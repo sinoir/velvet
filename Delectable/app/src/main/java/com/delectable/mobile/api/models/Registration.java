@@ -44,7 +44,7 @@ public class Registration extends Resource implements Actions.RegistrationAction
         });
     }
 
-    // TODO: Create and Link to Account Object
+    // TODO: Create and Link to Account Object when parsing JSON response
     String account;
 
     String email;
@@ -79,5 +79,85 @@ public class Registration extends Resource implements Actions.RegistrationAction
     @Override
     public String getResourceUrlForAction(int action) {
         return sActionUris.get(action);
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFacebookToken() {
+        return facebook_token;
+    }
+
+    public void setFacebookToken(String facebook_token) {
+        this.facebook_token = facebook_token;
+    }
+
+    public Double getFacebookTokenExpiration() {
+        return facebook_token_expiration;
+    }
+
+    public void setFacebookTokenExpiration(Double facebook_token_expiration) {
+        this.facebook_token_expiration = facebook_token_expiration;
+    }
+
+    public String getFname() {
+        return fname;
+    }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSessionToken() {
+        return session_token;
+    }
+
+    public void setSessionToken(String session_token) {
+        this.session_token = session_token;
+    }
+
+    public String getSessionType() {
+        return session_type;
+    }
+
+    public void setSessionType(String session_type) {
+        this.session_type = session_type;
+    }
+
+    public String getSessionKey() {
+        return session_key;
+    }
+
+    public void setSessionKey(String session_key) {
+        this.session_key = session_key;
     }
 }
