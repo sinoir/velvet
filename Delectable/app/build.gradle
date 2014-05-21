@@ -26,4 +26,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.+'
     compile 'com.j256.ormlite:ormlite-jdbc:4.27@jar'
     androidTestCompile 'junit:junit:4.10@jar'
+    compile 'org.apache.commons:commons-lang3:3.1@jar'
 }
