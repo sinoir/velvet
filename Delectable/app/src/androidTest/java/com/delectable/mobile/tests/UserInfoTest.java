@@ -10,31 +10,25 @@ import android.test.AndroidTestCase;
 /**
  * Created by abednarek on 5/22/14.
  */
-public class UserInfoTest extends AndroidTestCase {
+public class UserInfoTest extends BaseAndroidTestCase {
 
     Registration mTestRegistration;
 
     @Override
     protected void setUp() throws Exception {
-        clearPrefs();
+        super.setUp();
         mTestRegistration = new Registration();
         mTestRegistration.setSessionToken("Session Token");
         mTestRegistration.setSessionKey("Session Key");
-        super.setUp();
     }
 
     @Override
     protected void tearDown() throws Exception {
-        clearPrefs();
         mTestRegistration = null;
         super.tearDown();
     }
 
-    private void clearPrefs() {
-        SharedPreferences prefs = getContext().getSharedPreferences(UserInfo.PREFERENCES,
-                Context.MODE_PRIVATE);
-        prefs.edit().clear().commit();
-    }
+
 
     public void testOnSignIn() {
         UserInfo.onSignIn(getContext(), mTestRegistration);
