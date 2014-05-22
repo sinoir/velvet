@@ -44,8 +44,7 @@ public class Registration extends Resource implements Actions.RegistrationAction
         });
     }
 
-    // TODO: Create and Link to Account Object when parsing JSON response
-    String account;
+    Account account;
 
     String email;
 
@@ -65,15 +64,20 @@ public class Registration extends Resource implements Actions.RegistrationAction
 
     String session_key;
 
+    public Registration() {
+        // Default Session type is mobile
+        session_type = "mobile";
+    }
+
     @Override
     public String[] getPayloadFieldsForAction(int action) {
         return sActionPayloadFields.get(action);
     }
 
     @Override
-    public String parsePayloadForAction(JSONObject payload, int action) {
-        // TODO: Parse using GSON from JSON Payload
-        return null;
+    public Registration parsePayloadForAction(JSONObject payload, int action) {
+        Registration newRegistration = buildFromJson(payload.optJSONObject("payload"), this.getClass());
+        return newRegistration;
     }
 
     @Override
@@ -81,11 +85,11 @@ public class Registration extends Resource implements Actions.RegistrationAction
         return sActionUris.get(action);
     }
 
-    public String getAccount() {
+    public Account getAccount() {
         return account;
     }
 
-    public void setAccount(String account) {
+    public void setAccount(Account account) {
         this.account = account;
     }
 

@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import com.google.gson.Gson;
+
 import com.delectable.mobile.util.HelperUtil;
 
 import org.json.JSONObject;
@@ -16,8 +18,14 @@ import java.util.Map;
  */
 public abstract class Resource {
 
-
     protected static final String API_VER = "/v2";
+
+    public static <T extends Resource> T buildFromJson(JSONObject json, Class<T> tClass) {
+        Gson gson = new Gson();
+        String jsonString = "";
+        jsonString = json.toString();
+        return gson.fromJson(jsonString, tClass);
+    }
 
     public JSONObject buildPayloadForAction(int action) {
         JSONObject obj = new JSONObject(buildPayloadMapForAction(action));
@@ -58,6 +66,6 @@ public abstract class Resource {
 
     public abstract String getResourceUrlForAction(int action);
 
-    public abstract String parsePayloadForAction(JSONObject payload, int action);
+    public abstract Resource parsePayloadForAction(JSONObject payload, int action);
 
 }

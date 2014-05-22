@@ -1,8 +1,10 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Registration;
 
-import junit.framework.TestCase;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +12,7 @@ import java.util.Map;
 /**
  * Created by abednarek on 5/21/14.
  */
-public class RegistrationTest extends TestCase {
+public class RegistrationTest extends BaseInstrumentationTestCase {
 
     @Override
     protected void setUp() throws Exception {
@@ -105,16 +107,30 @@ public class RegistrationTest extends TestCase {
         Map<String, String> expectedMap = new HashMap<String, String>();
         expectedMap.put("session_type", regModel.getSessionType());
         expectedMap.put("facebook_token", regModel.getFacebookToken());
-        expectedMap.put("facebook_token_expiration", regModel.getFacebookTokenExpiration().toString());
+        expectedMap.put("facebook_token_expiration",
+                regModel.getFacebookTokenExpiration().toString());
 
         Map<String, String> actualMap = regModel.buildPayloadMapForAction(regModel.A_FACEBOOK);
         assertEquals(expectedMap, actualMap);
     }
 
+    public void testParsePayloadForAction() throws JSONException {
+        Registration someRegistration = buildTestModel();
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_registration_success_response);
+
+        // Action is ignored for registration for now
+        Registration actualRegistration = someRegistration
+                .parsePayloadForAction(json, -1);
+        assertEquals("537e2f09753490201d00084f", actualRegistration.getSessionKey());
+        assertEquals("OwcHeVvNMQ", actualRegistration.getSessionToken());
+        // TODO: Check fully parsed Account once account is created
+        assertNotNull(actualRegistration.getAccount());
+    }
+
     private Registration buildTestModel() {
         Registration regModel = new Registration();
         // TODO: Replace with some Account info?
-        regModel.setAccount("Some Account");
+        regModel.setAccount(new Account());
         regModel.setEmail("Some Email");
         regModel.setFacebookToken("Some Facebook Token");
         regModel.setFacebookTokenExpiration(123.456);
