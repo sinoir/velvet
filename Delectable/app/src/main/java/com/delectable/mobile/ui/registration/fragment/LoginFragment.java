@@ -1,11 +1,17 @@
 package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.RequestError;
+import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.api.models.Registration;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.home.activity.HomeActivity;
+import com.delectable.mobile.ui.registration.activity.LoginActivity;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -22,6 +28,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +46,16 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
 
     private View mLoginFormView;
 
+    private RegistrationController mRegistrationController;
+
     public LoginFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mRegistrationController = new RegistrationController(getActivity());
     }
 
     @Override
@@ -85,6 +96,7 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
 
     public void attemptLogin() {
         // TODO: Block method if already signing in
+        // TODO: Hide Keyboard...
 
         // Reset errors.
         mEmailView.setError(null);
@@ -122,7 +134,7 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            // TODO: Build Progress Spinner in Base Fragment
+            // TODO: Build Progress in Base Fragment
 //            showProgress(true);
             performLogin();
         }
@@ -132,7 +144,23 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
         Registration registration = new Registration();
         registration.setEmail(mEmailView.getText().toString());
         registration.setPassword(mPasswordView.getText().toString());
-        // TODO: Post to Server
+        mRegistrationController.loginUser(registration, new BaseNetworkController.SimpleRequestCallback() {
+            @Override
+            public void onSucess() {
+                // TODO: Hide Loader
+                Toast.makeText(getActivity(), "Successfully Logged in!", Toast.LENGTH_LONG).show();
+                Intent launchIntent = new Intent();
+                launchIntent.setClass(getActivity(), HomeActivity.class);
+                startActivity(launchIntent);
+                getActivity().finish();
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                // TODO: Hide Loader
+                Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private boolean isEmailValid(String email) {
