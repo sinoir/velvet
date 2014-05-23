@@ -7,7 +7,6 @@ import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.api.models.Registration;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.home.activity.HomeActivity;
-import com.delectable.mobile.ui.registration.activity.LoginActivity;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -27,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +39,8 @@ import java.util.List;
 public class LoginFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int sLoaderEmailAutocomplete = 0;
+
+    private ProgressBar mLoginProgress;
 
     private AutoCompleteTextView mEmailView;
 
@@ -61,11 +63,13 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
+        mLoginProgress = (ProgressBar) rootView.findViewById(R.id.login_progress);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) rootView.findViewById(R.id.email);
-//        populateAutoComplete();
 
         mPasswordView = (EditText) rootView.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -95,8 +99,10 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     public void attemptLogin() {
-        // TODO: Block method if already signing in
         // TODO: Hide Keyboard...
+        if (mLoginProgress.getVisibility() != View.GONE) {
+            return;
+        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -134,33 +140,35 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            // TODO: Build Progress in Base Fragment
-//            showProgress(true);
             performLogin();
         }
     }
 
     private void performLogin() {
+        mLoginProgress.setVisibility(View.VISIBLE);
         Registration registration = new Registration();
         registration.setEmail(mEmailView.getText().toString());
         registration.setPassword(mPasswordView.getText().toString());
-        mRegistrationController.loginUser(registration, new BaseNetworkController.SimpleRequestCallback() {
-            @Override
-            public void onSucess() {
-                // TODO: Hide Loader
-                Toast.makeText(getActivity(), "Successfully Logged in!", Toast.LENGTH_LONG).show();
-                Intent launchIntent = new Intent();
-                launchIntent.setClass(getActivity(), HomeActivity.class);
-                startActivity(launchIntent);
-                getActivity().finish();
-            }
+        mRegistrationController
+                .loginUser(registration, new BaseNetworkController.SimpleRequestCallback() {
+                    @Override
+                    public void onSucess() {
+                        mLoginProgress.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "Successfully Logged in!", Toast.LENGTH_LONG)
+                                .show();
+                        Intent launchIntent = new Intent();
+                        launchIntent.setClass(getActivity(), HomeActivity.class);
+                        startActivity(launchIntent);
+                        getActivity().finish();
+                    }
 
-            @Override
-            public void onFailed(RequestError error) {
-                // TODO: Hide Loader
-                Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG).show();
-            }
-        });
+                    @Override
+                    public void onFailed(RequestError error) {
+                        mLoginProgress.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
     }
 
     private boolean isEmailValid(String email) {
