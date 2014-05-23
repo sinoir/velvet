@@ -76,7 +76,17 @@ public class Registration extends Resource implements Actions.RegistrationAction
 
     @Override
     public Registration parsePayloadForAction(JSONObject payload, int action) {
-        Registration newRegistration = buildFromJson(payload.optJSONObject("payload"), this.getClass());
+        Registration newRegistration = buildFromJson(payload.optJSONObject("payload"),
+                this.getClass());
+
+        // Custom Account parsing
+        if (payload.optJSONObject("payload") != null) {
+            newRegistration
+                    .setAccount(Account.parsePrivateAccount(
+                            payload.optJSONObject("payload").optJSONObject(
+                                    "account")));
+        }
+
         return newRegistration;
     }
 
