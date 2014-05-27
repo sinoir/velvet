@@ -16,4 +16,8 @@ public class Actions {
         public static final int A_BASE_WINE_SEARCH = 0;
         public static final int A_ACCOUNT_SEARCH = 1;
     }
+
+    public interface BaseWineActions {
+        public static final int A_CONTEXT = 0;
+    }
 }

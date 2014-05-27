@@ -1,0 +1,82 @@
+{
+    "success": true,
+    "payload": {
+        "base_wine": {
+            "id": "5305ba538953f6d73900543d",
+            "ratings_summary": {
+                "all": {
+                    "count": 1,
+                    "avg": 30
+                },
+                "pro": {
+                    "count": 0,
+                    "avg": -1
+                }
+            },
+            "name": "Napa Valley Pinot Noir",
+            "producer_name": "Napa Ridge",
+            "region_id": "2983852",
+            "region_path": [
+                {
+                    "id": "2983715",
+                    "name": "USA"
+                },
+                {
+                    "id": "2945729",
+                    "name": "California"
+                },
+                {
+                    "id": "2983852",
+                    "name": "Napa Valley"
+                }
+            ],
+            "varietal_composition": [
+                {
+                    "id": "75",
+                    "name": "Pinot Noir",
+                    "color": "#ecc0b5"
+                }
+            ],
+            "default_wine_profile_id": "50e86605a6d027d09d00025a",
+            "photo": {
+                "url": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f.jpg",
+                "child_resolutions": {
+                    "50": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_nano.jpg",
+                    "110": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_micro.jpg",
+                    "150": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_thumb.jpg",
+                    "250": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_250x250.jpg",
+                    "640": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_medium.jpg"
+                }
+            },
+            "description": "",
+            "context": "profile",
+            "e_tag": "tmC2M7VCWpKZ4g",
+            "wine_profiles": [
+                {
+                    "id": "50e86605a6d027d09d00025a",
+                    "ratings_summary": {
+                        "all": {
+                            "count": 1,
+                            "avg": 30
+                        },
+                        "pro": {
+                            "count": 0,
+                            "avg": -1
+                        }
+                    },
+                    "vintage": "2009",
+                    "base_wine_id": "5305ba538953f6d73900543d",
+                    "price": 21.82,
+                    "price_status": "confirmed",
+                    "context": "subprofile",
+                    "e_tag": "XQr5adP35129_Q",
+                    "description": "",
+                    "price_text": "Buy it - $21"
+                }
+            ]
+        }
+    },
+    "e_tag": "tmC2M7VCWpKZ4g",
+    "context": "profile",
+    "e_tag_match": false
+}

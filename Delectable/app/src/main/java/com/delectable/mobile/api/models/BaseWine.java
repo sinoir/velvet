@@ -1,11 +1,29 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.api.Actions;
+
 import org.json.JSONObject;
+
+import android.util.SparseArray;
 
 import java.util.ArrayList;
 
 
-public class BaseWine extends Resource {
+public class BaseWine extends Resource implements Actions.BaseWineActions {
+
+    private static final String sBaseUri = API_VER + "/base_wines";
+
+    private static final SparseArray<String> sActionUris = new SparseArray<String>();
+
+    private static final SparseArray<String[]> sActionPayloadFields = new SparseArray<String[]>();
+
+    static {
+        sActionUris.append(A_CONTEXT, sBaseUri + "/context");
+
+        sActionPayloadFields.append(A_CONTEXT, new String[]{
+                "id",
+        });
+    }
 
     String id;
 
@@ -21,12 +39,13 @@ public class BaseWine extends Resource {
 
     ArrayList<VarietalsHash> varietal_composition;
 
-    // TODO: Build Wine Profile Object
-//    ArrayList<WineProfile> wine_profiles;
+    ArrayList<WineProfile> wine_profiles;
 
     String default_wine_profile_id;
 
     PhotoHash photo;
+
+    String description;
 
     String context;
 
@@ -34,17 +53,28 @@ public class BaseWine extends Resource {
 
     @Override
     public String[] getPayloadFieldsForAction(int action) {
-        return new String[0];
+        return sActionPayloadFields.get(action);
     }
 
     @Override
     public String getResourceUrlForAction(int action) {
-        return null;
+        return sActionUris.get(action);
     }
 
     @Override
-    public Resource parsePayloadForAction(JSONObject payload, int action) {
-        return null;
+    public BaseWine parsePayloadForAction(JSONObject jsonResult, int action) {
+        JSONObject payloadObj = jsonResult.optJSONObject("payload");
+        BaseWine newResource = null;
+        if (payloadObj != null && payloadObj.optJSONObject("base_wine") != null) {
+            newResource = buildFromJson(payloadObj.optJSONObject("base_wine"),
+                    this.getClass());
+        }
+
+        return newResource;
+    }
+
+    public String getResourceContextForAction(int action) {
+        return "profile";
     }
 
     public String getId() {
@@ -103,14 +133,13 @@ public class BaseWine extends Resource {
         this.varietal_composition = varietal_composition;
     }
 
-    //TODO: Build WineProfile object
-//    public ArrayList<WineProfile> getWineProfiles() {
-//        return wine_profiles;
-//    }
-//
-//    public void setWineProfiles(ArrayList<WineProfile> wine_profiles) {
-//        this.wine_profiles = wine_profiles;
-//    }
+    public ArrayList<WineProfile> getWineProfiles() {
+        return wine_profiles;
+    }
+
+    public void setWineProfiles(ArrayList<WineProfile> wine_profiles) {
+        this.wine_profiles = wine_profiles;
+    }
 
     public String getDefaultWineProfileId() {
         return default_wine_profile_id;
@@ -126,6 +155,14 @@ public class BaseWine extends Resource {
 
     public void setPhoto(PhotoHash photo) {
         this.photo = photo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContext() {
@@ -144,10 +181,53 @@ public class BaseWine extends Resource {
         this.e_tag = e_tag;
     }
 
-    class RegionPath {
+    @Override
+    public String toString() {
+        return "BaseWine{" +
+                "id='" + id + '\'' +
+                ", ratings_summary=" + ratings_summary +
+                ", producer_name='" + producer_name + '\'' +
+                ", name='" + name + '\'' +
+                ", region_id='" + region_id + '\'' +
+                ", region_path=" + region_path +
+                ", varietal_composition=" + varietal_composition +
+                ", wine_profiles=" + wine_profiles +
+                ", default_wine_profile_id='" + default_wine_profile_id + '\'' +
+                ", photo=" + photo +
+                ", description='" + description + '\'' +
+                ", context='" + context + '\'' +
+                ", e_tag='" + e_tag + '\'' +
+                '}';
+    }
+
+    public class RegionPath {
 
         String id;
 
         String name;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "RegionPath{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
     }
 }
