@@ -1,0 +1,141 @@
+{
+    "success": true,
+    "payload": {
+        "purchase_offer": {
+            "id": "5384fc9a753490ae0d00013b",
+            "vintage": "2009",
+            "expiration": 1401408000,
+            "min_quant": 1,
+            "max_quant": 12,
+            "default_quant": 1,
+            "pricing": [
+                {
+                    "quantity": 1,
+                    "per_bottle": "$21.82",
+                    "wine": "$21.82",
+                    "shipping": "$22.00",
+                    "tax": "$0.00",
+                    "total": "$43.82"
+                },
+                {
+                    "quantity": 2,
+                    "per_bottle": "$21.82",
+                    "wine": "$43.64",
+                    "shipping": "$22.50",
+                    "tax": "$0.00",
+                    "total": "$66.14"
+                },
+                {
+                    "quantity": 3,
+                    "per_bottle": "$21.82",
+                    "wine": "$65.46",
+                    "shipping": "$23.00",
+                    "tax": "$0.00",
+                    "total": "$88.46"
+                },
+                {
+                    "quantity": 4,
+                    "per_bottle": "$21.82",
+                    "wine": "$87.28",
+                    "shipping": "$23.50",
+                    "tax": "$0.00",
+                    "total": "$110.78"
+                },
+                {
+                    "quantity": 5,
+                    "per_bottle": "$21.82",
+                    "wine": "$109.10",
+                    "shipping": "$24.00",
+                    "tax": "$0.00",
+                    "total": "$133.10"
+                },
+                {
+                    "quantity": 6,
+                    "per_bottle": "$21.82",
+                    "wine": "$130.92",
+                    "shipping": "$24.50",
+                    "tax": "$0.00",
+                    "total": "$155.42"
+                },
+                {
+                    "quantity": 7,
+                    "per_bottle": "$21.82",
+                    "wine": "$152.74",
+                    "shipping": "$25.00",
+                    "tax": "$0.00",
+                    "total": "$177.74"
+                },
+                {
+                    "quantity": 8,
+                    "per_bottle": "$21.82",
+                    "wine": "$174.56",
+                    "shipping": "$25.50",
+                    "tax": "$0.00",
+                    "total": "$200.06"
+                },
+                {
+                    "quantity": 9,
+                    "per_bottle": "$21.82",
+                    "wine": "$196.38",
+                    "shipping": "$26.00",
+                    "tax": "$0.00",
+                    "total": "$222.38"
+                },
+                {
+                    "quantity": 10,
+                    "per_bottle": "$21.82",
+                    "wine": "$218.20",
+                    "shipping": "$26.50",
+                    "tax": "$0.00",
+                    "total": "$244.70"
+                },
+                {
+                    "quantity": 11,
+                    "per_bottle": "$21.82",
+                    "wine": "$240.02",
+                    "shipping": "$27.00",
+                    "tax": "$0.00",
+                    "total": "$267.02"
+                },
+                {
+                    "quantity": 12,
+                    "per_bottle": "$21.82",
+                    "wine": "$261.84",
+                    "shipping": "$0.01",
+                    "tax": "$0.00",
+                    "total": "$261.85"
+                }
+            ],
+            "object_nouns": {
+                "singular": "bottle",
+                "plural": "bottles"
+            },
+            "marketing_message": "Order 12 bottles to get 1 cent shipping!",
+            "marketing_message_attributes": []
+        },
+        "wine_profile": {
+            "id": "50e86605a6d027d09d00025a",
+            "region_id": "2983852",
+            "vintage": "2009",
+            "producer_name": "Napa Ridge",
+            "name": "Napa Valley Pinot Noir",
+            "base_wine_id": "5305ba538953f6d73900543d",
+            "price": 21.82,
+            "price_status": "confirmed",
+            "photo": {
+                "url": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f.jpg",
+                "child_resolutions": {
+                    "50": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_nano.jpg",
+                    "110": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_micro.jpg",
+                    "150": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_thumb.jpg",
+                    "250": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_250x250.jpg",
+                    "640": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_medium.jpg"
+                }
+            },
+            "description": "",
+            "context": "minimal",
+            "e_tag": "SF1craz1xak8Uw",
+            "price_text": "Buy it - $21"
+        }
+    }
+}
