@@ -1,0 +1,52 @@
+{
+    "success": true,
+    "payload": {
+        "q": "Napa Valley",
+        "offset": "0",
+        "limit": "2",
+        "search_time": 234,
+        "total": 1395,
+        "hits": [
+            {
+                "score": 154.30392,
+                "type": "base_wine",
+                "object": {
+                    "id": "5305ba538953f6d73900543d",
+                    "name": "Napa Valley Pinot Noir",
+                    "producer_name": "Napa Ridge",
+                    "photo": {
+                        "url": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f.jpg",
+                        "child_resolutions": {
+                            "50": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_nano.jpg",
+                            "110": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_micro.jpg",
+                            "150": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_thumb.jpg",
+                            "250": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_250x250.jpg",
+                            "640": "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_medium.jpg"
+                        }
+                    },
+                    "context": "minimal",
+                    "e_tag": "7QS0YY6tCgAgMw"
+                }
+            },
+            {
+                "score": 154.30392,
+                "type": "base_wine",
+                "object": {
+                    "id": "5305bb6a8953f6d739026e2a",
+                    "name": "Napa Valley Cabernet Sauvignon",
+                    "producer_name": "Napa Cellars",
+                    "photo": {
+                        "url": "https://s3.amazonaws.com/delectableCapturedPhotos/joe-jezowski-1361502507-dda3d7953b8f.jpg",
+                        "child_resolutions": {
+                            "110": "https://s3.amazonaws.com/delectableCapturedPhotos/joe-jezowski-1361502507-dda3d7953b8f_micro.jpg",
+                            "150": "https://s3.amazonaws.com/delectableCapturedPhotos/joe-jezowski-1361502507-dda3d7953b8f_thumb.jpg",
+                            "640": "https://s3.amazonaws.com/delectableCapturedPhotos/joe-jezowski-1361502507-dda3d7953b8f_medium.jpg"
+                        }
+                    },
+                    "context": "minimal",
+                    "e_tag": "BOQn0NzXIlDwJw"
+                }
+            }
+        ]
+    }
+}

@@ -11,4 +11,9 @@ public class Actions {
         public static final int A_LOGIN = 1;
         public static final int A_FACEBOOK = 2;
     }
+
+    public interface SearchActions {
+        public static final int A_BASE_WINE_SEARCH = 0;
+        public static final int A_ACCOUNT_SEARCH = 1;
+    }
 }
