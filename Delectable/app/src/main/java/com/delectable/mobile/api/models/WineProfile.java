@@ -56,6 +56,9 @@ public class WineProfile extends Resource implements Actions.WineProfileActions 
 
     Double price;
 
+    PhotoHash photo;
+
+
     @Override
     public String[] getPayloadFieldsForAction(int action) {
         return sActionPayloadFields.get(action);
@@ -197,6 +200,14 @@ public class WineProfile extends Resource implements Actions.WineProfileActions 
         this.price = price;
     }
 
+    public PhotoHash getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(PhotoHash photo) {
+        this.photo = photo;
+    }
+
     @Override
     public String toString() {
         return "WineProfile{" +
@@ -214,6 +225,7 @@ public class WineProfile extends Resource implements Actions.WineProfileActions 
                 ", description='" + description + '\'' +
                 ", context='" + context + '\'' +
                 ", price=" + price +
+                ", photo=" + photo +
                 '}';
     }
 }

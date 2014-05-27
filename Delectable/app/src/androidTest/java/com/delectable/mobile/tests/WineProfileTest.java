@@ -37,4 +37,43 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         assertEquals("", actualWine.getDescription());
         assertEquals("Buy it - $21", actualWine.getPriceText());
     }
+
+    public void testParseWineProfileMinimalContext() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_minimal_ctx);
+        WineProfile someWine = new WineProfile();
+        WineProfile actualWine = (WineProfile) someWine.parsePayloadForAction(json,
+                WineProfile.A_CONTEXT);
+
+        assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
+        assertNull(actualWine.getRatingsSummary());
+        assertEquals("2009", actualWine.getVintage());
+        assertEquals("Napa Ridge", actualWine.getProducerName());
+        assertEquals("Napa Valley Pinot Noir", actualWine.getName());
+        assertEquals("5305ba538953f6d73900543d", actualWine.getBaseWineId());
+        assertEquals(21.82, actualWine.getPrice().doubleValue());
+        assertEquals("confirmed", actualWine.getPriceStatus());
+
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f.jpg",
+                actualWine.getPhoto().getUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_nano.jpg",
+                actualWine.getPhoto().getNanoUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_micro.jpg",
+                actualWine.getPhoto().getMicroUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_thumb.jpg",
+                actualWine.getPhoto().getThumbUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_250x250.jpg",
+                actualWine.getPhoto().get250Url());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f_medium.jpg",
+                actualWine.getPhoto().getMediumUrl());
+        assertEquals("minimal", actualWine.getContext());
+        assertEquals("SF1craz1xak8Uw", actualWine.getETag());
+        assertEquals("", actualWine.getDescription());
+        assertEquals("Buy it - $21", actualWine.getPriceText());
+    }
 }
