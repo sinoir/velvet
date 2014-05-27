@@ -1,6 +1,7 @@
 package com.delectable.mobile.api.models;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import com.delectable.mobile.util.HelperUtil;
 
@@ -21,7 +22,21 @@ public abstract class Resource {
     protected static final String API_VER = "/v2";
 
     public static <T extends Resource> T buildFromJson(JSONObject json, Class<T> tClass) {
-        Gson gson = new Gson();
+        return buildFromJson(json, tClass, false);
+    }
+
+    public static <T extends Resource> T buildFromJsonForExposedObjects(JSONObject json,
+            Class<T> tClass) {
+        return buildFromJson(json, tClass, true);
+    }
+
+    public static <T extends Resource> T buildFromJson(JSONObject json, Class<T> tClass,
+            boolean shouldUseExposeAnnotations) {
+        GsonBuilder builder = new GsonBuilder();
+        if (shouldUseExposeAnnotations) {
+            builder.excludeFieldsWithoutExposeAnnotation();
+        }
+        Gson gson = builder.create();
         String jsonString = "";
         jsonString = json.toString();
         return gson.fromJson(jsonString, tClass);
