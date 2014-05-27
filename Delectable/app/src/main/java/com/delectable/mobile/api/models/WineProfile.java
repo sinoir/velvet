@@ -1,10 +1,36 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.api.Actions;
+
 import org.json.JSONObject;
 
-public class WineProfile extends Resource {
+import android.util.SparseArray;
+
+public class WineProfile extends Resource implements Actions.WineProfileActions {
+
+    private static final String sBaseUri = API_VER + "/wine_profiles";
+
+    private static final SparseArray<String> sActionUris = new SparseArray<String>();
+
+    private static final SparseArray<String[]> sActionPayloadFields = new SparseArray<String[]>();
+
+    static {
+        sActionUris.append(A_CONTEXT, sBaseUri + "/context");
+        sActionUris.append(A_WISHLIST, sBaseUri + "/wishlist");
+
+        sActionPayloadFields.append(A_CONTEXT, new String[]{
+                "id",
+        });
+
+        sActionPayloadFields.append(A_WISHLIST, new String[]{
+                "id",
+                "action",
+        });
+    }
 
     String id;
+
+    boolean action;
 
     RatingsSummaryHash ratings_summary;
 
@@ -32,16 +58,30 @@ public class WineProfile extends Resource {
 
     @Override
     public String[] getPayloadFieldsForAction(int action) {
-        return new String[0];
+        return sActionPayloadFields.get(action);
     }
 
     @Override
     public String getResourceUrlForAction(int action) {
-        return null;
+        return sActionUris.get(action);
     }
 
     @Override
-    public Resource parsePayloadForAction(JSONObject payload, int action) {
+    public Resource parsePayloadForAction(JSONObject jsonObject, int action) {
+        JSONObject payloadObj = jsonObject.optJSONObject("payload");
+        WineProfile newResource = null;
+        if (payloadObj != null && payloadObj.optJSONObject("wine_profile") != null) {
+            newResource = buildFromJson(payloadObj.optJSONObject("wine_profile"),
+                    this.getClass());
+        }
+
+        return newResource;
+    }
+
+    public String getResourceContextForAction(int action) {
+        if (action == A_CONTEXT) {
+            return "subprofile";
+        }
         return null;
     }
 
@@ -51,6 +91,14 @@ public class WineProfile extends Resource {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isAction() {
+        return action;
+    }
+
+    public void setAction(boolean action) {
+        this.action = action;
     }
 
     public RatingsSummaryHash getRatingsSummary() {
@@ -153,6 +201,7 @@ public class WineProfile extends Resource {
     public String toString() {
         return "WineProfile{" +
                 "id='" + id + '\'' +
+                ", action=" + action +
                 ", ratings_summary=" + ratings_summary +
                 ", region_id='" + region_id + '\'' +
                 ", vintage='" + vintage + '\'' +

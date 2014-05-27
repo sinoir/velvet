@@ -13,11 +13,19 @@ public class Actions {
     }
 
     public interface SearchActions {
+
         public static final int A_BASE_WINE_SEARCH = 0;
         public static final int A_ACCOUNT_SEARCH = 1;
     }
 
     public interface BaseWineActions {
+
         public static final int A_CONTEXT = 0;
+    }
+
+    public interface WineProfileActions {
+
+        public static final int A_CONTEXT = 0;
+        public static final int A_WISHLIST = 1;
     }
 }

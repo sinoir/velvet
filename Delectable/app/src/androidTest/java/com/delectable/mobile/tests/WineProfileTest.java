@@ -1,0 +1,40 @@
+package com.delectable.mobile.tests;
+
+import com.delectable.mobile.api.models.WineProfile;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class WineProfileTest extends BaseInstrumentationTestCase {
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
+
+    public void testParseWineProfileSubprofileContext() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
+        WineProfile someWine = new WineProfile();
+        WineProfile actualWine = (WineProfile) someWine.parsePayloadForAction(json,
+                WineProfile.A_CONTEXT);
+
+        assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
+        assertEquals(1, actualWine.getRatingsSummary().getAllCount());
+        assertEquals(30, actualWine.getRatingsSummary().getAllAvg());
+        assertEquals(0, actualWine.getRatingsSummary().getProCount());
+        assertEquals(-1, actualWine.getRatingsSummary().getProAvg());
+        assertEquals("2009", actualWine.getVintage());
+        assertEquals("5305ba538953f6d73900543d", actualWine.getBaseWineId());
+        assertEquals(21.82, actualWine.getPrice().doubleValue());
+        assertEquals("confirmed", actualWine.getPriceStatus());
+        assertEquals("subprofile", actualWine.getContext());
+        assertEquals("XQr5adP35129_Q", actualWine.getETag());
+        assertEquals("", actualWine.getDescription());
+        assertEquals("Buy it - $21", actualWine.getPriceText());
+    }
+}
