@@ -49,4 +49,12 @@ public abstract class BaseResponse {
     public void setETag(String e_tag) {
         this.e_tag = e_tag;
     }
+
+    @Override
+    public String toString() {
+        return "BaseResponse{" +
+                "context='" + context + '\'' +
+                ", e_tag='" + e_tag + '\'' +
+                '}';
+    }
 }

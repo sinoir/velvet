@@ -76,4 +76,12 @@ public abstract class BaseRequest {
     public void setETag(String e_tag) {
         this.e_tag = e_tag;
     }
+
+    @Override
+    public String toString() {
+        return "BaseRequest{" +
+                "context='" + context + '\'' +
+                ", e_tag='" + e_tag + '\'' +
+                '}';
+    }
 }
