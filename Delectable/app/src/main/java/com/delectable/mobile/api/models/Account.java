@@ -6,8 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-// TODO: Possible PersistedResource base model?
-public class Account extends Resource {
+public class Account extends BaseResponse {
 
     String id;
 
@@ -60,30 +59,18 @@ public class Account extends Resource {
 
     LocalNotifications local_notifs;
 
-    public static Account parsePrivateAccount(JSONObject payload) {
-        Account account = buildFromJson(payload, Account.class);
-        if (payload.optJSONObject("client_state") != null) {
-            account.setActivityFeedTsLast(payload.optJSONObject("client_state").optInt("activity_feed_ts_last"));
+    @Override
+    public BaseResponse buildFromJson(JSONObject jsonObj) {
+        Account account = buildFromJson(jsonObj, Account.class);
+        if (jsonObj.optJSONObject("client_state") != null) {
+            account.setActivityFeedTsLast(
+                    jsonObj.optJSONObject("client_state").optInt("activity_feed_ts_last"));
         }
-        if (payload.optJSONObject("tutorial_state") != null) {
-            account.setFtueCompleted(payload.optJSONObject("tutorial_state").optBoolean("ftue_completed"));
+        if (jsonObj.optJSONObject("tutorial_state") != null) {
+            account.setFtueCompleted(
+                    jsonObj.optJSONObject("tutorial_state").optBoolean("ftue_completed"));
         }
         return account;
-    }
-
-    @Override
-    public String[] getPayloadFieldsForAction(int action) {
-        return new String[0];
-    }
-
-    @Override
-    public String getResourceUrlForAction(int action) {
-        return null;
-    }
-
-    @Override
-    public Resource parsePayloadForAction(JSONObject payload, int action) {
-        return null;
     }
 
     public String getId() {

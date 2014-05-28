@@ -2,7 +2,8 @@ package com.delectable.mobile.api.controllers;
 
 import com.delectable.mobile.api.NetworkClient;
 import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.models.Resource;
+import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.requests.BaseRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -15,9 +16,6 @@ import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by abednarek on 5/21/14.
- */
 public class BaseNetworkController {
 
     public static final String TAG = "BaseNetworkController";
@@ -32,14 +30,14 @@ public class BaseNetworkController {
         return mContext;
     }
 
-    public void performActionOnResource(final Resource resource, final int action,
+    public void performActionOnResource(final BaseRequest requestObject,
             final RequestActionCallback callback) {
-        JSONObject payload = resource.buildPayloadForAction(action);
-        String resourceUri = resource.getResourceUrlForAction(action);
-        Log.d(TAG, "Sending Resource: " + resource.getClass().getSimpleName() + " Action: " + action
-                + " Payload: " + payload.toString());
+        String resourceUri = requestObject.getResourceUrl();
+
+        Log.d(TAG, "Sending Resource: " + requestObject.getClass().getSimpleName() + " Payload: "
+                + requestObject.buildPayload());
         try {
-            StringEntity postEntity = buildPostEntityFromPayload(payload);
+            StringEntity postEntity = buildPostEntityFromResource(requestObject);
             NetworkClient.post(
                     getContext(),
                     resourceUri,
@@ -50,10 +48,9 @@ public class BaseNetworkController {
                             Log.d(TAG, "Received Response!" + response);
                             boolean isSuccess = response.optBoolean("success");
                             if (isSuccess && response.optJSONObject("payload") != null) {
-                                Resource result = resource.parsePayloadForAction(
-                                        response, action);
+                                BaseResponse result = requestObject.buildResopnseFromJson(response);
                                 if (callback != null) {
-                                    callback.onSuccess(result, action);
+                                    callback.onSuccess(result);
                                 }
                             } else {
                                 RequestError error = RequestError.buildFromJson(response);
@@ -87,37 +84,36 @@ public class BaseNetworkController {
     }
 
     /**
-     * Build out request object with session info
-     *
-     * @param payload - Payload to attach to the request
-     * @return JSON Request Object with Session info
+     * Build out request object with bottom tier meta params
      */
-    public JSONObject buildRequestWithSession(JSONObject payload) throws JSONException {
+    public JSONObject buildPayloadWithMetaParams(BaseRequest request)
+            throws JSONException {
+        JSONObject payload = request.buildPayload();
         JSONObject requestObject = new JSONObject();
         requestObject.put("sessionType", "mobile");
         if (UserInfo.isSignedIn(getContext())) {
             requestObject.put("sessionKey", UserInfo.getSessionKey(getContext()));
             requestObject.put("sessionToken", UserInfo.getSessionToken(getContext()));
         }
+        // TODO: Add context
+        // TODO: Add eTag
         requestObject.put("payload", payload);
         return requestObject;
     }
 
     /**
      * Builds String Entity for posting
-     *
-     * @param payload - Payload object
-     * @return String Entity for posting
      */
-    public StringEntity buildPostEntityFromPayload(JSONObject payload)
+    public StringEntity buildPostEntityFromResource(BaseRequest request)
             throws UnsupportedEncodingException, JSONException {
-        StringEntity entity = new StringEntity(buildRequestWithSession(payload).toString());
+        StringEntity entity = new StringEntity(
+                buildPayloadWithMetaParams(request).toString());
         return entity;
     }
 
     public interface RequestActionCallback {
 
-        public void onSuccess(Resource result, int action);
+        public void onSuccess(BaseResponse result);
 
         public void onFailed(RequestError error);
     }

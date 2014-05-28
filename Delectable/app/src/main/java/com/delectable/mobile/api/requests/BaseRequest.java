@@ -1,8 +1,6 @@
-package com.delectable.mobile.api.models;
+package com.delectable.mobile.api.requests;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.util.HelperUtil;
 
 import org.json.JSONObject;
@@ -14,41 +12,17 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by abednarek on 5/21/14.
- */
-public abstract class Resource {
+public abstract class BaseRequest {
 
     protected static final String API_VER = "/v2";
 
-    public static <T extends Resource> T buildFromJson(JSONObject json, Class<T> tClass) {
-        return buildFromJson(json, tClass, false);
-    }
-
-    public static <T extends Resource> T buildFromJsonForExposedObjects(JSONObject json,
-            Class<T> tClass) {
-        return buildFromJson(json, tClass, true);
-    }
-
-    public static <T extends Resource> T buildFromJson(JSONObject json, Class<T> tClass,
-            boolean shouldUseExposeAnnotations) {
-        GsonBuilder builder = new GsonBuilder();
-        if (shouldUseExposeAnnotations) {
-            builder.excludeFieldsWithoutExposeAnnotation();
-        }
-        Gson gson = builder.create();
-        String jsonString = "";
-        jsonString = json.toString();
-        return gson.fromJson(jsonString, tClass);
-    }
-
-    public JSONObject buildPayloadForAction(int action) {
-        JSONObject obj = new JSONObject(buildPayloadMapForAction(action));
+    public JSONObject buildPayload() {
+        JSONObject obj = new JSONObject(buildPayloadMap());
         return obj;
     }
 
-    public Map<String, String> buildPayloadMapForAction(int action) {
-        String[] fields = getPayloadFieldsForAction(action);
+    public Map<String, String> buildPayloadMap() {
+        String[] fields = getPayloadFields();
         HashMap<String, String> payloadMap = new HashMap<String, String>();
         for (int i = 0; i < fields.length; i++) {
             String field = fields[i];
@@ -77,10 +51,10 @@ public abstract class Resource {
         return value;
     }
 
-    public abstract String[] getPayloadFieldsForAction(int action);
+    public abstract String[] getPayloadFields();
 
-    public abstract String getResourceUrlForAction(int action);
+    public abstract String getResourceUrl();
 
-    public abstract Resource parsePayloadForAction(JSONObject payload, int action);
+    public abstract BaseResponse buildResopnseFromJson(JSONObject jsonObject);
 
 }
