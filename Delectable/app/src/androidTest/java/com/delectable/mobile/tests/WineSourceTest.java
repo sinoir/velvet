@@ -3,13 +3,11 @@ package com.delectable.mobile.tests;
 import com.delectable.mobile.api.models.PurchasedOffer;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.models.WineSource;
+import com.delectable.mobile.api.requests.WineProfilesPricing;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by abednarek on 5/27/14.
- */
 public class WineSourceTest extends BaseInstrumentationTestCase {
 
     @Override
@@ -24,9 +22,9 @@ public class WineSourceTest extends BaseInstrumentationTestCase {
 
     public void testParsedWineSource() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_source);
-        WineSource someWineSource = new WineSource();
-        WineSource actualSource = (WineSource) someWineSource.parsePayloadForAction(json,
-                WineSource.A_SOURCE);
+
+        WineProfilesPricing request = new WineProfilesPricing();
+        WineSource actualSource = (WineSource) request.buildResopnseFromJson(json);
 
         PurchasedOffer actualPurchasedOffer = actualSource.getPurchaseOffer();
         assertEquals("5384fc9a753490ae0d00013b", actualPurchasedOffer.getId());

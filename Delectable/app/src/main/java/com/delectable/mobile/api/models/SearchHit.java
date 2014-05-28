@@ -1,8 +1,6 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
-
-public class SearchHit<T extends Resource> {
+public class SearchHit<T extends BaseResponse> {
 
     String type;
 

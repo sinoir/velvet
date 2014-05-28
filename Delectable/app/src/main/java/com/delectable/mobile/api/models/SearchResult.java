@@ -4,31 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.Actions;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import android.util.SparseArray;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseSearch extends Resource implements Actions.SearchActions {
-
-    private static final SparseArray<String> sActionUris = new SparseArray<String>();
-
-    private static final String[] sPayloadFields = new String[]{
-            "q",
-            "offset",
-            "limit"
-    };
-
-    static {
-        sActionUris.append(A_BASE_WINE_SEARCH, API_VER + "/base_wines/search");
-        sActionUris.append(A_ACCOUNT_SEARCH, API_VER + "/accounts/search");
-    }
+public class SearchResult extends BaseResponse {
 
     @Expose
     String q;
@@ -48,29 +31,23 @@ public class BaseSearch extends Resource implements Actions.SearchActions {
     ArrayList<SearchHit> hits;
 
     @Override
-    public String[] getPayloadFieldsForAction(int action) {
-        return sPayloadFields;
-    }
-
-    @Override
-    public String getResourceUrlForAction(int action) {
-        return sActionUris.get(action);
-    }
-
-    @Override
-    public Resource parsePayloadForAction(JSONObject payload, int action) {
-        JSONObject payloadJson = payload.optJSONObject("payload");
-        BaseSearch searchResult = buildFromJsonForExposedObjects(payloadJson, this.getClass());
+    public BaseResponse buildFromJson(JSONObject jsonObj) {
+        JSONObject payloadJson = jsonObj.optJSONObject("payload");
+        SearchResult searchResult = buildFromJsonForExposedObjects(payloadJson, this.getClass());
         JSONArray jsonHitsArray = payloadJson.optJSONArray("hits");
-        if (jsonHitsArray != null) {
-            if (action == A_BASE_WINE_SEARCH) {
+        // Parse SearchHits based on result type (Either BaseWine or Account)
+        if (jsonHitsArray != null &&
+                payloadJson != null &&
+                jsonHitsArray.length() > 0 &&
+                jsonHitsArray.optJSONObject(0).optString("type") != null) {
+            String type = jsonHitsArray.optJSONObject(0).optString("type");
+            if (type.equalsIgnoreCase("base_wine")) {
                 Type listType = new TypeToken<List<SearchHit<BaseWine>>>() {
                 }.getType();
                 ArrayList<SearchHit> wineHits = new Gson()
                         .fromJson(jsonHitsArray.toString(), listType);
                 searchResult.setHits(wineHits);
-            }
-            // TODO: Check for Account results.
+            }// TODO: Set hits for Accounts
         }
         return searchResult;
     }

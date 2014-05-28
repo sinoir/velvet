@@ -1,29 +1,11 @@
 package com.delectable.mobile.api.models;
 
-import com.delectable.mobile.api.Actions;
-
 import org.json.JSONObject;
-
-import android.util.SparseArray;
 
 import java.util.ArrayList;
 
 
-public class BaseWine extends Resource implements Actions.BaseWineActions {
-
-    private static final String sBaseUri = API_VER + "/base_wines";
-
-    private static final SparseArray<String> sActionUris = new SparseArray<String>();
-
-    private static final SparseArray<String[]> sActionPayloadFields = new SparseArray<String[]>();
-
-    static {
-        sActionUris.append(A_CONTEXT, sBaseUri + "/context");
-
-        sActionPayloadFields.append(A_CONTEXT, new String[]{
-                "id",
-        });
-    }
+public class BaseWine extends BaseResponse {
 
     String id;
 
@@ -52,18 +34,8 @@ public class BaseWine extends Resource implements Actions.BaseWineActions {
     String e_tag;
 
     @Override
-    public String[] getPayloadFieldsForAction(int action) {
-        return sActionPayloadFields.get(action);
-    }
-
-    @Override
-    public String getResourceUrlForAction(int action) {
-        return sActionUris.get(action);
-    }
-
-    @Override
-    public BaseWine parsePayloadForAction(JSONObject jsonResult, int action) {
-        JSONObject payloadObj = jsonResult.optJSONObject("payload");
+    public BaseResponse buildFromJson(JSONObject jsonObj) {
+        JSONObject payloadObj = jsonObj.optJSONObject("payload");
         BaseWine newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("base_wine") != null) {
             newResource = buildFromJson(payloadObj.optJSONObject("base_wine"),
@@ -71,10 +43,6 @@ public class BaseWine extends Resource implements Actions.BaseWineActions {
         }
 
         return newResource;
-    }
-
-    public String getResourceContextForAction(int action) {
-        return "profile";
     }
 
     public String getId() {

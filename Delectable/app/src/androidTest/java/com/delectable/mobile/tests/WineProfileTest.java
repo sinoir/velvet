@@ -1,6 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.requests.WineProfilesContext;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,9 +20,8 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
 
     public void testParseWineProfileSubprofileContext() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
-        WineProfile someWine = new WineProfile();
-        WineProfile actualWine = (WineProfile) someWine.parsePayloadForAction(json,
-                WineProfile.A_CONTEXT);
+        WineProfilesContext request = new WineProfilesContext();
+        WineProfile actualWine = (WineProfile) request.buildResopnseFromJson(json);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
         assertEquals(1, actualWine.getRatingsSummary().getAllCount());
@@ -40,9 +40,8 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
 
     public void testParseWineProfileMinimalContext() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_minimal_ctx);
-        WineProfile someWine = new WineProfile();
-        WineProfile actualWine = (WineProfile) someWine.parsePayloadForAction(json,
-                WineProfile.A_CONTEXT);
+        WineProfilesContext request = new WineProfilesContext();
+        WineProfile actualWine = (WineProfile) request.buildResopnseFromJson(json);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
         assertNull(actualWine.getRatingsSummary());

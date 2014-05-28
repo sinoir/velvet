@@ -16,6 +16,10 @@ public abstract class BaseRequest {
 
     protected static final String API_VER = "/v2";
 
+    String context;
+
+    String e_tag;
+
     public JSONObject buildPayload() {
         JSONObject obj = new JSONObject(buildPayloadMap());
         return obj;
@@ -57,4 +61,19 @@ public abstract class BaseRequest {
 
     public abstract BaseResponse buildResopnseFromJson(JSONObject jsonObject);
 
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String e_tag) {
+        this.e_tag = e_tag;
+    }
 }

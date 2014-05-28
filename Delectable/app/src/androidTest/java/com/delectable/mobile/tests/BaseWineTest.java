@@ -1,10 +1,12 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.BaseSearch;
+import com.delectable.mobile.api.models.SearchResult;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.requests.BaseWinesContext;
+import com.delectable.mobile.api.requests.BaseWinesSearch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,10 +24,9 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
     }
 
     public void testParseBaseWineSearchResults() throws JSONException {
-        BaseSearch searchQuery = new BaseSearch();
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_search_min_ctx);
-        BaseSearch actualSearchResult = (BaseSearch) searchQuery
-                .parsePayloadForAction(json, BaseSearch.A_BASE_WINE_SEARCH);
+        BaseWinesSearch request = new BaseWinesSearch();
+        SearchResult actualSearchResult = (SearchResult) request.buildResopnseFromJson(json);
 
         assertEquals("Napa Valley", actualSearchResult.getQ());
         assertEquals(0, actualSearchResult.getOffset().intValue());
@@ -34,7 +35,7 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         assertEquals(1395, actualSearchResult.getTotal().intValue());
 
         assertEquals(2, actualSearchResult.getHits().size());
-        SearchHit<BaseWine> actualFirstHit = actualSearchResult.getHits().get(0);
+        SearchHit<BaseWine> actualFirstHit = (SearchHit<BaseWine>) actualSearchResult.getHits().get(0);
         assertEquals(154.30392, actualFirstHit.getScore());
         assertEquals("base_wine", actualFirstHit.getType());
 
@@ -68,9 +69,8 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
     public void testParseBaseWineProfile() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_profile_ctx);
-        BaseWine someWine = new BaseWine();
-        BaseWine actualBaseWine = (BaseWine) someWine
-                .parsePayloadForAction(json, BaseWine.A_CONTEXT);
+        BaseWinesContext request = new BaseWinesContext();
+        BaseWine actualBaseWine  = (BaseWine) request.buildResopnseFromJson(json);
 
         assertEquals("5305ba538953f6d73900543d", actualBaseWine.getId());
         assertEquals(1, actualBaseWine.getRatingsSummary().getAllCount());

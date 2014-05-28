@@ -17,7 +17,7 @@ public class RegistrationsFacebook extends BaseRegistrations {
 
     @Override
     public String getResourceUrl() {
-        return sBaseUri + "/register";
+        return sBaseUri + "/facebook";
     }
 
     public String getFacebookToken() {
