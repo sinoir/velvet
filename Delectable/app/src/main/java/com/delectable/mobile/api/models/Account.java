@@ -1,7 +1,5 @@
 package com.delectable.mobile.api.models;
 
-import com.google.gson.annotations.SerializedName;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,10 +46,9 @@ public class Account extends BaseResponse {
 
     AccountConfig account_config;
 
-    @SerializedName("client_state.activity_feed_ts_last")
-    Integer activity_feed_ts_last;
+    ClientState client_state;
 
-    Boolean ftue_completed;
+    TutorialState tutorial_state;
 
     ArrayList<ShippingAddress> shipping_addresses;
 
@@ -62,14 +59,6 @@ public class Account extends BaseResponse {
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         Account account = buildFromJson(jsonObj, Account.class);
-        if (jsonObj.optJSONObject("client_state") != null) {
-            account.setActivityFeedTsLast(
-                    jsonObj.optJSONObject("client_state").optInt("activity_feed_ts_last"));
-        }
-        if (jsonObj.optJSONObject("tutorial_state") != null) {
-            account.setFtueCompleted(
-                    jsonObj.optJSONObject("tutorial_state").optBoolean("ftue_completed"));
-        }
         return account;
     }
 
@@ -233,20 +222,27 @@ public class Account extends BaseResponse {
         this.account_config = account_config;
     }
 
-    public Integer getActivityFeedTsLast() {
-        return activity_feed_ts_last;
+    public int getActivityFeedTsLast() {
+        return client_state != null && client_state.activity_feed_ts_last != null
+                ? client_state.activity_feed_ts_last : 0;
     }
 
     public void setActivityFeedTsLast(Integer activity_feed_ts_last) {
-        this.activity_feed_ts_last = activity_feed_ts_last;
+        if (this.client_state == null) {
+            this.client_state = new ClientState();
+        }
+        this.client_state.activity_feed_ts_last = activity_feed_ts_last;
     }
 
-    public Boolean getFtueCompleted() {
-        return ftue_completed;
+    public boolean getFtueCompleted() {
+        return tutorial_state != null ? tutorial_state.ftue_completed : false;
     }
 
     public void setFtueCompleted(Boolean ftue_completed) {
-        this.ftue_completed = ftue_completed;
+        if (this.tutorial_state == null) {
+            this.tutorial_state = new TutorialState();
+        }
+        this.tutorial_state.ftue_completed = ftue_completed;
     }
 
     public ArrayList<ShippingAddress> getShippingAddresses() {
@@ -271,5 +267,15 @@ public class Account extends BaseResponse {
 
     public void setLocalNotifs(LocalNotifications local_notifs) {
         this.local_notifs = local_notifs;
+    }
+
+    class ClientState {
+
+        Integer activity_feed_ts_last;
+    }
+
+    class TutorialState {
+
+        Boolean ftue_completed;
     }
 }

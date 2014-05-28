@@ -5,9 +5,6 @@ import com.delectable.mobile.api.models.Registration;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by abednarek on 5/22/14.
- */
 public class UserInfo {
 
     public static final String PREFERENCES = "com.delectable.mobile.data.userinfo";

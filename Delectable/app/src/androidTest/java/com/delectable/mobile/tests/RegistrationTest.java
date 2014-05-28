@@ -5,6 +5,9 @@ import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.LocalNotifications;
 import com.delectable.mobile.api.models.Registration;
+import com.delectable.mobile.api.requests.RegistrationsFacebook;
+import com.delectable.mobile.api.requests.RegistrationsLogin;
+import com.delectable.mobile.api.requests.RegistrationsRegister;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,9 +15,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by abednarek on 5/21/14.
- */
 public class RegistrationTest extends BaseInstrumentationTestCase {
 
     @Override
@@ -28,8 +28,8 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
     }
 
     public void testGetPayloadFieldsForRegisterAction() {
-        Registration regModel = new Registration();
-        String[] actualFields = regModel.getPayloadFieldsForAction(Registration.A_REGISTER);
+        RegistrationsRegister request = new RegistrationsRegister();
+        String[] actualFields = request.getPayloadFields();
         String[] expectedFields = new String[]{
                 "session_type",
                 "email",
@@ -43,8 +43,8 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
     }
 
     public void testGetPayloadFieldsForLoginAction() {
-        Registration regModel = new Registration();
-        String[] actualFields = regModel.getPayloadFieldsForAction(Registration.A_LOGIN);
+        RegistrationsLogin request = new RegistrationsLogin();
+        String[] actualFields = request.getPayloadFields();
         String[] expectedFields = new String[]{
                 "session_type",
                 "email",
@@ -56,8 +56,8 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
     }
 
     public void testGetPayloadFieldsForFacebookAction() {
-        Registration regModel = new Registration();
-        String[] actualFields = regModel.getPayloadFieldsForAction(Registration.A_FACEBOOK);
+        RegistrationsFacebook request = new RegistrationsFacebook();
+        String[] actualFields = request.getPayloadFields();
         String[] expectedFields = new String[]{
                 "session_type",
                 "facebook_token",
@@ -69,51 +69,63 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
     }
 
     public void testActionApiPaths() {
-        Registration regModel = new Registration();
+        RegistrationsRegister regRequest = new RegistrationsRegister();
+        RegistrationsLogin loginRequest = new RegistrationsLogin();
+        RegistrationsFacebook fbRequest = new RegistrationsFacebook();
+
         String basePath = "/v2/registrations/";
-        assertEquals(basePath + "register",
-                regModel.getResourceUrlForAction(Registration.A_REGISTER));
-        assertEquals(basePath + "login", regModel.getResourceUrlForAction(Registration.A_LOGIN));
-        assertEquals(basePath + "facebook",
-                regModel.getResourceUrlForAction(Registration.A_FACEBOOK));
+        assertEquals(basePath + "register", regRequest.getResourceUrl());
+        assertEquals(basePath + "login", loginRequest.getResourceUrl());
+        assertEquals(basePath + "facebook", fbRequest.getResourceUrl());
     }
 
     public void testBuildPayloadMapForRegistrationAction() {
-        Registration regModel = buildTestModel();
+        RegistrationsRegister request = new RegistrationsRegister();
+        request.setEmail("Some Email");
+        request.setPassword("Some Password");
+        request.setSessionType("Some Session");
+        request.setFname("First Name");
+        request.setLname("Last Name");
 
         Map<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("session_type", regModel.getSessionType());
-        expectedMap.put("email", regModel.getEmail());
-        expectedMap.put("password", regModel.getPassword());
-        expectedMap.put("fname", regModel.getFname());
-        expectedMap.put("lname", regModel.getLname());
+        expectedMap.put("session_type", request.getSessionType());
+        expectedMap.put("email", request.getEmail());
+        expectedMap.put("password", request.getPassword());
+        expectedMap.put("fname", request.getFname());
+        expectedMap.put("lname", request.getLname());
 
-        Map<String, String> actualMap = regModel.buildPayloadMapForAction(regModel.A_REGISTER);
+        Map<String, String> actualMap = request.buildPayloadMap();
         assertEquals(expectedMap, actualMap);
     }
 
     public void testBuildPayloadMapFoLoginAction() {
-        Registration regModel = buildTestModel();
+        RegistrationsLogin request = new RegistrationsLogin();
+        request.setEmail("Some Email");
+        request.setPassword("Some Password");
+        request.setSessionType("Some Session");
 
         Map<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("session_type", regModel.getSessionType());
-        expectedMap.put("email", regModel.getEmail());
-        expectedMap.put("password", regModel.getPassword());
+        expectedMap.put("session_type", request.getSessionType());
+        expectedMap.put("email", request.getEmail());
+        expectedMap.put("password", request.getPassword());
 
-        Map<String, String> actualMap = regModel.buildPayloadMapForAction(regModel.A_LOGIN);
+        Map<String, String> actualMap = request.buildPayloadMap();
         assertEquals(expectedMap, actualMap);
     }
 
     public void testBuildPayloadMapForFacebookAction() {
-        Registration regModel = buildTestModel();
+        RegistrationsFacebook request = new RegistrationsFacebook();
+        request.setFacebookToken("Some Token");
+        request.setFacebookTokenExpiration(1234.034);
+        request.setSessionType("Some Session");
 
         Map<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("session_type", regModel.getSessionType());
-        expectedMap.put("facebook_token", regModel.getFacebookToken());
+        expectedMap.put("session_type", request.getSessionType());
+        expectedMap.put("facebook_token", request.getFacebookToken());
         expectedMap.put("facebook_token_expiration",
-                regModel.getFacebookTokenExpiration().toString());
+                request.getFacebookTokenExpiration().toString());
 
-        Map<String, String> actualMap = regModel.buildPayloadMapForAction(regModel.A_FACEBOOK);
+        Map<String, String> actualMap = request.buildPayloadMap();
         assertEquals(expectedMap, actualMap);
     }
 
@@ -121,9 +133,7 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         Registration someRegistration = buildTestModel();
         JSONObject json = loadJsonObjectFromResource(R.raw.test_registration_success_response);
 
-        // Action is ignored for registration for now
-        Registration actualRegistration = someRegistration
-                .parsePayloadForAction(json, -1);
+        Registration actualRegistration = (Registration) someRegistration.buildFromJson(json);
         assertEquals("537e2f09753490201d00084f", actualRegistration.getSessionKey());
         assertEquals("OwcHeVvNMQ", actualRegistration.getSessionToken());
 
@@ -168,8 +178,8 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         assertEquals(0, actualAccount.getPaymentMethods().size());
         assertEquals("adam@ad60.com", actualAccount.getEmail());
         // TODO: custom parse these
-        assertEquals(0, actualAccount.getActivityFeedTsLast().intValue());
-        assertEquals(false, actualAccount.getFtueCompleted().booleanValue());
+        assertEquals(0, actualAccount.getActivityFeedTsLast());
+        assertEquals(false, actualAccount.getFtueCompleted());
         assertEquals(true, actualNotif.getSendLnOne().booleanValue());
         assertEquals(true, actualNotif.getSendLnTwo().booleanValue());
         assertEquals(false, actualNotif.getSendLnThree().booleanValue());
@@ -181,12 +191,6 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         Registration regModel = new Registration();
         // TODO: Replace with some Account info?
         regModel.setAccount(new Account());
-        regModel.setEmail("Some Email");
-        regModel.setFacebookToken("Some Facebook Token");
-        regModel.setFacebookTokenExpiration(123.456);
-        regModel.setFname("Some FName");
-        regModel.setLname("Some LName");
-        regModel.setPassword("Some Password");
         regModel.setSessionType("Some Session Type");
         regModel.setSessionToken("Some Session Token");
         regModel.setSessionKey("Some Session Key");

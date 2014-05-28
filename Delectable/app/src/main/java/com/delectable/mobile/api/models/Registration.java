@@ -21,11 +21,9 @@ public class Registration extends BaseResponse {
 
         // Custom Account parsing
         if (payload.optJSONObject("payload") != null) {
-            newRegistration
-                    .setAccount(Account.parsePrivateAccount(
-                            payload.optJSONObject("payload").optJSONObject(
-                                    "account")
-                    ));
+            JSONObject accountObject = payload.optJSONObject("payload").optJSONObject("account");
+            Account newAccount = Account.buildFromJson(accountObject, Account.class);
+            newRegistration.setAccount(newAccount);
         }
 
         return newRegistration;
@@ -39,35 +37,35 @@ public class Registration extends BaseResponse {
         this.account = account;
     }
 
-    public Boolean getNew_user() {
+    public Boolean getNewUser() {
         return new_user;
     }
 
-    public void setNew_user(Boolean new_user) {
+    public void setNewUser(Boolean new_user) {
         this.new_user = new_user;
     }
 
-    public String getSession_token() {
+    public String getSessionToken() {
         return session_token;
     }
 
-    public void setSession_token(String session_token) {
+    public void setSessionToken(String session_token) {
         this.session_token = session_token;
     }
 
-    public String getSession_type() {
+    public String getSessionType() {
         return session_type;
     }
 
-    public void setSession_type(String session_type) {
+    public void setSessionType(String session_type) {
         this.session_type = session_type;
     }
 
-    public String getSession_key() {
+    public String getSessionKey() {
         return session_key;
     }
 
-    public void setSession_key(String session_key) {
+    public void setSessionKey(String session_key) {
         this.session_key = session_key;
     }
 }
