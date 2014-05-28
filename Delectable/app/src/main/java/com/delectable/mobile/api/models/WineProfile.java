@@ -22,11 +22,7 @@ public class WineProfile extends BaseResponse {
 
     String price_status;
 
-    String e_tag;
-
     String description;
-
-    String context;
 
     Double price;
 
@@ -122,22 +118,6 @@ public class WineProfile extends BaseResponse {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getETag() {
-        return e_tag;
-    }
-
-    public void setETag(String e_tag) {
-        this.e_tag = e_tag;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
     }
 
     public Double getPrice() {

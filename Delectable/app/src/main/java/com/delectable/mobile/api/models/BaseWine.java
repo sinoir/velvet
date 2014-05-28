@@ -29,10 +29,6 @@ public class BaseWine extends BaseResponse {
 
     String description;
 
-    String context;
-
-    String e_tag;
-
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
@@ -131,22 +127,6 @@ public class BaseWine extends BaseResponse {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
-
-    public String getETag() {
-        return e_tag;
-    }
-
-    public void setETag(String e_tag) {
-        this.e_tag = e_tag;
     }
 
     @Override
