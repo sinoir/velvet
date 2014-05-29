@@ -1,0 +1,32 @@
+{
+    "success": true,
+    "payload": {
+        "account": {
+            "id": "537e2f09753490201d00084e",
+            "fname": "Adam",
+            "lname": "Bednarek",
+            "influencer": false,
+            "influencer_titles": [
+                ""
+            ],
+            "bio": "",
+            "follower_count": 0,
+            "following_count": 2,
+            "capture_count": 0,
+            "region_count": 0,
+            "wishlist_count": 0,
+            "url": "",
+            "photo": {
+                "url": "https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
+                "child_resolutions": {}
+            },
+            "context": "profile",
+            "e_tag": "jNHflR9U9xRQjA",
+            "current_user_relationship": -1,
+            "capture_summaries": []
+        }
+    },
+    "e_tag": "jNHflR9U9xRQjA",
+    "context": "profile",
+    "e_tag_match": false
+}

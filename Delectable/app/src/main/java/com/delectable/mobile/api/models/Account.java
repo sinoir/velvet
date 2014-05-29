@@ -56,6 +56,10 @@ public class Account extends BaseResponse {
 
     LocalNotifications local_notifs;
 
+    Integer current_user_relationship;
+
+    ArrayList<CaptureSummary> capture_summaries;
+
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
@@ -272,6 +276,22 @@ public class Account extends BaseResponse {
 
     public void setLocalNotifs(LocalNotifications local_notifs) {
         this.local_notifs = local_notifs;
+    }
+
+    public ArrayList<CaptureSummary> getCaptureSummaries() {
+        return capture_summaries;
+    }
+
+    public void setCaptureSummaries(ArrayList<CaptureSummary> capture_summaries) {
+        this.capture_summaries = capture_summaries;
+    }
+
+    public Integer getCurrentUserRelationship() {
+        return current_user_relationship;
+    }
+
+    public void setCurrentUserRelationship(Integer current_user_relationship) {
+        this.current_user_relationship = current_user_relationship;
     }
 
     class ClientState {
