@@ -95,8 +95,12 @@ public class BaseNetworkController {
             requestObject.put("sessionKey", UserInfo.getSessionKey(getContext()));
             requestObject.put("sessionToken", UserInfo.getSessionToken(getContext()));
         }
-        // TODO: Add context
-        // TODO: Add eTag
+        if (request.getContext() != null) {
+            requestObject.put("context", request.getContext());
+        }
+        if (request.getETag() != null) {
+            requestObject.put("e_tag", request.getETag());
+        }
         requestObject.put("payload", payload);
         return requestObject;
     }
