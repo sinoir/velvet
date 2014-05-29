@@ -19,13 +19,6 @@ public class Registration extends BaseResponse {
         Registration newRegistration = buildFromJson(payload.optJSONObject("payload"),
                 this.getClass());
 
-        // Custom Account parsing
-        if (payload.optJSONObject("payload") != null) {
-            JSONObject accountObject = payload.optJSONObject("payload").optJSONObject("account");
-            Account newAccount = Account.buildFromJson(accountObject, Account.class);
-            newRegistration.setAccount(newAccount);
-        }
-
         return newRegistration;
     }
 

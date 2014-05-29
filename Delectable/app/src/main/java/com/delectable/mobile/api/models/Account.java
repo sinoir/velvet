@@ -58,8 +58,13 @@ public class Account extends BaseResponse {
 
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
-        Account account = buildFromJson(jsonObj, Account.class);
-        return account;
+        JSONObject payloadObj = jsonObj.optJSONObject("payload");
+        Account newResource = null;
+        if (payloadObj != null && payloadObj.optJSONObject("account") != null) {
+            JSONObject accountObject = payloadObj.optJSONObject("account");
+            newResource = Account.buildFromJson(accountObject, Account.class);
+        }
+        return newResource;
     }
 
     public String getId() {

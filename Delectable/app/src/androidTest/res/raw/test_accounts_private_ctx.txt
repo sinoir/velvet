@@ -1,0 +1,65 @@
+{
+    "success": true,
+    "payload": {
+        "account": {
+            "id": "537e2f09753490201d00084e",
+            "fname": "Adam",
+            "lname": "Bednarek",
+            "influencer": false,
+            "influencer_titles": [
+                ""
+            ],
+            "bio": "",
+            "follower_count": 0,
+            "following_count": 2,
+            "capture_count": 0,
+            "region_count": 0,
+            "wishlist_count": 0,
+            "url": "",
+            "photo": {
+                "url": "https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
+                "child_resolutions": {}
+            },
+            "account_config": {
+                "passive_og_sharing": false,
+                "passive_vintank_sharing": false,
+                "pn_capture_transcribed": true,
+                "pn_comment_on_own_wine": true,
+                "pn_comment_response": true,
+                "pn_experiment": true,
+                "pn_friend_joined": true,
+                "pn_like_on_own_wine": true,
+                "pn_new_follower": true,
+                "pn_purchase_offer_made": true,
+                "pn_tagged": true,
+                "tagging_test": 0
+            },
+            "identifiers": [
+                {
+                    "type": "email",
+                    "id": "537e2f09753490201d000851",
+                    "string": "adam@ad60.com",
+                    "verified": false,
+                    "primary": true
+                }
+            ],
+            "sourcing_state": "CALIFORNIA",
+            "shipping_addresses": [],
+            "payment_methods": [],
+            "email": "adam@ad60.com",
+            "client_state": {
+                "activity_feed_ts_last": 0
+            },
+            "tutorial_state": {
+                "ftue_completed": true
+            },
+            "local_notifs": {
+                "send_ln_one": true,
+                "send_ln_two": true,
+                "send_ln_three": false,
+                "send_ln_four": false,
+                "send_ln_five": false
+            }
+        }
+    }
+}
