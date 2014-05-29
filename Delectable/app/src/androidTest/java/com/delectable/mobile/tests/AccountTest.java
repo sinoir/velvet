@@ -2,8 +2,10 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -214,5 +216,100 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(null, firstCapDetail.getBaseWine());
         assertEquals("minimal", firstCapDetail.getContext());
         assertEquals("0s2exXRTo5MDZA", firstCapDetail.getETag());
+    }
+
+    public void testParseAccountFollowerFeedMinCtx() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_min_ctx);
+        String expectedContext = "minimal";
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_MINIMAL);
+        assertEquals(expectedContext, request.getContext());
+
+        CaptureDetailsListing actualListing = (CaptureDetailsListing) request
+                .buildResopnseFromJson(json);
+
+        assertNull(actualListing.getBoundariesFromBefore());
+        assertNull(actualListing.getBoundariesFromAfter());
+        assertNull(actualListing.getBoundariesFromSince());
+
+        assertEquals("5358087d1d2b11888d000015", actualListing.getBoundariesToBefore());
+        assertEquals("5386a2077534901de4000004", actualListing.getBoundariesToAfter());
+        assertEquals("1401392575.8950038", actualListing.getBoundariesToSince());
+        assertEquals(0, actualListing.getBefore().size());
+        assertEquals(0, actualListing.getAfter().size());
+        assertEquals(20, actualListing.getUpdates().size());
+
+        assertEquals(0, actualListing.getDeletes().size());
+        assertTrue(actualListing.getMore());
+
+        assertEquals("1401392575.8950038", actualListing.getETag());
+        assertEquals(expectedContext, actualListing.getContext());
+
+        CaptureDetails actualFirstUpdateCapture = actualListing.getUpdates().get(0);
+
+        assertEquals("5386a2077534901de4000004", actualFirstUpdateCapture.getId());
+        assertEquals(1401332231.559, actualFirstUpdateCapture.getCreatedAt());
+        assertEquals(false, actualFirstUpdateCapture.getPrivate().booleanValue());
+        assertEquals(33,
+                actualFirstUpdateCapture.getRatings().get("50493e4de498ee00020006e5").intValue());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce.jpg",
+                actualFirstUpdateCapture.getPhoto().getUrl());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_nano.jpg",
+                actualFirstUpdateCapture.getPhoto().getNanoUrl());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_micro.jpg",
+                actualFirstUpdateCapture.getPhoto().getMicroUrl());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_thumb.jpg",
+                actualFirstUpdateCapture.getPhoto().getThumbUrl());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_250x250.jpg",
+                actualFirstUpdateCapture.getPhoto().get250Url());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_450x450.jpg",
+                actualFirstUpdateCapture.getPhoto().get450Url());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_medium.jpg",
+                actualFirstUpdateCapture.getPhoto().getMediumUrl());
+        assertEquals(
+                "https://d2mvsg0ph94s7h.cloudfront.net/michael-madrigale-1401332222-36883f2386ce_blur.jpg",
+                actualFirstUpdateCapture.getPhoto().getBlurUrl());
+        assertEquals("http://del.ec/sj8gg2A", actualFirstUpdateCapture.getShortShareUrl());
+        assertEquals("Close your eyes and you think it's Puligny. GREAT",
+                actualFirstUpdateCapture.getTweet());
+        assertEquals("521a25a7f05a32ac00000002",
+                actualFirstUpdateCapture.getWineProfile().getId());
+        assertEquals("1625419", actualFirstUpdateCapture.getWineProfile().getRegionId());
+        assertEquals("--", actualFirstUpdateCapture.getWineProfile().getVintage());
+        assertEquals("Edmond Cornu & Fils",
+                actualFirstUpdateCapture.getWineProfile().getProducerName());
+        assertEquals("Ladoix Vieilles Vignes Pinot Noir",
+                actualFirstUpdateCapture.getWineProfile().getName());
+        assertEquals("5305bb0fe5c5cb8a3a000a83",
+                actualFirstUpdateCapture.getWineProfile().getBaseWineId());
+        assertEquals(-1, actualFirstUpdateCapture.getWineProfile().getPrice().intValue());
+        assertEquals("impossible",
+                actualFirstUpdateCapture.getWineProfile().getPriceStatus());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/julien-mallus-1377436647-483177d7d3ba.jpg",
+                actualFirstUpdateCapture.getWineProfile().getPhoto().getUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/julien-mallus-1377436647-483177d7d3ba_micro.jpg",
+                actualFirstUpdateCapture.getWineProfile().getPhoto().getMicroUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/julien-mallus-1377436647-483177d7d3ba_thumb.jpg",
+                actualFirstUpdateCapture.getWineProfile().getPhoto().getThumbUrl());
+        assertEquals(
+                "https://s3.amazonaws.com/delectableCapturedPhotos/julien-mallus-1377436647-483177d7d3ba_medium.jpg",
+                actualFirstUpdateCapture.getWineProfile().getPhoto().getMediumUrl());
+        assertEquals("", actualFirstUpdateCapture.getWineProfile().getDescription());
+        assertEquals(null, actualFirstUpdateCapture.getWineProfile().getPriceText());
+        assertEquals("minimal", actualFirstUpdateCapture.getWineProfile().getContext());
+        assertEquals("f9zrnCF5TUb11w", actualFirstUpdateCapture.getWineProfile().getETag());
+        assertEquals(null, actualFirstUpdateCapture.getBaseWine());
+        assertEquals("minimal", actualFirstUpdateCapture.getContext());
+        assertEquals("FA5VUUsMpE0WcQ", actualFirstUpdateCapture.getETag());
     }
 }
