@@ -4,7 +4,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.RegistrationController;
-import com.delectable.mobile.api.models.Registration;
+import com.delectable.mobile.api.requests.RegistrationsLogin;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.home.activity.HomeActivity;
 
@@ -146,11 +146,11 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
 
     private void performLogin() {
         mLoginProgress.setVisibility(View.VISIBLE);
-        Registration registration = new Registration();
-        registration.setEmail(mEmailView.getText().toString());
-        registration.setPassword(mPasswordView.getText().toString());
+        RegistrationsLogin loginRequest = new RegistrationsLogin();
+        loginRequest.setEmail(mEmailView.getText().toString());
+        loginRequest.setPassword(mPasswordView.getText().toString());
         mRegistrationController
-                .loginUser(registration, new BaseNetworkController.SimpleRequestCallback() {
+                .loginUser(loginRequest, new BaseNetworkController.SimpleRequestCallback() {
                     @Override
                     public void onSucess() {
                         mLoginProgress.setVisibility(View.GONE);

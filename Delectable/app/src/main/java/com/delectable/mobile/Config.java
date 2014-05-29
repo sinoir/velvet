@@ -1,9 +1,8 @@
 package com.delectable.mobile;
 
-/**
- * Created by abednarek on 5/21/14.
- */
 public class Config {
+
+    public static final String DEFAULT_SESSION_TYPE = "mobile";
 
     public static class ServerInfo {
 

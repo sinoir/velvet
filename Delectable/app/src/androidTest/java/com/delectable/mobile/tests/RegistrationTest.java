@@ -1,5 +1,6 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.Config;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
@@ -83,9 +84,9 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         RegistrationsRegister request = new RegistrationsRegister();
         request.setEmail("Some Email");
         request.setPassword("Some Password");
-        request.setSessionType("Some Session");
         request.setFname("First Name");
         request.setLname("Last Name");
+        assertEquals(Config.DEFAULT_SESSION_TYPE, request.getSessionType());
 
         Map<String, String> expectedMap = new HashMap<String, String>();
         expectedMap.put("session_type", request.getSessionType());
@@ -102,7 +103,7 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         RegistrationsLogin request = new RegistrationsLogin();
         request.setEmail("Some Email");
         request.setPassword("Some Password");
-        request.setSessionType("Some Session");
+        assertEquals(Config.DEFAULT_SESSION_TYPE, request.getSessionType());
 
         Map<String, String> expectedMap = new HashMap<String, String>();
         expectedMap.put("session_type", request.getSessionType());
@@ -117,7 +118,7 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         RegistrationsFacebook request = new RegistrationsFacebook();
         request.setFacebookToken("Some Token");
         request.setFacebookTokenExpiration(1234.034);
-        request.setSessionType("Some Session");
+        assertEquals(Config.DEFAULT_SESSION_TYPE, request.getSessionType());
 
         Map<String, String> expectedMap = new HashMap<String, String>();
         expectedMap.put("session_type", request.getSessionType());

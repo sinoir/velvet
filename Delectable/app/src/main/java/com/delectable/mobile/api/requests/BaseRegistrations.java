@@ -1,5 +1,6 @@
 package com.delectable.mobile.api.requests;
 
+import com.delectable.mobile.Config;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Registration;
 
@@ -11,9 +12,9 @@ public abstract class BaseRegistrations extends BaseRequest {
 
     String session_type;
 
-    protected BaseRegistrations() {
+    public BaseRegistrations() {
         // Default SessionType is Mobile
-        this.session_type = "mobile";
+        this.session_type = Config.DEFAULT_SESSION_TYPE;
     }
 
     public String getSessionType() {

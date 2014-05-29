@@ -6,8 +6,6 @@ public class RegistrationsLogin extends BaseRegistrations {
 
     String password;
 
-    String session_type;
-
     @Override
     public String[] getPayloadFields() {
         return new String[]{
@@ -36,13 +34,5 @@ public class RegistrationsLogin extends BaseRegistrations {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getSessionType() {
-        return session_type;
-    }
-
-    public void setSessionType(String session_type) {
-        this.session_type = session_type;
     }
 }
