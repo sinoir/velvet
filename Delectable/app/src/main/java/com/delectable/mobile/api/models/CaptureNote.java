@@ -15,8 +15,6 @@ public class CaptureNote extends Capture {
 
     ArrayList<String> helpfuling_account_ids;
 
-    Account capturer_participant;
-
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         // Gets built by listing object
@@ -55,14 +53,6 @@ public class CaptureNote extends Capture {
         this.helpfuling_account_ids = helpfuling_account_ids;
     }
 
-    public Account getCapturerParticipant() {
-        return capturer_participant;
-    }
-
-    public void setCapturerParticipant(Account capturer_participant) {
-        this.capturer_participant = capturer_participant;
-    }
-
     @Override
     public String toString() {
         return "CaptureNote{" +
@@ -70,7 +60,6 @@ public class CaptureNote extends Capture {
                 ", note='" + note + '\'' +
                 ", vintage='" + vintage + '\'' +
                 ", helpfuling_account_ids=" + helpfuling_account_ids +
-                ", capturer_participant=" + capturer_participant +
                 "} " + super.toString();
     }
 }
