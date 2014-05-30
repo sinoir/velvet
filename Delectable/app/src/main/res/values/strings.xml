@@ -7,5 +7,8 @@
     <!-- Profile UI -->
     <string name="profile_followers">followers</string>
     <string name="profile_following">following</string>
+    <string name="profile_find_people">Find People</string>
+    <string name="profile_follow">Follow</string>
+    <string name="profile_unfollow">Unfollow</string>
 
 </resources>

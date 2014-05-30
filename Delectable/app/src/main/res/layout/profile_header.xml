@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/d_gray2">
+
+    <RelativeLayout
+        android:id="@+id/top_profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <include
+            layout="@layout/profile_header_main"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_pager_header_height" />
+        <!-- TODO: ViewPager header -->
+
+        <!-- TODO: Dot Indicators -->
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/find_follow_button"
+        android:layout_marginTop="@dimen/profile_vertical_spacing"
+        android:layout_marginBottom="@dimen/profile_vertical_spacing"
+        android:layout_width="310dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_below="@id/top_profile_container"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_find_people_background"
+        android:gravity="center"
+        android:text="@string/profile_find_people"
+        android:textColor="@color/btn_black_on_gray"
+        android:textSize="@dimen/button_text_size" />
+
+    <!-- TODO: Select List / Detail view buttons -->
+
+</RelativeLayout>
