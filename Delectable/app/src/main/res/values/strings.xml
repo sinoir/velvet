@@ -4,4 +4,8 @@
     <string name="app_name">Delectable</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Profile UI -->
+    <string name="profile_followers">followers</string>
+    <string name="profile_following">following</string>
+
 </resources>

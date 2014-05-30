@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/profile_image_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/circle_image_container_large" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_marginTop="@dimen/profile_vertical_spacing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/profile_username_text_size"
+        android:gravity="center"
+        android:text="Grace Carr" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/profile_vertical_spacing"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/followers_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/profile_counts_text_size"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/followers_text"
+            android:layout_toRightOf="@+id/followers_count"
+            android:paddingLeft="@dimen/profile_horizontal_text_spacing"
+            android:paddingRight="@dimen/profile_horizontal_text_spacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/d_gray3"
+            android:textSize="@dimen/profile_counts_text_size"
+            android:text="@string/profile_followers" />
+
+        <TextView
+            android:id="@+id/vertical_bar"
+            android:layout_toRightOf="@+id/followers_text"
+            android:paddingLeft="@dimen/profile_horizontal_text_spacing"
+            android:paddingRight="@dimen/profile_horizontal_text_spacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/d_gray3"
+            android:textSize="@dimen/profile_counts_text_size"
+            android:text="|" />
+
+        <TextView
+            android:id="@+id/following_count"
+            android:layout_toRightOf="@id/vertical_bar"
+            android:paddingLeft="@dimen/profile_horizontal_text_spacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/profile_counts_text_size"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/following_text"
+            android:layout_toRightOf="@+id/following_count"
+            android:paddingLeft="@dimen/profile_horizontal_text_spacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/d_gray3"
+            android:textSize="@dimen/profile_counts_text_size"
+            android:text="@string/profile_followers" />
+
+    </RelativeLayout>
+
+</LinearLayout>

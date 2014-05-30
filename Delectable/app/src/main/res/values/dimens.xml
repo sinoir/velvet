@@ -2,4 +2,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- User Profile Dimens -->
+    <dimen name="profile_vertical_spacing">9dp</dimen>
+    <dimen name="profile_horizontal_text_spacing">5dp</dimen>
+    <dimen name="profile_username_text_size">24sp</dimen>
+    <dimen name="profile_counts_text_size">16sp</dimen>
+
 </resources>
