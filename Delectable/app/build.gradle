@@ -22,7 +22,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
-    compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.android.support:support-v13:19.+'
     compile 'com.loopj.android:android-async-http:1.4.4@jar'
     compile 'com.google.code.gson:gson:2.2.+'
     compile 'com.j256.ormlite:ormlite-jdbc:4.27@jar'
