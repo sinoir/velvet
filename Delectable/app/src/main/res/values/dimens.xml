@@ -10,7 +10,16 @@
     <dimen name="profile_counts_text_size">16sp</dimen>
     <dimen name="profile_pager_header_height">160dp</dimen>
 
+    <!-- Capture Small Listing Row -->
+    <dimen name="cap_list_row_height">90dp</dimen>
+    <dimen name="cap_list_row_horizontal_spacing">15dp</dimen>
+    <dimen name="cap_list_row_vertical_spacing">20dp</dimen>
+    <dimen name="cap_list_row_image_size">50dp</dimen>
+    <dimen name="cap_list_row_top_text_font_size">14sp</dimen>
+    <dimen name="cap_list_row_bottom_text_font_size">16sp</dimen>
+
     <!-- General Dimens -->
     <dimen name="button_text_size">20sp</dimen>
     <dimen name="button_height">40dp</dimen>
+    <dimen name="rating_bar_height">10dp</dimen>
 </resources>

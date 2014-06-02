@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="@dimen/cap_list_row_image_size"
+        android:layout_height="@dimen/cap_list_row_image_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/cap_list_row_vertical_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="@dimen/cap_list_row_vertical_spacing"
+        android:layout_toRightOf="@id/image">
+
+        <TextView
+            android:id="@+id/producer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="LA RAME"
+            android:textColor="@color/d_gray4"
+            android:textSize="@dimen/cap_list_row_top_text_font_size" />
+
+        <TextView
+            android:id="@+id/wine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/producer_name"
+            android:text="Sauvignon Blanc Secret Sauce 2012"
+            android:textSize="@dimen/cap_list_row_bottom_text_font_size" />
+
+        <!-- TODO: Custom progress bar view -->
+        <View
+            android:id="@+id/rating_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/rating_bar_height"
+            android:layout_below="@id/wine_name"
+            android:layout_marginTop="4dp"
+            android:background="#76CC41" />
+    </RelativeLayout>
+
+</RelativeLayout>
