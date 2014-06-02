@@ -1,22 +1,53 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.RequestError;
+import com.delectable.mobile.api.controllers.AccountsNetworkController;
+import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureSummary;
+import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
+import com.squareup.picasso.Picasso;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class UserProfileTabFragment extends BaseFragment {
 
     private View mView;
 
     private ListView mListView;
+
+    private View mProfileHeaderView;
+
+    private TextView mUserNameTextView;
+
+    private TextView mFollowerCountTextView;
+
+    private TextView mFollowingCountTextView;
+
+    private ImageView mUserImageView;
+
+    private UserCapturesAdapter mAdapter;
+
+    private AccountsNetworkController mAccountsNetworkController;
+
+    private Account mUserAccount;
+
+    private ArrayList<CaptureDetails> mCaptureDetails;
+
+    private String mUserId;
 
     public UserProfileTabFragment() {
         // Required empty public constructor
@@ -25,8 +56,17 @@ public class UserProfileTabFragment extends BaseFragment {
     public static UserProfileTabFragment newInstance() {
         UserProfileTabFragment fragment = new UserProfileTabFragment();
         Bundle args = new Bundle();
+        // TODO: Pass ID
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mCaptureDetails = new ArrayList<CaptureDetails>();
+        mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        // TODO: Get UserID from Bundle
     }
 
     @Override
@@ -37,11 +77,71 @@ public class UserProfileTabFragment extends BaseFragment {
 
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
-        View profileHeader = inflater.inflate(R.layout.profile_header, null);
-        mListView.addHeaderView(profileHeader);
+        mProfileHeaderView = inflater.inflate(R.layout.profile_header, null);
+        mListView.addHeaderView(mProfileHeaderView);
 
-        // TODO: Create/Add Adapter ...
+        mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails);
+        mListView.setAdapter(mAdapter);
+        setupHeader();
 
         return mView;
+    }
+
+    private void setupHeader() {
+        // TODO: Will be placing main header in a viewpager
+        View headerMainView = mProfileHeaderView.findViewById(R.id.profile_header_main);
+        View imageContainerView = headerMainView.findViewById(R.id.profile_image_container);
+        mUserImageView = (ImageView) imageContainerView.findViewById(R.id.image);
+
+        mUserNameTextView = (TextView) headerMainView.findViewById(R.id.user_name);
+        mFollowerCountTextView = (TextView) headerMainView.findViewById(R.id.followers_count);
+        mFollowingCountTextView = (TextView) headerMainView.findViewById(R.id.following_count);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadAccountProfile();
+    }
+
+    private void loadAccountProfile() {
+        AccountsContextRequest request = new AccountsContextRequest(
+                AccountsContextRequest.CONTEXT_PROFILE);
+        request.setId(mUserId);
+        mAccountsNetworkController.performActionOnResource(request,
+                new BaseNetworkController.RequestActionCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        mUserAccount = (Account) result;
+                        mCaptureDetails.clear();
+                        if (mUserAccount.getCaptureSummaries() != null
+                                && mUserAccount.getCaptureSummaries().size() > 0) {
+                            for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
+                                mCaptureDetails.addAll(summary.getCaptures());
+                            }
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        updateUIWithData();
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+
+                    }
+                }
+        );
+    }
+
+    private void updateUIWithData() {
+        if (getActivity() == null) {
+            return;
+        }
+
+        String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
+        String imageUrl = mUserAccount.getPhoto().getUrl();
+        Picasso.with(getActivity()).load(imageUrl).into(mUserImageView);
+        mUserNameTextView.setText(userName);
+        mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
+        mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));
     }
 }

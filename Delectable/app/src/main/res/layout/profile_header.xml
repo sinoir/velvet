@@ -11,6 +11,7 @@
         android:layout_alignParentTop="true">
 
         <include
+            android:id="@+id/profile_header_main"
             layout="@layout/profile_header_main"
             android:layout_width="match_parent"
             android:layout_height="@dimen/profile_pager_header_height" />
