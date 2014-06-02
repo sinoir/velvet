@@ -40,14 +40,12 @@
             android:text="Sauvignon Blanc Secret Sauce 2012"
             android:textSize="@dimen/cap_list_row_bottom_text_font_size" />
 
-        <!-- TODO: Custom progress bar view -->
-        <View
+        <com.delectable.mobile.ui.common.widget.RatingsBarView
             android:id="@+id/rating_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/rating_bar_height"
             android:layout_below="@id/wine_name"
-            android:layout_marginTop="4dp"
-            android:background="#76CC41" />
+            android:layout_marginTop="4dp" />
     </RelativeLayout>
 
 </RelativeLayout>

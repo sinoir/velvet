@@ -16,20 +16,16 @@ import java.util.ArrayList;
 
 public class UserCapturesAdapter extends BaseAdapter {
 
-    private static final int sTypeSimpleListing = 0;
-
-    private static final int sTypeDetailedListing = 1;
-
     private Activity mContext;
 
     private ArrayList<CaptureDetails> mData;
 
-    private int mListingType;
+    private String mUserId;
 
-    public UserCapturesAdapter(Activity context, ArrayList<CaptureDetails> data) {
-        mListingType = 0;
+    public UserCapturesAdapter(Activity context, ArrayList<CaptureDetails> data, String userId) {
         mContext = context;
         mData = data;
+        mUserId = userId;
     }
 
     @Override
@@ -49,12 +45,7 @@ public class UserCapturesAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
-        if (mListingType == sTypeSimpleListing) {
-            view = getSimpleListingView(position, convertView, parent);
-        } else if (mListingType == sTypeDetailedListing) {
-            view = getDetailedListingView(position, convertView, parent);
-        }
+        View view = getSimpleListingView(position, convertView, parent);
         return view;
     }
 
@@ -70,12 +61,13 @@ public class UserCapturesAdapter extends BaseAdapter {
             viewHolder.wineImage = (ImageView) rowView.findViewById(R.id.image);
             viewHolder.producerName = (TextView) rowView.findViewById(R.id.producer_name);
             viewHolder.wineName = (TextView) rowView.findViewById(R.id.wine_name);
-            viewHolder.ratingBarView = rowView.findViewById(R.id.rating_bar);
+            viewHolder.ratingBarView = (RatingsBarView) rowView.findViewById(R.id.rating_bar);
             rowView.setTag(viewHolder);
         } else {
             viewHolder = (SimpleListingViewHolder) rowView.getTag();
         }
 
+        // TODO: Handle fresh captures with no matches / responses
         String producerName = "";
         String wineName = "";
         String wineImageUrl = "";
@@ -86,14 +78,18 @@ public class UserCapturesAdapter extends BaseAdapter {
         }
         viewHolder.producerName.setText(producerName);
         viewHolder.wineName.setText(wineName);
-        Picasso.with(mContext).load(wineImageUrl).into(viewHolder.wineImage);
+        if (wineImageUrl != "") {
+            Picasso.with(mContext).load(wineImageUrl).into(viewHolder.wineImage);
+        }
+
+        float ratingPercent = 0.0f;
+        if (capture.getRatings() != null && capture.getRatings().containsKey(mUserId)) {
+            // TODO: Figure out appropriate rating range , out of 100, 30, ?
+            ratingPercent = capture.getRatings().get(mUserId) / 100.0f;
+        }
+        viewHolder.ratingBarView.setPercent(ratingPercent);
 
         return rowView;
-    }
-
-    public View getDetailedListingView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement switching listing
-        return null;
     }
 
     static class SimpleListingViewHolder {
@@ -104,11 +100,6 @@ public class UserCapturesAdapter extends BaseAdapter {
 
         TextView wineName;
 
-        // TODO: Custom Bar View for rating
-        View ratingBarView;
-    }
-
-    static class DetailedListingViewHolder {
-        // TODO: Possibly split out?
+        RatingsBarView ratingBarView;
     }
 }

@@ -86,7 +86,7 @@ public class UserProfileTabFragment extends BaseFragment {
         mProfileHeaderView = inflater.inflate(R.layout.profile_header, null);
         mListView.addHeaderView(mProfileHeaderView);
 
-        mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails);
+        mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails, mUserId);
         mListView.setAdapter(mAdapter);
         setupHeader();
 
