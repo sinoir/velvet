@@ -71,6 +71,7 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.4" level="project" />
+    <orderEntry type="library" exported="" name="picasso-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="ormlite-jdbc-4.27" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
