@@ -10,6 +10,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -17,7 +18,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,7 +38,12 @@ public class UserProfileTabFragment extends BaseFragment {
 
     private TextView mFollowingCountTextView;
 
-    private ImageView mUserImageView;
+    private CircleImageView mUserImageView;
+
+    //TODO: ImageButtons?
+    private Button mSwitchToListViewButton;
+
+    private Button mSwitchToFeedViewButton;
 
     private UserCapturesAdapter mAdapter;
 
@@ -90,12 +96,36 @@ public class UserProfileTabFragment extends BaseFragment {
     private void setupHeader() {
         // TODO: Will be placing main header in a viewpager
         View headerMainView = mProfileHeaderView.findViewById(R.id.profile_header_main);
-        View imageContainerView = headerMainView.findViewById(R.id.profile_image_container);
-        mUserImageView = (ImageView) imageContainerView.findViewById(R.id.image);
-
+        mUserImageView = (CircleImageView) headerMainView.findViewById(R.id.image);
         mUserNameTextView = (TextView) headerMainView.findViewById(R.id.user_name);
         mFollowerCountTextView = (TextView) headerMainView.findViewById(R.id.followers_count);
         mFollowingCountTextView = (TextView) headerMainView.findViewById(R.id.following_count);
+
+        mSwitchToListViewButton = (Button) mProfileHeaderView
+                .findViewById(R.id.switch_to_listing_button);
+        mSwitchToFeedViewButton = (Button) mProfileHeaderView
+                .findViewById(R.id.switch_to_feed_listing_button);
+        mSwitchToListViewButton.setSelected(true);
+        setupSwitchButtons();
+    }
+
+    private void setupSwitchButtons() {
+        mSwitchToListViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSwitchToListViewButton.setSelected(true);
+                mSwitchToFeedViewButton.setSelected(false);
+                // TODO: Switch Adapters
+            }
+        });
+        mSwitchToFeedViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSwitchToListViewButton.setSelected(false);
+                mSwitchToFeedViewButton.setSelected(true);
+                // TODO: Switch Adapters
+            }
+        });
     }
 
     @Override
@@ -139,7 +169,7 @@ public class UserProfileTabFragment extends BaseFragment {
 
         String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
         String imageUrl = mUserAccount.getPhoto().getUrl();
-        Picasso.with(getActivity()).load(imageUrl).into(mUserImageView);
+        Picasso.with(getActivity()).load(imageUrl).into(mUserImageView.getPicassoTarget());
         mUserNameTextView.setText(userName);
         mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
         mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));

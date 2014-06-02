@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/d_gray2">
+    android:background="@color/d_gray1">
 
     <RelativeLayout
         android:id="@+id/top_profile_container"
@@ -18,22 +18,69 @@
         <!-- TODO: ViewPager header -->
 
         <!-- TODO: Dot Indicators -->
+
+        <Button
+            android:id="@+id/find_follow_button"
+            android:layout_width="310dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_below="@id/profile_header_main"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/profile_vertical_spacing"
+            android:layout_marginTop="@dimen/profile_vertical_spacing"
+            android:background="@drawable/btn_find_people_background"
+            android:gravity="center"
+            android:text="@string/profile_find_people"
+            android:textColor="@color/btn_black_on_gray"
+            android:textSize="@dimen/button_text_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/find_follow_button"
+            android:background="@color/d_gray2" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/find_follow_button"
-        android:layout_marginTop="@dimen/profile_vertical_spacing"
-        android:layout_marginBottom="@dimen/profile_vertical_spacing"
-        android:layout_width="310dp"
-        android:layout_height="@dimen/button_height"
+    <RelativeLayout
+        android:id="@+id/switch_buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_below="@id/top_profile_container"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_find_people_background"
-        android:gravity="center"
-        android:text="@string/profile_find_people"
-        android:textColor="@color/btn_black_on_gray"
-        android:textSize="@dimen/button_text_size" />
+        android:background="@android:color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
-    <!-- TODO: Select List / Detail view buttons -->
+        <TextView
+            android:id="@+id/capture_wine_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="152 wines"
+            android:textColor="@color/d_gray3" />
+
+        <!-- TODO: Use Image Button -->
+        <Button
+            android:id="@+id/switch_to_listing_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/vertical_divider" />
+
+        <View
+            android:id="@+id/vertical_divider"
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/switch_to_feed_listing_button"
+            android:background="@color/d_gray2" />
+
+        <Button
+            android:id="@+id/switch_to_feed_listing_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

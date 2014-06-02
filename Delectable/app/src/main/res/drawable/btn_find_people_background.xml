@@ -2,5 +2,5 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- TODO: Get 9patch button asset -->
-    <item android:drawable="@color/d_gray3" />
+    <item android:drawable="@color/d_gray5" />
 </selector>

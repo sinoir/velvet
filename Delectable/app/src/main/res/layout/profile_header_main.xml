@@ -4,10 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/circle_image_container_large"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/profile_vertical_spacing">
+
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/no_photo" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/user_name"

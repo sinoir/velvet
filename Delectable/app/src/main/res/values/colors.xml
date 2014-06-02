@@ -6,6 +6,8 @@
 
     <color name="d_gray1">#F5F5F5</color>
     <color name="d_gray2">#DEDEDE</color>
-    <color name="d_gray3">#9F9F9F</color>
+    <color name="d_gray3">#909090</color>
     <color name="d_gray4">#666666</color>
+    <color name="d_gray5">#DEDEDE</color>
+
 </resources>
