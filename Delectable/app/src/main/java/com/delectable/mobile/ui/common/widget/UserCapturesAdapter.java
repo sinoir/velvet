@@ -82,12 +82,7 @@ public class UserCapturesAdapter extends BaseAdapter {
             Picasso.with(mContext).load(wineImageUrl).into(viewHolder.wineImage);
         }
 
-        float ratingPercent = 0.0f;
-        if (capture.getRatings() != null && capture.getRatings().containsKey(mUserId)) {
-            // TODO: Figure out appropriate rating range , out of 100, 30, ?
-            ratingPercent = capture.getRatings().get(mUserId) / 100.0f;
-        }
-        viewHolder.ratingBarView.setPercent(ratingPercent);
+        viewHolder.ratingBarView.setPercent(capture.getRatingPercentForId(mUserId));
 
         return rowView;
     }

@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 public class CaptureDetails extends Capture {
 
+    public static int MAX_RATING_VALUE = 40;
+
     String short_share_url;
 
     String tweet;
@@ -43,6 +45,23 @@ public class CaptureDetails extends Capture {
         }
 
         return newResource;
+    }
+
+    /**
+     * Get % of Rating
+     *
+     * @param id = User ID linked to Ratings Hash
+     * @return -1.0f if no rating exists, or value between 0.0f and 1.0f
+     */
+    public float getRatingPercentForId(String id) {
+        float ratingPercent = -1.0f;
+        if (ratings != null && ratings.containsKey(id)) {
+            ratingPercent = ratings.get(id).floatValue() / MAX_RATING_VALUE;
+        }
+        if (ratingPercent <= 0.0f) {
+            ratingPercent = -1.0f;
+        }
+        return ratingPercent;
     }
 
     public String getShortShareUrl() {

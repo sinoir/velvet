@@ -225,4 +225,17 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         assertEquals(null, actualCapture.getBaseWine());
     }
+
+    public void testGetRatingPercentForId() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
+        float expectedNoRating = -1.0f;
+        float expectedGoodRating = 19.0f / 40.0f;
+        assertEquals(expectedNoRating, actualCapture.getRatingPercentForId("531626c71d2b11c1a400004e"));
+        assertEquals(expectedGoodRating, actualCapture.getRatingPercentForId(
+                "52069ff93166785b5d003576"));
+        assertEquals(expectedNoRating, actualCapture.getRatingPercentForId("abc"));
+    }
 }
