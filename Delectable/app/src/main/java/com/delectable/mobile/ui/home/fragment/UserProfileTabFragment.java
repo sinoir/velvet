@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 public class UserProfileTabFragment extends BaseFragment {
 
+    private static final String sArgsUserId = "sArgsUserId";
+
     private View mView;
 
     private ListView mListView;
@@ -61,10 +63,10 @@ public class UserProfileTabFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static UserProfileTabFragment newInstance() {
+    public static UserProfileTabFragment newInstance(String userId) {
         UserProfileTabFragment fragment = new UserProfileTabFragment();
         Bundle args = new Bundle();
-        // TODO: Pass ID
+        args.putString(sArgsUserId, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,7 +76,10 @@ public class UserProfileTabFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         mCaptureDetails = new ArrayList<CaptureDetails>();
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
-        // TODO: Get UserID from Bundle
+        Bundle args = getArguments();
+        if (args != null) {
+            mUserId = args.getString(sArgsUserId);
+        }
     }
 
     @Override

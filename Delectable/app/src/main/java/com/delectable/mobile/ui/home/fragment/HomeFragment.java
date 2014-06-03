@@ -37,6 +37,7 @@ public class HomeFragment extends BaseFragment {
 
         setHasOptionsMenu(true);
 
+        String currentUserId = UserInfo.getUserId(getActivity());
         mView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
@@ -49,7 +50,7 @@ public class HomeFragment extends BaseFragment {
         tabFragments.add(FollowFeedTabFragment.newInstance());
 
         imageId.add(R.drawable.ab_profile);
-        tabFragments.add(UserProfileTabFragment.newInstance());
+        tabFragments.add(UserProfileTabFragment.newInstance(currentUserId));
 
         imageId.add(R.drawable.ab_activity);
         tabFragments.add(ActivityFeedTabFragment.newInstance());
