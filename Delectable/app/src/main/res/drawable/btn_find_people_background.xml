@@ -2,5 +2,25 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- TODO: Get 9patch button asset -->
-    <item android:drawable="@color/d_gray5" />
+
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp" />
+            <solid android:color="@color/d_gray3" />
+        </shape>
+    </item>
+    
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp" />
+            <solid android:color="@color/d_gray3" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp" />
+            <solid android:color="@color/d_gray5" />
+        </shape>
+    </item>
 </selector>
