@@ -10,5 +10,6 @@
     <string name="profile_find_people">Find People</string>
     <string name="profile_follow">Follow</string>
     <string name="profile_unfollow">Unfollow</string>
+    <string name="with">with</string>
 
 </resources>

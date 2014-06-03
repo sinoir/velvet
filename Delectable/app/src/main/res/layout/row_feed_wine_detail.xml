@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/wine_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cap_feed_row_wine_banner_height">
+
+        <!--TOOD: Placeholder for no image? -->
+        <ImageView
+            android:id="@+id/wine_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:background="@color/d_gray3" />
+
+        <TextView
+            android:id="@+id/producer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/wine_name"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
+            android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
+            android:text="LA RAME"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/cap_feed_row_top_text_font_size" />
+
+        <TextView
+            android:id="@+id/wine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
+            android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
+            android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
+            android:text="Sauvignon Blanc Secret Sauce 2012"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/cap_feed_row_bottom_text_font_size" />
+
+        <!--TODO: Mini upside down Triangle -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wine_banner"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="@dimen/cap_list_row_horizontal_spacing"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:paddingRight="@dimen/cap_list_row_horizontal_spacing">
+
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/profile_image1"
+            android:layout_width="@dimen/small_profile_image_size"
+            android:layout_height="@dimen/small_profile_image_size"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+            android:src="@drawable/ab_profile_normal" />
+
+        <TextView
+            android:id="@+id/with_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/profile_image1"
+            android:text="@string/with" />
+
+        <RelativeLayout
+            android:id="@+id/participants_image_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <!--TODO: Participating commenters?-->
+        </RelativeLayout>
+    </RelativeLayout>
+    <!-- TODO: Expandable ListView with Grouped Rows? -->
+
+</RelativeLayout>
