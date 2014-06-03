@@ -47,6 +47,19 @@ public class CaptureDetails extends Capture {
         return newResource;
     }
 
+    public CaptureComment getCommentForUserId(String id) {
+        CaptureComment captureComment = null;
+        if (comments != null && comments.size() > 0) {
+            for (CaptureComment comment : comments) {
+                if (comment.account_id.equalsIgnoreCase(id)) {
+                    captureComment = comment;
+                    break;
+                }
+            }
+        }
+        return captureComment;
+    }
+
     /**
      * Get % of Rating
      *

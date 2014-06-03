@@ -1,5 +1,6 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.requests.CapturesContextRequest;
 
@@ -233,9 +234,47 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
         float expectedNoRating = -1.0f;
         float expectedGoodRating = 19.0f / 40.0f;
-        assertEquals(expectedNoRating, actualCapture.getRatingPercentForId("531626c71d2b11c1a400004e"));
+        assertEquals(expectedNoRating,
+                actualCapture.getRatingPercentForId("531626c71d2b11c1a400004e"));
         assertEquals(expectedGoodRating, actualCapture.getRatingPercentForId(
                 "52069ff93166785b5d003576"));
         assertEquals(expectedNoRating, actualCapture.getRatingPercentForId("abc"));
+    }
+
+    public void testGetCommentForUserIdFromCaptureWithComments() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureComment actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
+
+        String expectedCommentString = "Hard black berry. Simple acid. $25";
+        assertEquals(expectedCommentString, actualComment.getComment());
+    }
+
+    public void testGetCommentForUserIdFromCaptureWithCommentsAndBadUserId() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureComment actualComment = capture.getCommentForUserId("unknown?");
+
+        assertNull(actualComment);
+    }
+
+    public void testGetCommentForUserIdFromCaptureWithNoComments() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        // Clear comments with valud array list
+        capture.getComments().clear();
+        CaptureComment actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
+        assertNull(actualComment);
+
+        // Comments is Null
+        capture.setComments(null);
+        actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
+        assertNull(actualComment);
     }
 }
