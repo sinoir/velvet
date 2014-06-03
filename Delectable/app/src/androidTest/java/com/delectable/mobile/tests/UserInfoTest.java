@@ -1,15 +1,12 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Registration;
 import com.delectable.mobile.data.UserInfo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.test.AndroidTestCase;
 
-/**
- * Created by abednarek on 5/22/14.
- */
 public class UserInfoTest extends BaseAndroidTestCase {
 
     Registration mTestRegistration;
@@ -20,6 +17,8 @@ public class UserInfoTest extends BaseAndroidTestCase {
         mTestRegistration = new Registration();
         mTestRegistration.setSessionToken("Session Token");
         mTestRegistration.setSessionKey("Session Key");
+        mTestRegistration.setAccount(new Account());
+        mTestRegistration.getAccount().setId("my user id");
     }
 
     @Override
@@ -29,15 +28,15 @@ public class UserInfoTest extends BaseAndroidTestCase {
     }
 
 
-
     public void testOnSignIn() {
         UserInfo.onSignIn(getContext(), mTestRegistration);
         SharedPreferences prefs = getContext().getSharedPreferences(UserInfo.PREFERENCES,
                 Context.MODE_PRIVATE);
         assertEquals(mTestRegistration.getSessionKey(), UserInfo.getSessionKey(getContext()));
         assertEquals(mTestRegistration.getSessionToken(), UserInfo.getSessionToken(getContext()));
+        assertEquals(mTestRegistration.getAccount().getId(), UserInfo.getUserId(getContext()));
 
-        assertEquals(2, prefs.getAll().size());
+        assertEquals(3, prefs.getAll().size());
     }
 
     public void testOnSignOut() {
