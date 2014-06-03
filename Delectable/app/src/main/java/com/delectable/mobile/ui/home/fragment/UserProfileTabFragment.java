@@ -38,6 +38,8 @@ public class UserProfileTabFragment extends BaseFragment {
 
     private TextView mFollowingCountTextView;
 
+    private TextView mCaptureWineCountTextView;
+
     private CircleImageView mUserImageView;
 
     //TODO: ImageButtons?
@@ -100,6 +102,9 @@ public class UserProfileTabFragment extends BaseFragment {
         mUserNameTextView = (TextView) headerMainView.findViewById(R.id.user_name);
         mFollowerCountTextView = (TextView) headerMainView.findViewById(R.id.followers_count);
         mFollowingCountTextView = (TextView) headerMainView.findViewById(R.id.following_count);
+
+        mCaptureWineCountTextView = (TextView) mProfileHeaderView
+                .findViewById(R.id.capture_wine_count);
 
         mSwitchToListViewButton = (Button) mProfileHeaderView
                 .findViewById(R.id.switch_to_listing_button);
@@ -169,9 +174,17 @@ public class UserProfileTabFragment extends BaseFragment {
 
         String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
         String imageUrl = mUserAccount.getPhoto().getUrl();
+        int numCaptures = mUserAccount.getCaptureCount() != null ?
+                mUserAccount.getCaptureCount() : 0;
+        String wineCount = getResources().getString(R.string.wine_count, numCaptures);
+
+        wineCount = wineCount != null ? wineCount : "";
+
         Picasso.with(getActivity()).load(imageUrl).into(mUserImageView.getPicassoTarget());
+
         mUserNameTextView.setText(userName);
         mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
         mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));
+        mCaptureWineCountTextView.setText(wineCount);
     }
 }

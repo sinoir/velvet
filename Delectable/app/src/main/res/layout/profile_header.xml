@@ -54,7 +54,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="152 wines"
             android:textColor="@color/d_gray3" />
 
         <!-- TODO: Use Image Button -->
