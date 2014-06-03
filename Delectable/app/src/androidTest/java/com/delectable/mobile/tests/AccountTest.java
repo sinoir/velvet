@@ -438,4 +438,16 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(0, actualCapture.getContactParticipants().size());
         assertEquals(0, actualCapture.getRegisteredParticipants().size());
     }
+
+    public void testGetFullName() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_other_profile_ctx);
+        String expectedContext = "profile";
+        AccountsContextRequest request = new AccountsContextRequest(
+                AccountsContextRequest.CONTEXT_PROFILE);
+        assertEquals(expectedContext, request.getContext());
+
+        Account actualAccount = (Account) request.buildResopnseFromJson(json);
+        String expectedName = "James Wooldridge";
+        assertEquals(expectedName, actualAccount.getFullName());
+    }
 }

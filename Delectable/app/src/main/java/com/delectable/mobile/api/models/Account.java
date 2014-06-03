@@ -71,6 +71,10 @@ public class Account extends BaseResponse {
         return newResource;
     }
 
+    public String getFullName() {
+        return getFname() + " " + getLname();
+    }
+
     public String getId() {
         return id;
     }
