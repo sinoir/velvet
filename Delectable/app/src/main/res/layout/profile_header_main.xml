@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/following_count"
             android:paddingLeft="@dimen/profile_horizontal_text_spacing"
-            android:text="@string/profile_followers"
+            android:text="@string/profile_following"
             android:textColor="@color/d_gray3"
             android:textSize="@dimen/profile_counts_text_size" />
 
