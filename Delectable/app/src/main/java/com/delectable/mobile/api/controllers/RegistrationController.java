@@ -17,7 +17,7 @@ public class RegistrationController extends BaseNetworkController {
     public void loginUser(RegistrationsLogin loginRequest,
             final SimpleRequestCallback callback) {
 
-        performActionOnResource(loginRequest, new RequestActionCallback() {
+        performRequest(loginRequest, new RequestCallback() {
 
             @Override
             public void onSuccess(BaseResponse result) {

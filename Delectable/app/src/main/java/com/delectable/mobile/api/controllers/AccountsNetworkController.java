@@ -13,10 +13,10 @@ public class AccountsNetworkController extends BaseNetworkController {
     }
 
     // TODO: Figure out how the before / after should work... then pass it up?
-    public void loadFollowerFeed(final RequestActionCallback callback) {
+    public void loadFollowerFeed(final RequestCallback callback) {
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        performActionOnResource(request, new RequestActionCallback() {
+        performRequest(request, new RequestCallback() {
             @Override
             public void onSuccess(BaseResponse result) {
                 if (callback != null) {

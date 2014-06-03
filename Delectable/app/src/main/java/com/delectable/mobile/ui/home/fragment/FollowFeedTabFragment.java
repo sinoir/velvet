@@ -77,8 +77,8 @@ public class FollowFeedTabFragment extends BaseFragment {
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
         // TODO: Update with Before / After for pagination
-        mAccountsNetworkController.performActionOnResource(request,
-                new BaseNetworkController.RequestActionCallback() {
+        mAccountsNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
                         mDetailsListing = (CaptureDetailsListing) result;

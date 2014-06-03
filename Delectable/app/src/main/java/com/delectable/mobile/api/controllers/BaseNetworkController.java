@@ -30,8 +30,8 @@ public class BaseNetworkController {
         return mContext;
     }
 
-    public void performActionOnResource(final BaseRequest requestObject,
-            final RequestActionCallback callback) {
+    public void performRequest(final BaseRequest requestObject,
+            final RequestCallback callback) {
         String resourceUri = requestObject.getResourceUrl();
 
         Log.d(TAG, "Sending Resource: " + requestObject.getClass().getSimpleName() + " Payload: "
@@ -115,7 +115,7 @@ public class BaseNetworkController {
         return entity;
     }
 
-    public interface RequestActionCallback {
+    public interface RequestCallback {
 
         public void onSuccess(BaseResponse result);
 

@@ -143,8 +143,8 @@ public class UserProfileTabFragment extends BaseFragment {
         AccountsContextRequest request = new AccountsContextRequest(
                 AccountsContextRequest.CONTEXT_PROFILE);
         request.setId(mUserId);
-        mAccountsNetworkController.performActionOnResource(request,
-                new BaseNetworkController.RequestActionCallback() {
+        mAccountsNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
                         mUserAccount = (Account) result;
