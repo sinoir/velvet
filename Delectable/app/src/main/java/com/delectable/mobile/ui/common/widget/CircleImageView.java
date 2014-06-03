@@ -43,13 +43,14 @@ public class CircleImageView extends ImageView {
         super(context, attrs, defStyle);
 
         mContainerRectF = new RectF();
-
-        mBitmap = ((BitmapDrawable) getDrawable()).getBitmap();
-        mShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-
         mCircleShaderPaint = new Paint();
         mCircleShaderPaint.setAntiAlias(true);
-        mCircleShaderPaint.setShader(mShader);
+
+        if (getDrawable() != null) {
+            mBitmap = ((BitmapDrawable) getDrawable()).getBitmap();
+            mShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            mCircleShaderPaint.setShader(mShader);
+        }
         setImageResource(0);
 
         // With Picasso , we need to use this target
