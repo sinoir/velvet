@@ -15,20 +15,29 @@ import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
 import com.squareup.picasso.Picasso;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class UserProfileTabFragment extends BaseFragment {
 
+    public static final String TAG = "UserProfileTabFragment";
+
     private static final String sArgsUserId = "sArgsUserId";
 
     private View mView;
+
+    private SwipeRefreshLayout mRefreshContainer;
+
 
     private ListView mListView;
 
@@ -87,6 +96,7 @@ public class UserProfileTabFragment extends BaseFragment {
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_home_user_profile_tab, container, false);
+        mRefreshContainer = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container);
 
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
@@ -95,9 +105,39 @@ public class UserProfileTabFragment extends BaseFragment {
 
         mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails, mUserId);
         mListView.setAdapter(mAdapter);
+        setupPullToRefresh();
         setupHeader();
 
         return mView;
+    }
+
+    private void setupPullToRefresh() {
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view,
+                    int firstVisibleItem,
+                    int visibleItemCount,
+                    int totalItemCount) {
+                int topRowVerticalPosition = (mListView == null || mListView.getChildCount() == 0)
+                        ?
+                        0 : mListView.getChildAt(0).getTop();
+                mRefreshContainer.setEnabled(topRowVerticalPosition >= 0);
+            }
+        });
+
+        mRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d(TAG, "On Refresh");
+                // TODO: Show some indicator of refreshing
+                loadData();
+            }
+        });
     }
 
     private void setupHeader() {
@@ -141,10 +181,10 @@ public class UserProfileTabFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadAccountProfile();
+        loadData();
     }
 
-    private void loadAccountProfile() {
+    private void loadData() {
         AccountsContextRequest request = new AccountsContextRequest(
                 AccountsContextRequest.CONTEXT_PROFILE);
         request.setId(mUserId);
@@ -152,6 +192,8 @@ public class UserProfileTabFragment extends BaseFragment {
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
+                        Log.d(TAG, "Received Results! " + result);
+
                         mUserAccount = (Account) result;
                         mCaptureDetails.clear();
                         if (mUserAccount.getCaptureSummaries() != null
@@ -161,12 +203,17 @@ public class UserProfileTabFragment extends BaseFragment {
                             }
                         }
                         mAdapter.notifyDataSetChanged();
+                        mRefreshContainer.setRefreshing(false);
                         updateUIWithData();
                     }
 
                     @Override
                     public void onFailed(RequestError error) {
-
+                        mRefreshContainer.setRefreshing(false);
+                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
+                                .getCode());
+                        // TODO: What to do with errors?
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
         );

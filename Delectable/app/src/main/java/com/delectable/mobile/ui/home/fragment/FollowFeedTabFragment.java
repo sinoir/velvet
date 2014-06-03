@@ -12,16 +12,24 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class FollowFeedTabFragment extends BaseFragment {
 
+    private static final String TAG = "FollowFeedTabFragment";
+
     private View mView;
+
+    private SwipeRefreshLayout mRefreshContainer;
 
     private ListView mListView;
 
@@ -56,14 +64,19 @@ public class FollowFeedTabFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_home_follow_feed_tab, container, false);
+        mView = inflater
+                .inflate(R.layout.fragment_home_follow_feed_tab, container,
+                        false);
+        mRefreshContainer = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container);
 
-        // TODO: Pull to Refresh
         // TODO: Pagination
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
         mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails);
         mListView.setAdapter(mAdapter);
+
+        setupPullToRefresh();
+
         return mView;
     }
 
@@ -71,6 +84,35 @@ public class FollowFeedTabFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         loadData();
+    }
+
+    private void setupPullToRefresh() {
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view,
+                    int firstVisibleItem,
+                    int visibleItemCount,
+                    int totalItemCount) {
+                int topRowVerticalPosition = (mListView == null || mListView.getChildCount() == 0)
+                        ?
+                        0 : mListView.getChildAt(0).getTop();
+                mRefreshContainer.setEnabled(topRowVerticalPosition >= 0);
+            }
+        });
+
+        mRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d(TAG, "On Refresh");
+                // TODO: Show some indicator of refreshing
+                loadData();
+            }
+        });
     }
 
     private void loadData() {
@@ -81,13 +123,19 @@ public class FollowFeedTabFragment extends BaseFragment {
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
+                        Log.d(TAG, "Received Results! " + result);
                         mDetailsListing = (CaptureDetailsListing) result;
+                        mRefreshContainer.setRefreshing(false);
                         updateDisplayData();
                     }
 
                     @Override
                     public void onFailed(RequestError error) {
-
+                        mRefreshContainer.setRefreshing(false);
+                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
+                                .getCode());
+                        // TODO: What to do with errors?
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
         );
