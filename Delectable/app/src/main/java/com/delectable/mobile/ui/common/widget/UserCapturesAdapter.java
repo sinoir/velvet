@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.squareup.picasso.Picasso;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -78,9 +78,7 @@ public class UserCapturesAdapter extends BaseAdapter {
         }
         viewHolder.producerName.setText(producerName);
         viewHolder.wineName.setText(wineName);
-        if (wineImageUrl != "") {
-            Picasso.with(mContext).load(wineImageUrl).into(viewHolder.wineImage);
-        }
+        ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, viewHolder.wineImage);
 
         viewHolder.ratingBarView.setPercent(capture.getRatingPercentForId(mUserId));
 

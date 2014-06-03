@@ -12,7 +12,7 @@ import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
-import com.squareup.picasso.Picasso;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -232,8 +232,7 @@ public class UserProfileTabFragment extends BaseFragment {
 
         wineCount = wineCount != null ? wineCount : "";
 
-        Picasso.with(getActivity()).load(imageUrl).into(mUserImageView.getPicassoTarget());
-
+        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl, mUserImageView);
         mUserNameTextView.setText(userName);
         mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
         mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));

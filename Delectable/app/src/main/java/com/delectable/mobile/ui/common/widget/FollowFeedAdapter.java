@@ -4,7 +4,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Capture;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.squareup.picasso.Picasso;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -85,9 +85,9 @@ public class FollowFeedAdapter extends BaseAdapter {
             wineImageUrl = capture.getPhoto().getUrl();
         }
 
-        Picasso.with(mContext).load(wineImageUrl).into(viewHolder.wineImage);
-        Picasso.with(mContext).load(profileImageUrl)
-                .into(viewHolder.profileImage1.getPicassoTarget());
+        ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, viewHolder.wineImage);
+        ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage1);
+
         viewHolder.producerName.setText(producerName);
         viewHolder.wineName.setText(wineName);
 
