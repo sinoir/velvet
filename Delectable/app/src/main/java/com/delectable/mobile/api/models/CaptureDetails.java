@@ -4,8 +4,8 @@ import com.delectable.mobile.util.DateHelperUtil;
 
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class CaptureDetails extends Capture {

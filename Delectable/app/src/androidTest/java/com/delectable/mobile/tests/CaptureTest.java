@@ -7,7 +7,8 @@ import com.delectable.mobile.api.requests.CapturesContextRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 public class CaptureTest extends BaseInstrumentationTestCase {
 

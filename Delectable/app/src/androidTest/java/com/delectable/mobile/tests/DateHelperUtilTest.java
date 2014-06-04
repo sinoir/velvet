@@ -4,7 +4,8 @@ import com.delectable.mobile.util.DateHelperUtil;
 
 import junit.framework.TestCase;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 public class DateHelperUtilTest extends TestCase {
 
