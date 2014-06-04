@@ -1,7 +1,10 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.util.DateHelperUtil;
+
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -75,6 +78,11 @@ public class CaptureDetails extends Capture {
             ratingPercent = -1.0f;
         }
         return ratingPercent;
+    }
+
+    public Date getCreatedAtDate() {
+        double createdAtTime = created_at != null ? created_at.doubleValue() : 0.0f;
+        return DateHelperUtil.dateFromDouble(createdAtTime);
     }
 
     public String getShortShareUrl() {
@@ -210,5 +218,4 @@ public class CaptureDetails extends Capture {
                     '}';
         }
     }
-
 }

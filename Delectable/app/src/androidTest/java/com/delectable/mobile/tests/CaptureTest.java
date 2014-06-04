@@ -7,6 +7,8 @@ import com.delectable.mobile.api.requests.CapturesContextRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
+
 public class CaptureTest extends BaseInstrumentationTestCase {
 
     @Override
@@ -276,5 +278,16 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         capture.setComments(null);
         actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
         assertNull(actualComment);
+    }
+
+    public void testGetCreationDate() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+
+        Date expectedDate = new Date(1398530839601l);
+        Date actualDate = capture.getCreatedAtDate();
+        assertEquals(expectedDate, actualDate);
     }
 }

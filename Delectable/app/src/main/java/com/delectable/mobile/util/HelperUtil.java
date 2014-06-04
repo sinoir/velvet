@@ -2,9 +2,6 @@ package com.delectable.mobile.util;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-/**
- * Created by abednarek on 5/21/14.
- */
 public class HelperUtil {
 
     public static String snakeCaseToCamelCase(String snakeCasedString) {
