@@ -52,9 +52,8 @@
 
     </RelativeLayout>
 
-    <!-- TODO: Tagged With With will be list of 4 circles, then + circle if more-->
     <RelativeLayout
-        android:id="@+id/capturer_tagged_with_container"
+        android:id="@+id/tagged_participants_container"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@id/wine_banner"
@@ -63,8 +62,7 @@
         android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
         android:background="@android:color/white"
         android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-        android:visibility="gone">
+        android:paddingRight="@dimen/cap_list_row_horizontal_spacing">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
@@ -72,7 +70,6 @@
             android:layout_height="@dimen/small_profile_image_size"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
             android:src="@drawable/ab_profile_normal" />
 
         <TextView
@@ -80,15 +77,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+            android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
             android:layout_toRightOf="@id/profile_image1"
             android:text="@string/with" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/participants_image_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <!--TODO: Stub 4 circle button images then with + circle -->
-        </RelativeLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/with_text"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/tagged_user_image1"
+                android:layout_width="@dimen/small_profile_image_size"
+                android:layout_height="@dimen/small_profile_image_size"
+                android:layout_weight="1"
+                android:src="@drawable/ab_profile_normal" />
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/tagged_user_image2"
+                android:layout_width="@dimen/small_profile_image_size"
+                android:layout_height="@dimen/small_profile_image_size"
+                android:layout_weight="1"
+                android:src="@drawable/ab_profile_normal" />
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/tagged_user_image3"
+                android:layout_width="@dimen/small_profile_image_size"
+                android:layout_height="@dimen/small_profile_image_size"
+                android:layout_weight="1"
+                android:src="@drawable/ab_profile_normal" />
+
+            <!-- TODO: Plus Image Button Icon -->
+            <ImageView
+                android:id="@+id/more_tagged_user_button"
+                android:layout_width="@dimen/small_profile_image_size"
+                android:layout_height="@dimen/small_profile_image_size"
+                android:layout_weight="1"
+                android:src="@drawable/ab_profile_normal" />
+
+        </LinearLayout>
 
         <View
             android:id="@+id/vertical_divider1"
@@ -103,7 +135,7 @@
         android:id="@+id/capturer_comments_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/capturer_tagged_with_container"
+        android:layout_below="@id/tagged_participants_container"
         android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
         android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
         android:paddingRight="@dimen/cap_list_row_horizontal_spacing">

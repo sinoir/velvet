@@ -61,14 +61,26 @@ public class FollowFeedAdapter extends BaseAdapter {
             LayoutInflater inflater = mContext.getLayoutInflater();
             rowView = inflater.inflate(R.layout.row_feed_wine_detail, null);
             viewHolder = new FeedViewHolder();
+            // Top Wine Section
             viewHolder.wineImage = (ImageView) rowView.findViewById(R.id.wine_image);
             viewHolder.producerName = (TextView) rowView.findViewById(R.id.producer_name);
             viewHolder.wineName = (TextView) rowView.findViewById(R.id.wine_name);
-            viewHolder.profileImage1 = (CircleImageView) rowView.findViewById(R.id.profile_image1);
-            viewHolder.withText = rowView.findViewById(R.id.with_text);
-            viewHolder.participantsImageContainer = (RelativeLayout) rowView
-                    .findViewById(R.id.participants_image_container);
 
+            // Tagged Participants Section
+            viewHolder.taggedParticipantsContainer = rowView
+                    .findViewById(R.id.tagged_participants_container);
+            viewHolder.profileImage1 = (CircleImageView) rowView.findViewById(R.id.profile_image1);
+            viewHolder.taggedParticipantImages = new ArrayList<CircleImageView>();
+            viewHolder.taggedParticipantImages
+                    .add((CircleImageView) rowView.findViewById(R.id.tagged_user_image1));
+            viewHolder.taggedParticipantImages
+                    .add((CircleImageView) rowView.findViewById(R.id.tagged_user_image2));
+            viewHolder.taggedParticipantImages
+                    .add((CircleImageView) rowView.findViewById(R.id.tagged_user_image3));
+            viewHolder.moreTaggedParticipantsButton = (ImageView) rowView
+                    .findViewById(R.id.more_tagged_user_button);
+
+            // User Comment/Rating
             viewHolder.profileImage2 = (CircleImageView) rowView.findViewById(R.id.profile_image2);
             viewHolder.userName = (TextView) rowView.findViewById(R.id.user_name);
             viewHolder.userComment = (TextView) rowView.findViewById(R.id.user_comment);
@@ -81,10 +93,46 @@ public class FollowFeedAdapter extends BaseAdapter {
         } else {
             viewHolder = (FeedViewHolder) rowView.getTag();
         }
+        setupTopWineDetails(viewHolder, capture);
+        setupTaggedParticipants(viewHolder, capture);
+        setupUserCommentsRating(viewHolder, capture);
 
+        // TODO : Dynamic list of other comments ..
+
+        return rowView;
+    }
+
+    private void setupTopWineDetails(FeedViewHolder viewHolder, CaptureDetails capture) {
         String wineImageUrl = "";
         String producerName = "";
         String wineName = "";
+        if (capture.getWineProfile() != null) {
+            producerName = capture.getWineProfile().getProducerName();
+            wineName = capture.getWineProfile().getName();
+            wineImageUrl = capture.getPhoto().getUrl();
+        }
+        ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, viewHolder.wineImage);
+        viewHolder.producerName.setText(producerName);
+        viewHolder.wineName.setText(wineName);
+    }
+
+    private void setupTaggedParticipants(FeedViewHolder viewHolder, CaptureDetails capture) {
+        String profileImageUrl = getThumbnailParticipantPhotoFromAccount(
+                capture.getCapturerParticipant());
+        boolean hasCaptureParticipants = (capture.getTaggeeParticipants() != null);
+
+        ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage1);
+
+        if (hasCaptureParticipants) {
+            viewHolder.taggedParticipantsContainer.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.taggedParticipantsContainer.setVisibility(View.GONE);
+        }
+
+        // TODO: Build out Functionality for getting Participants Listing
+    }
+
+    private void setupUserCommentsRating(FeedViewHolder viewHolder, CaptureDetails capture) {
         String profileImageUrl = getThumbnailParticipantPhotoFromAccount(
                 capture.getCapturerParticipant());
         String userName = "";
@@ -92,15 +140,6 @@ public class FollowFeedAdapter extends BaseAdapter {
         String captureTimeLocation = "";
         String userAccountId = "";
         float capturePercent = 0.0f;
-
-        boolean hasCaptureParticipants = (capture.getCapturerParticipants() != null
-                && capture.getCapturerParticipants().size() > 0);
-
-        if (capture.getWineProfile() != null) {
-            producerName = capture.getWineProfile().getProducerName();
-            wineName = capture.getWineProfile().getName();
-            wineImageUrl = capture.getPhoto().getUrl();
-        }
 
         if (capture.getCapturerParticipant() != null) {
             userName = capture.getCapturerParticipant().getFullName();
@@ -121,12 +160,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         String location = "";
         captureTimeLocation += location;
 
-        ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, viewHolder.wineImage);
-        ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage1);
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage2);
-
-        viewHolder.producerName.setText(producerName);
-        viewHolder.wineName.setText(wineName);
         viewHolder.userName.setText(userName);
         if (userComment != "") {
             viewHolder.userComment.setText(userComment);
@@ -137,28 +171,6 @@ public class FollowFeedAdapter extends BaseAdapter {
         viewHolder.userCaptureRatingBar.setPercent(capturePercent);
 
         viewHolder.captureTimeLocation.setText(captureTimeLocation);
-
-        // TODO: Unhide the capturer_with_container view once figured out
-        if (hasCaptureParticipants) {
-            viewHolder.withText.setVisibility(View.VISIBLE);
-            viewHolder.participantsImageContainer.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.withText.setVisibility(View.INVISIBLE);
-            viewHolder.participantsImageContainer.setVisibility(View.GONE);
-        }
-
-        // TODO : Dynamic list of other comments ..
-
-        return rowView;
-    }
-
-    private void insertParticipantsImagesIntoView(RelativeLayout viewGroup,
-            ArrayList<Account> participants) {
-        viewGroup.removeAllViewsInLayout();
-        // TODO: Build out mini icons for participants
-        int startingId = 9000;
-        for (Account account : participants) {
-        }
     }
 
     private String getThumbnailParticipantPhotoFromAccount(Account account) {
@@ -181,11 +193,13 @@ public class FollowFeedAdapter extends BaseAdapter {
 
         TextView wineName;
 
+        View taggedParticipantsContainer;
+
         CircleImageView profileImage1;
 
-        View withText;
+        ArrayList<CircleImageView> taggedParticipantImages;
 
-        RelativeLayout participantsImageContainer;
+        ImageView moreTaggedParticipantsButton;
 
         CircleImageView profileImage2;
 
