@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:background="@color/d_gray3" />
+            android:background="@color/d_gray3"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/producer_name"
@@ -51,16 +52,19 @@
 
     </RelativeLayout>
 
+    <!-- TODO: Tagged With With will be list of 4 circles, then + circle if more-->
     <RelativeLayout
+        android:id="@+id/capturer_tagged_with_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_below="@id/wine_banner"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/cap_list_row_horizontal_spacing"
-        android:layout_marginTop="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
+        android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
         android:background="@android:color/white"
         android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingRight="@dimen/cap_list_row_horizontal_spacing">
+        android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
+        android:visibility="gone">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
@@ -83,9 +87,80 @@
             android:id="@+id/participants_image_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <!--TODO: Participating commenters?-->
+            <!--TODO: Stub 4 circle button images then with + circle -->
         </RelativeLayout>
+
+        <View
+            android:id="@+id/vertical_divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/with_text"
+            android:layout_alignParentBottom="true"
+            android:background="@color/d_gray2" />
     </RelativeLayout>
-    <!-- TODO: Expandable ListView with Grouped Rows? -->
+
+    <RelativeLayout
+        android:id="@+id/capturer_comments_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/capturer_tagged_with_container"
+        android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
+        android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:paddingRight="@dimen/cap_list_row_horizontal_spacing">
+
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/profile_image2"
+            android:layout_width="@dimen/small_profile_image_size"
+            android:layout_height="@dimen/small_profile_image_size"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+            android:src="@drawable/ab_profile_normal" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/profile_image2"
+            android:layout_toRightOf="@id/profile_image2"
+            android:text="Adam Bednarek"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/user_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_toRightOf="@id/profile_image2"
+            android:text="Soft in texture with a jolt of acidity lifting the blackberry"
+            android:textColor="@color/d_gray6"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/capture_time_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_comment"
+            android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
+            android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
+            android:layout_toRightOf="@id/profile_image2"
+            android:text="2 min ago at Foo Land"
+            android:textColor="@color/d_gray6"
+            android:textSize="12sp" />
+
+        <com.delectable.mobile.ui.common.widget.RatingsBarView
+            android:id="@+id/capturer_rating_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/rating_bar_height"
+            android:layout_alignLeft="@id/user_name"
+            android:layout_below="@id/capture_time_location"
+            android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing" />
+
+        <!-- TODO: Dynamic rows for other comments(tagee participants) / ratings(Registered users) -->
+        <!-- TODO: Button "Tap to add your rating" -->
+    </RelativeLayout>
+
+    <!-- TODO: Comment / like button and menu -->
+    <!-- Note: Make sure to have bottom padding -->
 
 </RelativeLayout>
