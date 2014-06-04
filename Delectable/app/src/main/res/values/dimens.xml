@@ -22,7 +22,8 @@
     <dimen name="cap_feed_row_wine_banner_height">384dp</dimen>
     <dimen name="cap_feed_row_top_text_font_size">16sp</dimen>
     <dimen name="cap_feed_row_bottom_text_font_size">18sp</dimen>
-    <dimen name="cap_feed_row_small_vertical_spacing">10sp</dimen>
+    <dimen name="cap_feed_row_small_vertical_spacing">10dp</dimen>
+    <dimen name="cap_feed_row_tag_user_image_spacing">10dp</dimen>
 
     <!-- General Dimens -->
     <dimen name="button_text_size">20sp</dimen>

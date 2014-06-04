@@ -82,45 +82,41 @@
             android:layout_toRightOf="@id/profile_image1"
             android:text="@string/with" />
 
-        <LinearLayout
-            android:id="@+id/participants_image_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/tagged_user_image1"
+            android:layout_width="@dimen/small_profile_image_size"
+            android:layout_height="@dimen/small_profile_image_size"
             android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/with_text"
-            android:orientation="horizontal"
-            android:weightSum="4">
+            android:layout_toRightOf="@id/with_text"
+            android:src="@drawable/ab_profile_normal" />
 
-            <com.delectable.mobile.ui.common.widget.CircleImageView
-                android:id="@+id/tagged_user_image1"
-                android:layout_width="@dimen/small_profile_image_size"
-                android:layout_height="@dimen/small_profile_image_size"
-                android:layout_weight="1"
-                android:src="@drawable/ab_profile_normal" />
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/tagged_user_image2"
+            android:layout_width="@dimen/small_profile_image_size"
+            android:layout_height="@dimen/small_profile_image_size"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
+            android:layout_toRightOf="@id/tagged_user_image1"
+            android:src="@drawable/ab_profile_normal" />
 
-            <com.delectable.mobile.ui.common.widget.CircleImageView
-                android:id="@+id/tagged_user_image2"
-                android:layout_width="@dimen/small_profile_image_size"
-                android:layout_height="@dimen/small_profile_image_size"
-                android:layout_weight="1"
-                android:src="@drawable/ab_profile_normal" />
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/tagged_user_image3"
+            android:layout_width="@dimen/small_profile_image_size"
+            android:layout_height="@dimen/small_profile_image_size"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
+            android:layout_toRightOf="@id/tagged_user_image2"
+            android:src="@drawable/ab_profile_normal" />
 
-            <com.delectable.mobile.ui.common.widget.CircleImageView
-                android:id="@+id/tagged_user_image3"
-                android:layout_width="@dimen/small_profile_image_size"
-                android:layout_height="@dimen/small_profile_image_size"
-                android:layout_weight="1"
-                android:src="@drawable/ab_profile_normal" />
-
-            <!-- TODO: Plus Image Button Icon -->
-            <ImageView
-                android:id="@+id/more_tagged_user_button"
-                android:layout_width="@dimen/small_profile_image_size"
-                android:layout_height="@dimen/small_profile_image_size"
-                android:layout_weight="1"
-                android:src="@drawable/ab_profile_normal" />
-
-        </LinearLayout>
+        <!-- TODO: Plus Image Button Icon -->
+        <ImageView
+            android:id="@+id/more_tagged_user_button"
+            android:layout_width="@dimen/small_profile_image_size"
+            android:layout_height="@dimen/small_profile_image_size"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
+            android:layout_toRightOf="@id/tagged_user_image3"
+            android:src="@drawable/ab_profile_normal" />
 
         <View
             android:id="@+id/vertical_divider1"

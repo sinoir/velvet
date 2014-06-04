@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -119,7 +118,12 @@ public class FollowFeedAdapter extends BaseAdapter {
     private void setupTaggedParticipants(FeedViewHolder viewHolder, CaptureDetails capture) {
         String profileImageUrl = getThumbnailParticipantPhotoFromAccount(
                 capture.getCapturerParticipant());
-        boolean hasCaptureParticipants = (capture.getTaggeeParticipants() != null);
+
+        // TODO: Combine data from other participants objects
+        ArrayList<Account> taggedParticipants = capture.getRegisteredParticipants() != null
+                ? capture.getRegisteredParticipants() : new ArrayList<Account>();
+
+        boolean hasCaptureParticipants = taggedParticipants.size() > 0;
 
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage1);
 
@@ -129,7 +133,25 @@ public class FollowFeedAdapter extends BaseAdapter {
             viewHolder.taggedParticipantsContainer.setVisibility(View.GONE);
         }
 
-        // TODO: Build out Functionality for getting Participants Listing
+        for (int i = 0; i < viewHolder.taggedParticipantImages.size(); i++) {
+            if (taggedParticipants.size() > i) {
+                String imageUrl = getThumbnailParticipantPhotoFromAccount(
+                        taggedParticipants.get(i));
+                // TODO: Add Touchstate to open User Profile
+                ImageLoaderUtil.loadImageIntoView(mContext, imageUrl,
+                        viewHolder.taggedParticipantImages.get(i));
+                viewHolder.taggedParticipantImages.get(i).setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.taggedParticipantImages.get(i).setVisibility(View.INVISIBLE);
+            }
+        }
+
+        if (taggedParticipants.size() == 3) {
+            // TODO: Add Touchstate to Open more tagged profile listing
+            viewHolder.moreTaggedParticipantsButton.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.moreTaggedParticipantsButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setupUserCommentsRating(FeedViewHolder viewHolder, CaptureDetails capture) {
