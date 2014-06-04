@@ -16,28 +16,38 @@
 
 package com.facebook.widget;
 
-import android.content.Context;
-import android.os.Handler;
-import android.support.v4.content.Loader;
-import com.facebook.*;
+import com.facebook.FacebookException;
+import com.facebook.FacebookRequestError;
+import com.facebook.Request;
+import com.facebook.RequestBatch;
+import com.facebook.Response;
+import com.facebook.internal.CacheableRequestBatch;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
-import com.facebook.internal.CacheableRequestBatch;
+
+import android.content.Context;
+import android.content.Loader;
+import android.os.Handler;
 
 class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphObjectCursor<T>> {
-    private final Class<T> graphObjectClass;
-    private boolean skipRoundtripIfCached;
-    private Request originalRequest;
-    private Request currentRequest;
-    private Request nextRequest;
-    private OnErrorListener onErrorListener;
-    private SimpleGraphObjectCursor<T> cursor;
-    private boolean appendResults = false;
-    private boolean loading = false;
 
-    public interface OnErrorListener {
-        public void onError(FacebookException error, GraphObjectPagingLoader<?> loader);
-    }
+    private final Class<T> graphObjectClass;
+
+    private boolean skipRoundtripIfCached;
+
+    private Request originalRequest;
+
+    private Request currentRequest;
+
+    private Request nextRequest;
+
+    private OnErrorListener onErrorListener;
+
+    private SimpleGraphObjectCursor<T> cursor;
+
+    private boolean appendResults = false;
+
+    private boolean loading = false;
 
     public GraphObjectPagingLoader(Context context, Class<T> graphObjectClass) {
         super(context);
@@ -95,7 +105,8 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
             });
 
             loading = true;
-            CacheableRequestBatch batch = putRequestIntoBatch(currentRequest, skipRoundtripIfCached);
+            CacheableRequestBatch batch = putRequestIntoBatch(currentRequest,
+                    skipRoundtripIfCached);
             Request.executeBatchAsync(batch);
         }
     }
@@ -153,7 +164,8 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
         }
     }
 
-    private CacheableRequestBatch putRequestIntoBatch(Request request, boolean skipRoundtripIfCached) {
+    private CacheableRequestBatch putRequestIntoBatch(Request request,
+            boolean skipRoundtripIfCached) {
         // We just use the request URL as the cache key.
         CacheableRequestBatch batch = new CacheableRequestBatch(request);
         // We use the default cache key (request URL).
@@ -173,7 +185,8 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
         FacebookRequestError requestError = response.getError();
         FacebookException exception = (requestError == null) ? null : requestError.getException();
         if (response.getGraphObject() == null && exception == null) {
-            exception = new FacebookException("GraphObjectPagingLoader received neither a result nor an error.");
+            exception = new FacebookException(
+                    "GraphObjectPagingLoader received neither a result nor an error.");
         }
 
         if (exception != null) {
@@ -188,7 +201,8 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
     }
 
     private void addResults(Response response) {
-        SimpleGraphObjectCursor<T> cursorToModify = (cursor == null || !appendResults) ? new SimpleGraphObjectCursor<T>() :
+        SimpleGraphObjectCursor<T> cursorToModify = (cursor == null || !appendResults)
+                ? new SimpleGraphObjectCursor<T>() :
                 new SimpleGraphObjectCursor<T>(cursor);
 
         PagedResults result = response.getGraphObjectAs(PagedResults.class);
@@ -220,7 +234,13 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
         deliverResult(cursorToModify);
     }
 
+    public interface OnErrorListener {
+
+        public void onError(FacebookException error, GraphObjectPagingLoader<?> loader);
+    }
+
     interface PagedResults extends GraphObject {
+
         GraphObjectList<GraphObject> getData();
     }
 }

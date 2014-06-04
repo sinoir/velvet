@@ -19,125 +19,152 @@ package com.facebook.model;
 import com.facebook.FacebookGraphObjectException;
 import com.facebook.internal.Utility;
 import com.facebook.internal.Validate;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * GraphObject is the primary interface used by the Facebook SDK for Android to represent objects in the Facebook
- * Social Graph and the Facebook Open Graph (OG). It is the base interface for all typed access to graph objects
- * in the SDK. No concrete classes implement GraphObject or its derived interfaces. Rather, they are implemented as
- * proxies (see the {@link com.facebook.model.GraphObject.Factory Factory} class) that provide strongly-typed property
- * getters and setters to access the underlying data. Since the primary use case for graph objects is sending and
- * receiving them over the wire to/from Facebook services, they are represented as JSONObjects. No validation is done
- * that a graph object is actually of a specific type -- any graph object can be treated as any GraphObject-derived
- * interface, and the presence or absence of specific properties determines its suitability for use as that
- * particular type of object.
- * <br/>
+ * GraphObject is the primary interface used by the Facebook SDK for Android to represent objects in
+ * the Facebook Social Graph and the Facebook Open Graph (OG). It is the base interface for all
+ * typed access to graph objects in the SDK. No concrete classes implement GraphObject or its
+ * derived interfaces. Rather, they are implemented as proxies (see the {@link
+ * com.facebook.model.GraphObject.Factory Factory} class) that provide strongly-typed property
+ * getters and setters to access the underlying data. Since the primary use case for graph objects
+ * is sending and receiving them over the wire to/from Facebook services, they are represented as
+ * JSONObjects. No validation is done that a graph object is actually of a specific type -- any
+ * graph object can be treated as any GraphObject-derived interface, and the presence or absence of
+ * specific properties determines its suitability for use as that particular type of object. <br/>
  */
 public interface GraphObject {
+
     /**
      * Returns a new proxy that treats this graph object as a different GraphObject-derived type.
+     *
      * @param graphObjectClass the type of GraphObject to return
-     * @return a new instance of the GraphObject-derived-type that references the same underlying data
+     * @return a new instance of the GraphObject-derived-type that references the same underlying
+     * data
      */
     <T extends GraphObject> T cast(Class<T> graphObjectClass);
 
     /**
-     * Returns a Java Collections map of names and properties.  Modifying the returned map modifies the
-     * inner JSON representation.
+     * Returns a Java Collections map of names and properties.  Modifying the returned map modifies
+     * the inner JSON representation.
+     *
      * @return a Java Collections map representing the GraphObject state
      */
     Map<String, Object> asMap();
 
     /**
      * Gets the underlying JSONObject representation of this graph object.
+     *
      * @return the underlying JSONObject representation of this graph object
      */
     JSONObject getInnerJSONObject();
 
     /**
      * Gets a property of the GraphObject
+     *
      * @param propertyName the name of the property to get
      * @return the value of the named property
      */
     Object getProperty(String propertyName);
 
     /**
-     * Gets a property of the GraphObject, cast to a particular GraphObject-derived interface. This gives some of
-     * the benefits of having a property getter defined to return a GraphObject-derived type without requiring
-     * explicit definition of an interface to define the getter.
-     * @param propertyName the name of the property to get
+     * Gets a property of the GraphObject, cast to a particular GraphObject-derived interface. This
+     * gives some of the benefits of having a property getter defined to return a
+     * GraphObject-derived type without requiring explicit definition of an interface to define the
+     * getter.
+     *
+     * @param propertyName     the name of the property to get
      * @param graphObjectClass the GraphObject-derived interface to cast the property to
-     * @return
      */
     <T extends GraphObject> T getPropertyAs(String propertyName, Class<T> graphObjectClass);
 
     /**
-     * Gets a property of the GraphObject, cast to a a list of instances of a particular GraphObject-derived interface.
-     * This gives some of the benefits of having a property getter defined to return a GraphObject-derived type without
-     * requiring explicit definition of an interface to define the getter.
-     * @param propertyName the name of the property to get
+     * Gets a property of the GraphObject, cast to a a list of instances of a particular
+     * GraphObject-derived interface. This gives some of the benefits of having a property getter
+     * defined to return a GraphObject-derived type without requiring explicit definition of an
+     * interface to define the getter.
+     *
+     * @param propertyName     the name of the property to get
      * @param graphObjectClass the GraphObject-derived interface to cast the property to a list of
-     * @return
      */
-    <T extends GraphObject> GraphObjectList<T> getPropertyAsList(String propertyName, Class<T> graphObjectClass);
+    <T extends GraphObject> GraphObjectList<T> getPropertyAsList(String propertyName,
+            Class<T> graphObjectClass);
 
     /**
      * Sets a property of the GraphObject
-     * @param propertyName the name of the property to set
+     *
+     * @param propertyName  the name of the property to set
      * @param propertyValue the value of the named property to set
      */
     void setProperty(String propertyName, Object propertyValue);
 
     /**
      * Removes a property of the GraphObject
+     *
      * @param propertyName the name of the property to remove
      */
     void removeProperty(String propertyName);
 
     /**
-     * Creates proxies that implement GraphObject, GraphObjectList, and their derived types. These proxies allow access
-     * to underlying collections and name/value property bags via strongly-typed property getters and setters.
-     * <p/>
-     * This supports get/set properties that use primitive types, JSON types, Date, other GraphObject types, Iterable,
-     * Collection, List, and GraphObjectList.
+     * Creates proxies that implement GraphObject, GraphObjectList, and their derived types. These
+     * proxies allow access to underlying collections and name/value property bags via
+     * strongly-typed property getters and setters. <p/> This supports get/set properties that use
+     * primitive types, JSON types, Date, other GraphObject types, Iterable, Collection, List, and
+     * GraphObjectList.
      */
     final class Factory {
+
         private static final HashSet<Class<?>> verifiedGraphObjectClasses = new HashSet<Class<?>>();
-        private static final SimpleDateFormat[] dateFormats = new SimpleDateFormat[] {
+
+        private static final SimpleDateFormat[] dateFormats = new SimpleDateFormat[]{
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US),
-                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US), new SimpleDateFormat("yyyy-MM-dd", Locale.US), };
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US),
+                new SimpleDateFormat("yyyy-MM-dd", Locale.US),};
 
         // No objects of this type should exist.
         private Factory() {
         }
 
         /**
-         * Creates a GraphObject proxy that provides typed access to the data in an underlying JSONObject.
+         * Creates a GraphObject proxy that provides typed access to the data in an underlying
+         * JSONObject.
+         *
          * @param json the JSONObject containing the data to be exposed
          * @return a GraphObject that represents the underlying data
-         *
-         * @throws com.facebook.FacebookException
-         *            If the passed in Class is not a valid GraphObject interface
+         * @throws com.facebook.FacebookException If the passed in Class is not a valid GraphObject
+         *                                        interface
          */
         public static GraphObject create(JSONObject json) {
             return create(json, GraphObject.class);
         }
 
         /**
-         * Creates a GraphObject-derived proxy that provides typed access to the data in an underlying JSONObject.
-         * @param json the JSONObject containing the data to be exposed
+         * Creates a GraphObject-derived proxy that provides typed access to the data in an
+         * underlying JSONObject.
+         *
+         * @param json             the JSONObject containing the data to be exposed
          * @param graphObjectClass the GraphObject-derived type to return
          * @return a graphObjectClass that represents the underlying data
-         *
-         * @throws com.facebook.FacebookException
-         *            If the passed in Class is not a valid GraphObject interface
+         * @throws com.facebook.FacebookException If the passed in Class is not a valid GraphObject
+         *                                        interface
          */
         public static <T extends GraphObject> T create(JSONObject json, Class<T> graphObjectClass) {
             return createGraphObjectProxy(graphObjectClass, json);
@@ -145,10 +172,10 @@ public interface GraphObject {
 
         /**
          * Creates a GraphObject proxy that initially contains no data.
-         * @return a GraphObject with no data
          *
-         * @throws com.facebook.FacebookException
-         *            If the passed in Class is not a valid GraphObject interface
+         * @return a GraphObject with no data
+         * @throws com.facebook.FacebookException If the passed in Class is not a valid GraphObject
+         *                                        interface
          */
         public static GraphObject create() {
             return create(GraphObject.class);
@@ -156,24 +183,27 @@ public interface GraphObject {
 
         /**
          * Creates a GraphObject-derived proxy that initially contains no data.
+         *
          * @param graphObjectClass the GraphObject-derived type to return
          * @return a graphObjectClass with no data
-         *
-         * @throws com.facebook.FacebookException
-         *            If the passed in Class is not a valid GraphObject interface
+         * @throws com.facebook.FacebookException If the passed in Class is not a valid GraphObject
+         *                                        interface
          */
         public static <T extends GraphObject> T create(Class<T> graphObjectClass) {
             return createGraphObjectProxy(graphObjectClass, new JSONObject());
         }
 
         /**
-         * Determines if two GraphObjects represent the same underlying graph object, based on their IDs.
+         * Determines if two GraphObjects represent the same underlying graph object, based on their
+         * IDs.
+         *
          * @param a a graph object
          * @param b another graph object
          * @return true if both graph objects have an ID and it is the same ID, false otherwise
          */
         public static boolean hasSameId(GraphObject a, GraphObject b) {
-            if (a == null || b == null || !a.asMap().containsKey("id") || !b.asMap().containsKey("id")) {
+            if (a == null || b == null || !a.asMap().containsKey("id") || !b.asMap()
+                    .containsKey("id")) {
                 return false;
             }
             if (a.equals(b)) {
@@ -181,45 +211,51 @@ public interface GraphObject {
             }
             Object idA = a.getProperty("id");
             Object idB = b.getProperty("id");
-            if (idA == null || idB == null || !(idA instanceof String) || !(idB instanceof String)) {
+            if (idA == null || idB == null || !(idA instanceof String)
+                    || !(idB instanceof String)) {
                 return false;
             }
             return idA.equals(idB);
         }
 
         /**
-         * Creates a GraphObjectList-derived proxy that provides typed access to the data in an underlying JSONArray.
-         * @param array the JSONArray containing the data to be exposed
+         * Creates a GraphObjectList-derived proxy that provides typed access to the data in an
+         * underlying JSONArray.
+         *
+         * @param array            the JSONArray containing the data to be exposed
          * @param graphObjectClass the GraphObject-derived type to return
          * @return a graphObjectClass that represents the underlying data
-         *
-         * @throws com.facebook.FacebookException
-         *            If the passed in Class is not a valid GraphObject interface
+         * @throws com.facebook.FacebookException If the passed in Class is not a valid GraphObject
+         *                                        interface
          */
-        public static <T> GraphObjectList<T> createList(JSONArray array, Class<T> graphObjectClass) {
+        public static <T> GraphObjectList<T> createList(JSONArray array,
+                Class<T> graphObjectClass) {
             return new GraphObjectListImpl<T>(array, graphObjectClass);
         }
 
         /**
          * Creates a GraphObjectList-derived proxy that initially contains no data.
+         *
          * @param graphObjectClass the GraphObject-derived type to return
          * @return a GraphObjectList with no data
-         *
-         * @throws com.facebook.FacebookException
-         *            If the passed in Class is not a valid GraphObject interface
+         * @throws com.facebook.FacebookException If the passed in Class is not a valid GraphObject
+         *                                        interface
          */
         public static <T> GraphObjectList<T> createList(Class<T> graphObjectClass) {
             return createList(new JSONArray(), graphObjectClass);
         }
 
-        private static <T extends GraphObject> T createGraphObjectProxy(Class<T> graphObjectClass, JSONObject state) {
+        private static <T extends GraphObject> T createGraphObjectProxy(Class<T> graphObjectClass,
+                JSONObject state) {
             verifyCanProxyClass(graphObjectClass);
 
-            Class<?>[] interfaces = new Class<?>[] { graphObjectClass };
+            Class<?>[] interfaces = new Class<?>[]{graphObjectClass};
             GraphObjectProxy graphObjectProxy = new GraphObjectProxy(state, graphObjectClass);
 
             @SuppressWarnings("unchecked")
-            T graphObject = (T) Proxy.newProxyInstance(GraphObject.class.getClassLoader(), interfaces, graphObjectProxy);
+            T graphObject = (T) Proxy
+                    .newProxyInstance(GraphObject.class.getClassLoader(), interfaces,
+                            graphObjectProxy);
 
             return graphObject;
         }
@@ -230,16 +266,19 @@ public interface GraphObject {
 
             @SuppressWarnings("unchecked")
             Map<String, Object> graphObject = (Map<String, Object>) Proxy
-                    .newProxyInstance(GraphObject.class.getClassLoader(), interfaces, graphObjectProxy);
+                    .newProxyInstance(GraphObject.class.getClassLoader(), interfaces,
+                            graphObjectProxy);
 
             return graphObject;
         }
 
-        private static synchronized <T extends GraphObject> boolean hasClassBeenVerified(Class<T> graphObjectClass) {
+        private static synchronized <T extends GraphObject> boolean hasClassBeenVerified(
+                Class<T> graphObjectClass) {
             return verifiedGraphObjectClasses.contains(graphObjectClass);
         }
 
-        private static synchronized <T extends GraphObject> void recordClassHasBeenVerified(Class<T> graphObjectClass) {
+        private static synchronized <T extends GraphObject> void recordClassHasBeenVerified(
+                Class<T> graphObjectClass) {
             verifiedGraphObjectClasses.add(graphObjectClass);
         }
 
@@ -249,8 +288,9 @@ public interface GraphObject {
             }
 
             if (!graphObjectClass.isInterface()) {
-                throw new FacebookGraphObjectException("Factory can only wrap interfaces, not class: "
-                        + graphObjectClass.getName());
+                throw new FacebookGraphObjectException(
+                        "Factory can only wrap interfaces, not class: "
+                                + graphObjectClass.getName());
             }
 
             Method[] methods = graphObjectClass.getMethods();
@@ -267,7 +307,8 @@ public interface GraphObject {
                     if (hasPropertyNameOverride) {
                         // If a property override is present, it MUST be valid. We don't fallback
                         // to using the method name
-                        if (!Utility.isNullOrEmpty(method.getAnnotation(PropertyName.class).value())) {
+                        if (!Utility
+                                .isNullOrEmpty(method.getAnnotation(PropertyName.class).value())) {
                             continue;
                         }
                     } else if (methodName.startsWith("set") && methodName.length() > 3) {
@@ -278,7 +319,8 @@ public interface GraphObject {
                     if (hasPropertyNameOverride) {
                         // If a property override is present, it MUST be valid. We don't fallback
                         // to using the method name
-                        if (!Utility.isNullOrEmpty(method.getAnnotation(PropertyName.class).value())) {
+                        if (!Utility
+                                .isNullOrEmpty(method.getAnnotation(PropertyName.class).value())) {
                             continue;
                         }
                     } else if (methodName.startsWith("get") && methodName.length() > 3) {
@@ -287,7 +329,8 @@ public interface GraphObject {
                     }
                 }
 
-                throw new FacebookGraphObjectException("Factory can't proxy method: " + method.toString());
+                throw new FacebookGraphObjectException(
+                        "Factory can't proxy method: " + method.toString());
             }
 
             recordClassHasBeenVerified(graphObjectClass);
@@ -331,7 +374,8 @@ public interface GraphObject {
 
             if (GraphObject.class.isAssignableFrom(expectedType)) {
                 @SuppressWarnings("unchecked")
-                Class<? extends GraphObject> graphObjectClass = (Class<? extends GraphObject>) expectedType;
+                Class<? extends GraphObject> graphObjectClass
+                        = (Class<? extends GraphObject>) expectedType;
 
                 // We need a GraphObject, but we don't have one.
                 if (JSONObject.class.isAssignableFrom(valueType)) {
@@ -345,15 +389,19 @@ public interface GraphObject {
                     U result = (U) ((GraphObject) value).cast(graphObjectClass);
                     return result;
                 } else {
-                    throw new FacebookGraphObjectException("Can't create GraphObject from " + valueType.getName());
+                    throw new FacebookGraphObjectException(
+                            "Can't create GraphObject from " + valueType.getName());
                 }
             } else if (Iterable.class.equals(expectedType) || Collection.class.equals(expectedType)
-                    || List.class.equals(expectedType) || GraphObjectList.class.equals(expectedType)) {
+                    || List.class.equals(expectedType) || GraphObjectList.class
+                    .equals(expectedType)) {
                 if (expectedTypeAsParameterizedType == null) {
-                    throw new FacebookGraphObjectException("can't infer generic type of: " + expectedType.toString());
+                    throw new FacebookGraphObjectException(
+                            "can't infer generic type of: " + expectedType.toString());
                 }
 
-                Type[] actualTypeArguments = expectedTypeAsParameterizedType.getActualTypeArguments();
+                Type[] actualTypeArguments = expectedTypeAsParameterizedType
+                        .getActualTypeArguments();
 
                 if (actualTypeArguments == null || actualTypeArguments.length != 1
                         || !(actualTypeArguments[0] instanceof Class<?>)) {
@@ -368,7 +416,8 @@ public interface GraphObject {
                     U result = (U) createList(jsonArray, collectionGenericArgument);
                     return result;
                 } else {
-                    throw new FacebookGraphObjectException("Can't create Collection from " + valueType.getName());
+                    throw new FacebookGraphObjectException(
+                            "Can't create Collection from " + valueType.getName());
                 }
             } else if (String.class.equals(expectedType)) {
                 if (Double.class.isAssignableFrom(valueType) ||
@@ -397,8 +446,9 @@ public interface GraphObject {
                     }
                 }
             }
-            throw new FacebookGraphObjectException("Can't convert type" + valueType.getName() + " to "
-                    + expectedType.getName());
+            throw new FacebookGraphObjectException(
+                    "Can't convert type" + valueType.getName() + " to "
+                            + expectedType.getName());
         }
 
         static String convertCamelCaseToLowercaseWithUnderscores(String string) {
@@ -421,9 +471,9 @@ public interface GraphObject {
             } else if (Iterable.class.isAssignableFrom(objClass)) {
                 JSONArray jsonArray = new JSONArray();
                 Iterable<?> iterable = (Iterable<?>) obj;
-                for (Object o : iterable ) {
+                for (Object o : iterable) {
                     if (GraphObject.class.isAssignableFrom(o.getClass())) {
-                        jsonArray.put(((GraphObject)o).getInnerJSONObject());
+                        jsonArray.put(((GraphObject) o).getInnerJSONObject());
                     } else {
                         jsonArray.put(o);
                     }
@@ -434,8 +484,10 @@ public interface GraphObject {
         }
 
         private abstract static class ProxyBase<STATE> implements InvocationHandler {
+
             // Pre-loaded Method objects for the methods in java.lang.Object
             private static final String EQUALS_METHOD = "equals";
+
             private static final String TOSTRING_METHOD = "toString";
 
             protected final STATE state;
@@ -446,11 +498,13 @@ public interface GraphObject {
 
             // Declared to return Object just to simplify implementation of proxy helpers.
             protected final Object throwUnexpectedMethodSignature(Method method) {
-                throw new FacebookGraphObjectException(getClass().getName() + " got an unexpected method signature: "
-                        + method.toString());
+                throw new FacebookGraphObjectException(
+                        getClass().getName() + " got an unexpected method signature: "
+                                + method.toString());
             }
 
-            protected final Object proxyObjectMethods(Object proxy, Method method, Object[] args) throws Throwable {
+            protected final Object proxyObjectMethods(Object proxy, Method method, Object[] args)
+                    throws Throwable {
                 String methodName = method.getName();
                 if (methodName.equals(EQUALS_METHOD)) {
                     Object other = args[0];
@@ -476,25 +530,45 @@ public interface GraphObject {
         }
 
         private final static class GraphObjectProxy extends ProxyBase<JSONObject> {
+
             private static final String CLEAR_METHOD = "clear";
+
             private static final String CONTAINSKEY_METHOD = "containsKey";
+
             private static final String CONTAINSVALUE_METHOD = "containsValue";
+
             private static final String ENTRYSET_METHOD = "entrySet";
+
             private static final String GET_METHOD = "get";
+
             private static final String ISEMPTY_METHOD = "isEmpty";
+
             private static final String KEYSET_METHOD = "keySet";
+
             private static final String PUT_METHOD = "put";
+
             private static final String PUTALL_METHOD = "putAll";
+
             private static final String REMOVE_METHOD = "remove";
+
             private static final String SIZE_METHOD = "size";
+
             private static final String VALUES_METHOD = "values";
+
             private static final String CAST_METHOD = "cast";
+
             private static final String CASTTOMAP_METHOD = "asMap";
+
             private static final String GETPROPERTY_METHOD = "getProperty";
+
             private static final String GETPROPERTYAS_METHOD = "getPropertyAs";
+
             private static final String GETPROPERTYASLIST_METHOD = "getPropertyAsList";
+
             private static final String SETPROPERTY_METHOD = "setProperty";
+
             private static final String REMOVEPROPERTY_METHOD = "removeProperty";
+
             private static final String GETINNERJSONOBJECT_METHOD = "getInnerJSONObject";
 
             private final Class<?> graphObjectClass;
@@ -506,11 +580,13 @@ public interface GraphObject {
 
             @Override
             public String toString() {
-                return String.format("GraphObject{graphObjectClass=%s, state=%s}", graphObjectClass.getSimpleName(), state);
+                return String.format("GraphObject{graphObjectClass=%s, state=%s}",
+                        graphObjectClass.getSimpleName(), state);
             }
 
             @Override
-            public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            public final Object invoke(Object proxy, Method method, Object[] args)
+                    throws Throwable {
                 Class<?> declaringClass = method.getDeclaringClass();
 
                 if (declaringClass == Object.class) {
@@ -570,11 +646,13 @@ public interface GraphObject {
                 return throwUnexpectedMethodSignature(method);
             }
 
-            private final Object proxyGraphObjectMethods(Object proxy, Method method, Object[] args) {
+            private final Object proxyGraphObjectMethods(Object proxy, Method method,
+                    Object[] args) {
                 String methodName = method.getName();
                 if (methodName.equals(CAST_METHOD)) {
                     @SuppressWarnings("unchecked")
-                    Class<? extends GraphObject> graphObjectClass = (Class<? extends GraphObject>) args[0];
+                    Class<? extends GraphObject> graphObjectClass
+                            = (Class<? extends GraphObject>) args[0];
 
                     if (graphObjectClass != null &&
                             graphObjectClass.isAssignableFrom(this.graphObjectClass)) {
@@ -601,7 +679,7 @@ public interface GraphObject {
                     ParameterizedType parameterizedType = new ParameterizedType() {
                         @Override
                         public Type[] getActualTypeArguments() {
-                            return new Type[]{ expectedType };
+                            return new Type[]{expectedType};
                         }
 
                         @Override
@@ -614,7 +692,8 @@ public interface GraphObject {
                             return GraphObjectList.class;
                         }
                     };
-                    return coerceValueToExpectedType(value, GraphObjectList.class, parameterizedType);
+                    return coerceValueToExpectedType(value, GraphObjectList.class,
+                            parameterizedType);
                 } else if (methodName.equals(SETPROPERTY_METHOD)) {
                     return setJSONProperty(args);
                 } else if (methodName.equals(REMOVEPROPERTY_METHOD)) {
@@ -625,14 +704,16 @@ public interface GraphObject {
                 return throwUnexpectedMethodSignature(method);
             }
 
-            private Object createGraphObjectsFromParameters(CreateGraphObject createGraphObject, Object value) {
+            private Object createGraphObjectsFromParameters(CreateGraphObject createGraphObject,
+                    Object value) {
                 if (createGraphObject != null &&
                         !Utility.isNullOrEmpty(createGraphObject.value())) {
                     String propertyName = createGraphObject.value();
                     if (List.class.isAssignableFrom(value.getClass())) {
-                        GraphObjectList<GraphObject> graphObjects = GraphObject.Factory.createList(GraphObject.class);
+                        GraphObjectList<GraphObject> graphObjects = GraphObject.Factory
+                                .createList(GraphObject.class);
                         @SuppressWarnings("unchecked")
-                        List<Object> values = (List<Object>)value;
+                        List<Object> values = (List<Object>) value;
                         for (Object obj : values) {
                             GraphObject graphObject = GraphObject.Factory.create();
                             graphObject.setProperty(propertyName, obj);
@@ -651,7 +732,8 @@ public interface GraphObject {
                 return value;
             }
 
-            private final Object proxyGraphObjectGettersAndSetters(Method method, Object[] args) throws JSONException {
+            private final Object proxyGraphObjectGettersAndSetters(Method method, Object[] args)
+                    throws JSONException {
                 String methodName = method.getName();
                 int parameterCount = method.getParameterTypes().length;
                 PropertyName propertyNameOverride = method.getAnnotation(PropertyName.class);
@@ -677,8 +759,10 @@ public interface GraphObject {
                     return value;
                 } else if (parameterCount == 1) {
                     // Has to be a setter. ASSUMPTION: The GraphObject-derived class has been verified
-                    CreateGraphObject createGraphObjectAnnotation = method.getAnnotation(CreateGraphObject.class);
-                    Object value = createGraphObjectsFromParameters(createGraphObjectAnnotation, args[0]);
+                    CreateGraphObject createGraphObjectAnnotation = method
+                            .getAnnotation(CreateGraphObject.class);
+                    Object value = createGraphObjectsFromParameters(createGraphObjectAnnotation,
+                            args[0]);
 
                     // If this is a wrapped object, store the underlying JSONObject instead, in order to serialize
                     // correctly.
@@ -703,8 +787,11 @@ public interface GraphObject {
             }
         }
 
-        private final static class GraphObjectListImpl<T> extends AbstractList<T> implements GraphObjectList<T> {
+        private final static class GraphObjectListImpl<T> extends AbstractList<T>
+                implements GraphObjectList<T> {
+
             private final JSONArray state;
+
             private final Class<?> itemType;
 
             public GraphObjectListImpl(JSONArray state, Class<?> itemType) {
@@ -717,7 +804,9 @@ public interface GraphObject {
 
             @Override
             public String toString() {
-                return String.format("GraphObjectList{itemType=%s, state=%s}", itemType.getSimpleName(), state);
+                return String
+                        .format("GraphObjectList{itemType=%s, state=%s}", itemType.getSimpleName(),
+                                state);
             }
 
             @Override
@@ -726,7 +815,8 @@ public interface GraphObject {
                 if (location < 0) {
                     throw new IndexOutOfBoundsException();
                 } else if (location < size()) {
-                    throw new UnsupportedOperationException("Only adding items at the end of the list is supported.");
+                    throw new UnsupportedOperationException(
+                            "Only adding items at the end of the list is supported.");
                 }
 
                 put(location, object);
@@ -780,18 +870,20 @@ public interface GraphObject {
             }
 
             @Override
-            public final <U extends GraphObject> GraphObjectList<U> castToListOf(Class<U> graphObjectClass) {
+            public final <U extends GraphObject> GraphObjectList<U> castToListOf(
+                    Class<U> graphObjectClass) {
                 if (GraphObject.class.isAssignableFrom(itemType)) {
                     if (graphObjectClass.isAssignableFrom(itemType)) {
                         @SuppressWarnings("unchecked")
-                        GraphObjectList<U> result = (GraphObjectList<U>)this;
+                        GraphObjectList<U> result = (GraphObjectList<U>) this;
                         return result;
                     }
 
                     return createList(state, graphObjectClass);
                 } else {
-                    throw new FacebookGraphObjectException("Can't cast GraphObjectCollection of non-GraphObject type "
-                            + itemType);
+                    throw new FacebookGraphObjectException(
+                            "Can't cast GraphObjectCollection of non-GraphObject type "
+                                    + itemType);
                 }
             }
 
