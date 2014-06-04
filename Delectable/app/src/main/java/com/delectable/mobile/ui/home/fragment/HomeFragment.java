@@ -6,6 +6,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.common.widget.TabsImagePagerAdapter;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.facebook.Session;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -84,6 +85,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void logout() {
+        // TODO: Some Common Logout function
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            session.closeAndClearTokenInformation();
+        }
         UserInfo.onSignOut(getActivity());
         Intent launchIntent = new Intent();
         launchIntent.setClass(getActivity(), LoginActivity.class);

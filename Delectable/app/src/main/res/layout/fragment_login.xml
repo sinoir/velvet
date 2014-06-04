@@ -65,6 +65,13 @@
                     android:text="@string/action_sign_in"
                     android:textStyle="bold" />
 
+                <com.facebook.widget.LoginButton
+                    android:id="@+id/facebook_sign_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

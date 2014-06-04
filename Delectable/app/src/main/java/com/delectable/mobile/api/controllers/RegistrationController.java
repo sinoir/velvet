@@ -3,7 +3,7 @@ package com.delectable.mobile.api.controllers;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Registration;
-import com.delectable.mobile.api.requests.RegistrationsLogin;
+import com.delectable.mobile.api.requests.BaseRegistrations;
 import com.delectable.mobile.data.UserInfo;
 
 import android.content.Context;
@@ -14,7 +14,7 @@ public class RegistrationController extends BaseNetworkController {
         super(context);
     }
 
-    public void loginUser(RegistrationsLogin loginRequest,
+    public void registerUser(BaseRegistrations loginRequest,
             final SimpleRequestCallback callback) {
 
         performRequest(loginRequest, new RequestCallback() {

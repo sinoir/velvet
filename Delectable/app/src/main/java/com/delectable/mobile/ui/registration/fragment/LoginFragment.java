@@ -4,9 +4,16 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.RegistrationController;
+import com.delectable.mobile.api.requests.BaseRegistrations;
+import com.delectable.mobile.api.requests.RegistrationsFacebook;
 import com.delectable.mobile.api.requests.RegistrationsLogin;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.home.activity.HomeActivity;
+import com.delectable.mobile.util.DateHelperUtil;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.LoginButton;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -17,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +39,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by abednarek on 5/22/14.
- */
 public class LoginFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int sLoaderEmailAutocomplete = 0;
+
+    private static final String TAG = "LoginFragment";
+
+    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            Log.d(TAG, "FB State:" + state);
+            Log.d(TAG, "FB Session:" + session);
+            Log.d(TAG, "FB exception:" + exception);
+            // TODO: Handle errors and other conditions.
+            if (state.isOpened()) {
+                facebookLogin();
+            }
+        }
+    };
 
     private ProgressBar mLoginProgress;
 
@@ -46,9 +67,9 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
 
     private EditText mPasswordView;
 
-    private View mLoginFormView;
-
     private RegistrationController mRegistrationController;
+
+    private UiLifecycleHelper mFacebookUiHelper;
 
     public LoginFragment() {
     }
@@ -56,8 +77,10 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mRegistrationController = new RegistrationController(getActivity());
+
+        mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
+        mFacebookUiHelper.onCreate(savedInstanceState);
     }
 
     @Override
@@ -91,11 +114,46 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
             }
         });
 
-        mLoginFormView = rootView.findViewById(R.id.login_form);
+        LoginButton fbLoginButton = (LoginButton) rootView.findViewById(R.id.facebook_sign_in);
+        fbLoginButton.setFragment(this);
+        fbLoginButton.setReadPermissions(
+                Arrays.asList("user_work_history", "email", "user_birthday", "user_interests",
+                        "user_activities")
+        );
 
         getLoaderManager().initLoader(sLoaderEmailAutocomplete, null, this);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFacebookUiHelper.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mFacebookUiHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mFacebookUiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mFacebookUiHelper.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mFacebookUiHelper.onSaveInstanceState(outState);
     }
 
     public void attemptLogin() {
@@ -144,13 +202,29 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
         }
     }
 
-    private void performLogin() {
+    public void facebookLogin() {
+        Session session = Session.getActiveSession();
+        Log.d(TAG, "FBLogin SessionState: " + session.getState());
+        Log.d(TAG, "FBLogin SessionState: " + session.getState());
         mLoginProgress.setVisibility(View.VISIBLE);
+        RegistrationsFacebook facebookRequest = new RegistrationsFacebook();
+        facebookRequest.setFacebookToken(session.getAccessToken());
+        facebookRequest.setFacebookTokenExpiration(
+                DateHelperUtil.doubleFromDate(session.getExpirationDate()));
+        registerWithRequest(facebookRequest);
+    }
+
+    private void performLogin() {
         RegistrationsLogin loginRequest = new RegistrationsLogin();
         loginRequest.setEmail(mEmailView.getText().toString());
         loginRequest.setPassword(mPasswordView.getText().toString());
+        registerWithRequest(loginRequest);
+    }
+
+    private void registerWithRequest(BaseRegistrations request) {
+        mLoginProgress.setVisibility(View.VISIBLE);
         mRegistrationController
-                .loginUser(loginRequest, new BaseNetworkController.SimpleRequestCallback() {
+                .registerUser(request, new BaseNetworkController.SimpleRequestCallback() {
                     @Override
                     public void onSucess() {
                         mLoginProgress.setVisibility(View.GONE);
@@ -217,13 +291,12 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        // Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
     }
-
 
     private interface ProfileQuery {
 
