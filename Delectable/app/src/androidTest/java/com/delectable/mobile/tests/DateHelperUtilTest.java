@@ -29,4 +29,11 @@ public class DateHelperUtilTest extends TestCase {
         Date expectedDate = new Date(1398530839600l);
         assertEquals(expectedDate, DateHelperUtil.dateFromDouble(rawDoubleDate));
     }
+
+    public void testDoubleFromDate() {
+        Date date = new Date(1398530839600l);
+        double expectedDouble = 1398530839.600;
+        double actualDouble = DateHelperUtil.doubleFromDate(date);
+        assertEquals(expectedDouble, actualDouble);
+    }
 }

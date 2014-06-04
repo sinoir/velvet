@@ -17,6 +17,19 @@ public class DateHelperUtil {
         return (firstPart * 1000) + lastPart;
     }
 
+    /**
+     * API uses floats for dates, convert a Date object to a double
+     *
+     * @param date - Date Object
+     * @return - Double format
+     */
+    public static double doubleFromDate(Date date) {
+        long initialDate = date.getTime();
+        long firstPart = initialDate / 1000l;
+        double decimalPart = (initialDate % 1000l) / 1000.0f;
+        return firstPart + decimalPart;
+    }
+
     public static Date dateFromDouble(double dateDouble) {
         return new Date(longDateFromDouble(dateDouble));
     }
