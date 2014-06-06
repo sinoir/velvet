@@ -41,4 +41,14 @@ public class CaptureComment {
     public void setAccountId(String account_id) {
         this.account_id = account_id;
     }
+
+    @Override
+    public String toString() {
+        return "CaptureComment{" +
+                "id='" + id + '\'' +
+                ", created_at=" + created_at +
+                ", comment='" + comment + '\'' +
+                ", account_id='" + account_id + '\'' +
+                '}';
+    }
 }

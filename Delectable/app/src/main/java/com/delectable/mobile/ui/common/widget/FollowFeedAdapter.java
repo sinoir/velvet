@@ -10,16 +10,20 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class FollowFeedAdapter extends BaseAdapter {
+
+    private static final String TAG = "FollowFeedAdapter";
 
     private Activity mContext;
 
@@ -88,6 +92,10 @@ public class FollowFeedAdapter extends BaseAdapter {
             viewHolder.userCaptureRatingBar = (RatingsBarView) rowView
                     .findViewById(R.id.capturer_rating_bar);
 
+            // Participants Comment/Rating
+            viewHolder.participantsCommentsRatingsContainer = (LinearLayout) rowView
+                    .findViewById(R.id.participants_comments_ratings_container);
+
             rowView.setTag(viewHolder);
         } else {
             viewHolder = (FeedViewHolder) rowView.getTag();
@@ -96,7 +104,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         setupTaggedParticipants(viewHolder, capture);
         setupUserCommentsRating(viewHolder, capture);
 
-        // TODO : Dynamic list of other comments ..
+        setupParticipantsRatingsAndComments(viewHolder, capture);
 
         return rowView;
     }
@@ -195,6 +203,34 @@ public class FollowFeedAdapter extends BaseAdapter {
         viewHolder.captureTimeLocation.setText(captureTimeLocation);
     }
 
+    private void setupParticipantsRatingsAndComments(FeedViewHolder viewHolder,
+            CaptureDetails capture) {
+        viewHolder.participantsCommentsRatingsContainer.removeAllViewsInLayout();
+        CommentRatingRowView.LayoutParams layoutParams = new CommentRatingRowView.LayoutParams(
+                CommentRatingRowView.LayoutParams.MATCH_PARENT,
+                CommentRatingRowView.LayoutParams.WRAP_CONTENT);
+        int verticalSpacing = mContext.getResources()
+                .getDimensionPixelSize(R.dimen.cap_feed_row_small_vertical_spacing);
+
+        // TODO: Finalize Test out with feed with participants.
+        ArrayList<Account> participants = capture.getCapturerParticipants();
+        if (participants != null) {
+            for (Account participant : participants) {
+                CaptureComment comment = capture.getCommentForUserId(participant.getId());
+                String commentText = comment != null ? comment.getComment() : "";
+                float rating = capture.getRatingPercentForId(participant.getId());
+                if (commentText != "" || rating > 0.0f) {
+                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
+                    commentRow.setPadding(0, verticalSpacing, 0, verticalSpacing);
+                    commentRow.setNameCommentWithRating(participant.getFullName(), commentText,
+                            rating);
+                    viewHolder.participantsCommentsRatingsContainer
+                            .addView(commentRow, layoutParams);
+                }
+            }
+        }
+    }
+
     private String getThumbnailParticipantPhotoFromAccount(Account account) {
         String profileImageUrl = "";
         if (account.getPhoto() != null) {
@@ -232,5 +268,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         TextView captureTimeLocation;
 
         RatingsBarView userCaptureRatingBar;
+
+        LinearLayout participantsCommentsRatingsContainer;
     }
 }
