@@ -152,7 +152,7 @@
             android:layout_alignTop="@+id/profile_image2"
             android:layout_toRightOf="@id/profile_image2"
             android:text="Adam Bednarek"
-            android:textSize="16sp" />
+            android:textSize="@dimen/cap_feed_comment_text_size" />
 
         <TextView
             android:id="@+id/user_comment"
@@ -162,7 +162,7 @@
             android:layout_toRightOf="@id/profile_image2"
             android:text="Soft in texture with a jolt of acidity lifting the blackberry"
             android:textColor="@color/d_gray6"
-            android:textSize="16sp" />
+            android:textSize="@dimen/cap_feed_comment_text_size" />
 
         <TextView
             android:id="@+id/capture_time_location"
@@ -185,6 +185,13 @@
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing" />
 
         <!-- TODO: Dynamic rows for other comments(tagee participants) / ratings(Registered users) -->
+        <LinearLayout
+            android:id="@+id/participants_comments_ratings_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/user_name"
+            android:layout_below="@id/capturer_rating_bar"
+            android:orientation="vertical" />
         <!-- TODO: Button "Tap to add your rating" -->
     </RelativeLayout>
 
