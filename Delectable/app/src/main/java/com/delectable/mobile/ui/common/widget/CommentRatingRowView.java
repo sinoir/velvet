@@ -66,8 +66,12 @@ public class CommentRatingRowView extends RelativeLayout {
 
     public void setNameCommentWithRating(String name, String comment, float ratingPercent) {
         setNameAndComment(name, comment);
-        mRatingsBarView.setVisibility(View.VISIBLE);
-        mRatingsBarView.setPercent(ratingPercent);
+        if (ratingPercent > 0.0f) {
+            mRatingsBarView.setVisibility(View.VISIBLE);
+            mRatingsBarView.setPercent(ratingPercent);
+        } else {
+            mRatingsBarView.setVisibility(View.GONE);
+        }
     }
 
     public void setNameWithRating(String name, float ratingPercent) {
