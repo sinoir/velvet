@@ -4,6 +4,8 @@
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.j256.ormlite/ormlite-jdbc/4.27/e128d11cdcc3602aacf82e645a4f8f2eff6f087d/ormlite-jdbc-4.27.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.j256.ormlite/ormlite-jdbc/4.27/6d3b018d5367f9a481d8b7af8e51fd5cee9bc78e/ormlite-jdbc-4.27-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
