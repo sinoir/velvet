@@ -5,11 +5,14 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Capture;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +31,13 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     private ArrayList<CaptureDetails> mData;
 
-    public FollowFeedAdapter(Activity context, ArrayList<CaptureDetails> data) {
+    private FeedItemActionsHandler mActionsHandler;
+
+    public FollowFeedAdapter(Activity context, ArrayList<CaptureDetails> data,
+            FeedItemActionsHandler actionsHandler) {
         mContext = context;
         mData = data;
+        mActionsHandler = actionsHandler;
     }
 
     @Override
@@ -53,7 +60,6 @@ public class FollowFeedAdapter extends BaseAdapter {
         return getFeedView(position, convertView, parent);
     }
 
-    // TODO: Possibly use Expandable List view or something, must display bottom comments / ratings
     private View getFeedView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
         FeedViewHolder viewHolder = null;
@@ -113,12 +119,10 @@ public class FollowFeedAdapter extends BaseAdapter {
 
         setupParticipantsRatingsAndComments(viewHolder, capture);
 
-        // TODO: setupTouchStates() / ClickHandler for each action
-
         return rowView;
     }
 
-    private void setupTopWineDetails(FeedViewHolder viewHolder, CaptureDetails capture) {
+    private void setupTopWineDetails(FeedViewHolder viewHolder, final CaptureDetails capture) {
         String wineImageUrl = "";
         String producerName = "";
         String wineName = "";
@@ -130,19 +134,37 @@ public class FollowFeedAdapter extends BaseAdapter {
         ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, viewHolder.wineImage);
         viewHolder.producerName.setText(producerName);
         viewHolder.wineName.setText(wineName);
+
+        viewHolder.wineImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionsHandler.launchWineProfile(capture.getWineProfile());
+            }
+        });
     }
 
-    private void setupTaggedParticipants(FeedViewHolder viewHolder, CaptureDetails capture) {
+    private void setupTaggedParticipants(FeedViewHolder viewHolder, final CaptureDetails capture) {
         String profileImageUrl = getThumbnailParticipantPhotoFromAccount(
                 capture.getCapturerParticipant());
 
         // TODO: Combine data from other participants objects
-        ArrayList<Account> taggedParticipants = capture.getRegisteredParticipants() != null
+        final ArrayList<Account> taggedParticipants = capture.getRegisteredParticipants() != null
                 ? capture.getRegisteredParticipants() : new ArrayList<Account>();
 
         boolean hasCaptureParticipants = taggedParticipants.size() > 0;
 
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage1);
+        viewHolder.profileImage1.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (capture.getCapturerParticipant() != null) {
+                            mActionsHandler
+                                    .launchUserProfile(capture.getCapturerParticipant().getId());
+                        }
+                    }
+                }
+        );
 
         if (hasCaptureParticipants) {
             viewHolder.taggedParticipantsContainer.setVisibility(View.VISIBLE);
@@ -154,10 +176,18 @@ public class FollowFeedAdapter extends BaseAdapter {
             if (taggedParticipants.size() > i) {
                 String imageUrl = getThumbnailParticipantPhotoFromAccount(
                         taggedParticipants.get(i));
-                // TODO: Add Touchstate to open User Profile
+                final String accountId = taggedParticipants.get(i).getId();
                 ImageLoaderUtil.loadImageIntoView(mContext, imageUrl,
                         viewHolder.taggedParticipantImages.get(i));
                 viewHolder.taggedParticipantImages.get(i).setVisibility(View.VISIBLE);
+                viewHolder.taggedParticipantImages.get(i).setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mActionsHandler.launchUserProfile(accountId);
+                            }
+                        }
+                );
             } else {
                 viewHolder.taggedParticipantImages.get(i).setVisibility(View.INVISIBLE);
             }
@@ -166,6 +196,15 @@ public class FollowFeedAdapter extends BaseAdapter {
         if (taggedParticipants.size() == 3) {
             // TODO: Add Touchstate to Open more tagged profile listing
             viewHolder.moreTaggedParticipantsButton.setVisibility(View.VISIBLE);
+            viewHolder.moreTaggedParticipantsButton.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // TODO: Ideally pass up list of tagged users, not the full capture object
+                            mActionsHandler.launchTaggedUserListing(capture);
+                        }
+                    }
+            );
         } else {
             viewHolder.moreTaggedParticipantsButton.setVisibility(View.INVISIBLE);
         }
@@ -200,6 +239,17 @@ public class FollowFeedAdapter extends BaseAdapter {
         captureTimeLocation += location;
 
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, viewHolder.profileImage2);
+
+        final String finalUserAccountId = userAccountId;
+        viewHolder.profileImage2.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mActionsHandler.launchUserProfile(finalUserAccountId);
+                    }
+                }
+        );
+
         viewHolder.userName.setText(userName);
         if (userComment != "") {
             viewHolder.userComment.setText(userComment);
@@ -240,10 +290,37 @@ public class FollowFeedAdapter extends BaseAdapter {
         }
     }
 
-    private void setupActionButtonStates(FeedViewHolder viewHolder, CaptureDetails capture) {
+    private void setupActionButtonStates(FeedViewHolder viewHolder, final CaptureDetails capture) {
         int numLikes = capture.getLikesCount();
         String likesCountText = mContext.getString(R.string.cap_feed_likes_count, numLikes);
         viewHolder.likesCount.setText(likesCountText);
+        boolean userLikesCapture = capture.doesUserLikeCapture(UserInfo.getUserId(mContext));
+
+        viewHolder.likeButton.setSelected(userLikesCapture);
+
+        viewHolder.rateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionsHandler.rateAndCommentForCapture(capture);
+            }
+        });
+
+        viewHolder.commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionsHandler.writeCommentForCapture(capture);
+            }
+        });
+
+        viewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, String.valueOf(capture.getLikingParticipants()));
+                mActionsHandler.toggleLikeForCapture(capture);
+            }
+        });
+
+        // TODO : Menu Overlfow Does what?
     }
 
     private String getThumbnailParticipantPhotoFromAccount(Account account) {
@@ -256,6 +333,21 @@ public class FollowFeedAdapter extends BaseAdapter {
             }
         }
         return profileImageUrl;
+    }
+
+    public static interface FeedItemActionsHandler {
+
+        public void writeCommentForCapture(CaptureDetails capture);
+
+        public void rateAndCommentForCapture(CaptureDetails capture);
+
+        public void toggleLikeForCapture(CaptureDetails capture);
+
+        public void launchWineProfile(WineProfile wineProfile);
+
+        public void launchUserProfile(String userAccountId);
+
+        public void launchTaggedUserListing(CaptureDetails capture);
     }
 
     static class FeedViewHolder {

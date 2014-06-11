@@ -7,6 +7,7 @@ import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
@@ -23,7 +24,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class FollowFeedTabFragment extends BaseFragment {
+public class FollowFeedTabFragment extends BaseFragment implements
+        FollowFeedAdapter.FeedItemActionsHandler {
 
     private static final String TAG = "FollowFeedTabFragment";
 
@@ -59,7 +61,6 @@ public class FollowFeedTabFragment extends BaseFragment {
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class FollowFeedTabFragment extends BaseFragment {
         // TODO: Pagination
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
-        mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails);
+        mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, this);
         mListView.setAdapter(mAdapter);
 
         setupPullToRefresh();
@@ -146,5 +147,46 @@ public class FollowFeedTabFragment extends BaseFragment {
         // TODO : Figure out way to combine before/after listing and deletes..
         mCaptureDetails.addAll(mDetailsListing.getUpdates());
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void writeCommentForCapture(CaptureDetails capture) {
+        // TODO: Launch Write Comment Dialog
+        Toast.makeText(getActivity(), "Write Comment", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void rateAndCommentForCapture(CaptureDetails capture) {
+        // TODO: Rate/Comment Capture
+        Toast.makeText(getActivity(), "Rate Capture", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void toggleLikeForCapture(CaptureDetails capture) {
+        // TODO: Like Capture
+        Toast.makeText(getActivity(), "Like Capture", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void launchWineProfile(WineProfile wineProfile) {
+        // TODO: Wine Profile
+        Toast.makeText(getActivity(), "Wine Profile: " + wineProfile.getName(), Toast.LENGTH_SHORT)
+                .show();
+        Log.d(TAG,
+                "Launch Wine Profile: " + wineProfile.getId() + " Name: " + wineProfile.getName());
+    }
+
+    @Override
+    public void launchUserProfile(String userAccountId) {
+        // TODO: User Profile
+        Toast.makeText(getActivity(), "User Profile", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Launch User Profile: " + userAccountId);
+    }
+
+    @Override
+    public void launchTaggedUserListing(CaptureDetails capture) {
+        // TODO: Tagged User Listing
+        Toast.makeText(getActivity(), "All Tagged Users list", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
     }
 }
