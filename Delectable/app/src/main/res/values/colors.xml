@@ -4,11 +4,14 @@
     <!-- TODO: Find better name / more general pallette names -->
     <color name="d_dark_blue">#1F303D</color>
 
+    <!-- Greys -->
     <color name="d_gray1">#F5F5F5</color>
     <color name="d_gray2">#DEDEDE</color>
     <color name="d_gray3">#909090</color>
     <color name="d_gray4">#666666</color>
     <color name="d_gray5">#DEDEDE</color>
     <color name="d_gray6">#606060</color>
-
+    <!-- Blues -->
+    <color name="d_link_blue">#0099CC</color>
+    <color name="d_link_blue_darker">#0066BB</color>
 </resources>

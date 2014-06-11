@@ -15,4 +15,8 @@
     <string name="wine_count">%d wines</string>
     <string name="action_facebook_login">Facebook Login</string>
 
+    <!-- Capture Feed -->
+    <string name="cap_feed_likes_count">%d likes</string>
+    <string name="cap_feed_add_rating">Tap to add your rating</string>
+
 </resources>

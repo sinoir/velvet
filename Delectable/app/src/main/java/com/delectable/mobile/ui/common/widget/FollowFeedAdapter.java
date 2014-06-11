@@ -10,7 +10,6 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +95,13 @@ public class FollowFeedAdapter extends BaseAdapter {
             viewHolder.participantsCommentsRatingsContainer = (LinearLayout) rowView
                     .findViewById(R.id.participants_comments_ratings_container);
 
+            // Action buttons:
+            viewHolder.rateButton = rowView.findViewById(R.id.rate_button);
+            viewHolder.commentButton = rowView.findViewById(R.id.comment_button);
+            viewHolder.likeButton = rowView.findViewById(R.id.like_button);
+            viewHolder.likesCount = (TextView) rowView.findViewById(R.id.likes_count);
+            viewHolder.menuButton = rowView.findViewById(R.id.menu_button);
+
             rowView.setTag(viewHolder);
         } else {
             viewHolder = (FeedViewHolder) rowView.getTag();
@@ -103,8 +109,11 @@ public class FollowFeedAdapter extends BaseAdapter {
         setupTopWineDetails(viewHolder, capture);
         setupTaggedParticipants(viewHolder, capture);
         setupUserCommentsRating(viewHolder, capture);
+        setupActionButtonStates(viewHolder, capture);
 
         setupParticipantsRatingsAndComments(viewHolder, capture);
+
+        // TODO: setupTouchStates() / ClickHandler for each action
 
         return rowView;
     }
@@ -186,7 +195,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         PrettyTime p = new PrettyTime();
         captureTimeLocation = p.format(capture.getCreatedAtDate());
 
-        // TODO: Add Location once location is added to model
+        // TODO: Add Location once location we find capture with location...
         String location = "";
         captureTimeLocation += location;
 
@@ -231,6 +240,12 @@ public class FollowFeedAdapter extends BaseAdapter {
         }
     }
 
+    private void setupActionButtonStates(FeedViewHolder viewHolder, CaptureDetails capture) {
+        int numLikes = capture.getLikesCount();
+        String likesCountText = mContext.getString(R.string.cap_feed_likes_count, numLikes);
+        viewHolder.likesCount.setText(likesCountText);
+    }
+
     private String getThumbnailParticipantPhotoFromAccount(Account account) {
         String profileImageUrl = "";
         if (account.getPhoto() != null) {
@@ -270,5 +285,15 @@ public class FollowFeedAdapter extends BaseAdapter {
         RatingsBarView userCaptureRatingBar;
 
         LinearLayout participantsCommentsRatingsContainer;
+
+        View rateButton;
+
+        View commentButton;
+
+        View likeButton;
+
+        TextView likesCount;
+
+        View menuButton;
     }
 }

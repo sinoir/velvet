@@ -184,7 +184,6 @@
             android:layout_below="@id/capture_time_location"
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing" />
 
-        <!-- TODO: Dynamic rows for other comments(tagee participants) / ratings(Registered users) -->
         <LinearLayout
             android:id="@+id/participants_comments_ratings_container"
             android:layout_width="match_parent"
@@ -192,10 +191,69 @@
             android:layout_alignLeft="@id/user_name"
             android:layout_below="@id/capturer_rating_bar"
             android:orientation="vertical" />
-        <!-- TODO: Button "Tap to add your rating" -->
+
+        <TextView
+            android:id="@+id/rate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/user_name"
+            android:layout_below="@id/participants_comments_ratings_container"
+            android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
+            android:text="@string/cap_feed_add_rating"
+            android:textColor="@color/btn_text_blue"
+            android:textSize="@dimen/cap_feed_comment_text_size" />
+
+        <View
+            android:id="@+id/vertical_divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/user_name"
+            android:layout_below="@id/rate_button"
+            android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
+            android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
+            android:background="@color/d_gray2" />
+
+        <RelativeLayout
+            android:id="@+id/action_buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/user_name"
+            android:layout_below="@id/vertical_divider2">
+
+            <ImageButton
+                android:id="@+id/comment_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/cap_feed_row_small_vertical_spacing"
+                android:background="@drawable/btn_comment" />
+
+            <ImageButton
+                android:id="@+id/like_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/cap_feed_row_small_vertical_spacing"
+                android:layout_toRightOf="@id/comment_button"
+                android:background="@drawable/btn_like" />
+
+            <TextView
+                android:id="@+id/likes_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/like_button"
+                android:text="0 likes" />
+
+            <!-- Overflow Icon -->
+            <ImageButton
+                android:id="@+id/menu_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
     </RelativeLayout>
-
-    <!-- TODO: Comment / like button and menu -->
-    <!-- Note: Make sure to have bottom padding -->
-
 </RelativeLayout>
