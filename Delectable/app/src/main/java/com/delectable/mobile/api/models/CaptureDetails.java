@@ -85,6 +85,10 @@ public class CaptureDetails extends Capture {
         return DateHelperUtil.dateFromDouble(createdAtTime);
     }
 
+    public int getLikesCount() {
+        return liking_participants != null ? liking_participants.size() : 0;
+    }
+
     public String getShortShareUrl() {
         return short_share_url;
     }

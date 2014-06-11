@@ -2,6 +2,8 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.api.requests.CapturesContextRequest;
 
 import org.json.JSONException;
@@ -290,5 +292,15 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         Date expectedDate = new Date(1398530839601l);
         Date actualDate = capture.getCreatedAtDate();
         assertEquals(expectedDate, actualDate);
+    }
+
+    public void testGetLikesCount() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) request
+                .buildResopnseFromJson(json);
+        CaptureDetails capture = captureListing.getUpdates().get(3);
+        assertEquals(3, capture.getLikesCount());
     }
 }
