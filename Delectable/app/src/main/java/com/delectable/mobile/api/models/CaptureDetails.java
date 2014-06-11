@@ -89,6 +89,19 @@ public class CaptureDetails extends Capture {
         return liking_participants != null ? liking_participants.size() : 0;
     }
 
+    public boolean doesUserLikeCapture(String accountId) {
+        boolean likesCapture = false;
+        if (liking_participants != null) {
+            for (Account account : liking_participants) {
+                if (account.getId().equalsIgnoreCase(accountId)) {
+                    likesCapture = true;
+                    break;
+                }
+            }
+        }
+        return likesCapture;
+    }
+
     public String getShortShareUrl() {
         return short_share_url;
     }

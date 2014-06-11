@@ -298,6 +298,39 @@ public class Account extends BaseResponse {
         this.current_user_relationship = current_user_relationship;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", fname='" + fname + '\'' +
+                ", lname='" + lname + '\'' +
+                ", photo=" + photo +
+                ", influencer=" + influencer +
+                ", influencer_titles=" + influencer_titles +
+                ", bio='" + bio + '\'' +
+                ", follower_count=" + follower_count +
+                ", wishlist_count=" + wishlist_count +
+                ", sourcing_state='" + sourcing_state + '\'' +
+                ", fb_id='" + fb_id + '\'' +
+                ", fb_token='" + fb_token + '\'' +
+                ", fb_token_exp=" + fb_token_exp +
+                ", payment_methods=" + payment_methods +
+                ", following_count=" + following_count +
+                ", url='" + url + '\'' +
+                ", capture_count=" + capture_count +
+                ", region_count=" + region_count +
+                ", account_config=" + account_config +
+                ", client_state=" + client_state +
+                ", tutorial_state=" + tutorial_state +
+                ", shipping_addresses=" + shipping_addresses +
+                ", identifiers=" + identifiers +
+                ", local_notifs=" + local_notifs +
+                ", current_user_relationship=" + current_user_relationship +
+                ", capture_summaries=" + capture_summaries +
+                "} " + super.toString();
+    }
+
     class ClientState {
 
         Integer activity_feed_ts_last;

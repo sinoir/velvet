@@ -303,4 +303,34 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         CaptureDetails capture = captureListing.getUpdates().get(3);
         assertEquals(3, capture.getLikesCount());
     }
+
+    public void testGetLikesCounWithNullLikingParticipants() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        assertEquals(0, capture.getLikesCount());
+    }
+
+    public void testDoesUserLikeCaptureWithLikingParticipants() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) request
+                .buildResopnseFromJson(json);
+        CaptureDetails capture = captureListing.getUpdates().get(3);
+        String userAccountId = "abc";
+        assertFalse(capture.doesUserLikeCapture(userAccountId));
+
+        userAccountId = "517809692dbf68273f000711";
+        assertTrue(capture.doesUserLikeCapture(userAccountId));
+    }
+
+    public void testDoesUserLikeCaptureWithNullLikingParticipants() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        assertNull(capture.getLikingParticipants());
+        String userAccountId = "";
+        assertFalse(capture.doesUserLikeCapture(userAccountId));
+    }
 }
