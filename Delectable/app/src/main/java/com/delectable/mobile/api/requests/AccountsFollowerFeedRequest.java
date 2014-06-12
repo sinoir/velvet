@@ -17,6 +17,8 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
 
     String after;
 
+    private CaptureDetailsListing mCurrentListing;
+
     /**
      * Make request to get Follower Capture Feed
      *
@@ -24,6 +26,23 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
      */
     public AccountsFollowerFeedRequest(String contextType) {
         context = contextType;
+    }
+
+    /**
+     * Makes request for updates / paging
+     *
+     * @param currentListing - Current listing that was loaded
+     * @param isPullToRefresh - Checks if we're refreshing.  Turns supress_before on
+     */
+    public AccountsFollowerFeedRequest(CaptureDetailsListing currentListing, boolean isPullToRefresh) {
+        // TODO: Check invalidate to reset / get new data without etag.
+        mCurrentListing = currentListing;
+        e_tag = currentListing.getETag();
+        context = currentListing.getContext();
+        before = currentListing.getBoundariesToBefore();
+        after = currentListing.getBoundariesToAfter();
+
+        // TODO: Add supress_before when pulling to refresh
     }
 
     @Override
@@ -48,6 +67,30 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
     @Override
     public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
         CaptureDetailsListing resForParsing = new CaptureDetailsListing();
-        return resForParsing.buildFromJson(jsonObject);
+        CaptureDetailsListing parsedListing = (CaptureDetailsListing) resForParsing
+                .buildFromJson(jsonObject);
+        if (mCurrentListing != null) {
+            parsedListing.combineWithPreviousListing(mCurrentListing);
+        } else {
+            parsedListing.updateCombinedData();
+        }
+        return parsedListing;
     }
+
+    public String getBefore() {
+        return before;
+    }
+
+    public void setBefore(String before) {
+        this.before = before;
+    }
+
+    public String getAfter() {
+        return after;
+    }
+
+    public void setAfter(String after) {
+        this.after = after;
+    }
+
 }

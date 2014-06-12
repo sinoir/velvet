@@ -1,6 +1,9 @@
 package com.delectable.mobile.api.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CaptureDetailsListing extends ListingResponse {
 
@@ -9,6 +12,52 @@ public class CaptureDetailsListing extends ListingResponse {
     ArrayList<CaptureDetails> after;
 
     ArrayList<CaptureDetails> updates;
+
+    Map<String, CaptureDetails> mAllCombinedDataMap;
+
+    @Override
+    public void updateCombinedData() {
+        if (mAllCombinedDataMap == null) {
+            mAllCombinedDataMap = new HashMap<String, CaptureDetails>();
+        }
+        if (after != null) {
+            addCapturesToDataMap(after);
+        }
+        if (before != null) {
+            addCapturesToDataMap(before);
+        }
+        if (updates != null) {
+            addCapturesToDataMap(updates);
+        }
+        if (deletes != null && deletes.size() > 0) {
+            for (String deleteId : deletes) {
+                mAllCombinedDataMap.remove(deleteId);
+            }
+        }
+    }
+
+    private void addCapturesToDataMap(ArrayList<CaptureDetails> captures) {
+        for (CaptureDetails capture : captures) {
+            mAllCombinedDataMap.put(capture.getId(), capture);
+        }
+    }
+
+    @Override
+    public void combineWithPreviousListing(ListingResponse previousListing) {
+        mAllCombinedDataMap = ((CaptureDetailsListing) previousListing).getAllCombinedDataMap();
+        updateCombinedData();
+    }
+
+    public Map<String, CaptureDetails> getAllCombinedDataMap() {
+        return mAllCombinedDataMap;
+    }
+
+    public ArrayList<CaptureDetails> getSortedCombinedData() {
+        ArrayList<CaptureDetails> sortedList = new ArrayList<CaptureDetails>(
+                mAllCombinedDataMap.values());
+        Collections.sort(sortedList, CaptureDetails.CreatedAtDescendingComparator);
+        return sortedList;
+    }
 
     @Override
     public ArrayList<CaptureDetails> getBefore() {

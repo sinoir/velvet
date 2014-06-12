@@ -77,6 +77,12 @@ public abstract class ListingResponse extends BaseResponse {
         this.boundaries = boundaries;
     }
 
+    public abstract void updateCombinedData();
+
+    public abstract ArrayList<? extends BaseResponse> getSortedCombinedData();
+
+    public abstract void combineWithPreviousListing(ListingResponse previousListing);
+
     public abstract ArrayList<? extends BaseResponse> getBefore();
 
     public abstract void setBefore(ArrayList<? extends BaseResponse> before);
@@ -106,7 +112,7 @@ public abstract class ListingResponse extends BaseResponse {
                 "} " + super.toString();
     }
 
-    class Boundaries {
+    public static class Boundaries {
 
         Boundary from;
 
@@ -121,7 +127,7 @@ public abstract class ListingResponse extends BaseResponse {
         }
     }
 
-    class Boundary {
+    public static class Boundary {
 
         String before;
 

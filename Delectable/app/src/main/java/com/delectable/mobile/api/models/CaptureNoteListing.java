@@ -11,6 +11,22 @@ public class CaptureNoteListing extends ListingResponse {
     ArrayList<CaptureNote> updates;
 
     @Override
+    public void updateCombinedData() {
+        // TODO: Combine Data
+    }
+
+    @Override
+    public ArrayList<? extends BaseResponse> getSortedCombinedData() {
+        // TODO: Combine Data
+        return null;
+    }
+
+    @Override
+    public void combineWithPreviousListing(ListingResponse previousListing) {
+        // TODO: Combine Data
+    }
+
+    @Override
     public ArrayList<CaptureNote> getBefore() {
         return before;
     }
