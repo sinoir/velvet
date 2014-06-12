@@ -115,9 +115,8 @@ public class FollowFeedAdapter extends BaseAdapter {
         setupTopWineDetails(viewHolder, capture);
         setupTaggedParticipants(viewHolder, capture);
         setupUserCommentsRating(viewHolder, capture);
-        setupActionButtonStates(viewHolder, capture);
-
         setupParticipantsRatingsAndComments(viewHolder, capture);
+        setupActionButtonStates(viewHolder, capture);
 
         return rowView;
     }
@@ -255,9 +254,15 @@ public class FollowFeedAdapter extends BaseAdapter {
             viewHolder.userComment.setText(userComment);
             viewHolder.userComment.setVisibility(View.VISIBLE);
         } else {
+            viewHolder.userComment.setText("");
             viewHolder.userComment.setVisibility(View.GONE);
         }
-        viewHolder.userCaptureRatingBar.setPercent(capturePercent);
+        if (capturePercent > 0.0f) {
+            viewHolder.userCaptureRatingBar.setVisibility(View.VISIBLE);
+            viewHolder.userCaptureRatingBar.setPercent(capturePercent);
+        } else {
+            viewHolder.userCaptureRatingBar.setVisibility(View.GONE);
+        }
 
         viewHolder.captureTimeLocation.setText(captureTimeLocation);
     }
@@ -272,9 +277,16 @@ public class FollowFeedAdapter extends BaseAdapter {
                 .getDimensionPixelSize(R.dimen.cap_feed_row_small_vertical_spacing);
 
         // TODO: Finalize Test out with feed with participants.
-        ArrayList<Account> participants = capture.getCapturerParticipants();
+        Account capturingAccount = capture.getCapturerParticipant();
+        ArrayList<Account> participants = capture.getCommentingParticipants();
+        int numDisplayedComments = 0;
         if (participants != null) {
+            viewHolder.participantsCommentsRatingsContainer.setVisibility(View.VISIBLE);
             for (Account participant : participants) {
+                // Skip comments by the user who captured, otherwise it will show as duplicate
+                if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
+                    continue;
+                }
                 CaptureComment comment = capture.getCommentForUserId(participant.getId());
                 String commentText = comment != null ? comment.getComment() : "";
                 float rating = capture.getRatingPercentForId(participant.getId());
@@ -285,8 +297,12 @@ public class FollowFeedAdapter extends BaseAdapter {
                             rating);
                     viewHolder.participantsCommentsRatingsContainer
                             .addView(commentRow, layoutParams);
+                    numDisplayedComments++;
                 }
             }
+        }
+        if (numDisplayedComments == 0) {
+            viewHolder.participantsCommentsRatingsContainer.setVisibility(View.GONE);
         }
     }
 

@@ -28,8 +28,6 @@ public class CaptureDetails extends Capture {
 
     String location_name;
 
-    ArrayList<Account> capturer_participants;
-
     ArrayList<Account> liking_participants;
 
     ArrayList<Account> commenting_participants;
@@ -164,14 +162,6 @@ public class CaptureDetails extends Capture {
 
     public void setLocationName(String location_name) {
         this.location_name = location_name;
-    }
-
-    public ArrayList<Account> getCapturerParticipants() {
-        return capturer_participants;
-    }
-
-    public void setCapturerParticipants(ArrayList<Account> capturer_participants) {
-        this.capturer_participants = capturer_participants;
     }
 
     public ArrayList<Account> getLikingParticipants() {
