@@ -9,6 +9,8 @@ import com.delectable.mobile.api.requests.CapturesContextRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 
@@ -332,5 +334,28 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertNull(capture.getLikingParticipants());
         String userAccountId = "";
         assertFalse(capture.doesUserLikeCapture(userAccountId));
+    }
+
+    public void testCaptureCreatedAtDescendingComparator() {
+        CaptureDetails firstCap = new CaptureDetails();
+        CaptureDetails secondCap = new CaptureDetails();
+        CaptureDetails thirdCap = new CaptureDetails();
+        firstCap.setCreatedAt(3.0);
+        secondCap.setCreatedAt(1.0);
+        thirdCap.setCreatedAt(4.0);
+
+        ArrayList<CaptureDetails> actualList = new ArrayList<CaptureDetails>();
+        actualList.add(firstCap);
+        actualList.add(secondCap);
+        actualList.add(thirdCap);
+
+        ArrayList<CaptureDetails> expectedSortedList = new ArrayList<CaptureDetails>();
+        expectedSortedList.add(thirdCap);
+        expectedSortedList.add(firstCap);
+        expectedSortedList.add(secondCap);
+
+        Collections.sort(actualList, CaptureDetails.CreatedAtDescendingComparator);
+
+        assertEquals(expectedSortedList, actualList);
     }
 }

@@ -2,7 +2,23 @@ package com.delectable.mobile.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Comparator;
+
 public abstract class Capture extends BaseResponse {
+
+    /**
+     * Sorts Captures by newest to oldest
+     */
+    public static Comparator<Capture> CreatedAtDescendingComparator = new Comparator<Capture>() {
+
+        @Override
+        public int compare(Capture lhs, Capture rhs) {
+            if (!(lhs instanceof Capture) || !(rhs instanceof Capture)) {
+                throw new ClassCastException();
+            }
+            return (int) (rhs.getCreatedAt() - lhs.getCreatedAt());
+        }
+    };
 
     String id;
 
