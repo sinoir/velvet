@@ -43,6 +43,8 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     private ArrayList<CaptureDetails> mCaptureDetails;
 
+    private boolean mIsLoadingData;
+
     public FollowFeedTabFragment() {
         // Required empty public constructor
     }
@@ -59,6 +61,7 @@ public class FollowFeedTabFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         mCaptureDetails = new ArrayList<CaptureDetails>();
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        mIsLoadingData = false;
     }
 
     @Override
@@ -70,7 +73,6 @@ public class FollowFeedTabFragment extends BaseFragment implements
                         false);
         mRefreshContainer = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container);
 
-        // TODO: Pagination
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
         mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, this);
@@ -84,7 +86,7 @@ public class FollowFeedTabFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        refreshData();
     }
 
     private void setupPullToRefresh() {
@@ -110,16 +112,44 @@ public class FollowFeedTabFragment extends BaseFragment implements
             @Override
             public void onRefresh() {
                 Log.d(TAG, "On Refresh");
-                // TODO: Show some indicator of refreshing
-                loadData();
+                refreshData();
             }
         });
     }
 
-    private void loadData() {
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        // TODO: Update with Before / After for pagination
+    private void refreshData() {
+        loadData(true);
+    }
+
+    private void loadNextPage() {
+        Log.d(TAG, "Load Next Page? " + mDetailsListing.getMore());
+        // TODO: Figure out why last page returns invalidate and doesn't load more pages, why is more true?
+        if (mDetailsListing != null &&
+                mDetailsListing.getMore() &&
+                (!mDetailsListing.getInvalidate()
+                        || mDetailsListing.getBoundariesFromAfter() == null)) {
+            loadData(false);
+        }
+    }
+
+    private void loadData(boolean isRefreshing) {
+        Log.d(TAG, "Load Data isRefreshing: ? " + isRefreshing);
+        if (!mIsLoadingData) {
+            mIsLoadingData = true;
+            AccountsFollowerFeedRequest request;
+            if (mDetailsListing == null) {
+                request = new AccountsFollowerFeedRequest(
+                        AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+            } else {
+                request = new AccountsFollowerFeedRequest(mDetailsListing, isRefreshing);
+            }
+            performRequest(request);
+            mRefreshContainer.setRefreshing(true);
+        }
+    }
+
+    private void performRequest(AccountsFollowerFeedRequest request) {
+        Log.d(TAG, "Request: " + request);
         mAccountsNetworkController.performRequest(request,
                 new BaseNetworkController.RequestCallback() {
                     @Override
@@ -127,12 +157,14 @@ public class FollowFeedTabFragment extends BaseFragment implements
                         Log.d(TAG, "Received Results! " + result);
                         mDetailsListing = (CaptureDetailsListing) result;
                         mRefreshContainer.setRefreshing(false);
+                        mIsLoadingData = false;
                         updateDisplayData();
                     }
 
                     @Override
                     public void onFailed(RequestError error) {
                         mRefreshContainer.setRefreshing(false);
+                        mIsLoadingData = false;
                         Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
                                 .getCode());
                         // TODO: What to do with errors?
@@ -144,8 +176,8 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     private void updateDisplayData() {
         mCaptureDetails.clear();
-        // TODO : Figure out way to combine before/after listing and deletes..
-        mCaptureDetails.addAll(mDetailsListing.getUpdates());
+        mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
+        Log.d(TAG, "Updating On Screen Data!");
         mAdapter.notifyDataSetChanged();
     }
 
@@ -188,5 +220,10 @@ public class FollowFeedTabFragment extends BaseFragment implements
         // TODO: Tagged User Listing
         Toast.makeText(getActivity(), "All Tagged Users list", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
+    }
+
+    @Override
+    public void shouldLoadNextPage() {
+        loadNextPage();
     }
 }

@@ -118,6 +118,10 @@ public class FollowFeedAdapter extends BaseAdapter {
         setupParticipantsRatingsAndComments(viewHolder, capture);
         setupActionButtonStates(viewHolder, capture);
 
+        if (position == mData.size() - 1) {
+            mActionsHandler.shouldLoadNextPage();
+        }
+
         return rowView;
     }
 
@@ -364,6 +368,8 @@ public class FollowFeedAdapter extends BaseAdapter {
         public void launchUserProfile(String userAccountId);
 
         public void launchTaggedUserListing(CaptureDetails capture);
+
+        public void shouldLoadNextPage();
     }
 
     static class FeedViewHolder {
