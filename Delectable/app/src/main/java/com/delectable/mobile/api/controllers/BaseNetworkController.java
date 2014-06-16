@@ -7,6 +7,7 @@ import com.delectable.mobile.api.requests.BaseRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,14 +62,16 @@ public class BaseNetworkController {
                         }
 
                         @Override
-                        public void onFailure(int statusCode, Throwable error, String content) {
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                                Throwable error) {
                             RequestError requestError = new RequestError();
                             requestError.setCode(statusCode);
                             requestError.setMessage("Internal Server Error");
+                            Log.e(TAG, "Request Failed", error);
                             if (callback != null) {
                                 callback.onFailed(requestError);
                             }
-                            super.onFailure(statusCode, error, content);
+                            super.onFailure(statusCode, headers, responseBody, error);
                         }
                     }
             );
@@ -89,17 +92,12 @@ public class BaseNetworkController {
     public JSONObject buildPayloadWithMetaParams(BaseRequest request)
             throws JSONException {
         JSONObject payload = request.buildPayload();
-        JSONObject requestObject = new JSONObject();
+        JSONObject requestObject = request.buildMetaParams();
+        // Default Session stuff
         requestObject.put("sessionType", "mobile");
         if (UserInfo.isSignedIn(getContext())) {
             requestObject.put("sessionKey", UserInfo.getSessionKey(getContext()));
             requestObject.put("sessionToken", UserInfo.getSessionToken(getContext()));
-        }
-        if (request.getContext() != null) {
-            requestObject.put("context", request.getContext());
-        }
-        if (request.getETag() != null) {
-            requestObject.put("e_tag", request.getETag());
         }
         requestObject.put("payload", payload);
         return requestObject;

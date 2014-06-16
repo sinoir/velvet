@@ -337,4 +337,34 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         ArrayList<CaptureDetails> actualCombinedData = captureListing.getSortedCombinedData();
         assertEquals(expectedCombinedData, actualCombinedData);
     }
+
+    public void testBuildMetaParamsWithNoExtraData() {
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+
+        HashMap<String, String> expectedMap = new HashMap<String, String>();
+        expectedMap.put("context", request.getContext());
+
+        Map<String, String> actualMap = request.buildMetaParamsMap();
+        assertEquals(expectedMap, actualMap);
+    }
+
+    public void testBuildMetaParamsWithExtraData() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_befaft_r1);
+        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+                .buildResopnseFromJson(json);
+
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(captureListing,
+                false);
+
+        HashMap<String, String> expectedMap = new HashMap<String, String>();
+        expectedMap.put("context", request.getContext());
+        expectedMap.put("e_tag", request.getETag());
+
+        Map<String, String> actualMap = request.buildMetaParamsMap();
+        assertEquals(expectedMap, actualMap);
+    }
 }

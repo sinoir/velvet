@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,21 @@ public abstract class BaseRequest {
     public JSONObject buildPayload() {
         JSONObject obj = new JSONObject(buildPayloadMap());
         return obj;
+    }
+
+    public JSONObject buildMetaParams() {
+        JSONObject obj = new JSONObject(buildMetaParamsMap());
+        return obj;
+    }
+
+    public Map<String, String> buildMetaParamsMap() {
+        String[] fields = getMetaParamFields();
+        HashMap<String, String> metaParamsMap = new HashMap<String, String>();
+        for (int i = 0; i < fields.length; i++) {
+            String field = fields[i];
+            metaParamsMap.put(field, String.valueOf(valueFromField(field)));
+        }
+        return metaParamsMap;
     }
 
     public Map<String, String> buildPayloadMap() {
@@ -53,6 +69,21 @@ public abstract class BaseRequest {
             e.printStackTrace();
         }
         return value;
+    }
+
+    /**
+     * Meta Params is on the same level as payload fields
+     */
+    public String[] getMetaParamFields() {
+        // Build Payload Fields according to what is set and not set
+        ArrayList<String> fieldsList = new ArrayList<String>();
+        if (e_tag != null) {
+            fieldsList.add("e_tag");
+        }
+        if (context != null) {
+            fieldsList.add("context");
+        }
+        return fieldsList.toArray(new String[fieldsList.size()]);
     }
 
     public abstract String[] getPayloadFields();
