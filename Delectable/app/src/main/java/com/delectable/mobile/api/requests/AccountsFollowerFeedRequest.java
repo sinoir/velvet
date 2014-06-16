@@ -17,6 +17,8 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
 
     String after;
 
+    Boolean suppress_before;
+
     private CaptureDetailsListing mCurrentListing;
 
     /**
@@ -25,24 +27,39 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
      * @param contextType - Must be either Details or Minimal
      */
     public AccountsFollowerFeedRequest(String contextType) {
-        context = contextType;
+        this(contextType, null, true);
     }
 
     /**
      * Makes request for updates / paging
      *
-     * @param currentListing - Current listing that was loaded
-     * @param isPullToRefresh - Checks if we're refreshing.  Turns supress_before on
+     * @param currentListing  - Current listing that was loaded
+     * @param isPullToRefresh - Checks if we're refreshing.  Turns suppress_before on
      */
-    public AccountsFollowerFeedRequest(CaptureDetailsListing currentListing, boolean isPullToRefresh) {
-        // TODO: Check invalidate to reset / get new data without etag.
-        mCurrentListing = currentListing;
-        e_tag = currentListing.getETag();
-        context = currentListing.getContext();
-        before = currentListing.getBoundariesToBefore();
-        after = currentListing.getBoundariesToAfter();
+    public AccountsFollowerFeedRequest(CaptureDetailsListing currentListing,
+            boolean isPullToRefresh) {
+        this(currentListing.getContext(), currentListing, isPullToRefresh);
+    }
 
-        // TODO: Add supress_before when pulling to refresh
+    /**
+     * Makes request for updates / paging
+     *
+     * @param contextType     - Must be either Details or Minimal
+     * @param currentListing  - Current listing that was loaded
+     * @param isPullToRefresh - Checks if we're refreshing.  Turns suppress_before on
+     */
+    public AccountsFollowerFeedRequest(String contextType, CaptureDetailsListing currentListing,
+            boolean isPullToRefresh) {
+        mCurrentListing = currentListing;
+        context = contextType;
+        if (currentListing != null) {
+            // TODO: Check invalidate to reset / get new data without etag.
+            e_tag = currentListing.getETag();
+            context = currentListing.getContext();
+            before = currentListing.getBoundariesToBefore();
+            after = currentListing.getBoundariesToAfter();
+        }
+        suppress_before = isPullToRefresh;
     }
 
     @Override
@@ -54,6 +71,9 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
         }
         if (after != null) {
             fieldsList.add("after");
+        }
+        if (suppress_before != null && suppress_before) {
+            fieldsList.add("suppress_before");
         }
         String[] fieldsArray = fieldsList.toArray(new String[fieldsList.size()]);
         return fieldsArray;
@@ -98,4 +118,21 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
         this.after = after;
     }
 
+    public Boolean getSuppressBefore() {
+        return suppress_before;
+    }
+
+    public void setSuppressBefore(Boolean suppress_before) {
+        this.suppress_before = suppress_before;
+    }
+
+    @Override
+    public String toString() {
+        return "AccountsFollowerFeedRequest{" +
+                "before='" + before + '\'' +
+                ", after='" + after + '\'' +
+                ", suppress_before=" + suppress_before +
+                ", mCurrentListing=" + mCurrentListing +
+                "} " + super.toString();
+    }
 }

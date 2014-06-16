@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
@@ -268,6 +270,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         expectedCombinedData.add(newListing.getUpdates().get(1));
         expectedCombinedData.addAll(newListing.getBefore());
 
+        assertEquals(captureListing.getETag(), newListing.getETag());
+
         ArrayList<CaptureDetails> actualCombinedData = newListing.getSortedCombinedData();
 
         assertEquals(10, actualCombinedData.size());
@@ -298,6 +302,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         expectedCombinedData.add(newListing.getUpdates().get(0));
         expectedCombinedData.addAll(newListing.getBefore());
 
+        assertEquals(captureListing.getETag(), newListing.getETag());
+
         ArrayList<CaptureDetails> actualCombinedData = newListing.getSortedCombinedData();
 
         assertEquals(9, actualCombinedData.size());
@@ -322,8 +328,31 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertEquals(expectedContext, request.getContext());
         assertEquals(expectedBefore, request.getBefore());
         assertEquals(expectedAfter, request.getAfter());
-        // TODO: test supress before once implemented
+        assertFalse(request.getSuppressBefore());
     }
+
+    public void testFollowerFeedRequestSuppressBefore() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_befaft_r1);
+        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+                .buildResopnseFromJson(json);
+
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        // Default SuppressBefore should be true
+        assertTrue(request.getSuppressBefore());
+
+        request = new AccountsFollowerFeedRequest(captureListing,
+                false);
+        assertFalse(request.getSuppressBefore());
+
+        request = new AccountsFollowerFeedRequest(captureListing,
+                true);
+        assertTrue(request.getSuppressBefore());
+    }
+
     public void testFollowerFeedWithNullPayload() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_null_payload);
@@ -390,6 +419,36 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         expectedMap.put("e_tag", request.getETag());
 
         Map<String, String> actualMap = request.buildMetaParamsMap();
+        assertEquals(expectedMap, actualMap);
+    }
+
+    public void testBuildPayloadWithNoExtraData() {
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+
+        HashMap<String, String> expectedMap = new HashMap<String, String>();
+        expectedMap.put("suppress_before", String.valueOf(request.getSuppressBefore()));
+
+        Map<String, String> actualMap = request.buildPayloadMap();
+        assertEquals(expectedMap, actualMap);
+    }
+
+    public void testBuildPayloadWithExtraData() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_befaft_r1);
+        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+                .buildResopnseFromJson(json);
+
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(captureListing,
+                false);
+
+        HashMap<String, String> expectedMap = new HashMap<String, String>();
+        expectedMap.put("before", request.getBefore());
+        expectedMap.put("after", request.getAfter());
+
+        Map<String, String> actualMap = request.buildPayloadMap();
         assertEquals(expectedMap, actualMap);
     }
 }
