@@ -18,7 +18,9 @@ public abstract class ListingResponse extends BaseResponse {
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
         ListingResponse newRegistration = buildFromJson(payload, this.getClass());
-        newRegistration.invalidate = jsonObj.optBoolean("invalidate");
+        if (newRegistration != null) {
+            newRegistration.invalidate = jsonObj.optBoolean("invalidate");
+        }
         return newRegistration;
     }
 

@@ -324,6 +324,31 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertEquals(expectedAfter, request.getAfter());
         // TODO: test supress before once implemented
     }
+    public void testFollowerFeedWithNullPayload() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_null_payload);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing actualListing = (CaptureDetailsListing) request
+                .buildResopnseFromJson(json);
+        assertNull(actualListing);
+    }
+
+    public void testFollowerFeedCombingingWithNullPayload() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_befaft_r1);
+        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing expectedListing = (CaptureDetailsListing) firstRequest
+                .buildResopnseFromJson(json);
+
+        json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_null_payload);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(expectedListing,
+                true);
+        CaptureDetailsListing actualListing = (CaptureDetailsListing) request.buildResopnseFromJson(
+                json);
+        assertEquals(expectedListing, actualListing);
+    }
 
     public void testGetSortedCombinedData() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(

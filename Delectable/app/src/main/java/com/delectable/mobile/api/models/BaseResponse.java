@@ -28,7 +28,9 @@ public abstract class BaseResponse {
         }
         Gson gson = builder.create();
         String jsonString = "";
-        jsonString = json.toString();
+        if (json != null) {
+            jsonString = json.toString();
+        }
         return gson.fromJson(jsonString, tClass);
     }
 

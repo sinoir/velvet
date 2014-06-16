@@ -48,7 +48,7 @@ public class BaseNetworkController {
                         public void onSuccess(JSONObject response) {
                             Log.d(TAG, "Received Response!" + response);
                             boolean isSuccess = response.optBoolean("success");
-                            if (isSuccess && response.optJSONObject("payload") != null) {
+                            if (isSuccess) {
                                 BaseResponse result = requestObject.buildResopnseFromJson(response);
                                 if (callback != null) {
                                     callback.onSuccess(result);

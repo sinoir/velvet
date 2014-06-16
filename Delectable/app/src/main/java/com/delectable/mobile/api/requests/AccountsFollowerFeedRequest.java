@@ -69,10 +69,15 @@ public class AccountsFollowerFeedRequest extends BaseRequest {
         CaptureDetailsListing resForParsing = new CaptureDetailsListing();
         CaptureDetailsListing parsedListing = (CaptureDetailsListing) resForParsing
                 .buildFromJson(jsonObject);
-        if (mCurrentListing != null) {
-            parsedListing.combineWithPreviousListing(mCurrentListing);
-        } else {
-            parsedListing.updateCombinedData();
+        // When combining data for suppressed before requests, it may be null:
+        parsedListing = parsedListing != null ? parsedListing : mCurrentListing;
+        if (parsedListing != null) {
+            if (mCurrentListing != null) {
+                parsedListing.combineWithPreviousListing(mCurrentListing);
+                parsedListing.setETag(mCurrentListing.getETag());
+            } else {
+                parsedListing.updateCombinedData();
+            }
         }
         return parsedListing;
     }
