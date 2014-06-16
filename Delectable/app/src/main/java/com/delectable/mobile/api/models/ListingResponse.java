@@ -8,6 +8,8 @@ public abstract class ListingResponse extends BaseResponse {
 
     Boolean more;
 
+    boolean invalidate;
+
     Boundaries boundaries;
 
     ArrayList<String> deletes;
@@ -16,6 +18,7 @@ public abstract class ListingResponse extends BaseResponse {
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
         ListingResponse newRegistration = buildFromJson(payload, this.getClass());
+        newRegistration.invalidate = jsonObj.optBoolean("invalidate");
         return newRegistration;
     }
 
@@ -25,6 +28,14 @@ public abstract class ListingResponse extends BaseResponse {
 
     public void setMore(Boolean more) {
         this.more = more;
+    }
+
+    public boolean getInvalidate() {
+        return invalidate;
+    }
+
+    public void setInvalidate(boolean invalidate) {
+        this.invalidate = invalidate;
     }
 
     public String getBoundariesFromBefore() {

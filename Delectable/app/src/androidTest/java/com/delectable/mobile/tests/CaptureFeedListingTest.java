@@ -116,7 +116,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertEquals("FA5VUUsMpE0WcQ", actualFirstUpdateCapture.getETag());
     }
 
-    public void testParseAccountFollowerFeedDetailsCtx() throws JSONException {
+    public void testParseAccountFollowerFeedDetailsCtxWithInvalidate() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
         String expectedContext = "details";
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
@@ -125,6 +125,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         CaptureDetailsListing actualListing = (CaptureDetailsListing) request
                 .buildResopnseFromJson(json);
+
+        assertTrue(actualListing.getInvalidate());
 
         assertEquals(5, actualListing.getUpdates().size());
         CaptureDetails actualCapture = actualListing.getUpdates().get(2);
