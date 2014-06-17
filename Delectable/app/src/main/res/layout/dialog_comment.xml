@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.delectable.mobile.ui.common.widget.MultiLineNoEnterEditText
+        android:id="@+id/comment_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dialog_comments_margin"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:hint="@string/comment_dialog_text_hint"
+        android:imeOptions="actionSend"
+        android:lines="8" />
+</RelativeLayout>

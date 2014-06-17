@@ -25,6 +25,9 @@
     <dimen name="cap_feed_row_small_vertical_spacing">10dp</dimen>
     <dimen name="cap_feed_row_tag_user_image_spacing">10dp</dimen>
 
+    <!-- Dialog Dimens -->
+    <dimen name="dialog_comments_margin">10dp</dimen>
+    
     <!-- General Dimens -->
     <dimen name="button_text_size">20sp</dimen>
     <dimen name="button_height">40dp</dimen>

@@ -10,6 +10,7 @@ import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
 
 import android.os.Bundle;
@@ -183,8 +184,17 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     @Override
     public void writeCommentForCapture(CaptureDetails capture) {
-        // TODO: Launch Write Comment Dialog
-        Toast.makeText(getActivity(), "Write Comment", Toast.LENGTH_SHORT).show();
+        CommentDialog dialog = new CommentDialog(getActivity(),
+                new CommentDialog.CommentDialogCallback() {
+                    @Override
+                    public void onFinishWritingComment(String comment) {
+                        // TODO: Helper to perform post comment request
+                        Toast.makeText(getActivity(), "Post Comment: " + comment,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        dialog.show();
     }
 
     @Override
