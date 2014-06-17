@@ -10,6 +10,7 @@ import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
 
@@ -199,8 +200,18 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     @Override
     public void rateAndCommentForCapture(CaptureDetails capture) {
-        // TODO: Rate/Comment Capture
-        Toast.makeText(getActivity(), "Rate Capture", Toast.LENGTH_SHORT).show();
+        CommentAndRateDialog dialog = new CommentAndRateDialog(getActivity(),
+                new CommentAndRateDialog.CommentAndRateDialogCallback() {
+                    @Override
+                    public void onFinishWritingCommentAndRating(String comment, int rating) {
+                        // TODO: Helper to perform post Comment/Rating request
+                        Toast.makeText(getActivity(),
+                                "Post Comment: '" + comment + "' With Rating: " + rating,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        dialog.show();
     }
 
     @Override

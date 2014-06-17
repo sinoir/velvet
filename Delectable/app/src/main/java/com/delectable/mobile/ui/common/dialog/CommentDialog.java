@@ -24,7 +24,7 @@ public class CommentDialog extends DialogWithCancelButton {
         mCallback = callback;
         mContentView = getLayoutInflater().inflate(R.layout.dialog_comment, null);
         setView(mContentView);
-        setTitle(R.string.comment_dialog_title);
+        setTitle(R.string.dialog_comment_title);
     }
 
     @Override

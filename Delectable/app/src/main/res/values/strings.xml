@@ -19,8 +19,12 @@
     <string name="cap_feed_likes_count">%d likes</string>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
 
-    <!-- Capture Comment Dialog -->
-    <string name="comment_dialog_text_hint">Write a comment</string>
-    <string name="comment_dialog_title">Comment</string>
+    <!-- Capture Comment/Rating Dialog -->
+    <string name="dialog_comment_text_hint">Write a comment</string>
+    <string name="dialog_comment_title">Comment</string>
+    <string name="dialog_comment_rating_title">Comment and rate</string>
+    <string name="dialog_rating_notforme">NOT FOR ME</string>
+    <string name="dialog_rating_loveit">LOVE IT</string>
+    <string name="dialog_rating_giverating">Give it a rating</string>
 
 </resources>

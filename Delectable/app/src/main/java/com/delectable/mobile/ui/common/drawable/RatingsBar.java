@@ -80,6 +80,26 @@ public class RatingsBar extends Drawable {
     }
 
     private void drawBarWithPaintAndWidth(Canvas canvas, float width, Paint paint) {
+        canvas.drawRoundRect(
+                barRectWithWidth(width),
+                mCornerRadius,
+                mCornerRadius,
+                paint);
+    }
+
+    private void drawDividers(Canvas canvas) {
+        RectF baseRect = barRectWithWidth(getBounds().width());
+        for (int i = 1; i < sNumSections; i++) {
+            float sectionStart = i * mSectionWidth;
+            canvas.drawLine(sectionStart,
+                    baseRect.top,
+                    sectionStart,
+                    baseRect.bottom,
+                    mDividerPaint);
+        }
+    }
+
+    private RectF barRectWithWidth(float width) {
         float centerY = getBounds().centerY();
         float halfHeight = mBarHeight / 2.0f;
         float bottom = halfHeight + centerY;
@@ -87,19 +107,7 @@ public class RatingsBar extends Drawable {
         float left = getBounds().left;
         float right = getBounds().left + width;
 
-        RectF rectF = new RectF(left, top, right, bottom);
-        canvas.drawRoundRect(rectF, mCornerRadius, mCornerRadius, paint);
-    }
-
-    private void drawDividers(Canvas canvas) {
-        for (int i = 1; i < sNumSections; i++) {
-            float sectionStart = i * mSectionWidth;
-            canvas.drawLine(sectionStart,
-                    getBounds().top,
-                    sectionStart,
-                    getBounds().bottom,
-                    mDividerPaint);
-        }
+        return new RectF(left, top, right, bottom);
     }
 
     private float overlayColoredBarWidth() {

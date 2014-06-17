@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_comment_rating_height"
+        android:background="@android:color/white">
+
+        <com.delectable.mobile.ui.common.widget.MultiLineNoEnterEditText
+            android:id="@+id/comment_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rate_seek_bar"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/dialog_comments_margin"
+            android:background="@android:color/transparent"
+            android:gravity="top"
+            android:hint="@string/dialog_comment_text_hint"
+            android:imeOptions="actionSend" />
+        <!-- TODO: "Give it a rating" hint -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rate_seek_bar"
+            android:layout_alignLeft="@id/comment_edit_text"
+            android:text="@string/dialog_rating_notforme"
+            android:textColor="@color/d_gray3"
+            android:textSize="@dimen/dialog_rating_end_text_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rate_seek_bar"
+            android:layout_alignRight="@id/comment_edit_text"
+            android:text="@string/dialog_rating_loveit"
+            android:textColor="@color/d_gray3"
+            android:textSize="@dimen/dialog_rating_end_text_size" />
+
+        <com.delectable.mobile.ui.common.widget.RatingSeekBar
+            android:id="@+id/rate_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/comment_edit_text"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/comment_edit_text"
+            android:layout_marginBottom="@dimen/dialog_comments_margin" />
+    </RelativeLayout>
+
+</FrameLayout>
