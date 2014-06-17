@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d_dark_blue"
+    android:orientation="vertical">
+
+    <SurfaceView
+        android:id="@+id/camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/wine_capture_preview_height"
+        android:background="@color/d_link_blue" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/camera_roll_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:background="@null"
+            android:src="@drawable/btn_camera_roll_normal" />
+
+        <ImageButton
+            android:id="@+id/capture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:background="@null"
+            android:src="@drawable/btn_shutter" />
+
+        <ImageButton
+            android:id="@+id/flash_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:background="@null"
+            android:src="@drawable/btn_flash_normal" />
+
+    </LinearLayout>
+
+</LinearLayout>

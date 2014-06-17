@@ -30,7 +30,11 @@
     <dimen name="dialog_comment_rating_height">180dp</dimen>
     <dimen name="dialog_rating_end_text_size">12dp</dimen>
     <dimen name="dialog_rating_hint_text_size">14sp</dimen>
-    
+
+    <!-- Wine Capture Camera Flow -->
+    <dimen name="wine_capture_preview_height">180dp</dimen>
+    <dimen name="wine_capture_button_horizontal_spacing">20dp</dimen>
+
     <!-- General Dimens -->
     <dimen name="button_text_size">20sp</dimen>
     <dimen name="button_height">40dp</dimen>

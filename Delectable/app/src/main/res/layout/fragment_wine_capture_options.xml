@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d_dark_blue"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/preview_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/wine_capture_preview_height"
+        android:background="@color/d_link_blue" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="Save to your wine history?"
+        android:textColor="@android:color/white"
+        android:textSize="19sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/scan_only_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:background="@null"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/btn_no_normal"
+            android:gravity="bottom"
+            android:text="SCAN ONLY"
+            android:textColor="@color/d_gray3"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/scan_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
+            android:background="@null"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/btn_yes_normal"
+            android:gravity="bottom"
+            android:text="SCAN &amp; SAVE"
+            android:textColor="@color/d_gray3"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>
