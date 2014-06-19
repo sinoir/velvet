@@ -91,8 +91,8 @@ public class WineCaptureOptionsFragment extends BaseFragment {
     }
 
     private void scanAndSaveCapture() {
-        // TODO: Pass up Image
-        WineCaptureSubmitFragment fragment = new WineCaptureSubmitFragment();
+        WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
+                .newInstance(mCapturedImageBitmap);
         launchNextFragment(fragment);
     }
 }

@@ -15,7 +15,6 @@
             android:layout_width="@dimen/capture_submit_image_size"
             android:layout_height="@dimen/capture_submit_image_size"
             android:layout_alignParentTop="true"
-            android:background="@color/d_link_blue"
             android:scaleType="centerInside" />
 
         <!-- Comment And Rating -->
