@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.common.widget.TabsImagePagerAdapter;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
@@ -18,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -39,6 +39,7 @@ public class HomeFragment extends BaseFragment {
         setHasOptionsMenu(true);
 
         String currentUserId = UserInfo.getUserId(getActivity());
+
         mView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
@@ -74,7 +75,7 @@ public class HomeFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.capture_wine:
-                Toast.makeText(getActivity(), "Launch Capture Wine!", Toast.LENGTH_SHORT).show();
+                launchWineCapture();
                 return true;
             case R.id.sign_out:
                 logout();
@@ -82,6 +83,12 @@ public class HomeFragment extends BaseFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void launchWineCapture() {
+        Intent launchIntent = new Intent();
+        launchIntent.setClass(getActivity(), WineCaptureActivity.class);
+        startActivity(launchIntent);
     }
 
     public void logout() {
