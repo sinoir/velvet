@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.capture.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 
 public class WineCaptureOptionsFragment extends BaseFragment {
 
+    private static final String sArgsImageData = "sArgsImageData";
+
     private View mView;
 
     private ImageView mPreviewImage;
@@ -22,10 +25,23 @@ public class WineCaptureOptionsFragment extends BaseFragment {
 
     private Button mScanAndSaveButton;
 
+    private Bitmap mCapturedImageBitmap;
+
+    public static WineCaptureOptionsFragment newInstance(Bitmap imageData) {
+        WineCaptureOptionsFragment fragment = new WineCaptureOptionsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(sArgsImageData, imageData);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO : Pass up Image from Camera
+        Bundle args = getArguments();
+        if (args != null) {
+            mCapturedImageBitmap = args.getParcelable(sArgsImageData);
+        }
         setHasOptionsMenu(true);
     }
 
@@ -38,7 +54,14 @@ public class WineCaptureOptionsFragment extends BaseFragment {
         mScanAndSaveButton = (Button) mView.findViewById(R.id.scan_save_button);
 
         setupButtonListeners();
+        displayCapturedImage();
         return mView;
+    }
+
+    private void displayCapturedImage() {
+        if (mCapturedImageBitmap != null) {
+            mPreviewImage.setImageBitmap(mCapturedImageBitmap);
+        }
     }
 
     @Override
@@ -61,7 +84,6 @@ public class WineCaptureOptionsFragment extends BaseFragment {
                 scanAndSaveCapture();
             }
         });
-
     }
 
     private void scanOnlyCapture() {

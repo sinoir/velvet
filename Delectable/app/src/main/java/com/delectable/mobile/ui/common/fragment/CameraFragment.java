@@ -4,6 +4,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.CameraUtil;
 
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
@@ -75,5 +76,28 @@ public class CameraFragment extends BaseFragment {
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    public void takeJpegCroppedPicture(final PictureTakenCallback jpegImageCallback) {
+        if (mCamera != null && jpegImageCallback != null) {
+            mCamera.takePicture(null, null, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    Bitmap bitmap = CameraUtil.getRotatedBitmapTakenFromCamera(
+                            getActivity(), data, mCameraId);
+                    Bitmap croppedBitmap = cropRotatedCapturedBitmap(bitmap);
+                    jpegImageCallback.onBitmapCaptured(croppedBitmap);
+                }
+            });
+        }
+    }
+
+    public Bitmap cropRotatedCapturedBitmap(Bitmap bitmap) {
+        return bitmap;
+    }
+
+    public interface PictureTakenCallback {
+
+        public void onBitmapCaptured(Bitmap bitmap);
     }
 }

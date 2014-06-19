@@ -98,6 +98,4 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             Toast.makeText(getContext(), "Failed to get camera Preview", Toast.LENGTH_SHORT);
         }
     }
-
-    // TODO: Take Picture methods with callback
 }
