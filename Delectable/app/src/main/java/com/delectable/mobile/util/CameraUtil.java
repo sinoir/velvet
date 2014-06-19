@@ -5,6 +5,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Surface;
@@ -31,6 +34,12 @@ public class CameraUtil {
     public static boolean checkSystemHasFlash(Context context) {
         return checkSystemHasFrontCameraHardware(context) &&
                 context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    public static boolean checkSystemHasFocus(Context context) {
+        return checkSystemHasFrontCameraHardware(context) &&
+                context.getPackageManager()
+                        .hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
     }
 
     public static void setCameraDisplayOrientation(Context context, int cameraId,
@@ -102,5 +111,25 @@ public class CameraUtil {
             return (float) previewSize.width / (float) previewSize.height;
         }
         return 1.0f;
+    }
+
+    public static Camera.Area getFocusAreaFromFrameBounds(PointF focusPoint, RectF bounds) {
+        int focusAreaSize = 50;
+        // Focus area has a width and height of 2000, 2000, ranging from -1000 to 1000
+        int maxFocusSize = 2000;
+        int adjustedX = (int) (((focusPoint.x * maxFocusSize) / bounds.width()) - 1000);
+        int adjustedY = (int) (((focusPoint.y * maxFocusSize) / bounds.height()) - 1000);
+
+        int left = adjustedX - (focusAreaSize / 2);
+        int top = adjustedY - (focusAreaSize / 2);
+
+        // Left and right must be within -1000 and 1000
+        Rect focusArea = new Rect(
+                Math.max(left, -1000),
+                Math.max(top, -1000),
+                Math.min(left + focusAreaSize, 1000),
+                Math.min(top + focusAreaSize, 1000));
+
+        return new Camera.Area(focusArea, focusAreaSize);
     }
 }

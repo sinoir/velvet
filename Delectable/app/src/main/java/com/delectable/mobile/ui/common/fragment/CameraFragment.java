@@ -5,9 +5,14 @@ import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.CameraUtil;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class CameraFragment extends BaseFragment {
 
@@ -99,7 +104,7 @@ public class CameraFragment extends BaseFragment {
     }
 
     public boolean toggleFlash() {
-        if (mCamera != null && CameraUtil.checkSystemHasFrontCameraHardware(getActivity())) {
+        if (mCamera != null && CameraUtil.checkSystemHasFlash(getActivity())) {
             Camera.Parameters p = mCamera.getParameters();
             if (mIsFlashOn) {
                 p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
@@ -111,6 +116,27 @@ public class CameraFragment extends BaseFragment {
             mCamera.setParameters(p);
         }
         return mIsFlashOn;
+    }
+
+    protected void focusOnPoint(PointF point, RectF bounds) {
+        Camera.Parameters p = mCamera.getParameters();
+        int maxFocusAraes = p.getMaxNumFocusAreas();
+        Camera.Area focusArea = CameraUtil.getFocusAreaFromFrameBounds(point, bounds);
+        ArrayList<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
+        focusAreas.add(focusArea);
+
+        if (maxFocusAraes > 0 && CameraUtil.checkSystemHasFocus(getActivity())) {
+            mCamera.cancelAutoFocus();
+            p.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            p.setFocusAreas(focusAreas);
+            mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                @Override
+                public void onAutoFocus(boolean success, Camera camera) {
+                    Log.d(TAG, "onAutoFocus() " + success);
+                }
+            });
+        }
+        mCamera.setParameters(p);
     }
 
     public interface PictureTakenCallback {

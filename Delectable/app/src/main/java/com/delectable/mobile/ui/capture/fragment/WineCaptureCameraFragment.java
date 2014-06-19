@@ -5,10 +5,13 @@ import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -73,6 +76,18 @@ public class WineCaptureCameraFragment extends CameraFragment {
             @Override
             public void onClick(View v) {
                 toggleFlash();
+            }
+        });
+
+        mCameraContainer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO: Display Focus icon
+                PointF pointToFocusOn = new PointF(event.getX(), event.getY());
+                RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
+                        mCameraPreview.getHeight());
+                focusOnPoint(pointToFocusOn, bounds);
+                return true;
             }
         });
     }
