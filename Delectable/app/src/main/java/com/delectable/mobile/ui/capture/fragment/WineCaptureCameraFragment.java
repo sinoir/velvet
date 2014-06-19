@@ -104,8 +104,11 @@ public class WineCaptureCameraFragment extends CameraFragment {
         });
     }
 
-    private void toggleFlash() {
-        // TODO: Toggle Flash
+    @Override
+    public boolean toggleFlash() {
+        boolean isFlashOn = super.toggleFlash();
+        // TODO: Toggle Icon to indicate flash is on or off
+        return isFlashOn;
     }
 
     private void launchOptionsScreen(Bitmap imageData) {

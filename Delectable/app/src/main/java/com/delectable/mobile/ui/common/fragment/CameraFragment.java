@@ -22,6 +22,8 @@ public class CameraFragment extends BaseFragment {
     // TODO: Helpers to change up Cam IDs for changing front / back camera
     private int mCameraId = 0;
 
+    private boolean mIsFlashOn = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,21 @@ public class CameraFragment extends BaseFragment {
 
     public Bitmap cropRotatedCapturedBitmap(Bitmap bitmap) {
         return bitmap;
+    }
+
+    public boolean toggleFlash() {
+        if (mCamera != null && CameraUtil.checkSystemHasFrontCameraHardware(getActivity())) {
+            Camera.Parameters p = mCamera.getParameters();
+            if (mIsFlashOn) {
+                p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                mIsFlashOn = false;
+            } else {
+                p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                mIsFlashOn = true;
+            }
+            mCamera.setParameters(p);
+        }
+        return mIsFlashOn;
     }
 
     public interface PictureTakenCallback {
