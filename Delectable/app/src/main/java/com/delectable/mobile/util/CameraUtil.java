@@ -2,6 +2,9 @@ package com.delectable.mobile.util;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Surface;
@@ -32,9 +35,32 @@ public class CameraUtil {
 
     public static void setCameraDisplayOrientation(Context context, int cameraId,
             Camera camera) {
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
+        int rotationDegrees = getCameraRotationFixInDegrees(context, cameraId);
+        camera.setDisplayOrientation(rotationDegrees);
+    }
 
+    public static Bitmap getRotatedBitmapTakenFromCamera(
+            Context context,
+            byte[] imageData,
+            int cameraId) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+        int rotationDegrees = getCameraRotationFixInDegrees(context, cameraId);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotationDegrees);
+
+        Bitmap rotatedBitmap = Bitmap.createBitmap(
+                bitmap,
+                0,
+                0,
+                bitmap.getWidth(),
+                bitmap.getHeight(),
+                matrix,
+                false);
+
+        return rotatedBitmap;
+    }
+
+    public static int getCameraRotationFixInDegrees(Context context, int cameraId) {
         WindowManager windowManager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
@@ -54,6 +80,9 @@ public class CameraUtil {
                 break;
         }
 
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+
         int result;
         // Compensate for Front facing camera mirror
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -62,7 +91,8 @@ public class CameraUtil {
         } else {
             result = (info.orientation - degrees + 360) % 360;
         }
-        camera.setDisplayOrientation(result);
+
+        return result;
     }
 
     public static float getCameraPreviewAspectRatio(Camera camera) {
