@@ -42,4 +42,15 @@
     <dimen name="small_profile_image_size">40dp</dimen>
     <dimen name="cap_feed_comment_text_size">16sp</dimen>
 
+    <!-- Wine Capture Submit Screen -->
+    <dimen name="capture_submit_margins">15dp</dimen>
+    <dimen name="capture_submit_image_size">60dp</dimen>
+    <dimen name="capture_submit_comment_text_size">16sp</dimen>
+    <dimen name="capture_submit_vertical_spacing">10dp</dimen>
+    <dimen name="capture_submit_section_spacing">40dp</dimen>
+    <dimen name="capture_submit_button_height">50dp</dimen>
+    <dimen name="comment_submit_button_image_padding">10dp</dimen>
+    <dimen name="capture_submit_share_text_size">18sp</dimen>
+    <dimen name="capture_submit_button_text_size">16sp</dimen>
+
 </resources>

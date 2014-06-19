@@ -5,6 +5,12 @@
     <string name="app_name">Delectable</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Common -->
+    <string name="facebook_text">Facebook</string>
+    <string name="twitter_text">Twitter</string>
+    <string name="instagram_text">Instagram</string>
+    <string name="make_private">Make Private</string>
+
     <!-- Profile UI -->
     <string name="profile_followers">followers</string>
     <string name="profile_following">following</string>
@@ -26,5 +32,11 @@
     <string name="dialog_rating_notforme">NOT FOR ME</string>
     <string name="dialog_rating_loveit">LOVE IT</string>
     <string name="dialog_rating_giverating">Give it a rating</string>
+
+    <!-- Wine Capture Submit Screen -->
+    <string name="capture_submit_leave_comment_hint">Tap to leave a comment (optional)</string>
+    <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
+    <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
+    <string name="capture_submit_share_text">SHARE</string>
 
 </resources>
