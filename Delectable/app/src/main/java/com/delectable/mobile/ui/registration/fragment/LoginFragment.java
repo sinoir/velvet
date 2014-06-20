@@ -228,19 +228,24 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
                     @Override
                     public void onSucess() {
                         mLoginProgress.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "Successfully Logged in!", Toast.LENGTH_LONG)
-                                .show();
-                        Intent launchIntent = new Intent();
-                        launchIntent.setClass(getActivity(), HomeActivity.class);
-                        startActivity(launchIntent);
-                        getActivity().finish();
+                        if (getActivity() != null) {
+                            Toast.makeText(getActivity(), "Successfully Logged in!",
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                            Intent launchIntent = new Intent();
+                            launchIntent.setClass(getActivity(), HomeActivity.class);
+                            startActivity(launchIntent);
+                            getActivity().finish();
+                        }
                     }
 
                     @Override
                     public void onFailed(RequestError error) {
-                        mLoginProgress.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG)
-                                .show();
+                        if (getActivity() != null) {
+                            mLoginProgress.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG)
+                                    .show();
+                        }
                     }
                 });
     }
