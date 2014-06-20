@@ -38,5 +38,6 @@
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
     <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
     <string name="capture_submit_share_text">SHARE</string>
+    <string name="capture_submit_post">Post</string>
 
 </resources>

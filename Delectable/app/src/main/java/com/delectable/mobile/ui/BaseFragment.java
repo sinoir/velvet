@@ -8,12 +8,15 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class BaseFragment extends Fragment {
 
     private ActionBar mActionBar;
 
     private ImageView mCustomHomeImageView;
+
+    private RelativeLayout mCustomActionBarView;
 
     private boolean mIsUsingCustomActionbarView = false;
 
@@ -45,9 +48,13 @@ public class BaseFragment extends Fragment {
      */
     public void overrideHomeIcon(int resId, View.OnClickListener listener) {
         // TODO: Find if there's a better alternative: having a title will push this custom view to the right
-        ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+        ActionBar.LayoutParams customViewpParams = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams imageViewpParams = new RelativeLayout.LayoutParams(
                 ActionBar.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+        mCustomActionBarView = new RelativeLayout(getActivity());
 
         // Custom Image View
         mCustomHomeImageView = new ImageView(getActivity());
@@ -60,17 +67,19 @@ public class BaseFragment extends Fragment {
             mCustomHomeImageView.setOnClickListener(listener);
         }
 
+        mCustomActionBarView.addView(mCustomHomeImageView, imageViewpParams);
+
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setCustomView(mCustomHomeImageView, params);
+        mActionBar.setCustomView(mCustomActionBarView, customViewpParams);
         mIsUsingCustomActionbarView = true;
     }
 
     private void toggleCustomActionBar() {
-        if (mIsUsingCustomActionbarView && mCustomHomeImageView != null) {
+        if (mIsUsingCustomActionbarView && mCustomActionBarView != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
             mActionBar.setDisplayShowHomeEnabled(false);
-            mActionBar.setCustomView(mCustomHomeImageView);
+            mActionBar.setCustomView(mCustomActionBarView);
         } else if (mActionBar.getCustomView() != null) {
             mActionBar.setDisplayShowCustomEnabled(false);
             mActionBar.setDisplayShowHomeEnabled(true);
