@@ -8,9 +8,9 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +36,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        overrideHomeIcon(R.drawable.ab_close, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -132,8 +138,13 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Customize with X
-        super.onCreateOptionsMenu(menu, inflater);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "OptionsItemSelected: " + item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().finish();
+                break;
+        }
+        return true;
     }
 }

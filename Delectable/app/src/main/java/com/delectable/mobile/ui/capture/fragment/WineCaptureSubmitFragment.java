@@ -61,6 +61,12 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
         setHasOptionsMenu(true);
+        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -180,9 +186,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Show Custom back < icon
-        // TODO: Post button top right
         super.onCreateOptionsMenu(menu, inflater);
+        // TODO: Post button top right
     }
 }
 

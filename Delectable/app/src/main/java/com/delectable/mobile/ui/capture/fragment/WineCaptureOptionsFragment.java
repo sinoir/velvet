@@ -43,6 +43,12 @@ public class WineCaptureOptionsFragment extends BaseFragment {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
         setHasOptionsMenu(true);
+        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
