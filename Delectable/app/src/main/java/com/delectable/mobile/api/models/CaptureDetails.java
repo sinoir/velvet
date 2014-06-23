@@ -37,7 +37,7 @@ public class CaptureDetails extends Capture {
     ArrayList<CaptureComment> comments;
 
     @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    public CaptureDetails buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         CaptureDetails newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("capture") != null) {

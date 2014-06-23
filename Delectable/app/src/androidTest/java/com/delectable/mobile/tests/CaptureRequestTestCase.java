@@ -3,6 +3,7 @@ package com.delectable.mobile.tests;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.requests.CaptureRequest;
@@ -112,6 +113,18 @@ public class CaptureRequestTestCase extends BaseInstrumentationTestCase {
 
         assertEquals("delectable-captured-photos", actualCapture.getBucket());
         assertEquals("adam-bednarek-1403535987-cb3008064b60.jpg", actualCapture.getFilename());
+    }
+
+    public void testParsedCaptureDetailsFromRequest() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+        ProvisionCapture provisionCapture = new ProvisionCapture();
+        provisionCapture.setBucket("Testbucket");
+        provisionCapture.setFilename("testFileName");
+
+        CaptureRequest request = new CaptureRequest(provisionCapture);
+        CaptureDetails actualCapture = request.buildResopnseFromJson(json);
+
+        assertEquals("535be3177534906c8b0007d8", actualCapture.getId());
     }
 
     private CaptureRequest getSampleCaptureRequestWithoutTaggees() {

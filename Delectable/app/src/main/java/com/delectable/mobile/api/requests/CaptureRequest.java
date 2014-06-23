@@ -122,8 +122,8 @@ public class CaptureRequest extends BaseRequest {
 
     @Override
     public CaptureDetails buildResopnseFromJson(JSONObject jsonObject) {
-        // TODO: Build Response for Capture
-        return null;
+        CaptureDetails resForParsing = new CaptureDetails();
+        return resForParsing.buildFromJson(jsonObject);
     }
 
     @Override
