@@ -6,11 +6,17 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class CaptureRequest extends BaseRequest {
+
+    private static final String TAG = "CaptureRequest";
 
     String label_scan_id;
 
@@ -104,7 +110,6 @@ public class CaptureRequest extends BaseRequest {
         if (foursquare_location_id != null) {
             fieldsList.add("foursquare_location_id");
         }
-        // TODO: Taggees
 
         String[] fieldsArray = fieldsList.toArray(new String[fieldsList.size()]);
         return fieldsArray;
@@ -117,7 +122,29 @@ public class CaptureRequest extends BaseRequest {
 
     @Override
     public CaptureDetails buildResopnseFromJson(JSONObject jsonObject) {
+        // TODO: Build Response for Capture
         return null;
+    }
+
+    @Override
+    public JSONObject buildPayload() {
+        JSONObject payloadObj = super.buildPayload();
+        try {
+            JSONArray jsonArray = TaggeeContact.buildJsonArray(getTaggees());
+            payloadObj.put("taggees", jsonArray);
+        } catch (JSONException e) {
+            Log.wtf(TAG, "Failed to Add TaggeeContacts", e);
+            e.printStackTrace();
+        }
+        return payloadObj;
+    }
+
+
+    public void addTaggee(TaggeeContact taggeeContact) {
+        if (taggees == null) {
+            taggees = new ArrayList<TaggeeContact>();
+        }
+        taggees.add(taggeeContact);
     }
 
     public String getLabelScanId() {

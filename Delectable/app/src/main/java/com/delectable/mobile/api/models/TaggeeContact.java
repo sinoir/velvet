@@ -1,5 +1,9 @@
 package com.delectable.mobile.api.models;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class TaggeeContact {
@@ -17,6 +21,49 @@ public class TaggeeContact {
     ArrayList<String> phone_numbers;
 
     ArrayList<String> email_addresses;
+
+    public static JSONArray buildJsonArray(ArrayList<TaggeeContact> contacts) throws JSONException {
+        JSONArray taggeeArray = new JSONArray();
+        if (contacts != null) {
+            for (TaggeeContact contact : contacts) {
+                taggeeArray.put(contact.buildJsonObject());
+            }
+        }
+        return taggeeArray;
+    }
+
+    public boolean isFacebookContact() {
+        return getFbId() != null;
+    }
+
+    public boolean isDelectaFriendContact() {
+        return getId() != null;
+    }
+
+    public boolean isContact() {
+        return getFname() != null;
+    }
+
+    public JSONObject buildJsonObject() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        if (isFacebookContact()) {
+            jsonObject.put("fb_id", getFbId());
+        } else if (isDelectaFriendContact()) {
+            jsonObject.put("id", getId());
+        } else if (isContact()) {
+            jsonObject.put("fname", getFname());
+            jsonObject.put("lname", getLname());
+            if (getPhoneNumbers() == null) {
+                setPhoneNumbers(new ArrayList<String>());
+            }
+            if (getEmailAddresses() == null) {
+                setEmailAddresses(new ArrayList<String>());
+            }
+            jsonObject.put("phone_numbers", getPhoneNumbers());
+            jsonObject.put("email_addresses", getEmailAddresses());
+        }
+        return jsonObject;
+    }
 
     public String getId() {
         return id;
