@@ -6,7 +6,6 @@ This project uses the latest Android Studio Canarie build
 * * *
 ####Getting Started
 * Install the Latest Android Studio from the canarie channel
-* Link or install Android SDK in ~/android-sdk (this is where the project looks for gradle libraries)
 * Import automatic Android Code Style formatter for Java and XML
 
 ####Coding Style
