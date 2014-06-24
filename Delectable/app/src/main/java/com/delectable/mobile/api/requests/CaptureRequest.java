@@ -1,7 +1,5 @@
 package com.delectable.mobile.api.requests;
 
-import com.google.gson.annotations.SerializedName;
-
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
@@ -14,17 +12,12 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class CaptureRequest extends BaseRequest {
+public class CaptureRequest extends BaseScanRequest {
 
     private static final String TAG = "CaptureRequest";
 
     String label_scan_id;
 
-    String bucket;
-
-    String filename;
-
-    @SerializedName("private")
     Boolean private_;
 
     String note;
@@ -51,8 +44,7 @@ public class CaptureRequest extends BaseRequest {
     ArrayList<TaggeeContact> taggees;
 
     public CaptureRequest(ProvisionCapture provision) {
-        setBucket(provision.getBucket());
-        setFilename(provision.getFilename());
+        super(provision);
     }
 
     @Override
@@ -159,22 +151,6 @@ public class CaptureRequest extends BaseRequest {
 
     public void setLabelScanId(String label_scan_id) {
         this.label_scan_id = label_scan_id;
-    }
-
-    public String getBucket() {
-        return bucket;
-    }
-
-    public void setBucket(String bucket) {
-        this.bucket = bucket;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
     }
 
     public Boolean getPrivate() {
