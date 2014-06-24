@@ -27,6 +27,8 @@ public class CaptureRequest extends BaseRequest {
     @SerializedName("private")
     Boolean private_;
 
+    String note;
+
     Integer rating;
 
     Boolean from_camera_roll;
@@ -72,6 +74,10 @@ public class CaptureRequest extends BaseRequest {
 
         if (private_ != null) {
             fieldsList.add("private");
+        }
+
+        if (note != null) {
+            fieldsList.add("note");
         }
 
         if (rating != null) {
@@ -177,6 +183,14 @@ public class CaptureRequest extends BaseRequest {
 
     public void setPrivate(Boolean private_) {
         this.private_ = private_;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Integer getRating() {
