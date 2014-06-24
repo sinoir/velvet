@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "payload": {
+    "bucket": "delectable-captured-photos",
+    "filename": "adam-bednarek-1403535987-cb3008064b60.jpg",
+    "url": "/delectable-captured-photos/adam-bednarek-1403535987-cb3008064b60.jpg",
+    "headers": {
+      "Content-Type": "image/jpeg",
+      "url": "/delectable-captured-photos/adam-bednarek-1403535987-cb3008064b60.jpg",
+      "Cache-Control": "max-age=2592000",
+      "Authorization": "AWS AKIAJWTVYM3KHHQGQSVA:aqXqb/6j0PvqOHwGA+UCxNY2eBg=",
+      "date": "Mon, 23 Jun 2014 15:06:27 GMT"
+    }
+  }
+}

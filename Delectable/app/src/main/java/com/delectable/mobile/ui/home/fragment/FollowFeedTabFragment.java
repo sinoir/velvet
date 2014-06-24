@@ -178,8 +178,12 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     private void updateDisplayData() {
         mCaptureDetails.clear();
-        mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
-        Log.d(TAG, "Updating On Screen Data!");
+        if (mDetailsListing != null) {
+            mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
+            Log.d(TAG, "Updating On Screen Data!");
+        } else {
+            // TODO: Emptystate for no data?
+        }
         mAdapter.notifyDataSetChanged();
     }
 

@@ -6,14 +6,15 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class WineCaptureSubmitFragment extends BaseFragment {
 
@@ -22,6 +23,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     private Bitmap mCapturedImageBitmap;
 
     private View mView;
+
+    private Button mPostButton;
 
     private ImageView mPreviewImageView;
 
@@ -60,13 +63,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
     }
 
     @Override
@@ -85,12 +81,37 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mShareInstagramButton = mView.findViewById(R.id.share_instagram);
         mMakePrivateButton = mView.findViewById(R.id.make_private);
 
+        setHasOptionsMenu(true);
+        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+        setupPostButtonToActionBar();
+
         setupPreviewImage();
         setupButtonListeners();
         setupRatingSeekBar();
 
         return mView;
     }
+
+    private void setupPostButtonToActionBar() {
+        RelativeLayout customView = (RelativeLayout) getActivity().getActionBar().getCustomView();
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mPostButton = new Button(getActivity());
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        customView.addView(mPostButton, params);
+
+        mPostButton.setText(R.string.capture_submit_post);
+        // TODO: TouchStates for button
+        mPostButton.setTextColor(Color.WHITE);
+        mPostButton.setBackgroundColor(getResources().getColor(R.color.d_link_blue));
+    }
+
 
     private void setupPreviewImage() {
         if (mCapturedImageBitmap != null) {
@@ -99,16 +120,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     }
 
     private void setupButtonListeners() {
-        mRatingBarHint.setOnClickListener(new View.OnClickListener() {
+        mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                postCapture();
             }
         });
-        mRatingSeekBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
         mDrinkingWithWhoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +178,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         });
     }
 
+    private void postCapture() {
+
+    }
+
     private void selectDrinkingPartners() {
 
     }
@@ -184,10 +206,5 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        // TODO: Post button top right
-    }
 }
 
