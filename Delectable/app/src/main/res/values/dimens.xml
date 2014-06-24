@@ -32,7 +32,7 @@
     <dimen name="dialog_rating_hint_text_size">14sp</dimen>
 
     <!-- Wine Capture Camera Flow -->
-    <dimen name="wine_capture_preview_height">385dp</dimen>
+    <dimen name="wine_capture_preview_height">320dp</dimen>
     <dimen name="wine_capture_button_horizontal_spacing">20dp</dimen>
 
     <!-- General Dimens -->
