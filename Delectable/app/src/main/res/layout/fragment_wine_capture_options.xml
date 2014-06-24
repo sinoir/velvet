@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_dark_blue"
-    android:orientation="vertical">
+    android:background="@color/d_dark_blue">
 
     <ImageView
         android:id="@+id/preview_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_capture_preview_height"
+        android:layout_alignParentTop="true"
         android:background="@color/d_link_blue" />
 
     <TextView
+        android:id="@+id/hint_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_below="@id/preview_image"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="Save to your wine history?"
         android:textColor="@android:color/white"
         android:textSize="19sp" />
 
     <LinearLayout
+        android:id="@+id/action_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/hint_text"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button
@@ -54,4 +59,17 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/loading_progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</RelativeLayout>

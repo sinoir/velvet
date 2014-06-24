@@ -38,6 +38,7 @@ public class CaptureRequestTestCase extends BaseInstrumentationTestCase {
         assertEquals(captureRequest.getBucket(), actualPayloadJson.get("bucket"));
         assertEquals(captureRequest.getFilename(), actualPayloadJson.get("filename"));
         assertEquals(captureRequest.getPrivate().toString(), actualPayloadJson.get("private"));
+        assertEquals(captureRequest.getNote().toString(), actualPayloadJson.get("note"));
         assertEquals(captureRequest.getRating().toString(), actualPayloadJson.get("rating"));
         assertEquals(captureRequest.getFromCameraRoll().toString(),
                 actualPayloadJson.get("from_camera_roll"));
@@ -135,6 +136,7 @@ public class CaptureRequestTestCase extends BaseInstrumentationTestCase {
         CaptureRequest sampleCapture = new CaptureRequest(provisionCapture);
         sampleCapture.setLabelScanId("scanId");
         sampleCapture.setPrivate(true);
+        sampleCapture.setNote("Some Note/Comment");
         sampleCapture.setRating(30);
         sampleCapture.setFromCameraRoll(false);
 

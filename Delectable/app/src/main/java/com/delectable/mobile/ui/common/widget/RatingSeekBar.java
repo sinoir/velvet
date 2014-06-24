@@ -39,8 +39,7 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        // Uncomment this to test out colors:
-        if (mUseColors) {
+        if (mUseColors && fromUser) {
             mRatingsBar.setPercent(progress / 40.0f);
         }
         if (mRatingChangeListener != null) {

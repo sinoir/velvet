@@ -29,6 +29,16 @@ public class BaseWine extends BaseResponse {
 
     String description;
 
+    boolean carbonation;
+
+    String sweetness;
+
+    String color;
+
+    String forward_id;
+
+    String producer_id;
+
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
@@ -129,6 +139,46 @@ public class BaseWine extends BaseResponse {
         this.description = description;
     }
 
+    public boolean getCarbonation() {
+        return carbonation;
+    }
+
+    public void setCarbonation(boolean carbonation) {
+        this.carbonation = carbonation;
+    }
+
+    public String getSweetness() {
+        return sweetness;
+    }
+
+    public void setSweetness(String sweetness) {
+        this.sweetness = sweetness;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getForwardId() {
+        return forward_id;
+    }
+
+    public void setForwardId(String forward_id) {
+        this.forward_id = forward_id;
+    }
+
+    public String getProducerId() {
+        return producer_id;
+    }
+
+    public void setProducerId(String producer_id) {
+        this.producer_id = producer_id;
+    }
+
     @Override
     public String toString() {
         return "BaseWine{" +
@@ -143,9 +193,12 @@ public class BaseWine extends BaseResponse {
                 ", default_wine_profile_id='" + default_wine_profile_id + '\'' +
                 ", photo=" + photo +
                 ", description='" + description + '\'' +
-                ", context='" + context + '\'' +
-                ", e_tag='" + e_tag + '\'' +
-                '}';
+                ", carbonation=" + carbonation +
+                ", sweetness='" + sweetness + '\'' +
+                ", color='" + color + '\'' +
+                ", forward_id='" + forward_id + '\'' +
+                ", producer_id='" + producer_id + '\'' +
+                "} " + super.toString();
     }
 
     public class RegionPath {

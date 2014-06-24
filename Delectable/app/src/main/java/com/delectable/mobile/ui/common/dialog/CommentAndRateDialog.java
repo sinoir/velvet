@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 public class CommentAndRateDialog extends DialogWithCancelButton {
 
-    private int mCurrentRating;
+    private int mCurrentRating = -1;
 
     private EditText mCommentEditText;
 
@@ -24,6 +24,8 @@ public class CommentAndRateDialog extends DialogWithCancelButton {
     private CommentAndRateDialogCallback mCallback;
 
     private RatingSeekBar mRatingsSeekBar;
+
+    private View mRatingHint;
 
     public CommentAndRateDialog(Context context, CommentAndRateDialogCallback callback) {
         super(context);
@@ -38,6 +40,7 @@ public class CommentAndRateDialog extends DialogWithCancelButton {
         super.onCreate(savedInstanceState);
         mCommentEditText = (EditText) mContentView.findViewById(R.id.comment_edit_text);
         mRatingsSeekBar = (RatingSeekBar) mContentView.findViewById(R.id.rate_seek_bar);
+        mRatingHint = mContentView.findViewById(R.id.rating_hint_text);
         setupEditText();
         setupRatingSeekBar();
     }
@@ -58,24 +61,27 @@ public class CommentAndRateDialog extends DialogWithCancelButton {
 
     private void setupRatingSeekBar() {
         mRatingsSeekBar.setMax(CaptureDetails.MAX_RATING_VALUE);
-        mCurrentRating = CaptureDetails.MAX_RATING_VALUE / 2;
 
-        mRatingsSeekBar.setProgress(mCurrentRating);
+        mRatingsSeekBar.setProgress(CaptureDetails.MAX_RATING_VALUE / 2);
         mRatingsSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {
                 mCurrentRating = rating;
+                if (mRatingHint.getVisibility() != View.GONE) {
+                    mRatingHint.setVisibility(View.GONE);
+                }
             }
         });
     }
 
     private void finishWritingCommentWithRating() {
         String comment = mCommentEditText.getText().toString();
-        if (mCallback != null) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            mCallback.onFinishWritingCommentAndRating(comment, mCurrentRating);
-            dismiss();
+        if (mCallback == null || (mCurrentRating == -1 && comment.length() == 0)) {
+            return;
         }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        mCallback.onFinishWritingCommentAndRating(comment, mCurrentRating);
+        dismiss();
     }
 
     public static interface CommentAndRateDialogCallback {
