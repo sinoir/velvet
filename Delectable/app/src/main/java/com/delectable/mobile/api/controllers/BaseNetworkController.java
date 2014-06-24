@@ -113,14 +113,14 @@ public class BaseNetworkController {
         return entity;
     }
 
-    public interface RequestCallback {
+    public static interface RequestCallback {
 
         public void onSuccess(BaseResponse result);
 
         public void onFailed(RequestError error);
     }
 
-    public interface SimpleRequestCallback {
+    public static interface SimpleRequestCallback {
 
         public void onSucess();
 
