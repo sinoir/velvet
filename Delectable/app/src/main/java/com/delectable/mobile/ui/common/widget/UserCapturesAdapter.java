@@ -67,18 +67,30 @@ public class UserCapturesAdapter extends BaseAdapter {
             viewHolder = (SimpleListingViewHolder) rowView.getTag();
         }
 
-        // TODO: Handle fresh captures with no matches / responses
-        String producerName = "";
-        String wineName = "";
-        String wineImageUrl = "";
+        String captureTitle = "";
+        String captureName = "";
+        String captureImageUrl = capture.getPhoto().getThumbUrl();
+        // If there was a capture with a valid Wine
         if (capture.getWineProfile() != null) {
-            producerName = capture.getWineProfile().getProducerName();
-            wineName = capture.getWineProfile().getName();
-            wineImageUrl = capture.getWineProfile().getPhoto().getThumbUrl();
+            captureTitle = capture.getWineProfile().getProducerName();
+            captureName = capture.getWineProfile().getName();
+            // Else if the capture went through that had no wine
+        } else if (capture.getTranscriptionErrorMessage() != null) {
+            captureName = capture.getTranscriptionErrorMessage();
+            // If all else fails, the image has yet to be identified
+        } else {
+            captureTitle = "UNIDENTIFIED";
+            captureName = "We are identifying this wine.";
         }
-        viewHolder.producerName.setText(producerName);
-        viewHolder.wineName.setText(wineName);
-        ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, viewHolder.wineImage);
+
+        // TODO: Toggle Privacy icon over the Image
+        if (capture.getPrivate()) {
+        } else {
+        }
+
+        viewHolder.producerName.setText(captureTitle);
+        viewHolder.wineName.setText(captureName);
+        ImageLoaderUtil.loadImageIntoView(mContext, captureImageUrl, viewHolder.wineImage);
 
         viewHolder.ratingBarView.setPercent(capture.getRatingPercentForId(mUserId));
 
