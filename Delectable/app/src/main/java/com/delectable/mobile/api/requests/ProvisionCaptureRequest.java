@@ -13,7 +13,7 @@ public class ProvisionCaptureRequest extends BaseRequest {
 
     @Override
     public String getResourceUrl() {
-        return API_VER + "/provision_capture";
+        return API_VER + "/captures/provision_capture";
     }
 
     @Override
