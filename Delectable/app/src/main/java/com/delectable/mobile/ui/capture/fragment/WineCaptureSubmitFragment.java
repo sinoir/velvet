@@ -1,13 +1,21 @@
 package com.delectable.mobile.ui.capture.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.RequestError;
+import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.controllers.S3ImageUploadController;
+import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.api.requests.CaptureRequest;
+import com.delectable.mobile.api.requests.ProvisionCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +23,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class WineCaptureSubmitFragment extends BaseFragment {
+
+    private static final String TAG = "WineCaptureSubmitFragment";
 
     private static final String sArgsImageData = "sArgsImageData";
 
@@ -46,7 +57,26 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private View mMakePrivateButton;
 
-    private int mCurrentRating;
+    private int mCurrentRating = -1;
+
+    private BaseNetworkController mNetworkController;
+
+    private S3ImageUploadController mImageUploadController;
+
+    private ProvisionCaptureRequest mProvisionRequest;
+
+    private ProvisionCapture mProvisionCapture;
+
+    private CaptureRequest mCaptureRequest;
+
+    // If provision capture hasn't been recieved yet before the user clicks post, set this to true
+    private boolean mIsWaitingOnProvisionCapture = false;
+
+    private boolean mIsWaitingOnImageUplaodToFinish = true;
+
+    private boolean mIsWaitingOnDataUplaodToFinish = true;
+
+    private CaptureDetails mCaptureResult;
 
     public static WineCaptureSubmitFragment newInstance(Bitmap imageData) {
         WineCaptureSubmitFragment fragment = new WineCaptureSubmitFragment();
@@ -63,6 +93,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
+        mNetworkController = new BaseNetworkController(getActivity());
+
+        loadCaptureProvision();
     }
 
     @Override
@@ -95,6 +128,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         setupRatingSeekBar();
 
         return mView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // If the posting finished while the app was in the background, should launch details
+        shouldLaunchCaptureDetails();
     }
 
     private void setupPostButtonToActionBar() {
@@ -167,44 +207,163 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private void setupRatingSeekBar() {
         mRatingSeekBar.setMax(CaptureDetails.MAX_RATING_VALUE);
-        mCurrentRating = CaptureDetails.MAX_RATING_VALUE / 2;
 
-        mRatingSeekBar.setProgress(mCurrentRating);
+        mRatingSeekBar.setProgress(CaptureDetails.MAX_RATING_VALUE / 2);
         mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {
                 mCurrentRating = rating;
+                if (mRatingBarHint.getVisibility() != View.INVISIBLE) {
+                    mRatingBarHint.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
 
-    private void postCapture() {
+    private void loadCaptureProvision() {
+        mProvisionRequest = new ProvisionCaptureRequest();
+        mNetworkController
+                .performRequest(mProvisionRequest, new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        // TODO: Synchronize
+                        mProvisionCapture = (ProvisionCapture) result;
+                        sendCapturedImage();
+                        Log.d(TAG, "Capture Provision: " + mProvisionCapture);
+                        if (mIsWaitingOnProvisionCapture) {
+                            mIsWaitingOnProvisionCapture = false;
+                            sendCaptureData();
+                        }
+                    }
 
+                    @Override
+                    public void onFailed(RequestError error) {
+                        requestFailed(error);
+                    }
+                });
+    }
+
+    private void sendCapturedImage() {
+        if (mProvisionCapture != null) {
+            mImageUploadController = new S3ImageUploadController(getActivity(), mProvisionCapture);
+            mImageUploadController.uploadImage(mCapturedImageBitmap,
+                    new BaseNetworkController.SimpleRequestCallback() {
+                        @Override
+                        public void onSucess() {
+                            Log.d(TAG, "Image Upload Done!");
+                            mIsWaitingOnImageUplaodToFinish = false;
+                            if (!mIsWaitingOnDataUplaodToFinish) {
+                                // Finish activity
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(RequestError error) {
+                            requestFailed(error);
+                        }
+                    }
+            );
+        }
+    }
+
+    private void sendCaptureData() {
+        if (mProvisionCapture != null) {
+            mCaptureRequest = new CaptureRequest(mProvisionCapture);
+            updateCaptureRequestWithFormData();
+            mNetworkController
+                    .performRequest(mCaptureRequest, new BaseNetworkController.RequestCallback() {
+                        @Override
+                        public void onSuccess(BaseResponse result) {
+                            mCaptureResult = (CaptureDetails) result;
+                            mIsWaitingOnDataUplaodToFinish = false;
+                            shouldLaunchCaptureDetails();
+                        }
+
+                        @Override
+                        public void onFailed(RequestError error) {
+                            requestFailed(error);
+                        }
+                    });
+        }
+    }
+
+    private void shouldLaunchCaptureDetails() {
+        if (!mIsWaitingOnImageUplaodToFinish && mCaptureResult != null) {
+            // TODO: Finish, goto capture info screen
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        }
+    }
+
+    private void requestFailed(RequestError error) {
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateCaptureRequestWithFormData() {
+        if (mCaptureRequest == null) {
+            return;
+        }
+
+        String comment = mCommentEditText.getText().toString();
+        if (comment.length() > 0) {
+            mCaptureRequest.setNote(comment);
+        }
+
+        if (mMakePrivateButton.isSelected()) {
+            mCaptureRequest.setPrivate(true);
+        } else {
+            mCaptureRequest.setShareFb(mShareFacebookButton.isSelected());
+            mCaptureRequest.setShareTw(mShareTwitterButton.isSelected());
+        }
+
+        mCaptureRequest.setRating(mCurrentRating);
+
+        // TODO: Add Label Scan ID ?
+        // TODO: Add Foursquare ID
+        // TODO: Add Coordinates
+        // TODO: Add Taggees
+    }
+
+    private void postCapture() {
+        // TODO: Display some Loading indicator / Ability to cancel?
+        // TODO: Or have all this in a service separate from the main app, and use a bus to connect the data
+        sendCaptureData();
     }
 
     private void selectDrinkingPartners() {
-
+        // TODO: Drinking Partners Screen
     }
 
     private void selectDrinkingLocation() {
-
+        // TODO: Location Listing
     }
 
     private void shareCaptureOnFacebook() {
-
+        // TODO: Facebook Connect
+        mShareFacebookButton.setSelected(!mShareFacebookButton.isSelected());
+        mMakePrivateButton.setSelected(false);
     }
 
     private void shareCaptureOnTwitter() {
-
+        // TODO: Login With Twitter
+        mShareTwitterButton.setSelected(!mShareTwitterButton.isSelected());
+        mMakePrivateButton.setSelected(false);
     }
 
     private void shareCaptureOnInstagram() {
-
+        // TODO: Login with Instagram
+        mShareInstagramButton.setSelected(!mShareInstagramButton.isSelected());
+        mMakePrivateButton.setSelected(false);
     }
 
     private void makeCaputrePrivate() {
-
+        mShareFacebookButton.setSelected(false);
+        mShareTwitterButton.setSelected(false);
+        mShareInstagramButton.setSelected(false);
+        mMakePrivateButton.setSelected(!mMakePrivateButton.isSelected());
     }
-
 }
 
