@@ -4,10 +4,13 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,8 +18,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 public class WineCaptureCameraFragment extends CameraFragment {
+
+    public static final int SELECT_PHOTO = 100;
 
     private static final String TAG = "WineCaptureCameraFragment";
 
@@ -113,7 +121,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     private void launchCameraRoll() {
-        // TODO: Launch Camera Roll
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_PHOTO);
     }
 
     private void captureCameraImage() {
@@ -146,5 +156,29 @@ public class WineCaptureCameraFragment extends CameraFragment {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PHOTO && resultCode == getActivity().RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            try {
+                if (getActivity() != null) {
+                    // TODO: Background thread here or in resize screen?
+                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(
+                            getActivity().getContentResolver(), selectedImageUri);
+                    // TODO: Launch in a resizing UI as iOS ?
+                    launchOptionsScreen(selectedImage);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Failed to open image", e);
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        }
     }
 }
