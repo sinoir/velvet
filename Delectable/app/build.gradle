@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName '1.0'
         testPackageName "com.delectable.mobile.tests"
+        testApplicationId 'com.delectable.mobile.tests'
     }
     buildTypes {
         release {
