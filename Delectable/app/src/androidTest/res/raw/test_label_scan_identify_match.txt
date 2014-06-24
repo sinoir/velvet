@@ -1,0 +1,100 @@
+{
+    "payload": {
+        "label_scan": {
+            "id": "53a9fbbe31a01582e5000232",
+            "photo": "https://s3.amazonaws.com/delectable-label-scan-photos/adam-bednarek-1-1403648955-44f2b83726b3.jpg",
+            "base_wine": {
+                "wine_profiles": [
+                    {
+                        "price_status": "impossible",
+                        "id": "526b19e4dde641ac00000005",
+                        "ratings_summary": {
+                            "pro": {
+                                "avg": 35.285714285714285,
+                                "count": 7
+                            },
+                            "all": {
+                                "avg": 35.57142857142857,
+                                "count": 14
+                            }
+                        },
+                        "e_tag": "3Ld8OSljXfJZAg",
+                        "price": -1,
+                        "base_wine_id": "5305bacb8049af4f3a00a405",
+                        "vintage": "2010",
+                        "description": "",
+                        "context": "subprofile",
+                        "price_text": null,
+                        "photo": {
+                            "child_resolutions": {
+                                "50": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_nano.jpg",
+                                "110": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_micro.jpg",
+                                "150": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_thumb.jpg",
+                                "640": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_medium.jpg"
+                            },
+                            "url": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af.jpg"
+                        }
+                    }
+                ],
+                "varietal_composition": [
+                    {
+                        "id": "20",
+                        "color": "#e5bc64",
+                        "name": "Chardonnay"
+                    }
+                ],
+                "ratings_summary": {
+                    "pro": {
+                        "avg": 35.285714285714285,
+                        "count": 7
+                    },
+                    "all": {
+                        "avg": 35.57142857142857,
+                        "count": 14
+                    }
+                },
+                "default_wine_profile_id": "526b19e4dde641ac00000005",
+                "region_id": "1603408",
+                "carbonation": false,
+                "sweetness": "not_desert",
+                "photo": {
+                    "child_resolutions": {
+                        "50": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_nano.jpg",
+                        "110": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_micro.jpg",
+                        "150": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_thumb.jpg",
+                        "640": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af_medium.jpg"
+                    },
+                    "url": "https://s3.amazonaws.com/delectableCapturedPhotos/petra-and-dade-thieriot-1382750543-3224602277af.jpg"
+                },
+                "id": "5305bacb8049af4f3a00a405",
+                "producer_id": "5305baca8049af4f3a00a309",
+                "region_path": [
+                    {
+                        "id": "2973141",
+                        "name": "France"
+                    },
+                    {
+                        "id": "1633444",
+                        "name": "Burgundy"
+                    },
+                    {
+                        "id": "2973827",
+                        "name": "Côte de Beaune"
+                    },
+                    {
+                        "id": "1603408",
+                        "name": "Meursault"
+                    }
+                ],
+                "e_tag": "Y7F9vOAgapaDSg",
+                "producer_name": "Domaine Roulot",
+                "color": "white",
+                "description": "",
+                "name": "Meursault 1er Cru Chardonnay",
+                "context": "profile",
+                "forwarded_id": null
+            }
+        }
+    },
+    "success": true
+}

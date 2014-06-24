@@ -14,11 +14,11 @@ public class RatingsSummaryHash {
         return pro != null ? pro.count : 0;
     }
 
-    public int getAllAvg() {
+    public double getAllAvg() {
         return all != null ? all.avg : 0;
     }
 
-    public int getProAvg() {
+    public double getProAvg() {
         return pro != null ? pro.avg : 0;
     }
 
@@ -50,7 +50,7 @@ public class RatingsSummaryHash {
 
         Integer count;
 
-        Integer avg;
+        Double avg;
 
         @Override
         public String toString() {
