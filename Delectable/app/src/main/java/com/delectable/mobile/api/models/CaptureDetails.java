@@ -100,6 +100,27 @@ public class CaptureDetails extends Capture {
         return likesCapture;
     }
 
+    public void toggleUserLikesCapture(String accountId) {
+        boolean userLikedCapture = false;
+        if (liking_participants != null) {
+            for (Account account : liking_participants) {
+                if (account.getId().equalsIgnoreCase(accountId)) {
+                    userLikedCapture = true;
+                    liking_participants.remove(account);
+                    break;
+                }
+            }
+        }
+        if (!userLikedCapture) {
+            if (liking_participants == null) {
+                liking_participants = new ArrayList<Account>();
+            }
+            Account tempUserAccount = new Account();
+            tempUserAccount.setId(accountId);
+            liking_participants.add(tempUserAccount);
+        }
+    }
+
     public String getShortShareUrl() {
         return short_share_url;
     }

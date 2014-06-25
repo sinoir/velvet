@@ -327,6 +327,26 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertTrue(capture.doesUserLikeCapture(userAccountId));
     }
 
+    public void testToggleUserLikesCapture() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) request
+                .buildResopnseFromJson(json);
+        CaptureDetails capture = captureListing.getUpdates().get(3);
+        // Tests if user doesn't like capture, and toggling makes user like the capture
+        String userAccountId = "abc";
+        assertFalse(capture.doesUserLikeCapture(userAccountId));
+        capture.toggleUserLikesCapture(userAccountId);
+        assertTrue(capture.doesUserLikeCapture(userAccountId));
+
+        // Tests if existing user likes capture, and then toggles to unlike capture
+        userAccountId = "517809692dbf68273f000711";
+        assertTrue(capture.doesUserLikeCapture(userAccountId));
+        capture.toggleUserLikesCapture(userAccountId);
+        assertFalse(capture.doesUserLikeCapture(userAccountId));
+    }
+
     public void testDoesUserLikeCaptureWithNullLikingParticipants() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
         CapturesContextRequest request = new CapturesContextRequest();
