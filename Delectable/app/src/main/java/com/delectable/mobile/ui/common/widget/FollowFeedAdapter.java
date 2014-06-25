@@ -281,6 +281,7 @@ public class FollowFeedAdapter extends BaseAdapter {
                 .getDimensionPixelSize(R.dimen.cap_feed_row_small_vertical_spacing);
 
         // TODO: Finalize Test out with feed with participants.
+        // TODO: Show multiple comments for user
         Account capturingAccount = capture.getCapturerParticipant();
         ArrayList<Account> participants = capture.getCommentingParticipants();
         int numDisplayedComments = 0;
@@ -314,7 +315,17 @@ public class FollowFeedAdapter extends BaseAdapter {
         int numLikes = capture.getLikesCount();
         String likesCountText = mContext.getString(R.string.cap_feed_likes_count, numLikes);
         viewHolder.likesCount.setText(likesCountText);
-        boolean userLikesCapture = capture.doesUserLikeCapture(UserInfo.getUserId(mContext));
+        String userId = UserInfo.getUserId(mContext);
+        boolean userLikesCapture = capture.doesUserLikeCapture(userId);
+        boolean isCurrentUserCapture = capture.getCapturerParticipant().getId()
+                .equalsIgnoreCase(userId);
+
+        // Rating can only be done for user's capture:
+        if (isCurrentUserCapture) {
+            viewHolder.rateButton.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.rateButton.setVisibility(View.GONE);
+        }
 
         viewHolder.likeButton.setSelected(userLikesCapture);
 
