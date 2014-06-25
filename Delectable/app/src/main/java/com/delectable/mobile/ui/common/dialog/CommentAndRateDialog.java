@@ -27,12 +27,18 @@ public class CommentAndRateDialog extends DialogWithCancelButton {
 
     private View mRatingHint;
 
-    public CommentAndRateDialog(Context context, CommentAndRateDialogCallback callback) {
+    private String mCurrentComment;
+
+    public CommentAndRateDialog(Context context, String currentComment, int currentRating,
+            CommentAndRateDialogCallback callback) {
         super(context);
         mCallback = callback;
         mContentView = getLayoutInflater().inflate(R.layout.dialog_comment_and_rate, null);
         setView(mContentView);
         setTitle(R.string.dialog_comment_title);
+
+        mCurrentComment = currentComment;
+        mCurrentRating = currentRating;
     }
 
     @Override
@@ -47,7 +53,8 @@ public class CommentAndRateDialog extends DialogWithCancelButton {
 
     private void setupEditText() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
+        mCommentEditText.setText(mCurrentComment);
+        mCommentEditText.setSelection(mCurrentComment.length());
         mCommentEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -61,8 +68,13 @@ public class CommentAndRateDialog extends DialogWithCancelButton {
 
     private void setupRatingSeekBar() {
         mRatingsSeekBar.setMax(CaptureDetails.MAX_RATING_VALUE);
-
-        mRatingsSeekBar.setProgress(CaptureDetails.MAX_RATING_VALUE / 2);
+        if (mCurrentRating == -1) {
+            mRatingsSeekBar.setProgress(CaptureDetails.MAX_RATING_VALUE / 2);
+        } else {
+            mRatingsSeekBar.setShowColors(true);
+            mRatingsSeekBar.setProgress(mCurrentRating);
+            mRatingHint.setVisibility(View.GONE);
+        }
         mRatingsSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {

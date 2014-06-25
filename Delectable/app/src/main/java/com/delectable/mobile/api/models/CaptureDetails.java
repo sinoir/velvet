@@ -69,13 +69,23 @@ public class CaptureDetails extends Capture {
      */
     public float getRatingPercentForId(String id) {
         float ratingPercent = -1.0f;
-        if (ratings != null && ratings.containsKey(id)) {
-            ratingPercent = ratings.get(id).floatValue() / MAX_RATING_VALUE;
-        }
+        ratingPercent = (float) getRatingForId(id) / MAX_RATING_VALUE;
         if (ratingPercent <= 0.0f) {
             ratingPercent = -1.0f;
         }
         return ratingPercent;
+    }
+
+    public int getRatingForId(String id) {
+        int rating = -1;
+        if (ratings != null && ratings.containsKey(id)) {
+            rating = ratings.get(id);
+        }
+        return rating;
+    }
+
+    public void updateRatingForUser(String id, int rating) {
+        ratings.put(id, rating);
     }
 
     public Date getCreatedAtDate() {
@@ -98,6 +108,27 @@ public class CaptureDetails extends Capture {
             }
         }
         return likesCapture;
+    }
+
+    public void toggleUserLikesCapture(String accountId) {
+        boolean userLikedCapture = false;
+        if (liking_participants != null) {
+            for (Account account : liking_participants) {
+                if (account.getId().equalsIgnoreCase(accountId)) {
+                    userLikedCapture = true;
+                    liking_participants.remove(account);
+                    break;
+                }
+            }
+        }
+        if (!userLikedCapture) {
+            if (liking_participants == null) {
+                liking_participants = new ArrayList<Account>();
+            }
+            Account tempUserAccount = new Account();
+            tempUserAccount.setId(accountId);
+            liking_participants.add(tempUserAccount);
+        }
     }
 
     public String getShortShareUrl() {

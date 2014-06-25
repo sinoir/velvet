@@ -15,7 +15,7 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
     private OnRatingsChangeListener mRatingChangeListener;
 
     // Can toggle this to use bar colors
-    private boolean mUseColors = true;
+    private boolean mShowColors = false;
 
     public RatingSeekBar(Context context) {
         this(context, null);
@@ -39,7 +39,7 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (mUseColors && fromUser) {
+        if (fromUser || mShowColors) {
             mRatingsBar.setPercent(progress / 40.0f);
         }
         if (mRatingChangeListener != null) {
@@ -59,12 +59,12 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
         mRatingChangeListener = ratingChangeListener;
     }
 
-    public boolean isUseColors() {
-        return mUseColors;
+    public boolean isShowColors() {
+        return mShowColors;
     }
 
-    public void setUseColors(boolean useColors) {
-        mUseColors = useColors;
+    public void setShowColors(boolean showColors) {
+        mShowColors = showColors;
     }
 
     public interface OnRatingsChangeListener {
