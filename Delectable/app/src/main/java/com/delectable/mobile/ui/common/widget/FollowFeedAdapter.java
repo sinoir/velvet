@@ -227,9 +227,9 @@ public class FollowFeedAdapter extends BaseAdapter {
             userAccountId = capture.getCapturerParticipant().getId();
         }
 
-        CaptureComment userCaptureComment = capture.getCommentForUserId(userAccountId);
-        if (userCaptureComment != null) {
-            userComment = userCaptureComment.getComment();
+        ArrayList<CaptureComment> userCaptureComments = capture.getCommentsForUserId(userAccountId);
+        if (userCaptureComments.size() > 0) {
+            userComment = userCaptureComments.get(0).getComment();
         }
 
         capturePercent = capture.getRatingPercentForId(userAccountId);
@@ -292,16 +292,27 @@ public class FollowFeedAdapter extends BaseAdapter {
                 if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
                     continue;
                 }
-                CaptureComment comment = capture.getCommentForUserId(participant.getId());
-                String commentText = comment != null ? comment.getComment() : "";
+                ArrayList<CaptureComment> comments = capture.getCommentsForUserId(
+                        participant.getId());
+                String firstCommentText = comments.size() > 0 ? comments.get(0).getComment() : "";
                 float rating = capture.getRatingPercentForId(participant.getId());
-                if (commentText != "" || rating > 0.0f) {
+                // TODO : Figure out how to layout multiple comments with ratings?
+                if (firstCommentText != "" || rating > 0.0f) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
                     commentRow.setPadding(0, verticalSpacing, 0, verticalSpacing);
-                    commentRow.setNameCommentWithRating(participant.getFullName(), commentText,
+                    commentRow.setNameCommentWithRating(participant.getFullName(), firstCommentText,
                             rating);
-                    viewHolder.participantsCommentsRatingsContainer
-                            .addView(commentRow, layoutParams);
+                    viewHolder.participantsCommentsRatingsContainer.addView(commentRow,
+                            layoutParams);
+                    numDisplayedComments++;
+                }
+                for (int i = 1; i < comments.size(); i++) {
+                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
+                    commentRow.setPadding(0, verticalSpacing, 0, verticalSpacing);
+                    commentRow.setNameCommentWithRating(participant.getFullName(),
+                            comments.get(i).getComment(), -1);
+                    viewHolder.participantsCommentsRatingsContainer.addView(commentRow,
+                            layoutParams);
                     numDisplayedComments++;
                 }
             }

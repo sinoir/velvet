@@ -71,17 +71,16 @@ public class CaptureDetails extends Capture {
         e_tag = newCapture.getETag();
     }
 
-    public CaptureComment getCommentForUserId(String id) {
-        CaptureComment captureComment = null;
+    public ArrayList<CaptureComment> getCommentsForUserId(String id) {
+        ArrayList<CaptureComment> captureComments = new ArrayList<CaptureComment>();
         if (comments != null && comments.size() > 0) {
             for (CaptureComment comment : comments) {
                 if (comment.account_id.equalsIgnoreCase(id)) {
-                    captureComment = comment;
-                    break;
+                    captureComments.add(comment);
                 }
             }
         }
-        return captureComment;
+        return captureComments;
     }
 
     /**

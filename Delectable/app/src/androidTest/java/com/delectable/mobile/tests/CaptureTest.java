@@ -290,7 +290,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         CapturesContextRequest request = new CapturesContextRequest();
         CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
-        CaptureComment actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
+        CaptureComment actualComment = capture.getCommentsForUserId("52069ff93166785b5d003576")
+                .get(0);
 
         String expectedCommentString = "Hard black berry. Simple acid. $25";
         assertEquals(expectedCommentString, actualComment.getComment());
@@ -301,9 +302,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         CapturesContextRequest request = new CapturesContextRequest();
         CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
-        CaptureComment actualComment = capture.getCommentForUserId("unknown?");
+        ArrayList<CaptureComment> actualComments = capture.getCommentsForUserId("unknown?");
 
-        assertNull(actualComment);
+        assertEquals(0, actualComments.size());
     }
 
     public void testGetCommentForUserIdFromCaptureWithNoComments() throws JSONException {
@@ -313,13 +314,14 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
         // Clear comments with valud array list
         capture.getComments().clear();
-        CaptureComment actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
-        assertNull(actualComment);
+        ArrayList<CaptureComment> actualComments = capture
+                .getCommentsForUserId("52069ff93166785b5d003576");
+        assertEquals(0, actualComments.size());
 
         // Comments is Null
         capture.setComments(null);
-        actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
-        assertNull(actualComment);
+        actualComments = capture.getCommentsForUserId("52069ff93166785b5d003576");
+        assertEquals(0, actualComments.size());
     }
 
     public void testGetCreationDate() throws JSONException {
