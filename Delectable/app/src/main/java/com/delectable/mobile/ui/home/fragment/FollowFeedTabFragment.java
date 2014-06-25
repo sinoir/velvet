@@ -5,6 +5,7 @@ import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.WineProfile;
@@ -208,8 +209,18 @@ public class FollowFeedTabFragment extends BaseFragment implements
     }
 
     @Override
-    public void rateAndCommentForCapture(CaptureDetails capture) {
+    public void rateAndCommentForCapture(final CaptureDetails capture) {
+        String userId = UserInfo.getUserId(getActivity());
+        boolean isCurrentUserCapture = capture.getCapturerParticipant().getId().equalsIgnoreCase(userId);
+        CaptureComment currentUserComment = capture.getCommentForUserId(userId);
+        String currentUserCommentText = "";
+
+        if (currentUserComment != null && isCurrentUserCapture) {
+            currentUserCommentText = currentUserComment.getComment();
+        }
+        int currentUserRating = capture.getRatingForId(userId);
         CommentAndRateDialog dialog = new CommentAndRateDialog(getActivity(),
+                currentUserCommentText, currentUserRating,
                 new CommentAndRateDialog.CommentAndRateDialogCallback() {
                     @Override
                     public void onFinishWritingCommentAndRating(String comment, int rating) {
