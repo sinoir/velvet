@@ -11,6 +11,7 @@ import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.api.requests.LikeCaptureActionRequest;
+import com.delectable.mobile.api.requests.RateCaptureRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
@@ -224,10 +225,11 @@ public class FollowFeedTabFragment extends BaseFragment implements
                 new CommentAndRateDialog.CommentAndRateDialogCallback() {
                     @Override
                     public void onFinishWritingCommentAndRating(String comment, int rating) {
-                        // TODO: Helper to perform post Comment/Rating request
+                        // TODO: Post Comments
                         Toast.makeText(getActivity(),
                                 "Post Comment: '" + comment + "' With Rating: " + rating,
                                 Toast.LENGTH_SHORT).show();
+                        sendRating(capture, rating);
                     }
                 }
         );
@@ -251,7 +253,31 @@ public class FollowFeedTabFragment extends BaseFragment implements
             @Override
             public void onFailed(RequestError error) {
                 Toast.makeText(getActivity(), "Failed to like capture", Toast.LENGTH_SHORT).show();
+                // Reset like
                 capture.toggleUserLikesCapture(userId);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void sendRating(final CaptureDetails capture, final int rating) {
+        final String userId = UserInfo.getUserId(getActivity());
+        final int oldRating = capture.getRatingForId(userId);
+
+        RateCaptureRequest request = new RateCaptureRequest(capture, rating);
+        capture.updateRatingForUser(UserInfo.getUserId(getActivity()), rating);
+        mAdapter.notifyDataSetChanged();
+        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                // Success
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                Toast.makeText(getActivity(), "Failed to like capture", Toast.LENGTH_SHORT).show();
+                // Reset displayed rating
+                capture.updateRatingForUser(UserInfo.getUserId(getActivity()), oldRating);
                 mAdapter.notifyDataSetChanged();
             }
         });
