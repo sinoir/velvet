@@ -415,4 +415,41 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         assertEquals(expectedSortedList, actualList);
     }
+
+    public void testUpdateCaptureDetails() throws JSONException {
+        // Get "Old" capture
+        JSONObject jsonDetails = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+        CapturesContextRequest capRequest = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) capRequest.buildResopnseFromJson(jsonDetails);
+
+        // Get "Updated" capture
+        JSONObject jsonFeed = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_ctx);
+        AccountsFollowerFeedRequest listRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) listRequest
+                .buildResopnseFromJson(
+                        jsonFeed);
+        // this is just a test, ideally the updated capture will have the same ID
+        CaptureDetails updatedCapture = captureListing.getUpdates().get(3);
+        updatedCapture.setId(capture.getId());
+
+        capture.updateWithNewCapture(updatedCapture);
+
+        assertEquals(updatedCapture.getShortShareUrl(), capture.getShortShareUrl());
+        assertEquals(updatedCapture.getTweet(), capture.getTweet());
+        assertEquals(updatedCapture.getRatings(), capture.getRatings());
+        assertEquals(updatedCapture.getPhoto(), capture.getPhoto());
+        assertEquals(updatedCapture.getBaseWine(), capture.getBaseWine());
+        assertEquals(updatedCapture.getWineProfile(), capture.getWineProfile());
+        assertEquals(updatedCapture.getTranscriptionErrorMessage(),
+                capture.getTranscriptionErrorMessage());
+        assertEquals(updatedCapture.getLocationName(), capture.getLocationName());
+        assertEquals(updatedCapture.getLikingParticipants(), capture.getLikingParticipants());
+        assertEquals(updatedCapture.getCommentingParticipants(),
+                capture.getCommentingParticipants());
+        assertEquals(updatedCapture.getTaggeeParticipants(), capture.getTaggeeParticipants());
+        assertEquals(updatedCapture.getComments(), capture.getComments());
+        assertEquals(updatedCapture.getETag(), capture.getETag());
+    }
 }
