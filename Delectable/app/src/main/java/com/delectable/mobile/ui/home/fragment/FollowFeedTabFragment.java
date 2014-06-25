@@ -10,6 +10,8 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
+import com.delectable.mobile.api.requests.CommentCaptureRequest;
+import com.delectable.mobile.api.requests.EditCommentRequest;
 import com.delectable.mobile.api.requests.LikeCaptureActionRequest;
 import com.delectable.mobile.api.requests.RateCaptureRequest;
 import com.delectable.mobile.data.UserInfo;
@@ -195,14 +197,12 @@ public class FollowFeedTabFragment extends BaseFragment implements
     }
 
     @Override
-    public void writeCommentForCapture(CaptureDetails capture) {
+    public void writeCommentForCapture(final CaptureDetails capture) {
         CommentDialog dialog = new CommentDialog(getActivity(),
                 new CommentDialog.CommentDialogCallback() {
                     @Override
                     public void onFinishWritingComment(String comment) {
-                        // TODO: Helper to perform post comment request
-                        Toast.makeText(getActivity(), "Post Comment: " + comment,
-                                Toast.LENGTH_SHORT).show();
+                        sendComment(capture, comment);
                     }
                 }
         );
@@ -212,12 +212,14 @@ public class FollowFeedTabFragment extends BaseFragment implements
     @Override
     public void rateAndCommentForCapture(final CaptureDetails capture) {
         String userId = UserInfo.getUserId(getActivity());
-        boolean isCurrentUserCapture = capture.getCapturerParticipant().getId().equalsIgnoreCase(userId);
-        CaptureComment currentUserComment = capture.getCommentForUserId(userId);
+        boolean isCurrentUserCapture = capture.getCapturerParticipant().getId()
+                .equalsIgnoreCase(userId);
+        ArrayList<CaptureComment> comments = capture.getCommentsForUserId(userId);
+        final CaptureComment firstUserComment = comments.size() > 0 ? comments.get(0) : null;
         String currentUserCommentText = "";
 
-        if (currentUserComment != null && isCurrentUserCapture) {
-            currentUserCommentText = currentUserComment.getComment();
+        if (firstUserComment != null && isCurrentUserCapture) {
+            currentUserCommentText = firstUserComment.getComment();
         }
         int currentUserRating = capture.getRatingForId(userId);
         CommentAndRateDialog dialog = new CommentAndRateDialog(getActivity(),
@@ -225,11 +227,14 @@ public class FollowFeedTabFragment extends BaseFragment implements
                 new CommentAndRateDialog.CommentAndRateDialogCallback() {
                     @Override
                     public void onFinishWritingCommentAndRating(String comment, int rating) {
-                        // TODO: Post Comments
-                        Toast.makeText(getActivity(),
-                                "Post Comment: '" + comment + "' With Rating: " + rating,
-                                Toast.LENGTH_SHORT).show();
                         sendRating(capture, rating);
+                        if (firstUserComment != null) {
+                            firstUserComment.setComment(comment);
+                            editComment(capture, firstUserComment);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            sendComment(capture, comment);
+                        }
                     }
                 }
         );
@@ -275,10 +280,58 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
             @Override
             public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to like capture", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to rate capture", Toast.LENGTH_SHORT).show();
                 // Reset displayed rating
                 capture.updateRatingForUser(UserInfo.getUserId(getActivity()), oldRating);
                 mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void sendComment(final CaptureDetails capture, String comment) {
+        CommentCaptureRequest request = new CommentCaptureRequest(capture, comment);
+        // TODO: Loader?
+        // Temp comment for seamless UI
+        final CaptureComment tempComment = new CaptureComment();
+        tempComment.setAccountId(UserInfo.getUserId(getActivity()));
+        tempComment.setComment(comment);
+        if (capture.getComments() == null) {
+            capture.setComments(new ArrayList<CaptureComment>());
+        }
+        capture.getComments().add(tempComment);
+        mAdapter.notifyDataSetChanged();
+        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                // Merge new capture with old capture to retain sorting of the mCaptureDetails list
+                CaptureDetails newCapture = (CaptureDetails) result;
+                capture.updateWithNewCapture(newCapture);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                Toast.makeText(getActivity(), "Failed to comment capture", Toast.LENGTH_SHORT)
+                        .show();
+                capture.getComments().remove(tempComment);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void editComment(CaptureDetails capture, final CaptureComment captureComment) {
+        EditCommentRequest request = new EditCommentRequest(capture, captureComment);
+        // TODO: Loader?
+        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                // Success
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                Toast.makeText(getActivity(), "Failed to comment capture", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }

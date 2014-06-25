@@ -290,7 +290,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         CapturesContextRequest request = new CapturesContextRequest();
         CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
-        CaptureComment actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
+        CaptureComment actualComment = capture.getCommentsForUserId("52069ff93166785b5d003576")
+                .get(0);
 
         String expectedCommentString = "Hard black berry. Simple acid. $25";
         assertEquals(expectedCommentString, actualComment.getComment());
@@ -301,9 +302,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         CapturesContextRequest request = new CapturesContextRequest();
         CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
-        CaptureComment actualComment = capture.getCommentForUserId("unknown?");
+        ArrayList<CaptureComment> actualComments = capture.getCommentsForUserId("unknown?");
 
-        assertNull(actualComment);
+        assertEquals(0, actualComments.size());
     }
 
     public void testGetCommentForUserIdFromCaptureWithNoComments() throws JSONException {
@@ -313,13 +314,14 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
         // Clear comments with valud array list
         capture.getComments().clear();
-        CaptureComment actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
-        assertNull(actualComment);
+        ArrayList<CaptureComment> actualComments = capture
+                .getCommentsForUserId("52069ff93166785b5d003576");
+        assertEquals(0, actualComments.size());
 
         // Comments is Null
         capture.setComments(null);
-        actualComment = capture.getCommentForUserId("52069ff93166785b5d003576");
-        assertNull(actualComment);
+        actualComments = capture.getCommentsForUserId("52069ff93166785b5d003576");
+        assertEquals(0, actualComments.size());
     }
 
     public void testGetCreationDate() throws JSONException {
@@ -414,5 +416,42 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         Collections.sort(actualList, CaptureDetails.CreatedAtDescendingComparator);
 
         assertEquals(expectedSortedList, actualList);
+    }
+
+    public void testUpdateCaptureDetails() throws JSONException {
+        // Get "Old" capture
+        JSONObject jsonDetails = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+        CapturesContextRequest capRequest = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) capRequest.buildResopnseFromJson(jsonDetails);
+
+        // Get "Updated" capture
+        JSONObject jsonFeed = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_ctx);
+        AccountsFollowerFeedRequest listRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureDetailsListing captureListing = (CaptureDetailsListing) listRequest
+                .buildResopnseFromJson(
+                        jsonFeed);
+        // this is just a test, ideally the updated capture will have the same ID
+        CaptureDetails updatedCapture = captureListing.getUpdates().get(3);
+        updatedCapture.setId(capture.getId());
+
+        capture.updateWithNewCapture(updatedCapture);
+
+        assertEquals(updatedCapture.getShortShareUrl(), capture.getShortShareUrl());
+        assertEquals(updatedCapture.getTweet(), capture.getTweet());
+        assertEquals(updatedCapture.getRatings(), capture.getRatings());
+        assertEquals(updatedCapture.getPhoto(), capture.getPhoto());
+        assertEquals(updatedCapture.getBaseWine(), capture.getBaseWine());
+        assertEquals(updatedCapture.getWineProfile(), capture.getWineProfile());
+        assertEquals(updatedCapture.getTranscriptionErrorMessage(),
+                capture.getTranscriptionErrorMessage());
+        assertEquals(updatedCapture.getLocationName(), capture.getLocationName());
+        assertEquals(updatedCapture.getLikingParticipants(), capture.getLikingParticipants());
+        assertEquals(updatedCapture.getCommentingParticipants(),
+                capture.getCommentingParticipants());
+        assertEquals(updatedCapture.getTaggeeParticipants(), capture.getTaggeeParticipants());
+        assertEquals(updatedCapture.getComments(), capture.getComments());
+        assertEquals(updatedCapture.getETag(), capture.getETag());
     }
 }

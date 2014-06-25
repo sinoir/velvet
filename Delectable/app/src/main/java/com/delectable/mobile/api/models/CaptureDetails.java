@@ -48,17 +48,39 @@ public class CaptureDetails extends Capture {
         return newResource;
     }
 
-    public CaptureComment getCommentForUserId(String id) {
-        CaptureComment captureComment = null;
+
+    /**
+     * Updates existing capture with updated capture
+     *
+     * @param newCapture - Capture must be the same "object" / ID as this, and context must be
+     *                   detailed
+     */
+    public void updateWithNewCapture(CaptureDetails newCapture) {
+        short_share_url = newCapture.getShortShareUrl();
+        tweet = newCapture.getTweet();
+        ratings = newCapture.getRatings();
+        photo = newCapture.getPhoto();
+        base_wine = newCapture.getBaseWine();
+        wine_profile = newCapture.getWineProfile();
+        transcription_error_message = newCapture.getTranscriptionErrorMessage();
+        location_name = newCapture.getLocationName();
+        liking_participants = newCapture.getLikingParticipants();
+        commenting_participants = newCapture.getCommentingParticipants();
+        taggee_participants = newCapture.getTaggeeParticipants();
+        comments = newCapture.getComments();
+        e_tag = newCapture.getETag();
+    }
+
+    public ArrayList<CaptureComment> getCommentsForUserId(String id) {
+        ArrayList<CaptureComment> captureComments = new ArrayList<CaptureComment>();
         if (comments != null && comments.size() > 0) {
             for (CaptureComment comment : comments) {
                 if (comment.account_id.equalsIgnoreCase(id)) {
-                    captureComment = comment;
-                    break;
+                    captureComments.add(comment);
                 }
             }
         }
-        return captureComment;
+        return captureComments;
     }
 
     /**
