@@ -248,6 +248,43 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals(expectedNoRating, actualCapture.getRatingPercentForId("abc"));
     }
 
+    public void testGetRatingForId() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
+        int expectedNoRating = -1;
+        int expectedGoodRating = 19;
+        // Test Existing User with No Rating
+        assertEquals(expectedNoRating, actualCapture.getRatingForId("531626c71d2b11c1a400004e"));
+        // Test Existing User With Rating
+        assertEquals(expectedGoodRating,
+                actualCapture.getRatingForId("52069ff93166785b5d003576"));
+        // Test Non Existing User With No Rating
+        assertEquals(expectedNoRating, actualCapture.getRatingForId("abc"));
+    }
+
+    public void testUpdateCaptureRating() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
+
+        CapturesContextRequest request = new CapturesContextRequest();
+        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+
+        // Tests if user doesn't have a rating
+        String userAccountId = "abc";
+        int rating = 34;
+        assertFalse(capture.getRatings().containsKey(userAccountId));
+        capture.updateRatingForUser(userAccountId, rating);
+        assertEquals(rating, capture.getRatings().get(userAccountId).intValue());
+
+        // Tests if existing user likes capture, and then toggles to unlike capture
+        userAccountId = "531626c71d2b11c1a400004e";
+        rating = 13;
+        assertTrue(capture.getRatings().containsKey(userAccountId));
+        capture.updateRatingForUser(userAccountId, rating);
+        assertEquals(rating, capture.getRatings().get(userAccountId).intValue());
+    }
+
     public void testGetCommentForUserIdFromCaptureWithComments() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
