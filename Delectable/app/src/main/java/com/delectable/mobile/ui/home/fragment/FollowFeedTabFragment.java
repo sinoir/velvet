@@ -9,6 +9,8 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
+import com.delectable.mobile.api.requests.LikeCaptureActionRequest;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
@@ -47,6 +49,8 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     private boolean mIsLoadingData;
 
+    private BaseNetworkController mNetworkController;
+
     public FollowFeedTabFragment() {
         // Required empty public constructor
     }
@@ -63,6 +67,7 @@ public class FollowFeedTabFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         mCaptureDetails = new ArrayList<CaptureDetails>();
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        mNetworkController = new BaseNetworkController(getActivity());
         mIsLoadingData = false;
     }
 
@@ -219,9 +224,26 @@ public class FollowFeedTabFragment extends BaseFragment implements
     }
 
     @Override
-    public void toggleLikeForCapture(CaptureDetails capture) {
-        // TODO: Like Capture
-        Toast.makeText(getActivity(), "Like Capture", Toast.LENGTH_SHORT).show();
+    public void toggleLikeForCapture(final CaptureDetails capture) {
+        final String userId = UserInfo.getUserId(getActivity());
+        boolean userLikesCapture = !capture.doesUserLikeCapture(userId);
+        capture.toggleUserLikesCapture(userId);
+        mAdapter.notifyDataSetChanged();
+        LikeCaptureActionRequest likeRequest = new LikeCaptureActionRequest(capture,
+                userLikesCapture);
+        mNetworkController.performRequest(likeRequest, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                // Success
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                Toast.makeText(getActivity(), "Failed to like capture", Toast.LENGTH_SHORT).show();
+                capture.toggleUserLikesCapture(userId);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
