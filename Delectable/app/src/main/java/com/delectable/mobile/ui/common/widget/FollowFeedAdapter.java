@@ -222,11 +222,13 @@ public class FollowFeedAdapter extends BaseAdapter {
         String userAccountId = "";
         float capturePercent = 0.0f;
 
+        // Signed in User comments
         if (capture.getCapturerParticipant() != null) {
             userName = capture.getCapturerParticipant().getFullName();
             userAccountId = capture.getCapturerParticipant().getId();
         }
 
+        // Display the first user comment on top
         ArrayList<CaptureComment> userCaptureComments = capture.getCommentsForUserId(userAccountId);
         if (userCaptureComments.size() > 0) {
             userComment = userCaptureComments.get(0).getComment();
@@ -271,6 +273,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         viewHolder.captureTimeLocation.setText(captureTimeLocation);
     }
 
+    // Shows the rest of the comments/ratings below the first user comment
     private void setupParticipantsRatingsAndComments(FeedViewHolder viewHolder,
             CaptureDetails capture) {
         viewHolder.participantsCommentsRatingsContainer.removeAllViewsInLayout();
@@ -288,14 +291,18 @@ public class FollowFeedAdapter extends BaseAdapter {
         if (participants != null) {
             viewHolder.participantsCommentsRatingsContainer.setVisibility(View.VISIBLE);
             for (Account participant : participants) {
-                // Skip comments by the user who captured, otherwise it will show as duplicate
-                if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
-                    continue;
-                }
                 ArrayList<CaptureComment> comments = capture.getCommentsForUserId(
                         participant.getId());
-                String firstCommentText = comments.size() > 0 ? comments.get(0).getComment() : "";
+                int firstIndex = 0;
                 float rating = capture.getRatingPercentForId(participant.getId());
+                // Skip first user comment by the user who captured, otherwise it will show as duplicate
+                if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
+                    firstIndex = 1;
+                    // Don't duplicate ratings
+                    rating = -1.0f;
+                }
+                String firstCommentText = comments.size() > firstIndex ? comments.get(firstIndex)
+                        .getComment() : "";
                 // TODO : Figure out how to layout multiple comments with ratings?
                 if (firstCommentText != "" || rating > 0.0f) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
@@ -306,7 +313,7 @@ public class FollowFeedAdapter extends BaseAdapter {
                             layoutParams);
                     numDisplayedComments++;
                 }
-                for (int i = 1; i < comments.size(); i++) {
+                for (int i = (firstIndex + 1); i < comments.size(); i++) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
                     commentRow.setPadding(0, verticalSpacing, 0, verticalSpacing);
                     commentRow.setNameCommentWithRating(participant.getFullName(),
