@@ -1,4 +1,4 @@
-package com.delectable.mobile.ui.home.fragment;
+package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
@@ -28,16 +28,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class UserProfileTabFragment extends BaseFragment {
+public class UserProfileFragment extends BaseFragment {
 
-    public static final String TAG = "UserProfileTabFragment";
+    public static final String TAG = "UserProfileFragment";
 
     private static final String sArgsUserId = "sArgsUserId";
+
+    private static final String sArgsDispalyUserNameInActionBar = "sArgsDispalyUserNameInActionBar";
 
     private View mView;
 
     private SwipeRefreshLayout mRefreshContainer;
-
 
     private ListView mListView;
 
@@ -68,14 +69,22 @@ public class UserProfileTabFragment extends BaseFragment {
 
     private String mUserId;
 
-    public UserProfileTabFragment() {
+    private boolean mShouldShowNameInActionBar = false;
+
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
-    public static UserProfileTabFragment newInstance(String userId) {
-        UserProfileTabFragment fragment = new UserProfileTabFragment();
+    public static UserProfileFragment newInstance(String userId) {
+        return newInstance(userId, false);
+    }
+
+    public static UserProfileFragment newInstance(String userId,
+            boolean displayUserNameInActionbar) {
+        UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
         args.putString(sArgsUserId, userId);
+        args.putBoolean(sArgsDispalyUserNameInActionBar, displayUserNameInActionbar);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,6 +97,7 @@ public class UserProfileTabFragment extends BaseFragment {
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
+            mShouldShowNameInActionBar = args.getBoolean(sArgsDispalyUserNameInActionBar);
         }
     }
 
@@ -237,5 +247,8 @@ public class UserProfileTabFragment extends BaseFragment {
         mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
         mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));
         mCaptureWineCountTextView.setText(wineCount);
+        if (mShouldShowNameInActionBar) {
+            getActivity().getActionBar().setTitle(mUserAccount.getFname());
+        }
     }
 }

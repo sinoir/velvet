@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.delectable.mobile.ui.home.fragment.UserProfileTabFragment">
+    tools:context="com.delectable.mobile.ui.profile.fragment.UserProfileFragment">
 
     <ListView
         android:id="@+id/list_view"
