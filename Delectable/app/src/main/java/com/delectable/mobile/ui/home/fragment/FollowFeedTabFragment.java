@@ -19,7 +19,9 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -347,9 +349,10 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
     @Override
     public void launchUserProfile(String userAccountId) {
-        // TODO: User Profile
-        Toast.makeText(getActivity(), "User Profile", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Launch User Profile: " + userAccountId);
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, userAccountId);
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
     }
 
     @Override

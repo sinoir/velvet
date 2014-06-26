@@ -6,6 +6,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.common.widget.TabsImagePagerAdapter;
+import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.facebook.Session;
 
@@ -52,7 +53,7 @@ public class HomeFragment extends BaseFragment {
         tabFragments.add(FollowFeedTabFragment.newInstance());
 
         imageId.add(R.drawable.ab_profile);
-        tabFragments.add(UserProfileTabFragment.newInstance(currentUserId));
+        tabFragments.add(UserProfileFragment.newInstance(currentUserId));
 
         imageId.add(R.drawable.ab_activity);
         tabFragments.add(ActivityFeedTabFragment.newInstance());
