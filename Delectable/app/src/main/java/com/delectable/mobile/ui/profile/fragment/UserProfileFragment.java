@@ -10,8 +10,8 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
+import com.delectable.mobile.ui.profile.widget.ProfileHeaderMainView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.os.Bundle;
@@ -44,15 +44,9 @@ public class UserProfileFragment extends BaseFragment {
 
     private View mProfileHeaderView;
 
-    private TextView mUserNameTextView;
-
-    private TextView mFollowerCountTextView;
-
-    private TextView mFollowingCountTextView;
-
     private TextView mCaptureWineCountTextView;
 
-    private CircleImageView mUserImageView;
+    private ProfileHeaderMainView mProfileHeaderMainView;
 
     //TODO: ImageButtons?
     private Button mSwitchToListViewButton;
@@ -152,15 +146,13 @@ public class UserProfileFragment extends BaseFragment {
 
     private void setupHeader() {
         // TODO: Will be placing main header in a viewpager
-        View headerMainView = mProfileHeaderView.findViewById(R.id.profile_header_main);
-        mUserImageView = (CircleImageView) headerMainView.findViewById(R.id.image);
-        mUserNameTextView = (TextView) headerMainView.findViewById(R.id.user_name);
-        mFollowerCountTextView = (TextView) headerMainView.findViewById(R.id.followers_count);
-        mFollowingCountTextView = (TextView) headerMainView.findViewById(R.id.following_count);
-
         mCaptureWineCountTextView = (TextView) mProfileHeaderView
                 .findViewById(R.id.capture_wine_count);
+        mProfileHeaderMainView = (ProfileHeaderMainView) mProfileHeaderView
+                .findViewById(R.id.profile_header_main);
 
+        mCaptureWineCountTextView = (TextView) mProfileHeaderView.findViewById(
+                R.id.capture_wine_count);
         mSwitchToListViewButton = (Button) mProfileHeaderView
                 .findViewById(R.id.switch_to_listing_button);
         mSwitchToFeedViewButton = (Button) mProfileHeaderView
@@ -241,12 +233,14 @@ public class UserProfileFragment extends BaseFragment {
         String wineCount = getResources().getString(R.string.wine_count, numCaptures);
 
         wineCount = wineCount != null ? wineCount : "";
-
-        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl, mUserImageView);
-        mUserNameTextView.setText(userName);
-        mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
-        mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));
         mCaptureWineCountTextView.setText(wineCount);
+
+        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl,
+                mProfileHeaderMainView.getUserImageView());
+        mProfileHeaderMainView.setUserName(userName);
+        mProfileHeaderMainView.setFollowerCount(mUserAccount.getFollowerCount());
+        mProfileHeaderMainView.setFollowingCount(mUserAccount.getFollowingCount());
+
         if (mShouldShowNameInActionBar) {
             getActivity().getActionBar().setTitle(mUserAccount.getFname());
         }
