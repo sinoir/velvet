@@ -57,6 +57,22 @@ public class ProfileHeaderMainView extends LinearLayout {
         mFollowingCountTextView.setText(String.valueOf(followingCount));
     }
 
+    public TextView getUserNameTextView() {
+        return mUserNameTextView;
+    }
+
+    public TextView getFollowerCountTextView() {
+        return mFollowerCountTextView;
+    }
+
+    public TextView getFollowingCountTextView() {
+        return mFollowingCountTextView;
+    }
+
+    public ProfileHeaderMainViewActionListeners getActionListener() {
+        return mActionListener;
+    }
+
     public void setActionListener(
             ProfileHeaderMainViewActionListeners actionListener) {
         mActionListener = actionListener;
