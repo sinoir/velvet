@@ -26,6 +26,7 @@ target/
 .project
 
 # Android Studio
+*.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/datasources.xml
