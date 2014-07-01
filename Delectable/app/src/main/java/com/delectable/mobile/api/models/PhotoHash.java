@@ -2,11 +2,41 @@ package com.delectable.mobile.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PhotoHash {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PhotoHash implements Parcelable {
+
+    public static final Parcelable.Creator<PhotoHash> CREATOR
+            = new Parcelable.Creator<PhotoHash>() {
+        public PhotoHash createFromParcel(Parcel source) {
+            return new PhotoHash(source);
+        }
+
+        public PhotoHash[] newArray(int size) {
+            return new PhotoHash[size];
+        }
+    };
 
     String url;
 
     ChildResolution child_resolutions;
+
+    public PhotoHash() {
+    }
+
+    private PhotoHash(Parcel in) {
+        this.url = in.readString();
+
+        this.child_resolutions = new ChildResolution();
+        this.child_resolutions.size_nano = in.readString();
+        this.child_resolutions.size_micro = in.readString();
+        this.child_resolutions.size_thumb = in.readString();
+        this.child_resolutions.size_250 = in.readString();
+        this.child_resolutions.size_450 = in.readString();
+        this.child_resolutions.size_medium = in.readString();
+        this.child_resolutions.size_blur = in.readString();
+    }
 
     public String getUrl() {
         return url;
@@ -60,6 +90,23 @@ public class PhotoHash {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeString(this.child_resolutions.size_nano);
+        dest.writeString(this.child_resolutions.size_micro);
+        dest.writeString(this.child_resolutions.size_thumb);
+        dest.writeString(this.child_resolutions.size_250);
+        dest.writeString(this.child_resolutions.size_450);
+        dest.writeString(this.child_resolutions.size_medium);
+        dest.writeString(this.child_resolutions.size_blur);
+    }
+
     class ChildResolution {
 
         @SerializedName("50")
@@ -95,5 +142,7 @@ public class PhotoHash {
                     ", size_blur='" + size_blur + '\'' +
                     '}';
         }
+
+
     }
 }
