@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.NavigationAdapter;
+import com.delectable.mobile.ui.home.widget.NavHeader;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -66,6 +67,8 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     private NavigationAdapter mNavigationAdapter;
 
+    private NavHeader mNavHeader;
+
     public NavigationDrawerFragment() {
     }
 
@@ -94,6 +97,9 @@ public class NavigationDrawerFragment extends BaseFragment {
             Bundle savedInstanceState) {
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+
+        mNavHeader = new NavHeader(getActivity());
+        mDrawerListView.addHeaderView(mNavHeader);
 
         // TODO: Custom Adapter for with themed menu items
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
