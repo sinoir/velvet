@@ -28,7 +28,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.delectable.mobile.ui.home.activity.HomeActivity"
+            android:name=".ui.home.activity.HomeNavActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
 

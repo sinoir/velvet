@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class HomeActivity extends BaseActivity {
+public class HomeNavActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
