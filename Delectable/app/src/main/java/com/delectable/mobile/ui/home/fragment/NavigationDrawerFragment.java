@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.NavigationAdapter;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -17,8 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class NavigationDrawerFragment extends BaseFragment {
 
@@ -62,6 +64,8 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     private boolean mFromSavedInstanceState;
 
+    private NavigationAdapter mNavigationAdapter;
+
     public NavigationDrawerFragment() {
     }
 
@@ -98,17 +102,26 @@ public class NavigationDrawerFragment extends BaseFragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        "Home",
-                        "Find People",
-                        "Settings",
-                }
-        ));
+
+        // Setup Navigation Adapter
+        ArrayList<NavigationAdapter.NavItemObject> navItems
+                = new ArrayList<NavigationAdapter.NavItemObject>();
+        // TODO: Add Real Nav Icons
+        navItems.add(new NavigationAdapter.NavItemObject(
+                getString(R.string.navigation_home),
+                null));
+        navItems.add(new NavigationAdapter.NavItemObject(
+                getString(R.string.navigation_find_people),
+                null));
+        navItems.add(new NavigationAdapter.NavItemObject(
+                getString(R.string.navigation_settings),
+                null));
+
+        mNavigationAdapter = new NavigationAdapter(navItems, getActivity());
+
+        mDrawerListView.setAdapter(mNavigationAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         // TODO: Laod User Data somewhere and add it to the drawer layout
         // TODO: Add Header with User Info
         // TODO: Add some Footer Listview with activity feed
