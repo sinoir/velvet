@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.capture.activity.WineCaptureActivity;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.common.widget.TabsImagePagerAdapter;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;

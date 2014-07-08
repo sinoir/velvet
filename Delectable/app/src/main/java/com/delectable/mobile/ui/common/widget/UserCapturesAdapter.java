@@ -67,21 +67,9 @@ public class UserCapturesAdapter extends BaseAdapter {
             viewHolder = (SimpleListingViewHolder) rowView.getTag();
         }
 
-        String captureTitle = "";
-        String captureName = "";
+        String captureTitle = capture.getDisplayTitle();
+        String captureName = capture.getDisplayDescription();
         String captureImageUrl = capture.getPhoto().getThumbUrl();
-        // If there was a capture with a valid Wine
-        if (capture.getWineProfile() != null) {
-            captureTitle = capture.getWineProfile().getProducerName();
-            captureName = capture.getWineProfile().getName();
-            // Else if the capture went through that had no wine
-        } else if (capture.getTranscriptionErrorMessage() != null) {
-            captureName = capture.getTranscriptionErrorMessage();
-            // If all else fails, the image has yet to be identified
-        } else {
-            captureTitle = "UNIDENTIFIED";
-            captureName = "We are identifying this wine.";
-        }
 
         // TODO: Toggle Privacy icon over the Image
         if (capture.getPrivate()) {
