@@ -1,7 +1,7 @@
 package com.delectable.mobile;
 
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.ui.home.activity.HomeActivity;
+import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 
 import android.app.Activity;
@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
 
         Intent launchIntent = new Intent();
         if (UserInfo.isSignedIn(this)) {
-            launchIntent.setClass(getApplicationContext(), HomeActivity.class);
+            launchIntent.setClass(getApplicationContext(), NavActivity.class);
         } else {
             launchIntent.setClass(getApplicationContext(), LoginActivity.class);
         }

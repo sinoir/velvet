@@ -10,10 +10,12 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
+import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -21,9 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,22 +43,7 @@ public class UserProfileFragment extends BaseFragment {
 
     private ListView mListView;
 
-    private View mProfileHeaderView;
-
-    private TextView mUserNameTextView;
-
-    private TextView mFollowerCountTextView;
-
-    private TextView mFollowingCountTextView;
-
-    private TextView mCaptureWineCountTextView;
-
-    private CircleImageView mUserImageView;
-
-    //TODO: ImageButtons?
-    private Button mSwitchToListViewButton;
-
-    private Button mSwitchToFeedViewButton;
+    private ProfileHeaderView mProfileHeaderView;
 
     private UserCapturesAdapter mAdapter;
 
@@ -110,13 +96,28 @@ public class UserProfileFragment extends BaseFragment {
 
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
-        mProfileHeaderView = inflater.inflate(R.layout.profile_header, null);
+        // TODO: Implement ProfileHeaderActionListener
+        mProfileHeaderView = new ProfileHeaderView(getActivity());
         mListView.addHeaderView(mProfileHeaderView);
 
         mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails, mUserId);
         mListView.setAdapter(mAdapter);
         setupPullToRefresh();
-        setupHeader();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Ignore header
+                if (position > 0) {
+                    CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position - 1);
+                    Intent intent = new Intent();
+                    intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                            captureDetails.getId());
+                    intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         return mView;
     }
@@ -146,44 +147,6 @@ public class UserProfileFragment extends BaseFragment {
                 Log.d(TAG, "On Refresh");
                 // TODO: Show some indicator of refreshing
                 loadData();
-            }
-        });
-    }
-
-    private void setupHeader() {
-        // TODO: Will be placing main header in a viewpager
-        View headerMainView = mProfileHeaderView.findViewById(R.id.profile_header_main);
-        mUserImageView = (CircleImageView) headerMainView.findViewById(R.id.image);
-        mUserNameTextView = (TextView) headerMainView.findViewById(R.id.user_name);
-        mFollowerCountTextView = (TextView) headerMainView.findViewById(R.id.followers_count);
-        mFollowingCountTextView = (TextView) headerMainView.findViewById(R.id.following_count);
-
-        mCaptureWineCountTextView = (TextView) mProfileHeaderView
-                .findViewById(R.id.capture_wine_count);
-
-        mSwitchToListViewButton = (Button) mProfileHeaderView
-                .findViewById(R.id.switch_to_listing_button);
-        mSwitchToFeedViewButton = (Button) mProfileHeaderView
-                .findViewById(R.id.switch_to_feed_listing_button);
-        mSwitchToListViewButton.setSelected(true);
-        setupSwitchButtons();
-    }
-
-    private void setupSwitchButtons() {
-        mSwitchToListViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwitchToListViewButton.setSelected(true);
-                mSwitchToFeedViewButton.setSelected(false);
-                // TODO: Switch Adapters
-            }
-        });
-        mSwitchToFeedViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwitchToListViewButton.setSelected(false);
-                mSwitchToFeedViewButton.setSelected(true);
-                // TODO: Switch Adapters
             }
         });
     }
@@ -238,15 +201,15 @@ public class UserProfileFragment extends BaseFragment {
         String imageUrl = mUserAccount.getPhoto().getUrl();
         int numCaptures = mUserAccount.getCaptureCount() != null ?
                 mUserAccount.getCaptureCount() : 0;
-        String wineCount = getResources().getString(R.string.wine_count, numCaptures);
 
-        wineCount = wineCount != null ? wineCount : "";
+        mProfileHeaderView.setWineCount(numCaptures);
 
-        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl, mUserImageView);
-        mUserNameTextView.setText(userName);
-        mFollowerCountTextView.setText(String.valueOf(mUserAccount.getFollowerCount()));
-        mFollowingCountTextView.setText(String.valueOf(mUserAccount.getFollowingCount()));
-        mCaptureWineCountTextView.setText(wineCount);
+        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl,
+                mProfileHeaderView.getUserImageView());
+        mProfileHeaderView.setUserName(userName);
+        mProfileHeaderView.setFollowerCount(mUserAccount.getFollowerCount());
+        mProfileHeaderView.setFollowingCount(mUserAccount.getFollowingCount());
+
         if (mShouldShowNameInActionBar) {
             getActivity().getActionBar().setTitle(mUserAccount.getFname());
         }

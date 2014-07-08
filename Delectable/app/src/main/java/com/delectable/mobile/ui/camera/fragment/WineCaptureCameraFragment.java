@@ -1,4 +1,4 @@
-package com.delectable.mobile.ui.capture.fragment;
+package com.delectable.mobile.ui.camera.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;

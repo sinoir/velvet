@@ -48,7 +48,6 @@ public class CaptureDetails extends Capture {
         return newResource;
     }
 
-
     /**
      * Updates existing capture with updated capture
      *
@@ -151,6 +150,40 @@ public class CaptureDetails extends Capture {
             tempUserAccount.setId(accountId);
             liking_participants.add(tempUserAccount);
         }
+    }
+
+    /**
+     * Helper to get Display Title
+     *
+     * @return Wine Producer Name if it was a match, otherwise "UNIDENTIFIED"
+     */
+    public String getDisplayTitle() {
+        String title = "";
+        if (getWineProfile() != null) {
+            title = getWineProfile().getProducerName();
+            // Else if the capture went through that had no wine
+        } else if (getTranscriptionErrorMessage() == null) {
+            title = "UNIDENTIFIED";
+        }
+        return title;
+    }
+
+    /**
+     * Helper to get Display Desciption
+     *
+     * @return Wine Name if it was a match, otherwise error / currently identifying wine text
+     */
+    public String getDisplayDescription() {
+        String desc = "";
+        if (getWineProfile() != null) {
+            desc = getWineProfile().getName();
+            // Else if the capture went through that had no wine
+        } else if (getTranscriptionErrorMessage() != null) {
+            desc = getTranscriptionErrorMessage();
+        } else {
+            desc = "We are identifying this wine.";
+        }
+        return desc;
     }
 
     public String getShortShareUrl() {

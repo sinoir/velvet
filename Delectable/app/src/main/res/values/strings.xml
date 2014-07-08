@@ -11,6 +11,14 @@
     <string name="instagram_text">Instagram</string>
     <string name="make_private">Make Private</string>
 
+    <!-- Navigation -->
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_find_people">Find People</string>
+    <string name="navigation_settings">Settings</string>
+
+
     <!-- Profile UI -->
     <string name="profile_followers">followers</string>
     <string name="profile_following">following</string>
@@ -19,6 +27,8 @@
     <string name="profile_unfollow">Unfollow</string>
     <string name="with">with</string>
     <string name="wine_count">%d wines</string>
+    <string name="followers_count">%s followers</string>
+    <string name="following_count">%s following</string>
     <string name="action_facebook_login">Facebook Login</string>
 
     <!-- Capture Feed -->

@@ -7,7 +7,8 @@
     <RelativeLayout
         android:id="@+id/wine_banner"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cap_feed_row_wine_banner_height">
+        android:layout_height="@dimen/cap_feed_row_wine_banner_height"
+        android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing">
 
         <!--TOOD: Placeholder for no image? -->
         <ImageView
@@ -26,7 +27,6 @@
             android:layout_alignParentLeft="true"
             android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
             android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-            android:text="LA RAME"
             android:textColor="@android:color/white"
             android:textSize="@dimen/cap_feed_row_top_text_font_size" />
 
@@ -39,7 +39,6 @@
             android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
             android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
             android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-            android:text="Sauvignon Blanc Secret Sauce 2012"
             android:textColor="@android:color/white"
             android:textSize="@dimen/cap_feed_row_bottom_text_font_size" />
 
@@ -59,10 +58,10 @@
         android:layout_below="@id/wine_banner"
         android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
-        android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
         android:background="@android:color/white"
         android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingRight="@dimen/cap_list_row_horizontal_spacing">
+        android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
+        android:visibility="gone">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
@@ -80,7 +79,8 @@
             android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
             android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
             android:layout_toRightOf="@id/profile_image1"
-            android:text="@string/with" />
+            android:text="@string/with"
+            android:visibility="gone" />
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/tagged_user_image1"
@@ -88,7 +88,8 @@
             android:layout_height="@dimen/small_profile_image_size"
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/with_text"
-            android:src="@drawable/ab_profile_normal" />
+            android:src="@drawable/ab_profile_normal"
+            android:visibility="gone" />
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/tagged_user_image2"
@@ -97,7 +98,8 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
             android:layout_toRightOf="@id/tagged_user_image1"
-            android:src="@drawable/ab_profile_normal" />
+            android:src="@drawable/ab_profile_normal"
+            android:visibility="gone" />
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/tagged_user_image3"
@@ -106,7 +108,8 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
             android:layout_toRightOf="@id/tagged_user_image2"
-            android:src="@drawable/ab_profile_normal" />
+            android:src="@drawable/ab_profile_normal"
+            android:visibility="gone" />
 
         <!-- TODO: Plus Image Button Icon -->
         <ImageView
@@ -116,7 +119,8 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
             android:layout_toRightOf="@id/tagged_user_image3"
-            android:src="@drawable/ab_profile_normal" />
+            android:src="@drawable/ab_profile_normal"
+            android:visibility="gone" />
 
         <View
             android:id="@+id/vertical_divider1"
@@ -124,7 +128,8 @@
             android:layout_height="1dp"
             android:layout_alignLeft="@id/with_text"
             android:layout_alignParentBottom="true"
-            android:background="@color/d_gray2" />
+            android:background="@color/d_gray2"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -134,7 +139,8 @@
         android:layout_below="@id/tagged_participants_container"
         android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
         android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingRight="@dimen/cap_list_row_horizontal_spacing">
+        android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
+        android:visibility="gone">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image2"

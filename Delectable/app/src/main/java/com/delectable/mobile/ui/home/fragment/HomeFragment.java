@@ -3,10 +3,9 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.capture.activity.WineCaptureActivity;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.common.widget.TabsImagePagerAdapter;
-import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
+import com.delectable.mobile.ui.common.widget.TabsTextPagerAdapter;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.facebook.Session;
 
@@ -31,7 +30,7 @@ public class HomeFragment extends BaseFragment {
 
     private SlidingPagerTabStrip mTabStrip;
 
-    private TabsImagePagerAdapter mTabsAdapter;
+    private TabsTextPagerAdapter mTabsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,20 +45,18 @@ public class HomeFragment extends BaseFragment {
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
 
-        ArrayList<Integer> imageId = new ArrayList<Integer>();
+        ArrayList<String> titles = new ArrayList<String>();
         ArrayList<Fragment> tabFragments = new ArrayList<Fragment>();
 
-        imageId.add(R.drawable.ab_feed);
+        titles.add("FOLLOWING");
         tabFragments.add(FollowFeedTabFragment.newInstance());
 
-        imageId.add(R.drawable.ab_profile);
-        tabFragments.add(UserProfileFragment.newInstance(currentUserId));
+        titles.add("YOU");
+        tabFragments.add(FollowFeedTabFragment.newInstance(currentUserId));
 
-        imageId.add(R.drawable.ab_activity);
-        tabFragments.add(ActivityFeedTabFragment.newInstance());
+        mTabsAdapter = new TabsTextPagerAdapter(getFragmentManager(), tabFragments, titles);
 
-        mTabsAdapter = new TabsImagePagerAdapter(getFragmentManager(), tabFragments, imageId);
-
+        // TODO: Customize TabStrip appearance, dark blue, with lighter text
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
 
