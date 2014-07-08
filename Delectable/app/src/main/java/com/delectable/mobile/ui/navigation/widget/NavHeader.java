@@ -1,4 +1,4 @@
-package com.delectable.mobile.ui.home.widget;
+package com.delectable.mobile.ui.navigation.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.widget.CircleImageView;

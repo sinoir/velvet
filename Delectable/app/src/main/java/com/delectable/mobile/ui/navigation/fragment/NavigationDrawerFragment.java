@@ -1,4 +1,4 @@
-package com.delectable.mobile.ui.home.fragment;
+package com.delectable.mobile.ui.navigation.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
@@ -10,7 +10,7 @@ import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.NavigationAdapter;
-import com.delectable.mobile.ui.home.widget.NavHeader;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.ActionBar;

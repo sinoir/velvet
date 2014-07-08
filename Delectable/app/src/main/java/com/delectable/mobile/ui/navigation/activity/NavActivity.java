@@ -1,10 +1,10 @@
-package com.delectable.mobile.ui.home.activity;
+package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
-import com.delectable.mobile.ui.home.fragment.NavigationDrawerFragment;
+import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 
 import android.app.ActionBar;
 import android.app.FragmentManager;
@@ -13,7 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class HomeNavActivity extends BaseActivity
+public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
