@@ -33,7 +33,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.delectable.mobile.ui.capture.activity.WineCaptureActivity"
+            android:name="com.delectable.mobile.ui.camera.activity.WineCaptureActivity"
             android:label=""
             android:screenOrientation="portrait" />
 

@@ -1,8 +1,8 @@
-package com.delectable.mobile.ui.capture.activity;
+package com.delectable.mobile.ui.camera.activity;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
-import com.delectable.mobile.ui.capture.fragment.WineCaptureCameraFragment;
+import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
 
 import android.os.Bundle;
 
