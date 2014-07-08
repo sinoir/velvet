@@ -10,7 +10,7 @@
         android:layout_marginTop="@dimen/profile_vertical_spacing">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
-            android:id="@+id/image"
+            android:id="@+id/profile_image1"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerInParent="true"
@@ -34,6 +34,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
+        <!-- TODO: Make this a spannable textview for # following/followers -->
         <TextView
             android:id="@+id/followers_count"
             android:layout_width="wrap_content"

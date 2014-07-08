@@ -8,7 +8,7 @@ import com.delectable.mobile.api.requests.BaseRegistrations;
 import com.delectable.mobile.api.requests.RegistrationsFacebook;
 import com.delectable.mobile.api.requests.RegistrationsLogin;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.home.activity.HomeActivity;
+import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -233,7 +233,7 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
                                     Toast.LENGTH_LONG)
                                     .show();
                             Intent launchIntent = new Intent();
-                            launchIntent.setClass(getActivity(), HomeActivity.class);
+                            launchIntent.setClass(getActivity(), NavActivity.class);
                             startActivity(launchIntent);
                             getActivity().finish();
                         }
