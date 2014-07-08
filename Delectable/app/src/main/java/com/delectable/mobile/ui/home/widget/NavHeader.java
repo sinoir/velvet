@@ -17,6 +17,8 @@ public class NavHeader extends RelativeLayout {
 
     private TextView mFollowingCountTextView;
 
+    private TextView mUserBioTextView;
+
     private CircleImageView mUserImageView;
 
     public NavHeader(Context context) {
@@ -36,6 +38,7 @@ public class NavHeader extends RelativeLayout {
         mUserNameTextView = (TextView) findViewById(R.id.user_name);
         mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
         mFollowingCountTextView = (TextView) findViewById(R.id.following_count);
+        mUserBioTextView = (TextView) findViewById(R.id.user_bio_text);
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -45,6 +48,10 @@ public class NavHeader extends RelativeLayout {
 
     public void setUserName(String userName) {
         mUserNameTextView.setText(userName);
+    }
+
+    public void setUserBio(String bio) {
+        mUserBioTextView.setText(bio);
     }
 
     public void setFollowerCount(int followerCount) {

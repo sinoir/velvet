@@ -21,7 +21,6 @@
         android:layout_alignTop="@id/profile_image1"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/profile_image1"
-        android:text="Claire Underwood"
         android:textSize="20sp" />
 
     <TextView
@@ -31,7 +30,6 @@
         android:layout_alignBottom="@id/profile_image1"
         android:layout_marginBottom="10dp"
         android:layout_toRightOf="@+id/profile_image1"
-        android:text="1000 followers"
         android:textColor="@color/d_gray3"
         android:textSize="14sp" />
 
@@ -43,7 +41,6 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/followers_count"
-        android:text="1000 following"
         android:textColor="@color/d_gray3"
         android:textSize="14sp" />
 
@@ -59,7 +56,6 @@
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:lines="3"
-        android:text="Beer, wine, meat and metal. I'm the master sommelier at Nopa in San Francisco. Beer, wine, meat and metal. I'm the master sommelier at Nopa in San Francisco."
         android:textSize="14sp" />
 
     <View

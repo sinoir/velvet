@@ -1,9 +1,17 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.RequestError;
+import com.delectable.mobile.api.controllers.AccountsNetworkController;
+import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.NavigationAdapter;
 import com.delectable.mobile.ui.home.widget.NavHeader;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -12,6 +20,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,30 +29,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class NavigationDrawerFragment extends BaseFragment {
 
+    private static final String TAG = "NavigationDrawerFragment";
+
     /**
-     * Navigation Items
+     * Navigation Items - Starts at 1, User Profile is at 0
      */
-    public static final int NAV_HOME = 0;
+    // TODO: Should selectecing Position 0 goto User Profile?
+    public static final int NAV_HEADER = 0;
 
-    public static final int NAV_FIND_PEOPLE = 1;
+    public static final int NAV_HOME = 1;
 
-    public static final int NAV_SETTINGS = 2;
+    public static final int NAV_FIND_PEOPLE = 2;
+
+    public static final int NAV_SETTINGS = 3;
+
+    public static final int NAV_FOOTER = 4;
 
     /**
      * Remember the position of the selected item.
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-
-    /**
-     * Per the design guidelines, you should show the drawer on launch until the user manually
-     * expands it. This shared preference tracks this.
-     */
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -61,7 +72,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedPosition = 0;
+    private int mCurrentSelectedPosition = NAV_HOME;
 
     private boolean mFromSavedInstanceState;
 
@@ -69,19 +80,26 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     private NavHeader mNavHeader;
 
+    private String mUserId;
+
+    private AccountsNetworkController mAccountsNetworkController;
+
+    private Account mUserAccount;
+
     public NavigationDrawerFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        mUserId = UserInfo.getUserId(getActivity());
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
 
-        // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
 
@@ -101,11 +119,14 @@ public class NavigationDrawerFragment extends BaseFragment {
         mNavHeader = new NavHeader(getActivity());
         mDrawerListView.addHeaderView(mNavHeader);
 
-        // TODO: Custom Adapter for with themed menu items
+        // TODO: Fix deselection of Nav items when clicking header/footer..
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                // Ignore Header and Footer for now
+                if (position != NAV_HEADER && position != NAV_FOOTER) {
+                    selectItem(position);
+                }
             }
         });
 
@@ -128,10 +149,14 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerListView.setAdapter(mNavigationAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
-        // TODO: Laod User Data somewhere and add it to the drawer layout
-        // TODO: Add Header with User Info
         // TODO: Add some Footer Listview with activity feed
         return mDrawerListView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
     }
 
     @Override
@@ -255,6 +280,44 @@ public class NavigationDrawerFragment extends BaseFragment {
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
+    }
+
+    private void loadData() {
+        // TODO: Have some central data loading service and cache this somewhere
+        AccountsContextRequest request = new AccountsContextRequest(
+                AccountsContextRequest.CONTEXT_PROFILE);
+        request.setId(mUserId);
+        mAccountsNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        Log.d(TAG, "Received Results! " + result);
+
+                        mUserAccount = (Account) result;
+                        updateUIWithData();
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
+                                .getCode());
+                        // TODO: What to do with errors?
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+    private void updateUIWithData() {
+        if (mUserAccount == null) {
+            return;
+        }
+        mNavHeader.setFollowerCount(mUserAccount.getFollowerCount());
+        mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
+        mNavHeader.setUserName(mUserAccount.getFullName());
+        mNavHeader.setUserBio(mUserAccount.getBio());
+        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
+                mNavHeader.getUserImageView());
     }
 
     /**
