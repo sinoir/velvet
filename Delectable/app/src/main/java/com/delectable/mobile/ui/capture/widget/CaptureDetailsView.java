@@ -39,6 +39,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private ImageView mMoreTaggedParticipantsButton;
 
+    private RelativeLayout mCapturerCommentsContainer;
+
     private CircleImageView mProfileImage2;
 
     private TextView mUserName;
@@ -96,6 +98,8 @@ public class CaptureDetailsView extends RelativeLayout {
         mMoreTaggedParticipantsButton = (ImageView) findViewById(R.id.more_tagged_user_button);
 
         // User Comment/Rating
+        mCapturerCommentsContainer = (RelativeLayout) findViewById(
+                R.id.capturer_comments_container);
         mProfileImage2 = (CircleImageView) findViewById(R.id.profile_image2);
         mUserName = (TextView) findViewById(R.id.user_name);
         mUserComment = (TextView) findViewById(R.id.user_comment);
@@ -116,12 +120,12 @@ public class CaptureDetailsView extends RelativeLayout {
 
     public void updateCaptureData(CaptureDetails captureData) {
         mCaptureData = captureData;
-
         setupTopWineDetails();
         setupTaggedParticipants();
         setupUserCommentsRating();
         setupParticipantsRatingsAndComments();
         setupActionButtonStates();
+        mCapturerCommentsContainer.setVisibility(View.VISIBLE);
     }
 
     public void setActionsHandler(CaptureActionsHandler actionsHandler) {
