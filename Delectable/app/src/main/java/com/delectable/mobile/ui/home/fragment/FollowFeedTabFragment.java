@@ -19,6 +19,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.ui.home.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.Intent;
@@ -35,7 +36,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class FollowFeedTabFragment extends BaseFragment implements
-        FollowFeedAdapter.FeedItemActionsHandler {
+        FollowFeedAdapter.FeedItemActionsHandler, CaptureDetailsView.CaptureActionsHandler {
 
     private static final String TAG = "FollowFeedTabFragment";
 
@@ -88,7 +89,7 @@ public class FollowFeedTabFragment extends BaseFragment implements
 
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
-        mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, this);
+        mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, this, this);
         mListView.setAdapter(mAdapter);
 
         setupPullToRefresh();
