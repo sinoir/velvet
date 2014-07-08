@@ -8,6 +8,8 @@ import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureDetailsListing;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
+import com.delectable.mobile.api.requests.BaseCaptureFeedListingRequest;
+import com.delectable.mobile.api.requests.CaptureFeedRequest;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
 
@@ -28,6 +30,8 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
 
     private static final String TAG = "FollowFeedTabFragment";
 
+    private static final String sArgsUserId = "sArgsUserId";
+
     private View mView;
 
     private SwipeRefreshLayout mRefreshContainer;
@@ -44,13 +48,20 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
 
     private boolean mIsLoadingData;
 
+    private String mUserId;
+
     public FollowFeedTabFragment() {
         // Required empty public constructor
     }
 
     public static FollowFeedTabFragment newInstance() {
+        return newInstance(null);
+    }
+
+    public static FollowFeedTabFragment newInstance(String userId) {
         FollowFeedTabFragment fragment = new FollowFeedTabFragment();
         Bundle args = new Bundle();
+        args.putString(sArgsUserId, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,6 +72,10 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         mCaptureDetails = new ArrayList<CaptureDetails>();
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
         mIsLoadingData = false;
+        Bundle args = getArguments();
+        if (args != null) {
+            mUserId = args.getString(sArgsUserId);
+        }
     }
 
     @Override
@@ -135,19 +150,33 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         Log.d(TAG, "Load Data isRefreshing: ? " + isRefreshing);
         if (!mIsLoadingData) {
             mIsLoadingData = true;
-            AccountsFollowerFeedRequest request;
-            if (mDetailsListing == null) {
-                request = new AccountsFollowerFeedRequest(
-                        AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-            } else {
-                request = new AccountsFollowerFeedRequest(mDetailsListing, isRefreshing);
-            }
+            BaseCaptureFeedListingRequest request = makeCaptureRequest(isRefreshing);
             performRequest(request);
             mRefreshContainer.setRefreshing(true);
         }
     }
 
-    private void performRequest(AccountsFollowerFeedRequest request) {
+    private BaseCaptureFeedListingRequest makeCaptureRequest(boolean isRefreshing) {
+        BaseCaptureFeedListingRequest request;
+        // If we have a user ID, we want to show the captures for that user id only
+        if (mUserId != null) {
+            request = new CaptureFeedRequest(BaseCaptureFeedListingRequest.CONTEXT_DETAILS);
+            request.setId(mUserId);
+        } else {
+            // Otherwise we want to display follower captures
+            request = new AccountsFollowerFeedRequest(
+                    BaseCaptureFeedListingRequest.CONTEXT_DETAILS);
+        }
+        request.setIsPullToRefresh(isRefreshing);
+
+        if (mDetailsListing != null) {
+            request.setCurrentListing(mDetailsListing);
+        }
+
+        return request;
+    }
+
+    private void performRequest(BaseCaptureFeedListingRequest request) {
         Log.d(TAG, "Request: " + request);
         mAccountsNetworkController.performRequest(request,
                 new BaseNetworkController.RequestCallback() {
