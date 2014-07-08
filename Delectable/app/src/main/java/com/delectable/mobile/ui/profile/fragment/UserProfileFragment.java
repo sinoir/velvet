@@ -10,10 +10,12 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -100,6 +103,21 @@ public class UserProfileFragment extends BaseFragment {
         mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails, mUserId);
         mListView.setAdapter(mAdapter);
         setupPullToRefresh();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Ignore header
+                if (position > 0) {
+                    CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position - 1);
+                    Intent intent = new Intent();
+                    intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                            captureDetails.getId());
+                    intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         return mView;
     }
