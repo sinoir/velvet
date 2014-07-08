@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.api.models.Capture;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.ui.home.widget.CaptureDetailsView;
+import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 
 import android.app.Activity;
 import android.view.View;

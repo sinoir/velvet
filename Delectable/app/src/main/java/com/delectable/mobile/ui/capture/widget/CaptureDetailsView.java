@@ -1,4 +1,4 @@
-package com.delectable.mobile.ui.home.widget;
+package com.delectable.mobile.ui.capture.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
