@@ -133,14 +133,10 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupTopWineDetails() {
-        String wineImageUrl = "";
-        String producerName = "";
-        String wineName = "";
-        if (mCaptureData.getWineProfile() != null) {
-            producerName = mCaptureData.getWineProfile().getProducerName();
-            wineName = mCaptureData.getWineProfile().getName();
-            wineImageUrl = mCaptureData.getPhoto().getUrl();
-        }
+        String wineImageUrl = mCaptureData.getPhoto().getUrl();
+        String producerName = mCaptureData.getDisplayTitle();
+        String wineName = mCaptureData.getDisplayDescription();
+
         ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, mWineImage);
         mProducerName.setText(producerName);
         mWineName.setText(wineName);
