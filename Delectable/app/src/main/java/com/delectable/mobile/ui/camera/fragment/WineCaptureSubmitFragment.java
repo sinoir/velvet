@@ -149,7 +149,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mPostButton.setText(R.string.capture_submit_post);
         // TODO: TouchStates for button
         mPostButton.setTextColor(Color.WHITE);
-        mPostButton.setBackgroundColor(getResources().getColor(R.color.d_link_blue));
+        mPostButton.setBackgroundColor(getResources().getColor(R.color.d_blue));
     }
 
 

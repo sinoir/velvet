@@ -2,12 +2,12 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--TODO: Get right color states -->
-    <item android:color="@color/d_link_blue_darker" android:state_pressed="true" />
-    <item android:color="@color/d_link_blue_darker" android:state_focused="true" />
+    <item android:color="@color/d_blue_pressed" android:state_pressed="true" />
+    <item android:color="@color/d_blue_pressed" android:state_focused="true" />
 
-    <item android:color="#606060" android:state_enabled="false" android:state_focused="true" />
-    <item android:color="#606060" android:state_enabled="false" />
+    <item android:color="@color/d_dark_gray" android:state_enabled="false" android:state_focused="true" />
+    <item android:color="@color/d_dark_gray" android:state_enabled="false" />
 
-    <item android:color="@color/d_link_blue" />
+    <item android:color="@color/d_blue" />
 
 </selector>

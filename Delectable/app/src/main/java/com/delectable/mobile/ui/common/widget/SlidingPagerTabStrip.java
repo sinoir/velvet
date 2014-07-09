@@ -92,7 +92,7 @@ public class SlidingPagerTabStrip extends FrameLayout {
         a.recycle();
 
         // TODO: Indicator Colors for each tab
-        mIndicatorColor = getResources().getColor(R.color.d_dark_blue);
+        mIndicatorColor = getResources().getColor(R.color.d_dark_navy);
         mIndicatorHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 mIndicatorHeight, dm);
 

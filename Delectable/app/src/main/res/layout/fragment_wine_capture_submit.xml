@@ -50,7 +50,7 @@
             android:layout_above="@+id/rate_seek_bar"
             android:layout_alignLeft="@id/rate_seek_bar"
             android:text="@string/dialog_rating_notforme"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/dialog_rating_end_text_size" />
 
         <TextView
@@ -59,7 +59,7 @@
             android:layout_above="@+id/rate_seek_bar"
             android:layout_alignRight="@id/rate_seek_bar"
             android:text="@string/dialog_rating_loveit"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/dialog_rating_end_text_size" />
 
         <com.delectable.mobile.ui.common.widget.RatingSeekBar
@@ -76,7 +76,7 @@
             android:layout_height="1dp"
             android:layout_below="@id/rate_seek_bar"
             android:layout_marginTop="@dimen/capture_submit_section_spacing"
-            android:background="@color/d_gray2" />
+            android:background="@color/d_light_gray" />
 
         <!-- TODO: Are these buttons or editable text views? -->
 
@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/drinking_with_who"
-            android:background="@color/d_gray2" />
+            android:background="@color/d_light_gray" />
 
         <TextView
             android:id="@+id/drinking_where"
@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/drinking_where"
-            android:background="@color/d_gray2" />
+            android:background="@color/d_light_gray" />
 
         <TextView
             android:id="@+id/share_text"
@@ -125,7 +125,7 @@
             android:layout_below="@id/vertical_divider3"
             android:layout_marginTop="@dimen/capture_submit_section_spacing"
             android:text="@string/capture_submit_share_text"
-            android:textColor="@color/d_gray4"
+            android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/capture_submit_share_text_size" />
 
         <View
@@ -134,14 +134,14 @@
             android:layout_height="1dp"
             android:layout_below="@id/share_text"
             android:layout_marginTop="@dimen/capture_submit_vertical_spacing"
-            android:background="@color/d_gray2" />
+            android:background="@color/d_light_gray" />
 
         <LinearLayout
             android:id="@+id/share_row_1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/capture_submit_button_height"
             android:layout_below="@id/vertical_divider4"
-            android:background="@color/d_gray2"
+            android:background="@color/d_light_gray"
             android:orientation="horizontal"
             android:paddingBottom="1dp"
             android:weightSum="2">
@@ -179,7 +179,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/capture_submit_button_height"
             android:layout_below="@id/share_row_1"
-            android:background="@color/d_gray2"
+            android:background="@color/d_light_gray"
             android:orientation="horizontal"
             android:paddingBottom="1dp"
             android:weightSum="2">

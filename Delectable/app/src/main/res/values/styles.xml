@@ -6,7 +6,7 @@
     </style>
 
     <style name="DelectableActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/d_dark_blue</item>
+        <item name="android:background">@color/d_dark_navy</item>
     </style>
 
 </resources>
