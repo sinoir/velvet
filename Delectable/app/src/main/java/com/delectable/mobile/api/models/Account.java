@@ -1,5 +1,6 @@
 package com.delectable.mobile.api.models;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -129,6 +130,14 @@ public class Account extends BaseResponse {
 
     public void setInfluencerTitles(ArrayList<String> influencer_titles) {
         this.influencer_titles = influencer_titles;
+    }
+
+    /**
+     *
+     * @return Returns influencer titles in a comma delimited String.
+     */
+    public String getInfluencerTitlesString() {
+        return StringUtils.join(influencer_titles, ",");
     }
 
     public String getBio() {
