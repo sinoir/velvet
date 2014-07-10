@@ -19,6 +19,10 @@
     <string name="navigation_settings">Settings</string>
 
 
+    <!-- Home -->
+    <string name="home_tab_following">FOLLOWING</string>
+    <string name="home_tab_you">YOU</string>
+
     <!-- Profile UI -->
     <string name="profile_followers">followers</string>
     <string name="profile_following">following</string>
@@ -26,6 +30,7 @@
     <string name="profile_follow">Follow</string>
     <string name="profile_unfollow">Unfollow</string>
     <string name="with">with</string>
+    <!-- TODO: Use Plurals -->
     <string name="wine_count">%d wines</string>
     <string name="followers_count">%s followers</string>
     <string name="following_count">%s following</string>
