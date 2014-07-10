@@ -47,7 +47,7 @@ public class DialogWithCancelButton extends AlertDialog {
     private void customizeTitleDivider() {
         // Need to hack the title bar divider, this is hard coded on the android platform...
         Resources res = getContext().getResources();
-        int dividerGrayColor = res.getColor(R.color.d_gray2);
+        int dividerGrayColor = res.getColor(R.color.d_light_gray);
         View titleDivider = findViewById(res.getIdentifier("titleDivider", "id", "android"));
         if (titleDivider != null) {
             titleDivider.setBackgroundColor(dividerGrayColor);

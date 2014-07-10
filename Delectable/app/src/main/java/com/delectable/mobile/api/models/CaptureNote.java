@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class CaptureNote extends Capture {
 
+    public static int MAX_RATING_VALUE = 40;
+
     Integer capturer_rating;
 
     String note;
@@ -15,10 +17,20 @@ public class CaptureNote extends Capture {
 
     ArrayList<String> helpfuling_account_ids;
 
+
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         // Gets built by listing object
         return null;
+    }
+
+    public float getRatingPercent() {
+        float ratingPercent = -1.0f;
+        ratingPercent = (float) capturer_rating / MAX_RATING_VALUE;
+        if (ratingPercent <= 0.0f) {
+            ratingPercent = -1.0f;
+        }
+        return ratingPercent;
     }
 
     public Integer getCapturerRating() {

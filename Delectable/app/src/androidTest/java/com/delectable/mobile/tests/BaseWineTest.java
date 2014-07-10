@@ -74,9 +74,9 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
         assertEquals("5305ba538953f6d73900543d", actualBaseWine.getId());
         assertEquals(1, actualBaseWine.getRatingsSummary().getAllCount());
-        assertEquals(30, actualBaseWine.getRatingsSummary().getAllAvg());
+        assertEquals(30.0, actualBaseWine.getRatingsSummary().getAllAvg());
         assertEquals(0, actualBaseWine.getRatingsSummary().getProCount());
-        assertEquals(-1, actualBaseWine.getRatingsSummary().getProAvg());
+        assertEquals(-1.0, actualBaseWine.getRatingsSummary().getProAvg());
         assertEquals("Napa Valley Pinot Noir", actualBaseWine.getName());
         assertEquals("Napa Ridge", actualBaseWine.getProducerName());
         assertEquals("2983852", actualBaseWine.getRegionId());
@@ -122,9 +122,9 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         WineProfile firstWineProfile = actualBaseWine.getWineProfiles().get(0);
         assertEquals("50e86605a6d027d09d00025a", firstWineProfile.getId());
         assertEquals(1, firstWineProfile.getRatingsSummary().getAllCount());
-        assertEquals(30, firstWineProfile.getRatingsSummary().getAllAvg());
+        assertEquals(30.0, firstWineProfile.getRatingsSummary().getAllAvg());
         assertEquals(0, firstWineProfile.getRatingsSummary().getProCount());
-        assertEquals(-1, firstWineProfile.getRatingsSummary().getProAvg());
+        assertEquals(-1.0, firstWineProfile.getRatingsSummary().getProAvg());
         assertEquals("2009", firstWineProfile.getVintage());
         assertEquals("5305ba538953f6d73900543d", firstWineProfile.getBaseWineId());
         assertEquals(21.82, firstWineProfile.getPrice().doubleValue());

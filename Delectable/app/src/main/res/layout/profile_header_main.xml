@@ -50,7 +50,7 @@
             android:paddingLeft="@dimen/profile_horizontal_text_spacing"
             android:paddingRight="@dimen/profile_horizontal_text_spacing"
             android:text="@string/profile_followers"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/profile_counts_text_size" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:paddingLeft="@dimen/profile_horizontal_text_spacing"
             android:paddingRight="@dimen/profile_horizontal_text_spacing"
             android:text="|"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/profile_counts_text_size" />
 
         <TextView
@@ -80,7 +80,7 @@
             android:layout_toRightOf="@+id/following_count"
             android:paddingLeft="@dimen/profile_horizontal_text_spacing"
             android:text="@string/profile_following"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/profile_counts_text_size" />
 
     </RelativeLayout>

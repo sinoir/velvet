@@ -5,8 +5,8 @@
     <item android:color="@android:color/white" android:state_pressed="true" />
     <item android:color="@android:color/white" android:state_focused="true" />
 
-    <item android:color="#606060" android:state_enabled="false" android:state_focused="true" />
-    <item android:color="#606060" android:state_enabled="false" />
+    <item android:color="@color/d_dark_gray" android:state_enabled="false" android:state_focused="true" />
+    <item android:color="@color/d_dark_gray" android:state_enabled="false" />
 
     <item android:color="@android:color/black" />
 

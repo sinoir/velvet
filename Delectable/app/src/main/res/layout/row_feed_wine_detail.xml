@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:background="@color/d_gray3"
+            android:background="@color/d_medium_gray"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -128,7 +128,7 @@
             android:layout_height="1dp"
             android:layout_alignLeft="@id/with_text"
             android:layout_alignParentBottom="true"
-            android:background="@color/d_gray2"
+            android:background="@color/d_light_gray"
             android:visibility="gone" />
     </RelativeLayout>
 
@@ -167,7 +167,7 @@
             android:layout_below="@+id/user_name"
             android:layout_toRightOf="@id/profile_image2"
             android:text="Soft in texture with a jolt of acidity lifting the blackberry"
-            android:textColor="@color/d_gray6"
+            android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/cap_feed_comment_text_size" />
 
         <TextView
@@ -179,7 +179,7 @@
             android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
             android:layout_toRightOf="@id/profile_image2"
             android:text="2 min ago at Foo Land"
-            android:textColor="@color/d_gray6"
+            android:textColor="@color/d_dark_gray"
             android:textSize="12sp" />
 
         <com.delectable.mobile.ui.common.widget.RatingsBarView
@@ -217,7 +217,7 @@
             android:layout_below="@id/rate_button"
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
             android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
-            android:background="@color/d_gray2" />
+            android:background="@color/d_light_gray" />
 
         <RelativeLayout
             android:id="@+id/action_buttons_container"

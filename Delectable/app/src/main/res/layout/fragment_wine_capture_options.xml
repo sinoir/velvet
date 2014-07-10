@@ -3,14 +3,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_dark_blue">
+    android:background="@color/d_dark_navy">
 
     <ImageView
         android:id="@+id/preview_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_capture_preview_height"
         android:layout_alignParentTop="true"
-        android:background="@color/d_link_blue" />
+        android:background="@color/d_blue" />
 
     <TextView
         android:id="@+id/hint_text"
@@ -42,7 +42,7 @@
             android:drawableTop="@drawable/btn_no_normal"
             android:gravity="bottom"
             android:text="SCAN ONLY"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="12sp" />
 
         <Button
@@ -55,7 +55,7 @@
             android:drawableTop="@drawable/btn_yes_normal"
             android:gravity="bottom"
             android:text="SCAN &amp; SAVE"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="12sp" />
     </LinearLayout>
 

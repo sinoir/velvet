@@ -2,7 +2,11 @@ package com.delectable.mobile.api.models;
 
 import org.json.JSONObject;
 
-public class WineProfile extends BaseResponse {
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class WineProfile extends BaseResponse implements Parcelable {
 
     String id;
 
@@ -29,6 +33,7 @@ public class WineProfile extends BaseResponse {
     PhotoHash photo;
 
     @Override
+    @SuppressLint("")
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         WineProfile newResource = null;
@@ -155,4 +160,58 @@ public class WineProfile extends BaseResponse {
                 ", photo=" + photo +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeParcelable(this.ratings_summary, 0);
+        dest.writeString(this.region_id);
+        dest.writeString(this.vintage);
+        dest.writeString(this.producer_name);
+        dest.writeString(this.name);
+        dest.writeString(this.base_wine_id);
+        dest.writeString(this.price_text);
+        dest.writeString(this.price_status);
+        dest.writeString(this.description);
+        dest.writeValue(this.price);
+        dest.writeParcelable(this.photo, flags);
+        dest.writeString(this.context);
+        dest.writeString(this.e_tag);
+    }
+
+    public WineProfile() {
+    }
+
+    private WineProfile(Parcel in) {
+        this.id = in.readString();
+        this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
+        this.region_id = in.readString();
+        this.vintage = in.readString();
+        this.producer_name = in.readString();
+        this.name = in.readString();
+        this.base_wine_id = in.readString();
+        this.price_text = in.readString();
+        this.price_status = in.readString();
+        this.description = in.readString();
+        this.price = (Double) in.readValue(Double.class.getClassLoader());
+        this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
+        this.context = in.readString();
+        this.e_tag = in.readString();
+    }
+
+    public static final Parcelable.Creator<WineProfile> CREATOR
+            = new Parcelable.Creator<WineProfile>() {
+        public WineProfile createFromParcel(Parcel source) {
+            return new WineProfile(source);
+        }
+
+        public WineProfile[] newArray(int size) {
+            return new WineProfile[size];
+        }
+    };
 }

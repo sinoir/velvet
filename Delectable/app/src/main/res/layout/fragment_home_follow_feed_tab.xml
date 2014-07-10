@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_gray3"
+    android:background="@color/d_medium_gray"
     tools:context="com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment">
 
     <!--TODO: Progress Activity when loading for first time? -->

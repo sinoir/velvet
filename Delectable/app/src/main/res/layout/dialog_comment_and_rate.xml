@@ -41,7 +41,7 @@
             android:layout_above="@+id/rate_seek_bar"
             android:layout_alignLeft="@id/comment_edit_text"
             android:text="@string/dialog_rating_notforme"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/dialog_rating_end_text_size" />
 
         <TextView
@@ -50,7 +50,7 @@
             android:layout_above="@+id/rate_seek_bar"
             android:layout_alignRight="@id/comment_edit_text"
             android:text="@string/dialog_rating_loveit"
-            android:textColor="@color/d_gray3"
+            android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/dialog_rating_end_text_size" />
 
         <com.delectable.mobile.ui.common.widget.RatingSeekBar

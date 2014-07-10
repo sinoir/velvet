@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="LA RAME"
-            android:textColor="@color/d_gray4"
+            android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/cap_list_row_top_text_font_size" />
 
         <TextView
@@ -38,6 +38,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@id/producer_name"
             android:text="Sauvignon Blanc Secret Sauce 2012"
+            android:textColor="@color/d_black"
             android:textSize="@dimen/cap_list_row_bottom_text_font_size" />
 
         <com.delectable.mobile.ui.common.widget.RatingsBarView

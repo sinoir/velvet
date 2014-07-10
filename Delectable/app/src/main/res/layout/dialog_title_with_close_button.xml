@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         android:text="X"
-        android:textColor="@color/d_gray4"
+        android:textColor="@color/d_dark_gray"
         android:textSize="24dp" />
 
     <TextView
