@@ -16,7 +16,6 @@
         android:src="@drawable/ab_profile_normal" />
 
     <RelativeLayout
-        android:id="@+id/"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
