@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.delectable.mobile.ui.common.widget.WineBannerView
+        android:id="@+id/wine_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cap_feed_row_wine_banner_height"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/varietal_region_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/d_off_white"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/general_row_vertical_spacing"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:paddingRight="@dimen/general_row_horizontal_spacing"
+        android:paddingTop="@dimen/general_row_vertical_spacing">
+
+        <LinearLayout
+            android:id="@+id/varietal_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+            <!-- TODO make drawable for varietal color -->
+            <ImageView
+                android:id="@+id/varietal_color_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+                android:src="@drawable/ic_varietal" />
+
+            <TextView
+                android:id="@+id/varietal_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|left"
+                android:text="Cabernet Sauvignon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/region_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/location_icon"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+                android:src="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/location_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|left"
+                android:text="Alexander Valley in Sonoma County, California" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ratings_all_years_container"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@drawable/bg_wine_profile_top_bottom_border"
+        android:paddingBottom="15dp"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:paddingRight="@dimen/general_row_horizontal_spacing"
+        android:paddingTop="15dp">
+
+        <LinearLayout
+            android:id="@+id/all_ratings_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/all_ratings_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8.3/10"
+                android:textColor="@color/d_light_green"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/all_ratings_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1014 RATINGS"
+                android:textColor="@color/d_medium_gray"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pro_ratings_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+            android:layout_toRightOf="@+id/all_ratings_container"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pro_ratings_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6.9/10"
+                android:textColor="@color/d_light_green"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/pro_ratings_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="32 PRO RATINGS"
+                android:textColor="@color/d_medium_gray"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/vertical_divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+            android:layout_toLeftOf="@+id/all_years_textview"
+            android:background="@color/d_light_gray" />
+
+        <TextView
+            android:id="@+id/all_years_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical|right"
+            android:text="@string/wine_profile_all_years"
+            android:textColor="@color/btn_text_blue" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>
