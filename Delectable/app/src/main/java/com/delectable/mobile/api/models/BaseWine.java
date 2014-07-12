@@ -2,10 +2,13 @@ package com.delectable.mobile.api.models;
 
 import org.json.JSONObject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 
-public class BaseWine extends BaseResponse {
+public class BaseWine extends BaseResponse implements Parcelable {
 
     String id;
 
@@ -38,6 +41,11 @@ public class BaseWine extends BaseResponse {
     String forward_id;
 
     String producer_id;
+
+
+    public BaseWine() {
+        //no paramter constructor
+    }
 
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
@@ -201,34 +209,70 @@ public class BaseWine extends BaseResponse {
                 "} " + super.toString();
     }
 
-    public class RegionPath {
-
-        String id;
-
-        String name;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return "RegionPath{" +
-                    "id='" + id + '\'' +
-                    ", name='" + name + '\'' +
-                    '}';
-        }
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeParcelable(this.ratings_summary, 0);
+        dest.writeString(this.producer_name);
+        dest.writeString(this.name);
+        dest.writeString(this.region_id);
+        dest.writeTypedList(this.region_path);
+        dest.writeTypedList(this.varietal_composition);
+        dest.writeTypedList(this.wine_profiles);
+        dest.writeString(this.default_wine_profile_id);
+        dest.writeParcelable(this.photo, 0);
+        dest.writeString(this.description);
+        dest.writeByte(carbonation ? (byte) 1 : (byte) 0);
+        dest.writeString(this.sweetness);
+        dest.writeString(this.color);
+        dest.writeString(this.forward_id);
+        dest.writeString(this.producer_id);
+        dest.writeString(this.context);
+        dest.writeString(this.e_tag);
+    }
+
+    private BaseWine(Parcel in) {
+        this.id = in.readString();
+        this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
+        this.producer_name = in.readString();
+        this.name = in.readString();
+        this.region_id = in.readString();
+        if (region_path == null) {
+            region_path = new ArrayList<RegionPath>();
+        }
+        in.readTypedList(this.region_path, RegionPath.CREATOR);
+        if (varietal_composition == null) {
+            varietal_composition = new ArrayList<VarietalsHash>();
+        }
+        in.readTypedList(this.varietal_composition, VarietalsHash.CREATOR);
+        if (wine_profiles == null) {
+            wine_profiles = new ArrayList<WineProfile>();
+        }
+        in.readTypedList(this.wine_profiles, WineProfile.CREATOR);
+        this.default_wine_profile_id = in.readString();
+        this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
+        this.description = in.readString();
+        this.carbonation = in.readByte() != 0;
+        this.sweetness = in.readString();
+        this.color = in.readString();
+        this.forward_id = in.readString();
+        this.producer_id = in.readString();
+        this.context = in.readString();
+        this.e_tag = in.readString();
+    }
+
+    public static final Parcelable.Creator<BaseWine> CREATOR = new Parcelable.Creator<BaseWine>() {
+        public BaseWine createFromParcel(Parcel source) {
+            return new BaseWine(source);
+        }
+
+        public BaseWine[] newArray(int size) {
+            return new BaseWine[size];
+        }
+    };
 }

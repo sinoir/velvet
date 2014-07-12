@@ -3,15 +3,13 @@ package com.delectable.mobile.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class VarietalsHash implements Parcelable {
+public class RegionPath implements Parcelable {
 
     String id;
 
     String name;
 
-    String color;
-
-    public VarietalsHash() {
+    public RegionPath() {
     }
 
     public String getId() {
@@ -30,20 +28,11 @@ public class VarietalsHash implements Parcelable {
         this.name = name;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     @Override
     public String toString() {
-        return "VarietalsHash{" +
+        return "RegionPath{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", color='" + color + '\'' +
                 '}';
     }
 
@@ -56,23 +45,21 @@ public class VarietalsHash implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
-        dest.writeString(this.color);
     }
 
-    private VarietalsHash(Parcel in) {
+    private RegionPath(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
-        this.color = in.readString();
     }
 
-    public static final Parcelable.Creator<VarietalsHash> CREATOR
-            = new Parcelable.Creator<VarietalsHash>() {
-        public VarietalsHash createFromParcel(Parcel source) {
-            return new VarietalsHash(source);
+    public static final Parcelable.Creator<RegionPath> CREATOR
+            = new Parcelable.Creator<RegionPath>() {
+        public RegionPath createFromParcel(Parcel source) {
+            return new RegionPath(source);
         }
 
-        public VarietalsHash[] newArray(int size) {
-            return new VarietalsHash[size];
+        public RegionPath[] newArray(int size) {
+            return new RegionPath[size];
         }
     };
 }
