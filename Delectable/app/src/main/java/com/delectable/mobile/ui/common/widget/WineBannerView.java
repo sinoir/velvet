@@ -1,7 +1,10 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.PhotoHash;
+import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
@@ -43,26 +46,60 @@ public class WineBannerView extends RelativeLayout {
     }
 
     /**
-     *
-     * @param captureDetails
-     * @param includeVintage include the vintage year in the wine name
+     * Will include the vintage with the wine name in the view as well.
      */
-    //Follower Feed and Wine Capture screen use this method to update their views
-    public void updateCaptureDetailsData(CaptureDetails captureDetails, boolean includeVintage) {
+    //Follower Feed ListView items use this method to update their views.
+    public void updateData(CaptureDetails captureDetails) {
         String wineImageUrl = captureDetails.getPhoto().getUrl();
         String producerName = captureDetails.getDisplayTitle();
-        String wineName = captureDetails.getDisplayDescription();
+        String wineName = captureDetails.getDisplayDescription() +
+                " " + captureDetails.getWineProfile().getVintage();
 
-        if(includeVintage) {
-            wineName += " " + captureDetails.getWineProfile().getVintage();
+        updateViewWithData(wineImageUrl, producerName, wineName);
+    }
+
+    /**
+     * @param capturePhotoHash include the {@link com.delectable.mobile.api.models.CaptureDetails
+     *                         CaptureDetails}' {@link PhotoHash} if you want the view to show the
+     *                         capture photo. Passing in {@code null} will use {@link WineProfile}'s
+     *                         photo.
+     * @param includeVintage   {@code true} to show the vintage year.
+     */
+    //Wine Profile screen (accessed from Follower Feed) uses this method to update their WineBannerView
+    //Wine Profile screen (accessed from Wishlist) also uses this method, but also shows the vintage.
+    public void updateData(WineProfile wineProfile, PhotoHash capturePhotoHash,
+            boolean includeVintage) {
+
+        String wineImageUrl;
+        if (capturePhotoHash != null) {
+            wineImageUrl = capturePhotoHash.getUrl();
+        } else {
+            wineImageUrl = wineProfile.getPhoto().getUrl();
+        }
+        String producerName = wineProfile.getProducerName();
+        String wineName = wineProfile.getName();
+
+        if (includeVintage) {
+            wineName += " " + wineProfile.getVintage();
         }
 
+        updateViewWithData(wineImageUrl, producerName, wineName);
+    }
+
+    //Wine Profile coming from Search Results screen uses this method
+    public void updateData(BaseWine baseWine) {
+        String wineImageUrl = baseWine.getPhoto().getUrl();
+        String producerName = baseWine.getProducerName();
+        String wineName = baseWine.getName();
+
+        updateViewWithData(wineImageUrl, producerName, wineName);
+    }
+
+    private void updateViewWithData(String wineImageUrl, String producerName, String wineName) {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
         mProducerName.setText(producerName);
         mWineName.setText(wineName);
     }
-
-
 
 
 }
