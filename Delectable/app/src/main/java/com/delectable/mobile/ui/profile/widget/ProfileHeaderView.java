@@ -6,18 +6,12 @@ import com.delectable.mobile.ui.common.widget.CircleImageView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
 public class ProfileHeaderView extends RelativeLayout implements
         ProfileHeaderMainView.ProfileHeaderMainViewActionListeners {
 
     private ProfileHeaderMainView mProfileHeaderMainView;
-
-    //TODO: ImageButtons?
-    private Button mSwitchToListViewButton;
-
-    private Button mSwitchToFeedViewButton;
 
     private ProfileHeaderActionListener mActionListener;
 
@@ -33,32 +27,7 @@ public class ProfileHeaderView extends RelativeLayout implements
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header, this);
 
-        // TODO: Will be placing main header in a viewpager?
         mProfileHeaderMainView = (ProfileHeaderMainView) findViewById(R.id.profile_header_main);
-        mSwitchToListViewButton = (Button) findViewById(R.id.switch_to_listing_button);
-        mSwitchToFeedViewButton = (Button) findViewById(R.id.switch_to_feed_listing_button);
-        mSwitchToListViewButton.setSelected(true);
-
-        mSwitchToListViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwitchToListViewButton.setSelected(true);
-                mSwitchToFeedViewButton.setSelected(false);
-                if (mActionListener != null) {
-                    mActionListener.switchToListView();
-                }
-            }
-        });
-        mSwitchToFeedViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwitchToListViewButton.setSelected(false);
-                mSwitchToFeedViewButton.setSelected(true);
-                if (mActionListener != null) {
-                    mActionListener.switchToFeedView();
-                }
-            }
-        });
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -101,10 +70,6 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     public static interface ProfileHeaderActionListener {
-
-        public void switchToListView();
-
-        public void switchToFeedView();
 
         public void wineCountClicked();
 

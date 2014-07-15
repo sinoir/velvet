@@ -31,48 +31,6 @@
             android:text="@string/profile_find_people"
             android:textColor="@color/btn_text_white_to_grey"
             android:textSize="@dimen/button_text_size" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/find_follow_button"
-            android:background="@color/d_light_gray" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/switch_buttons_container"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/top_profile_container"
-        android:background="@android:color/white"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-
-        <!-- TODO: Use Image Button -->
-        <Button
-            android:id="@+id/switch_to_listing_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/vertical_divider" />
-
-        <View
-            android:id="@+id/vertical_divider"
-            android:layout_width="1dp"
-            android:layout_height="15dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/switch_to_feed_listing_button"
-            android:background="@color/d_light_gray" />
-
-        <Button
-            android:id="@+id/switch_to_feed_listing_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp" />
     </RelativeLayout>
 
 </RelativeLayout>
