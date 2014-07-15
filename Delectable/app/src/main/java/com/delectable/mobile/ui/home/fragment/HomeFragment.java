@@ -4,12 +4,11 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
+import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.common.widget.TabsTextPagerAdapter;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.facebook.Session;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -30,7 +29,7 @@ public class HomeFragment extends BaseFragment {
 
     private SlidingPagerTabStrip mTabStrip;
 
-    private TabsTextPagerAdapter mTabsAdapter;
+    private SlidingPagerAdapter mTabsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,18 +44,27 @@ public class HomeFragment extends BaseFragment {
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
 
-        ArrayList<String> titles = new ArrayList<String>();
-        ArrayList<Fragment> tabFragments = new ArrayList<Fragment>();
+        ArrayList<SlidingPagerAdapter.SlidingPagerItem> tabItems
+                = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
 
-        titles.add("FOLLOWING");
-        tabFragments.add(FollowFeedTabFragment.newInstance());
+        // "FOLLOWING" tab
+        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
+                FollowFeedTabFragment.newInstance(),
+                R.color.d_dark_navy,
+                R.color.d_light_green,
+                R.color.tab_text_white_grey,
+                getString(R.string.home_tab_following)));
 
-        titles.add("YOU");
-        tabFragments.add(FollowFeedTabFragment.newInstance(currentUserId));
+        // "YOU" tab
+        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
+                FollowFeedTabFragment.newInstance(currentUserId),
+                R.color.d_dark_navy,
+                R.color.d_light_green,
+                R.color.tab_text_white_grey,
+                getString(R.string.home_tab_you)));
 
-        mTabsAdapter = new TabsTextPagerAdapter(getFragmentManager(), tabFragments, titles);
+        mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
 
-        // TODO: Customize TabStrip appearance, dark blue, with lighter text
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
 
