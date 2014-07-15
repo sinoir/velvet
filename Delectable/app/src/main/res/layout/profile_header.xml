@@ -20,7 +20,7 @@
 
         <Button
             android:id="@+id/find_follow_button"
-            android:layout_width="310dp"
+            android:layout_width="210dp"
             android:layout_height="@dimen/button_height"
             android:layout_below="@id/profile_header_main"
             android:layout_centerHorizontal="true"
@@ -29,7 +29,7 @@
             android:background="@drawable/btn_find_people_background"
             android:gravity="center"
             android:text="@string/profile_find_people"
-            android:textColor="@color/btn_dark_gray_on_light_gray"
+            android:textColor="@color/btn_text_white_to_grey"
             android:textSize="@dimen/button_text_size" />
 
         <View
@@ -47,7 +47,6 @@
         android:background="@android:color/white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
-
 
 
         <!-- TODO: Use Image Button -->
