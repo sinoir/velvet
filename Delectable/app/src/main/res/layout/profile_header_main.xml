@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/profile_vertical_spacing">
-
+        <!--TOOD: Some circle background behind the Profile Image -->
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
             android:layout_width="80dp"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/profile_vertical_spacing"
         android:gravity="center"
-        android:text=""
+        android:textColor="@color/d_white"
         android:textSize="@dimen/profile_username_text_size" />
 
     <RelativeLayout
@@ -34,33 +34,20 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <!-- TODO: Make this a spannable textview for # following/followers -->
         <TextView
-            android:id="@+id/followers_count"
+            android:id="@+id/capture_wine_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="@dimen/profile_counts_text_size" />
-
-        <TextView
-            android:id="@+id/followers_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/followers_count"
-            android:paddingLeft="@dimen/profile_horizontal_text_spacing"
-            android:paddingRight="@dimen/profile_horizontal_text_spacing"
-            android:text="@string/profile_followers"
+            android:layout_centerVertical="true"
             android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/profile_counts_text_size" />
 
         <TextView
-            android:id="@+id/vertical_bar"
+            android:id="@+id/followers_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/followers_text"
+            android:layout_toRightOf="@id/capture_wine_count"
             android:paddingLeft="@dimen/profile_horizontal_text_spacing"
-            android:paddingRight="@dimen/profile_horizontal_text_spacing"
-            android:text="|"
             android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/profile_counts_text_size" />
 
@@ -68,18 +55,8 @@
             android:id="@+id/following_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/vertical_bar"
+            android:layout_toRightOf="@id/followers_count"
             android:paddingLeft="@dimen/profile_horizontal_text_spacing"
-            android:text="0"
-            android:textSize="@dimen/profile_counts_text_size" />
-
-        <TextView
-            android:id="@+id/following_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/following_count"
-            android:paddingLeft="@dimen/profile_horizontal_text_spacing"
-            android:text="@string/profile_following"
             android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/profile_counts_text_size" />
 

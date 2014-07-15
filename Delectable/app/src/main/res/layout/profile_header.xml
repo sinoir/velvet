@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/d_off_white">
+    android:background="@color/d_dark_navy">
 
     <RelativeLayout
         android:id="@+id/top_profile_container"
@@ -48,12 +48,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-        <TextView
-            android:id="@+id/capture_wine_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@color/d_medium_gray" />
+
 
         <!-- TODO: Use Image Button -->
         <Button

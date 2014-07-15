@@ -8,12 +8,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class ProfileHeaderView extends RelativeLayout implements
         ProfileHeaderMainView.ProfileHeaderMainViewActionListeners {
-
-    private TextView mCaptureWineCountTextView;
 
     private ProfileHeaderMainView mProfileHeaderMainView;
 
@@ -23,7 +20,6 @@ public class ProfileHeaderView extends RelativeLayout implements
     private Button mSwitchToFeedViewButton;
 
     private ProfileHeaderActionListener mActionListener;
-
 
     public ProfileHeaderView(Context context) {
         this(context, null);
@@ -37,11 +33,8 @@ public class ProfileHeaderView extends RelativeLayout implements
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header, this);
 
-        // TODO: Will be placing main header in a viewpager
-        mCaptureWineCountTextView = (TextView) findViewById(R.id.capture_wine_count);
+        // TODO: Will be placing main header in a viewpager?
         mProfileHeaderMainView = (ProfileHeaderMainView) findViewById(R.id.profile_header_main);
-
-        mCaptureWineCountTextView = (TextView) findViewById(R.id.capture_wine_count);
         mSwitchToListViewButton = (Button) findViewById(R.id.switch_to_listing_button);
         mSwitchToFeedViewButton = (Button) findViewById(R.id.switch_to_feed_listing_button);
         mSwitchToListViewButton.setSelected(true);
@@ -86,8 +79,7 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     public void setWineCount(int wineCount) {
-        String wineCountText = getResources().getString(R.string.wine_count, wineCount);
-        mCaptureWineCountTextView.setText(wineCountText);
+        mProfileHeaderMainView.setWineCount(wineCount);
     }
 
     public void setActionListener(ProfileHeaderActionListener actionListener) {

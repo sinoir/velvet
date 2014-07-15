@@ -13,6 +13,8 @@ public class ProfileHeaderMainView extends LinearLayout {
 
     private TextView mUserNameTextView;
 
+    private TextView mCaptureWineCountTextView;
+
     private TextView mFollowerCountTextView;
 
     private TextView mFollowingCountTextView;
@@ -36,6 +38,8 @@ public class ProfileHeaderMainView extends LinearLayout {
 
         mUserImageView = (CircleImageView) findViewById(R.id.profile_image1);
         mUserNameTextView = (TextView) findViewById(R.id.user_name);
+        mCaptureWineCountTextView = (TextView) findViewById(R.id.capture_wine_count);
+        mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
         mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
         mFollowingCountTextView = (TextView) findViewById(R.id.following_count);
     }
@@ -49,12 +53,22 @@ public class ProfileHeaderMainView extends LinearLayout {
         mUserNameTextView.setText(userName);
     }
 
+    public void setWineCount(int wineCount) {
+        String wineCountText = getResources()
+                .getQuantityString(R.plurals.wine_count, wineCount, wineCount);
+        mCaptureWineCountTextView.setText(wineCountText);
+    }
+
     public void setFollowerCount(int followerCount) {
-        mFollowerCountTextView.setText(String.valueOf(followerCount));
+        String followerCountText = getResources().getQuantityString(R.plurals.followers_count,
+                followerCount, followerCount);
+        mFollowerCountTextView.setText(followerCountText);
     }
 
     public void setFollowingCount(int followingCount) {
-        mFollowingCountTextView.setText(String.valueOf(followingCount));
+        String followingCountText = getResources().getString(R.string.following_count,
+                followingCount);
+        mFollowingCountTextView.setText(followingCountText);
     }
 
     public TextView getUserNameTextView() {

@@ -22,6 +22,7 @@
     <!-- Home -->
     <string name="home_tab_following">FOLLOWING</string>
     <string name="home_tab_you">YOU</string>
+    <string name="action_facebook_login">Facebook Login</string>
 
     <!-- Profile UI -->
     <string name="profile_followers">followers</string>
@@ -30,11 +31,16 @@
     <string name="profile_follow">Follow</string>
     <string name="profile_unfollow">Unfollow</string>
     <string name="with">with</string>
-    <!-- TODO: Use Plurals -->
-    <string name="wine_count">%d wines</string>
-    <string name="followers_count">%s followers</string>
-    <string name="following_count">%s following</string>
-    <string name="action_facebook_login">Facebook Login</string>
+
+    <string name="following_count">%d following</string>
+    <plurals name="wine_count">
+        <item quantity="one">1 wine</item>
+        <item quantity="other">%d wines</item>
+    </plurals>
+    <plurals name="followers_count">
+        <item quantity="one">1 follower</item>
+        <item quantity="other">%d followers</item>
+    </plurals>
 
     <!-- Capture Feed -->
     <string name="cap_feed_likes_count">%d likes</string>

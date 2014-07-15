@@ -66,14 +66,14 @@ public class NavHeader extends RelativeLayout {
     }
 
     public void setFollowerCount(int followerCount) {
-        String followerCountText = getResources()
-                .getString(R.string.followers_count, followerCount);
+        String followerCountText = getResources().getQuantityString(R.plurals.followers_count,
+                followerCount, followerCount);
         mFollowerCountTextView.setText(followerCountText);
     }
 
     public void setFollowingCount(int followingCount) {
         String followingCountText = getResources()
-                .getString(R.string.followers_count, followingCount);
+                .getString(R.string.following_count, followingCount);
         mFollowingCountTextView.setText(followingCountText);
     }
 
@@ -82,6 +82,7 @@ public class NavHeader extends RelativeLayout {
     }
 
     public interface NavHeaderActionListener {
+
         public void navHeaderUserImageClicked();
     }
 }
