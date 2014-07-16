@@ -16,13 +16,14 @@ public class RatingsSummaryHash implements Parcelable {
         }
     };
 
+    private static final double MAX_RATING = 40.0;
+
     Ratings all;
 
     Ratings pro;
 
     public RatingsSummaryHash() {
     }
-
 
     private RatingsSummaryHash(Parcel in) {
         this.all = new Ratings();
@@ -34,21 +35,6 @@ public class RatingsSummaryHash implements Parcelable {
         this.pro.avg = in.readDouble();
     }
 
-    public int getAllCount() {
-        return all != null ? all.count : 0;
-    }
-
-    public int getProCount() {
-        return pro != null ? pro.count : 0;
-    }
-
-    public double getAllAvg() {
-        return all != null ? all.avg : 0;
-    }
-
-    public double getProAvg() {
-        return pro != null ? pro.avg : 0;
-    }
 
     public Ratings getAll() {
         return all;
@@ -58,12 +44,19 @@ public class RatingsSummaryHash implements Parcelable {
         this.all = all;
     }
 
-    @Override
-    public String toString() {
-        return "RatingsSummaryHash{" +
-                "all=" + all +
-                ", pro=" + pro +
-                '}';
+    public int getAllCount() {
+        return all != null ? all.count : 0;
+    }
+
+    public double getAllAvg() {
+        return all != null ? all.avg : 0;
+    }
+
+    /**
+     * @return Returns -1 if there is no average.
+     */
+    public double getAllAvgOfTen() {
+        return getAvgOfTen(getAllAvg());
     }
 
     public Ratings getPro() {
@@ -72,6 +65,41 @@ public class RatingsSummaryHash implements Parcelable {
 
     public void setPro(Ratings pro) {
         this.pro = pro;
+    }
+
+    public int getProCount() {
+        return pro != null ? pro.count : 0;
+    }
+
+    public double getProAvg() {
+        return pro != null ? pro.avg : 0;
+    }
+
+    /**
+     * @return Returns -1 if there is no average.
+     */
+    public double getProAvgOfTen() {
+        return getAvgOfTen(getProAvg());
+    }
+
+    /**
+     * @param originalAvg The original average, which should be out of 40.
+     * @return Returns -1 if there is no average.
+     */
+    public double getAvgOfTen(double originalAvg) {
+        if (originalAvg == -1) {
+            return -1;
+        }
+        double percent = originalAvg / MAX_RATING;
+        return percent * 10;
+    }
+
+    @Override
+    public String toString() {
+        return "RatingsSummaryHash{" +
+                "all=" + all +
+                ", pro=" + pro +
+                '}';
     }
 
     @Override
