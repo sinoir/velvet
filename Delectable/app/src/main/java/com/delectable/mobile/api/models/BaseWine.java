@@ -1,14 +1,20 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.R;
+
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class BaseWine extends BaseResponse implements Parcelable {
+
+    private static final int MAX_REGION_PATHS = 4;
 
     String id;
 
@@ -101,6 +107,46 @@ public class BaseWine extends BaseResponse implements Parcelable {
 
     public ArrayList<RegionPath> getRegionPath() {
         return region_path;
+    }
+
+    /**
+     * The region path display text will show at most three region paths. Typically, there are four
+     * region paths.
+     */
+    public String getRegionPathDisplayText(Context c) {
+
+        //this shouldn't happen, that there are more than 4 region paths
+        if (region_path.size() > MAX_REGION_PATHS) {
+            throw new RuntimeException("Unexpected data, there are more than 4 region paths.");
+        }
+
+        //we don't ever show USA text
+        if (region_path.get(0).getName().equals("USA")) {
+            region_path.remove(0);
+        }
+
+        //trim most micro region path because we only show three regions max
+        if (region_path.size() == MAX_REGION_PATHS) {
+            region_path.remove(MAX_REGION_PATHS - 1);
+        }
+
+        //region path comes back from API in macro->micro order, we reverse it to make our paramaterized string
+        Collections.reverse(region_path);
+        String[] regions = new String[region_path.size()];
+        for (int i = 0; i < region_path.size(); i++) {
+            regions[i] = region_path.get(i).getName();
+        }
+
+        int stringResource = R.string.wine_profile_region_path_1_node;
+        if(regions.length==3) {
+            stringResource = R.string.wine_profile_region_path_3_nodes;
+        }
+        if(regions.length==2) {
+            stringResource = R.string.wine_profile_region_path_2_nodes;
+        }
+        //regions.length==1 is already taken care of from original assignment
+
+        return c.getResources().getString(stringResource, regions);
     }
 
     public void setRegionPath(ArrayList<RegionPath> region_path) {
