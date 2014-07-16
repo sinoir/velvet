@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/cap_feed_row_wine_banner_height"
+    android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing">
+
+    <!--TOOD: Placeholder for no image? -->
+    <ImageView
+        android:id="@+id/wine_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/d_medium_gray"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/producer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/wine_name"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:paddingRight="@dimen/general_row_horizontal_spacing"
+        android:textColor="@android:color/white"
+        android:text="MAS CONSCIENCE"
+        android:visibility="visible"
+        android:textSize="@dimen/cap_feed_row_top_text_font_size" />
+
+    <TextView
+        android:id="@+id/wine_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="@dimen/general_row_vertical_spacing"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:paddingRight="@dimen/general_row_horizontal_spacing"
+        android:textColor="@android:color/white"
+        android:text="Ciel Cieux Vin de Pays de l'Herault Cinsault 2012"
+        android:visibility="visible"
+
+        android:textSize="@dimen/cap_feed_row_bottom_text_font_size" />
+
+    <!--TODO: Mini upside down Triangle -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white" />
+
+</RelativeLayout>
+
+
+

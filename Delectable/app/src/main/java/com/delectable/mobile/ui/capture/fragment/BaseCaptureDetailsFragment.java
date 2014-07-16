@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
@@ -16,6 +17,9 @@ import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
+import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -157,12 +161,12 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void launchWineProfile(WineProfile wineProfile) {
-        // TODO: Wine Profile
-        Toast.makeText(getActivity(), "Wine Profile: " + wineProfile.getName(), Toast.LENGTH_SHORT)
-                .show();
-        Log.d(TAG,
-                "Launch Wine Profile: " + wineProfile.getId() + " Name: " + wineProfile.getName());
+    public void launchWineProfile(CaptureDetails capture) {
+        Intent intent = new Intent();
+        intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE, capture.getWineProfile());
+        intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH, capture.getPhoto());
+        intent.setClass(getActivity(), WineProfileActivity.class);
+        startActivity(intent);
     }
 
     @Override
