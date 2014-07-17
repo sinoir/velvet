@@ -16,7 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
- * A representation of the {@link CaptureNote} model, this is the row for the listview that appears in the Wine Profile screen.
+ * A representation of the {@link CaptureNote} model, this is the row for the listview that appears
+ * in the Wine Profile screen.
  */
 public class WineProfileCommentUnitRow extends RelativeLayout {
 
@@ -33,6 +34,10 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
     private TextView mHelpfulCount;
 
     private ImageButton mHelpfulButton;
+
+    private ActionsHandler mActionsHandler;
+
+    private CaptureNote mCaptureNote;
 
     public WineProfileCommentUnitRow(Context context) {
         this(context, null);
@@ -54,9 +59,42 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
         mRatingsBar = (RatingsBarView) findViewById(R.id.rating_bar);
         mHelpfulCount = (TextView) findViewById(R.id.helpful_count);
         mHelpfulButton = (ImageButton) findViewById(R.id.helpful_button);
+
+        OnClickListener launchUserProfileClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = mCaptureNote.getCapturerParticipant().getId();
+                mActionsHandler.launchUserProfile(userId);
+            }
+        };
+        mProfileImage.setOnClickListener(launchUserProfileClickListener);
+        mUserName.setOnClickListener(launchUserProfileClickListener);
+        mInfluencerTitles.setOnClickListener(launchUserProfileClickListener);
+
+        mHelpfulButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+
+                //TODO caching might need to be done here
+                //currently this is only modifying the reference in memory and not performing any sort of syncing
+                if (v.isSelected()) {
+                    mCaptureNote.getHelpfulingAccountIds().add(UserInfo.getUserId(getContext()));
+                } else {
+                    mCaptureNote.getHelpfulingAccountIds().remove(UserInfo.getUserId(getContext()));
+                }
+                updateHelpfulViews(mCaptureNote);
+                mActionsHandler.toggleHelpful(mCaptureNote, v.isSelected());
+            }
+        });
+    }
+
+    public void setActionsHandler(ActionsHandler actionsHandler) {
+        mActionsHandler = actionsHandler;
     }
 
     public void updateCaptureNoteData(CaptureNote captureNote) {
+        mCaptureNote = captureNote;
         Account capturer = captureNote.getCapturerParticipant();
 
         //user image
@@ -67,9 +105,9 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
         mUserName.setText(capturer.getFullName());
 
         //influencer title(s)
-        if(capturer.getInfluencer()) {
+        if (capturer.getInfluencer()) {
             String titles = capturer.getInfluencerTitlesString();
-            if(titles.equals("")) {
+            if (titles.equals("")) {
                 mInfluencerTitles.setVisibility(View.GONE);
             } else {
                 mInfluencerTitles.setText(titles);
@@ -82,13 +120,14 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
 
         //capture comment
         String message;
-        if(captureNote.getNote()==null || captureNote.getNote().equals("")) {
+        if (captureNote.getNote() == null || captureNote.getNote().equals("")) {
             message = getResources()
                     .getString(R.string.wine_profile_empty_comment_message, capturer.getFname(),
                             captureNote.getVintage());
         } else {
             //TODO vintage string needs to be made medium gray
-            String vintage = getResources().getString(R.string.wine_profile_vintage, captureNote.getVintage());
+            String vintage = getResources()
+                    .getString(R.string.wine_profile_vintage, captureNote.getVintage());
             message = captureNote.getNote() + vintage;
         }
         mUserComment.setText(message);
@@ -101,6 +140,10 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
             mRatingsBar.setVisibility(View.GONE);
         }
 
+        updateHelpfulViews(captureNote);
+    }
+
+    private void updateHelpfulViews(CaptureNote captureNote) {
         //helpful count
         int helpfulCount = captureNote.getHelpfulingAccountIds().size();
         if (helpfulCount > 0) {
@@ -113,7 +156,8 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
         }
 
         //whether user marked it as helpful
-        boolean markedHelpful = captureNote.getHelpfulingAccountIds().contains(UserInfo.getUserId(getContext()));
+        boolean markedHelpful = captureNote.getHelpfulingAccountIds()
+                .contains(UserInfo.getUserId(getContext()));
         mHelpfulButton.setSelected(markedHelpful);
     }
 
@@ -129,6 +173,13 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
             }
         }
         return profileImageUrl;
+    }
+
+    public static interface ActionsHandler {
+
+        public void toggleHelpful(CaptureNote captureNote, boolean markHelpful);
+
+        public void launchUserProfile(String userAccountId);
     }
 
 

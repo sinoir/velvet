@@ -12,12 +12,17 @@ import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.BaseWinesContext;
 import com.delectable.mobile.api.requests.CaptureNotesRequest;
+import com.delectable.mobile.api.requests.HelpfulActionRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
+import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -28,6 +33,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,7 +43,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
-public class WineProfileFragment extends BaseFragment {
+public class WineProfileFragment extends BaseFragment implements
+        WineProfileCommentUnitRow.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -46,8 +53,6 @@ public class WineProfileFragment extends BaseFragment {
     private static final String sArgsWineProfile = "wineProfile";
 
     private static final String sArgsPhotoHash = "photoHash";
-
-    private ListView mListView;
 
     private View mVarietalContainer;
 
@@ -70,7 +75,7 @@ public class WineProfileFragment extends BaseFragment {
 
     private ArrayList<CaptureNote> mCaptureNotes = new ArrayList<CaptureNote>();
 
-    private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(mCaptureNotes);
+    private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(mCaptureNotes, this);
 
     private WineProfile mWineProfile;
 
@@ -132,6 +137,13 @@ public class WineProfileFragment extends BaseFragment {
 
         listview.addHeaderView(header, null, false);
         listview.setAdapter(mAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                position--; //headerview offsets position of listitems by 1
+                launchCaptureDetails(mAdapter.getItem(position));
+            }
+        });
         return view;
     }
 
@@ -196,6 +208,26 @@ public class WineProfileFragment extends BaseFragment {
         );
     }
 
+    private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
+        HelpfulActionRequest request = new HelpfulActionRequest(captureNote, markHelpful);
+        mNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        //TODO implement HelpfulActionRequests's buildResopnseFromJson in order to have the result return non-null
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
+                                .getCode());
+                        // TODO: What to do with errors?
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
     private void updateBaseWineData() {
 
         //varietal info
@@ -209,7 +241,7 @@ public class WineProfileFragment extends BaseFragment {
 
             //combine varietal names if there's more than one
             ArrayList<String> varietalNames = new ArrayList<String>();
-            for(VarietalsHash varietal: mBaseWine.getVarietalComposition()) {
+            for (VarietalsHash varietal : mBaseWine.getVarietalComposition()) {
                 varietalNames.add(varietal.getName());
             }
             TextUtils.join(", ", varietalNames);
@@ -267,5 +299,24 @@ public class WineProfileFragment extends BaseFragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {
+        markCaptureAsHelpful(captureNote, markHelpful);
+    }
 
+    public void launchCaptureDetails(CaptureNote captureNote) {
+        Intent intent = new Intent();
+        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                captureNote.getId());
+        intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void launchUserProfile(String userAccountId) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, userAccountId);
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
+    }
 }
