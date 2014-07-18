@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- made for a RelativeLayout -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/general_row_height"
+    android:layout_margin="@dimen/general_row_horizontal_spacing">
+
+    <TextView
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:text="2012"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/choose_vintage_dialog_year_text_size" />
+
+    <TextView
+        android:id="@+id/ratings_count"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/general_text_horizontal_spacing"
+        android:layout_toLeftOf="@+id/rating"
+        android:gravity="center_vertical"
+        android:text="(19 ratings)"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/choose_vintage_dialog_ratings_count_text_size" />
+
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="@dimen/choose_vintage_dialog_rating_textview_width"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/general_text_horizontal_spacing"
+        android:gravity="center_vertical|right"
+        android:singleLine="true"
+        android:text="10.0/10"
+        android:textColor="@color/d_light_green"
+        android:textSize="@dimen/choose_vintage_dialog_rating_text_size" />
+</merge>

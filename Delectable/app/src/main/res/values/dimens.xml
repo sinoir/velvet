@@ -19,6 +19,9 @@
      -->
     <dimen name="general_row_vertical_spacing">20dp</dimen>
     <dimen name="general_row_horizontal_spacing">15dp</dimen>
+    <dimen name="general_row_height">50dp</dimen>
+    <dimen name="general_text_horizontal_spacing">5dp</dimen>
+
 
     <!-- User Profile Dimens -->
     <dimen name="profile_vertical_spacing">9dp</dimen>
@@ -59,8 +62,6 @@
     <dimen name="wine_capture_preview_height">320dp</dimen>
     <dimen name="wine_capture_button_horizontal_spacing">20dp</dimen>
 
-
-
     <!-- Wine Capture Submit Screen -->
     <dimen name="capture_submit_margins">15dp</dimen>
     <dimen name="capture_submit_image_size">60dp</dimen>
@@ -71,5 +72,18 @@
     <dimen name="comment_submit_button_image_padding">10dp</dimen>
     <dimen name="capture_submit_share_text_size">18sp</dimen>
     <dimen name="capture_submit_button_text_size">16sp</dimen>
+
+    <!-- Wine Profile Screen-->
+
+    <!-- Choose Vintage Dialog -->
+    <dimen name="choose_vintage_dialog_header_height">60dp</dimen>
+    <dimen name="choose_vintage_dialog_title_text_size">22sp</dimen>
+    <dimen name="choose_vintage_dialog_header_divider_height">1px</dimen>
+    <dimen name="choose_vintage_dialog_year_text_size">16sp</dimen>
+    <dimen name="choose_vintage_dialog_ratings_count_text_size">14sp</dimen>
+    <dimen name="choose_vintage_dialog_text_horizontal_spacing">5dp</dimen>
+    <dimen name="choose_vintage_dialog_rating_textview_width">50dp</dimen>
+    <dimen name="choose_vintage_dialog_rating_text_size">14sp</dimen>
+
 
 </resources>
