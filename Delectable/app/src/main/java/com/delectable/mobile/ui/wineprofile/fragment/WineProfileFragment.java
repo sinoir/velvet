@@ -15,6 +15,7 @@ import com.delectable.mobile.api.requests.CaptureNotesRequest;
 import com.delectable.mobile.api.requests.HelpfulActionRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
@@ -54,6 +55,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String sArgsPhotoHash = "photoHash";
 
+    private static final int CHOOSE_VINTAGE_DIALOG = 1;
+
     private View mVarietalContainer;
 
     private ImageView mVarietalImageView;
@@ -69,6 +72,8 @@ public class WineProfileFragment extends BaseFragment implements
     private TextView mProRatingsAverageTextView;
 
     private TextView mProRatingsCountTextView;
+
+    private TextView mAllYearsTextView;
 
 
     private BaseNetworkController mNetworkController;
@@ -134,6 +139,19 @@ public class WineProfileFragment extends BaseFragment implements
         mAllRatingsCountTextView = (TextView) header.findViewById(R.id.all_ratings_count);
         mProRatingsAverageTextView = (TextView) header.findViewById(R.id.pro_ratings_average);
         mProRatingsCountTextView = (TextView) header.findViewById(R.id.pro_ratings_count);
+        mAllYearsTextView = (TextView) header.findViewById(R.id.all_years_textview);
+
+        mAllYearsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(
+                        mBaseWine.getWineProfiles());
+
+                dialog.setTargetFragment(WineProfileFragment.this,
+                        CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+                dialog.show(getFragmentManager(), "dialog");
+            }
+        });
 
         listview.addHeaderView(header, null, false);
         listview.setAdapter(mAdapter);
@@ -156,7 +174,17 @@ public class WineProfileFragment extends BaseFragment implements
             loadBaseWineData();
         }
         if (mCaptureNoteListing == null) {
-            loadCaptureNotesData();
+            loadCaptureNotesData(IdType.BASE_WINE, mWineProfile.getBaseWineId());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case CHOOSE_VINTAGE_DIALOG:
+                WineProfile wineProfile = data.getParcelableExtra(ChooseVintageDialog.WINE_PROFILE);
+                loadCaptureNotesData(IdType.WINE_PROFILE, wineProfile.getId());
         }
     }
 
@@ -181,14 +209,20 @@ public class WineProfileFragment extends BaseFragment implements
                     }
                 }
         );
-
-
     }
 
-    private void loadCaptureNotesData() {
+    /**
+     * @param idType Whether to load captures notes for a base wine or a wine profile.
+     */
+    private void loadCaptureNotesData(IdType idType, String id) {
         //retrieve captureNotes
         CaptureNotesRequest captureReq = new CaptureNotesRequest();
-        captureReq.setBaseWineId(mWineProfile.getBaseWineId());
+        if (idType == IdType.BASE_WINE) {
+            captureReq.setBaseWineId(id);
+        }
+        if (idType == IdType.WINE_PROFILE) {
+            captureReq.setWineProfileId(id);
+        }
         mNetworkController.performRequest(captureReq,
                 new BaseNetworkController.RequestCallback() {
                     @Override
@@ -318,5 +352,9 @@ public class WineProfileFragment extends BaseFragment implements
         intent.putExtra(UserProfileActivity.PARAMS_USER_ID, userAccountId);
         intent.setClass(getActivity(), UserProfileActivity.class);
         startActivity(intent);
+    }
+
+    private static enum IdType {
+        BASE_WINE, WINE_PROFILE;
     }
 }
