@@ -74,6 +74,19 @@
     <dimen name="capture_submit_button_text_size">16sp</dimen>
 
     <!-- Wine Profile Screen-->
+    <dimen name="wine_profile_varietal_region_container_vertical_spacing">12dp</dimen>
+    <dimen name="wine_profile_varietal_region_text_vertical_spacing">8dp</dimen>
+    <dimen name="wine_profile_varietal_icon_width">14dp</dimen>
+    <dimen name="wine_profile_varietal_icon_corner_radius">5dp</dimen>
+    <dimen name="wine_profile_varietal_text_height">16sp</dimen>
+    <dimen name="wine_profile_location_icon_width">10dp</dimen>
+    <dimen name="wine_profile_ratings_all_years_container_height">60dp</dimen>
+    <dimen name="wine_profile_rating_text_size">14sp</dimen>
+    <dimen name="wine_profile_ratings_count_text_size">12sp</dimen>
+    <dimen name="wine_profile_ratings_texts_horizontal_spacing">25dp</dimen>
+    <dimen name="wine_profile_all_years_text_size">16sp</dimen>
+
+
 
     <!-- Choose Vintage Dialog -->
     <dimen name="choose_vintage_dialog_header_height">60dp</dimen>
