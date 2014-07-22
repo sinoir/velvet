@@ -25,7 +25,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class UserProfileFragment extends BaseFragment {
+public class UserProfileFragment extends BaseFragment implements
+        ProfileHeaderView.ProfileHeaderActionListener {
 
     public static final String TAG = "UserProfileFragment";
 
@@ -165,5 +166,33 @@ public class UserProfileFragment extends BaseFragment {
         mProfileHeaderView.setUserName(userName);
         mProfileHeaderView.setFollowerCount(mUserAccount.getFollowerCount());
         mProfileHeaderView.setFollowingCount(mUserAccount.getFollowingCount());
+
+        if (mUserAccount.isUserRelationshipTypeSelf()) {
+            mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_SELF);
+        } else if (mUserAccount.isUserRelationshipTypeFollowing()) {
+            mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_FOLLOWING);
+        } else {
+            mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_NOT_FOLLOWING);
+        }
+    }
+
+    @Override
+    public void toggleFollowUserClicked() {
+        // TODO: Make Follow Request
+    }
+
+    @Override
+    public void wineCountClicked() {
+        // TODO: Do we do anything?
+    }
+
+    @Override
+    public void followerCountClicked() {
+        // TODO: Do we do anything?
+    }
+
+    @Override
+    public void followingCountClicked() {
+        // TODO: Do we do anything?
     }
 }
