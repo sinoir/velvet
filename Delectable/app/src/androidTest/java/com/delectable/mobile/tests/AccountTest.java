@@ -228,58 +228,31 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(expectedName, actualAccount.getFullName());
     }
 
-    public void testUserRelationshipTypeUnset() {
-        Account actualAccount = new Account();
-        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_UNSET);
-
-        assertTrue(actualAccount.isUserRelationshipTypeUnset());
-        assertFalse(actualAccount.isUserRelationshipTypeSelf());
-        assertFalse(actualAccount.isUserRelationshipTypeFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeNotFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeInvite());
-    }
-
     public void testUserRelationshipTypeSelf() {
         Account actualAccount = new Account();
         actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_SELF);
 
-        assertFalse(actualAccount.isUserRelationshipTypeUnset());
         assertTrue(actualAccount.isUserRelationshipTypeSelf());
+        assertFalse(actualAccount.isUserRelationshipTypeNone());
         assertFalse(actualAccount.isUserRelationshipTypeFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeNotFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeInvite());
     }
 
     public void testUserRelationshipTypeFollowing() {
         Account actualAccount = new Account();
         actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_FOLLOWING);
 
-        assertFalse(actualAccount.isUserRelationshipTypeUnset());
         assertFalse(actualAccount.isUserRelationshipTypeSelf());
+        assertFalse(actualAccount.isUserRelationshipTypeNone());
         assertTrue(actualAccount.isUserRelationshipTypeFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeNotFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeInvite());
     }
 
-    public void testUserRelationshipTypeNotFollowing() {
+    public void testUserRelationshipTypeNone() {
         Account actualAccount = new Account();
-        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_NOT_FOLLOWING);
+        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_NONE);
 
-        assertFalse(actualAccount.isUserRelationshipTypeUnset());
         assertFalse(actualAccount.isUserRelationshipTypeSelf());
+        assertTrue(actualAccount.isUserRelationshipTypeNone());
         assertFalse(actualAccount.isUserRelationshipTypeFollowing());
-        assertTrue(actualAccount.isUserRelationshipTypeNotFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeInvite());
     }
 
-    public void testUserRelationshipTypeInvite() {
-        Account actualAccount = new Account();
-        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_INVITE);
-
-        assertFalse(actualAccount.isUserRelationshipTypeUnset());
-        assertFalse(actualAccount.isUserRelationshipTypeSelf());
-        assertFalse(actualAccount.isUserRelationshipTypeFollowing());
-        assertFalse(actualAccount.isUserRelationshipTypeNotFollowing());
-        assertTrue(actualAccount.isUserRelationshipTypeInvite());
-    }
 }

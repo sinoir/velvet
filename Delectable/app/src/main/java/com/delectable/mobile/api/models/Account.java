@@ -7,15 +7,11 @@ import java.util.ArrayList;
 
 public class Account extends BaseResponse {
 
-    public static int RELATION_TYPE_UNSET = 0;
+    public static int RELATION_TYPE_SELF = -1;
 
-    public static int RELATION_TYPE_SELF = 1;
+    public static int RELATION_TYPE_NONE = 0;
 
-    public static int RELATION_TYPE_NOT_FOLLOWING = 2;
-
-    public static int RELATION_TYPE_FOLLOWING = 3;
-
-    public static int RELATION_TYPE_INVITE = 4;
+    public static int RELATION_TYPE_FOLLOWING = 1;
 
     String id;
 
@@ -82,10 +78,6 @@ public class Account extends BaseResponse {
         return newResource;
     }
 
-    public boolean isUserRelationshipTypeUnset() {
-        return checkRelationship(RELATION_TYPE_UNSET);
-    }
-
     public boolean isUserRelationshipTypeSelf() {
         return checkRelationship(RELATION_TYPE_SELF);
     }
@@ -94,12 +86,8 @@ public class Account extends BaseResponse {
         return checkRelationship(RELATION_TYPE_FOLLOWING);
     }
 
-    public boolean isUserRelationshipTypeNotFollowing() {
-        return checkRelationship(RELATION_TYPE_NOT_FOLLOWING);
-    }
-
-    public boolean isUserRelationshipTypeInvite() {
-        return checkRelationship(RELATION_TYPE_INVITE);
+    public boolean isUserRelationshipTypeNone() {
+        return checkRelationship(RELATION_TYPE_NONE);
     }
 
     private boolean checkRelationship(int relationshipType) {
