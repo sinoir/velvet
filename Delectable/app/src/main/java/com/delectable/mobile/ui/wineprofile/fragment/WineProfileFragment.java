@@ -15,9 +15,9 @@ import com.delectable.mobile.api.requests.CaptureNotesRequest;
 import com.delectable.mobile.api.requests.HelpfulActionRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
-import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 
@@ -144,9 +144,7 @@ public class WineProfileFragment extends BaseFragment implements
         mAllYearsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(
-                        mBaseWine.getWineProfiles());
-
+                ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWine);
                 dialog.setTargetFragment(WineProfileFragment.this,
                         CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
                 dialog.show(getFragmentManager(), "dialog");
@@ -183,8 +181,15 @@ public class WineProfileFragment extends BaseFragment implements
 
         switch (requestCode) {
             case CHOOSE_VINTAGE_DIALOG:
-                WineProfile wineProfile = data.getParcelableExtra(ChooseVintageDialog.WINE_PROFILE);
-                loadCaptureNotesData(IdType.WINE_PROFILE, wineProfile.getId());
+                Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
+                if (wine instanceof BaseWine) {
+                    BaseWine baseWine = (BaseWine) wine;
+                    loadCaptureNotesData(IdType.BASE_WINE, baseWine.getId());
+                }
+                if (wine instanceof WineProfile) {
+                    WineProfile wineProfile = (WineProfile) wine;
+                    loadCaptureNotesData(IdType.WINE_PROFILE, wineProfile.getId());
+                }
         }
     }
 

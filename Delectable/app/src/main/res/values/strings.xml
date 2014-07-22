@@ -62,7 +62,7 @@
     </plurals>
     <string name="wine_profile_all_years">All years</string>
     <string name="choose_vintage_dialog_title">Choose vintage</string>
-    <string name="choose_vintage_dialog_all_years">all years</string>
+    <string name="choose_vintage_dialog_all_years">All years</string>
     <plurals name="choose_vintage_dialog_ratings_count">
         <item quantity="one">1 rating</item>
         <item quantity="other">%d ratings</item>

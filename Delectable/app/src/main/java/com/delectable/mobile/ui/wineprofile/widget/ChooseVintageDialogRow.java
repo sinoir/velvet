@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfile;
 
 import android.content.Context;
@@ -46,25 +47,47 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         mRating = (TextView) findViewById(R.id.rating);
     }
 
-    public void updateData(WineProfile wineProfile) {
-        mYear.setText(wineProfile.getVintage());
-        int reviewCount = wineProfile.getRatingsSummary().getAllCount();
-        String ratingCount = getContext().getResources()
-                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, reviewCount,
-                        reviewCount);
+    public void updateData(String year, int ratingsCount, double rating) {
+        mYear.setText(year);
+        String ratingCount = getResources()
+                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
+                        ratingsCount);
         mRatingsCount.setText(ratingCount);
 
         //rating
-        double allAvg = wineProfile.getRatingsSummary().getAllAvgOfTen();
-        DecimalFormat format = new DecimalFormat("0.0");
-        if (allAvg == NO_AVG_RATING) { //handling a no rating case, show a dash
+        if (rating == NO_AVG_RATING) { //handling a no rating case, show a dash
             mRating.setText("-");
             mRating.setTextColor(getResources().getColor(R.color.d_medium_gray));
         } else {
-            String allAvgStr = format.format(allAvg);
+            DecimalFormat format = new DecimalFormat("0.0");
+            String allAvgStr = format.format(rating);
             mRating.setText(makeRatingDisplayText(allAvgStr));
             mRating.setTextColor(getResources().getColor(R.color.d_light_green));
         }
+    }
+
+    /**
+     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
+     * data for a normal row.
+     */
+    public void updateData(WineProfile wineProfile) {
+        String year = wineProfile.getVintage();
+        int reviewCount = wineProfile.getRatingsSummary().getAllCount();
+        double rating = wineProfile.getRatingsSummary().getAllAvgOfTen();
+
+        updateData(year, reviewCount, rating);
+    }
+
+    /**
+     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
+     * data for the all years row.
+     */
+    public void updateData(BaseWine baseWine) {
+        String year = getResources().getString(R.string.choose_vintage_dialog_all_years);
+        int reviewCount = baseWine.getRatingsSummary().getAllCount();
+        double rating = baseWine.getRatingsSummary().getAllAvgOfTen();
+
+        updateData(year, reviewCount, rating);
     }
 
     //TODO should abstract this, copied directly from WineProfileFragment. Make textview subclass perhaps with a setter for the ratings

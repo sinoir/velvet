@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.wineprofile.dialog;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
 import android.app.Activity;
@@ -14,25 +14,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class ChooseVintageDialog extends DialogFragment {
 
-    public static final String WINE_PROFILE = "WINE_PROFILE";
+    public static final String WINE = "WINE";
 
-    private static final String WINE_PROFILES = "WINE_PROFILES";
+    private static final String BASE_WINE = "BASE_WINE";
 
     private static final String TAG = ChooseVintageDialog.class.getSimpleName();
 
-    private ArrayList<WineProfile> mWineProfiles = new ArrayList<WineProfile>();
-
-    private WineProfilesAdapter mAdapter = new WineProfilesAdapter(mWineProfiles);
+    private WineProfilesAdapter mAdapter = new WineProfilesAdapter();
 
 
-    public static ChooseVintageDialog newInstance(ArrayList<WineProfile> wineProfiles) {
+    public static ChooseVintageDialog newInstance(BaseWine baseWine) {
         ChooseVintageDialog f = new ChooseVintageDialog();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(WINE_PROFILES, wineProfiles);
+        args.putParcelable(BASE_WINE, baseWine);
         f.setArguments(args);
         return f;
     }
@@ -42,9 +38,8 @@ public class ChooseVintageDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
         if (getArguments() != null) {
-            ArrayList<WineProfile> wineProfiles = getArguments().getParcelableArrayList(WINE_PROFILES);
-            mWineProfiles.clear();
-            mWineProfiles.addAll(wineProfiles);
+            BaseWine baseWine = getArguments().getParcelable(BASE_WINE);
+            mAdapter.setBaseWine(baseWine);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -60,8 +55,10 @@ public class ChooseVintageDialog extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //call back to implementing class
                 Intent intent = new Intent();
-                intent.putExtra(WINE_PROFILE, mAdapter.getItem(position));
-                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                intent.putExtra(WINE,
+                        mAdapter.getItem(position)); //can be a BaseWine or WineProfile
+                getTargetFragment()
+                        .onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                 dismiss();
             }
         });
