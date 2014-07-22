@@ -19,17 +19,16 @@
         <!-- TODO: Dot Indicators -->
 
         <Button
-            android:id="@+id/find_follow_button"
+            android:id="@+id/follow_button"
             android:layout_width="210dp"
             android:layout_height="@dimen/button_height"
             android:layout_below="@id/profile_header_main"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/profile_vertical_spacing"
             android:layout_marginTop="@dimen/profile_vertical_spacing"
-            android:background="@drawable/btn_find_people_background"
+            android:background="@drawable/btn_follow_background"
             android:gravity="center"
-            android:text="@string/profile_find_people"
-            android:textColor="@color/btn_text_white_to_grey"
+            android:textColor="@color/d_white"
             android:textSize="@dimen/button_text_size" />
     </RelativeLayout>
 
