@@ -144,7 +144,7 @@ public class CaptureDetailsView extends RelativeLayout {
         mWineImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionsHandler.launchWineProfile(mCaptureData.getWineProfile());
+                mActionsHandler.launchWineProfile(mCaptureData);
             }
         });
     }
@@ -397,7 +397,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void toggleLikeForCapture(CaptureDetails capture);
 
-        public void launchWineProfile(WineProfile wineProfile);
+        public void launchWineProfile(CaptureDetails capture);
 
         public void launchUserProfile(String userAccountId);
 

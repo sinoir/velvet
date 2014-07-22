@@ -257,8 +257,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         // Load "Second Request" response, as if getting a request with etag / before / after
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_befaft_r2);
-        AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(captureListing,
-                false);
+        AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        secondRequest.setCurrentListing(captureListing);
         CaptureDetailsListing newListing = (CaptureDetailsListing) secondRequest
                 .buildResopnseFromJson(json);
 
@@ -290,8 +291,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
-        AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(captureListing,
-                false);
+        AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        secondRequest.setCurrentListing(captureListing);
         CaptureDetailsListing newListing = (CaptureDetailsListing) secondRequest
                 .buildResopnseFromJson(json);
 
@@ -322,13 +324,14 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         String expectedBefore = captureListing.getBoundariesToBefore();
         String expectedAfter = captureListing.getBoundariesToAfter();
 
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(captureListing,
-                false);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        request.setCurrentListing(captureListing);
         assertEquals(expectedEtag, request.getETag());
         assertEquals(expectedContext, request.getContext());
         assertEquals(expectedBefore, request.getBefore());
         assertEquals(expectedAfter, request.getAfter());
-        assertFalse(request.getSuppressBefore());
+        assertNull(request.getSuppressBefore());
     }
 
     public void testFollowerFeedRequestSuppressBefore() throws JSONException {
@@ -341,15 +344,16 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        // Default SuppressBefore should be true
-        assertTrue(request.getSuppressBefore());
+        // Default SuppressBefore should be false / null
+        assertNull(request.getSuppressBefore());
 
-        request = new AccountsFollowerFeedRequest(captureListing,
-                false);
-        assertFalse(request.getSuppressBefore());
+        request = new AccountsFollowerFeedRequest(AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        request.setCurrentListing(captureListing);
+        assertNull(request.getSuppressBefore());
 
-        request = new AccountsFollowerFeedRequest(captureListing,
-                true);
+        request = new AccountsFollowerFeedRequest(AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        request.setCurrentListing(captureListing);
+        request.setIsPullToRefresh(true);
         assertTrue(request.getSuppressBefore());
     }
 
@@ -372,8 +376,10 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 .buildResopnseFromJson(json);
 
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_null_payload);
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(expectedListing,
-                true);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        request.setCurrentListing(expectedListing);
+        request.setIsPullToRefresh(true);
         CaptureDetailsListing actualListing = (CaptureDetailsListing) request.buildResopnseFromJson(
                 json);
         assertEquals(expectedListing, actualListing);
@@ -411,8 +417,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
                 .buildResopnseFromJson(json);
 
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(captureListing,
-                false);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        request.setCurrentListing(captureListing);
 
         HashMap<String, String> expectedMap = new HashMap<String, String>();
         expectedMap.put("context", request.getContext());
@@ -427,7 +434,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
 
         HashMap<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("suppress_before", String.valueOf(request.getSuppressBefore()));
 
         Map<String, String> actualMap = request.buildPayloadMap();
         assertEquals(expectedMap, actualMap);
@@ -441,8 +447,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
                 .buildResopnseFromJson(json);
 
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(captureListing,
-                false);
+        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
+                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        request.setCurrentListing(captureListing);
 
         HashMap<String, String> expectedMap = new HashMap<String, String>();
         expectedMap.put("before", request.getBefore());
