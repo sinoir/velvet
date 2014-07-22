@@ -38,6 +38,4 @@ public class UserProfileActivity extends BaseActivity {
         }
         return true;
     }
-
-    // TODO: Options overflow menu
 }

@@ -10,59 +10,48 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
-import com.delectable.mobile.util.ImageLoaderUtil;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class UserProfileFragment extends BaseFragment {
+public class RecentCapturesTabFragment extends BaseFragment {
 
-    public static final String TAG = "UserProfileFragment";
+    public static final String TAG = "RecentCapturesTabFragment";
 
     private static final String sArgsUserId = "sArgsUserId";
 
     private View mView;
 
-    private View mLayoutContainer;
+    private ListView mListView;
 
-    private ProfileHeaderView mProfileHeaderView;
-
-    private ViewPager mViewPager;
-
-    private SlidingPagerTabStrip mTabStrip;
-
-    private SlidingPagerAdapter mTabsAdapter;
+    private UserCapturesAdapter mAdapter;
 
     private AccountsNetworkController mAccountsNetworkController;
 
     private Account mUserAccount;
 
+    // TODO: Pass up data via some mechanism
     private ArrayList<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
 
-    public UserProfileFragment() {
+    public RecentCapturesTabFragment() {
         // Required empty public constructor
     }
 
-    public static UserProfileFragment newInstance(String userId) {
-        return newInstance(userId, false);
-    }
-
-    // TODO: remove
-    public static UserProfileFragment newInstance(String userId,
-            boolean displayUserNameInActionbar) {
-        UserProfileFragment fragment = new UserProfileFragment();
+    public static RecentCapturesTabFragment newInstance(String userId) {
+        RecentCapturesTabFragment fragment = new RecentCapturesTabFragment();
         Bundle args = new Bundle();
         args.putString(sArgsUserId, userId);
         fragment.setArguments(args);
@@ -83,37 +72,24 @@ public class UserProfileFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        mView = inflater.inflate(R.layout.list_view_layout, container, false);
 
-        mProfileHeaderView = (ProfileHeaderView) mView.findViewById(R.id.profile_header_view);
+        mListView = (ListView) mView.findViewById(android.R.id.list);
 
-        mViewPager = (ViewPager) mView.findViewById(R.id.pager);
-        mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
+        mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails, mUserId);
+        mListView.setAdapter(mAdapter);
 
-        ArrayList<SlidingPagerAdapter.SlidingPagerItem> tabItems
-                = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
-
-        // TODO: Split Recent / TopRated Tabs
-        // "RECENT" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
-                getString(R.string.profile_tab_recent)));
-
-        // "TOP RATED" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
-                getString(R.string.profile_tab_top_rated)));
-
-        mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
-
-        mViewPager.setAdapter(mTabsAdapter);
-        mTabStrip.setViewPager(mViewPager);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position - 1);
+                Intent intent = new Intent();
+                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                        captureDetails.getId());
+                intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return mView;
     }
@@ -142,7 +118,7 @@ public class UserProfileFragment extends BaseFragment {
                                 mCaptureDetails.addAll(summary.getCaptures());
                             }
                         }
-                        updateUIWithData();
+                        mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -154,24 +130,5 @@ public class UserProfileFragment extends BaseFragment {
                     }
                 }
         );
-    }
-
-    private void updateUIWithData() {
-        if (getActivity() == null) {
-            return;
-        }
-
-        String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
-        String imageUrl = mUserAccount.getPhoto().getUrl();
-        int numCaptures = mUserAccount.getCaptureCount() != null ?
-                mUserAccount.getCaptureCount() : 0;
-
-        mProfileHeaderView.setWineCount(numCaptures);
-
-        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl,
-                mProfileHeaderView.getUserImageView());
-        mProfileHeaderView.setUserName(userName);
-        mProfileHeaderView.setFollowerCount(mUserAccount.getFollowerCount());
-        mProfileHeaderView.setFollowingCount(mUserAccount.getFollowingCount());
     }
 }

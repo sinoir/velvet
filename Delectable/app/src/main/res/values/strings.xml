@@ -42,6 +42,9 @@
         <item quantity="other">%d followers</item>
     </plurals>
 
+    <string name="profile_tab_recent">RECENT</string>
+    <string name="profile_tab_top_rated">TOP RATED</string>
+
     <!-- Capture Feed -->
     <string name="cap_feed_likes_count">%d likes</string>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
