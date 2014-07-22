@@ -7,6 +7,16 @@ import java.util.ArrayList;
 
 public class Account extends BaseResponse {
 
+    public static int RELATION_TYPE_UNSET = 0;
+
+    public static int RELATION_TYPE_SELF = 1;
+
+    public static int RELATION_TYPE_NOT_FOLLOWING = 2;
+
+    public static int RELATION_TYPE_FOLLOWING = 3;
+
+    public static int RELATION_TYPE_INVITE = 4;
+
     String id;
 
     String email;
@@ -72,6 +82,31 @@ public class Account extends BaseResponse {
         return newResource;
     }
 
+    public boolean isUserRelationshipTypeUnset() {
+        return checkRelationship(RELATION_TYPE_UNSET);
+    }
+
+    public boolean isUserRelationshipTypeSelf() {
+        return checkRelationship(RELATION_TYPE_SELF);
+    }
+
+    public boolean isUserRelationshipTypeFollowing() {
+        return checkRelationship(RELATION_TYPE_FOLLOWING);
+    }
+
+    public boolean isUserRelationshipTypeNotFollowing() {
+        return checkRelationship(RELATION_TYPE_NOT_FOLLOWING);
+    }
+
+    public boolean isUserRelationshipTypeInvite() {
+        return checkRelationship(RELATION_TYPE_INVITE);
+    }
+
+    private boolean checkRelationship(int relationshipType) {
+        return (getCurrentUserRelationship() != null)
+                && (getCurrentUserRelationship().intValue() == relationshipType);
+    }
+
     public String getFullName() {
         return getFname() + " " + getLname();
     }
@@ -133,7 +168,6 @@ public class Account extends BaseResponse {
     }
 
     /**
-     *
      * @return Returns influencer titles in a comma delimited String.
      */
     public String getInfluencerTitlesString() {
