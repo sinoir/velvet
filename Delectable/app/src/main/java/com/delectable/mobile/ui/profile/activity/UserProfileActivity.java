@@ -23,7 +23,7 @@ public class UserProfileActivity extends BaseActivity {
         }
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, UserProfileFragment.newInstance(mUserId, true)).commit();
+                    .add(R.id.container, UserProfileFragment.newInstance(mUserId)).commit();
         }
 
         getActionBar().setDisplayHomeAsUpEnabled(true);

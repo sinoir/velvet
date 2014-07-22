@@ -33,8 +33,6 @@ public class UserProfileFragment extends BaseFragment {
 
     private View mView;
 
-    private View mLayoutContainer;
-
     private ProfileHeaderView mProfileHeaderView;
 
     private ViewPager mViewPager;
@@ -56,12 +54,6 @@ public class UserProfileFragment extends BaseFragment {
     }
 
     public static UserProfileFragment newInstance(String userId) {
-        return newInstance(userId, false);
-    }
-
-    // TODO: remove
-    public static UserProfileFragment newInstance(String userId,
-            boolean displayUserNameInActionbar) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
         args.putString(sArgsUserId, userId);
