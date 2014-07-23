@@ -9,6 +9,7 @@ import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.api.requests.FollowAccountsActionRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
@@ -21,7 +22,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,7 @@ public class UserProfileFragment extends BaseFragment implements
 
     private SlidingPagerAdapter mTabsAdapter;
 
-    private AccountsNetworkController mAccountsNetworkController;
+    private BaseNetworkController mNetworkController;
 
     private Account mUserAccount;
 
@@ -66,7 +66,7 @@ public class UserProfileFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCaptureDetails = new ArrayList<CaptureDetails>();
-        mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        mNetworkController = new AccountsNetworkController(getActivity());
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
@@ -79,6 +79,7 @@ public class UserProfileFragment extends BaseFragment implements
         mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         mProfileHeaderView = (ProfileHeaderView) mView.findViewById(R.id.profile_header_view);
+        mProfileHeaderView.setActionListener(this);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
@@ -121,7 +122,7 @@ public class UserProfileFragment extends BaseFragment implements
         AccountsContextRequest request = new AccountsContextRequest(
                 AccountsContextRequest.CONTEXT_PROFILE);
         request.setId(mUserId);
-        mAccountsNetworkController.performRequest(request,
+        mNetworkController.performRequest(request,
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
@@ -142,8 +143,7 @@ public class UserProfileFragment extends BaseFragment implements
                     public void onFailed(RequestError error) {
                         Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
                                 .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        showToastError(error.getMessage());
                     }
                 }
         );
@@ -177,8 +177,29 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     @Override
-    public void toggleFollowUserClicked() {
-        // TODO: Make Follow Request
+    public void toggleFollowUserClicked(final boolean isFollowingSelected) {
+        Log.d(TAG, "Toggle Following? " + isFollowingSelected);
+        FollowAccountsActionRequest request = new FollowAccountsActionRequest(mUserId,
+                isFollowingSelected);
+        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                // Do nothing
+                Log.d(TAG, "Toggle Follow Success! " + result);
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                showToastError(error.getMessage());
+                // Revert Follow Button state
+                // If the user toggled to Is Following, should revert back to not Following
+                if (isFollowingSelected) {
+                    mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_NOT_FOLLOWING);
+                } else {
+                    mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_FOLLOWING);
+                }
+            }
+        });
     }
 
     @Override

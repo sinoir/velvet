@@ -52,7 +52,8 @@ public class ProfileHeaderView extends RelativeLayout implements
                                              @Override
                                              public void onClick(View v) {
                                                  if (mActionListener != null) {
-                                                     mActionListener.toggleFollowUserClicked();
+                                                     mActionListener.toggleFollowUserClicked(
+                                                             !mIsFollowing);
                                                  }
                                                  if (mIsFollowing) {
                                                      setFollowingState(STATE_NOT_FOLLOWING);
@@ -145,7 +146,7 @@ public class ProfileHeaderView extends RelativeLayout implements
 
         public void wineCountClicked();
 
-        public void toggleFollowUserClicked();
+        public void toggleFollowUserClicked(boolean isFollowing);
 
         public void followerCountClicked();
 
