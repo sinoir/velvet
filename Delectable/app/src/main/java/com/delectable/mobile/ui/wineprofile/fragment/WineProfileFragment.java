@@ -12,12 +12,18 @@ import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.BaseWinesContext;
 import com.delectable.mobile.api.requests.CaptureNotesRequest;
+import com.delectable.mobile.api.requests.HelpfulActionRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
+import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -28,6 +34,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,7 +44,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
-public class WineProfileFragment extends BaseFragment {
+public class WineProfileFragment extends BaseFragment implements
+        WineProfileCommentUnitRow.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -47,7 +55,7 @@ public class WineProfileFragment extends BaseFragment {
 
     private static final String sArgsPhotoHash = "photoHash";
 
-    private ListView mListView;
+    private static final int CHOOSE_VINTAGE_DIALOG = 1;
 
     private View mVarietalContainer;
 
@@ -65,12 +73,14 @@ public class WineProfileFragment extends BaseFragment {
 
     private TextView mProRatingsCountTextView;
 
+    private TextView mAllYearsTextView;
+
 
     private BaseNetworkController mNetworkController;
 
     private ArrayList<CaptureNote> mCaptureNotes = new ArrayList<CaptureNote>();
 
-    private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(mCaptureNotes);
+    private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(mCaptureNotes, this);
 
     private WineProfile mWineProfile;
 
@@ -129,9 +139,27 @@ public class WineProfileFragment extends BaseFragment {
         mAllRatingsCountTextView = (TextView) header.findViewById(R.id.all_ratings_count);
         mProRatingsAverageTextView = (TextView) header.findViewById(R.id.pro_ratings_average);
         mProRatingsCountTextView = (TextView) header.findViewById(R.id.pro_ratings_count);
+        mAllYearsTextView = (TextView) header.findViewById(R.id.all_years_textview);
+
+        mAllYearsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWine);
+                dialog.setTargetFragment(WineProfileFragment.this,
+                        CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+                dialog.show(getFragmentManager(), "dialog");
+            }
+        });
 
         listview.addHeaderView(header, null, false);
         listview.setAdapter(mAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                position--; //headerview offsets position of listitems by 1
+                launchCaptureDetails(mAdapter.getItem(position));
+            }
+        });
         return view;
     }
 
@@ -144,7 +172,24 @@ public class WineProfileFragment extends BaseFragment {
             loadBaseWineData();
         }
         if (mCaptureNoteListing == null) {
-            loadCaptureNotesData();
+            loadCaptureNotesData(IdType.BASE_WINE, mWineProfile.getBaseWineId());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case CHOOSE_VINTAGE_DIALOG:
+                Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
+                if (wine instanceof BaseWine) {
+                    BaseWine baseWine = (BaseWine) wine;
+                    loadCaptureNotesData(IdType.BASE_WINE, baseWine.getId());
+                }
+                if (wine instanceof WineProfile) {
+                    WineProfile wineProfile = (WineProfile) wine;
+                    loadCaptureNotesData(IdType.WINE_PROFILE, wineProfile.getId());
+                }
         }
     }
 
@@ -169,20 +214,46 @@ public class WineProfileFragment extends BaseFragment {
                     }
                 }
         );
-
-
     }
 
-    private void loadCaptureNotesData() {
+    /**
+     * @param idType Whether to load captures notes for a base wine or a wine profile.
+     */
+    private void loadCaptureNotesData(IdType idType, String id) {
         //retrieve captureNotes
         CaptureNotesRequest captureReq = new CaptureNotesRequest();
-        captureReq.setBaseWineId(mWineProfile.getBaseWineId());
+        if (idType == IdType.BASE_WINE) {
+            captureReq.setBaseWineId(id);
+        }
+        if (idType == IdType.WINE_PROFILE) {
+            captureReq.setWineProfileId(id);
+        }
         mNetworkController.performRequest(captureReq,
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
                         mCaptureNoteListing = (CaptureNoteListing) result;
                         updateCaptureNotesData();
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
+                                .getCode());
+                        // TODO: What to do with errors?
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+    private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
+        HelpfulActionRequest request = new HelpfulActionRequest(captureNote, markHelpful);
+        mNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        //TODO implement HelpfulActionRequests's buildResopnseFromJson in order to have the result return non-null
                     }
 
                     @Override
@@ -209,7 +280,7 @@ public class WineProfileFragment extends BaseFragment {
 
             //combine varietal names if there's more than one
             ArrayList<String> varietalNames = new ArrayList<String>();
-            for(VarietalsHash varietal: mBaseWine.getVarietalComposition()) {
+            for (VarietalsHash varietal : mBaseWine.getVarietalComposition()) {
                 varietalNames.add(varietal.getName());
             }
             TextUtils.join(", ", varietalNames);
@@ -267,5 +338,28 @@ public class WineProfileFragment extends BaseFragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {
+        markCaptureAsHelpful(captureNote, markHelpful);
+    }
 
+    public void launchCaptureDetails(CaptureNote captureNote) {
+        Intent intent = new Intent();
+        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                captureNote.getId());
+        intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void launchUserProfile(String userAccountId) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, userAccountId);
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private static enum IdType {
+        BASE_WINE, WINE_PROFILE;
+    }
 }

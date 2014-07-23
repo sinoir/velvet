@@ -12,8 +12,11 @@ public class CaptureNotesAdapter extends BaseAdapter {
 
     private ArrayList<CaptureNote> mCaptureNotes;
 
-    public CaptureNotesAdapter(ArrayList<CaptureNote> captureNotes) {
+    private WineProfileCommentUnitRow.ActionsHandler mActionsHandler;
+
+    public CaptureNotesAdapter(ArrayList<CaptureNote> captureNotes, WineProfileCommentUnitRow.ActionsHandler actionsHandler) {
         mCaptureNotes = captureNotes;
+        mActionsHandler = actionsHandler;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class CaptureNotesAdapter extends BaseAdapter {
         WineProfileCommentUnitRow row = (WineProfileCommentUnitRow) convertView;
         if (row == null) {
             row = new WineProfileCommentUnitRow(parent.getContext());
+            row.setActionsHandler(mActionsHandler);
         }
         row.updateCaptureNoteData(mCaptureNotes.get(position));
         return row;

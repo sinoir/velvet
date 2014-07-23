@@ -3,9 +3,9 @@
 <!-- This is the icon for the wine profile's varietal, it's color changes depending on what it's varietal is -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <corners android:radius="8dp" />
+    <corners android:radius="@dimen/wine_profile_varietal_icon_corner_radius" />
     <solid android:color="@android:color/darker_gray" />
     <size
-        android:width="20dp"
-        android:height="20dp" />
+        android:width="@dimen/wine_profile_varietal_icon_width"
+        android:height="@dimen/wine_profile_varietal_icon_width" />
 </shape>
