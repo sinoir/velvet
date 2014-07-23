@@ -139,7 +139,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
         }
         mAdapter.notifyDataSetChanged();
         // Scroll back to top of view when switching
-        mListView.smoothScrollToPosition(0);
+        mListView.smoothScrollToPosition(-1);
     }
 
     @Override
