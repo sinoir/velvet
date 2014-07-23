@@ -72,7 +72,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
     @Override
     public void dataSetChanged() {
-        mCaptureDetailsView.updateCaptureData(mCaptureDetails);
+        mCaptureDetailsView.updateData(mCaptureDetails);
     }
 
     private void loadData() {
@@ -84,7 +84,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
                     public void onSuccess(BaseResponse result) {
                         Log.d(TAG, "Received Results! " + result);
                         mCaptureDetails = (CaptureDetails) result;
-                        mCaptureDetailsView.updateCaptureData(mCaptureDetails);
+                        mCaptureDetailsView.updateData(mCaptureDetails);
                     }
 
                     @Override

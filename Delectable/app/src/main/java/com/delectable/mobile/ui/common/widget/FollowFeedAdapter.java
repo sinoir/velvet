@@ -56,7 +56,7 @@ public class FollowFeedAdapter extends BaseAdapter {
             rowView = new CaptureDetailsView(mContext);
             rowView.setActionsHandler(mCaptureActionsHandler);
         }
-        rowView.updateCaptureData(capture);
+        rowView.updateData(capture);
         if (position == mData.size() - 1) {
             mActionsHandler.shouldLoadNextPage();
         }

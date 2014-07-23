@@ -118,7 +118,7 @@ public class CaptureDetailsView extends RelativeLayout {
         mMenuButton = findViewById(R.id.menu_button);
     }
 
-    public void updateCaptureData(CaptureDetails captureData) {
+    public void updateData(CaptureDetails captureData) {
         mCaptureData = captureData;
         setupTopWineDetails();
         setupTaggedParticipants();
