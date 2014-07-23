@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WineBannerView">
+        <!-- The position of the bottom corner of the triangle-->
+        <attr name="triangleCenterPosition" format="dimension" />
+        <attr name="showTriangleMask" format="boolean" />
+    </declare-styleable>
+</resources>

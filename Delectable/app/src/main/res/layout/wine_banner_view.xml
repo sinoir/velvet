@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- made for RelativeLayout -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/cap_feed_row_wine_banner_height"
-    android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing">
+    android:layout_height="@dimen/cap_feed_row_wine_banner_height">
 
     <!--TOOD: Placeholder for no image? -->
     <ImageView
@@ -42,15 +41,7 @@
         android:visibility="visible"
 
         android:textSize="@dimen/cap_feed_row_bottom_text_font_size" />
-
-    <!--TODO: Mini upside down Triangle -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="7dp"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/white" />
-
-</RelativeLayout>
+</merge>
 
 
 

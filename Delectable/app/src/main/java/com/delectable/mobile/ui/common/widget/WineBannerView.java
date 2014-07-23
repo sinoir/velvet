@@ -8,6 +8,12 @@ import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +26,10 @@ import android.widget.TextView;
  * Feed screen.
  */
 public class WineBannerView extends RelativeLayout {
+
+    boolean mShowTriangleMask;
+
+    private int mTriangleCenterPosition;
 
     private ImageView mWineImage;
 
@@ -37,6 +47,15 @@ public class WineBannerView extends RelativeLayout {
 
     public WineBannerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WineBannerView);
+
+        mShowTriangleMask = a.getBoolean(R.styleable.WineBannerView_showTriangleMask, false);
+
+        int defaultCenterPos = context.getResources().getDimensionPixelSize(R.dimen.wine_banner_triangle_center_position);
+        mTriangleCenterPosition = a.getDimensionPixelSize(R.styleable.WineBannerView_triangleCenterPosition, defaultCenterPos);
+
+        a.recycle();
 
         View.inflate(context, R.layout.wine_banner_view, this);
 
@@ -99,6 +118,83 @@ public class WineBannerView extends RelativeLayout {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
         mProducerName.setText(producerName);
         mWineName.setText(wineName);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        if (mShowTriangleMask) {
+            drawTriangle(canvas);
+        }
+    }
+
+    //TODO will need to adjust the bottom bounds of this view by the height of our triangle 
+    private void drawTriangle(Canvas canvas) {
+        Paint paint = new Paint();
+
+        paint.setStrokeWidth(0);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setAntiAlias(true);
+
+        int triangleWidth = getResources()
+                .getDimensionPixelOffset(R.dimen.wine_banner_triangle_width);
+        int triangleHeight = getResources()
+                .getDimensionPixelOffset(R.dimen.wine_banner_triangle_height);
+
+        int yTopBoundary = canvas.getHeight() - triangleHeight;
+        int yBottomBoundary = canvas.getHeight();
+
+        //left edge corners
+        int xBottomLeftCorner = 0;
+        int yBottomLeftCorner = yBottomBoundary;
+
+        int xTopLeftCorner = 0;
+        int yTopLeftCorner = yTopBoundary;
+
+        //triangle corners
+        int xTriangleLeft = mTriangleCenterPosition - triangleWidth / 2;
+        int yTriangleLeft = yTopBoundary;
+
+        int xTriangleBottom = xTriangleLeft + triangleWidth / 2;
+        int yTriangleBottom = yBottomBoundary;
+
+        int xTriangleRight = xTriangleBottom + triangleWidth / 2;
+        int yTriangleRight = yTopBoundary;
+
+        //right edge corners
+        int xTopRightCorner = canvas.getWidth();
+        int yTopRightCorner = yTopBoundary;
+
+        int xBottomRightCorner = canvas.getWidth();
+        int yBottomRightCorner = yBottomBoundary;
+
+        Point a = new Point(xBottomLeftCorner, yBottomLeftCorner);
+        Point b = new Point(xTopLeftCorner, yTopLeftCorner);
+        Point c = new Point(xTriangleLeft, yTriangleLeft);
+        Point d = new Point(xTriangleBottom, yTriangleBottom);
+        Point e = new Point(xTriangleRight, yTriangleRight);
+        Point f = new Point(xTopRightCorner, yTopRightCorner);
+        Point g = new Point(xBottomRightCorner, yBottomRightCorner);
+
+        Path path = new Path();
+        path.setFillType(Path.FillType.EVEN_ODD);
+
+        //drawing left side trapezoid
+        path.moveTo(a.x, a.y);
+        path.lineTo(b.x, b.y);
+        path.lineTo(c.x, c.y);
+        path.lineTo(d.x, d.y);
+        path.close();
+
+        //drawing right side trapezoid
+        path.moveTo(d.x, d.y);
+        path.lineTo(e.x, e.y);
+        path.lineTo(f.x, f.y);
+        path.lineTo(g.x, g.y);
+        path.close();
+
+        canvas.drawPath(path, paint);
     }
 
 

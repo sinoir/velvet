@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="300dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/choose_vintage_dialog_header_height"
+        android:gravity="center_vertical|left"
+        android:padding="@dimen/general_row_horizontal_spacing"
+        android:text="@string/choose_vintage_dialog_title"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/choose_vintage_dialog_title_text_size" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:background="@color/d_medium_gray"
+        android:layout_height="@dimen/choose_vintage_dialog_header_divider_height" />
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
