@@ -4,14 +4,14 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.api.requests.AccountsContextRequest;
-import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.requests.BaseCaptureFeedListingRequest;
+import com.delectable.mobile.api.requests.CaptureFeedRequest;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
-import com.delectable.mobile.ui.common.widget.UserCapturesAdapter;
+import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,11 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class RecentCapturesTabFragment extends BaseFragment {
+public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
 
     public static final String TAG = "RecentCapturesTabFragment";
 
@@ -35,13 +34,12 @@ public class RecentCapturesTabFragment extends BaseFragment {
 
     private ListView mListView;
 
-    private UserCapturesAdapter mAdapter;
+    private FollowFeedAdapter mAdapter;
 
     private AccountsNetworkController mAccountsNetworkController;
 
-    private Account mUserAccount;
+    private CaptureDetailsListing mDetailsListing;
 
-    // TODO: Pass up data via some mechanism
     private ArrayList<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
@@ -76,7 +74,10 @@ public class RecentCapturesTabFragment extends BaseFragment {
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
 
-        mAdapter = new UserCapturesAdapter(getActivity(), mCaptureDetails, mUserId);
+        // Not handling pagination here
+        mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, null, this, mUserId);
+        mAdapter.setCurrentState(FollowFeedAdapter.DISPLAY_STATE_SIMPLE);
+
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,22 +102,20 @@ public class RecentCapturesTabFragment extends BaseFragment {
     }
 
     private void loadData() {
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PROFILE);
+        BaseCaptureFeedListingRequest request = new CaptureFeedRequest(
+                BaseCaptureFeedListingRequest.CONTEXT_DETAILS);
         request.setId(mUserId);
         mAccountsNetworkController.performRequest(request,
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
                         Log.d(TAG, "Received Results! " + result);
-
-                        mUserAccount = (Account) result;
+                        mDetailsListing = (CaptureDetailsListing) result;
                         mCaptureDetails.clear();
-                        if (mUserAccount.getCaptureSummaries() != null
-                                && mUserAccount.getCaptureSummaries().size() > 0) {
-                            for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                                mCaptureDetails.addAll(summary.getCaptures());
-                            }
+                        if (mDetailsListing != null) {
+                            mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
+                        } else {
+                            // TODO: Emptystate for no data?
                         }
                         mAdapter.notifyDataSetChanged();
                     }
@@ -125,8 +124,7 @@ public class RecentCapturesTabFragment extends BaseFragment {
                     public void onFailed(RequestError error) {
                         Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
                                 .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        showToastError(error.getMessage());
                     }
                 }
         );
