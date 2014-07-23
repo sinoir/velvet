@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -76,6 +79,9 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        
+        setHasOptionsMenu(true);
+
         mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         mProfileHeaderView = (ProfileHeaderView) mView.findViewById(R.id.profile_header_view);
@@ -116,6 +122,35 @@ public class UserProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
         loadData();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO: Custom Back Arrow...
+        inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                launchFindPeople();
+                return true;
+            case R.id.toggle_list:
+                toggleListDetailView();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void toggleListDetailView() {
+        // TODO: Toggle ListView Adapter to update to capture listing kind of view.
+    }
+
+    private void launchFindPeople() {
+        // TODO: Find People screen
     }
 
     private void loadData() {
