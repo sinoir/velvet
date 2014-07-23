@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class BaseFragment extends Fragment {
 
@@ -37,6 +38,11 @@ public class BaseFragment extends Fragment {
         activity.replaceWithFragment(fragment);
     }
 
+    public void showToastError(String error) {
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        }
+    }
 
     /**
      * * Override home icon with custom view with click listener
