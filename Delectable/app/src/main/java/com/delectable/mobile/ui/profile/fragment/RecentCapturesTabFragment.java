@@ -129,4 +129,20 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
                 }
         );
     }
+
+    public void toggleAdapterViewState() {
+        if (mAdapter.getCurrentState() == FollowFeedAdapter.DISPLAY_STATE_DETAILED) {
+            mAdapter.setCurrentState(FollowFeedAdapter.DISPLAY_STATE_SIMPLE);
+        } else {
+            mAdapter.setCurrentState(FollowFeedAdapter.DISPLAY_STATE_DETAILED);
+        }
+        mAdapter.notifyDataSetChanged();
+        // Scroll back to top of view when switching
+        mListView.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void dataSetChanged() {
+        mAdapter.notifyDataSetChanged();
+    }
 }

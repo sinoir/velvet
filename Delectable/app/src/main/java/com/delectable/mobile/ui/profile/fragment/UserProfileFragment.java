@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,10 @@ public class UserProfileFragment extends BaseFragment implements
 
     private String mUserId;
 
+    private RecentCapturesTabFragment mRecentCapturesTabFragment;
+
+    private RecentCapturesTabFragment mTopRatedTabFragment;
+
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -79,7 +84,7 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        
+
         setHasOptionsMenu(true);
 
         mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
@@ -94,9 +99,11 @@ public class UserProfileFragment extends BaseFragment implements
                 = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
 
         // TODO: Split Recent / TopRated Tabs
+        mRecentCapturesTabFragment = RecentCapturesTabFragment.newInstance(mUserId);
+        mTopRatedTabFragment = RecentCapturesTabFragment.newInstance(mUserId);
         // "RECENT" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
+                mRecentCapturesTabFragment,
                 R.color.d_dark_navy,
                 R.color.d_light_green,
                 R.color.tab_text_white_grey,
@@ -104,7 +111,7 @@ public class UserProfileFragment extends BaseFragment implements
 
         // "TOP RATED" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
+                mTopRatedTabFragment,
                 R.color.d_dark_navy,
                 R.color.d_light_green,
                 R.color.tab_text_white_grey,
@@ -146,11 +153,14 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     private void toggleListDetailView() {
-        // TODO: Toggle ListView Adapter to update to capture listing kind of view.
+        // TODO: Toggle Menu Icon
+        mRecentCapturesTabFragment.toggleAdapterViewState();
+        mTopRatedTabFragment.toggleAdapterViewState();
     }
 
     private void launchFindPeople() {
         // TODO: Find People screen
+        Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
     }
 
     private void loadData() {
