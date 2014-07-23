@@ -8,22 +8,27 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class ProfileHeaderView extends RelativeLayout implements
         ProfileHeaderMainView.ProfileHeaderMainViewActionListeners {
 
-    private TextView mCaptureWineCountTextView;
+    public static final int STATE_FOLLOWING = 0;
+
+    public static final int STATE_NOT_FOLLOWING = 1;
+
+    public static final int STATE_SELF = 2;
 
     private ProfileHeaderMainView mProfileHeaderMainView;
 
-    //TODO: ImageButtons?
-    private Button mSwitchToListViewButton;
-
-    private Button mSwitchToFeedViewButton;
-
     private ProfileHeaderActionListener mActionListener;
 
+    private Button mFollowButton;
+
+    private boolean mIsFollowing = false;
+
+    private String mFollowText;
+
+    private String mUnfollowText;
 
     public ProfileHeaderView(Context context) {
         this(context, null);
@@ -37,38 +42,30 @@ public class ProfileHeaderView extends RelativeLayout implements
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header, this);
 
-        // TODO: Will be placing main header in a viewpager
-        mCaptureWineCountTextView = (TextView) findViewById(R.id.capture_wine_count);
         mProfileHeaderMainView = (ProfileHeaderMainView) findViewById(R.id.profile_header_main);
+        mFollowButton = (Button) findViewById(R.id.follow_button);
 
-        mCaptureWineCountTextView = (TextView) findViewById(R.id.capture_wine_count);
-        mSwitchToListViewButton = (Button) findViewById(R.id.switch_to_listing_button);
-        mSwitchToFeedViewButton = (Button) findViewById(R.id.switch_to_feed_listing_button);
-        mSwitchToListViewButton.setSelected(true);
+        mFollowText = context.getString(R.string.profile_follow);
+        mUnfollowText = context.getString(R.string.profile_unfollow);
 
-        mSwitchToListViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwitchToListViewButton.setSelected(true);
-                mSwitchToFeedViewButton.setSelected(false);
-                if (mActionListener != null) {
-                    mActionListener.switchToListView();
-                }
-            }
-        });
-        mSwitchToFeedViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwitchToListViewButton.setSelected(false);
-                mSwitchToFeedViewButton.setSelected(true);
-                if (mActionListener != null) {
-                    mActionListener.switchToFeedView();
-                }
-            }
-        });
+        mFollowButton.setOnClickListener(new OnClickListener() {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 if (mActionListener != null) {
+                                                     mActionListener.toggleFollowUserClicked();
+                                                 }
+                                                 if (mIsFollowing) {
+                                                     setFollowingState(STATE_NOT_FOLLOWING);
+                                                 } else {
+                                                     setFollowingState(STATE_FOLLOWING);
+                                                 }
+                                             }
+                                         }
+        );
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
+
     public CircleImageView getUserImageView() {
         return mProfileHeaderMainView.getUserImageView();
     }
@@ -86,8 +83,44 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     public void setWineCount(int wineCount) {
-        String wineCountText = getResources().getString(R.string.wine_count, wineCount);
-        mCaptureWineCountTextView.setText(wineCountText);
+        mProfileHeaderMainView.setWineCount(wineCount);
+    }
+
+    public void setFollowingState(int state) {
+        switch (state) {
+            case STATE_FOLLOWING:
+                mIsFollowing = true;
+                updateButtonToUnfollow();
+                shouldShowFollowButton(true);
+                break;
+            case STATE_NOT_FOLLOWING:
+                mIsFollowing = false;
+                updateButtonToFollowing();
+                shouldShowFollowButton(true);
+                break;
+            case STATE_SELF:
+                mIsFollowing = false;
+                shouldShowFollowButton(false);
+                break;
+        }
+    }
+
+    private void updateButtonToFollowing() {
+        mFollowButton.setText(mFollowText);
+        mFollowButton.setSelected(false);
+    }
+
+    private void updateButtonToUnfollow() {
+        mFollowButton.setText(mUnfollowText);
+        mFollowButton.setSelected(true);
+    }
+
+    public void shouldShowFollowButton(boolean showFollowButton) {
+        if (showFollowButton) {
+            mFollowButton.setVisibility(View.VISIBLE);
+        } else {
+            mFollowButton.setVisibility(View.GONE);
+        }
     }
 
     public void setActionListener(ProfileHeaderActionListener actionListener) {
@@ -110,13 +143,7 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public static interface ProfileHeaderActionListener {
 
-        public void switchToListView();
-
-        public void switchToFeedView();
-
         public void wineCountClicked();
-
-        public void findPeopleClicked();
 
         public void toggleFollowUserClicked();
 

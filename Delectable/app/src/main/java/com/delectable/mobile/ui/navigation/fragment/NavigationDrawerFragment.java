@@ -11,10 +11,12 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.NavigationAdapter;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -33,14 +35,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class NavigationDrawerFragment extends BaseFragment {
+public class NavigationDrawerFragment extends BaseFragment implements
+        NavHeader.NavHeaderActionListener {
 
     private static final String TAG = "NavigationDrawerFragment";
 
     /**
      * Navigation Items - Starts at 1, User Profile is at 0
      */
-    // TODO: Should selectecing Position 0 goto User Profile?
     public static final int NAV_HEADER = 0;
 
     public static final int NAV_HOME = 1;
@@ -118,6 +120,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 
         mNavHeader = new NavHeader(getActivity());
         mDrawerListView.addHeaderView(mNavHeader);
+        mNavHeader.setActionListener(this);
 
         // TODO: Fix deselection of Nav items when clicking header/footer..
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -333,6 +336,15 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     private ActionBar getActionBar() {
         return getActivity().getActionBar();
+    }
+
+    @Override
+    public void navHeaderUserImageClicked() {
+        // TODO: Figure out whether we open in Activity or in Fragment with Nav
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
     }
 
     /**

@@ -227,4 +227,32 @@ public class AccountTest extends BaseInstrumentationTestCase {
         String expectedName = "James Wooldridge";
         assertEquals(expectedName, actualAccount.getFullName());
     }
+
+    public void testUserRelationshipTypeSelf() {
+        Account actualAccount = new Account();
+        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_SELF);
+
+        assertTrue(actualAccount.isUserRelationshipTypeSelf());
+        assertFalse(actualAccount.isUserRelationshipTypeNone());
+        assertFalse(actualAccount.isUserRelationshipTypeFollowing());
+    }
+
+    public void testUserRelationshipTypeFollowing() {
+        Account actualAccount = new Account();
+        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_FOLLOWING);
+
+        assertFalse(actualAccount.isUserRelationshipTypeSelf());
+        assertFalse(actualAccount.isUserRelationshipTypeNone());
+        assertTrue(actualAccount.isUserRelationshipTypeFollowing());
+    }
+
+    public void testUserRelationshipTypeNone() {
+        Account actualAccount = new Account();
+        actualAccount.setCurrentUserRelationship(Account.RELATION_TYPE_NONE);
+
+        assertFalse(actualAccount.isUserRelationshipTypeSelf());
+        assertTrue(actualAccount.isUserRelationshipTypeNone());
+        assertFalse(actualAccount.isUserRelationshipTypeFollowing());
+    }
+
 }

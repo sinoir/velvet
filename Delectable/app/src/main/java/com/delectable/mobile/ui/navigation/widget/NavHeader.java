@@ -21,6 +21,8 @@ public class NavHeader extends RelativeLayout {
 
     private CircleImageView mUserImageView;
 
+    private NavHeaderActionListener mActionListener;
+
     public NavHeader(Context context) {
         this(context, null);
     }
@@ -39,6 +41,15 @@ public class NavHeader extends RelativeLayout {
         mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
         mFollowingCountTextView = (TextView) findViewById(R.id.following_count);
         mUserBioTextView = (TextView) findViewById(R.id.user_bio_text);
+
+        mUserImageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mActionListener != null) {
+                    mActionListener.navHeaderUserImageClicked();
+                }
+            }
+        });
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -55,15 +66,23 @@ public class NavHeader extends RelativeLayout {
     }
 
     public void setFollowerCount(int followerCount) {
-        String followerCountText = getResources()
-                .getString(R.string.followers_count, followerCount);
+        String followerCountText = getResources().getQuantityString(R.plurals.followers_count,
+                followerCount, followerCount);
         mFollowerCountTextView.setText(followerCountText);
     }
 
     public void setFollowingCount(int followingCount) {
         String followingCountText = getResources()
-                .getString(R.string.followers_count, followingCount);
+                .getString(R.string.following_count, followingCount);
         mFollowingCountTextView.setText(followingCountText);
     }
 
+    public void setActionListener(NavHeaderActionListener actionListener) {
+        mActionListener = actionListener;
+    }
+
+    public interface NavHeaderActionListener {
+
+        public void navHeaderUserImageClicked();
+    }
 }
