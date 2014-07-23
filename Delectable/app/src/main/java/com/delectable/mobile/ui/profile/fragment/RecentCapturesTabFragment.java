@@ -24,6 +24,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+// TODO / Note: Abstract something from FollowFeedTabFragment, these are almost identical.
 public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
 
     public static final String TAG = "RecentCapturesTabFragment";
