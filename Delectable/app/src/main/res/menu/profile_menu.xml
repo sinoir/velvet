@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ab_search"
+        android:showAsAction="always"
+        android:title="Find People"></item>
+
+    <!-- TODO: Need asset for list / detail listing -->
+    <item
+        android:id="@+id/toggle_list"
+        android:icon="@drawable/ab_camera"
+        android:showAsAction="always"
+        android:title="Toggle List"></item>
+
+</menu>

@@ -9,6 +9,7 @@ import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.api.requests.FollowAccountsActionRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
@@ -19,6 +20,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -42,13 +46,17 @@ public class UserProfileFragment extends BaseFragment implements
 
     private SlidingPagerAdapter mTabsAdapter;
 
-    private AccountsNetworkController mAccountsNetworkController;
+    private BaseNetworkController mNetworkController;
 
     private Account mUserAccount;
 
     private ArrayList<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
+
+    private RecentCapturesTabFragment mRecentCapturesTabFragment;
+
+    private RecentCapturesTabFragment mTopRatedTabFragment;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -66,7 +74,7 @@ public class UserProfileFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCaptureDetails = new ArrayList<CaptureDetails>();
-        mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        mNetworkController = new AccountsNetworkController(getActivity());
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
@@ -76,9 +84,13 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+
         mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         mProfileHeaderView = (ProfileHeaderView) mView.findViewById(R.id.profile_header_view);
+        mProfileHeaderView.setActionListener(this);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
@@ -87,9 +99,11 @@ public class UserProfileFragment extends BaseFragment implements
                 = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
 
         // TODO: Split Recent / TopRated Tabs
+        mRecentCapturesTabFragment = RecentCapturesTabFragment.newInstance(mUserId);
+        mTopRatedTabFragment = RecentCapturesTabFragment.newInstance(mUserId);
         // "RECENT" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
+                mRecentCapturesTabFragment,
                 R.color.d_dark_navy,
                 R.color.d_light_green,
                 R.color.tab_text_white_grey,
@@ -97,7 +111,7 @@ public class UserProfileFragment extends BaseFragment implements
 
         // "TOP RATED" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
+                mTopRatedTabFragment,
                 R.color.d_dark_navy,
                 R.color.d_light_green,
                 R.color.tab_text_white_grey,
@@ -117,11 +131,43 @@ public class UserProfileFragment extends BaseFragment implements
         loadData();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO: Custom Back Arrow...
+        inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                launchFindPeople();
+                return true;
+            case R.id.toggle_list:
+                toggleListDetailView();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void toggleListDetailView() {
+        // TODO: Toggle Menu Icon
+        mRecentCapturesTabFragment.toggleAdapterViewState();
+        mTopRatedTabFragment.toggleAdapterViewState();
+    }
+
+    private void launchFindPeople() {
+        // TODO: Find People screen
+        Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
+    }
+
     private void loadData() {
         AccountsContextRequest request = new AccountsContextRequest(
                 AccountsContextRequest.CONTEXT_PROFILE);
         request.setId(mUserId);
-        mAccountsNetworkController.performRequest(request,
+        mNetworkController.performRequest(request,
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
@@ -142,8 +188,7 @@ public class UserProfileFragment extends BaseFragment implements
                     public void onFailed(RequestError error) {
                         Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
                                 .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        showToastError(error.getMessage());
                     }
                 }
         );
@@ -177,8 +222,29 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     @Override
-    public void toggleFollowUserClicked() {
-        // TODO: Make Follow Request
+    public void toggleFollowUserClicked(final boolean isFollowingSelected) {
+        Log.d(TAG, "Toggle Following? " + isFollowingSelected);
+        FollowAccountsActionRequest request = new FollowAccountsActionRequest(mUserId,
+                isFollowingSelected);
+        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                // Do nothing
+                Log.d(TAG, "Toggle Follow Success! " + result);
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                showToastError(error.getMessage());
+                // Revert Follow Button state
+                // If the user toggled to Is Following, should revert back to not Following
+                if (isFollowingSelected) {
+                    mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_NOT_FOLLOWING);
+                } else {
+                    mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_FOLLOWING);
+                }
+            }
+        });
     }
 
     @Override

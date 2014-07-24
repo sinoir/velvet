@@ -15,7 +15,17 @@ public class FollowAccountsActionRequest extends BaseActionRequest {
     ArrayList<String> ids;
 
     /**
-     * @param accountIds   - Account IDs to Follow / Unfollow
+     * @param accountId    - Account ID to Follow / Unfollow
+     * @param shouldFollow - Whether or not to follow the list of users
+     */
+    public FollowAccountsActionRequest(String accountId, boolean shouldFollow) {
+        ids = new ArrayList<String>();
+        ids.add(accountId);
+        action = shouldFollow;
+    }
+
+    /**
+     * @param accountIds   - List of Account IDs to Follow / Unfollow
      * @param shouldFollow - Whether or not to follow the list of users
      */
     public FollowAccountsActionRequest(ArrayList<String> accountIds, boolean shouldFollow) {
