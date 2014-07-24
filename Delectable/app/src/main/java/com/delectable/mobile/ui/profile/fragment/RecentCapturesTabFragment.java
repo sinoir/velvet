@@ -77,7 +77,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
 
         // Not handling pagination here
         mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, null, this, mUserId);
-        mAdapter.setCurrentState(FollowFeedAdapter.DISPLAY_STATE_SIMPLE);
+        mAdapter.setCurrentViewType(FollowFeedAdapter.VIEW_TYPE_SIMPLE);
 
         mListView.setAdapter(mAdapter);
 
@@ -132,10 +132,10 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
     }
 
     public void toggleAdapterViewState() {
-        if (mAdapter.getCurrentState() == FollowFeedAdapter.DISPLAY_STATE_DETAILED) {
-            mAdapter.setCurrentState(FollowFeedAdapter.DISPLAY_STATE_SIMPLE);
+        if (mAdapter.getCurrentViewType() == FollowFeedAdapter.VIEW_TYPE_DETAILED) {
+            mAdapter.setCurrentViewType(FollowFeedAdapter.VIEW_TYPE_SIMPLE);
         } else {
-            mAdapter.setCurrentState(FollowFeedAdapter.DISPLAY_STATE_DETAILED);
+            mAdapter.setCurrentViewType(FollowFeedAdapter.VIEW_TYPE_DETAILED);
         }
         mAdapter.notifyDataSetChanged();
         // Scroll back to top of view when switching

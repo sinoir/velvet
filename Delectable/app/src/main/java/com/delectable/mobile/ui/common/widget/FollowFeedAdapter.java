@@ -15,11 +15,13 @@ import java.util.ArrayList;
 
 public class FollowFeedAdapter extends BaseAdapter {
 
-    public static final int DISPLAY_STATE_SIMPLE = 0;
+    public static final int VIEW_TYPE_SIMPLE = 0;
 
-    public static final int DISPLAY_STATE_DETAILED = 1;
+    public static final int VIEW_TYPE_DETAILED = 1;
 
-    private int mCurrentState = DISPLAY_STATE_DETAILED;
+    private int mCurrentViewType = VIEW_TYPE_DETAILED;
+
+    private static final int sNumberViewTypes = 2;
 
     private static final String TAG = "FollowFeedAdapter";
 
@@ -72,14 +74,24 @@ public class FollowFeedAdapter extends BaseAdapter {
     }
 
     @Override
+    public int getViewTypeCount() {
+        return sNumberViewTypes;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mCurrentViewType;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-        switch (mCurrentState) {
-            case DISPLAY_STATE_DETAILED:
+        switch (mCurrentViewType) {
+            case VIEW_TYPE_DETAILED:
                 Log.d(TAG, "Displaying Detailed List Items");
                 view = getDetailedListingView(position, convertView);
                 break;
-            case DISPLAY_STATE_SIMPLE:
+            case VIEW_TYPE_SIMPLE:
             default:
                 Log.d(TAG, "Displaying Simple List Items");
                 view = getSimpleListingView(position, convertView);
@@ -97,9 +109,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         CaptureDetailsView rowView = null;
         CaptureDetails capture = mData.get(position);
 
-        if (convertView instanceof CaptureDetailsView) {
-            rowView = (CaptureDetailsView) convertView;
-        }
+        rowView = (CaptureDetailsView) convertView;
 
         if (rowView == null) {
             rowView = new CaptureDetailsView(mContext);
@@ -113,9 +123,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         CaptureSimpleItemRow rowView = null;
         CaptureDetails capture = mData.get(position);
 
-        if (convertView instanceof CaptureSimpleItemRow) {
-            rowView = (CaptureSimpleItemRow) convertView;
-        }
+        rowView = (CaptureSimpleItemRow) convertView;
 
         if (rowView == null) {
             rowView = new CaptureSimpleItemRow(mContext);
@@ -124,12 +132,12 @@ public class FollowFeedAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public int getCurrentState() {
-        return mCurrentState;
+    public int getCurrentViewType() {
+        return mCurrentViewType;
     }
 
-    public void setCurrentState(int currentState) {
-        mCurrentState = currentState;
+    public void setCurrentViewType(int currentViewType) {
+        mCurrentViewType = currentViewType;
     }
 
     public static interface FeedItemActionsHandler {
