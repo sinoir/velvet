@@ -10,11 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
 
-        <com.delectable.mobile.ui.profile.widget.ProfileHeaderMainView
-            android:id="@+id/profile_header_main"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/profile_header_viewpager"
             android:layout_width="match_parent"
             android:layout_height="@dimen/profile_pager_header_height" />
-        <!-- TODO: ViewPager header -->
 
         <!-- TODO: Dot Indicators -->
 
@@ -22,7 +21,7 @@
             android:id="@+id/follow_button"
             android:layout_width="210dp"
             android:layout_height="@dimen/button_height"
-            android:layout_below="@id/profile_header_main"
+            android:layout_below="@id/profile_header_viewpager"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/profile_vertical_spacing"
             android:layout_marginTop="@dimen/profile_vertical_spacing"
