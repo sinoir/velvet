@@ -5,6 +5,7 @@ import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
+import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 
 import android.app.ActionBar;
 import android.app.FragmentManager;
@@ -69,6 +70,7 @@ public class NavActivity extends BaseActivity
                 break;
             case NavigationDrawerFragment.NAV_SETTINGS:
                 // TODO: Settings Screen
+                fragment = new SettingsFragment();
                 break;
             case NavigationDrawerFragment.NAV_FIND_PEOPLE:
                 // TODO: Find People Screen

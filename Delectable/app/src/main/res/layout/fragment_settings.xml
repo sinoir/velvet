@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/d_white"
+        android:paddingBottom="@dimen/settings_view_horizontal_padding"
+        android:paddingTop="@dimen/settings_view_horizontal_padding">
+
+
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="@dimen/settings_profile_image_height"
+            android:layout_height="@dimen/settings_profile_image_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/settings_view_horizontal_padding"
+            android:src="@drawable/no_photo" />
+
+        <EditText
+            android:id="@+id/name"
+            style="@style/SettingsEditText"
+            android:hint="@string/settings_name_hint"
+            android:text="Arnold Fishhorse" />
+
+        <EditText
+            android:id="@+id/short_bio"
+            style="@style/SettingsEditText"
+            android:hint="@string/settings_short_bio_hint" />
+
+        <EditText
+            android:id="@+id/website"
+            style="@style/SettingsEditText"
+            android:hint="@string/settings_website_hint" />
+
+        <TextView
+            android:id="@+id/account_category_label"
+            style="@style/SettingsCategoryLabel"
+            android:text="@string/settings_account" />
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/email_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_email_label" />
+
+            <EditText
+                android:id="@+id/email_value"
+                style="@style/SettingsRowEditText"
+                android:layout_toRightOf="@+id/email_label"
+                android:hint="@string/settings_email_hint" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/phone_number_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_phone_number_label" />
+
+            <EditText
+                android:id="@+id/phone_number_value"
+                style="@style/SettingsRowEditText"
+                android:layout_toRightOf="@+id/phone_number_label"
+                android:hint="@string/settings_phone_number_hint" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/facebook_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_facebook_label" />
+
+            <EditText
+                android:id="@+id/facebook_value"
+                style="@style/SettingsRowEditText"
+                android:layout_toRightOf="@+id/facebook_label"
+                android:hint="@string/settings_facebook_hint" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/twitter_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_twitter_label" />
+
+            <EditText
+                android:id="@+id/twitter_value"
+                style="@style/SettingsRowEditText"
+                android:layout_toRightOf="@+id/twitter_label"
+                android:hint="@string/settings_twitter_hint" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/notification_category_label"
+            style="@style/SettingsCategoryLabel"
+            android:text="@string/settings_notification" />
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/following_you"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_following_you" />
+
+            <!-- TODO change icon to phone icon style-->
+            <ImageButton
+                android:id="@+id/following_device_notification"
+                style="@style/SettingsPhoneNotificationIcon"
+                android:layout_toLeftOf="@+id/following_email_notification" />
+
+            <!-- TODO change icon to letter icon in style -->
+            <ImageButton
+                android:id="@+id/following_email_notification"
+                style="@style/SettingsEmailNotificationIcon" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/comment_on_your_wine"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_comment_on_your_wine" />
+
+            <!-- TODO change icon to phone icon style-->
+            <ImageButton
+                android:id="@+id/comment_device_notification"
+                style="@style/SettingsPhoneNotificationIcon"
+                android:layout_toLeftOf="@+id/comment_email_notification" />
+
+            <!-- TODO change icon to letter icon in style -->
+            <ImageButton
+                android:id="@+id/comment_email_notification"
+                style="@style/SettingsEmailNotificationIcon" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <TextView
+                android:id="@+id/tagged_on_a_wine"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/settings_tagged_on_a_wine" />
+
+            <!-- TODO change icon to phone icon style-->
+            <ImageButton
+                android:id="@+id/tagged_device_notification"
+                style="@style/SettingsPhoneNotificationIcon"
+                android:layout_toLeftOf="@+id/tagged_email_notification" />
+
+            <!-- TODO change icon to letter icon in style -->
+            <ImageButton
+                android:id="@+id/tagged_email_notification"
+                style="@style/SettingsEmailNotificationIcon" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/about_category_label"
+            style="@style/SettingsCategoryLabel"
+            android:text="@string/settings_about" />
+
+        <TextView
+            android:id="@+id/contact"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_contact" />
+
+        <View style="@style/SettingsAboutCategoryDivider" />
+
+        <TextView
+            android:id="@+id/terms_of_use"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_terms_of_use" />
+
+        <View style="@style/SettingsAboutCategoryDivider" />
+
+        <TextView
+            android:id="@+id/privacy_policy"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_privacy_policy" />
+
+        <View style="@style/SettingsAboutCategoryDivider" />
+
+        <TextView
+            android:id="@+id/sign_out"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_sign_out" />
+
+        <View style="@style/SettingsAboutCategoryDivider" />
+
+        <TextView
+            android:id="@+id/delectable_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/settings_view_horizontal_padding"
+            android:gravity="center"
+            android:text="Delectable 1.01"
+            android:textColor="@color/d_dark_gray"
+            android:textSize="@dimen/settings_version_text_size" />
+
+    </LinearLayout>
+</ScrollView>

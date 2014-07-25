@@ -10,4 +10,110 @@
         <item name="android:background">@color/d_dark_navy</item>
     </style>
 
+    <!-- Settings Screen -->
+
+    <style name="SettingsBaseTextStyle">
+        <item name="android:textColor">@color/d_black</item>
+        <item name="android:textColorHint">@color/d_dark_gray</item>
+        <item name="android:textSize">@dimen/settings_text_size</item>
+        <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
+    </style>
+
+    <style name="SettingsEditText" parent="SettingsBaseTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_row_height</item>
+        <item name="android:background">@drawable/bg_settings_bottom_border</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>
+    </style>
+
+    <style name="SettingsCategoryLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_row_height</item>
+        <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:gravity">left|bottom</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">@dimen/settings_text_size</item>
+    </style>
+
+    <style name="SettingsRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_row_height</item>
+        <item name="android:background">@drawable/bg_settings_bottom_border</item>
+        <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:paddingRight">@dimen/general_row_horizontal_spacing</item>
+    </style>
+
+
+    <style name="SettingsRowTextLabel" parent="SettingsBaseTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <style name="SettingsRowEditText" parent="SettingsBaseTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:gravity">bottom|right</item>
+        <item name="android:background">@null</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_marginLeft">@dimen/settings_text_horizontal_spacing</item>
+    </style>
+
+    <style name="SettingsBaseNotificationIconStyle">
+        <item name="android:layout_width">@dimen/general_icon_size</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:selectable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="SettingsEmailNotificationIcon" parent="SettingsBaseNotificationIconStyle">
+        <item name="android:layout_alignParentRight">true</item>
+        <!-- TODO will probably need to bring this back to size the icon when we get the real drawable
+        <item name="android:paddingLeft">@dimen/settings_email_notification_icon_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/settings_email_notification_icon_horizontal_padding</item>
+        -->
+        <item name="android:src">@drawable/ic_settings_email_notification</item>
+        <item name="android:contentDescription">@string/settings_cd_email_notifications</item>
+    </style>
+
+    <style name="SettingsPhoneNotificationIcon" parent="SettingsBaseNotificationIconStyle">
+        <item name="android:layout_marginRight">@dimen/settings_notification_icon_horizontal_spacing</item>
+        <!-- TODO will probably need to bring this back to size the icon when we get the real drawable
+        <item name="android:paddingLeft">@dimen/settings_phone_notification_icon_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/settings_phone_notification_icon_horizontal_padding</item>
+        -->
+        <item name="android:src">@drawable/ic_settings_phone_notification</item>
+        <item name="android:contentDescription">@string/settings_cd_phone_notifications</item>
+    </style>
+
+    <style name="SettingsAboutCategoryRow" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_row_height</item>
+        <item name="android:paddingLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:paddingRight">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:selectable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_white_to_light_opacity</item>
+        <item name="android:textColor">@color/d_black</item>
+        <item name="android:textSize">@dimen/settings_text_size</item>
+        <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
+    </style>
+
+    <style name="SettingsAboutCategoryDivider" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_divider_height</item>
+        <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:background">@color/d_light_gray</item>
+    </style>
+
+
+
 </resources>
