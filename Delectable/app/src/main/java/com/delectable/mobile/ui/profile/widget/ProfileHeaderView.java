@@ -2,12 +2,17 @@ package com.delectable.mobile.ui.profile.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.ui.common.widget.SimpleViewPagerAdapter;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
 
 public class ProfileHeaderView extends RelativeLayout implements
         ProfileHeaderMainView.ProfileHeaderMainViewActionListeners {
@@ -20,6 +25,8 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     private ProfileHeaderMainView mProfileHeaderMainView;
 
+    private ProfileHeaderBioView mProfileHeaderBioView;
+
     private ProfileHeaderActionListener mActionListener;
 
     private Button mFollowButton;
@@ -29,6 +36,12 @@ public class ProfileHeaderView extends RelativeLayout implements
     private String mFollowText;
 
     private String mUnfollowText;
+
+    private ViewPager mViewPager;
+
+    private CirclePageIndicator mIndicator;
+
+    private SimpleViewPagerAdapter mAdapter;
 
     public ProfileHeaderView(Context context) {
         this(context, null);
@@ -42,12 +55,27 @@ public class ProfileHeaderView extends RelativeLayout implements
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header, this);
 
-        mProfileHeaderMainView = (ProfileHeaderMainView) findViewById(R.id.profile_header_main);
-        mFollowButton = (Button) findViewById(R.id.follow_button);
+        mViewPager = (ViewPager) findViewById(R.id.profile_header_viewpager);
+        mIndicator = (CirclePageIndicator) findViewById(R.id.pager_indicator);
+
+        mProfileHeaderMainView = new ProfileHeaderMainView(context);
+        mProfileHeaderBioView = new ProfileHeaderBioView(context);
+
+        // Setup ViewPager Adapter for Main/Bio
+        ArrayList<View> pagerViews = new ArrayList<View>();
+        pagerViews.add(mProfileHeaderMainView);
+        pagerViews.add(mProfileHeaderBioView);
+        mAdapter = new SimpleViewPagerAdapter(pagerViews);
+        mViewPager.setAdapter(mAdapter);
+        // Must set pager to indicator after pager has adapter
+        mIndicator.setViewPager(mViewPager);
 
         mFollowText = context.getString(R.string.profile_follow);
         mUnfollowText = context.getString(R.string.profile_unfollow);
 
+        mFollowButton = (Button) findViewById(R.id.follow_button);
+
+        // Setup FollowButton Click Listener
         mFollowButton.setOnClickListener(new OnClickListener() {
                                              @Override
                                              public void onClick(View v) {
@@ -85,6 +113,10 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public void setWineCount(int wineCount) {
         mProfileHeaderMainView.setWineCount(wineCount);
+    }
+
+    public void setUserBio(String userBio) {
+        mProfileHeaderBioView.setUserBio(userBio);
     }
 
     public void setFollowingState(int state) {
