@@ -25,7 +25,13 @@
     <color name="d_orange">#ffb300</color>
     <color name="d_dark_green">#6ab325</color>
 
-    <color name="d_black_light_opacity">#40000000</color>
+    <!-- Transparent Blacks -->
+    <color name="d_black_25op">#40000000</color>
 
+    <!-- Transparent Whites -->
+    <!-- 20% opacity -->
+    <color name="d_white_20op">#33FFFFFF</color>
+    <!-- 80% opacity -->
+    <color name="d_white_80op">#CCFFFFFF</color>
 
 </resources>

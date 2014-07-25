@@ -6,7 +6,7 @@ import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.api.requests.BaseCaptureFeedListingRequest;
 import com.delectable.mobile.api.requests.CaptureFeedRequest;
@@ -42,7 +42,7 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
 
     private AccountsNetworkController mAccountsNetworkController;
 
-    private CaptureDetailsListing mDetailsListing;
+    private ListingResponse<CaptureDetails> mDetailsListing;
 
     private ArrayList<CaptureDetails> mCaptureDetails;
 
@@ -183,7 +183,7 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
                     @Override
                     public void onSuccess(BaseResponse result) {
                         Log.d(TAG, "Received Results! " + result);
-                        mDetailsListing = (CaptureDetailsListing) result;
+                        mDetailsListing = (ListingResponse<CaptureDetails>) result;
                         mRefreshContainer.setRefreshing(false);
                         mIsLoadingData = false;
                         updateDisplayData();

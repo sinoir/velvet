@@ -1,12 +1,10 @@
 package com.delectable.mobile.ui.capture.fragment;
 
-import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.requests.CommentCaptureRequest;
 import com.delectable.mobile.api.requests.EditCommentRequest;
 import com.delectable.mobile.api.requests.LikeCaptureActionRequest;
@@ -17,9 +15,7 @@ import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
-import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
-import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
