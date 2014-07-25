@@ -5,24 +5,35 @@ import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+
 public abstract class BaseResponse {
 
     String context;
 
     String e_tag;
 
+    // If a subclass uses generic T, we must specify a TypeToken before serializing/deserializing the gson
+    // For example, MyClass<T>
+    protected Type mClassType;
+
     public static <T extends BaseResponse> T buildFromJson(JSONObject json, Class<T> tClass) {
-        return buildFromJson(json, tClass, false);
+        return buildFromJson(json, tClass, false, null);
+    }
+
+    public static <T extends BaseResponse> T buildFromJson(JSONObject json, Type classType) {
+        return buildFromJson(json, null, false, classType);
     }
 
     public static <T extends BaseResponse> T buildFromJsonForExposedObjects(JSONObject json,
             Class<T> tClass) {
-        return buildFromJson(json, tClass, true);
+        return buildFromJson(json, tClass, true, null);
     }
 
     public static <T extends BaseResponse> T buildFromJson(JSONObject json, Class<T> tClass,
-            boolean shouldUseExposeAnnotations) {
+            boolean shouldUseExposeAnnotations, Type classType) {
         GsonBuilder builder = new GsonBuilder();
+        T result;
         if (shouldUseExposeAnnotations) {
             builder.excludeFieldsWithoutExposeAnnotation();
         }
@@ -31,10 +42,24 @@ public abstract class BaseResponse {
         if (json != null) {
             jsonString = json.toString();
         }
-        return gson.fromJson(jsonString, tClass);
+
+        if (classType != null) {
+            result = gson.fromJson(jsonString, classType);
+        } else {
+            result = gson.fromJson(jsonString, tClass);
+        }
+        return result;
     }
 
     public abstract BaseResponse buildFromJson(JSONObject jsonObj);
+
+    public Type getClassType() {
+        return mClassType;
+    }
+
+    public void setClassType(Type classType) {
+        mClassType = classType;
+    }
 
     public String getContext() {
         return context;

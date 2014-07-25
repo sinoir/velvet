@@ -1,11 +1,8 @@
 package com.delectable.mobile.api.models;
 
-import com.delectable.mobile.util.DateHelperUtil;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class CaptureDetails extends Capture {
@@ -107,11 +104,6 @@ public class CaptureDetails extends Capture {
 
     public void updateRatingForUser(String id, int rating) {
         ratings.put(id, rating);
-    }
-
-    public Date getCreatedAtDate() {
-        double createdAtTime = created_at != null ? created_at.doubleValue() : 0.0f;
-        return DateHelperUtil.dateFromDouble(createdAtTime);
     }
 
     public int getLikesCount() {
