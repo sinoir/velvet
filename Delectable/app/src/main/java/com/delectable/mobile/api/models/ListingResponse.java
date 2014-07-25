@@ -2,9 +2,15 @@ package com.delectable.mobile.api.models;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class ListingResponse extends BaseResponse {
+public class ListingResponse<T extends BaseListingElement> extends BaseResponse {
+
+    private static final String TAG = ListingResponse.class.getSimpleName();
 
     Boolean more;
 
@@ -12,12 +18,25 @@ public abstract class ListingResponse extends BaseResponse {
 
     Boundaries boundaries;
 
+    ArrayList<T> before;
+
+    ArrayList<T> after;
+
+    ArrayList<T> updates;
+
     ArrayList<String> deletes;
+
+    Map<String, T> mAllCombinedDataMap;
+
+    // Class Type is required for json parsing
+    public ListingResponse(Type classType) {
+        setClassType(classType);
+    }
 
     @Override
     public BaseResponse buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
-        ListingResponse newRegistration = buildFromJson(payload, this.getClass());
+        ListingResponse<T> newRegistration = buildFromJson(payload, getClassType());
         if (newRegistration != null) {
             newRegistration.invalidate = jsonObj.optBoolean("invalidate");
         }
@@ -90,23 +109,29 @@ public abstract class ListingResponse extends BaseResponse {
         this.boundaries = boundaries;
     }
 
-    public abstract void updateCombinedData();
+    public ArrayList<T> getBefore() {
+        return before;
+    }
 
-    public abstract ArrayList<? extends BaseResponse> getSortedCombinedData();
+    public void setBefore(ArrayList<T> before) {
+        this.before = before;
+    }
 
-    public abstract void combineWithPreviousListing(ListingResponse previousListing);
+    public ArrayList<T> getAfter() {
+        return after;
+    }
 
-    public abstract ArrayList<? extends BaseResponse> getBefore();
+    public void setAfter(ArrayList<T> after) {
+        this.after = after;
+    }
 
-    public abstract void setBefore(ArrayList<? extends BaseResponse> before);
+    public ArrayList<T> getUpdates() {
+        return updates;
+    }
 
-    public abstract ArrayList<? extends BaseResponse> getAfter();
-
-    public abstract void setAfter(ArrayList<? extends BaseResponse> after);
-
-    public abstract ArrayList<? extends BaseResponse> getUpdates();
-
-    public abstract void setUpdates(ArrayList<? extends BaseResponse> updates);
+    public void setUpdates(ArrayList<T> updates) {
+        this.updates = updates;
+    }
 
     public ArrayList<String> getDeletes() {
         return deletes;
@@ -114,6 +139,48 @@ public abstract class ListingResponse extends BaseResponse {
 
     public void setDeletes(ArrayList<String> deletes) {
         this.deletes = deletes;
+    }
+
+    public void updateCombinedData() {
+        if (mAllCombinedDataMap == null) {
+            mAllCombinedDataMap = new HashMap<String, T>();
+        }
+        if (after != null) {
+            addElementToDataMap(after);
+        }
+        if (before != null) {
+            addElementToDataMap(before);
+        }
+        if (updates != null) {
+            addElementToDataMap(updates);
+        }
+        if (deletes != null && deletes.size() > 0) {
+            for (String deleteId : deletes) {
+                mAllCombinedDataMap.remove(deleteId);
+            }
+        }
+    }
+
+    private void addElementToDataMap(ArrayList<T> elements) {
+        for (T element : elements) {
+            mAllCombinedDataMap.put(element.getId(), element);
+        }
+    }
+
+    public ArrayList<T> getSortedCombinedData() {
+        ArrayList<T> sortedList = new ArrayList<T>(
+                mAllCombinedDataMap.values());
+        Collections.sort(sortedList, T.CreatedAtDescendingComparator);
+        return sortedList;
+    }
+
+    public void combineWithPreviousListing(ListingResponse previousListing) {
+        mAllCombinedDataMap = previousListing.getAllCombinedDataMap();
+        updateCombinedData();
+    }
+
+    public Map<String, T> getAllCombinedDataMap() {
+        return mAllCombinedDataMap;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 
 import org.json.JSONException;
@@ -30,7 +30,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 AccountsFollowerFeedRequest.CONTEXT_MINIMAL);
         assertEquals(expectedContext, request.getContext());
 
-        CaptureDetailsListing actualListing = (CaptureDetailsListing) request
+        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
                 .buildResopnseFromJson(json);
 
         assertNull(actualListing.getBoundariesFromBefore());
@@ -125,7 +125,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
         assertEquals(expectedContext, request.getContext());
 
-        CaptureDetailsListing actualListing = (CaptureDetailsListing) request
+        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
                 .buildResopnseFromJson(json);
 
         assertTrue(actualListing.getInvalidate());
@@ -252,7 +252,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         // Load "Second Request" response, as if getting a request with etag / before / after
@@ -260,7 +261,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
         secondRequest.setCurrentListing(captureListing);
-        CaptureDetailsListing newListing = (CaptureDetailsListing) secondRequest
+        ListingResponse<CaptureDetails> newListing = (ListingResponse<CaptureDetails>) secondRequest
                 .buildResopnseFromJson(json);
 
         ArrayList<CaptureDetails> expectedCombinedData = new ArrayList<CaptureDetails>();
@@ -285,7 +286,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
@@ -294,7 +296,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
         secondRequest.setCurrentListing(captureListing);
-        CaptureDetailsListing newListing = (CaptureDetailsListing) secondRequest
+        ListingResponse<CaptureDetails> newListing = (ListingResponse<CaptureDetails>) secondRequest
                 .buildResopnseFromJson(json);
 
         ArrayList<CaptureDetails> expectedCombinedData = new ArrayList<CaptureDetails>();
@@ -317,7 +319,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
         String expectedEtag = captureListing.getETag();
         String expectedContext = captureListing.getContext();
@@ -339,7 +342,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
@@ -362,7 +366,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_null_payload);
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing actualListing = (CaptureDetailsListing) request
+        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
                 .buildResopnseFromJson(json);
         assertNull(actualListing);
     }
@@ -372,7 +376,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing expectedListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> expectedListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_null_payload);
@@ -380,8 +385,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
         request.setCurrentListing(expectedListing);
         request.setIsPullToRefresh(true);
-        CaptureDetailsListing actualListing = (CaptureDetailsListing) request.buildResopnseFromJson(
-                json);
+        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
+                .buildResopnseFromJson(
+                        json);
         assertEquals(expectedListing, actualListing);
     }
 
@@ -390,7 +396,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         ArrayList<CaptureDetails> expectedCombinedData = captureListing.getUpdates();
@@ -414,7 +421,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
@@ -444,7 +452,8 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        CaptureDetailsListing captureListing = (CaptureDetailsListing) firstRequest
+        ListingResponse<CaptureDetails> captureListing
+                = (ListingResponse<CaptureDetails>) firstRequest
                 .buildResopnseFromJson(json);
 
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(

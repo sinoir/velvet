@@ -1,10 +1,14 @@
 package com.delectable.mobile.api.requests;
 
+import com.google.gson.reflect.TypeToken;
+
 import com.delectable.mobile.api.models.BaseResponse;
-import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.ListingResponse;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public abstract class BaseCaptureFeedListingRequest extends BaseRequest {
@@ -21,7 +25,7 @@ public abstract class BaseCaptureFeedListingRequest extends BaseRequest {
 
     Boolean suppress_before;
 
-    private CaptureDetailsListing mCurrentListing;
+    private ListingResponse<CaptureDetails> mCurrentListing;
 
     /**
      * Make request to get Follower Capture Feed
@@ -35,7 +39,7 @@ public abstract class BaseCaptureFeedListingRequest extends BaseRequest {
     /**
      * Current Listing that was already loaded, used for updating existing list
      */
-    public void setCurrentListing(CaptureDetailsListing currentListing) {
+    public void setCurrentListing(ListingResponse<CaptureDetails> currentListing) {
         mCurrentListing = currentListing;
         if (currentListing != null) {
             // TODO: Check invalidate to reset / get new data without etag.
@@ -75,9 +79,11 @@ public abstract class BaseCaptureFeedListingRequest extends BaseRequest {
 
     @Override
     public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        CaptureDetailsListing resForParsing = new CaptureDetailsListing();
-        CaptureDetailsListing parsedListing = (CaptureDetailsListing) resForParsing
-                .buildFromJson(jsonObject);
+        Type classType = new TypeToken<ListingResponse<CaptureDetails>>() {
+        }.getType();
+        ListingResponse<CaptureDetails> resForParsing = new ListingResponse<CaptureDetails>(classType);
+        ListingResponse<CaptureDetails> parsedListing
+                = (ListingResponse<CaptureDetails>) resForParsing.buildFromJson(jsonObject);
         // When combining data for suppressed before requests, it may be null:
         parsedListing = parsedListing != null ? parsedListing : mCurrentListing;
         if (parsedListing != null) {

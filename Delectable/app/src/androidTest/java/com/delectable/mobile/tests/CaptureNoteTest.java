@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.models.CaptureNoteListing;
+import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.requests.CaptureNotesRequest;
 
 import org.json.JSONException;
@@ -24,8 +24,9 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_notes_listing_first_query);
 
         CaptureNotesRequest request = new CaptureNotesRequest();
-        CaptureNoteListing actualListing = (CaptureNoteListing) request.buildResopnseFromJson(
-                json);
+        ListingResponse<CaptureNote> actualListing = (ListingResponse<CaptureNote>) request
+                .buildResopnseFromJson(
+                        json);
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());

@@ -6,7 +6,7 @@ import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.models.CaptureNoteListing;
+import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
@@ -88,7 +88,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private BaseWine mBaseWine;
 
-    private CaptureNoteListing mCaptureNoteListing;
+    private ListingResponse<CaptureNote> mCaptureNoteListing;
 
 
     /**
@@ -232,7 +232,7 @@ public class WineProfileFragment extends BaseFragment implements
                 new BaseNetworkController.RequestCallback() {
                     @Override
                     public void onSuccess(BaseResponse result) {
-                        mCaptureNoteListing = (CaptureNoteListing) result;
+                        mCaptureNoteListing = (ListingResponse<CaptureNote>) result;
                         updateCaptureNotesData();
                     }
 

@@ -6,7 +6,7 @@ import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureDetailsListing;
+import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.requests.BaseCaptureFeedListingRequest;
 import com.delectable.mobile.api.requests.CaptureFeedRequest;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
@@ -39,7 +39,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
 
     private AccountsNetworkController mAccountsNetworkController;
 
-    private CaptureDetailsListing mDetailsListing;
+    private ListingResponse<CaptureDetails> mDetailsListing;
 
     private ArrayList<CaptureDetails> mCaptureDetails;
 
@@ -111,7 +111,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
                     @Override
                     public void onSuccess(BaseResponse result) {
                         Log.d(TAG, "Received Results! " + result);
-                        mDetailsListing = (CaptureDetailsListing) result;
+                        mDetailsListing = (ListingResponse<CaptureDetails>) result;
                         mCaptureDetails.clear();
                         if (mDetailsListing != null) {
                             mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());

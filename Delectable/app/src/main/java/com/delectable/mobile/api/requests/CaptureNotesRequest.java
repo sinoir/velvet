@@ -1,10 +1,15 @@
 package com.delectable.mobile.api.requests;
 
+import com.google.gson.reflect.TypeToken;
+
 import com.delectable.mobile.api.models.BaseResponse;
-import com.delectable.mobile.api.models.CaptureNoteListing;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureNote;
+import com.delectable.mobile.api.models.ListingResponse;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class CaptureNotesRequest extends BaseRequest {
@@ -49,7 +54,9 @@ public class CaptureNotesRequest extends BaseRequest {
 
     @Override
     public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        CaptureNoteListing resForParsing = new CaptureNoteListing();
+        Type classType = new TypeToken<ListingResponse<CaptureNote>>() {
+        }.getType();
+        ListingResponse<CaptureNote> resForParsing = new ListingResponse<CaptureNote>(classType);
         return resForParsing.buildFromJson(jsonObject);
     }
 
