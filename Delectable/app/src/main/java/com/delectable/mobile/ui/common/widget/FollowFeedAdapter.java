@@ -49,6 +49,7 @@ public class FollowFeedAdapter extends BaseAdapter {
         mData = data;
         mActionsHandler = actionsHandler;
         mCaptureActionsHandler = captureActionsHandler;
+        mUserId = userId;
     }
 
     public FollowFeedAdapter(Activity context, ArrayList<CaptureDetails> data,

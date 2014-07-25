@@ -12,6 +12,8 @@
     <dimen name="small_profile_image_size">40dp</dimen>
     <dimen name="cap_feed_comment_text_size">16sp</dimen>
     <dimen name="tab_height">50dp</dimen>
+    <dimen name="circle_pager_indicator_padding">20dp</dimen>
+    <dimen name="circle_pager_indicator_radius">4dp</dimen>
 
     <!-- General Row Unit Spacing -->
     <!-- Used in:
@@ -29,6 +31,7 @@
     <dimen name="profile_horizontal_text_spacing">15dp</dimen>
     <dimen name="profile_username_text_size">24sp</dimen>
     <dimen name="profile_counts_text_size">16sp</dimen>
+    <dimen name="profile_bio_text_size">16sp</dimen>
     <dimen name="profile_pager_header_height">160dp</dimen>
 
     <!-- Comment Unit -->

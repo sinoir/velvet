@@ -211,6 +211,7 @@ public class UserProfileFragment extends BaseFragment implements
         mProfileHeaderView.setUserName(userName);
         mProfileHeaderView.setFollowerCount(mUserAccount.getFollowerCount());
         mProfileHeaderView.setFollowingCount(mUserAccount.getFollowingCount());
+        mProfileHeaderView.setUserBio(mUserAccount.getBio());
 
         if (mUserAccount.isUserRelationshipTypeSelf()) {
             mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_SELF);
