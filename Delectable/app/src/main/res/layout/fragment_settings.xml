@@ -111,7 +111,7 @@
 
             <!-- TODO change icon to phone icon style-->
             <ImageButton
-                android:id="@+id/following_device_notification"
+                android:id="@+id/following_phone_notification"
                 style="@style/SettingsPhoneNotificationIcon"
                 android:layout_toLeftOf="@+id/following_email_notification" />
 
@@ -130,7 +130,7 @@
 
             <!-- TODO change icon to phone icon style-->
             <ImageButton
-                android:id="@+id/comment_device_notification"
+                android:id="@+id/comment_phone_notification"
                 style="@style/SettingsPhoneNotificationIcon"
                 android:layout_toLeftOf="@+id/comment_email_notification" />
 
@@ -149,7 +149,7 @@
 
             <!-- TODO change icon to phone icon style-->
             <ImageButton
-                android:id="@+id/tagged_device_notification"
+                android:id="@+id/tagged_phone_notification"
                 style="@style/SettingsPhoneNotificationIcon"
                 android:layout_toLeftOf="@+id/tagged_email_notification" />
 
