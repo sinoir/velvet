@@ -6,7 +6,7 @@ public class Config {
 
     public static class ServerInfo {
 
-        public static final String SERVER_MOBILE_URL = "https://mobile-api.delectable.com";
+        public static final String SERVER_MOBILE_URL = "http://mobile-api.delectable.com";
 
         public static final String SERVER_STAGING_URL = "https://staging-api.delectable.com";
 
