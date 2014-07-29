@@ -5,11 +5,14 @@ import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.api.requests.ActivityFeedRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.NavigationAdapter;
+import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -29,7 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,20 +40,7 @@ import java.util.ArrayList;
 public class NavigationDrawerFragment extends BaseFragment implements
         NavHeader.NavHeaderActionListener {
 
-    private static final String TAG = "NavigationDrawerFragment";
-
-    /**
-     * Navigation Items - Starts at 1, User Profile is at 0
-     */
-    public static final int NAV_HEADER = 0;
-
-    public static final int NAV_HOME = 1;
-
-    public static final int NAV_FIND_PEOPLE = 2;
-
-    public static final int NAV_SETTINGS = 3;
-
-    public static final int NAV_FOOTER = 4;
+    private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
     /**
      * Remember the position of the selected item.
@@ -68,17 +57,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private View mView;
+
     private DrawerLayout mDrawerLayout;
 
     private ListView mDrawerListView;
 
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedPosition = NAV_HOME;
-
-    private boolean mFromSavedInstanceState;
-
-    private NavigationAdapter mNavigationAdapter;
+    private ActivityFeedAdapter mActivityFeedAdapter;
 
     private NavHeader mNavHeader;
 
@@ -86,7 +73,16 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private AccountsNetworkController mAccountsNetworkController;
 
+    private BaseNetworkController mBaseNetworkController;
+
     private Account mUserAccount;
+
+    private ArrayList<ActivityRecipient> mActivityRecipients;
+
+    private ListingResponse<ActivityRecipient> mActivityRecipientListing;
+
+    private int mCurrentSelectedNavItem = 0;
+
 
     public NavigationDrawerFragment() {
     }
@@ -94,15 +90,16 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivityRecipients = new ArrayList<ActivityRecipient>();
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
+        mBaseNetworkController = new BaseNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
         if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
+            mCurrentSelectedNavItem = savedInstanceState.getInt(STATE_SELECTED_POSITION);
         }
 
-        selectItem(mCurrentSelectedPosition);
+        selectItem(mCurrentSelectedNavItem);
     }
 
     @Override
@@ -115,45 +112,21 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+        mView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+
+        // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
+        mDrawerListView = (ListView) mView;
 
         mNavHeader = new NavHeader(getActivity());
         mDrawerListView.addHeaderView(mNavHeader);
         mNavHeader.setActionListener(this);
 
-        // TODO: Fix deselection of Nav items when clicking header/footer..
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Ignore Header and Footer for now
-                if (position != NAV_HEADER && position != NAV_FOOTER) {
-                    selectItem(position);
-                }
-            }
-        });
+        mActivityFeedAdapter = new ActivityFeedAdapter(getActivity(), mActivityRecipients);
 
-        // Setup Navigation Adapter
-        ArrayList<NavigationAdapter.NavItemObject> navItems
-                = new ArrayList<NavigationAdapter.NavItemObject>();
-        // TODO: Add Real Nav Icons
-        navItems.add(new NavigationAdapter.NavItemObject(
-                getString(R.string.navigation_home),
-                null));
-        navItems.add(new NavigationAdapter.NavItemObject(
-                getString(R.string.navigation_find_people),
-                null));
-        navItems.add(new NavigationAdapter.NavItemObject(
-                getString(R.string.navigation_settings),
-                null));
+        mDrawerListView.setAdapter(mActivityFeedAdapter);
+        mNavHeader.setCurrentSelectedNavItem(mCurrentSelectedNavItem);
 
-        mNavigationAdapter = new NavigationAdapter(navItems, getActivity());
-
-        mDrawerListView.setAdapter(mNavigationAdapter);
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-
-        // TODO: Add some Footer Listview with activity feed
-        return mDrawerListView;
+        return mView;
     }
 
     @Override
@@ -181,7 +154,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedNavItem);
     }
 
     @Override
@@ -273,7 +246,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     private void selectItem(int position) {
-        mCurrentSelectedPosition = position;
+        mCurrentSelectedNavItem = position;
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
@@ -286,6 +259,11 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     private void loadData() {
+        loadUserData();
+        loadActivityFeed();
+    }
+
+    private void loadUserData() {
         // TODO: Have some central data loading service and cache this somewhere
         AccountsContextRequest request = new AccountsContextRequest(
                 AccountsContextRequest.CONTEXT_PROFILE);
@@ -311,6 +289,30 @@ public class NavigationDrawerFragment extends BaseFragment implements
         );
     }
 
+    private void loadActivityFeed() {
+        ActivityFeedRequest request = new ActivityFeedRequest();
+        mBaseNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
+            @Override
+            public void onSuccess(BaseResponse result) {
+                Log.d(TAG, "Result: " + result);
+                mActivityRecipientListing = (ListingResponse<ActivityRecipient>) result;
+                mActivityRecipients.clear();
+                if (mActivityRecipientListing != null) {
+                    mActivityRecipients.addAll(mActivityRecipientListing.getSortedCombinedData());
+                } else {
+                    // TODO: Empty State for no data?
+                }
+                mActivityFeedAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailed(RequestError error) {
+                Log.e(TAG, "Error Result? : " + error);
+                showToastError(error.getMessage());
+            }
+        });
+    }
+
     private void updateUIWithData() {
         if (mUserAccount == null) {
             return;
@@ -319,6 +321,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
         mNavHeader.setUserBio(mUserAccount.getBio());
+        // TODO: Calculate Recent scans count somehow and store it
+        mNavHeader.setRecentScansCount(0);
         ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
                 mNavHeader.getUserImageView());
     }
@@ -345,6 +349,16 @@ public class NavigationDrawerFragment extends BaseFragment implements
         intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
         intent.setClass(getActivity(), UserProfileActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void navItemClicked(int navItem) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(navItem);
+        }
     }
 
     /**

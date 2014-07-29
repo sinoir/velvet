@@ -16,6 +16,8 @@ public class ActivityFeedRequest extends BaseRequest {
 
     String after;
 
+    private ListingResponse<ActivityRecipient> mCurrentListing;
+
     @Override
     public String[] getPayloadFields() {
         // Build Payload Fields according to what is set and not set
@@ -41,7 +43,33 @@ public class ActivityFeedRequest extends BaseRequest {
         }.getType();
         ListingResponse<ActivityRecipient> resForParsing = new ListingResponse<ActivityRecipient>(
                 classType);
-        return (ListingResponse<ActivityRecipient>) resForParsing.buildFromJson(jsonObject);
+        ListingResponse<ActivityRecipient> parsedListing
+                = (ListingResponse<ActivityRecipient>) resForParsing.buildFromJson(jsonObject);
+        // When combining data for suppressed before requests, it may be null:
+        parsedListing = parsedListing != null ? parsedListing : mCurrentListing;
+        if (parsedListing != null) {
+            if (mCurrentListing != null) {
+                parsedListing.combineWithPreviousListing(mCurrentListing);
+                parsedListing.setETag(mCurrentListing.getETag());
+            } else {
+                parsedListing.updateCombinedData();
+            }
+        }
+        return parsedListing;
+    }
+
+    /**
+     * Current Listing that was already loaded, used for updating existing list
+     */
+    public void setCurrentListing(ListingResponse<ActivityRecipient> currentListing) {
+        mCurrentListing = currentListing;
+        if (currentListing != null) {
+            // TODO: Check invalidate to reset / get new data without etag.
+            e_tag = currentListing.getETag();
+            context = currentListing.getContext();
+            before = currentListing.getBoundariesToBefore();
+            after = currentListing.getBoundariesToAfter();
+        }
     }
 
     public String getBefore() {
@@ -63,8 +91,9 @@ public class ActivityFeedRequest extends BaseRequest {
     @Override
     public String toString() {
         return "ActivityFeedRequest{" +
-                "before=" + before +
-                ", after=" + after +
+                "before='" + before + '\'' +
+                ", after='" + after + '\'' +
+                ", mCurrentListing=" + mCurrentListing +
                 '}';
     }
 }

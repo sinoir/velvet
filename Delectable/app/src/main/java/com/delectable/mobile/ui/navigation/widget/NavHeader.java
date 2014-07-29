@@ -5,23 +5,59 @@ import com.delectable.mobile.ui.common.widget.CircleImageView;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.InjectViews;
+import butterknife.OnClick;
+
 public class NavHeader extends RelativeLayout {
 
-    private TextView mUserNameTextView;
+    // These must reflec the order of the mNavigationItems and onNavigationItemClicked id orders
+    public static final int NAV_HOME = 0;
 
-    private TextView mFollowerCountTextView;
+    public static final int NAV_RECENINT_SCANS = 1;
 
-    private TextView mFollowingCountTextView;
+    public static final int NAV_FIND_FRIENDS = 2;
 
-    private TextView mUserBioTextView;
+    public static final int NAV_SETTINGS = 3;
 
-    private CircleImageView mUserImageView;
+    private static final String TAG = NavHeader.class.getSimpleName();
+
+    @InjectView(R.id.profile_image1)
+    CircleImageView mUserImageView;
+
+    @InjectView(R.id.nav_user_name)
+    TextView mUserNameTextView;
+
+    @InjectView(R.id.followers_count)
+    TextView mFollowerCountTextView;
+
+    @InjectView(R.id.following_count)
+    TextView mFollowingCountTextView;
+
+    @InjectView(R.id.user_bio_text)
+    TextView mUserBioTextView;
+
+    @InjectView(R.id.navigation_recent_scans)
+    View mNavigationRecentScans;
+
+    @InjectView(R.id.recent_scans_count)
+    TextView mNavigationRecentScansCount;
+
+    @InjectViews({R.id.navigation_home, R.id.navigation_recent_scans, R.id.navigation_find_friends,
+            R.id.navigation_settings})
+    List<View> mNavigationItems;
 
     private NavHeaderActionListener mActionListener;
+
+    private View mCurrentSelectedNav;
 
     public NavHeader(Context context) {
         this(context, null);
@@ -35,21 +71,48 @@ public class NavHeader extends RelativeLayout {
             int defStyle) {
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.navigation_header, this);
+        ButterKnife.inject(this);
+    }
 
-        mUserImageView = (CircleImageView) findViewById(R.id.profile_image1);
-        mUserNameTextView = (TextView) findViewById(R.id.user_name);
-        mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
-        mFollowingCountTextView = (TextView) findViewById(R.id.following_count);
-        mUserBioTextView = (TextView) findViewById(R.id.user_bio_text);
+    @OnClick(R.id.profile_image1)
+    void onProfileImageClicked() {
+        if (mActionListener != null) {
+            mActionListener.navHeaderUserImageClicked();
+        }
+    }
 
-        mUserImageView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mActionListener != null) {
-                    mActionListener.navHeaderUserImageClicked();
-                }
-            }
-        });
+    @OnClick({R.id.navigation_home, R.id.navigation_recent_scans, R.id.navigation_find_friends,
+            R.id.navigation_settings})
+    void onNavigationClicked(View navItem) {
+        boolean wasCurrentViewAlreadySelected = toggleViewSelection(navItem);
+        int navIndex = mNavigationItems.indexOf(navItem);
+        Log.d(TAG, "Clicked Nav Item: " + navIndex);
+        if (mActionListener != null && !wasCurrentViewAlreadySelected) {
+            mActionListener.navItemClicked(navIndex);
+        }
+    }
+
+    /**
+     * Helper to toggle selected view if it wasn't selected already, and deselect the last view
+     *
+     * @param selectedView - Current View to select
+     * @return - Whether the current view was selected or not. This way we don't need to trigger a
+     * click event
+     */
+    private boolean toggleViewSelection(View selectedView) {
+        boolean wasSelected = false;
+        if (mCurrentSelectedNav == null) {
+            mCurrentSelectedNav = selectedView;
+            selectedView.setActivated(true);
+        } else if (!mCurrentSelectedNav.equals(selectedView)) {
+            mCurrentSelectedNav.setActivated(false);
+            selectedView.setActivated(true);
+            mCurrentSelectedNav = selectedView;
+        } else {
+            wasSelected = true;
+        }
+
+        return wasSelected;
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -77,6 +140,21 @@ public class NavHeader extends RelativeLayout {
         mFollowingCountTextView.setText(followingCountText);
     }
 
+    public void setRecentScansCount(int scansCount) {
+        if (scansCount > 0) {
+            mNavigationRecentScans.setVisibility(View.VISIBLE);
+        } else {
+            mNavigationRecentScans.setVisibility(View.GONE);
+        }
+        mNavigationRecentScansCount.setText(String.valueOf(scansCount));
+    }
+
+    public void setCurrentSelectedNavItem(int navItem) {
+        if (navItem < mNavigationItems.size()) {
+            toggleViewSelection(mNavigationItems.get(navItem));
+        }
+    }
+
     public void setActionListener(NavHeaderActionListener actionListener) {
         mActionListener = actionListener;
     }
@@ -84,5 +162,7 @@ public class NavHeader extends RelativeLayout {
     public interface NavHeaderActionListener {
 
         public void navHeaderUserImageClicked();
+
+        public void navItemClicked(int navItem);
     }
 }

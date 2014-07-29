@@ -168,8 +168,7 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
     }
 
     public ArrayList<T> getSortedCombinedData() {
-        ArrayList<T> sortedList = new ArrayList<T>(
-                mAllCombinedDataMap.values());
+        ArrayList<T> sortedList = new ArrayList<T>(mAllCombinedDataMap.values());
         Collections.sort(sortedList, T.CreatedAtDescendingComparator);
         return sortedList;
     }
