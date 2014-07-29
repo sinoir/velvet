@@ -1,67 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="150dp"
-    android:background="@color/d_off_white">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/d_white">
 
-    <com.delectable.mobile.ui.common.widget.CircleImageView
-        android:id="@+id/profile_image1"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/no_photo" />
-
-    <TextView
-        android:id="@+id/user_name"
+    <RelativeLayout
+        android:id="@+id/navigation_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/profile_image1"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@id/profile_image1"
-        android:textSize="20sp" />
+        android:background="@color/d_off_white">
 
-    <TextView
-        android:id="@+id/followers_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/profile_image1"
-        android:layout_marginBottom="10dp"
-        android:layout_toRightOf="@+id/profile_image1"
-        android:textColor="@color/d_medium_gray"
-        android:textSize="14sp" />
+        <com.delectable.mobile.ui.common.widget.CircleImageView
+            android:id="@+id/profile_image1"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/no_photo" />
 
-    <TextView
-        android:id="@+id/following_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/profile_image1"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/followers_count"
-        android:textColor="@color/d_medium_gray"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/nav_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/profile_image1"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/profile_image1"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/user_bio_text"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/followers_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/profile_image1"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@+id/profile_image1"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/following_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/profile_image1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/followers_count"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/user_bio_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_image1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/user_bio_text"
+            android:background="@color/d_light_gray" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/navigation_items"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/profile_image1"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:lines="3"
-        android:textSize="14sp" />
+        android:layout_below="@+id/navigation_profile"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/navigation_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp"
+            android:text="@string/navigation_home"
+            android:textColor="@color/nav_text_item_color" />
+
+        <RelativeLayout
+            android:id="@+id/navigation_recent_scans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:minHeight="50dp"
+                android:paddingEnd="25dp"
+                android:paddingStart="25dp"
+                android:text="@string/navigation_recent_scans"
+                android:textColor="@color/nav_text_item_color" />
+
+            <TextView
+                android:id="@+id/recent_scans_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:minHeight="50dp"
+                android:paddingEnd="25dp"
+                android:paddingStart="25dp"
+                android:text="0"
+                android:textColor="@color/nav_text_item_color" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/navigation_find_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp"
+            android:text="@string/navigation_find_friends"
+            android:textColor="@color/nav_text_item_color" />
+
+        <TextView
+            android:id="@+id/navigation_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp"
+            android:text="@string/navigation_settings"
+            android:textColor="@color/nav_text_item_color" />
+    </LinearLayout>
 
     <View
+        android:id="@+id/vertical_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/navigation_items"
         android:background="@color/d_light_gray" />
 
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/vertical_divider"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/navigation_recent_activity_header"
+        android:textColor="@color/d_medium_gray" />
 </RelativeLayout>
