@@ -39,9 +39,8 @@ public class ActivityFeedAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        Object obj = mActivityFeedData.get(position);
-        return obj;
+    public ActivityRecipient getItem(int position) {
+        return mActivityFeedData.get(position);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class ActivityFeedAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ActivityFeedRow rowView = (ActivityFeedRow) convertView;
-        ActivityRecipient data = (ActivityRecipient) getItem(position);
+        ActivityRecipient data = getItem(position);
         if (rowView == null) {
             rowView = new ActivityFeedRow(mContext);
         }
