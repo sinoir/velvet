@@ -40,7 +40,16 @@
         <activity
             android:name="com.delectable.mobile.ui.profile.activity.UserProfileActivity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter android:label="">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="account"
+                    android:scheme="delectable" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity"
