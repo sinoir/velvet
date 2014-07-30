@@ -4,12 +4,16 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 public class CaptureDetailsActivity extends BaseActivity {
 
     public static final String PARAMS_CAPTURE_ID = "PARAMS_CAPTURE_ID";
+
+    private static final String TAG = CaptureDetailsActivity.class.getSimpleName();
 
     private String mCaptureId;
 
@@ -21,6 +25,15 @@ public class CaptureDetailsActivity extends BaseActivity {
         if (args != null) {
             mCaptureId = args.getString(PARAMS_CAPTURE_ID);
         }
+
+        // Deep Link params
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri deepLinkData = intent.getData();
+        if (deepLinkData != null) {
+            mCaptureId = deepLinkData.getQueryParameter("capture_id");
+        }
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, CaptureDetailsFragment.newInstance(mCaptureId))
