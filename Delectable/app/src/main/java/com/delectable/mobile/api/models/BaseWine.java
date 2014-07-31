@@ -53,13 +53,11 @@ public class BaseWine extends BaseResponse implements Parcelable {
         //no paramter constructor
     }
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    public static BaseWine buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         BaseWine newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("base_wine") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("base_wine"),
-                    this.getClass());
+            newResource = buildFromJson(payloadObj.optJSONObject("base_wine"), BaseWine.class);
         }
 
         return newResource;

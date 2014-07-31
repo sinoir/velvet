@@ -26,7 +26,6 @@ public class IdentifyRequest extends BaseScanRequest {
 
     @Override
     public LabelScan buildResopnseFromJson(JSONObject jsonObject) {
-        LabelScan resForParsing = new LabelScan();
-        return resForParsing.buildFromJson(jsonObject);
+        return LabelScan.buildFromJson(jsonObject);
     }
 }

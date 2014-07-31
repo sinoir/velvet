@@ -2,8 +2,6 @@ package com.delectable.mobile.api.requests;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.models.BaseResponse;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
 
@@ -53,7 +51,7 @@ public class CaptureNotesRequest extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
+    public ListingResponse<CaptureNote> buildResopnseFromJson(JSONObject jsonObject) {
         Type classType = new TypeToken<ListingResponse<CaptureNote>>() {
         }.getType();
         ListingResponse<CaptureNote> resForParsing = new ListingResponse<CaptureNote>(classType);

@@ -8,8 +8,7 @@ public class WineSource extends BaseResponse {
 
     PurchasedOffer purchase_offer;
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObject) {
+    public static WineSource buildFromJson(JSONObject jsonObject) {
         JSONObject payloadObj = jsonObject.optJSONObject("payload");
         WineSource newResource = buildFromJson(payloadObj, WineSource.class);
         return newResource;

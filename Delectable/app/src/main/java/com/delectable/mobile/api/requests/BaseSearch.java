@@ -24,8 +24,7 @@ public abstract class BaseSearch extends BaseRequest {
 
     @Override
     public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        SearchResult resForParsing = new SearchResult();
-        return resForParsing.buildFromJson(jsonObject);
+        return SearchResult.buildFromJson(jsonObject);
     }
 
     public String getQ() {

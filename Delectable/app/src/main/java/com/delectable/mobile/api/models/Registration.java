@@ -14,10 +14,9 @@ public class Registration extends BaseResponse {
 
     String session_key;
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject payload) {
+    public static Registration buildFromJson(JSONObject payload) {
         Registration newRegistration = buildFromJson(payload.optJSONObject("payload"),
-                this.getClass());
+                Registration.class);
 
         return newRegistration;
     }

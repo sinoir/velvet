@@ -39,9 +39,8 @@ public class AccountsContextRequest extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        Account resForParsing = new Account();
-        return resForParsing.buildFromJson(jsonObject);
+    public Account buildResopnseFromJson(JSONObject jsonObject) {
+        return Account.buildFromJson(jsonObject);
     }
 
     public String getId() {

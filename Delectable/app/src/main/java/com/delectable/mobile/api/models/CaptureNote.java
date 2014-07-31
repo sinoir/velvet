@@ -1,8 +1,6 @@
 package com.delectable.mobile.api.models;
 
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class CaptureNote extends Capture {
@@ -16,13 +14,6 @@ public class CaptureNote extends Capture {
     String vintage;
 
     ArrayList<String> helpfuling_account_ids;
-
-
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
-        // Gets built by listing object
-        return null;
-    }
 
     public float getRatingPercent() {
         float ratingPercent = -1.0f;

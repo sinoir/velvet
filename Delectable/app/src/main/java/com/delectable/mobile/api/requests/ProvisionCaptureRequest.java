@@ -18,7 +18,6 @@ public class ProvisionCaptureRequest extends BaseRequest {
 
     @Override
     public ProvisionCapture buildResopnseFromJson(JSONObject jsonObject) {
-        ProvisionCapture resForParsing = new ProvisionCapture();
-        return resForParsing.buildFromJson(jsonObject);
+        return ProvisionCapture.buildFromJson(jsonObject);
     }
 }
