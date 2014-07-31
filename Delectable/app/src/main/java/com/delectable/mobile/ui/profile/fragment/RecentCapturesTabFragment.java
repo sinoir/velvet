@@ -84,7 +84,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position - 1);
+                CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position);
                 Intent intent = new Intent();
                 intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
                         captureDetails.getId());
