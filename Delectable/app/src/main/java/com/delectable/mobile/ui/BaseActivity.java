@@ -11,6 +11,8 @@ import android.os.Bundle;
 
 public abstract class BaseActivity extends Activity {
 
+    private static final String TAG = BaseActivity.class.getSimpleName();
+
     private boolean mIsFromDeepLink;
 
     private Uri mDeepLinkUriData;
@@ -30,6 +32,15 @@ public abstract class BaseActivity extends Activity {
         } else {
             mIsFromDeepLink = false;
         }
+    }
+
+    /**
+     * Should be called in place of finish() when the "Up" button is pressed from a deep linked
+     * Activity
+     */
+    public void finishDeepLinkActivity() {
+        // TODO: Figure out what kind of task we're in. If the main app hasn't been opened yet, we should open the app and go back to the Main Activity or something, otherwise hitting up will close the app.
+        super.finish();
     }
 
     public void replaceWithFragment(BaseFragment fragment) {
@@ -61,4 +72,5 @@ public abstract class BaseActivity extends Activity {
     public Uri getDeepLinkUriData() {
         return mDeepLinkUriData;
     }
+
 }

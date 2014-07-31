@@ -39,7 +39,7 @@ public class UserProfileActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishDeepLinkActivity();
                 return true;
         }
         return super.onOptionsItemSelected(item);

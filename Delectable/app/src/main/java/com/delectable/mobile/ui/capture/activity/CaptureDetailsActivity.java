@@ -40,7 +40,7 @@ public class CaptureDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishDeepLinkActivity();
                 break;
         }
         return true;
