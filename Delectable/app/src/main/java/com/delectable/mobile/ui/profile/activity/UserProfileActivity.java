@@ -11,6 +11,8 @@ public class UserProfileActivity extends BaseActivity {
 
     public static final String PARAMS_USER_ID = "PARAMS_USER_ID";
 
+    private static final String TAG = UserProfileActivity.class.getSimpleName();
+
     private String mUserId;
 
     @Override
@@ -20,7 +22,11 @@ public class UserProfileActivity extends BaseActivity {
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mUserId = args.getString(PARAMS_USER_ID);
+        } else {
+            // Check if Deep Link params contains data if the bundle args doesn't
+            mUserId = getDeepLinkParam("account_id");
         }
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, UserProfileFragment.newInstance(mUserId)).commit();
@@ -33,7 +39,7 @@ public class UserProfileActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishDeepLinkActivity();
                 return true;
         }
         return super.onOptionsItemSelected(item);
