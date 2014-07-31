@@ -43,8 +43,7 @@ public class ActivityFeedRequest extends BaseRequest {
         }.getType();
         ListingResponse<ActivityRecipient> resForParsing = new ListingResponse<ActivityRecipient>(
                 classType);
-        ListingResponse<ActivityRecipient> parsedListing
-                = (ListingResponse<ActivityRecipient>) resForParsing.buildFromJson(jsonObject);
+        ListingResponse<ActivityRecipient> parsedListing = resForParsing.buildFromJson(jsonObject);
         // When combining data for suppressed before requests, it may be null:
         parsedListing = parsedListing != null ? parsedListing : mCurrentListing;
         if (parsedListing != null) {

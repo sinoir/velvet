@@ -40,8 +40,8 @@ public class CommentCaptureRequest extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        CaptureDetails updatedCapture = mCaptureDetails.buildFromJson(jsonObject);
+    public CaptureDetails buildResopnseFromJson(JSONObject jsonObject) {
+        CaptureDetails updatedCapture = CaptureDetails.buildFromJson(jsonObject);
         return updatedCapture;
     }
 

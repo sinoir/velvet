@@ -120,8 +120,7 @@ public class CaptureRequest extends BaseScanRequest {
 
     @Override
     public CaptureDetails buildResopnseFromJson(JSONObject jsonObject) {
-        CaptureDetails resForParsing = new CaptureDetails();
-        return resForParsing.buildFromJson(jsonObject);
+        return CaptureDetails.buildFromJson(jsonObject);
     }
 
     @Override

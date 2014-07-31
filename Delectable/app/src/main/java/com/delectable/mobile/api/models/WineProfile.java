@@ -2,11 +2,21 @@ package com.delectable.mobile.api.models;
 
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class WineProfile extends BaseResponse implements Parcelable {
+
+    public static final Parcelable.Creator<WineProfile> CREATOR
+            = new Parcelable.Creator<WineProfile>() {
+        public WineProfile createFromParcel(Parcel source) {
+            return new WineProfile(source);
+        }
+
+        public WineProfile[] newArray(int size) {
+            return new WineProfile[size];
+        }
+    };
 
     String id;
 
@@ -32,14 +42,32 @@ public class WineProfile extends BaseResponse implements Parcelable {
 
     PhotoHash photo;
 
-    @Override
-    @SuppressLint("")
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    public WineProfile() {
+    }
+
+    private WineProfile(Parcel in) {
+        this.id = in.readString();
+        this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
+        this.region_id = in.readString();
+        this.vintage = in.readString();
+        this.producer_name = in.readString();
+        this.name = in.readString();
+        this.base_wine_id = in.readString();
+        this.price_text = in.readString();
+        this.price_status = in.readString();
+        this.description = in.readString();
+        this.price = (Double) in.readValue(Double.class.getClassLoader());
+        this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
+        this.context = in.readString();
+        this.e_tag = in.readString();
+    }
+
+    public static WineProfile buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         WineProfile newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("wine_profile") != null) {
             newResource = buildFromJson(payloadObj.optJSONObject("wine_profile"),
-                    this.getClass());
+                    WineProfile.class);
         }
 
         return newResource;
@@ -183,35 +211,4 @@ public class WineProfile extends BaseResponse implements Parcelable {
         dest.writeString(this.context);
         dest.writeString(this.e_tag);
     }
-
-    public WineProfile() {
-    }
-
-    private WineProfile(Parcel in) {
-        this.id = in.readString();
-        this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
-        this.region_id = in.readString();
-        this.vintage = in.readString();
-        this.producer_name = in.readString();
-        this.name = in.readString();
-        this.base_wine_id = in.readString();
-        this.price_text = in.readString();
-        this.price_status = in.readString();
-        this.description = in.readString();
-        this.price = (Double) in.readValue(Double.class.getClassLoader());
-        this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
-        this.context = in.readString();
-        this.e_tag = in.readString();
-    }
-
-    public static final Parcelable.Creator<WineProfile> CREATOR
-            = new Parcelable.Creator<WineProfile>() {
-        public WineProfile createFromParcel(Parcel source) {
-            return new WineProfile(source);
-        }
-
-        public WineProfile[] newArray(int size) {
-            return new WineProfile[size];
-        }
-    };
 }

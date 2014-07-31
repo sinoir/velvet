@@ -1,6 +1,5 @@
 package com.delectable.mobile.api.requests;
 
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.BaseWine;
 
 import org.json.JSONObject;
@@ -15,7 +14,7 @@ public class BaseWinesContext extends BaseRequest {
 
     @Override
     public String[] getPayloadFields() {
-        return new String[] {
+        return new String[]{
                 "id",
         };
     }
@@ -26,9 +25,8 @@ public class BaseWinesContext extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        BaseWine resForParsing = new BaseWine();
-        return resForParsing.buildFromJson(jsonObject);
+    public BaseWine buildResopnseFromJson(JSONObject jsonObject) {
+        return BaseWine.buildFromJson(jsonObject);
     }
 
     public String getId() {

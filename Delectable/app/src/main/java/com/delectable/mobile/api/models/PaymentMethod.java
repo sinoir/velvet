@@ -1,8 +1,5 @@
 package com.delectable.mobile.api.models;
 
-/**
- * Created by abednarek on 5/23/14.
- */
 public class PaymentMethod {
 
     String id;

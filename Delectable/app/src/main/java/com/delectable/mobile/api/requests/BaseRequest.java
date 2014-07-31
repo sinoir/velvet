@@ -90,7 +90,7 @@ public abstract class BaseRequest {
 
     public abstract String getResourceUrl();
 
-    public abstract BaseResponse buildResopnseFromJson(JSONObject jsonObject);
+    public abstract <T extends BaseResponse> T buildResopnseFromJson(JSONObject jsonObject);
 
     public String getContext() {
         return context;

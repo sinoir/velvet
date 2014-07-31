@@ -10,12 +10,11 @@ public class ProvisionCapture extends BaseResponse {
 
     Headers headers;
 
-    @Override
-    public ProvisionCapture buildFromJson(JSONObject jsonObj) {
+    public static ProvisionCapture buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         ProvisionCapture newResource = null;
         if (payloadObj != null) {
-            newResource = buildFromJson(payloadObj, this.getClass());
+            newResource = buildFromJson(payloadObj, ProvisionCapture.class);
         }
 
         return newResource;

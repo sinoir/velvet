@@ -2,7 +2,6 @@ package com.delectable.mobile.api.requests;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
 
@@ -78,12 +77,12 @@ public abstract class BaseCaptureFeedListingRequest extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
+    public ListingResponse<CaptureDetails> buildResopnseFromJson(JSONObject jsonObject) {
         Type classType = new TypeToken<ListingResponse<CaptureDetails>>() {
         }.getType();
-        ListingResponse<CaptureDetails> resForParsing = new ListingResponse<CaptureDetails>(classType);
-        ListingResponse<CaptureDetails> parsedListing
-                = (ListingResponse<CaptureDetails>) resForParsing.buildFromJson(jsonObject);
+        ListingResponse<CaptureDetails> resForParsing = new ListingResponse<CaptureDetails>(
+                classType);
+        ListingResponse<CaptureDetails> parsedListing = resForParsing.buildFromJson(jsonObject);
         // When combining data for suppressed before requests, it may be null:
         parsedListing = parsedListing != null ? parsedListing : mCurrentListing;
         if (parsedListing != null) {

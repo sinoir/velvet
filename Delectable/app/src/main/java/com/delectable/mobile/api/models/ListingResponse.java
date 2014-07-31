@@ -33,8 +33,8 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         setClassType(classType);
     }
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    // TODO: Figure out if we can make this a static method, with the generic stuff..
+    public ListingResponse<T> buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
         ListingResponse<T> newRegistration = buildFromJson(payload, getClassType());
         if (newRegistration != null) {

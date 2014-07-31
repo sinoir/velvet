@@ -15,13 +15,12 @@ public class LabelScan extends BaseResponse {
 
     BaseWine base_wine;
 
-    @Override
-    public LabelScan buildFromJson(JSONObject jsonObj) {
+    public static LabelScan buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         Log.d(TAG, "Label Response: " + jsonObj);
         LabelScan newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("label_scan") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("label_scan"), this.getClass());
+            newResource = buildFromJson(payloadObj.optJSONObject("label_scan"), LabelScan.class);
         }
         return newResource;
     }

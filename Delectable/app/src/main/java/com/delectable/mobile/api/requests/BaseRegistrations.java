@@ -1,7 +1,6 @@
 package com.delectable.mobile.api.requests;
 
 import com.delectable.mobile.Config;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Registration;
 
 import org.json.JSONObject;
@@ -26,8 +25,7 @@ public abstract class BaseRegistrations extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        Registration resForParsing = new Registration();
-        return resForParsing.buildFromJson(jsonObject);
+    public Registration buildResopnseFromJson(JSONObject jsonObject) {
+        return Registration.buildFromJson(jsonObject);
     }
 }

@@ -30,10 +30,9 @@ public class SearchResult extends BaseResponse {
 
     ArrayList<SearchHit> hits;
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    public static SearchResult buildFromJson(JSONObject jsonObj) {
         JSONObject payloadJson = jsonObj.optJSONObject("payload");
-        SearchResult searchResult = buildFromJsonForExposedObjects(payloadJson, this.getClass());
+        SearchResult searchResult = buildFromJsonForExposedObjects(payloadJson, SearchResult.class);
         JSONArray jsonHitsArray = payloadJson.optJSONArray("hits");
         // Parse SearchHits based on result type (Either BaseWine or Account)
         if (jsonHitsArray != null &&

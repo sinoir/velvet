@@ -51,8 +51,6 @@ public abstract class BaseResponse {
         return result;
     }
 
-    public abstract BaseResponse buildFromJson(JSONObject jsonObj);
-
     public Type getClassType() {
         return mClassType;
     }
