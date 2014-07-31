@@ -4,8 +4,6 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -24,14 +22,9 @@ public class CaptureDetailsActivity extends BaseActivity {
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mCaptureId = args.getString(PARAMS_CAPTURE_ID);
-        }
-
-        // Deep Link params
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri deepLinkData = intent.getData();
-        if (deepLinkData != null) {
-            mCaptureId = deepLinkData.getQueryParameter("capture_id");
+        } else {
+            // Check if Deep Link params contains data if the bundle args doesn't
+            mCaptureId = getDeepLinkParam("capture_id");
         }
 
         if (savedInstanceState == null) {
