@@ -11,6 +11,8 @@ public class CaptureDetailsActivity extends BaseActivity {
 
     public static final String PARAMS_CAPTURE_ID = "PARAMS_CAPTURE_ID";
 
+    private static final String TAG = CaptureDetailsActivity.class.getSimpleName();
+
     private String mCaptureId;
 
     @Override
@@ -20,7 +22,11 @@ public class CaptureDetailsActivity extends BaseActivity {
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mCaptureId = args.getString(PARAMS_CAPTURE_ID);
+        } else {
+            // Check if Deep Link params contains data if the bundle args doesn't
+            mCaptureId = getDeepLinkParam("capture_id");
         }
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, CaptureDetailsFragment.newInstance(mCaptureId))
@@ -34,7 +40,7 @@ public class CaptureDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishDeepLinkActivity();
                 break;
         }
         return true;

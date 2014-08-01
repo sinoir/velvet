@@ -1,6 +1,5 @@
 package com.delectable.mobile.api.requests;
 
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.WineSource;
 
 import org.json.JSONObject;
@@ -25,9 +24,8 @@ public class WineProfilesPricing extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        WineSource resForParsing = new WineSource();
-        return resForParsing.buildFromJson(jsonObject);
+    public WineSource buildResopnseFromJson(JSONObject jsonObject) {
+        return WineSource.buildFromJson(jsonObject);
     }
 
     public String getId() {

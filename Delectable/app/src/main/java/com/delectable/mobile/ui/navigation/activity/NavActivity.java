@@ -6,6 +6,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 
 import android.app.ActionBar;
 import android.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -65,15 +67,15 @@ public class NavActivity extends BaseActivity
         FragmentManager fragmentManager = getFragmentManager();
         BaseFragment fragment = null;
         switch (position) {
-            case NavigationDrawerFragment.NAV_HOME:
+            case NavHeader.NAV_HOME:
                 fragment = new HomeFragment();
                 break;
-            case NavigationDrawerFragment.NAV_SETTINGS:
-                // TODO: Settings Screen
+            case NavHeader.NAV_SETTINGS:
                 fragment = new SettingsFragment();
                 break;
-            case NavigationDrawerFragment.NAV_FIND_PEOPLE:
+            case NavHeader.NAV_FIND_FRIENDS:
                 // TODO: Find People Screen
+                Toast.makeText(this, "Show Find People", Toast.LENGTH_SHORT).show();
                 break;
         }
         if (fragment != null) {

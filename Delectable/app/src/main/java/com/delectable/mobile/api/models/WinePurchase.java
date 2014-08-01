@@ -6,8 +6,7 @@ public class WinePurchase extends BaseResponse {
 
     String purchase_order_id;
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    public static WinePurchase buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         WinePurchase newResource = buildFromJson(payloadObj, WinePurchase.class);
         return newResource;

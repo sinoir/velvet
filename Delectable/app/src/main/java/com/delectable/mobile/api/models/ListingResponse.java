@@ -33,8 +33,8 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         setClassType(classType);
     }
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    // TODO: Figure out if we can make this a static method, with the generic stuff..
+    public ListingResponse<T> buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
         ListingResponse<T> newRegistration = buildFromJson(payload, getClassType());
         if (newRegistration != null) {
@@ -168,8 +168,7 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
     }
 
     public ArrayList<T> getSortedCombinedData() {
-        ArrayList<T> sortedList = new ArrayList<T>(
-                mAllCombinedDataMap.values());
+        ArrayList<T> sortedList = new ArrayList<T>(mAllCombinedDataMap.values());
         Collections.sort(sortedList, T.CreatedAtDescendingComparator);
         return sortedList;
     }

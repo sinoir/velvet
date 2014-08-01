@@ -12,6 +12,7 @@ import com.delectable.mobile.api.requests.CaptureFeedRequest;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -84,11 +85,21 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position - 1);
+                CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position);
                 Intent intent = new Intent();
-                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
-                        captureDetails.getId());
-                intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
+                if (captureDetails.getWineProfile() != null) {
+                    intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE,
+                            captureDetails.getWineProfile());
+                    intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
+                            captureDetails.getPhoto());
+                    intent.setClass(getActivity(), WineProfileActivity.class);
+                } else {
+                    intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                            captureDetails.getId());
+                    intent.setClass(getActivity(), CaptureDetailsActivity.class);
+
+                }
                 startActivity(intent);
             }
         });

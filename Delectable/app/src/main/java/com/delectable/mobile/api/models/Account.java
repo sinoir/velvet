@@ -67,8 +67,7 @@ public class Account extends BaseResponse {
 
     ArrayList<CaptureSummary> capture_summaries;
 
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
+    public static Account buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         Account newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("account") != null) {

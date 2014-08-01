@@ -39,9 +39,8 @@ public class CapturesContextRequest extends BaseRequest {
     }
 
     @Override
-    public BaseResponse buildResopnseFromJson(JSONObject jsonObject) {
-        CaptureDetails resForParsing = new CaptureDetails();
-        return resForParsing.buildFromJson(jsonObject);
+    public CaptureDetails buildResopnseFromJson(JSONObject jsonObject) {
+        return CaptureDetails.buildFromJson(jsonObject);
     }
 
     public String getId() {

@@ -33,13 +33,11 @@ public class CaptureDetails extends Capture {
 
     ArrayList<CaptureComment> comments;
 
-    @Override
-    public CaptureDetails buildFromJson(JSONObject jsonObj) {
+    public static CaptureDetails buildFromJson(JSONObject jsonObj) {
         JSONObject payloadObj = jsonObj.optJSONObject("payload");
         CaptureDetails newResource = null;
         if (payloadObj != null && payloadObj.optJSONObject("capture") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("capture"),
-                    this.getClass());
+            newResource = buildFromJson(payloadObj.optJSONObject("capture"), CaptureDetails.class);
         }
 
         return newResource;

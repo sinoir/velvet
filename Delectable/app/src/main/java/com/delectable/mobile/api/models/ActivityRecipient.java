@@ -1,7 +1,5 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class ActivityRecipient extends BaseListingElement {
@@ -15,11 +13,6 @@ public class ActivityRecipient extends BaseListingElement {
     PhotoLink right_image_link;
 
     PhotoLink left_image_link;
-
-    @Override
-    public BaseResponse buildFromJson(JSONObject jsonObj) {
-        return null;
-    }
 
     public String getText() {
         return text;
