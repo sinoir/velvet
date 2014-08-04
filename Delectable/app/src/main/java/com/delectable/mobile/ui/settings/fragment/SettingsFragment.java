@@ -17,9 +17,14 @@ import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
+import com.facebook.Session;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -100,6 +105,9 @@ public class SettingsFragment extends BaseFragment {
     @InjectView(R.id.tagged_email_notification)
     ImageButton mTaggedEmailIcon;
 
+    @InjectView(R.id.delectable_version)
+    TextView mVersionText;
+
     /**
      * Used to keep track of which identifier is the primary email
      */
@@ -178,6 +186,8 @@ public class SettingsFragment extends BaseFragment {
 
         mEmailField.setOnFocusChangeListener(focusLossListener);
         mPhoneNumberField.setOnFocusChangeListener(focusLossListener);
+
+        mVersionText.setText(getString(R.string.settings_delectable_version, getAppVersion()));
 
         return view;
     }
@@ -474,7 +484,7 @@ public class SettingsFragment extends BaseFragment {
 
         switch (v.getId()) {
             case R.id.contact:
-                //TODO go to contact
+                launchEmailFeedback();
                 break;
             case R.id.terms_of_use:
                 //TODO go to terms of use
@@ -483,9 +493,62 @@ public class SettingsFragment extends BaseFragment {
                 //TODO go to privacy policy
                 break;
             case R.id.sign_out:
-                //TODO sign out
+                signout();
                 break;
         }
+    }
+
+    public void launchEmailFeedback() {
+        Intent send = new Intent(Intent.ACTION_SENDTO);
+        String uriText =
+                "mailto:" + Uri.encode(getString(R.string.settings_contact_email)) +
+                        "?subject=" + Uri.encode(getString(R.string.settings_contact_subject)) +
+                        "&body=" + Uri.encode(prepareEmailBody());
+        Uri uri = Uri.parse(uriText);
+
+        send.setData(uri);
+        startActivity(Intent.createChooser(send,
+                getString(R.string.settings_contact_email_intent_dialog_title)));
+    }
+
+    private String prepareEmailBody() {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(getString(R.string.settings_contact_myAndroidDevice, Build.MANUFACTURER,
+                Build.MODEL))
+                .append("\n")
+                .append(getString(R.string.settings_contact_myAndroidVersion,
+                        Build.VERSION.RELEASE))
+                .append("\n")
+                .append(getString(R.string.settings_contact_myAppVersion, getAppVersion()))
+                .append("\n")
+                .append(getString(R.string.settings_contact_user,
+                        UserInfo.getUserId(getActivity())))
+                .append("\n\n")
+                .append(getString(R.string.settings_contact_explanation))
+                .append("\n\n")
+                .append("--")
+                .append("\n\n");
+        return builder.toString();
+    }
+
+    //TODO implement properly when versioning is in place
+    private String getAppVersion() {
+        return "1.0";
+    }
+
+
+    public void signout() {
+        // TODO: Some Common Logout function- grabbed straight from HomeFragment
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            session.closeAndClearTokenInformation();
+        }
+        UserInfo.onSignOut(getActivity());
+        Intent launchIntent = new Intent();
+        launchIntent.setClass(getActivity(), LoginActivity.class);
+        startActivity(launchIntent);
+        getActivity().finish();
     }
 
     /**
