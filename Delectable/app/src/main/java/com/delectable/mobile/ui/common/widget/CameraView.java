@@ -73,6 +73,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    public boolean isSurfaceCreated() {
+        return mIsSurfaceCreated;
+    }
+
     public void udpateCamera(Camera camera, int cameraId) {
         mCamera = camera;
         mCameraId = cameraId;

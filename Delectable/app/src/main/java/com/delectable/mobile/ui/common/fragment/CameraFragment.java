@@ -119,6 +119,11 @@ public class CameraFragment extends BaseFragment {
     }
 
     protected void focusOnPoint(PointF point, RectF bounds) {
+        // Don't focus yet if the camera is not being previewed, otherwise it crashes
+        if (mCamera == null || !mCameraView.isSurfaceCreated()) {
+            Log.e(TAG, "Tried Focusing on Point when Preview hasn't started yet");
+            return;
+        }
         Camera.Parameters p = mCamera.getParameters();
         int maxFocusAraes = p.getMaxNumFocusAreas();
         Camera.Area focusArea = CameraUtil.getFocusAreaFromFrameBounds(point, bounds);
