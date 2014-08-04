@@ -6,8 +6,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/d_white"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/settings_view_horizontal_padding"
         android:paddingTop="@dimen/settings_view_horizontal_padding">
 
@@ -24,17 +24,23 @@
             android:id="@+id/name"
             style="@style/SettingsEditText"
             android:hint="@string/settings_name_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName"
+            android:singleLine="true"
             android:text="Arnold Fishhorse" />
 
         <EditText
             android:id="@+id/short_bio"
             style="@style/SettingsEditText"
-            android:hint="@string/settings_short_bio_hint" />
+            android:hint="@string/settings_short_bio_hint"
+            android:imeOptions="actionDone" />
 
         <EditText
             android:id="@+id/website"
             style="@style/SettingsEditText"
-            android:hint="@string/settings_website_hint" />
+            android:hint="@string/settings_website_hint"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/account_category_label"
@@ -52,7 +58,9 @@
                 android:id="@+id/email_value"
                 style="@style/SettingsRowEditText"
                 android:layout_toRightOf="@+id/email_label"
-                android:hint="@string/settings_email_hint" />
+                android:hint="@string/settings_email_hint"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/SettingsRow">
@@ -66,7 +74,9 @@
                 android:id="@+id/phone_number_value"
                 style="@style/SettingsRowEditText"
                 android:layout_toRightOf="@+id/phone_number_label"
-                android:hint="@string/settings_phone_number_hint" />
+                android:hint="@string/settings_phone_number_hint"
+                android:imeOptions="actionDone"
+                android:inputType="phone" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/SettingsRow">
