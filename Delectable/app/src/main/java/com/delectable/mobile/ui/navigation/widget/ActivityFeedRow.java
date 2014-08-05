@@ -14,17 +14,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class ActivityFeedRow extends RelativeLayout {
 
     private static final String TAG = ActivityFeedRow.class.getSimpleName();
 
-    private CircleImageView mLeftImage;
+    @InjectView(R.id.left_iamge)
+    protected CircleImageView mLeftImage;
 
-    private TextView mText;
+    @InjectView(R.id.text)
+    protected TextView mText;
 
-    private TextView mTimeAgo;
+    @InjectView(R.id.time_ago)
+    protected TextView mTimeAgo;
 
-    private ImageView mRightImage;
+    @InjectView(R.id.right_image)
+    protected ImageView mRightImage;
+
 
     public ActivityFeedRow(Context context) {
         this(context, null);
@@ -36,13 +44,8 @@ public class ActivityFeedRow extends RelativeLayout {
 
     public ActivityFeedRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
         View.inflate(context, R.layout.row_activity_feed, this);
-
-        mLeftImage = (CircleImageView) findViewById(R.id.profile_image);
-        mText = (TextView) findViewById(R.id.text);
-        mTimeAgo = (TextView) findViewById(R.id.time_ago);
-        mRightImage = (ImageView) findViewById(R.id.wine_image);
+        ButterKnife.inject(this);
     }
 
     public void updateData(ActivityRecipient data) {
