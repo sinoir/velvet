@@ -13,14 +13,17 @@ import com.delectable.mobile.api.requests.ActivityFeedRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
+import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -38,7 +41,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class NavigationDrawerFragment extends BaseFragment implements
-        NavHeader.NavHeaderActionListener {
+        NavHeader.NavHeaderActionListener, ActivityFeedRow.ActivityActionsHandler {
 
     private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
@@ -125,6 +128,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         mDrawerListView.setAdapter(mActivityFeedAdapter);
         mNavHeader.setCurrentSelectedNavItem(mCurrentSelectedNavItem);
+
+        mActivityFeedAdapter.setActionsHandler(this);
 
         return mView;
     }
@@ -358,6 +363,20 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(navItem);
+        }
+    }
+
+    @Override
+    public void openDeepLink(String url) {
+        Uri deepLinkUri = Uri.parse(url);
+        try {
+            Intent intent = new Intent();
+            intent.setData(deepLinkUri);
+            startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            // TODO: Add remote log here, this will happen if we have a new deep link url and we haven't implemented it yet...
+            Log.wtf(TAG, "Failed to open deeplink", ex);
+            showToastError(ex.getLocalizedMessage());
         }
     }
 
