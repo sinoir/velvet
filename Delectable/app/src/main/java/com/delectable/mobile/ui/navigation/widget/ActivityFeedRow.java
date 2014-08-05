@@ -14,17 +14,26 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class ActivityFeedRow extends RelativeLayout {
 
     private static final String TAG = ActivityFeedRow.class.getSimpleName();
 
-    private CircleImageView mLeftImage;
+    @InjectView(R.id.left_iamge)
+    protected CircleImageView mLeftImage;
 
-    private TextView mText;
+    @InjectView(R.id.text)
+    protected TextView mText;
 
-    private TextView mTimeAgo;
+    @InjectView(R.id.time_ago)
+    protected TextView mTimeAgo;
 
-    private ImageView mRightImage;
+    @InjectView(R.id.right_image)
+    protected ImageView mRightImage;
+
+    private ActivityActionsHandler mActionsHandler;
 
     public ActivityFeedRow(Context context) {
         this(context, null);
@@ -36,13 +45,8 @@ public class ActivityFeedRow extends RelativeLayout {
 
     public ActivityFeedRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
         View.inflate(context, R.layout.row_activity_feed, this);
-
-        mLeftImage = (CircleImageView) findViewById(R.id.profile_image);
-        mText = (TextView) findViewById(R.id.text);
-        mTimeAgo = (TextView) findViewById(R.id.time_ago);
-        mRightImage = (ImageView) findViewById(R.id.wine_image);
+        ButterKnife.inject(this);
     }
 
     public void updateData(ActivityRecipient data) {
@@ -52,6 +56,7 @@ public class ActivityFeedRow extends RelativeLayout {
         mText.setText(data.getText());
         mTimeAgo.setText(activityTime);
 
+        // Setup Left and Right Images
         if (data.getLeftImageLink() != null && data.getLeftImageLink().getPhoto() != null) {
             mLeftImage.setVisibility(View.VISIBLE);
             ImageLoaderUtil
@@ -71,6 +76,45 @@ public class ActivityFeedRow extends RelativeLayout {
             mRightImage.setVisibility(View.GONE);
             mRightImage.setImageDrawable(null);
         }
-        // TODO: Implement Click Listeners / Handler for Deep Links
+
+        // Setup Left and Right Image Links
+
+        if (data.getLeftImageLink() != null && data.getLeftImageLink().getUrl() != null) {
+            final String leftImageUrl = data.getLeftImageLink().getUrl();
+            mLeftImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mActionsHandler != null) {
+                        mActionsHandler.openDeepLink(leftImageUrl);
+                    }
+                }
+            });
+        } else {
+            mLeftImage.setOnClickListener(null);
+        }
+
+        if (data.getRightImageLink() != null && data.getRightImageLink().getUrl() != null) {
+            final String rightImageUrl = data.getRightImageLink().getUrl();
+            mRightImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mActionsHandler != null) {
+                        mActionsHandler.openDeepLink(rightImageUrl);
+                    }
+                }
+            });
+        } else {
+            mRightImage.setOnClickListener(null);
+        }
+    }
+
+    public void setActionsHandler(ActivityActionsHandler actionsHandler) {
+        mActionsHandler = actionsHandler;
+    }
+
+    public static interface ActivityActionsHandler {
+
+        public void openDeepLink(String url);
+
     }
 }
