@@ -33,6 +33,7 @@ public class ActivityFeedRow extends RelativeLayout {
     @InjectView(R.id.right_image)
     protected ImageView mRightImage;
 
+    private ActivityActionsHandler mActionsHandler;
 
     public ActivityFeedRow(Context context) {
         this(context, null);
@@ -55,6 +56,7 @@ public class ActivityFeedRow extends RelativeLayout {
         mText.setText(data.getText());
         mTimeAgo.setText(activityTime);
 
+        // Setup Left and Right Images
         if (data.getLeftImageLink() != null && data.getLeftImageLink().getPhoto() != null) {
             mLeftImage.setVisibility(View.VISIBLE);
             ImageLoaderUtil
@@ -74,6 +76,45 @@ public class ActivityFeedRow extends RelativeLayout {
             mRightImage.setVisibility(View.GONE);
             mRightImage.setImageDrawable(null);
         }
-        // TODO: Implement Click Listeners / Handler for Deep Links
+
+        // Setup Left and Right Image Links
+
+        if (data.getLeftImageLink() != null && data.getLeftImageLink().getUrl() != null) {
+            final String leftImageUrl = data.getLeftImageLink().getUrl();
+            mLeftImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mActionsHandler != null) {
+                        mActionsHandler.openDeepLink(leftImageUrl);
+                    }
+                }
+            });
+        } else {
+            mLeftImage.setOnClickListener(null);
+        }
+
+        if (data.getRightImageLink() != null && data.getRightImageLink().getUrl() != null) {
+            final String rightImageUrl = data.getRightImageLink().getUrl();
+            mRightImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mActionsHandler != null) {
+                        mActionsHandler.openDeepLink(rightImageUrl);
+                    }
+                }
+            });
+        } else {
+            mRightImage.setOnClickListener(null);
+        }
+    }
+
+    public void setActionsHandler(ActivityActionsHandler actionsHandler) {
+        mActionsHandler = actionsHandler;
+    }
+
+    public static interface ActivityActionsHandler {
+
+        public void openDeepLink(String url);
+
     }
 }
