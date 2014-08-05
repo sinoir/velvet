@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ChooseVintageDialog extends DialogFragment {
 
@@ -47,7 +48,9 @@ public class ChooseVintageDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
+        View view = inflater.inflate(R.layout.dialog_listview, container, false);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setText(R.string.choose_vintage_dialog_title);
         ListView listview = (ListView) view.findViewById(R.id.list_view);
         listview.setAdapter(mAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
