@@ -1,22 +1,5 @@
 package com.delectable.mobile.ui.navigation.fragment;
 
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.AccountsNetworkController;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.ActivityRecipient;
-import com.delectable.mobile.api.models.BaseResponse;
-import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.AccountsContextRequest;
-import com.delectable.mobile.api.requests.ActivityFeedRequest;
-import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
-import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
-import com.delectable.mobile.util.ImageLoaderUtil;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -33,9 +16,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.RequestError;
+import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.models.ActivityRecipient;
+import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.ListingResponse;
+import com.delectable.mobile.api.requests.ActivityFeedRequest;
+import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.FetchAccountFailedEvent;
+import com.delectable.mobile.events.FetchedAccountEvent;
+import com.delectable.mobile.model.local.Account;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
 
 public class NavigationDrawerFragment extends BaseFragment implements
         NavHeader.NavHeaderActionListener {
@@ -71,11 +76,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private String mUserId;
 
-    private AccountsNetworkController mAccountsNetworkController;
-
     private BaseNetworkController mBaseNetworkController;
-
-    private Account mUserAccount;
 
     private ArrayList<ActivityRecipient> mActivityRecipients;
 
@@ -83,6 +84,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private int mCurrentSelectedNavItem = 0;
 
+    @Inject
+    AccountController mAccountController;
+    @Inject
+    AccountModel mAccountModel;
 
     public NavigationDrawerFragment() {
     }
@@ -90,8 +95,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         mActivityRecipients = new ArrayList<ActivityRecipient>();
-        mAccountsNetworkController = new AccountsNetworkController(getActivity());
         mBaseNetworkController = new BaseNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
@@ -130,9 +135,22 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // TODO load data from cache asynchronously
+        updateUIWithData(mAccountModel.getAccount(mUserId));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         loadData();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -259,34 +277,20 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     private void loadData() {
-        loadUserData();
+        mAccountController.fetchProfile(mUserId);
         loadActivityFeed();
     }
 
-    private void loadUserData() {
-        // TODO: Have some central data loading service and cache this somewhere
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PROFILE);
-        request.setId(mUserId);
-        mAccountsNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
+    public void onEventMainThread(FetchedAccountEvent event) {
+        if (!mUserId.equals(event.getAccountId()))
+            return;
 
-                        mUserAccount = (Account) result;
-                        updateUIWithData();
-                    }
+        // TODO load data from cache asynchronously
+        updateUIWithData(mAccountModel.getAccount(event.getAccountId()));
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
+    public void onEventMainThread(FetchAccountFailedEvent event) {
+        // TODO show error dialog
     }
 
     private void loadActivityFeed() {
@@ -313,17 +317,17 @@ public class NavigationDrawerFragment extends BaseFragment implements
         });
     }
 
-    private void updateUIWithData() {
-        if (mUserAccount == null) {
+    private void updateUIWithData(Account userAccount) {
+        if (userAccount == null) {
             return;
         }
-        mNavHeader.setFollowerCount(mUserAccount.getFollowerCount());
-        mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
-        mNavHeader.setUserName(mUserAccount.getFullName());
-        mNavHeader.setUserBio(mUserAccount.getBio());
+        mNavHeader.setFollowerCount(userAccount.getFollowerCount());
+        mNavHeader.setFollowingCount(userAccount.getFollowingCount());
+        mNavHeader.setUserName(userAccount.getFullName());
+        mNavHeader.setUserBio(userAccount.getBio());
         // TODO: Calculate Recent scans count somehow and store it
         mNavHeader.setRecentScansCount(0);
-        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
+        ImageLoaderUtil.loadImageIntoView(getActivity(), userAccount.getPhoto().getUrl(),
                 mNavHeader.getUserImageView());
     }
 

@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
+
 public class BaseFragment extends Fragment {
 
     private ActionBar mActionBar;
@@ -21,6 +25,9 @@ public class BaseFragment extends Fragment {
 
     private boolean mIsUsingCustomActionbarView = false;
 
+    @Inject
+    EventBus mEventBus;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +35,27 @@ public class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         toggleCustomActionBar();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            mEventBus.unregister(this);
+        } catch (Throwable t) {
+        }
     }
 
     public void launchNextFragment(BaseFragment fragment) {
@@ -46,7 +71,7 @@ public class BaseFragment extends Fragment {
 
     /**
      * * Override home icon with custom view with click listener
-     *
+     * <p/>
      * Note: Having a title will push this view to the right of the title.
      *
      * @param resId    - Drawable resource
