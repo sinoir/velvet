@@ -18,6 +18,8 @@ import android.widget.ImageView;
 
 /**
  * Draws an image in a circle/oval shape view.
+ *
+ * To make a circle, the height / width must be equal and squared, otherwise it'll draw an oval.
  */
 public class CircleImageView extends ImageView {
 
@@ -94,6 +96,12 @@ public class CircleImageView extends ImageView {
         } else {
             super.onDraw(canvas);
         }
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        updateShaderWithBitmap(bm);
     }
 
     private void updateShaderWithBitmap(Bitmap bitmap) {
