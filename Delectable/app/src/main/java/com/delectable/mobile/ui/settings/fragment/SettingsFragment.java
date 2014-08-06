@@ -4,28 +4,40 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.IdentifiersListing;
+import com.delectable.mobile.api.models.PhotoHash;
+import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.api.requests.AccountsFacebookifyProfilePhotoRequest;
+import com.delectable.mobile.api.requests.AccountsProvisionProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
+import com.delectable.mobile.api.requests.AccountsUpdateProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateProfileRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.facebook.Session;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,6 +67,10 @@ public class SettingsFragment extends BaseFragment {
 
     private static final int LAST_NAME = 1;
 
+    private static final int SELECT_PHOTO_REQUEST = 0;
+
+    private static final int CAMERA_REQUEST = 1;
+
     private String mUserId;
 
     private AccountsNetworkController mAccountsNetworkController;
@@ -63,6 +79,7 @@ public class SettingsFragment extends BaseFragment {
 
     private Account mUserAccount;
 
+    //region Views
     @InjectView(R.id.profile_image)
     CircleImageView mProfileImage;
 
@@ -107,6 +124,7 @@ public class SettingsFragment extends BaseFragment {
 
     @InjectView(R.id.delectable_version)
     TextView mVersionText;
+    //endregion
 
     /**
      * Used to keep track of which identifier is the primary email
@@ -124,6 +142,7 @@ public class SettingsFragment extends BaseFragment {
         return fragment;
     }
 
+    //region Life Cycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +159,7 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         ButterKnife.inject(this, view);
@@ -191,7 +211,6 @@ public class SettingsFragment extends BaseFragment {
 
         return view;
     }
-
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
@@ -264,14 +283,45 @@ public class SettingsFragment extends BaseFragment {
         return name;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            Bitmap bitmap = getImage(selectedImageUri);
+            mProfileImage.setImageBitmap(bitmap);
+            provisionProfilePhoto(bitmap);
+        }
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            mProfileImage.setImageBitmap(photo);
+            provisionProfilePhoto(photo);
+        }
+    }
+
+    private Bitmap getImage(Uri selectedImage) {
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getActivity().getContentResolver()
+                .query(selectedImage, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        return BitmapFactory.decodeFile(picturePath);
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        if (mUserAccount == null) {
+            loadData();
+        }
     }
+    //endregion
 
-    //region API REQUESTS
+    //region API Requests
     private void loadData() {
         AccountsContextRequest request = new AccountsContextRequest(
                 AccountsContextRequest.CONTEXT_PRIVATE);
@@ -286,14 +336,111 @@ public class SettingsFragment extends BaseFragment {
 
                     @Override
                     public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        showToastError(error.getMessage());
+                        String message = AccountsContextRequest.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
                         updateUI();
                     }
                 }
         );
     }
+
+    //region Setting Profile Photo Endpoints
+    private void facebookifyProfilePhoto() {
+        AccountsFacebookifyProfilePhotoRequest request
+                = new AccountsFacebookifyProfilePhotoRequest();
+        mNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        PhotoHash photoHash = (PhotoHash) result;
+                        Log.d(TAG, "facebookify profile photo successful: " + photoHash.getUrl());
+                        mUserAccount.setPhoto(photoHash);
+                        updateUI();
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        String message = AccountsFacebookifyProfilePhotoRequest.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
+                    }
+                });
+    }
+
+    private void provisionProfilePhoto(final Bitmap photo) {
+        AccountsProvisionProfilePhotoRequest request = new AccountsProvisionProfilePhotoRequest();
+        mNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        ProvisionCapture provision = (ProvisionCapture) result;
+                        Log.d(TAG, "provision successful: " + provision.getHeaders().getUrl());
+                        sendPhotoToS3(photo, provision);
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        String message = AccountsProvisionProfilePhotoRequest.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
+                    }
+                }
+        );
+    }
+
+    private void sendPhotoToS3(Bitmap photo, final ProvisionCapture provision) {
+        S3ImageUploadController mImageUploadController = new S3ImageUploadController(getActivity(),
+                provision);
+        mImageUploadController.uploadImage(photo,
+                new BaseNetworkController.SimpleRequestCallback() {
+                    @Override
+                    public void onSucess() {
+                        Log.d(TAG, "Image Upload Done!");
+                        updateProfilePicture(provision);
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        String message = S3ImageUploadController.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
+                    }
+                }
+        );
+    }
+
+    private void updateProfilePicture(ProvisionCapture provision) {
+        AccountsUpdateProfilePhotoRequest request = new AccountsUpdateProfilePhotoRequest(
+                provision.getBucket(), provision.getFilename());
+        mNetworkController.performRequest(request,
+                new BaseNetworkController.RequestCallback() {
+                    @Override
+                    public void onSuccess(BaseResponse result) {
+                        PhotoHash photoHash = (PhotoHash) result;
+                        Log.d(TAG, "updateProfilePicture successful: " + photoHash.getUrl());
+                    }
+
+                    @Override
+                    public void onFailed(RequestError error) {
+                        String message = AccountsUpdateProfilePhotoRequest.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
+                    }
+                }
+        );
+    }
+    //endregion
 
     /**
      * Parameters can be null.
@@ -318,7 +465,11 @@ public class SettingsFragment extends BaseFragment {
 
                     @Override
                     public void onFailed(RequestError error) {
-                        showToastError(error.getCode() + " error: " + error.getMessage());
+                        String message = AccountsUpdateProfileRequest.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
                         updateUI(); //revert ui back to it's original state
                     }
                 }
@@ -403,8 +554,11 @@ public class SettingsFragment extends BaseFragment {
 
         @Override
         public void onFailed(RequestError error) {
-            Log.d(TAG, "Results Failed! " + error.getMessage() + " Code: " + error.getCode());
-            showToastError(error.getCode() + " error: " + error.getMessage());
+            String message = " Accounts Add/Update/Remove Identifier failed: " +
+                    error.getCode() + " error: " + error.getMessage();
+            Log.d(TAG, message);
+            showToastError(message);
+            //TODO figure out how to handle error UI wise
             updateUI(); //updating ui so that user entered text is reverted back to original
         }
     };
@@ -422,16 +576,75 @@ public class SettingsFragment extends BaseFragment {
 
                     @Override
                     public void onFailed(RequestError error) {
-                        //TODO handle settings update error
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        showToastError(error.getCode() + " error: " + error.getMessage());
+                        String message = AccountsUpdateSettingRequest.TAG + " failed: " +
+                                error.getCode() + " error: " + error.getMessage();
+                        Log.d(TAG, message);
+                        showToastError(message);
+                        //TODO figure out how to handle error UI wise
                     }
                 }
         );
     }
     //endregion
 
+
+    //region Profile Image Actions
+    @OnClick(R.id.profile_image)
+    void onProfileImageClick() {
+
+        //show dialog to choose new photo source
+        final int PHOTO_LIBRARY = 0;
+        final int TAKE_PHOTO = 1;
+        final int FACEBOOK = 2;
+
+        ArrayList<String> listItems = new ArrayList<String>();
+        listItems.add(PHOTO_LIBRARY, getString(R.string.settings_choose_from_library));
+        listItems.add(TAKE_PHOTO, getString(R.string.settings_take_photo));
+        //TODO hide facebook row if user is not facebook connected
+        listItems.add(FACEBOOK, getString(R.string.settings_import_from_facebook));
+
+        SetProfilePicDialog dialog = SetProfilePicDialog.newInstance(listItems);
+        dialog.setCallback(new SetProfilePicDialog.Callback() {
+            @Override
+            public void onDialogItemClick(int position) {
+                switch (position) {
+                    case PHOTO_LIBRARY:
+                        launchPhotoLibrary();
+                        break;
+                    case TAKE_PHOTO:
+                        launchCamera();
+                        break;
+                    case FACEBOOK:
+                        setFacebookPhotoAsProfile();
+                        break;
+                }
+            }
+        });
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    private void launchPhotoLibrary() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+
+        //alternative way of making intent, use if strange things happen with intent above
+        //Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(intent, SELECT_PHOTO_REQUEST);
+    }
+
+    private void launchCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    private void setFacebookPhotoAsProfile() {
+        facebookifyProfilePhoto();
+    }
+    //endregion
+
+
+    //region Button Click Actions
     @OnClick({R.id.following_phone_notification,
             R.id.comment_phone_notification,
             R.id.tagged_phone_notification,
@@ -476,20 +689,19 @@ public class SettingsFragment extends BaseFragment {
     void onAboutRowClick(View v) {
 
         //TODO remove later, debugging toast
-        if (v instanceof TextView) {
-            TextView tv = (TextView) v;
-            String text = tv.getText().toString();
-            Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-        }
+        TextView tv = (TextView) v;
+        String text = tv.getText().toString();
 
         switch (v.getId()) {
             case R.id.contact:
                 launchEmailFeedback();
                 break;
             case R.id.terms_of_use:
+                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
                 //TODO go to terms of use
                 break;
             case R.id.privacy_policy:
+                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
                 //TODO go to privacy policy
                 break;
             case R.id.sign_out:
@@ -550,6 +762,7 @@ public class SettingsFragment extends BaseFragment {
         startActivity(launchIntent);
         getActivity().finish();
     }
+    //endregion
 
     /**
      * Updates the UI with the current {@link #mUserAccount} object.
@@ -602,4 +815,5 @@ public class SettingsFragment extends BaseFragment {
 
         //TODO no fields for email notifications yet for API, implement when ready
     }
+
 }
