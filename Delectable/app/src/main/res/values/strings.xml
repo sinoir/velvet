@@ -130,4 +130,11 @@
     <string name="settings_contact_myAppVersion">My Delectable app version: %1$s</string>
     <string name="settings_contact_user">User: %1$s</string>
     <string name="settings_contact_explanation">The info above is helpful if you are reporting a technical issue. Feel free to delete it if you\'d rather not send it.</string>
+
+    <string name="settings_set_profile_pic_dialog_title">Update profile picture</string>
+    <string name="settings_import_from_facebook">Import from facebook</string>
+    <string name="settings_choose_from_library">Choose from library</string>
+    <string name="settings_take_photo">Take photo</string>
+
+
 </resources>
