@@ -1,11 +1,13 @@
 package com.delectable.mobile.model.api;
 
+import com.delectable.mobile.Config;
+
 public class BaseRequest {
 
     private String context;
     private String e_tag;
 
-    private final String sessionType = "mobile";
+    private final String sessionType = Config.DEFAULT_SESSION_TYPE;
     private String sessionKey;
     private String sessionToken;
 

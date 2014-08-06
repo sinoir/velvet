@@ -19,7 +19,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mObjectGraph = ObjectGraph.create(new AppModule());
-        //Cache.init(getApplicationContext());
     }
 
     public static App getInstance() {

@@ -9,7 +9,6 @@ import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
-import com.google.gson.Gson;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
 
@@ -47,11 +46,6 @@ public class AppModule {
     CacheManager provideCacheManager() {
         Cache.init(App.getInstance());
         return Cache.getCacheManager();
-    }
-
-    @Provides
-    Gson provideGson() {
-        return new Gson();
     }
 
     @Provides

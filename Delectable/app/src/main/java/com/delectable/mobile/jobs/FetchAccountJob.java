@@ -9,7 +9,6 @@ import com.delectable.mobile.model.api.AccountContextRequest;
 import com.delectable.mobile.model.api.AccountContextResponse;
 import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.net.NetworkClient;
-import com.google.gson.Gson;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
@@ -27,8 +26,6 @@ public class FetchAccountJob extends Job {
     EventBus mEventBus;
     @Inject
     NetworkClient mNetworkClient;
-    @Inject
-    Gson mGson;
 
     private String mAccountId;
     private boolean mIsPrivate;
@@ -46,16 +43,21 @@ public class FetchAccountJob extends Job {
     @Override
     public void onRun() throws Throwable {
 
-        // TODO get eTag from cached instance, handle eTag match
+        String eTag = null;
+        Account cachedAccount = mAccountModel.getAccount(mAccountId);
+        if (cachedAccount != null) {
+            eTag = cachedAccount.getETag();
+        }
 
         String endpoint = "/accounts/context";
-        AccountContextRequest request = new AccountContextRequest(mIsPrivate ? "private" : "profile", new AccountContextRequest.AccountContextPayload(mAccountId));
+        AccountContextRequest request = new AccountContextRequest(mIsPrivate ? "private" : "profile", eTag, new AccountContextRequest.AccountContextPayload(mAccountId));
         AccountContextResponse response = mNetworkClient.post(endpoint, request, AccountContextResponse.class);
-        Account account = response.payload.account;
-        Log.d(TAG, "ACCOUNT RESPONSE: " + mGson.toJson(response));
 
-        mAccountModel.saveAccount(account);
-        mEventBus.post(new FetchedAccountEvent(account.getId()));
+        if (!response.e_tag_match) {
+            Account account = response.payload.account;
+            mAccountModel.saveAccount(account);
+            mEventBus.post(new FetchedAccountEvent(account.getId()));
+        }
 
     }
 

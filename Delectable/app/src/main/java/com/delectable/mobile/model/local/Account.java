@@ -76,6 +76,8 @@ public class Account {
 
     List<CaptureSummary> capture_summaries;
 
+    String e_tag;
+
     public boolean isUserRelationshipTypeSelf() {
         return checkRelationship(RELATION_TYPE_SELF);
     }
@@ -327,6 +329,14 @@ public class Account {
         this.current_user_relationship = current_user_relationship;
     }
 
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String eTag) {
+        this.e_tag = eTag;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -357,6 +367,7 @@ public class Account {
                 ", local_notifs=" + local_notifs +
                 ", current_user_relationship=" + current_user_relationship +
                 ", capture_summaries=" + capture_summaries +
+                ", e_tag=" + e_tag +
                 "} " + super.toString();
     }
 
