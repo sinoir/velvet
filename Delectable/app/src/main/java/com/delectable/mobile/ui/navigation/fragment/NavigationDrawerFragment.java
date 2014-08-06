@@ -326,8 +326,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
         mNavHeader.setUserBio(mUserAccount.getBio());
-        // TODO: Calculate Recent scans count somehow and store it
-        mNavHeader.setRecentScansCount(0);
         ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
                 mNavHeader.getUserImageView());
     }
