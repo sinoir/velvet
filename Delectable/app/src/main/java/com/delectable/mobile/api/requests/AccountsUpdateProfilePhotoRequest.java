@@ -8,6 +8,8 @@ import org.json.JSONObject;
 public class AccountsUpdateProfilePhotoRequest extends BaseRequest {
 
 
+    public static final String TAG = AccountsUpdateProfilePhotoRequest.class.getSimpleName();
+
     private String bucket;
 
     private String filename;

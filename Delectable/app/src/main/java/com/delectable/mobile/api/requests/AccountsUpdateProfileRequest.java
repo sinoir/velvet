@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AccountsUpdateProfileRequest extends BaseRequest {
 
-    private static final String TAG = AccountsUpdateProfileRequest.class.getSimpleName();
+    public static final String TAG = AccountsUpdateProfileRequest.class.getSimpleName();
 
     private String fname;
 

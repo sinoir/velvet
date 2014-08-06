@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class AccountsUpdateSettingRequest extends BaseRequest {
 
-    private static final String TAG = AccountsUpdateSettingRequest.class.getSimpleName();
+    public static final String TAG = AccountsUpdateSettingRequest.class.getSimpleName();
 
     //possible keys that we can use in the key parameter
 

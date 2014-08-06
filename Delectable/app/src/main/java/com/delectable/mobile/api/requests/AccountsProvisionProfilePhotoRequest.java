@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class AccountsProvisionProfilePhotoRequest extends BaseRequest {
 
+    public static final String TAG = AccountsProvisionProfilePhotoRequest.class.getSimpleName();
+
     @Override
     public String[] getPayloadFields() {
         //build empty payload
