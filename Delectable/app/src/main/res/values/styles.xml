@@ -65,12 +65,14 @@
 
     <style name="SettingsBaseNotificationIconStyle">
         <item name="android:layout_width">@dimen/general_icon_size</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:background">@null</item>
+        <item name="android:layout_alignParentBottom">true</item>
         <item name="android:selectable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:scaleType">centerInside</item>
+        <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
 
     <style name="SettingsEmailNotificationIcon" parent="SettingsBaseNotificationIconStyle">
