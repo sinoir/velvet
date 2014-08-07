@@ -1,16 +1,16 @@
 package com.delectable.mobile.jobs;
 
-import android.util.Log;
-
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.FetchAccountFailedEvent;
-import com.delectable.mobile.events.FetchedAccountEvent;
+import com.delectable.mobile.events.UpdatedAccountEvent;
 import com.delectable.mobile.model.api.AccountContextRequest;
 import com.delectable.mobile.model.api.AccountContextResponse;
 import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
+
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -56,7 +56,7 @@ public class FetchAccountJob extends Job {
         if (!response.e_tag_match) {
             Account account = response.payload.account;
             mAccountModel.saveAccount(account);
-            mEventBus.post(new FetchedAccountEvent(account.getId()));
+            mEventBus.post(new UpdatedAccountEvent(account.getId()));
         }
 
     }

@@ -1,5 +1,21 @@
 package com.delectable.mobile.ui.profile.fragment;
 
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureSummary;
+import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.events.FetchAccountFailedEvent;
+import com.delectable.mobile.events.FollowAccountFailedEvent;
+import com.delectable.mobile.events.UpdatedAccountEvent;
+import com.delectable.mobile.model.local.Account;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
+import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
+import com.delectable.mobile.util.ImageLoaderUtil;
+
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -11,28 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.delectable.mobile.App;
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.AccountsNetworkController;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.api.requests.FollowAccountsActionRequest;
-import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.data.AccountModel;
-import com.delectable.mobile.events.FetchAccountFailedEvent;
-import com.delectable.mobile.events.FetchedAccountEvent;
-import com.delectable.mobile.model.local.Account;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
-import com.delectable.mobile.util.ImageLoaderUtil;
-import com.delectable.mobile.util.SafeAsyncTask;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -53,16 +49,15 @@ public class UserProfileFragment extends BaseFragment implements
 
     private SlidingPagerAdapter mTabsAdapter;
 
-    private BaseNetworkController mNetworkController;
-
     private Account mUserAccount;
 
-    private ArrayList<CaptureDetails> mCaptureDetails;
+    private List<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
 
     @Inject
     AccountController mAccountController;
+
     @Inject
     AccountModel mAccountModel;
 
@@ -83,7 +78,6 @@ public class UserProfileFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
         mCaptureDetails = new ArrayList<CaptureDetails>();
-        mNetworkController = new AccountsNetworkController(getActivity());
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
@@ -95,7 +89,7 @@ public class UserProfileFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
@@ -183,7 +177,7 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     private void loadData() {
-
+/*
         new SafeAsyncTask<Account>(this) {
             @Override
             protected Account safeDoInBackground(Void[] params) {
@@ -203,13 +197,13 @@ public class UserProfileFragment extends BaseFragment implements
                     }
                     updateUIWithData();
                 }
-                // Fetch profile to check for updates (we're using eTags, so no big deal)
-                mAccountController.fetchProfile(mUserId);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+*/
 
-        /*
-        // Synchronous
+        // FIXME Use asynchronous method above once the other requests are refactored as well
+        // and see if the UI speed will improve, otherwise we might stick with the
+        // synchronous retrieval for small data
         mUserAccount = mAccountModel.getAccount(mUserId);
         if (mUserAccount != null) {
             Log.d(TAG, "CACHE HIT for profile: " + mUserId);
@@ -222,19 +216,24 @@ public class UserProfileFragment extends BaseFragment implements
             }
             updateUIWithData();
         }
-        */
 
     }
 
-    public void onEventMainThread(FetchedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId()))
+    public void onEventMainThread(UpdatedAccountEvent event) {
+        if (!mUserId.equals(event.getAccountId())) {
             return;
+        }
         loadData();
     }
 
     public void onEventMainThread(FetchAccountFailedEvent event) {
         // TODO show error dialog
     }
+
+    public void onEventMainThread(FollowAccountFailedEvent event) {
+        // TODO show error dialog
+    }
+
 
     private void updateUIWithData() {
 
@@ -264,27 +263,7 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public void toggleFollowUserClicked(final boolean isFollowingSelected) {
         Log.d(TAG, "Toggle Following? " + isFollowingSelected);
-        FollowAccountsActionRequest request = new FollowAccountsActionRequest(mUserId,
-                isFollowingSelected);
-        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Do nothing
-                Log.d(TAG, "Toggle Follow Success! " + result);
-            }
-
-            @Override
-            public void onFailed(RequestError error) {
-                showToastError(error.getMessage());
-                // Revert Follow Button state
-                // If the user toggled to Is Following, should revert back to not Following
-                if (isFollowingSelected) {
-                    mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_NOT_FOLLOWING);
-                } else {
-                    mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_FOLLOWING);
-                }
-            }
-        });
+        mAccountController.followAccount(mUserId, isFollowingSelected);
     }
 
     @Override

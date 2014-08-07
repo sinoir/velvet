@@ -5,6 +5,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.jobs.FetchAccountJob;
+import com.delectable.mobile.jobs.FollowAccountJob;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
@@ -26,6 +27,7 @@ import de.greenrobot.event.EventBus;
                 UserProfileFragment.class,
                 AccountModel.class,
                 FetchAccountJob.class,
+                FollowAccountJob.class,
                 AccountController.class
         }
 )
