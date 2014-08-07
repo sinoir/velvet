@@ -22,7 +22,7 @@ public class NavHeader extends RelativeLayout {
     // These must reflec the order of the mNavigationItems and onNavigationItemClicked id orders
     public static final int NAV_HOME = 0;
 
-    public static final int NAV_RECENINT_SCANS = 1;
+    public static final int NAV_SEARCH = 1;
 
     public static final int NAV_FIND_FRIENDS = 2;
 
@@ -45,13 +45,7 @@ public class NavHeader extends RelativeLayout {
     @InjectView(R.id.user_bio_text)
     TextView mUserBioTextView;
 
-    @InjectView(R.id.navigation_recent_scans)
-    View mNavigationRecentScans;
-
-    @InjectView(R.id.recent_scans_count)
-    TextView mNavigationRecentScansCount;
-
-    @InjectViews({R.id.navigation_home, R.id.navigation_recent_scans, R.id.navigation_find_friends,
+    @InjectViews({R.id.navigation_home, R.id.navigation_search, R.id.navigation_find_friends,
             R.id.navigation_settings})
     List<View> mNavigationItems;
 
@@ -81,7 +75,7 @@ public class NavHeader extends RelativeLayout {
         }
     }
 
-    @OnClick({R.id.navigation_home, R.id.navigation_recent_scans, R.id.navigation_find_friends,
+    @OnClick({R.id.navigation_home, R.id.navigation_search, R.id.navigation_find_friends,
             R.id.navigation_settings})
     void onNavigationClicked(View navItem) {
         boolean wasCurrentViewAlreadySelected = toggleViewSelection(navItem);
@@ -138,15 +132,6 @@ public class NavHeader extends RelativeLayout {
         String followingCountText = getResources()
                 .getString(R.string.following_count, followingCount);
         mFollowingCountTextView.setText(followingCountText);
-    }
-
-    public void setRecentScansCount(int scansCount) {
-        if (scansCount > 0) {
-            mNavigationRecentScans.setVisibility(View.VISIBLE);
-        } else {
-            mNavigationRecentScans.setVisibility(View.GONE);
-        }
-        mNavigationRecentScansCount.setText(String.valueOf(scansCount));
     }
 
     public void setCurrentSelectedNavItem(int navItem) {
