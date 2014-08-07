@@ -30,6 +30,7 @@ import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.util.ImageLoaderUtil;
+import com.delectable.mobile.util.SafeAsyncTask;
 
 import java.util.ArrayList;
 
@@ -87,11 +88,14 @@ public class UserProfileFragment extends BaseFragment implements
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
         }
+
+        // fetch profile to check for updates (we're using eTags, so no big deal)
+        mAccountController.fetchProfile(mUserId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
@@ -179,17 +183,47 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     private void loadData() {
-        // TODO get model data asynchronously
-        mUserAccount = mAccountModel.getAccount(mUserId);
 
-        mCaptureDetails.clear();
-        if (mUserAccount.getCaptureSummaries() != null
-                && mUserAccount.getCaptureSummaries().size() > 0) {
-            for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                mCaptureDetails.addAll(summary.getCaptures());
+        new SafeAsyncTask<Account>(this) {
+            @Override
+            protected Account safeDoInBackground(Void[] params) {
+                return mAccountModel.getAccount(mUserId);
             }
+
+            @Override
+            protected void safeOnPostExecute(Account account) {
+                mUserAccount = account;
+                if (mUserAccount != null) {
+                    mCaptureDetails.clear();
+                    if (mUserAccount.getCaptureSummaries() != null
+                            && mUserAccount.getCaptureSummaries().size() > 0) {
+                        for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
+                            mCaptureDetails.addAll(summary.getCaptures());
+                        }
+                    }
+                    updateUIWithData();
+                }
+                // Fetch profile to check for updates (we're using eTags, so no big deal)
+                mAccountController.fetchProfile(mUserId);
+            }
+        }.execute();
+
+        /*
+        // Synchronous
+        mUserAccount = mAccountModel.getAccount(mUserId);
+        if (mUserAccount != null) {
+            Log.d(TAG, "CACHE HIT for profile: " + mUserId);
+            mCaptureDetails.clear();
+            if (mUserAccount.getCaptureSummaries() != null
+                    && mUserAccount.getCaptureSummaries().size() > 0) {
+                for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
+                    mCaptureDetails.addAll(summary.getCaptures());
+                }
+            }
+            updateUIWithData();
         }
-        updateUIWithData();
+        */
+
     }
 
     public void onEventMainThread(FetchedAccountEvent event) {

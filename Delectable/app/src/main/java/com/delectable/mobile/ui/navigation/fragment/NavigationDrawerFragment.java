@@ -1,5 +1,24 @@
 package com.delectable.mobile.ui.navigation.fragment;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
@@ -20,25 +39,7 @@ import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
-
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
+import com.delectable.mobile.util.SafeAsyncTask;
 
 import java.util.ArrayList;
 
@@ -108,6 +109,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         selectItem(mCurrentSelectedNavItem);
+
+        // Fetch user profile once per app launch
+        mAccountController.fetchProfile(mUserId);
     }
 
     @Override
@@ -142,9 +146,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onStart() {
         super.onStart();
-
-        // TODO load data from cache asynchronously
-        updateUIWithData(mAccountModel.getAccount(mUserId));
     }
 
     @Override
@@ -277,16 +278,29 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     private void loadData() {
-        mAccountController.fetchProfile(mUserId);
+        // Asynchronously retreive profile from local model
+        new SafeAsyncTask<Account>(this) {
+            @Override
+            protected Account safeDoInBackground(Void[] params) {
+                return mAccountModel.getAccount(mUserId);
+            }
+
+            @Override
+            protected void safeOnPostExecute(Account account) {
+                if (account != null) {
+                    updateUIWithData(account);
+                }
+            }
+        }.execute();
+
+        // TODO refactor this to load data from local model instead of requesting it from the API
         loadActivityFeed();
     }
 
     public void onEventMainThread(FetchedAccountEvent event) {
         if (!mUserId.equals(event.getAccountId()))
             return;
-
-        // TODO load data from cache asynchronously
-        updateUIWithData(mAccountModel.getAccount(event.getAccountId()));
+        loadData();
     }
 
     public void onEventMainThread(FetchAccountFailedEvent event) {

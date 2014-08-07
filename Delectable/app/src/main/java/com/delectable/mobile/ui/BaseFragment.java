@@ -11,11 +11,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements LifecycleProvider {
+
+    private State state;
+
+    private Set<LifecycleListener> lifecycleListeners;
 
     private ActionBar mActionBar;
 
@@ -28,15 +35,24 @@ public class BaseFragment extends Fragment {
     @Inject
     EventBus mEventBus;
 
+    public BaseFragment() {
+        lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
+        state = State.constructed;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        state = State.created;
         mActionBar = getActivity().getActionBar();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        state = State.started;
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
+            lifecycleListener.onStart();
+        }
         try {
             mEventBus.register(this);
         } catch (Throwable t) {
@@ -44,18 +60,46 @@ public class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        state = State.paused;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        state = State.resumed;
         toggleCustomActionBar();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        state = State.stopped;
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
+            lifecycleListener.onStop();
+        }
         try {
             mEventBus.unregister(this);
         } catch (Throwable t) {
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        state = State.destroyed;
+        lifecycleListeners.clear();
+    }
+
+    @Override
+    public void registerLifecycleListener(LifecycleListener listener) {
+        lifecycleListeners.add(listener);
+    }
+
+    @Override
+    public void unregister(LifecycleListener listener) {
+        lifecycleListeners.remove(listener);
     }
 
     public void launchNextFragment(BaseFragment fragment) {
@@ -116,4 +160,15 @@ public class BaseFragment extends Fragment {
             mActionBar.setDisplayShowHomeEnabled(true);
         }
     }
+
+    private static enum State {
+        constructed,
+        created,
+        started,
+        resumed,
+        paused,
+        stopped,
+        destroyed
+    }
+
 }
