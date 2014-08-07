@@ -84,13 +84,17 @@ public class NavActivity extends BaseActivity
             case NavHeader.NAV_HOME:
                 fragment = new HomeFragment();
                 break;
-            case NavHeader.NAV_SETTINGS:
-                // TODO: Settings Screen
-                Toast.makeText(this, "Show Nav Settings", Toast.LENGTH_SHORT).show();
-                break;
             case NavHeader.NAV_FIND_FRIENDS:
                 // TODO: Find People Screen
                 Toast.makeText(this, "Show Find People", Toast.LENGTH_SHORT).show();
+                break;
+            case NavHeader.NAV_SEARCH:
+                // TODO: Search Screen
+                Toast.makeText(this, "Show Search", Toast.LENGTH_SHORT).show();
+                break;
+            case NavHeader.NAV_SETTINGS:
+                // TODO: Settings Screen
+                Toast.makeText(this, "Show Nav Settings", Toast.LENGTH_SHORT).show();
                 break;
         }
         if (fragment != null) {
