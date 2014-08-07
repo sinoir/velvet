@@ -15,6 +15,7 @@ public class Cache {
     private static final int CACHE_SIZE_KB = 1024 * 10;
 
     private static CacheManager sCacheManager;
+    private static DiskCache sDiskCache;
 
     private static final String TAG = Cache.class.getSimpleName();
 
@@ -27,8 +28,8 @@ public class Cache {
         File cacheFile = new File(cachePath + File.separator + BuildConfig.PACKAGE_NAME);
 
         try {
-            DiskCache diskCache = new DiskCache(cacheFile, BuildConfig.VERSION_CODE, CACHE_SIZE_KB);
-            sCacheManager = CacheManager.getInstance(diskCache);
+            sDiskCache = new DiskCache(cacheFile, BuildConfig.VERSION_CODE, CACHE_SIZE_KB);
+            sCacheManager = CacheManager.getInstance(sDiskCache);
         } catch (IOException e) {
             Log.e(TAG, "cache init failed: " + e.getMessage());
             return false;
@@ -39,6 +40,14 @@ public class Cache {
 
     public static CacheManager getCacheManager() {
         return sCacheManager;
+    }
+
+    public static void clearCache() {
+        try {
+            sDiskCache.clearCache();
+        } catch (IOException e) {
+            Log.e(TAG, "cache clearing failed: " + e.getMessage());
+        }
     }
 
 }
