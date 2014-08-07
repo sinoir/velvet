@@ -9,6 +9,7 @@ import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
+import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
 
@@ -22,6 +23,7 @@ import de.greenrobot.event.EventBus;
         injects = {
                 BaseFragment.class,
                 NavigationDrawerFragment.class,
+                UserProfileFragment.class,
                 AccountModel.class,
                 FetchAccountJob.class,
                 AccountController.class

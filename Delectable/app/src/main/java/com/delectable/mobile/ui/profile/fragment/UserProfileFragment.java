@@ -1,21 +1,5 @@
 package com.delectable.mobile.ui.profile.fragment;
 
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.AccountsNetworkController;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.BaseResponse;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.api.requests.AccountsContextRequest;
-import com.delectable.mobile.api.requests.FollowAccountsActionRequest;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
-import com.delectable.mobile.util.ImageLoaderUtil;
-
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -27,7 +11,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.RequestError;
+import com.delectable.mobile.api.controllers.AccountsNetworkController;
+import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureSummary;
+import com.delectable.mobile.api.requests.FollowAccountsActionRequest;
+import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.events.FetchAccountFailedEvent;
+import com.delectable.mobile.events.FetchedAccountEvent;
+import com.delectable.mobile.model.local.Account;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
+import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
+import com.delectable.mobile.util.ImageLoaderUtil;
+
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class UserProfileFragment extends BaseFragment implements
         ProfileHeaderView.ProfileHeaderActionListener {
@@ -54,6 +60,11 @@ public class UserProfileFragment extends BaseFragment implements
 
     private String mUserId;
 
+    @Inject
+    AccountController mAccountController;
+    @Inject
+    AccountModel mAccountModel;
+
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -69,6 +80,7 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         mCaptureDetails = new ArrayList<CaptureDetails>();
         mNetworkController = new AccountsNetworkController(getActivity());
         Bundle args = getArguments();
@@ -167,40 +179,30 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     private void loadData() {
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PROFILE);
-        request.setId(mUserId);
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
+        // TODO get model data asynchronously
+        mUserAccount = mAccountModel.getAccount(mUserId);
 
-                        mUserAccount = (Account) result;
-                        mCaptureDetails.clear();
-                        if (mUserAccount.getCaptureSummaries() != null
-                                && mUserAccount.getCaptureSummaries().size() > 0) {
-                            for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                                mCaptureDetails.addAll(summary.getCaptures());
-                            }
-                        }
-                        updateUIWithData();
-                    }
+        mCaptureDetails.clear();
+        if (mUserAccount.getCaptureSummaries() != null
+                && mUserAccount.getCaptureSummaries().size() > 0) {
+            for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
+                mCaptureDetails.addAll(summary.getCaptures());
+            }
+        }
+        updateUIWithData();
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        showToastError(error.getMessage());
-                    }
-                }
-        );
+    public void onEventMainThread(FetchedAccountEvent event) {
+        if (!mUserId.equals(event.getAccountId()))
+            return;
+        loadData();
+    }
+
+    public void onEventMainThread(FetchAccountFailedEvent event) {
+        // TODO show error dialog
     }
 
     private void updateUIWithData() {
-        if (getActivity() == null) {
-            return;
-        }
 
         String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
         String imageUrl = mUserAccount.getPhoto().getUrl();
