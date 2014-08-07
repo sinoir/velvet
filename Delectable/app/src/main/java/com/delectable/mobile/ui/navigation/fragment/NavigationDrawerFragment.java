@@ -1,24 +1,5 @@
 package com.delectable.mobile.ui.navigation.fragment;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
@@ -31,7 +12,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.FetchAccountFailedEvent;
-import com.delectable.mobile.events.FetchedAccountEvent;
+import com.delectable.mobile.events.UpdatedAccountEvent;
 import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
@@ -40,6 +21,26 @@ import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -90,6 +91,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Inject
     AccountController mAccountController;
+
     @Inject
     AccountModel mAccountModel;
 
@@ -123,7 +125,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
@@ -291,15 +293,16 @@ public class NavigationDrawerFragment extends BaseFragment implements
                     updateUIWithData(account);
                 }
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         // TODO refactor this to load data from local model instead of requesting it from the API
         loadActivityFeed();
     }
 
-    public void onEventMainThread(FetchedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId()))
+    public void onEventMainThread(UpdatedAccountEvent event) {
+        if (!mUserId.equals(event.getAccountId())) {
             return;
+        }
         loadData();
     }
 
