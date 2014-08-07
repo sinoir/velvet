@@ -27,6 +27,8 @@ import android.widget.TextView;
  */
 public class WineBannerView extends RelativeLayout {
 
+    private static final String TAG = WineBannerView.class.getSimpleName();
+
     boolean mShowTriangleMask;
 
     private int mTriangleCenterPosition;
@@ -36,6 +38,8 @@ public class WineBannerView extends RelativeLayout {
     private TextView mProducerName;
 
     private TextView mWineName;
+
+    private Paint mPaint;
 
     public WineBannerView(Context context) {
         this(context, null);
@@ -52,8 +56,11 @@ public class WineBannerView extends RelativeLayout {
 
         mShowTriangleMask = a.getBoolean(R.styleable.WineBannerView_showTriangleMask, false);
 
-        int defaultCenterPos = context.getResources().getDimensionPixelSize(R.dimen.wine_banner_triangle_center_position);
-        mTriangleCenterPosition = a.getDimensionPixelSize(R.styleable.WineBannerView_triangleCenterPosition, defaultCenterPos);
+        int defaultCenterPos = context.getResources()
+                .getDimensionPixelSize(R.dimen.wine_banner_triangle_center_position);
+        mTriangleCenterPosition = a
+                .getDimensionPixelSize(R.styleable.WineBannerView_triangleCenterPosition,
+                        defaultCenterPos);
 
         a.recycle();
 
@@ -62,6 +69,13 @@ public class WineBannerView extends RelativeLayout {
         mWineImage = (ImageView) findViewById(R.id.wine_image);
         mProducerName = (TextView) findViewById(R.id.producer_name);
         mWineName = (TextView) findViewById(R.id.wine_name);
+
+        //paint object to draw upside down triangle
+        mPaint = new Paint();
+        mPaint.setStrokeWidth(0);
+        mPaint.setColor(Color.WHITE);
+        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaint.setAntiAlias(true);
     }
 
     /**
@@ -194,7 +208,7 @@ public class WineBannerView extends RelativeLayout {
         path.lineTo(g.x, g.y);
         path.close();
 
-        canvas.drawPath(path, paint);
+        canvas.drawPath(path, mPaint);
     }
 
 
