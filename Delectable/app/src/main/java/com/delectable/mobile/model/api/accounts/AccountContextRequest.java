@@ -1,4 +1,6 @@
-package com.delectable.mobile.model.api;
+package com.delectable.mobile.model.api.accounts;
+
+import com.delectable.mobile.model.api.BaseRequest;
 
 public class AccountContextRequest extends BaseRequest {
 

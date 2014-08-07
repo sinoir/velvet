@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.FetchAccountFailedEvent;
 import com.delectable.mobile.events.UpdatedAccountEvent;
-import com.delectable.mobile.model.api.AccountContextRequest;
-import com.delectable.mobile.model.api.AccountContextResponse;
+import com.delectable.mobile.model.api.accounts.AccountContextRequest;
+import com.delectable.mobile.model.api.accounts.AccountContextResponse;
 import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
@@ -22,12 +22,15 @@ public class FetchAccountJob extends Job {
 
     @Inject
     AccountModel mAccountModel;
+
     @Inject
     EventBus mEventBus;
+
     @Inject
     NetworkClient mNetworkClient;
 
     private String mAccountId;
+
     private boolean mIsPrivate;
 
     public FetchAccountJob(String id, boolean isPrivate) {
@@ -50,8 +53,11 @@ public class FetchAccountJob extends Job {
         }
 
         String endpoint = "/accounts/context";
-        AccountContextRequest request = new AccountContextRequest(mIsPrivate ? "private" : "profile", eTag, new AccountContextRequest.AccountContextPayload(mAccountId));
-        AccountContextResponse response = mNetworkClient.post(endpoint, request, AccountContextResponse.class);
+        AccountContextRequest request = new AccountContextRequest(
+                mIsPrivate ? "private" : "profile", eTag,
+                new AccountContextRequest.AccountContextPayload(mAccountId));
+        AccountContextResponse response = mNetworkClient
+                .post(endpoint, request, AccountContextResponse.class);
 
         if (!response.e_tag_match) {
             Account account = response.payload.account;
