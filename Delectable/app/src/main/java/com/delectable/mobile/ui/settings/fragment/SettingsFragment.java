@@ -242,11 +242,33 @@ public class SettingsFragment extends BaseFragment {
         if (!mUserAccount.getFullName().equals(mNameField.getText().toString())) {
             return true;
         }
-        if (!mUserAccount.getUrl().equals(mWebsiteField.getText().toString())) {
-            return true;
+
+        String urlField = mWebsiteField.getText().toString();
+
+        //textview's text value is "" even if null is set to is
+        if (mUserAccount.getUrl() == null) {
+            if(!urlField.trim().equals("")) {
+                return true;
+            }
         }
-        if (!mUserAccount.getBio().equals(mShortBioField.getText().toString())) {
-            return true;
+        if (mUserAccount.getUrl() != null) {
+            if (!mUserAccount.getUrl().equals(urlField)) {
+                return true;
+            }
+        }
+
+        String bioField = mShortBioField.getText().toString();
+
+        //textview's text value is "" even if null is set to is
+        if (mUserAccount.getBio() == null) {
+            if(!bioField.trim().equals("")) {
+                return true;
+            }
+        }
+        if (mUserAccount.getBio() != null) {
+            if (!mUserAccount.getBio().equals(bioField)) {
+                return true;
+            }
         }
         return false;
     }
