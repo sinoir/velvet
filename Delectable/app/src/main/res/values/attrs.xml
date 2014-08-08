@@ -5,4 +5,26 @@
         <attr name="triangleCenterPosition" format="dimension" />
         <attr name="showTriangleMask" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="FontTextView">
+        <!-- This is mapped directly to FontTextView.Font. If changes are made here, they should be
+        made in the Font enum as well-->
+        <attr name="fontName">
+            <enum name="whitney_black" value="0" />
+            <enum name="whitney_black_ital" value="1" />
+            <enum name="whitney_bold" value="2" />
+            <enum name="whitney_bold_ital" value="3" />
+            <enum name="whitney_bold_sc" value="4" />
+            <enum name="whitney_book" value="5" />
+            <enum name="whitney_book_ital" value="6" />
+            <enum name="whitney_book_sc" value="7" />
+            <enum name="whitney_light" value="8" />
+            <enum name="whitney_light_ital" value="9" />
+            <enum name="whitney_medium" value="10" />
+            <enum name="whitney_medium_ital" value="11" />
+            <enum name="whitney_medium_sc" value="12" />
+            <enum name="whitney_semibold" value="13" />
+            <enum name="whitney_semibold_ital" value="14" />
+            <enum name="whitney_semibold_sc" value="15" />
+        </attr>
+    </declare-styleable>
 </resources>
