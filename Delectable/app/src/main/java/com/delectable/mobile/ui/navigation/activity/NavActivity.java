@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.navigation.activity;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
@@ -10,10 +11,13 @@ import com.delectable.mobile.ui.navigation.widget.NavHeader;
 
 import android.app.ActionBar;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class NavActivity extends BaseActivity
@@ -29,6 +33,8 @@ public class NavActivity extends BaseActivity
      */
     private CharSequence mTitle;
 
+    private ImageView mCameraButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,15 @@ public class NavActivity extends BaseActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // Setup Floating Camera Button
+        mCameraButton = (ImageView) findViewById(R.id.camera_button);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
     }
 
     @Override
@@ -70,17 +85,27 @@ public class NavActivity extends BaseActivity
             case NavHeader.NAV_HOME:
                 fragment = new HomeFragment();
                 break;
-            case NavHeader.NAV_SETTINGS:
-                fragment = new SettingsFragment();
-                break;
             case NavHeader.NAV_FIND_FRIENDS:
                 // TODO: Find People Screen
                 Toast.makeText(this, "Show Find People", Toast.LENGTH_SHORT).show();
+                break;
+            case NavHeader.NAV_SEARCH:
+                // TODO: Search Screen
+                Toast.makeText(this, "Show Search", Toast.LENGTH_SHORT).show();
+                break;
+            case NavHeader.NAV_SETTINGS:
+                fragment = new SettingsFragment();
                 break;
         }
         if (fragment != null) {
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
+    }
+
+    public void launchWineCapture() {
+        Intent launchIntent = new Intent();
+        launchIntent.setClass(this, WineCaptureActivity.class);
+        startActivity(launchIntent);
     }
 
     public void restoreActionBar() {

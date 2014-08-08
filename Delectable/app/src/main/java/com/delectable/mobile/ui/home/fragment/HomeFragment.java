@@ -3,7 +3,6 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
@@ -80,21 +79,13 @@ public class HomeFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.capture_wine:
-                launchWineCapture();
-                return true;
+            // TODO: Remove once settings is ready with Sign Out
             case R.id.sign_out:
                 logout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void launchWineCapture() {
-        Intent launchIntent = new Intent();
-        launchIntent.setClass(getActivity(), WineCaptureActivity.class);
-        startActivity(launchIntent);
     }
 
     public void logout() {

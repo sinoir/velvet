@@ -10,8 +10,21 @@
         <item name="android:background">@color/d_dark_navy</item>
     </style>
 
-    <!-- Settings Screen -->
+    <!-- Navigation Item Styles -->
+    <style name="NavigationItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/d_white</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:textColor">@color/nav_text_item_color</item>
+    </style>
 
+    <!-- Settings Screen -->
     <style name="SettingsBaseTextStyle">
         <item name="android:textColor">@color/d_black</item>
         <item name="android:textColorHint">@color/d_dark_gray</item>
@@ -77,25 +90,19 @@
 
     <style name="SettingsEmailNotificationIcon" parent="SettingsBaseNotificationIconStyle">
         <item name="android:layout_alignParentRight">true</item>
-        <!-- TODO will probably need to bring this back to size the icon when we get the real drawable
-        <item name="android:paddingLeft">@dimen/settings_email_notification_icon_horizontal_padding</item>
-        <item name="android:paddingRight">@dimen/settings_email_notification_icon_horizontal_padding</item>
-        -->
         <item name="android:src">@drawable/ic_settings_email_notification</item>
         <item name="android:contentDescription">@string/settings_cd_email_notifications</item>
     </style>
 
     <style name="SettingsPhoneNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_marginRight">@dimen/settings_notification_icon_horizontal_spacing</item>
-        <!-- TODO will probably need to bring this back to size the icon when we get the real drawable
-        <item name="android:paddingLeft">@dimen/settings_phone_notification_icon_horizontal_padding</item>
-        <item name="android:paddingRight">@dimen/settings_phone_notification_icon_horizontal_padding</item>
-        -->
+        <item name="android:layout_marginRight">
+            @dimen/settings_notification_icon_horizontal_spacing
+        </item>
         <item name="android:src">@drawable/ic_settings_phone_notification</item>
         <item name="android:contentDescription">@string/settings_cd_phone_notifications</item>
     </style>
 
-    <style name="SettingsAboutCategoryRow" >
+    <style name="SettingsAboutCategoryRow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_row_height</item>
         <item name="android:paddingLeft">@dimen/general_row_horizontal_spacing</item>
@@ -109,13 +116,11 @@
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
 
-    <style name="SettingsAboutCategoryDivider" >
+    <style name="SettingsAboutCategoryDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_divider_height</item>
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:background">@color/d_light_gray</item>
     </style>
-
-
 
 </resources>
