@@ -803,23 +803,12 @@ public class SettingsFragment extends BaseFragment {
 
         //account
         mEmailField.setText(mUserAccount.getEmail());
+
         //grab primary identifier for user's email
-        for (Identifier identifier : mUserAccount.getIdentifiers()) {
-            if (identifier.getPrimary()) {
-                mPrimaryEmailIdentifier = identifier;
-                break;
-            }
-        }
-        mPhoneIdentifier = null;
-        String mPhoneNumber = null;
-        //grab first phone identifier value
-        for (Identifier identifier : mUserAccount.getIdentifiers()) {
-            if (identifier.getType().equalsIgnoreCase(Identifier.Type.PHONE)) {
-                mPhoneIdentifier = identifier;
-                mPhoneNumber = identifier.getString();
-                break;
-            }
-        }
+        mPrimaryEmailIdentifier = mUserAccount.getPrimaryEmailIdentifier();
+
+        mPhoneIdentifier = mUserAccount.getPhoneIdentifier();
+        String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
         mPhoneNumberField.setText(mPhoneNumber);
 
         //TODO connect facebook
