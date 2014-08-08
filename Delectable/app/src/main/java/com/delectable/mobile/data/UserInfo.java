@@ -1,5 +1,6 @@
 package com.delectable.mobile.data;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Registration;
 
 import android.content.Context;
@@ -15,6 +16,16 @@ public class UserInfo {
 
     private static final String PROPERTY_USER_ID = "userId";
 
+    public static void onSignIn(String userId, String sessionKey, String sessionToken) {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_USER_ID, userId);
+        editor.putString(PROPERTY_SESSION_KEY, sessionKey);
+        editor.putString(PROPERTY_SESSION_TOKEN, sessionToken);
+        editor.commit();
+    }
 
     public static void onSignIn(Context context, Registration newRegistration) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);

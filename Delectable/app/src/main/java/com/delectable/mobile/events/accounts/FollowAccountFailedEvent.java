@@ -1,11 +1,11 @@
-package com.delectable.mobile.events;
+package com.delectable.mobile.events.accounts;
 
-public class FetchAccountFailedEvent {
+public class FollowAccountFailedEvent {
 
     private String mAccountId;
     // TODO add error cause or message
 
-    public FetchAccountFailedEvent(String id) {
+    public FollowAccountFailedEvent(String id) {
         mAccountId = id;
     }
 

@@ -1,7 +1,7 @@
 package com.delectable.mobile.controllers;
 
-import com.delectable.mobile.jobs.FetchAccountJob;
-import com.delectable.mobile.jobs.FollowAccountJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountJob;
+import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;

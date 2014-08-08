@@ -1,4 +1,4 @@
-package com.delectable.mobile.events;
+package com.delectable.mobile.events.accounts;
 
 public class UpdatedAccountEvent {
 
