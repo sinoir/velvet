@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.settings.fragment;
 
+import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.AccountsNetworkController;
@@ -766,9 +767,8 @@ public class SettingsFragment extends BaseFragment {
         return builder.toString();
     }
 
-    //TODO implement properly when versioning is in place
     private String getAppVersion() {
-        return "1.0";
+        return BuildConfig.VERSION_NAME;
     }
 
 
