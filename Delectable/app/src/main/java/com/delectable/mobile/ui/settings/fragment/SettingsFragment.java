@@ -1,19 +1,18 @@
 package com.delectable.mobile.ui.settings.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.S3ImageUploadController;
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsContextRequest;
 import com.delectable.mobile.api.requests.AccountsFacebookifyProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsProvisionProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
@@ -21,12 +20,18 @@ import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateProfileRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
+import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
+import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.ImageLoaderUtil;
+import com.delectable.mobile.util.SafeAsyncTask;
 import com.facebook.Session;
 
 import android.app.Activity;
@@ -36,6 +41,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -54,6 +60,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -79,6 +87,12 @@ public class SettingsFragment extends BaseFragment {
     private BaseNetworkController mNetworkController;
 
     private Account mUserAccount;
+
+    @Inject
+    AccountController mAccountController;
+
+    @Inject
+    AccountModel mAccountModel;
 
     //region Views
     @InjectView(R.id.profile_image)
@@ -147,14 +161,12 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         mAccountsNetworkController = new AccountsNetworkController(getActivity());
         mNetworkController = new AccountsNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
-        Bundle args = getArguments();
-        if (args != null) {
-            //no arguments passed into this fragment
-        }
+        mAccountController.fetchPrivateAccount(mUserId);
     }
 
     @Override
@@ -248,7 +260,7 @@ public class SettingsFragment extends BaseFragment {
 
         //textview's text value is "" even if null is set to is
         if (mUserAccount.getUrl() == null) {
-            if(!urlField.trim().equals("")) {
+            if (!urlField.trim().equals("")) {
                 return true;
             }
         }
@@ -262,7 +274,7 @@ public class SettingsFragment extends BaseFragment {
 
         //textview's text value is "" even if null is set to is
         if (mUserAccount.getBio() == null) {
-            if(!bioField.trim().equals("")) {
+            if (!bioField.trim().equals("")) {
                 return true;
             }
         }
@@ -339,36 +351,44 @@ public class SettingsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (mUserAccount == null) {
-            loadData();
+            loadCachedAccount();
         }
     }
     //endregion
 
-    //region API Requests
-    private void loadData() {
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PRIVATE);
-        request.setId(mUserId);
-        mAccountsNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        mUserAccount = (Account) result;
-                        updateUI();
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsContextRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                        updateUI();
-                    }
-                }
-        );
+    //region Events
+    public void onEventMainThread(UpdatedAccountEvent event) {
+        if (!mUserId.equals(event.getAccountId())) {
+            return;
+        }
+        loadCachedAccount();
     }
+
+    public void onEventMainThread(FetchAccountFailedEvent event) {
+        // TODO show error dialog
+    }
+    //endregion
+
+
+    private void loadCachedAccount() {
+        // Asynchronously retreive profile from local model
+        new SafeAsyncTask<Account>(this) {
+            @Override
+            protected Account safeDoInBackground(Void[] params) {
+                return mAccountModel.getAccount(mUserId);
+            }
+
+            @Override
+            protected void safeOnPostExecute(Account account) {
+                if (account != null) {
+                    mUserAccount = account;
+                    updateUI();
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    //region API Requests
 
     //region Setting Profile Photo Endpoints
     private void facebookifyProfilePhoto() {
@@ -794,6 +814,12 @@ public class SettingsFragment extends BaseFragment {
         if (mUserAccount == null) {
             return;
         }
+
+        //TODO temporary hack, if e_tag exists, then we know the account object we have a handle on is a context profile account
+        if (mUserAccount.getETag() != null) {
+            return;
+        }
+
         //profile info
         ImageLoaderUtil
                 .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(), mProfileImage);
