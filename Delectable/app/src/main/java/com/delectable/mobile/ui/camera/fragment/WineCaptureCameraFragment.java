@@ -154,7 +154,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     private void launchOptionsScreen(Bitmap imageData) {
-        WineCaptureOptionsFragment fragment = WineCaptureOptionsFragment.newInstance(imageData);
+        WineCaptureConfirmFragment fragment = WineCaptureConfirmFragment.newInstance(imageData);
         launchNextFragment(fragment);
     }
 

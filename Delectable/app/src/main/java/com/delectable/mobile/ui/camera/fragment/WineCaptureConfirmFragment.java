@@ -23,11 +23,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class WineCaptureOptionsFragment extends BaseFragment {
+public class WineCaptureConfirmFragment extends BaseFragment {
 
     private static final String sArgsImageData = "sArgsImageData";
 
-    private static final String TAG = "WineCaptureOptionsFragment";
+    private static final String TAG = WineCaptureConfirmFragment.class.getSimpleName();
 
     private View mView;
 
@@ -56,8 +56,8 @@ public class WineCaptureOptionsFragment extends BaseFragment {
 
     private IdentifyRequest mIdentifyRequest;
 
-    public static WineCaptureOptionsFragment newInstance(Bitmap imageData) {
-        WineCaptureOptionsFragment fragment = new WineCaptureOptionsFragment();
+    public static WineCaptureConfirmFragment newInstance(Bitmap imageData) {
+        WineCaptureConfirmFragment fragment = new WineCaptureConfirmFragment();
         Bundle args = new Bundle();
         args.putParcelable(sArgsImageData, imageData);
         fragment.setArguments(args);
