@@ -13,11 +13,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -34,22 +33,19 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     private View mCameraContainer;
 
-    private ImageButton mCameraRollButton;
+    private View mCameraRollButton;
 
-    private ImageButton mCaptureButton;
+    private View mCaptureButton;
 
-    private ImageButton mFlashButton;
+    private Button mFlashButton;
+
+    private View mCloseButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_close, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        getActivity().getActionBar().hide();
     }
 
     @Override
@@ -62,9 +58,10 @@ public class WineCaptureCameraFragment extends CameraFragment {
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
 
-        mCameraRollButton = (ImageButton) mView.findViewById(R.id.camera_roll_button);
-        mCaptureButton = (ImageButton) mView.findViewById(R.id.capture_button);
-        mFlashButton = (ImageButton) mView.findViewById(R.id.flash_button);
+        mCameraRollButton = mView.findViewById(R.id.camera_roll_button);
+        mCaptureButton = mView.findViewById(R.id.capture_button);
+        mFlashButton = (Button) mView.findViewById(R.id.flash_button);
+        mCloseButton = mView.findViewById(R.id.close_button);
 
         setupButtonListeners();
 
@@ -72,6 +69,13 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     private void setupButtonListeners() {
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+
         mCameraRollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,24 +142,15 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @Override
     public boolean toggleFlash() {
         boolean isFlashOn = super.toggleFlash();
-        // TODO: Toggle Icon to indicate flash is on or off
+        mFlashButton.setSelected(isFlashOn);
+        String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
+        mFlashButton.setText(flashText);
         return isFlashOn;
     }
 
     private void launchOptionsScreen(Bitmap imageData) {
         WineCaptureOptionsFragment fragment = WineCaptureOptionsFragment.newInstance(imageData);
         launchNextFragment(fragment);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "OptionsItemSelected: " + item);
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getActivity().finish();
-                break;
-        }
-        return true;
     }
 
     @Override

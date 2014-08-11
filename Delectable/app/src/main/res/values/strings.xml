@@ -10,6 +10,8 @@
     <string name="twitter_text">Twitter</string>
     <string name="instagram_text">Instagram</string>
     <string name="make_private">Make Private</string>
+    <string name="flash_on">ON</string>
+    <string name="flash_off">OFF</string>
 
     <!-- Navigation -->
     <string name="navigation_drawer_open">Open</string>

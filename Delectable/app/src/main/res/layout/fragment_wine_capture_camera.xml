@@ -18,6 +18,19 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/flash_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
+        android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+        android:background="@null"
+        android:drawableLeft="@drawable/ic_flash"
+        android:text="@string/flash_off"
+        android:textColor="@color/btn_flash_translucent_to_white" />
+
     <LinearLayout
         android:id="@+id/action_buttons_container"
         android:layout_width="match_parent"
@@ -30,12 +43,13 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/camera_roll_button"
+            android:id="@+id/close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
             android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
             android:background="@null"
-            android:src="@drawable/btn_camera_roll_normal" />
+            android:src="@drawable/btn_capture_close" />
 
         <ImageButton
             android:id="@+id/capture_button"
@@ -47,13 +61,13 @@
             android:src="@drawable/btn_shutter" />
 
         <ImageButton
-            android:id="@+id/flash_button"
+            android:id="@+id/camera_roll_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
             android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
             android:background="@null"
-            android:src="@drawable/btn_flash_normal" />
+            android:src="@drawable/btn_capture_options" />
     </LinearLayout>
 
 </RelativeLayout>
