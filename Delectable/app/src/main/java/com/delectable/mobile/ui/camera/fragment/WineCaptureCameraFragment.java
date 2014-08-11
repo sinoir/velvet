@@ -25,7 +25,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     public static final int SELECT_PHOTO = 100;
 
-    private static final String TAG = "WineCaptureCameraFragment";
+    private static final String TAG = WineCaptureCameraFragment.class.getSimpleName();
 
     private View mView;
 
@@ -101,10 +101,15 @@ public class WineCaptureCameraFragment extends CameraFragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // TODO: Display Focus icon
-                PointF pointToFocusOn = new PointF(event.getX(), event.getY());
-                RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
-                        mCameraPreview.getHeight());
-                focusOnPoint(pointToFocusOn, bounds);
+                try {
+                    PointF pointToFocusOn = new PointF(event.getX(), event.getY());
+                    RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
+                            mCameraPreview.getHeight());
+                    // TODO: Figure out why we get RuntimeException when running on some phones
+                    focusOnPoint(pointToFocusOn, bounds);
+                } catch (Exception ex) {
+                    Log.wtf(TAG, "Failed to Focus", ex);
+                }
                 return true;
             }
         });
