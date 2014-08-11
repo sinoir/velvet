@@ -24,6 +24,8 @@ public class ActivityFeedAdapter extends BaseAdapter {
 
     private String mActivityFeedTitle;
 
+    private ActivityFeedRow.ActivityActionsHandler mActionsHandler;
+
     public ActivityFeedAdapter(Context context, ArrayList<ActivityRecipient> feedData) {
         mActivityFeedData = feedData;
         mContext = context;
@@ -56,7 +58,11 @@ public class ActivityFeedAdapter extends BaseAdapter {
             rowView = new ActivityFeedRow(mContext);
         }
         rowView.updateData(data);
-
+        rowView.setActionsHandler(mActionsHandler);
         return rowView;
+    }
+
+    public void setActionsHandler(ActivityFeedRow.ActivityActionsHandler actionsHandler) {
+        mActionsHandler = actionsHandler;
     }
 }

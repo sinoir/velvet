@@ -6,4 +6,5 @@
     android:choiceMode="none"
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
+    android:listSelector="@android:color/transparent"
     tools:context=".NavigationDrawerFragment" />
