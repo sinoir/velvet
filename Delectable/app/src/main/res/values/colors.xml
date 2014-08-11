@@ -31,4 +31,7 @@
     <!-- 80% opacity -->
     <color name="d_white_80op">#CCFFFFFF</color>
 
+
+    <!-- Transparent Blacks -->
+    <color name="d_black_10op">#1A000000</color>
 </resources>

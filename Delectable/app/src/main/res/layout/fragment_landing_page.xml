@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/general_row_horizontal_spacing"
+    android:paddingRight="@dimen/general_row_horizontal_spacing"
+    android:background="@android:color/darker_gray">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/signup_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:layout_above="@+id/login_text"
+        android:background="@drawable/btn_signup"
+        android:gravity="center"
+        android:text="@string/login_sign_up"
+        android:textColor="@color/d_black"
+        android:clickable="true"
+        android:textSize="@dimen/login_signup_button_text_height"
+        app:fontName="whitney_medium_sc" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/login_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:clickable="true"
+        android:text="@string/login_already_have_account"
+        android:textColor="@color/btn_text_white_to_grey"
+        android:textSize="@dimen/login_already_have_account_text_height"
+        app:fontName="whitney_book" />
+</RelativeLayout>

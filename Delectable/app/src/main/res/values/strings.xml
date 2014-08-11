@@ -11,6 +11,13 @@
     <string name="instagram_text">Instagram</string>
     <string name="make_private">Make Private</string>
 
+    <!-- Signup Login -->
+    <string name="login_sign_up">sign up</string>
+    <string name="login_already_have_account">Already have an account?</string>
+    <string name="login_login">Log in</string>
+
+
+
     <!-- Navigation -->
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
