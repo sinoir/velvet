@@ -144,12 +144,6 @@ public class WineBannerView extends RelativeLayout {
 
     //TODO will need to adjust the bottom bounds of this view by the height of our triangle 
     private void drawTriangle(Canvas canvas) {
-        Paint paint = new Paint();
-
-        paint.setStrokeWidth(0);
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setAntiAlias(true);
 
         int triangleWidth = getResources()
                 .getDimensionPixelOffset(R.dimen.wine_banner_triangle_width);
