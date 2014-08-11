@@ -2,6 +2,7 @@ package com.delectable.mobile;
 
 public class Config {
 
+    public static final String API_VERSION = "/v2";
     public static final String DEFAULT_SESSION_TYPE = "mobile";
 
     public static class ServerInfo {

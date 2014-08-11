@@ -1,12 +1,9 @@
 package com.delectable.mobile.ui.registration.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.controllers.RegistrationController;
-import com.delectable.mobile.api.requests.BaseRegistrations;
-import com.delectable.mobile.api.requests.RegistrationsFacebook;
-import com.delectable.mobile.api.requests.RegistrationsLogin;
+import com.delectable.mobile.controllers.RegistrationController;
+import com.delectable.mobile.events.registrations.LoginEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.DateHelperUtil;
@@ -42,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class LoginFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int sLoaderEmailAutocomplete = 0;
@@ -67,9 +66,10 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
 
     private EditText mPasswordView;
 
-    private RegistrationController mRegistrationController;
-
     private UiLifecycleHelper mFacebookUiHelper;
+
+    @Inject
+    RegistrationController mRegistrationController;
 
     public LoginFragment() {
     }
@@ -77,8 +77,7 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRegistrationController = new RegistrationController(getActivity());
-
+        App.injectMembers(this);
         mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
         mFacebookUiHelper.onCreate(savedInstanceState);
     }
@@ -205,49 +204,30 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
     public void facebookLogin() {
         Session session = Session.getActiveSession();
         Log.d(TAG, "FBLogin SessionState: " + session.getState());
-        Log.d(TAG, "FBLogin SessionState: " + session.getState());
         mLoginProgress.setVisibility(View.VISIBLE);
-        RegistrationsFacebook facebookRequest = new RegistrationsFacebook();
-        facebookRequest.setFacebookToken(session.getAccessToken());
-        facebookRequest.setFacebookTokenExpiration(
+        mRegistrationController.facebookLogin(session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
-        registerWithRequest(facebookRequest);
     }
 
     private void performLogin() {
-        RegistrationsLogin loginRequest = new RegistrationsLogin();
-        loginRequest.setEmail(mEmailView.getText().toString());
-        loginRequest.setPassword(mPasswordView.getText().toString());
-        registerWithRequest(loginRequest);
+        mLoginProgress.setVisibility(View.VISIBLE);
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        mRegistrationController.login(email, password);
     }
 
-    private void registerWithRequest(BaseRegistrations request) {
-        mLoginProgress.setVisibility(View.VISIBLE);
-        mRegistrationController
-                .registerUser(request, new BaseNetworkController.SimpleRequestCallback() {
-                    @Override
-                    public void onSucess() {
-                        mLoginProgress.setVisibility(View.GONE);
-                        if (getActivity() != null) {
-                            Toast.makeText(getActivity(), "Successfully Logged in!",
-                                    Toast.LENGTH_LONG)
-                                    .show();
-                            Intent launchIntent = new Intent();
-                            launchIntent.setClass(getActivity(), NavActivity.class);
-                            startActivity(launchIntent);
-                            getActivity().finish();
-                        }
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        if (getActivity() != null) {
-                            mLoginProgress.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-                });
+    public void onEventMainThread(LoginEvent login) {
+        mLoginProgress.setVisibility(View.GONE);
+        if (login.isSuccessful()) {
+            Toast.makeText(getActivity(), "Successfully Logged in!",
+                    Toast.LENGTH_LONG)
+                    .show();
+            startActivity(new Intent(getActivity(), NavActivity.class));
+            getActivity().finish();
+        } else {
+            Toast.makeText(getActivity(), "Failed Logging in!", Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 
     private boolean isEmailValid(String email) {
