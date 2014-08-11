@@ -65,6 +65,7 @@
     <!-- Wine Capture Camera Flow -->
     <dimen name="wine_capture_preview_height">320dp</dimen>
     <dimen name="wine_capture_button_horizontal_spacing">20dp</dimen>
+    <dimen name="wine_capture_fill_frame_label_top_margin">20dp</dimen>
 
     <!-- Wine Capture Submit Screen -->
     <dimen name="capture_submit_margins">15dp</dimen>
@@ -104,9 +105,5 @@
     <dimen name="wine_banner_triangle_width">14dp</dimen>
     <dimen name="wine_banner_triangle_height">7dp</dimen>
     <dimen name="wine_banner_triangle_center_position">32dp</dimen>
-
-
-
-
 
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/d_dark_navy">
@@ -31,23 +32,31 @@
         android:text="@string/flash_off"
         android:textColor="@color/btn_flash_translucent_to_white" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/action_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/camera_container"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_below="@+id/camera_container"
+        android:background="@color/d_dark_navy">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/wine_capture_fill_frame_label_top_margin"
+            android:text="@string/capture_camera_fill_frame_label"
+            android:textColor="@color/d_white"
+            android:textSize="16sp"
+            app:fontName="whitney_book" />
 
         <ImageButton
             android:id="@+id/close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
-            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_alignBottom="@+id/capture_button"
+            android:layout_alignTop="@+id/capture_button"
+            android:layout_toLeftOf="@+id/capture_button"
             android:background="@null"
             android:src="@drawable/btn_capture_close" />
 
@@ -55,6 +64,7 @@
             android:id="@+id/capture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
             android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
             android:background="@null"
@@ -64,10 +74,12 @@
             android:id="@+id/camera_roll_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
-            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_alignBottom="@+id/capture_button"
+            android:layout_alignTop="@+id/capture_button"
+            android:layout_toRightOf="@+id/capture_button"
             android:background="@null"
             android:src="@drawable/btn_capture_options" />
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
