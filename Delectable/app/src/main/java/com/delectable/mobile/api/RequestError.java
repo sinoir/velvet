@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * Created by abednarek on 5/22/14.
  */
-public class RequestError {
+public class RequestError extends Throwable {
 
     int code;
 
@@ -40,4 +40,5 @@ public class RequestError {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

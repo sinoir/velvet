@@ -5,6 +5,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".App"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/DelectableTheme">
@@ -81,6 +82,7 @@
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- TODO: Handle in code possiblity of user not having a camera on device -->
     <uses-feature
