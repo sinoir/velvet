@@ -1,12 +1,9 @@
-package com.delectable.mobile.ui.wineprofile.dialog;
+package com.delectable.mobile.ui.settings.dialog;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
+import com.delectable.mobile.ui.settings.widget.SetProfilePicRowAdapter;
 
-import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,21 +12,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ChooseVintageDialog extends DialogFragment {
+import java.util.ArrayList;
 
-    public static final String WINE = "WINE";
+public class SetProfilePicDialog extends DialogFragment {
 
-    private static final String BASE_WINE = "BASE_WINE";
+    private static final String TAG = SetProfilePicDialog.class.getSimpleName();
 
-    private static final String TAG = ChooseVintageDialog.class.getSimpleName();
+    private static final String LIST_ITEMS = "BASE_WINE";
 
-    private WineProfilesAdapter mAdapter = new WineProfilesAdapter();
+    private SetProfilePicRowAdapter mAdapter;
 
+    private Callback mCallback;
 
-    public static ChooseVintageDialog newInstance(BaseWine baseWine) {
-        ChooseVintageDialog f = new ChooseVintageDialog();
+    public static SetProfilePicDialog newInstance(ArrayList<String> listItems) {
+        SetProfilePicDialog f = new SetProfilePicDialog();
         Bundle args = new Bundle();
-        args.putParcelable(BASE_WINE, baseWine);
+        args.putStringArrayList(LIST_ITEMS, listItems);
         f.setArguments(args);
         return f;
     }
@@ -38,11 +36,15 @@ public class ChooseVintageDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
+
         if (getArguments() != null) {
-            BaseWine baseWine = getArguments().getParcelable(BASE_WINE);
-            mAdapter.setBaseWine(baseWine);
-            mAdapter.notifyDataSetChanged();
+            ArrayList<String> listItems = getArguments().getStringArrayList(LIST_ITEMS);
+            mAdapter = new SetProfilePicRowAdapter(listItems);
+            return;
         }
+
+        throw new RuntimeException(TAG + " needs to be initialized with list items");
+
     }
 
     @Override
@@ -50,23 +52,30 @@ public class ChooseVintageDialog extends DialogFragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_listview, container, false);
         TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(R.string.choose_vintage_dialog_title);
+        title.setText(R.string.settings_set_profile_pic_dialog_title);
         ListView listview = (ListView) view.findViewById(R.id.list_view);
         listview.setAdapter(mAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //call back to implementing class
-                Intent intent = new Intent();
-                intent.putExtra(WINE,
-                        mAdapter.getItem(position)); //can be a BaseWine or WineProfile
-                getTargetFragment()
-                        .onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                if (mCallback != null) {
+                    mCallback.onDialogItemClick(position);
+                }
                 dismiss();
             }
         });
 
         return view;
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
+    }
+
+    public static interface Callback {
+
+        public void onDialogItemClick(int position);
     }
 
 }

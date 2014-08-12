@@ -2,6 +2,15 @@ package com.delectable.mobile.api.models;
 
 public class Identifier {
 
+    public static class Type {
+
+        public static final String FACEBOOK = "facebook";
+
+        public static final String EMAIL = "email";
+
+        public static final String PHONE = "phone";
+    }
+
     String id;
 
     Boolean primary;

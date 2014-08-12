@@ -2,10 +2,12 @@ package com.delectable.mobile.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PhotoHash implements Parcelable {
+public class PhotoHash extends BaseResponse implements Parcelable {
 
     public static final Parcelable.Creator<PhotoHash> CREATOR
             = new Parcelable.Creator<PhotoHash>() {
@@ -36,6 +38,16 @@ public class PhotoHash implements Parcelable {
         this.child_resolutions.size_450 = in.readString();
         this.child_resolutions.size_medium = in.readString();
         this.child_resolutions.size_blur = in.readString();
+    }
+
+    public static PhotoHash buildFromJson(JSONObject jsonObj) {
+        JSONObject payloadObj = jsonObj.optJSONObject("payload");
+        PhotoHash newResource = null;
+        if (payloadObj != null && payloadObj.optJSONObject("photo") != null) {
+            JSONObject photoObj = payloadObj.optJSONObject("photo");
+            newResource = buildFromJson(photoObj, PhotoHash.class);
+        }
+        return newResource;
     }
 
     public String getUrl() {

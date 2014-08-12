@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 
 public class S3ImageUploadController {
 
-    private static final String TAG = "S3ImageUploadController";
+    public static final String TAG = S3ImageUploadController.class.getSimpleName();
 
     private static String sS3BaseURL = "https://s3.amazonaws.com";
 
