@@ -37,9 +37,7 @@ import com.facebook.Session;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -58,6 +56,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -324,6 +323,9 @@ public class SettingsFragment extends BaseFragment {
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
             Bitmap bitmap = getImage(selectedImageUri);
+            if (bitmap == null) {
+                return; //unable to retrieve image from phone, don't do anything
+            }
             mProfileImage.setImageBitmap(bitmap);
             provisionProfilePhoto(bitmap);
         }
@@ -334,17 +336,24 @@ public class SettingsFragment extends BaseFragment {
         }
     }
 
+    /**
+     * @return Returns null if the image couldn't be retrieved.
+     */
     private Bitmap getImage(Uri selectedImage) {
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-        Cursor cursor = getActivity().getContentResolver()
-                .query(selectedImage, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        return BitmapFactory.decodeFile(picturePath);
+        try {
+            if (getActivity() == null) {
+                return null;
+            }
+            // TODO: Background thread here?
+            Bitmap bm = MediaStore.Images.Media
+                    .getBitmap(getActivity().getContentResolver(), selectedImage);
+            return bm;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to open image", e);
+            Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT).show();
+            return null;
+        }
     }
 
     @Override
@@ -667,7 +676,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void launchPhotoLibrary() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
 
         //alternative way of making intent, use if strange things happen with intent above
