@@ -15,13 +15,15 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class WineCaptureConfirmFragment extends BaseFragment {
 
@@ -29,15 +31,19 @@ public class WineCaptureConfirmFragment extends BaseFragment {
 
     private static final String TAG = WineCaptureConfirmFragment.class.getSimpleName();
 
+    @InjectView(R.id.loading_progress_container)
+    protected View mLoadingProgressContainer;
+
+    @InjectView(R.id.preview_image)
+    protected ImageView mPreviewImage;
+
+    @InjectView(R.id.confirm_button)
+    protected ImageButton mConfirmButton;
+
+    @InjectView(R.id.cancel_button)
+    protected ImageButton mCancelButton;
+
     private View mView;
-
-    private View mLoadingProgressContainer;
-
-    private ImageView mPreviewImage;
-
-    private Button mScanOnlyButton;
-
-    private Button mScanAndSaveButton;
 
     private Bitmap mCapturedImageBitmap;
 
@@ -71,14 +77,7 @@ public class WineCaptureConfirmFragment extends BaseFragment {
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-
+        getActivity().getActionBar().hide();
         mNetworkController = new BaseNetworkController(getActivity());
     }
 
@@ -86,14 +85,10 @@ public class WineCaptureConfirmFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_options, container, false);
+        ButterKnife.inject(this, mView);
 
-        mLoadingProgressContainer = mView.findViewById(R.id.loading_progress_container);
         // TODO: Make previewImage Height = Width a square
-        mPreviewImage = (ImageView) mView.findViewById(R.id.preview_image);
-        mScanOnlyButton = (Button) mView.findViewById(R.id.scan_only_button);
-        mScanAndSaveButton = (Button) mView.findViewById(R.id.scan_save_button);
 
-        setupButtonListeners();
         displayCapturedImage();
         return mView;
     }
@@ -104,38 +99,22 @@ public class WineCaptureConfirmFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Show Custom back < icon
-        super.onCreateOptionsMenu(menu, inflater);
+    @OnClick(R.id.cancel_button)
+    protected void cancelScan() {
+        getActivity().onBackPressed();
     }
 
-    private void setupButtonListeners() {
-        mScanOnlyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mScanOnlyButton.setEnabled(false);
-                scanOnly();
-            }
-        });
-
-        mScanAndSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scanAndSaveCapture();
-            }
-        });
-    }
-
-    private void scanOnly() {
-        loadPhotoProvision();
-        mLoadingProgressContainer.setVisibility(View.VISIBLE);
-    }
-
-    private void scanAndSaveCapture() {
+    @OnClick(R.id.confirm_button)
+    protected void scanAndSaveCapture() {
         WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
                 .newInstance(mCapturedImageBitmap);
         launchNextFragment(fragment);
+    }
+
+    private void scanOnly() {
+        // TODO: Remove Scan Only (Refactor the Camera flow)
+        loadPhotoProvision();
+        mLoadingProgressContainer.setVisibility(View.VISIBLE);
     }
 
     private void loadPhotoProvision() {
@@ -224,7 +203,6 @@ public class WineCaptureConfirmFragment extends BaseFragment {
         mLoadingProgressContainer.setVisibility(View.GONE);
         mProvision = null;
         mLabelScan = null;
-        mScanOnlyButton.setEnabled(true);
     }
 }
 
