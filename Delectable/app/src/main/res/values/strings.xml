@@ -118,4 +118,46 @@
     <string name="capture_submit_share_text">SHARE</string>
     <string name="capture_submit_post">Post</string>
 
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_name_hint">Name</string>
+    <string name="settings_short_bio_hint">Short bio</string>
+    <string name="settings_website_hint">Website</string>
+    <string name="settings_account">account</string>
+    <string name="settings_email_label">Email</string>
+    <string name="settings_email_hint">hello@goat.com</string>
+    <string name="settings_phone_number_label">Phone number</string>
+    <string name="settings_phone_number_hint">Enter phone number</string>
+    <string name="settings_facebook_label">Facebook</string>
+    <string name="settings_facebook_hint">Connect</string>
+    <string name="settings_twitter_label">Twitter</string>
+    <string name="settings_twitter_hint">\@bearroast</string>
+    <string name="settings_notification">notification</string>
+    <string name="settings_following_you">Following you</string>
+    <string name="settings_comment_on_your_wine">Comment on your wine</string>
+    <string name="settings_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="settings_about">about</string>
+    <string name="settings_contact">Contact</string>
+    <string name="settings_terms_of_use">Terms of use</string>
+    <string name="settings_privacy_policy">Privacy policy</string>
+    <string name="settings_sign_out">Sign out</string>
+    <string name="settings_delectable_version">Delectable %1$s</string>
+    <string name="settings_cd_phone_notifications">phone notifications</string>
+    <string name="settings_cd_email_notifications">email notifications</string>
+    <!-- contact email strings -->
+    <string name="settings_contact_email_intent_dialog_title">Send mail...</string>
+    <string name="settings_contact_email">feedback@delectable.com</string>
+    <string name="settings_contact_subject">Thoughts about Delectable</string>
+    <string name="settings_contact_myAndroidDevice">My android device: %1$s %2$s</string>
+    <string name="settings_contact_myAndroidVersion">My android version: %1$s</string>
+    <string name="settings_contact_myAppVersion">My Delectable app version: %1$s</string>
+    <string name="settings_contact_user">User: %1$s</string>
+    <string name="settings_contact_explanation">The info above is helpful if you are reporting a technical issue. Feel free to delete it if you\'d rather not send it.</string>
+
+    <string name="settings_set_profile_pic_dialog_title">Update profile picture</string>
+    <string name="settings_import_from_facebook">Import from facebook</string>
+    <string name="settings_choose_from_library">Choose from library</string>
+    <string name="settings_take_photo">Take photo</string>
+
+
 </resources>

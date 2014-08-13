@@ -6,6 +6,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
+import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 
 import android.app.ActionBar;
@@ -93,8 +94,7 @@ public class NavActivity extends BaseActivity
                 Toast.makeText(this, "Show Search", Toast.LENGTH_SHORT).show();
                 break;
             case NavHeader.NAV_SETTINGS:
-                // TODO: Settings Screen
-                Toast.makeText(this, "Show Nav Settings", Toast.LENGTH_SHORT).show();
+                fragment = new SettingsFragment();
                 break;
         }
         if (fragment != null) {
