@@ -102,6 +102,21 @@
                         style="@style/SignUpIn_field"
                         android:layout_below="@+id/password_label"
                         android:inputType="textPassword" />
+
+                    <com.delectable.mobile.ui.common.widget.FontTextView
+                        android:id="@+id/forgot_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/password_field"
+                        android:layout_alignRight="@+id/password_field"
+                        android:layout_alignTop="@+id/password_field"
+                        android:clickable="true"
+                        android:gravity="center_vertical|right"
+                        android:text="@string/signup_in_forgot"
+                        android:textColor="@color/text_medium_gray_to_dark_gray"
+                        android:textSize="@dimen/signup_in_field_text_size"
+                        app:fontName="whitney_book" />
+
                 </RelativeLayout>
             </LinearLayout>
 

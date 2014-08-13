@@ -25,6 +25,8 @@
     <string name="signup_in_email_address_label">email address</string>
     <string name="signup_in_email_address_hint">hello@email.com</string>
     <string name="signup_in_password_label">password</string>
+    <string name="signup_in_forgot">Forgot?</string>
+
     <string name="signup_in_or">or</string>
     <string name="signup_in_sign_in_using_facebook">sign in using facebook</string>
     <string name="signup_in_sign_in_using_google">sign in using google</string>
