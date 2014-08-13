@@ -21,13 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class WineCaptureSubmitFragment extends BaseFragment {
 
-    private static final String TAG = "WineCaptureSubmitFragment";
+    private static final String TAG = WineCaptureSubmitFragment.class.getSimpleName();
 
     private static final String sArgsImageData = "sArgsImageData";
 
@@ -37,11 +36,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private Button mPostButton;
 
-    private ImageView mPreviewImageView;
-
     private EditText mCommentEditText;
-
-    private View mRatingBarHint;
 
     private RatingSeekBar mRatingSeekBar;
 
@@ -94,6 +89,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
         mNetworkController = new BaseNetworkController(getActivity());
+        // TODO: Hide actionbar when back pressed, or have camera/confirm screens hide in onResume
+        getActivity().getActionBar().show();
 
         loadCaptureProvision();
     }
@@ -103,9 +100,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
 
-        mPreviewImageView = (ImageView) mView.findViewById(R.id.capture_image_preview);
         mCommentEditText = (EditText) mView.findViewById(R.id.comment_edit_text);
-        mRatingBarHint = mView.findViewById(R.id.rating_hint_text);
         mRatingSeekBar = (RatingSeekBar) mView.findViewById(R.id.rate_seek_bar);
         mDrinkingWithWhoButton = mView.findViewById(R.id.drinking_with_who);
         mDrinkingWhereButton = mView.findViewById(R.id.drinking_where);
@@ -123,7 +118,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         });
         setupPostButtonToActionBar();
 
-        setupPreviewImage();
         setupButtonListeners();
         setupRatingSeekBar();
 
@@ -150,13 +144,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         // TODO: TouchStates for button
         mPostButton.setTextColor(Color.WHITE);
         mPostButton.setBackgroundColor(getResources().getColor(R.color.d_blue));
-    }
-
-
-    private void setupPreviewImage() {
-        if (mCapturedImageBitmap != null) {
-            mPreviewImageView.setImageBitmap(mCapturedImageBitmap);
-        }
     }
 
     private void setupButtonListeners() {
@@ -213,9 +200,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             @Override
             public void onRatingsChanged(int rating) {
                 mCurrentRating = rating;
-                if (mRatingBarHint.getVisibility() != View.INVISIBLE) {
-                    mRatingBarHint.setVisibility(View.INVISIBLE);
-                }
             }
         });
     }

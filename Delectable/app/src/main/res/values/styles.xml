@@ -10,6 +10,13 @@
         <item name="android:background">@color/d_dark_navy</item>
     </style>
 
+    <!-- Divider drawn horizontally, dividing vertical items -->
+    <style name="VerticalDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/d_light_gray</item>
+    </style>
+
 
     <!-- Navigation Item Styles -->
     <style name="NavigationItem">
@@ -23,5 +30,19 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textColor">@color/nav_text_item_color</item>
+    </style>
+
+    <!-- Wine Capture Submit Styles -->
+    <style name="WineCaptureSubmitText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/capture_submit_button_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="WineCaptureDividers" parent="VerticalDivider">
+        <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
     </style>
 </resources>

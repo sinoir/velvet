@@ -1,216 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:fillViewport="true">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/capture_submit_margins">
-
-        <ImageView
-            android:id="@+id/capture_image_preview"
-            android:layout_width="@dimen/capture_submit_image_size"
-            android:layout_height="@dimen/capture_submit_image_size"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerInside" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <!-- Comment And Rating -->
 
+        <!-- TODO: Use Whitney Font -->
         <EditText
             android:id="@+id/comment_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/capture_submit_image_size"
+            android:layout_height="100dp"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/capture_submit_vertical_spacing"
-            android:layout_marginLeft="@dimen/capture_submit_margins"
-            android:layout_toRightOf="@id/capture_image_preview"
+            android:layout_margin="@dimen/capture_submit_margins"
+            android:layout_marginBottom="20dp"
             android:background="@android:color/white"
+            android:gravity="top"
             android:hint="@string/capture_submit_leave_comment_hint"
+            android:textColorHint="@color/d_medium_gray"
             android:textSize="@dimen/capture_submit_comment_text_size" />
 
-        <TextView
-            android:id="@+id/rating_hint_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/comment_edit_text"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/capture_submit_vertical_spacing"
-            android:background="@drawable/dialog_medium"
-            android:gravity="center"
-            android:text="@string/dialog_rating_giverating"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dialog_rating_hint_text_size" />
-
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/rate_seek_bar"
             android:layout_alignLeft="@id/rate_seek_bar"
             android:text="@string/dialog_rating_notforme"
             android:textColor="@color/d_medium_gray"
-            android:textSize="@dimen/dialog_rating_end_text_size" />
+            android:textSize="@dimen/dialog_rating_end_text_size"
+            app:fontName="whitney_medium" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/rate_seek_bar"
             android:layout_alignRight="@id/rate_seek_bar"
             android:text="@string/dialog_rating_loveit"
             android:textColor="@color/d_medium_gray"
-            android:textSize="@dimen/dialog_rating_end_text_size" />
+            android:textSize="@dimen/dialog_rating_end_text_size"
+            app:fontName="whitney_medium" />
 
         <com.delectable.mobile.ui.common.widget.RatingSeekBar
             android:id="@+id/rate_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rating_hint_text" />
+            android:layout_below="@+id/comment_edit_text"
+            android:layout_marginLeft="@dimen/capture_submit_margins"
+            android:layout_marginRight="@dimen/capture_submit_margins" />
 
-        <!-- More info -->
+        <!-- More options -->
 
-        <View
-            android:id="@+id/vertical_divider1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/rate_seek_bar"
-            android:layout_marginTop="@dimen/capture_submit_section_spacing"
-            android:background="@color/d_light_gray" />
-
-        <!-- TODO: Are these buttons or editable text views? -->
-
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/drinking_with_who"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/capture_submit_button_height"
-            android:layout_below="@+id/vertical_divider1"
-            android:drawableLeft="@drawable/ic_avatar"
-            android:drawablePadding="@dimen/comment_submit_button_image_padding"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/comment_submit_button_image_padding"
-            android:text="@string/capture_submit_drinking_with_who_text"
-            android:textSize="@dimen/capture_submit_button_text_size" />
+            style="@style/WineCaptureSubmitText"
+            android:layout_below="@id/rate_seek_bar"
+            android:layout_marginTop="10dp"
+            android:text="@string/capture_submit_drinking_with_who_text" />
 
         <View
             android:id="@+id/vertical_divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/drinking_with_who"
-            android:background="@color/d_light_gray" />
+            style="@style/WineCaptureDividers"
+            android:layout_below="@id/drinking_with_who" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/drinking_where"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/capture_submit_button_height"
+            style="@style/WineCaptureSubmitText"
             android:layout_below="@+id/vertical_divider2"
-            android:drawableLeft="@drawable/ic_location"
-            android:drawablePadding="@dimen/comment_submit_button_image_padding"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/comment_submit_button_image_padding"
-            android:text="@string/capture_submit_drinking_where_text"
-            android:textSize="@dimen/capture_submit_button_text_size" />
+            android:text="@string/capture_submit_drinking_where_text" />
 
         <View
             android:id="@+id/vertical_divider3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
+            style="@style/WineCaptureDividers"
             android:layout_below="@id/drinking_where"
-            android:background="@color/d_light_gray" />
+            android:layout_marginBottom="40dp" />
 
-        <TextView
-            android:id="@+id/share_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/make_private"
+            style="@style/WineCaptureSubmitText"
             android:layout_below="@id/vertical_divider3"
-            android:layout_marginTop="@dimen/capture_submit_section_spacing"
-            android:text="@string/capture_submit_share_text"
-            android:textColor="@color/d_dark_gray"
-            android:textSize="@dimen/capture_submit_share_text_size" />
+            android:text="@string/make_private" />
 
         <View
             android:id="@+id/vertical_divider4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/share_text"
-            android:layout_marginTop="@dimen/capture_submit_vertical_spacing"
-            android:background="@color/d_light_gray" />
+            style="@style/WineCaptureDividers"
+            android:layout_below="@id/make_private" />
 
-        <LinearLayout
-            android:id="@+id/share_row_1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/capture_submit_button_height"
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/share_facebook"
+            style="@style/WineCaptureSubmitText"
             android:layout_below="@id/vertical_divider4"
-            android:background="@color/d_light_gray"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:weightSum="2">
+            android:text="@string/facebook_text" />
 
-            <TextView
-                android:id="@+id/share_facebook"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="1dp"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:drawableLeft="@drawable/ic_facebook"
-                android:drawablePadding="@dimen/comment_submit_button_image_padding"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/comment_submit_button_image_padding"
-                android:text="@string/facebook_text"
-                android:textSize="@dimen/capture_submit_button_text_size" />
+        <View
+            android:id="@+id/vertical_divider5"
+            style="@style/WineCaptureDividers"
+            android:layout_below="@id/share_facebook" />
 
-            <TextView
-                android:id="@+id/share_twitter"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:drawableLeft="@drawable/ic_twitter"
-                android:drawablePadding="@dimen/comment_submit_button_image_padding"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/comment_submit_button_image_padding"
-                android:text="@string/twitter_text"
-                android:textSize="@dimen/capture_submit_button_text_size" />
-        </LinearLayout>
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/share_twitter"
+            style="@style/WineCaptureSubmitText"
+            android:layout_below="@id/vertical_divider5"
+            android:text="@string/twitter_text" />
 
-        <LinearLayout
-            android:id="@+id/share_row_2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/capture_submit_button_height"
-            android:layout_below="@id/share_row_1"
-            android:background="@color/d_light_gray"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:weightSum="2">
+        <View
+            android:id="@+id/vertical_divider6"
+            style="@style/WineCaptureDividers"
+            android:layout_below="@id/share_twitter" />
 
-            <TextView
-                android:id="@+id/share_instagram"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="1dp"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:drawableLeft="@drawable/ic_instagram"
-                android:drawablePadding="@dimen/comment_submit_button_image_padding"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/comment_submit_button_image_padding"
-                android:text="@string/instagram_text"
-                android:textSize="@dimen/capture_submit_button_text_size" />
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/share_instagram"
+            style="@style/WineCaptureSubmitText"
+            android:layout_below="@id/vertical_divider6"
+            android:text="@string/instagram_text" />
 
-            <TextView
-                android:id="@+id/make_private"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:drawableLeft="@drawable/ic_private"
-                android:drawablePadding="@dimen/comment_submit_button_image_padding"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/comment_submit_button_image_padding"
-                android:text="@string/make_private"
-                android:textSize="@dimen/capture_submit_button_text_size" />
-        </LinearLayout>
+        <View
+            android:id="@+id/vertical_divider7"
+            style="@style/WineCaptureDividers"
+            android:layout_below="@id/share_instagram" />
 
     </RelativeLayout>
 

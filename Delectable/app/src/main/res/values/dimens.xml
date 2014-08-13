@@ -68,7 +68,7 @@
     <dimen name="wine_capture_fill_frame_label_top_margin">20dp</dimen>
 
     <!-- Wine Capture Submit Screen -->
-    <dimen name="capture_submit_margins">15dp</dimen>
+    <dimen name="capture_submit_margins">16dp</dimen>
     <dimen name="capture_submit_image_size">60dp</dimen>
     <dimen name="capture_submit_comment_text_size">16sp</dimen>
     <dimen name="capture_submit_vertical_spacing">10dp</dimen>
