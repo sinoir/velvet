@@ -151,6 +151,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     }
 
     private void toggleCustomActionBar() {
+        if (mActionBar == null) {
+            return;
+        }
         if (mIsUsingCustomActionbarView && mCustomActionBarView != null) {
             mActionBar.setDisplayShowCustomEnabled(true);
             mActionBar.setDisplayShowHomeEnabled(false);

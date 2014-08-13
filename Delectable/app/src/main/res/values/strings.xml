@@ -13,7 +13,7 @@
 
     <!-- Login -->
     <string name="login_sign_up">sign up</string>
-    <string name="login_already_have_account">Already have an account?</string>
+    <string name="login_already_have_account">Already have an account?&#160;</string>
     <string name="login_login">Log in</string>
 
     <!-- Sign up Sign in -->
