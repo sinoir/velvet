@@ -7,22 +7,21 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.Button;
 
-public class FontTextView extends TextView {
+public class FontButton extends Button {
 
-
-    public FontTextView(Context context) {
+    public FontButton(Context context) {
         super(context);
         init(null);
     }
 
-    public FontTextView(Context context, AttributeSet attrs) {
+    public FontButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public FontTextView(Context context, AttributeSet attrs, int defStyle) {
+    public FontButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs);
     }

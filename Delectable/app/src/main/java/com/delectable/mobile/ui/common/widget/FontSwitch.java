@@ -7,22 +7,21 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.Switch;
 
-public class FontTextView extends TextView {
+public class FontSwitch extends Switch {
 
-
-    public FontTextView(Context context) {
+    public FontSwitch(Context context) {
         super(context);
         init(null);
     }
 
-    public FontTextView(Context context, AttributeSet attrs) {
+    public FontSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public FontTextView(Context context, AttributeSet attrs, int defStyle) {
+    public FontSwitch(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs);
     }
