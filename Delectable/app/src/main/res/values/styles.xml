@@ -41,19 +41,19 @@
     </style>
 
     <!-- Wine Capture Submit Styles -->
-    <style name="WineCaptureSubmitText">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="WineCaptureFlow_optionsLabel">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/capture_submit_button_height</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">16sp</item>
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
+        <item name="android:paddingRight">@dimen/capture_submit_margins</item>
+        <item name="android:background">@drawable/bg_bottom_border</item>
         <item name="fontName">whitney_medium</item>
     </style>
 
     <!-- TODO: Customize Switch Style -->
-    <style name="WineCaptureSubmitSwitch" parent="WineCaptureSubmitText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginRight">@dimen/capture_submit_margins</item>
+    <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel">
     </style>
 
     <style name="WineCaptureDividers" parent="VerticalDivider">

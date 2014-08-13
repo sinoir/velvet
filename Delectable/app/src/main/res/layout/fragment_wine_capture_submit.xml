@@ -24,7 +24,8 @@
             android:gravity="top"
             android:hint="@string/capture_submit_leave_comment_hint"
             android:textColorHint="@color/d_medium_gray"
-            android:textSize="@dimen/capture_submit_comment_text_size" />
+            android:textSize="@dimen/capture_submit_comment_text_size"
+            app:fontName="whitney_medium" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:layout_width="wrap_content"
@@ -58,72 +59,43 @@
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/drinking_with_who"
-            style="@style/WineCaptureSubmitText"
+            style="@style/WineCaptureFlow_optionsLabel"
             android:layout_below="@id/rate_seek_bar"
             android:layout_marginTop="10dp"
+            android:background="@drawable/bg_bottom_border"
             android:text="@string/capture_submit_drinking_with_who_text" />
-
-        <View
-            android:id="@+id/vertical_divider2"
-            style="@style/WineCaptureDividers"
-            android:layout_below="@id/drinking_with_who" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/drinking_where"
-            style="@style/WineCaptureSubmitText"
-            android:layout_below="@+id/vertical_divider2"
+            style="@style/WineCaptureFlow_optionsLabel"
+            android:layout_below="@+id/drinking_with_who"
+            android:layout_marginBottom="40dp"
             android:text="@string/capture_submit_drinking_where_text" />
-
-        <View
-            android:id="@+id/vertical_divider3"
-            style="@style/WineCaptureDividers"
-            android:layout_below="@id/drinking_where"
-            android:layout_marginBottom="40dp" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/make_private"
-            style="@style/WineCaptureSubmitSwitch"
-            android:layout_below="@id/vertical_divider3"
+            style="@style/WineCaptureFlow_switch"
+            android:layout_below="@id/drinking_where"
             android:checked="true"
             android:text="@string/make_private" />
 
-        <View
-            android:id="@+id/vertical_divider4"
-            style="@style/WineCaptureDividers"
-            android:layout_below="@id/make_private" />
-
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_facebook"
-            style="@style/WineCaptureSubmitSwitch"
-            android:layout_below="@id/vertical_divider4"
+            style="@style/WineCaptureFlow_switch"
+            android:layout_below="@id/make_private"
             android:text="@string/facebook_text" />
-
-        <View
-            android:id="@+id/vertical_divider5"
-            style="@style/WineCaptureDividers"
-            android:layout_below="@id/share_facebook" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_twitter"
-            style="@style/WineCaptureSubmitSwitch"
-            android:layout_below="@id/vertical_divider5"
+            style="@style/WineCaptureFlow_switch"
+            android:layout_below="@id/share_facebook"
             android:text="@string/twitter_text" />
-
-        <View
-            android:id="@+id/vertical_divider6"
-            style="@style/WineCaptureDividers"
-            android:layout_below="@id/share_twitter" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_instagram"
-            style="@style/WineCaptureSubmitSwitch"
-            android:layout_below="@id/vertical_divider6"
+            style="@style/WineCaptureFlow_switch"
+            android:layout_below="@id/share_twitter"
             android:text="@string/instagram_text" />
-
-        <View
-            android:id="@+id/vertical_divider7"
-            style="@style/WineCaptureDividers"
-            android:layout_below="@id/share_instagram" />
 
     </RelativeLayout>
 
