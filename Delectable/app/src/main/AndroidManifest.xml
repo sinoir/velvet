@@ -24,6 +24,7 @@
         </activity>
 
         <activity
+            android:theme="@style/DelectableTheme.NoActionBar"
             android:name="com.delectable.mobile.ui.registration.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait" />

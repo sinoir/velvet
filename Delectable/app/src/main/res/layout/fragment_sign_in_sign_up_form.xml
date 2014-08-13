@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d_off_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/signup_in_top_half_height"
+            android:background="@color/d_white"
+            android:paddingTop="@dimen/signup_in_top_margin">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/sign_up_sign_in_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/done_button"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignTop="@+id/done_button"
+                android:layout_marginLeft="@dimen/signup_in_fields_horizontal_margin"
+                android:layout_toLeftOf="@+id/done_button"
+                android:gravity="center_vertical|left"
+                android:text="@string/sign_up_title"
+                android:textColor="@color/d_dark_gray"
+                android:textSize="@dimen/signup_in_title_text_height"
+                app:fontName="whitney_book" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/done_button"
+                android:layout_width="@dimen/signup_in_done_button_width"
+                android:layout_height="@dimen/signup_in_done_button_height"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="@dimen/signup_in_done_button_right_margin"
+                android:background="@drawable/btn_login_done"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/signup_in_done"
+                android:textColor="@color/d_white"
+                android:textSize="@dimen/signup_in_done_button_text_height"
+                app:fontName="whitney_medium_sc" />
+
+            <LinearLayout
+                android:id="@+id/fields_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/sign_up_sign_in_title"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/signup_in_fields_horizontal_margin"
+                android:paddingRight="@dimen/signup_in_fields_horizontal_margin">
+
+                <RelativeLayout
+                    style="@style/SignUpIn_fieldContainer"
+                    android:visibility="visible">
+
+                    <com.delectable.mobile.ui.common.widget.FontTextView
+                        android:id="@+id/name_label"
+                        style="@style/SignUpIn_fieldLabel"
+                        android:text="@string/signup_in_name_label" />
+
+                    <EditText
+                        android:id="@+id/name_field"
+                        style="@style/SignUpIn_field"
+                        android:layout_below="@+id/name_label"
+                        android:hint="@string/signup_in_name_hint"
+                        android:inputType="textPersonName" />
+                </RelativeLayout>
+
+                <RelativeLayout style="@style/SignUpIn_fieldContainer">
+
+                    <com.delectable.mobile.ui.common.widget.FontTextView
+                        android:id="@+id/email_address_label"
+                        style="@style/SignUpIn_fieldLabel"
+                        android:text="@string/signup_in_email_address_label" />
+
+                    <EditText
+                        android:id="@+id/email_address_field"
+                        style="@style/SignUpIn_field"
+                        android:layout_below="@+id/email_address_label"
+                        android:hint="@string/signup_in_email_address_hint"
+                        android:inputType="textEmailAddress" />
+                </RelativeLayout>
+
+                <RelativeLayout style="@style/SignUpIn_fieldContainer">
+
+                    <com.delectable.mobile.ui.common.widget.FontTextView
+                        android:id="@+id/password_label"
+                        style="@style/SignUpIn_fieldLabel"
+                        android:text="@string/signup_in_password_label" />
+
+                    <EditText
+                        android:id="@+id/password_field"
+                        style="@style/SignUpIn_field"
+                        android:layout_below="@+id/password_label"
+                        android:inputType="textPassword" />
+                </RelativeLayout>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/d_off_white"
+            android:paddingBottom="@dimen/signup_in_top_margin"
+            android:paddingLeft="@dimen/signup_in_bottom_half_horizontal_spacing"
+            android:paddingRight="@dimen/signup_in_bottom_half_horizontal_spacing">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/or_textview"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/signup_in_or_height"
+                android:gravity="center"
+                android:text="@string/signup_in_or"
+                android:textColor="@color/d_dark_gray"
+                android:textSize="@dimen/signup_in_or_text_size"
+                app:fontName="whitney_book_sc" />
+
+            <RelativeLayout
+                android:id="@+id/facebook_button"
+                style="@style/SignUpIn_social_button"
+                android:layout_below="@id/or_textview">
+
+                <ImageView
+                    style="@style/SignUpIn_social_icon"
+                    android:src="@drawable/ic_fb" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/facebook_sign_in_text"
+                    style="@style/SignUpIn_social_text"
+                    android:text="@string/signup_in_sign_in_using_facebook" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/google_button"
+                style="@style/SignUpIn_social_button"
+                android:layout_below="@id/facebook_button"
+                android:layout_marginTop="@dimen/signup_in_social_signin_button_vertical_spacing">
+
+                <ImageView
+                    style="@style/SignUpIn_social_icon"
+                    android:src="@drawable/ic_gplus" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/google_sign_in_text"
+                    style="@style/SignUpIn_social_text"
+                    android:text="@string/signup_in_sign_in_using_google" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>
