@@ -7,20 +7,19 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.EditText;
 
-public class FontTextView extends TextView {
+public class FontEditText extends EditText {
 
-
-    public FontTextView(Context context) {
+    public FontEditText(Context context) {
         super(context);
     }
 
-    public FontTextView(Context context, AttributeSet attrs) {
+    public FontEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FontTextView(Context context, AttributeSet attrs, int defStyle) {
+    public FontEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         if (!isInEditMode()) {
