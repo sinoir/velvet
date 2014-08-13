@@ -3,11 +3,20 @@
     <!-- Base application theme. -->
     <style name="DelectableTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/DelectableActionBar</item>
+        <item name="android:editTextStyle">@style/Delectable.EditText</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="DelectableActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/d_dark_navy</item>
+    </style>
+
+    <style name="DelectableTheme.NoActionBar" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="android:editTextStyle">@style/Delectable.EditText</item>
+    </style>
+
+    <style name="Delectable.EditText" parent="android:Widget.Holo.Light.EditText">
+        <item name="android:background">@drawable/bg_edit_text</item>
     </style>
 
     <!-- Navigation Item Styles -->
@@ -22,6 +31,54 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textColor">@color/nav_text_item_color</item>
+    </style>
+
+    <!-- Sign up/Sign in Fields -->
+    <style name="SignUpIn_fieldLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="android:textSize">@dimen/signup_in_field_label_text_size</item>
+        <item name="fontName">whitney_book_sc</item>
+    </style>
+
+    <style name="SignUpIn_field">
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/signup_in_field_text_size</item>
+    </style>
+
+
+    <style name="SignUpIn_fieldContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/signup_in_field_vertical_spacing</item>
+    </style>
+
+    <!-- Sign up/Sign in social sign in buttons-->
+    <style name="SignUpIn_social_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/signup_in_social_signin_button_height</item>
+        <item name="android:background">@drawable/btn_social_signin_up_bg</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingLeft">@dimen/signup_in_social_signin_button_horizontal_padding
+        </item>
+    </style>
+
+    <style name="SignUpIn_social_icon">
+        <item name="android:layout_width">@dimen/signup_in_social_icon_height</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+    <style name="SignUpIn_social_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/signup_in_social_signin_button_text_size</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="fontName">whitney_book_sc</item>
     </style>
 
     <!-- Settings Screen -->
@@ -122,5 +179,4 @@
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:background">@color/d_light_gray</item>
     </style>
-
 </resources>

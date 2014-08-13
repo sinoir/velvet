@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="@dimen/login_button_corner_radius" />
+            <solid android:color="@color/d_black_10op" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="@dimen/login_button_corner_radius" />
+            <solid android:color="@color/d_black_10op" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="@dimen/login_button_corner_radius" />
+            <solid android:color="@color/d_black_10op" />
+        </shape>
+    </item>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="@dimen/login_button_corner_radius" />
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+</selector>

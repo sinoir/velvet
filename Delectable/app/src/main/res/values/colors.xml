@@ -25,8 +25,9 @@
     <color name="d_orange">#ffb300</color>
     <color name="d_dark_green">#6ab325</color>
 
-    <!-- Transparent Blacks -->
-    <color name="d_black_25op">#40000000</color>
+    <color name="d_gray_disabled_done_button">#D2D2D2</color>
+    <color name="d_blue_default_done_button">#0099CC</color>
+    <color name="d_blue_pressed_done_button">#0080B3</color>
 
     <!-- Transparent Whites -->
     <!-- 20% opacity -->
@@ -34,4 +35,7 @@
     <!-- 80% opacity -->
     <color name="d_white_80op">#CCFFFFFF</color>
 
+    <!-- Transparent Blacks -->
+    <color name="d_black_10op">#1A000000</color>
+    <color name="d_black_25op">#40000000</color>
 </resources>
