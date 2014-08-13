@@ -11,10 +11,26 @@
     <string name="instagram_text">Instagram</string>
     <string name="make_private">Make Private</string>
 
-    <!-- Signup Login -->
+    <!-- Login -->
     <string name="login_sign_up">sign up</string>
     <string name="login_already_have_account">Already have an account?</string>
     <string name="login_login">Log in</string>
+
+    <!-- Sign up Sign in -->
+    <string name="sign_up_title">Sign up</string>
+    <string name="sign_in_title">Sign in</string>
+    <string name="signup_in_done">done</string>
+    <string name="signup_in_name_label">name</string>
+    <string name="signup_in_name_hint">First and last</string>
+    <string name="signup_in_email_address_label">email address</string>
+    <string name="signup_in_email_address_hint">hello@email.com</string>
+    <string name="signup_in_password_label">password</string>
+    <string name="signup_in_or">or</string>
+    <string name="signup_in_sign_in_using_facebook">sign in using facebook</string>
+    <string name="signup_in_sign_in_using_google">sign in using google</string>
+    <string name="signup_in_sign_up_using_facebook">sign up using facebook</string>
+    <string name="signup_in_sign_up_using_google">sign up using google</string>
+
 
 
 
