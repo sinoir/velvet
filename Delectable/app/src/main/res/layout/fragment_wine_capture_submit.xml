@@ -13,8 +13,7 @@
 
         <!-- Comment And Rating -->
 
-        <!-- TODO: Use Whitney Font -->
-        <EditText
+        <com.delectable.mobile.ui.common.widget.FontEditText
             android:id="@+id/comment_edit_text"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -81,10 +80,11 @@
             android:layout_below="@id/drinking_where"
             android:layout_marginBottom="40dp" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
+        <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/make_private"
-            style="@style/WineCaptureSubmitText"
+            style="@style/WineCaptureSubmitSwitch"
             android:layout_below="@id/vertical_divider3"
+            android:checked="true"
             android:text="@string/make_private" />
 
         <View
@@ -92,9 +92,9 @@
             style="@style/WineCaptureDividers"
             android:layout_below="@id/make_private" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
+        <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_facebook"
-            style="@style/WineCaptureSubmitText"
+            style="@style/WineCaptureSubmitSwitch"
             android:layout_below="@id/vertical_divider4"
             android:text="@string/facebook_text" />
 
@@ -103,9 +103,9 @@
             style="@style/WineCaptureDividers"
             android:layout_below="@id/share_facebook" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
+        <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_twitter"
-            style="@style/WineCaptureSubmitText"
+            style="@style/WineCaptureSubmitSwitch"
             android:layout_below="@id/vertical_divider5"
             android:text="@string/twitter_text" />
 
@@ -114,9 +114,9 @@
             style="@style/WineCaptureDividers"
             android:layout_below="@id/share_twitter" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
+        <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_instagram"
-            style="@style/WineCaptureSubmitText"
+            style="@style/WineCaptureSubmitSwitch"
             android:layout_below="@id/vertical_divider6"
             android:text="@string/instagram_text" />
 

@@ -42,6 +42,12 @@
         <item name="fontName">whitney_medium</item>
     </style>
 
+    <!-- TODO: Customize Switch Style -->
+    <style name="WineCaptureSubmitSwitch" parent="WineCaptureSubmitText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginRight">@dimen/capture_submit_margins</item>
+    </style>
+
     <style name="WineCaptureDividers" parent="VerticalDivider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
     </style>
