@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ChooseVintageDialog extends DialogFragment {
 
     public static final String WINE = "WINE";
 
-    private static final String BASE_WINE = "BASE_WINE";
+    private static final String sArgsBaseWine = "BASE_WINE";
 
     private static final String TAG = ChooseVintageDialog.class.getSimpleName();
 
@@ -28,7 +29,7 @@ public class ChooseVintageDialog extends DialogFragment {
     public static ChooseVintageDialog newInstance(BaseWine baseWine) {
         ChooseVintageDialog f = new ChooseVintageDialog();
         Bundle args = new Bundle();
-        args.putParcelable(BASE_WINE, baseWine);
+        args.putParcelable(sArgsBaseWine, baseWine);
         f.setArguments(args);
         return f;
     }
@@ -38,7 +39,7 @@ public class ChooseVintageDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
         if (getArguments() != null) {
-            BaseWine baseWine = getArguments().getParcelable(BASE_WINE);
+            BaseWine baseWine = getArguments().getParcelable(sArgsBaseWine);
             mAdapter.setBaseWine(baseWine);
             mAdapter.notifyDataSetChanged();
         }
@@ -47,7 +48,9 @@ public class ChooseVintageDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
+        View view = inflater.inflate(R.layout.dialog_listview, container, false);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setText(R.string.choose_vintage_dialog_title);
         ListView listview = (ListView) view.findViewById(R.id.list_view);
         listview.setAdapter(mAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

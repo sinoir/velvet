@@ -328,6 +328,31 @@ public class Account extends BaseResponse {
         this.current_user_relationship = current_user_relationship;
     }
 
+    /**
+     *
+     * @return Returns null if there is no identifier set as primary.
+     */
+    public Identifier getPrimaryEmailIdentifier() {
+        for (Identifier identifier : identifiers) {
+            if (identifier.getPrimary()) {
+                return identifier;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return Returns the first phone identifier. Returns null if there is no phone identifier.
+     */
+    public Identifier getPhoneIdentifier() {
+        for (Identifier identifier : identifiers) {
+            if (identifier.getType().equalsIgnoreCase(Identifier.Type.PHONE)) {
+                return identifier;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Account{" +

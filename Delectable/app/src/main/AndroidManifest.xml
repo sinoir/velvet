@@ -5,6 +5,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".App"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -24,6 +25,7 @@
         </activity>
 
         <activity
+            android:theme="@style/DelectableTheme.NoActionBar"
             android:name="com.delectable.mobile.ui.registration.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait" />
@@ -82,6 +84,7 @@
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- TODO: Handle in code possiblity of user not having a camera on device -->
     <uses-feature
@@ -92,5 +95,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- for reading photos from phones that have them on external storage-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
 </manifest>

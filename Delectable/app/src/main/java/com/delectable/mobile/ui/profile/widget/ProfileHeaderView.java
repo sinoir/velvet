@@ -83,11 +83,14 @@ public class ProfileHeaderView extends RelativeLayout implements
                                                      mActionListener.toggleFollowUserClicked(
                                                              !mIsFollowing);
                                                  }
+                                                 /*
+                                                 // No need to do that, UI refreshes itself when Account gets updated
                                                  if (mIsFollowing) {
                                                      setFollowingState(STATE_NOT_FOLLOWING);
                                                  } else {
                                                      setFollowingState(STATE_FOLLOWING);
                                                  }
+                                                 */
                                              }
                                          }
         );

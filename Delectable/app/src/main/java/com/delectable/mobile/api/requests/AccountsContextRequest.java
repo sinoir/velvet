@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class AccountsContextRequest extends BaseRequest {
 
+    public static final String TAG = AccountsContextRequest.class.getSimpleName();
+
     public static final String CONTEXT_PROFILE = "profile";
     public static final String CONTEXT_PRIVATE = "private";
 
