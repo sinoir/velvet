@@ -81,7 +81,6 @@
         <item name="fontName">whitney_book_sc</item>
     </style>
 
-    =======
     <!-- Settings Screen -->
     <style name="SettingsBaseTextStyle">
         <item name="android:textColor">@color/d_black</item>
@@ -180,6 +179,4 @@
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:background">@color/d_light_gray</item>
     </style>
-    >>>>>>> 2ca157cbde827b5fdd31b7912f8ea1b703be7aac
-
 </resources>
