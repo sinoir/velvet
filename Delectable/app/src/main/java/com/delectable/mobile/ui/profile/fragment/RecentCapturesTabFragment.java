@@ -12,6 +12,7 @@ import com.delectable.mobile.api.requests.CaptureFeedRequest;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.ui.common.widget.OverScrollByListView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
 import android.content.Intent;
@@ -21,20 +22,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
 // TODO / Note: Abstract something from FollowFeedTabFragment, these are almost identical.
-public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
+public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implements
+        OverScrollByListView.ScrollByCallback {
 
-    public static final String TAG = "RecentCapturesTabFragment";
+    private static final String TAG = RecentCapturesTabFragment.class.getSimpleName();
 
     private static final String sArgsUserId = "sArgsUserId";
 
     private View mView;
 
-    private ListView mListView;
+    private OverScrollByListView mListView;
 
     private FollowFeedAdapter mAdapter;
 
@@ -45,6 +46,8 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
     private ArrayList<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
+
+    private Callback mCallback;
 
     public RecentCapturesTabFragment() {
         // Required empty public constructor
@@ -74,13 +77,14 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.list_view_layout, container, false);
 
-        mListView = (ListView) mView.findViewById(android.R.id.list);
+        mListView = (OverScrollByListView) mView.findViewById(android.R.id.list);
 
         // Not handling pagination here
         mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, null, this, mUserId);
         mAdapter.setCurrentViewType(FollowFeedAdapter.VIEW_TYPE_SIMPLE);
 
         mListView.setAdapter(mAdapter);
+        mListView.setCallback(this);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -111,6 +115,10 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
     public void onResume() {
         super.onResume();
         loadData();
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
     }
 
     private void loadData() {
@@ -145,5 +153,25 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment {
     @Override
     public void dataSetChanged() {
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void overScrolledY(int deltaY, int scrollY, boolean isTouchEvent) {
+        // Check if it overscrolled on the top
+        if (scrollY == 0 && deltaY < 0 && mCallback != null) {
+            Log.d(TAG, "ListOverScroll DeltaY: " + deltaY + " ScrollY: " + scrollY);
+            mCallback.onCaptureListOverScrolledTop();
+            // Cancel any further scrolling, to prevent strange behavior
+            mListView.cancelScrolling();
+        }
+    }
+
+    public interface Callback {
+
+        /**
+         * Helper callback to pass up the ListView OverScroll when the user overscrolled the top of
+         * the ListView
+         */
+        public void onCaptureListOverScrolledTop();
     }
 }
