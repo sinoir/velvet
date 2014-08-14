@@ -104,8 +104,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
         mNetworkController = new BaseNetworkController(getActivity());
-        // TODO: Hide actionbar when back pressed, or have camera/confirm screens hide in onResume
-        getActivity().getActionBar().show();
 
         loadCaptureProvision();
     }
@@ -137,6 +135,12 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         super.onResume();
         // If the posting finished while the app was in the background, should launch details
         shouldLaunchCaptureDetails();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().getActionBar().show();
     }
 
     private void setupPostButtonToActionBar() {

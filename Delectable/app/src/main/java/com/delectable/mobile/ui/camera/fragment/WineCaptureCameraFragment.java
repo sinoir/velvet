@@ -56,7 +56,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().getActionBar().hide();
     }
 
     @Override
@@ -68,6 +67,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
         setupCameraSurface(mCameraPreview);
 
         return mView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().getActionBar().hide();
     }
 
     @OnClick(R.id.close_button)

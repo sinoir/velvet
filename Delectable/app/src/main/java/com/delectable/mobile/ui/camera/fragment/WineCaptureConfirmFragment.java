@@ -77,7 +77,6 @@ public class WineCaptureConfirmFragment extends BaseFragment {
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
-        getActivity().getActionBar().hide();
         mNetworkController = new BaseNetworkController(getActivity());
     }
 
@@ -91,6 +90,12 @@ public class WineCaptureConfirmFragment extends BaseFragment {
 
         displayCapturedImage();
         return mView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().getActionBar().hide();
     }
 
     private void displayCapturedImage() {
