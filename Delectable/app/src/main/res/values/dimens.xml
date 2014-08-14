@@ -58,7 +58,8 @@
     <dimen name="signup_in_social_signin_button_horizontal_padding">23dp</dimen>
     <dimen name="signup_in_social_signin_button_text_size">19sp</dimen>
     <dimen name="signup_in_social_signin_button_vertical_spacing">15dp</dimen>
-
+    <dimen name="signup_in_terms_privacy_height">60dp</dimen>
+    <dimen name="signup_in_terms_privacy_text_size">14sp</dimen>
 
 
 

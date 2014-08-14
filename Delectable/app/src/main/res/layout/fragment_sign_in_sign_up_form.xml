@@ -59,6 +59,7 @@
                 android:paddingRight="@dimen/signup_in_fields_horizontal_margin">
 
                 <RelativeLayout
+                    android:id="@+id/name_field_container"
                     style="@style/SignUpIn_fieldContainer"
                     android:visibility="visible">
 
@@ -127,7 +128,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/d_off_white"
-            android:paddingBottom="@dimen/signup_in_top_margin"
             android:paddingLeft="@dimen/signup_in_bottom_half_horizontal_spacing"
             android:paddingRight="@dimen/signup_in_bottom_half_horizontal_spacing">
 
@@ -159,7 +159,7 @@
             <RelativeLayout
                 android:id="@+id/google_button"
                 style="@style/SignUpIn_social_button"
-                android:layout_below="@id/facebook_button"
+                android:layout_below="@+id/facebook_button"
                 android:layout_marginTop="@dimen/signup_in_social_signin_button_vertical_spacing">
 
                 <ImageView
@@ -171,6 +171,37 @@
                     style="@style/SignUpIn_social_text"
                     android:text="@string/signup_in_sign_in_using_google" />
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/terms_privacy_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/signup_in_terms_privacy_height"
+                android:layout_below="@+id/google_button"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    style="@style/SignUpInTermsText"
+                    android:text="@string/signup_in_read_our"
+                    android:textColor="@color/d_medium_gray" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/terms_textview"
+                    style="@style/SignUpInTermsText"
+                    android:text="@string/signup_in_terms_of_use"
+                    android:textColor="@color/text_black_to_dark_gray" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    style="@style/SignUpInTermsText"
+                    android:text="@string/signup_in_and"
+                    android:textColor="@color/d_medium_gray" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/privacy_textview"
+                    style="@style/SignUpInTermsText"
+                    android:text="@string/signup_in_privacy_policy"
+                    android:textColor="@color/text_black_to_dark_gray" />
+            </LinearLayout>
         </RelativeLayout>
 
     </LinearLayout>
