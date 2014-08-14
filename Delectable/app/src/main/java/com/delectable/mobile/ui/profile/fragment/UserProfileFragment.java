@@ -39,6 +39,12 @@ public class UserProfileFragment extends BaseFragment implements
 
     private static final String sArgsUserId = "sArgsUserId";
 
+    @Inject
+    AccountController mAccountController;
+
+    @Inject
+    AccountModel mAccountModel;
+
     private View mView;
 
     private ProfileHeaderView mProfileHeaderView;
@@ -54,12 +60,6 @@ public class UserProfileFragment extends BaseFragment implements
     private List<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
-
-    @Inject
-    AccountController mAccountController;
-
-    @Inject
-    AccountModel mAccountModel;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -130,14 +130,6 @@ public class UserProfileFragment extends BaseFragment implements
         return mView;
     }
 
-    private RecentCapturesTabFragment getRecentCapturesTabFragment() {
-        return (RecentCapturesTabFragment) mTabsAdapter.getItem(0);
-    }
-
-    private RecentCapturesTabFragment getTopRatedTabFragment() {
-        return (RecentCapturesTabFragment) mTabsAdapter.getItem(1);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -157,18 +149,9 @@ public class UserProfileFragment extends BaseFragment implements
             case R.id.search:
                 launchFindPeople();
                 return true;
-            case R.id.toggle_list:
-                toggleListDetailView();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void toggleListDetailView() {
-        // TODO: Toggle Menu Icon
-        getRecentCapturesTabFragment().toggleAdapterViewState();
-        getTopRatedTabFragment().toggleAdapterViewState();
     }
 
     private void launchFindPeople() {
