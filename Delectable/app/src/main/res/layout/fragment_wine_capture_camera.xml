@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/d_dark_navy">
@@ -18,42 +19,67 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/flash_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
+        android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+        android:background="@null"
+        android:drawableLeft="@drawable/ic_flash"
+        android:text="@string/flash_off"
+        android:textColor="@color/btn_flash_translucent_to_white" />
+
+    <RelativeLayout
         android:id="@+id/action_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/camera_container"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_below="@+id/camera_container"
+        android:background="@color/d_dark_navy">
 
-        <ImageButton
-            android:id="@+id/camera_roll_button"
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/wine_capture_fill_frame_label_top_margin"
+            android:text="@string/capture_camera_fill_frame_label"
+            android:textColor="@color/d_white"
+            android:textSize="16sp"
+            app:fontName="whitney_book" />
+
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/capture_button"
+            android:layout_alignTop="@+id/capture_button"
+            android:layout_toLeftOf="@+id/capture_button"
             android:background="@null"
-            android:src="@drawable/btn_camera_roll_normal" />
+            android:src="@drawable/btn_capture_close" />
 
         <ImageButton
             android:id="@+id/capture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
             android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
             android:background="@null"
             android:src="@drawable/btn_shutter" />
 
         <ImageButton
-            android:id="@+id/flash_button"
+            android:id="@+id/camera_roll_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
-            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_alignBottom="@+id/capture_button"
+            android:layout_alignTop="@+id/capture_button"
+            android:layout_toRightOf="@+id/capture_button"
             android:background="@null"
-            android:src="@drawable/btn_flash_normal" />
-    </LinearLayout>
+            android:src="@drawable/btn_capture_options" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

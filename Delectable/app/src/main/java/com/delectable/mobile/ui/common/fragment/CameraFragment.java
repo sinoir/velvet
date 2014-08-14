@@ -5,9 +5,11 @@ import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.CameraUtil;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -89,16 +91,18 @@ public class CameraFragment extends BaseFragment {
         if (mCamera != null && jpegImageCallback != null) {
             mCamera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
-                public void onPictureTaken(byte[] data, Camera camera) {
-                    Bitmap bitmap = CameraUtil.getRotatedBitmapTakenFromCamera(
-                            getActivity(), data, mCameraId);
-                    Bitmap croppedBitmap = cropRotatedCapturedBitmap(bitmap);
-                    jpegImageCallback.onBitmapCaptured(croppedBitmap);
+                public void onPictureTaken(final byte[] data, Camera camera) {
+                    TransformTask task = new TransformTask();
+                    task.jpegImageCallback = jpegImageCallback;
+                    task.data = data;
+                    task.execute();
                 }
             });
         }
     }
 
+    // Extend this method to do custom Cropping / Rotating
+    // Warning: This is called background thread!
     public Bitmap cropRotatedCapturedBitmap(Bitmap bitmap) {
         return bitmap;
     }
@@ -119,6 +123,11 @@ public class CameraFragment extends BaseFragment {
     }
 
     protected void focusOnPoint(PointF point, RectF bounds) {
+        // Don't focus yet if the camera is not being previewed, otherwise it crashes
+        if (mCamera == null || !mCameraView.isSurfaceCreated()) {
+            Log.e(TAG, "Tried Focusing on Point when Preview hasn't started yet");
+            return;
+        }
         Camera.Parameters p = mCamera.getParameters();
         int maxFocusAraes = p.getMaxNumFocusAreas();
         Camera.Area focusArea = CameraUtil.getFocusAreaFromFrameBounds(point, bounds);
@@ -139,8 +148,44 @@ public class CameraFragment extends BaseFragment {
         mCamera.setParameters(p);
     }
 
+
     public interface PictureTakenCallback {
 
         public void onBitmapCaptured(Bitmap bitmap);
+    }
+
+    public class TransformTask extends AsyncTask<Void, Void, Bitmap> {
+
+        byte[] data;
+
+        PictureTakenCallback jpegImageCallback;
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            // Just get the Size of the bitmap, so we can scale if necessary, this will not make a bitmap (it'll be null), so it shoudl be faster
+            options.inJustDecodeBounds = true;
+
+            BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+            // Gives us a Bitmap size that's small enough to handle quickly, 1024 is a rough max width/height to give us the appropriate sample size.  The resulting image won't be exact, and maybe a little larger.
+            options.inSampleSize = CameraUtil.calculateInSampleSize(options, 1024, 1024);
+
+            // Make sure we reset the inJustDecodeBounds so we can create a bitmap
+            options.inJustDecodeBounds = false;
+
+            // Rotate Bitmap with passed data and options
+            Bitmap bitmap = CameraUtil.getRotatedBitmapTakenFromCamera(
+                    getActivity(), data, mCameraId, options);
+            Bitmap transformedBitmap = cropRotatedCapturedBitmap(bitmap);
+            return transformedBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (jpegImageCallback != null) {
+                jpegImageCallback.onBitmapCaptured(bitmap);
+            }
+        }
     }
 }

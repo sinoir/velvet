@@ -8,6 +8,7 @@
     <dimen name="button_text_size">20sp</dimen>
     <dimen name="button_height">45dp</dimen>
     <dimen name="rating_bar_height">10dp</dimen>
+    <dimen name="rating_bar_seek_height">15dp</dimen>
     <dimen name="rating_bar_horizontal_spacing">10dp</dimen>
     <dimen name="small_profile_image_size">40dp</dimen>
     <dimen name="cap_feed_comment_text_size">16sp</dimen>
@@ -101,9 +102,10 @@
     <!-- Wine Capture Camera Flow -->
     <dimen name="wine_capture_preview_height">320dp</dimen>
     <dimen name="wine_capture_button_horizontal_spacing">20dp</dimen>
+    <dimen name="wine_capture_fill_frame_label_top_margin">20dp</dimen>
 
     <!-- Wine Capture Submit Screen -->
-    <dimen name="capture_submit_margins">15dp</dimen>
+    <dimen name="capture_submit_margins">16dp</dimen>
     <dimen name="capture_submit_image_size">60dp</dimen>
     <dimen name="capture_submit_comment_text_size">16sp</dimen>
     <dimen name="capture_submit_vertical_spacing">10dp</dimen>

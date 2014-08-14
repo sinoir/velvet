@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:color="@color/d_white" android:state_pressed="true" />
+    <item android:color="@color/d_white" android:state_focused="true" />
+    <item android:color="@color/d_white" android:state_selected="true" />
+
+    <!-- 72% Opacity to match flash icon opacity (right from Sketch) -->
+    <item android:color="#B8FFFFFF" />
+
+</selector>

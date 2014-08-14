@@ -12,52 +12,35 @@
         android:layout_alignParentTop="true"
         android:background="@color/d_blue" />
 
-    <TextView
-        android:id="@+id/hint_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/preview_image"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="Save to your wine history?"
-        android:textColor="@android:color/white"
-        android:textSize="19sp" />
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/action_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/hint_text"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_below="@+id/preview_image"
+        android:background="@color/d_dark_navy">
 
-        <Button
-            android:id="@+id/scan_only_button"
+        <ImageButton
+            android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/confirm_button"
+            android:layout_alignTop="@+id/confirm_button"
+            android:layout_toLeftOf="@+id/confirm_button"
+            android:background="@null"
+            android:src="@drawable/btn_capture_back" />
+
+        <ImageButton
+            android:id="@+id/confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
             android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
             android:background="@null"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/btn_no_normal"
-            android:gravity="bottom"
-            android:text="SCAN ONLY"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="12sp" />
+            android:src="@drawable/btn_confirm" />
 
-        <Button
-            android:id="@+id/scan_save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
-            android:background="@null"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/btn_yes_normal"
-            android:gravity="bottom"
-            android:text="SCAN &amp; SAVE"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="12sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/loading_progress_container"
