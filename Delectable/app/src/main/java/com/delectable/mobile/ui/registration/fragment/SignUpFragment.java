@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.util.NameUtil;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -80,9 +81,13 @@ public class SignUpFragment extends BaseSignUpInFragment {
         if (emptyFieldExists()) {
             return;
         }
-        String name = getNameField().getText().toString().trim();
+        String nameEntered = getNameField().getText().toString().trim();
         String email = getEmailField().getText().toString().trim();
         String password = getPasswordField().getText().toString().trim();
+
+        String[] name = NameUtil.getSplitName(nameEntered);
+        String fName = name[NameUtil.FIRST_NAME];
+        String lName = name[NameUtil.LAST_NAME];
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.ImageLoaderUtil;
+import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.facebook.Session;
 
@@ -70,10 +71,6 @@ import butterknife.OnClick;
 public class SettingsFragment extends BaseFragment {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
-
-    private static final int FIRST_NAME = 0;
-
-    private static final int LAST_NAME = 1;
 
     private static final int SELECT_PHOTO_REQUEST = 0;
 
@@ -240,9 +237,9 @@ public class SettingsFragment extends BaseFragment {
                 return; //no need to call update
             }
 
-            String[] name = getSplitName(mNameField.getText().toString());
-            String fName = name[FIRST_NAME];
-            String lName = name[LAST_NAME];
+            String[] name = NameUtil.getSplitName(mNameField.getText().toString());
+            String fName = name[NameUtil.FIRST_NAME];
+            String lName = name[NameUtil.LAST_NAME];
             String url = mWebsiteField.getText().toString();
             String bio = mShortBioField.getText().toString();
 
@@ -283,38 +280,6 @@ public class SettingsFragment extends BaseFragment {
             }
         }
         return false;
-    }
-
-    private String[] getSplitName(String fullName) {
-
-        String[] name = new String[2];
-
-        //purge new lines
-        fullName = fullName.replaceAll("\\r\\n|\\r|\\n", "");
-
-        if (fullName == null || fullName.equals("")) {
-            name[FIRST_NAME] = "";
-            name[LAST_NAME] = "";
-            return name;
-        }
-
-        //split name by whitespace
-        String[] splitName = fullName.split("\\s+");
-
-        //mononym
-        if (splitName.length == 1) {
-            name[FIRST_NAME] = fullName;
-            //server thing, it doesn't take empty strings as a name, but it does white space
-            name[LAST_NAME] = " ";
-            return name;
-        }
-
-        //rebuild first name(s), excluding last string in splitname
-        String[] firstNames = Arrays.copyOfRange(splitName, 0, splitName.length - 1);
-        name[FIRST_NAME] = TextUtils.join(" ", firstNames);
-        name[LAST_NAME] = splitName[splitName.length - 1];
-
-        return name;
     }
 
     @Override
