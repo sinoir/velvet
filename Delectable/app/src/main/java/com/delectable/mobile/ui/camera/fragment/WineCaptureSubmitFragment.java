@@ -20,9 +20,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 public class WineCaptureSubmitFragment extends BaseFragment {
 
@@ -30,27 +37,35 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final String sArgsImageData = "sArgsImageData";
 
+    @InjectView(R.id.comment_edit_text)
+    protected EditText mCommentEditText;
+
+    @InjectView(R.id.rate_seek_bar)
+    protected RatingSeekBar mRatingSeekBar;
+
+    @InjectView(R.id.drinking_with_who)
+    protected View mDrinkingWithWhoButton;
+
+    @InjectView(R.id.drinking_where)
+    protected View mDrinkingWhereButton;
+
+    @InjectView(R.id.share_facebook)
+    protected Switch mShareFacebookButton;
+
+    @InjectView(R.id.share_twitter)
+    protected Switch mShareTwitterButton;
+
+    @InjectView(R.id.share_instagram)
+    protected Switch mShareInstagramButton;
+
+    @InjectView(R.id.make_private)
+    protected Switch mMakePrivateButton;
+
     private Bitmap mCapturedImageBitmap;
 
     private View mView;
 
     private Button mPostButton;
-
-    private EditText mCommentEditText;
-
-    private RatingSeekBar mRatingSeekBar;
-
-    private View mDrinkingWithWhoButton;
-
-    private View mDrinkingWhereButton;
-
-    private View mShareFacebookButton;
-
-    private View mShareTwitterButton;
-
-    private View mShareInstagramButton;
-
-    private View mMakePrivateButton;
 
     private int mCurrentRating = -1;
 
@@ -100,14 +115,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
 
-        mCommentEditText = (EditText) mView.findViewById(R.id.comment_edit_text);
-        mRatingSeekBar = (RatingSeekBar) mView.findViewById(R.id.rate_seek_bar);
-        mDrinkingWithWhoButton = mView.findViewById(R.id.drinking_with_who);
-        mDrinkingWhereButton = mView.findViewById(R.id.drinking_where);
-        mShareFacebookButton = mView.findViewById(R.id.share_facebook);
-        mShareTwitterButton = mView.findViewById(R.id.share_twitter);
-        mShareInstagramButton = mView.findViewById(R.id.share_instagram);
-        mMakePrivateButton = mView.findViewById(R.id.make_private);
+        ButterKnife.inject(this, mView);
 
         setHasOptionsMenu(true);
         overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
@@ -151,43 +159,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 postCapture();
-            }
-        });
-
-        mDrinkingWithWhoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectDrinkingPartners();
-            }
-        });
-        mDrinkingWhereButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectDrinkingLocation();
-            }
-        });
-        mShareFacebookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareCaptureOnFacebook();
-            }
-        });
-        mShareTwitterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareCaptureOnTwitter();
-            }
-        });
-        mShareInstagramButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareCaptureOnInstagram();
-            }
-        });
-        mMakePrivateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makeCaputrePrivate();
             }
         });
     }
@@ -296,7 +267,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCaptureRequest.setNote(comment);
         }
 
-        if (mMakePrivateButton.isSelected()) {
+        if (!mMakePrivateButton.isChecked()) {
             mCaptureRequest.setPrivate(true);
         } else {
             mCaptureRequest.setShareFb(mShareFacebookButton.isSelected());
@@ -317,37 +288,53 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         sendCaptureData();
     }
 
-    private void selectDrinkingPartners() {
+    @OnClick(R.id.drinking_with_who)
+    protected void selectDrinkingPartners() {
         // TODO: Drinking Partners Screen
     }
 
-    private void selectDrinkingLocation() {
+    @OnClick(R.id.drinking_where)
+    protected void selectDrinkingLocation() {
         // TODO: Location Listing
     }
 
-    private void shareCaptureOnFacebook() {
+    @OnCheckedChanged(R.id.share_facebook)
+    protected void shareCaptureOnFacebook(CompoundButton view, boolean isChecked) {
         // TODO: Facebook Connect
-        mShareFacebookButton.setSelected(!mShareFacebookButton.isSelected());
-        mMakePrivateButton.setSelected(false);
+        // TODO: What happens to Private when now it's "Post to Delectable?"
+        if (isChecked) {
+            mMakePrivateButton.setChecked(true);
+        }
     }
 
-    private void shareCaptureOnTwitter() {
+    @OnCheckedChanged(R.id.share_twitter)
+    protected void shareCaptureOnTwitter(CompoundButton view, boolean isChecked) {
         // TODO: Login With Twitter
         mShareTwitterButton.setSelected(!mShareTwitterButton.isSelected());
-        mMakePrivateButton.setSelected(false);
+        if (isChecked) {
+            mMakePrivateButton.setChecked(true);
+        }
     }
 
-    private void shareCaptureOnInstagram() {
+
+    @OnCheckedChanged(R.id.share_instagram)
+    protected void shareCaptureOnInstagram(CompoundButton view, boolean isChecked) {
         // TODO: Login with Instagram
         mShareInstagramButton.setSelected(!mShareInstagramButton.isSelected());
-        mMakePrivateButton.setSelected(false);
+        if (isChecked) {
+            mMakePrivateButton.setChecked(true);
+        }
     }
 
-    private void makeCaputrePrivate() {
-        mShareFacebookButton.setSelected(false);
-        mShareTwitterButton.setSelected(false);
-        mShareInstagramButton.setSelected(false);
-        mMakePrivateButton.setSelected(!mMakePrivateButton.isSelected());
+    @OnCheckedChanged(R.id.make_private)
+    protected void makeCaputrePrivate(CompoundButton view, boolean isChecked) {
+        // TODO: Verify, this was taken from when Post to Delectable was "make private"
+        // Unselect everything if Post to Delectable is not selected
+        if (!isChecked) {
+            mShareFacebookButton.setChecked(false);
+            mShareTwitterButton.setChecked(false);
+            mShareInstagramButton.setChecked(false);
+        }
     }
 }
 
