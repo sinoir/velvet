@@ -10,11 +10,13 @@ import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
+import com.delectable.mobile.jobs.registrations.RegisterJob;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.registration.fragment.LoginFragment;
+import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
@@ -29,10 +31,12 @@ import de.greenrobot.event.EventBus;
         injects = {
                 BaseFragment.class,
                 LoginFragment.class,
+                SignUpFragment.class,
                 NavigationDrawerFragment.class,
                 UserProfileFragment.class,
                 AccountModel.class,
                 LoginJob.class,
+                RegisterJob.class,
                 LoginFacebookJob.class,
                 FetchAccountJob.class,
                 FollowAccountJob.class,
