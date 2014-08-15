@@ -35,6 +35,8 @@ public class LoginJob extends Job {
 
     private String mPassword;
 
+    private String mErrorMessage;
+
     public LoginJob(String email, String password) {
         super(new Params(Priority.UX).requireNetwork());
         mEmail = email;
@@ -52,7 +54,7 @@ public class LoginJob extends Job {
         RegistrationLoginRequest request = new RegistrationLoginRequest(
                 new RegistrationLoginRequest.RegistrationLoginPayload(mEmail, mPassword));
         RegistrationLoginResponse response = mNetworkClient
-                .post(endpoint, request, RegistrationLoginResponse.class);
+                .post(endpoint, request, RegistrationLoginResponse.class, false);
 
         String sessionKey = response.payload.session_key;
         String sessionToken = response.payload.session_token;
@@ -62,19 +64,18 @@ public class LoginJob extends Job {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
         mEventBus.post(new LoginRegisterEvent(true));
-        Log.d(TAG, "LOGIN: " + sessionKey + "/" + sessionToken + "/" + account.getId());
-
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new LoginRegisterEvent(false));
+        mEventBus.post(new LoginRegisterEvent(mErrorMessage));
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
         // TODO check error type and see if a retry makes sense
-        Log.d(TAG, "ERROR: " + throwable.getMessage());
-        return true;
+        mErrorMessage = throwable.getMessage();
+        Log.e(TAG + ".Error", mErrorMessage);
+        return false;
     }
 }
