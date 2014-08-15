@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.registration.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.controllers.RegistrationController;
-import com.delectable.mobile.events.registrations.LoginEvent;
+import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.DateHelperUtil;
@@ -216,7 +216,7 @@ public class LoginFragment extends BaseFragment implements LoaderManager.LoaderC
         mRegistrationController.login(email, password);
     }
 
-    public void onEventMainThread(LoginEvent login) {
+    public void onEventMainThread(LoginRegisterEvent login) {
         mLoginProgress.setVisibility(View.GONE);
         if (login.isSuccessful()) {
             Toast.makeText(getActivity(), "Successfully Logged in!",

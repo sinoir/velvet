@@ -3,7 +3,7 @@ package com.delectable.mobile.jobs.registrations;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.events.registrations.LoginEvent;
+import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
@@ -61,14 +61,14 @@ public class LoginJob extends Job {
         mEventBus.post(new UpdatedAccountEvent(account.getId()));
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
-        mEventBus.post(new LoginEvent(true));
+        mEventBus.post(new LoginRegisterEvent(true));
         Log.d(TAG, "LOGIN: " + sessionKey + "/" + sessionToken + "/" + account.getId());
 
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new LoginEvent(false));
+        mEventBus.post(new LoginRegisterEvent(false));
     }
 
     @Override
