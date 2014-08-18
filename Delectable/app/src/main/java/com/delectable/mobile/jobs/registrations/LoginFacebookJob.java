@@ -22,6 +22,8 @@ public class LoginFacebookJob extends Job {
 
     private static final String TAG = LoginFacebookJob.class.getSimpleName();
 
+    String mErrorMessage;
+
     @Inject
     AccountModel mAccountModel;
 
@@ -64,19 +66,18 @@ public class LoginFacebookJob extends Job {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
         mEventBus.post(new LoginRegisterEvent(true));
-        Log.d(TAG, "FACEBOOK LOGIN: " + sessionKey + "/" + sessionToken + "/" + account.getId());
 
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new LoginRegisterEvent(false));
+        mEventBus.post(new LoginRegisterEvent(mErrorMessage));
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
         // TODO check error type and see if a retry makes sense
-        Log.d(TAG, "ERROR: " + throwable.getMessage());
-        return true;
+        mErrorMessage = throwable.getMessage();
+        return false;
     }
 }
