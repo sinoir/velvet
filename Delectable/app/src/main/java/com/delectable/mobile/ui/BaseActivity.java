@@ -51,7 +51,7 @@ public abstract class BaseActivity extends Activity {
                 android.R.animator.fade_in, android.R.animator.fade_out,
                 android.R.animator.fade_in, android.R.animator.fade_out);
 
-        transaction.replace(R.id.container, fragment);
+        transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
         transaction.addToBackStack(null);
 
         transaction.commit();
