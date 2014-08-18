@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +17,8 @@ import butterknife.OnClick;
 public class SignInFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignInFragment.class.getSimpleName();
+
+    private static final int RESET_PASSWORD_DIALOG = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +92,9 @@ public class SignInFragment extends BaseSignUpInFragment {
     @OnClick(R.id.forgot_textview)
     protected void onForgotTextClick() {
         Log.d(TAG, "onForgotTextClick");
+        ResetPasswordDialog dialog = ResetPasswordDialog.newInstance();
+        dialog.setTargetFragment(this, RESET_PASSWORD_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
 
     @Override

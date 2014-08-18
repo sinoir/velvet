@@ -12,6 +12,7 @@
     <string name="make_private">Post to Delectable</string>
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
+    <string name="cancel">cancel</string>
 
     <!-- Login -->
     <string name="login_sign_up">sign up</string>
@@ -39,6 +40,9 @@
     <string name="signup_in_and">&#160;and&#160;</string>
     <string name="signup_in_privacy_policy">Privacy Policy</string>
 
+    <string name="reset_password_dialog_title">Reset your password?</string>
+    <string name="reset_password_dialog_email_hint">Enter your email address</string>
+    <string name="reset_password_dialog_reset_password">reset password</string>
 
 
 
