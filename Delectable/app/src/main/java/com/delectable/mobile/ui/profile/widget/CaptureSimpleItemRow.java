@@ -12,15 +12,34 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class CaptureSimpleItemRow extends RelativeLayout {
 
-    private ImageView mWineImage;
+    @InjectView(R.id.wine_image)
+    protected ImageView mWineImage;
 
-    private TextView mProducerName;
+    @InjectView(R.id.producer_name)
+    protected TextView mProducerName;
 
-    private TextView mWineName;
+    @InjectView(R.id.wine_name)
+    protected TextView mWineName;
 
-    private RatingsBarView mRatingBarView;
+    @InjectView(R.id.capture_comment_tagged_text)
+    protected TextView mCommentText;
+
+    @InjectView(R.id.rating_bar)
+    protected RatingsBarView mRatingBarView;
+
+    @InjectView(R.id.capture_time)
+    protected TextView mCaptureTime;
+
+    @InjectView(R.id.compose_capture)
+    protected View mComposeCapture;
+
+    @InjectView(R.id.discard_capture)
+    protected View mDiscardCapture;
 
     private CaptureDetails mCaptureData;
 
@@ -36,11 +55,7 @@ public class CaptureSimpleItemRow extends RelativeLayout {
         super(context, attrs, defStyle);
 
         View.inflate(context, R.layout.row_simple_wine_detail, this);
-
-        mWineImage = (ImageView) findViewById(R.id.image);
-        mProducerName = (TextView) findViewById(R.id.producer_name);
-        mWineName = (TextView) findViewById(R.id.wine_name);
-        mRatingBarView = (RatingsBarView) findViewById(R.id.rating_bar);
+        ButterKnife.inject(this);
     }
 
     public void updateData(CaptureDetails capture, String userId) {
