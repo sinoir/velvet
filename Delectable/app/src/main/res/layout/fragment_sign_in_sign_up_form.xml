@@ -154,6 +154,14 @@
                     android:id="@+id/facebook_sign_in_text"
                     style="@style/SignUpIn_social_text"
                     android:text="@string/signup_in_sign_in_using_facebook" />
+
+                <com.facebook.widget.LoginButton
+                    android:duplicateParentState="true"
+                    android:id="@+id/facebook_sign_in"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
             </RelativeLayout>
 
             <RelativeLayout

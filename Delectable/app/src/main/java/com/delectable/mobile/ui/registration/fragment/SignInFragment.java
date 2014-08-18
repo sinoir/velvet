@@ -1,12 +1,7 @@
 package com.delectable.mobile.ui.registration.fragment;
 
-import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.controllers.RegistrationController;
-import com.delectable.mobile.events.registrations.LoginRegisterEvent;
-import com.delectable.mobile.ui.navigation.activity.NavActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,24 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+//TODO implement something to show that requests are loading
 public class SignInFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignInFragment.class.getSimpleName();
-
-    @Inject
-    RegistrationController mRegistrationController;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        App.injectMembers(this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,16 +85,6 @@ public class SignInFragment extends BaseSignUpInFragment {
         mRegistrationController.login(email, password);
     }
 
-    public void onEventMainThread(LoginRegisterEvent registerEvent) {
-        if (registerEvent.isSuccessful()) {
-            Log.d(TAG, "Successfully Logged in!");
-            startActivity(new Intent(getActivity(), NavActivity.class));
-            getActivity().finish();
-            return;
-        }
-
-        Toast.makeText(getActivity(), registerEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
-    }
 
     @OnClick(R.id.forgot_textview)
     protected void onForgotTextClick() {
@@ -118,17 +92,9 @@ public class SignInFragment extends BaseSignUpInFragment {
     }
 
     @Override
-    protected void onFacebookButtonClick() {
-        Log.d(TAG, "onFacebookButtonClick");
-
-    }
-
-    @Override
     protected void onGoogleButtonClick() {
         Log.d(TAG, "onGoogleButtonClick");
-
-
+        //TODO implement google sign in
     }
-
 
 }
