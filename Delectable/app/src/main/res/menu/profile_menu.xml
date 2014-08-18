@@ -8,11 +8,4 @@
         android:showAsAction="always"
         android:title="Find People"></item>
 
-    <!-- TODO: Need asset for list / detail listing -->
-    <item
-        android:id="@+id/toggle_list"
-        android:icon="@drawable/ab_camera"
-        android:showAsAction="always"
-        android:title="Toggle List"></item>
-
 </menu>

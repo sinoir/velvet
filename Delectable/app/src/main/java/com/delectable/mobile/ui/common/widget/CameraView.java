@@ -48,7 +48,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         mIsSurfaceCreated = true;
-        setupCameraInHolder();
     }
 
     @Override
@@ -71,6 +70,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public boolean isSurfaceCreated() {
+        return mIsSurfaceCreated;
     }
 
     public void udpateCamera(Camera camera, int cameraId) {

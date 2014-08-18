@@ -51,8 +51,9 @@ public class CameraUtil {
     public static Bitmap getRotatedBitmapTakenFromCamera(
             Context context,
             byte[] imageData,
-            int cameraId) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            int cameraId, BitmapFactory.Options options) {
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
         int rotationDegrees = getCameraRotationFixInDegrees(context, cameraId);
         Matrix matrix = new Matrix();
         matrix.postRotate(rotationDegrees);
@@ -131,5 +132,32 @@ public class CameraUtil {
                 Math.min(top + focusAreaSize, 1000));
 
         return new Camera.Area(focusArea, focusAreaSize);
+    }
+
+    /**
+     * Helper to calculate sample size based on the max width / height From:
+     * http://developer.android.com/training/displaying-bitmaps/load-bitmap.html#load-bitmap
+     */
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth,
+            int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }

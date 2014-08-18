@@ -9,7 +9,9 @@
     <string name="facebook_text">Facebook</string>
     <string name="twitter_text">Twitter</string>
     <string name="instagram_text">Instagram</string>
-    <string name="make_private">Make Private</string>
+    <string name="make_private">Post to Delectable</string>
+    <string name="flash_on">ON</string>
+    <string name="flash_off">OFF</string>
 
     <!-- Login -->
     <string name="login_sign_up">sign up</string>
@@ -117,12 +119,12 @@
     </plurals>
 
 
-    <!-- Wine Capture Submit Screen -->
-    <string name="capture_submit_leave_comment_hint">Tap to leave a comment (optional)</string>
+    <!-- Wine Capture Flow Screens-->
+    <string name="capture_submit_leave_comment_hint">Write a comment or taste note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
     <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
-    <string name="capture_submit_share_text">SHARE</string>
     <string name="capture_submit_post">Post</string>
+    <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
 
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>

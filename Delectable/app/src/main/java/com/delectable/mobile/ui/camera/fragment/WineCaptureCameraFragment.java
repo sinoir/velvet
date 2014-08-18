@@ -13,97 +13,111 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnTouch;
 
 public class WineCaptureCameraFragment extends CameraFragment {
 
     public static final int SELECT_PHOTO = 100;
 
-    private static final String TAG = "WineCaptureCameraFragment";
+    private static final String TAG = WineCaptureCameraFragment.class.getSimpleName();
+
+    @InjectView(R.id.camera_preview)
+    protected CameraView mCameraPreview;
+
+    @InjectView(R.id.camera_container)
+    protected View mCameraContainer;
+
+    @InjectView(R.id.camera_roll_button)
+    protected View mCameraRollButton;
+
+    @InjectView(R.id.capture_button)
+    protected View mCaptureButton;
+
+    @InjectView(R.id.flash_button)
+    protected Button mFlashButton;
+
+    @InjectView(R.id.close_button)
+    protected View mCloseButton;
 
     private View mView;
-
-    private CameraView mCameraPreview;
-
-    private View mCameraContainer;
-
-    private ImageButton mCameraRollButton;
-
-    private ImageButton mCaptureButton;
-
-    private ImageButton mFlashButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_close, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_camera, container, false);
+        ButterKnife.inject(this, mView);
 
-        mCameraPreview = (CameraView) mView.findViewById(R.id.camera_preview);
-        mCameraContainer = mView.findViewById(R.id.camera_container);
         setupCameraSurface(mCameraPreview);
-        mCameraPreview.setScaleToFitY(true);
-
-        mCameraRollButton = (ImageButton) mView.findViewById(R.id.camera_roll_button);
-        mCaptureButton = (ImageButton) mView.findViewById(R.id.capture_button);
-        mFlashButton = (ImageButton) mView.findViewById(R.id.flash_button);
-
-        setupButtonListeners();
 
         return mView;
     }
 
-    private void setupButtonListeners() {
-        mCameraRollButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCameraRoll();
-            }
-        });
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().getActionBar().hide();
+    }
 
-        mCaptureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                captureCameraImage();
-            }
-        });
+    @OnClick(R.id.close_button)
+    public void closeCamera() {
+        getActivity().finish();
+    }
 
-        mFlashButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFlash();
-            }
-        });
+    @OnClick(R.id.camera_roll_button)
+    protected void launchCameraRoll() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_PHOTO);
+    }
 
-        mCameraContainer.setOnTouchListener(new View.OnTouchListener() {
+    @OnClick(R.id.capture_button)
+    protected void captureCameraImage() {
+        takeJpegCroppedPicture(new PictureTakenCallback() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO: Display Focus icon
-                PointF pointToFocusOn = new PointF(event.getX(), event.getY());
-                RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
-                        mCameraPreview.getHeight());
-                focusOnPoint(pointToFocusOn, bounds);
-                return true;
+            public void onBitmapCaptured(Bitmap bitmap) {
+                launchOptionsScreen(bitmap);
             }
         });
+    }
+
+    @OnTouch(R.id.camera_container)
+    protected boolean focusCamera(View view, MotionEvent event) {
+        // TODO: Display Focus icon
+        try {
+            PointF pointToFocusOn = new PointF(event.getX(), event.getY());
+            RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
+                    mCameraPreview.getHeight());
+            // TODO: Figure out why we get RuntimeException when running on some phones
+            focusOnPoint(pointToFocusOn, bounds);
+        } catch (Exception ex) {
+            Log.wtf(TAG, "Failed to Focus", ex);
+        }
+        return true;
+    }
+
+    @OnClick(R.id.flash_button)
+    public void toggleFlashClicked() {
+        boolean isFlashOn = toggleFlash();
+        mFlashButton.setSelected(isFlashOn);
+        String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
+        mFlashButton.setText(flashText);
     }
 
     @Override
@@ -120,42 +134,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
         return Bitmap.createBitmap(bitmap, 0, 0, imageWidth, croppedHeight);
     }
 
-    private void launchCameraRoll() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, SELECT_PHOTO);
-    }
-
-    private void captureCameraImage() {
-        takeJpegCroppedPicture(new PictureTakenCallback() {
-            @Override
-            public void onBitmapCaptured(Bitmap bitmap) {
-                launchOptionsScreen(bitmap);
-            }
-        });
-    }
-
-    @Override
-    public boolean toggleFlash() {
-        boolean isFlashOn = super.toggleFlash();
-        // TODO: Toggle Icon to indicate flash is on or off
-        return isFlashOn;
-    }
-
     private void launchOptionsScreen(Bitmap imageData) {
-        WineCaptureOptionsFragment fragment = WineCaptureOptionsFragment.newInstance(imageData);
+        WineCaptureConfirmFragment fragment = WineCaptureConfirmFragment.newInstance(imageData);
         launchNextFragment(fragment);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "OptionsItemSelected: " + item);
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getActivity().finish();
-                break;
-        }
-        return true;
     }
 
     @Override

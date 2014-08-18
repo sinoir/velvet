@@ -27,7 +27,7 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
 
     public RatingSeekBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        int barHeight = context.getResources().getDimensionPixelSize(R.dimen.rating_bar_height);
+        int barHeight = context.getResources().getDimensionPixelSize(R.dimen.rating_bar_seek_height);
         mRatingsBar = new RatingsBar(barHeight);
         setProgressDrawable(mRatingsBar);
         Drawable thumb = getResources().getDrawable(R.drawable.btn_rating_bar_slider_normal);
