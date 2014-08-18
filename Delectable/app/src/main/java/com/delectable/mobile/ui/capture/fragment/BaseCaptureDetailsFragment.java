@@ -190,7 +190,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void editCapture(CaptureDetails capture) {
-        // TODO: Edit Capture
+        // Not sure if this is what the edit icon does?
+        rateAndCommentForCapture(capture);
     }
 
     private void sendRating(final CaptureDetails capture, final int rating) {

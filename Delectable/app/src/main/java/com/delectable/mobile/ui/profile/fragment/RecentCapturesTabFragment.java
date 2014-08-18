@@ -21,7 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
@@ -86,28 +85,6 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         mListView.setAdapter(mAdapter);
         mListView.setCallback(this);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CaptureDetails captureDetails = (CaptureDetails) mAdapter.getItem(position);
-                Intent intent = new Intent();
-                // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
-                if (captureDetails.getWineProfile() != null) {
-                    intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE,
-                            captureDetails.getWineProfile());
-                    intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
-                            captureDetails.getPhoto());
-                    intent.setClass(getActivity(), WineProfileActivity.class);
-                } else {
-                    intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
-                            captureDetails.getId());
-                    intent.setClass(getActivity(), CaptureDetailsActivity.class);
-
-                }
-                startActivity(intent);
-            }
-        });
-
         return mView;
     }
 
@@ -148,6 +125,25 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
                     }
                 }
         );
+    }
+
+    @Override
+    public void launchWineProfile(CaptureDetails captureDetails) {
+        Intent intent = new Intent();
+        // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
+        if (captureDetails.getWineProfile() != null) {
+            intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE,
+                    captureDetails.getWineProfile());
+            intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
+                    captureDetails.getPhoto());
+            intent.setClass(getActivity(), WineProfileActivity.class);
+        } else {
+            intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                    captureDetails.getId());
+            intent.setClass(getActivity(), CaptureDetailsActivity.class);
+
+        }
+        startActivity(intent);
     }
 
     @Override
