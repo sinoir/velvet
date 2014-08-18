@@ -2,7 +2,6 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.NameUtil;
@@ -17,16 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
 import butterknife.OnClick;
 
 public class SignUpFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignUpFragment.class.getSimpleName();
-
-    @Inject
-    RegistrationController mRegistrationController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,20 +105,11 @@ public class SignUpFragment extends BaseSignUpInFragment {
 
     public void onEventMainThread(LoginRegisterEvent registerEvent) {
         if (registerEvent.isSuccessful()) {
-            Log.d(TAG, "Successfully Logged in!");
             startActivity(new Intent(getActivity(), NavActivity.class));
             getActivity().finish();
             return;
         }
-
         Toast.makeText(getActivity(), registerEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    protected void onFacebookButtonClick() {
-        Log.d(TAG, "onFacebookButtonClick");
-
     }
 
     @Override
@@ -137,7 +122,6 @@ public class SignUpFragment extends BaseSignUpInFragment {
     protected void goToTermsOfUse() {
         Log.d(TAG, "goToTermsOfUse");
         //TODO need link/text for terms of use
-
     }
 
     @OnClick(R.id.privacy_textview)
