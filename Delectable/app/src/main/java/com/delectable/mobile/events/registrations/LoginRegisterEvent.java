@@ -1,26 +1,14 @@
 package com.delectable.mobile.events.registrations;
 
-public class LoginRegisterEvent {
+import com.delectable.mobile.events.BaseEvent;
 
-    private boolean mSuccessful;
-
-    private String mErrorMessage;
+public class LoginRegisterEvent extends BaseEvent {
 
     public LoginRegisterEvent(boolean successful) {
-        mSuccessful = successful;
+        super(successful);
     }
 
     public LoginRegisterEvent(String errorMessage) {
-        mSuccessful = false;
-        mErrorMessage = errorMessage;
+        super(errorMessage);
     }
-
-    public boolean isSuccessful() {
-        return mSuccessful;
-    }
-
-    public String getErrorMessage() {
-        return mErrorMessage;
-    }
-
 }
