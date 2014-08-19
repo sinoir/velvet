@@ -15,7 +15,6 @@ import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
-import com.delectable.mobile.ui.registration.fragment.LoginFragment;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
@@ -31,7 +30,6 @@ import de.greenrobot.event.EventBus;
 @Module(
         injects = {
                 BaseFragment.class,
-                LoginFragment.class,
                 SignUpFragment.class,
                 SignInFragment.class,
                 NavigationDrawerFragment.class,
