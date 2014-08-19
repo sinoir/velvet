@@ -24,11 +24,12 @@ public class LandingPageFragment extends BaseFragment {
 
     @OnClick(R.id.signup_button)
     void goToSignup() {
-
+        launchNextFragment(new SignUpFragment());
     }
 
     @OnClick(R.id.login_text_container)
     void goToSignin() {
+        launchNextFragment(new SignInFragment());
 
     }
 }

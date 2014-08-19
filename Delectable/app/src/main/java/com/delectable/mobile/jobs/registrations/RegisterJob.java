@@ -5,8 +5,8 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.registrations.RegistrationLoginRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
+import com.delectable.mobile.model.api.registrations.RegistrationsRegisterRequest;
 import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
@@ -18,9 +18,9 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class LoginJob extends Job {
+public class RegisterJob extends Job {
 
-    private static final String TAG = LoginJob.class.getSimpleName();
+    private static final String TAG = RegisterJob.class.getSimpleName();
 
     @Inject
     AccountModel mAccountModel;
@@ -35,12 +35,19 @@ public class LoginJob extends Job {
 
     private String mPassword;
 
+    private String mFname;
+
+    private String mLname;
+
     private String mErrorMessage;
 
-    public LoginJob(String email, String password) {
+
+    public RegisterJob(String email, String password, String fname, String lname) {
         super(new Params(Priority.UX).requireNetwork());
         mEmail = email;
         mPassword = password;
+        mFname = fname;
+        mLname = lname;
     }
 
     @Override
@@ -50,9 +57,10 @@ public class LoginJob extends Job {
     @Override
     public void onRun() throws Throwable {
 
-        String endpoint = "/registrations/login";
-        RegistrationLoginRequest request = new RegistrationLoginRequest(
-                new RegistrationLoginRequest.RegistrationLoginPayload(mEmail, mPassword));
+        String endpoint = "/registrations/register";
+        RegistrationsRegisterRequest.Payload payload = new RegistrationsRegisterRequest.Payload(
+                mEmail, mPassword, mFname, mLname);
+        RegistrationsRegisterRequest request = new RegistrationsRegisterRequest(payload);
         RegistrationLoginResponse response = mNetworkClient
                 .post(endpoint, request, RegistrationLoginResponse.class, false);
 

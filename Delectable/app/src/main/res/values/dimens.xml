@@ -59,6 +59,16 @@
     <dimen name="signup_in_social_signin_button_horizontal_padding">23dp</dimen>
     <dimen name="signup_in_social_signin_button_text_size">19sp</dimen>
     <dimen name="signup_in_social_signin_button_vertical_spacing">15dp</dimen>
+    <dimen name="signup_in_terms_privacy_height">60dp</dimen>
+    <dimen name="signup_in_terms_privacy_text_size">14sp</dimen>
+
+    <!-- Reset Password Dialog -->
+    <dimen name="reset_password_dialog_height">215dp</dimen>
+    <dimen name="reset_password_dialog_horizontal_spacing">20dp</dimen>
+    <dimen name="reset_password_dialog_vertical_spacing">30dp</dimen>
+    <dimen name="reset_password_dialog_title_text_size">22sp</dimen>
+    <dimen name="reset_password_dialog_action_text_size">20sp</dimen>
+    <dimen name="reset_password_dialog_header_height">60dp</dimen>
 
 
 

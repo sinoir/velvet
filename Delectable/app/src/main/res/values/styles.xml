@@ -15,6 +15,10 @@
         <item name="android:editTextStyle">@style/Delectable.EditText</item>
     </style>
 
+    <style name="DelectableTheme.Dialog" parent="android:Theme.Holo.Light.Dialog">
+        <item name="android:editTextStyle">@style/Delectable.EditText</item>
+    </style>
+
     <style name="Delectable.EditText" parent="android:Widget.Holo.Light.EditText">
         <item name="android:background">@drawable/bg_edit_text</item>
     </style>
@@ -106,6 +110,21 @@
         <item name="android:textSize">@dimen/signup_in_social_signin_button_text_size</item>
         <item name="android:textColor">@color/d_dark_gray</item>
         <item name="fontName">whitney_book_sc</item>
+    </style>
+
+    <style name="SignUpInTermsText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/signup_in_terms_privacy_text_size</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="ResetPasswordDialogActionText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/reset_password_dialog_header_height</item>
+        <item name="android:textSize">@dimen/reset_password_dialog_action_text_size</item>
+        <item name="fontName">whitney_medium_sc</item>
     </style>
 
     <!-- Settings Screen -->
