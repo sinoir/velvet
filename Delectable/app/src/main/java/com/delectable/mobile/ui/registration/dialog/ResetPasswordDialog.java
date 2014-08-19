@@ -25,17 +25,32 @@ public class ResetPasswordDialog extends DialogFragment {
 
     private static final String TAG = ResetPasswordDialog.class.getSimpleName();
 
+    public static final String EMAIL = "EMAIL";
+
     @InjectView(R.id.email_address_field)
     FontEditText mEmailField;
 
-    public static ResetPasswordDialog newInstance() {
-        return new ResetPasswordDialog();
+    private String mPhoneEmail;
+
+    /**
+     * @param email The email that you want to prepopulate the email field with. Typically the
+     *              phone's account email.
+     */
+    public static ResetPasswordDialog newInstance(String email) {
+        ResetPasswordDialog f = new ResetPasswordDialog();
+        Bundle args = new Bundle();
+        args.putString(EMAIL, email);
+        f.setArguments(args);
+        return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.DelectableTheme_Dialog);
+        if (getArguments() != null) {
+            mPhoneEmail = getArguments().getString(EMAIL);
+        }
     }
 
     @Override
@@ -44,6 +59,7 @@ public class ResetPasswordDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_reset_password, container, false);
         ButterKnife.inject(this, view);
 
+        mEmailField.setText(mPhoneEmail);
         mEmailField.setOnEditorActionListener(DoneActionListener);
         mEmailField.setOnFocusChangeListener(ShowKeyboardOnFocusListener);
 

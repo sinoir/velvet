@@ -92,7 +92,7 @@ public class SignInFragment extends BaseSignUpInFragment {
     @OnClick(R.id.forgot_textview)
     protected void onForgotTextClick() {
         Log.d(TAG, "onForgotTextClick");
-        ResetPasswordDialog dialog = ResetPasswordDialog.newInstance();
+        ResetPasswordDialog dialog = ResetPasswordDialog.newInstance(getPhoneEmail());
         dialog.setTargetFragment(this, RESET_PASSWORD_DIALOG); //callback goes to onActivityResult
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
