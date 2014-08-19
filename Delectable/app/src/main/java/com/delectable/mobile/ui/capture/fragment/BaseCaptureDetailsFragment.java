@@ -183,6 +183,17 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
     }
 
+    @Override
+    public void discardCapture(CaptureDetails capture) {
+        // TODO: Discard / Delete Capture
+    }
+
+    @Override
+    public void editCapture(CaptureDetails capture) {
+        // Not sure if this is what the edit icon does?
+        rateAndCommentForCapture(capture);
+    }
+
     private void sendRating(final CaptureDetails capture, final int rating) {
         final String userId = UserInfo.getUserId(getActivity());
         final int oldRating = capture.getRatingForId(userId);

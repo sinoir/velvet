@@ -401,5 +401,9 @@ public class CaptureDetailsView extends RelativeLayout {
         public void launchUserProfile(String userAccountId);
 
         public void launchTaggedUserListing(CaptureDetails capture);
+
+        public void discardCapture(CaptureDetails capture);
+
+        public void editCapture(CaptureDetails capture);
     }
 }

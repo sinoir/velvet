@@ -36,8 +36,6 @@
     <string name="signup_in_sign_up_using_google">sign up using google</string>
 
 
-
-
     <!-- Navigation -->
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
@@ -69,6 +67,10 @@
         <item quantity="one">1 follower</item>
         <item quantity="other">%d followers</item>
     </plurals>
+    <plurals name="with_friends">
+        <item quantity="one">with 1 friend</item>
+        <item quantity="other">with %d friends</item>
+    </plurals>
 
     <string name="profile_tab_recent">RECENT</string>
     <string name="profile_tab_top_rated">TOP RATED</string>
@@ -76,6 +78,9 @@
     <!-- Capture Feed -->
     <string name="cap_feed_likes_count">%d likes</string>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
+    <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
+    <string name="cap_feed_add_your_rating">Add your rating</string>
+    <string name="cap_feed_at_location">at %s</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>

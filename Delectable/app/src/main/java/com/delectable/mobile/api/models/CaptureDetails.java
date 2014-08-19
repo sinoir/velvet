@@ -142,6 +142,20 @@ public class CaptureDetails extends Capture {
         }
     }
 
+    public int getNumberTaggedParticipants() {
+        int numParticipants = 0;
+        if (getRegisteredParticipants() != null) {
+            numParticipants += getRegisteredParticipants().size();
+        }
+        if (getFacebookParticipants() != null) {
+            numParticipants += getFacebookParticipants().size();
+        }
+        if (getContactParticipants() != null) {
+            numParticipants += getContactParticipants().size();
+        }
+        return numParticipants;
+    }
+
     /**
      * Helper to get Display Title
      *

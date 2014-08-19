@@ -1,52 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/wine_image"
         android:layout_width="@dimen/cap_list_row_image_size"
         android:layout_height="@dimen/cap_list_row_image_size"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing" />
+        android:layout_marginTop="@dimen/cap_list_row_vertical_spacing" />
 
-    <RelativeLayout
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/producer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/cap_list_row_vertical_spacing"
+        android:layout_alignTop="@+id/wine_image"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_toRightOf="@+id/wine_image"
+        android:text="LA RAME"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="@dimen/cap_list_row_top_text_font_size"
+        app:fontName="whitney_medium_sc" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/wine_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/producer_name"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_toRightOf="@+id/wine_image"
+        android:text="Sauvignon Blanc Secret Sauce 2012 and a very long long title"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/cap_list_row_bottom_text_font_size"
+        app:fontName="whitney_book" />
+
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/capture_comment_tagged_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wine_image"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:layout_marginTop="@dimen/cap_list_row_vertical_spacing"
-        android:layout_toRightOf="@id/image">
+        android:textColor="@color/d_dark_gray"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:fontName="whitney_book" />
 
-        <TextView
-            android:id="@+id/producer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="LA RAME"
-            android:textColor="@color/d_dark_gray"
-            android:textSize="@dimen/cap_list_row_top_text_font_size" />
+    <com.delectable.mobile.ui.common.widget.RatingsBarView
+        android:id="@+id/rating_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rating_bar_height"
+        android:layout_below="@+id/capture_comment_tagged_text"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/wine_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/producer_name"
-            android:text="Sauvignon Blanc Secret Sauce 2012"
-            android:textColor="@color/d_black"
-            android:textSize="@dimen/cap_list_row_bottom_text_font_size" />
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/rate_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rating_bar"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="10dp"
+        android:text="Rate, comment and share this wine"
+        android:textColor="@color/d_blue"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:fontName="whitney_book" />
 
-        <com.delectable.mobile.ui.common.widget.RatingsBarView
-            android:id="@+id/rating_bar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/rating_bar_height"
-            android:layout_below="@id/wine_name"
-            android:layout_marginTop="4dp" />
-    </RelativeLayout>
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/capture_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rate_comment"
+        android:layout_marginBottom="@dimen/cap_list_row_vertical_spacing"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="@dimen/cap_list_row_vertical_spacing"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="14sp"
+        app:fontName="whitney_book" />
+
+    <ImageView
+        android:id="@+id/compose_capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rate_comment"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="@dimen/cap_list_row_vertical_spacing"
+        android:layout_toLeftOf="@+id/discard_capture"
+        android:src="@drawable/btn_compose"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/discard_capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/rate_comment"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="@dimen/cap_list_row_vertical_spacing"
+        android:src="@drawable/btn_discard"
+        android:visibility="gone" />
 
 </RelativeLayout>

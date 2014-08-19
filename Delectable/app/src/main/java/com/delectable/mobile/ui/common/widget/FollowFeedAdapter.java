@@ -21,9 +21,10 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     private int mCurrentViewType = VIEW_TYPE_DETAILED;
 
+    private static final String TAG = FollowFeedAdapter.class.getSimpleName();
+
     private static final int sNumberViewTypes = 2;
 
-    private static final String TAG = "FollowFeedAdapter";
 
     private Activity mContext;
 
@@ -128,6 +129,7 @@ public class FollowFeedAdapter extends BaseAdapter {
 
         if (rowView == null) {
             rowView = new CaptureSimpleItemRow(mContext);
+            rowView.setActionsHandler(mCaptureActionsHandler);
         }
         rowView.updateData(capture, mUserId);
         return rowView;
