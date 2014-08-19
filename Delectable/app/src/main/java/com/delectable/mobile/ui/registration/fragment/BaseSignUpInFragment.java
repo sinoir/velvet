@@ -195,8 +195,11 @@ public abstract class BaseSignUpInFragment extends BaseFragment
             // Potentially filter on ProfileQuery.IS_PRIMARY
             cursor.moveToNext();
         }
-        mPhoneEmail = emails.get(0);
-        mEmailField.setText(mPhoneEmail);
+
+        if (emails.size() > 0) {
+            mPhoneEmail = emails.get(0);
+            mEmailField.setText(mPhoneEmail);
+        }
     }
 
     @Override

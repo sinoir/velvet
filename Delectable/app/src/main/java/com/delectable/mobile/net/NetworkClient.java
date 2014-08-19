@@ -63,9 +63,9 @@ public class NetworkClient {
 
         //handle HTTP errors
         if (!response.isSuccessful()) {
-            // TODO error handling, throw exception that gets handled in job queue
-            throw new IOException(
-                    "Request Error " + response.code() + ": " + response.toString());
+            String errorMessage = "Request Error " + response.code() + ": " + response.toString();
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
         }
         //be careful, calling this ResponseBody.string() method more than once wipes out the string
         String responseBody = response.body().string();
@@ -74,19 +74,24 @@ public class NetworkClient {
 
         //handle Gson parsing errors
         if (responseObj == null) {
-            throw new IOException("Error parsing response into JSON");
+            String errorMessage = "Error parsing response into JSON";
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
         }
 
         //handle API errors
         if (!responseObj.success) {
 
             if (responseObj.getError() == null) {
-                throw new IOException("API Error with no message.");
+                String errorMessage = "API Error with no message.";
+                Log.i(requestName, "error: " + errorMessage);
+                throw new IOException(errorMessage);
             }
 
-            throw new IOException(
-                    "Error " + responseObj.getError().getCode() + ": " + responseObj.getError()
-                            .getMessage());
+            String errorMessage = "Error " + responseObj.getError().getCode() + ": " +
+                    responseObj.getError().getMessage();
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
         }
 
         return responseObj;
