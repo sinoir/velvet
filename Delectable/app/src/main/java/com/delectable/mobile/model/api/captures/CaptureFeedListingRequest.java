@@ -25,7 +25,6 @@ public class CaptureFeedListingRequest extends BaseRequest {
         if (currentListing != null) {
             // TODO: Check invalidate to reset / get new data without etag.
             setETag(currentListing.getETag());
-            setContext(currentListing.getContext());
             payload.before = currentListing.getBoundariesToBefore();
             payload.after = currentListing.getBoundariesToAfter();
         }
