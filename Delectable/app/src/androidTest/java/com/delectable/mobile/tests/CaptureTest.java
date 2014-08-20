@@ -440,6 +440,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         CaptureDetailsResponse responseObject = mGson
                 .fromJson(jsonDetails.toString(), CaptureDetailsResponse.class);
         CaptureDetails capture = responseObject.payload.capture;
+        // Test with capture being private
+        capture.setPrivate(true);
 
         // Get "Updated" capture
         JSONObject jsonFeed = loadJsonObjectFromResource(
@@ -454,6 +456,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         capture.updateWithNewCapture(updatedCapture);
 
+        assertEquals(updatedCapture.getPrivate(), capture.getPrivate());
         assertEquals(updatedCapture.getShortShareUrl(), capture.getShortShareUrl());
         assertEquals(updatedCapture.getTweet(), capture.getTweet());
         assertEquals(updatedCapture.getRatings(), capture.getRatings());
@@ -466,6 +469,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals(updatedCapture.getLikingParticipants(), capture.getLikingParticipants());
         assertEquals(updatedCapture.getCommentingParticipants(),
                 capture.getCommentingParticipants());
+        assertEquals(updatedCapture.getCapturerParticipant(), capture.getCapturerParticipant());
         assertEquals(updatedCapture.getTaggeeParticipants(), capture.getTaggeeParticipants());
         assertEquals(updatedCapture.getComments(), capture.getComments());
         assertEquals(updatedCapture.getETag(), capture.getETag());
