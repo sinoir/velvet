@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.controllers.AccountController;
@@ -9,7 +10,6 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;

@@ -1,17 +1,18 @@
 package com.delectable.mobile.api.models;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class Account extends BaseResponse {
+public class Account {
 
-    public static int RELATION_TYPE_SELF = -1;
+    // TODO avoid wrapper objects for primitive types
 
-    public static int RELATION_TYPE_NONE = 0;
+    public static transient int RELATION_TYPE_SELF = -1;
 
-    public static int RELATION_TYPE_FOLLOWING = 1;
+    public static transient int RELATION_TYPE_NONE = 0;
+
+    public static transient int RELATION_TYPE_FOLLOWING = 1;
 
     String id;
 
@@ -25,7 +26,7 @@ public class Account extends BaseResponse {
 
     Boolean influencer;
 
-    ArrayList<String> influencer_titles;
+    List<String> influencer_titles;
 
     String bio;
 
@@ -41,7 +42,7 @@ public class Account extends BaseResponse {
 
     Float fb_token_exp;
 
-    ArrayList<PaymentMethod> payment_methods;
+    List<PaymentMethod> payment_methods;
 
     Integer following_count;
 
@@ -57,25 +58,17 @@ public class Account extends BaseResponse {
 
     TutorialState tutorial_state;
 
-    ArrayList<ShippingAddress> shipping_addresses;
+    List<ShippingAddress> shipping_addresses;
 
-    ArrayList<Identifier> identifiers;
+    List<Identifier> identifiers;
 
     LocalNotifications local_notifs;
 
     Integer current_user_relationship;
 
-    ArrayList<CaptureSummary> capture_summaries;
+    List<CaptureSummary> capture_summaries;
 
-    public static Account buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        Account newResource = null;
-        if (payloadObj != null && payloadObj.optJSONObject("account") != null) {
-            JSONObject accountObject = payloadObj.optJSONObject("account");
-            newResource = Account.buildFromJson(accountObject, Account.class);
-        }
-        return newResource;
-    }
+    String e_tag;
 
     public boolean isUserRelationshipTypeSelf() {
         return checkRelationship(RELATION_TYPE_SELF);
@@ -146,11 +139,11 @@ public class Account extends BaseResponse {
         this.influencer = influencer;
     }
 
-    public ArrayList<String> getInfluencerTitles() {
+    public List<String> getInfluencerTitles() {
         return influencer_titles;
     }
 
-    public void setInfluencerTitles(ArrayList<String> influencer_titles) {
+    public void setInfluencerTitles(List<String> influencer_titles) {
         this.influencer_titles = influencer_titles;
     }
 
@@ -217,11 +210,11 @@ public class Account extends BaseResponse {
         this.fb_token_exp = fb_token_exp;
     }
 
-    public ArrayList<PaymentMethod> getPaymentMethods() {
+    public List<PaymentMethod> getPaymentMethods() {
         return payment_methods;
     }
 
-    public void setPaymentMethods(ArrayList<PaymentMethod> payment_methods) {
+    public void setPaymentMethods(List<PaymentMethod> payment_methods) {
         this.payment_methods = payment_methods;
     }
 
@@ -288,19 +281,19 @@ public class Account extends BaseResponse {
         this.tutorial_state.ftue_completed = ftue_completed;
     }
 
-    public ArrayList<ShippingAddress> getShippingAddresses() {
+    public List<ShippingAddress> getShippingAddresses() {
         return shipping_addresses;
     }
 
-    public void setShippingAddresses(ArrayList<ShippingAddress> shipping_addresses) {
+    public void setShippingAddresses(List<ShippingAddress> shipping_addresses) {
         this.shipping_addresses = shipping_addresses;
     }
 
-    public ArrayList<Identifier> getIdentifiers() {
+    public List<Identifier> getIdentifiers() {
         return identifiers;
     }
 
-    public void setIdentifiers(ArrayList<Identifier> identifiers) {
+    public void setIdentifiers(List<Identifier> identifiers) {
         this.identifiers = identifiers;
     }
 
@@ -312,11 +305,11 @@ public class Account extends BaseResponse {
         this.local_notifs = local_notifs;
     }
 
-    public ArrayList<CaptureSummary> getCaptureSummaries() {
+    public List<CaptureSummary> getCaptureSummaries() {
         return capture_summaries;
     }
 
-    public void setCaptureSummaries(ArrayList<CaptureSummary> capture_summaries) {
+    public void setCaptureSummaries(List<CaptureSummary> capture_summaries) {
         this.capture_summaries = capture_summaries;
     }
 
@@ -328,8 +321,15 @@ public class Account extends BaseResponse {
         this.current_user_relationship = current_user_relationship;
     }
 
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String eTag) {
+        this.e_tag = eTag;
+    }
+
     /**
-     *
      * @return Returns null if there is no identifier set as primary.
      */
     public Identifier getPrimaryEmailIdentifier() {
@@ -383,6 +383,7 @@ public class Account extends BaseResponse {
                 ", local_notifs=" + local_notifs +
                 ", current_user_relationship=" + current_user_relationship +
                 ", capture_summaries=" + capture_summaries +
+                ", e_tag=" + e_tag +
                 "} " + super.toString();
     }
 

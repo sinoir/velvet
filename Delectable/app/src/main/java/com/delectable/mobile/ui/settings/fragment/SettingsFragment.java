@@ -6,6 +6,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.S3ImageUploadController;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.IdentifiersListing;
@@ -24,7 +25,6 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
@@ -69,15 +69,32 @@ public class SettingsFragment extends BaseFragment {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
 
+    private BaseNetworkController.RequestCallback IdentifierChangeCallback
+            = new BaseNetworkController.RequestCallback() {
+        @Override
+        public void onSuccess(BaseResponse result) {
+            Log.d(TAG, "Received Results! " + result);
+            //update user object with new identifiers listing
+            IdentifiersListing identifiersListing = (IdentifiersListing) result;
+            ArrayList<Identifier> identifiers = identifiersListing.getIdentifiers();
+            mUserAccount.setIdentifiers(identifiers);
+            updateUI();
+        }
+
+        @Override
+        public void onFailed(RequestError error) {
+            String message = " Accounts Add/Update/Remove Identifier failed: " +
+                    error.getCode() + " error: " + error.getMessage();
+            Log.d(TAG, message);
+            showToastError(message);
+            //TODO figure out how to handle error UI wise
+            updateUI(); //updating ui so that user entered text is reverted back to original
+        }
+    };
+
     private static final int SELECT_PHOTO_REQUEST = 0;
 
     private static final int CAMERA_REQUEST = 1;
-
-    private String mUserId;
-
-    private BaseNetworkController mNetworkController;
-
-    private Account mUserAccount;
 
     @Inject
     AccountController mAccountController;
@@ -130,7 +147,13 @@ public class SettingsFragment extends BaseFragment {
 
     @InjectView(R.id.delectable_version)
     TextView mVersionText;
+
+    private String mUserId;
+
+    private BaseNetworkController mNetworkController;
     //endregion
+
+    private Account mUserAccount;
 
     /**
      * Used to keep track of which identifier is the primary email
@@ -141,7 +164,6 @@ public class SettingsFragment extends BaseFragment {
      * Used to keep track of the user's original phone number.
      */
     private Identifier mPhoneIdentifier;
-
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -314,6 +336,7 @@ public class SettingsFragment extends BaseFragment {
             return null;
         }
     }
+    //endregion
 
     @Override
     public void onResume() {
@@ -322,7 +345,6 @@ public class SettingsFragment extends BaseFragment {
             loadCachedAccount();
         }
     }
-    //endregion
 
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
@@ -331,12 +353,13 @@ public class SettingsFragment extends BaseFragment {
         }
         loadCachedAccount();
     }
+    //endregion
 
     public void onEventMainThread(FetchAccountFailedEvent event) {
         // TODO show error dialog
     }
-    //endregion
 
+    //region API Requests
 
     private void loadCachedAccount() {
         // Asynchronously retreive profile from local model
@@ -355,8 +378,6 @@ public class SettingsFragment extends BaseFragment {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
-    //region API Requests
 
     //region Setting Profile Photo Endpoints
     private void facebookifyProfilePhoto() {
@@ -428,6 +449,7 @@ public class SettingsFragment extends BaseFragment {
                 }
         );
     }
+    //endregion
 
     private void updateProfilePicture(ProvisionCapture provision) {
         AccountsUpdateProfilePhotoRequest request = new AccountsUpdateProfilePhotoRequest(
@@ -451,7 +473,6 @@ public class SettingsFragment extends BaseFragment {
                 }
         );
     }
-    //endregion
 
     /**
      * Parameters can be null.
@@ -486,7 +507,6 @@ public class SettingsFragment extends BaseFragment {
                 }
         );
     }
-
 
     private void modifyPhone(String number) {
         modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
@@ -550,30 +570,6 @@ public class SettingsFragment extends BaseFragment {
         AccountsRemoveIdentifierRequest request = new AccountsRemoveIdentifierRequest(identifier);
         mNetworkController.performRequest(request, IdentifierChangeCallback);
     }
-
-    private BaseNetworkController.RequestCallback IdentifierChangeCallback
-            = new BaseNetworkController.RequestCallback() {
-        @Override
-        public void onSuccess(BaseResponse result) {
-            Log.d(TAG, "Received Results! " + result);
-            //update user object with new identifiers listing
-            IdentifiersListing identifiersListing = (IdentifiersListing) result;
-            ArrayList<Identifier> identifiers = identifiersListing.getIdentifiers();
-            mUserAccount.setIdentifiers(identifiers);
-            updateUI();
-        }
-
-        @Override
-        public void onFailed(RequestError error) {
-            String message = " Accounts Add/Update/Remove Identifier failed: " +
-                    error.getCode() + " error: " + error.getMessage();
-            Log.d(TAG, message);
-            showToastError(message);
-            //TODO figure out how to handle error UI wise
-            updateUI(); //updating ui so that user entered text is reverted back to original
-        }
-    };
-
 
     private void updateAccountSettings(String key, boolean setting) {
         AccountsUpdateSettingRequest request = new AccountsUpdateSettingRequest(key, setting);

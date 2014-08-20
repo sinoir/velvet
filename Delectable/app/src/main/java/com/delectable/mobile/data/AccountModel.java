@@ -1,7 +1,8 @@
 package com.delectable.mobile.data;
 
-import com.delectable.mobile.model.local.Account;
 import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.models.Account;
 import com.iainconnor.objectcache.CacheManager;
 
 import java.lang.reflect.Type;
