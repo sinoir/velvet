@@ -2,15 +2,19 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
+import com.delectable.mobile.model.api.captures.CaptureFeedListingRequest;
+import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
+
+    private static final String TAG = CaptureFeedListingTest.class.getSimpleName();
 
     @Override
     protected void setUp() throws Exception {
@@ -24,14 +28,10 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountFollowerFeedMinCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_min_ctx);
-        String expectedContext = "minimal";
-        // TODO: Fix Test
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_MINIMAL);
-        assertEquals(expectedContext, request.getContext());
 
-        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> actualListing = feedResponseObject.payload;
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());
@@ -48,7 +48,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertTrue(actualListing.getMore());
 
         assertEquals("1401392575.8950038", actualListing.getETag());
-        assertEquals(expectedContext, actualListing.getContext());
 
         CaptureDetails actualFirstUpdateCapture = actualListing.getUpdates().get(0);
 
@@ -120,15 +119,12 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountFollowerFeedDetailsCtxWithInvalidate() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        String expectedContext = "details";
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        assertEquals(expectedContext, request.getContext());
 
-        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> actualListing = feedResponseObject.payload;
 
-        assertTrue(actualListing.getInvalidate());
+        assertTrue(feedResponseObject.invalidate);
 
         assertEquals(5, actualListing.getUpdates().size());
         CaptureDetails actualCapture = actualListing.getUpdates().get(2);
@@ -164,7 +160,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertEquals("http://del.ec/mssXw6Q", actualCapture.getShortShareUrl());
         assertEquals("Just posted a wine", actualCapture.getTweet());
         assertEquals(0, actualCapture.getCommentingParticipants().size());
-        assertEquals(expectedContext, actualCapture.getContext());
         assertEquals("XWJa4ploEboxyw", actualCapture.getETag());
 
         assertEquals("5159067ae8bd545f210005e3", actualCapture.getWineProfile().getId());
@@ -203,7 +198,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertEquals(true, actualCapture.getCapturerParticipant().getInfluencer().booleanValue());
         assertEquals("Owner/Winemaker Weingut Dönnhoff",
                 actualCapture.getCapturerParticipant().getInfluencerTitles().get(0));
-        assertEquals("minimal", actualCapture.getCapturerParticipant().getContext());
         assertEquals("aedNQFIXBPjvow", actualCapture.getCapturerParticipant().getETag());
 
         assertEquals(0, actualCapture.getCommentingParticipants().size());
@@ -238,7 +232,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 actualCapture.getLikingParticipants().get(1).getInfluencer().booleanValue());
         assertEquals("Buyer Wine Library",
                 actualCapture.getLikingParticipants().get(1).getInfluencerTitles().get(0));
-        assertEquals("minimal", actualCapture.getLikingParticipants().get(1).getContext());
         assertEquals("h2jSaWRTOhAVMA", actualCapture.getLikingParticipants().get(1).getETag());
 
         assertEquals(0, actualCapture.getFacebookParticipants().size());
@@ -250,19 +243,18 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         // Load "First Request" response - As if first resopnse without etag
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
+
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
 
         // Load "Second Request" response, as if getting a request with etag / before / after
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_befaft_r2);
-        AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        secondRequest.setCurrentListing(captureListing);
-        ListingResponse<CaptureDetails> newListing = (ListingResponse<CaptureDetails>) secondRequest
-                .buildResopnseFromJson(json);
+
+        feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> newListing = feedResponseObject.payload;
+
+        newListing.combineWithPreviousListing(captureListing);
 
         ArrayList<CaptureDetails> expectedCombinedData = new ArrayList<CaptureDetails>();
         expectedCombinedData.addAll(newListing.getAfter());
@@ -271,8 +263,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         expectedCombinedData.add(newListing.getUpdates().get(0));
         expectedCombinedData.add(newListing.getUpdates().get(1));
         expectedCombinedData.addAll(newListing.getBefore());
-
-        assertEquals(captureListing.getETag(), newListing.getETag());
 
         ArrayList<CaptureDetails> actualCombinedData = newListing.getSortedCombinedData();
 
@@ -284,20 +274,17 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         // Load "First Request" response - As if first resopnse without etag
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
 
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
-        AccountsFollowerFeedRequest secondRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        secondRequest.setCurrentListing(captureListing);
-        ListingResponse<CaptureDetails> newListing = (ListingResponse<CaptureDetails>) secondRequest
-                .buildResopnseFromJson(json);
+        feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> newListing = feedResponseObject.payload;
+
+        newListing.combineWithPreviousListing(captureListing);
 
         ArrayList<CaptureDetails> expectedCombinedData = new ArrayList<CaptureDetails>();
         expectedCombinedData.addAll(newListing.getAfter());
@@ -305,8 +292,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         expectedCombinedData.add(captureListing.getUpdates().get(1));
         expectedCombinedData.add(newListing.getUpdates().get(0));
         expectedCombinedData.addAll(newListing.getBefore());
-
-        assertEquals(captureListing.getETag(), newListing.getETag());
 
         ArrayList<CaptureDetails> actualCombinedData = newListing.getSortedCombinedData();
 
@@ -317,18 +302,16 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
     public void testFollowerFeedRequestWithPreivousCapture() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+
         String expectedEtag = captureListing.getETag();
         String expectedContext = captureListing.getContext();
         String expectedBefore = captureListing.getBoundariesToBefore();
         String expectedAfter = captureListing.getBoundariesToAfter();
 
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
+        CaptureFeedListingRequest request = new CaptureFeedListingRequest();
         request.setCurrentListing(captureListing);
         assertEquals(expectedEtag, request.getETag());
         assertEquals(expectedContext, request.getContext());
@@ -337,134 +320,25 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertNull(request.getSuppressBefore());
     }
 
-    public void testFollowerFeedRequestSuppressBefore() throws JSONException {
-        JSONObject json = loadJsonObjectFromResource(
-                R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
-
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        // Default SuppressBefore should be false / null
-        assertNull(request.getSuppressBefore());
-
-        request = new AccountsFollowerFeedRequest(AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        request.setCurrentListing(captureListing);
-        assertNull(request.getSuppressBefore());
-
-        request = new AccountsFollowerFeedRequest(AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        request.setCurrentListing(captureListing);
-        request.setIsPullToRefresh(true);
-        assertTrue(request.getSuppressBefore());
-    }
-
     public void testFollowerFeedWithNullPayload() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_null_payload);
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> actualListing = feedResponseObject.payload;
         assertNull(actualListing);
     }
 
-    public void testFollowerFeedCombingingWithNullPayload() throws JSONException {
-        JSONObject json = loadJsonObjectFromResource(
-                R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> expectedListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
-
-        json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_null_payload);
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        request.setCurrentListing(expectedListing);
-        request.setIsPullToRefresh(true);
-        ListingResponse<CaptureDetails> actualListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(
-                        json);
-        assertEquals(expectedListing, actualListing);
-    }
 
     public void testGetSortedCombinedData() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
 
         ArrayList<CaptureDetails> expectedCombinedData = captureListing.getUpdates();
         ArrayList<CaptureDetails> actualCombinedData = captureListing.getSortedCombinedData();
         assertEquals(expectedCombinedData, actualCombinedData);
-    }
-
-    public void testBuildMetaParamsWithNoExtraData() {
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-
-        HashMap<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("context", request.getContext());
-
-        Map<String, String> actualMap = request.buildMetaParamsMap();
-        assertEquals(expectedMap, actualMap);
-    }
-
-    public void testBuildMetaParamsWithExtraData() throws JSONException {
-        JSONObject json = loadJsonObjectFromResource(
-                R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
-
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        request.setCurrentListing(captureListing);
-
-        HashMap<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("context", request.getContext());
-        expectedMap.put("e_tag", request.getETag());
-
-        Map<String, String> actualMap = request.buildMetaParamsMap();
-        assertEquals(expectedMap, actualMap);
-    }
-
-    public void testBuildPayloadWithNoExtraData() {
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-
-        HashMap<String, String> expectedMap = new HashMap<String, String>();
-
-        Map<String, String> actualMap = request.buildPayloadMap();
-        assertEquals(expectedMap, actualMap);
-    }
-
-    public void testBuildPayloadWithExtraData() throws JSONException {
-        JSONObject json = loadJsonObjectFromResource(
-                R.raw.test_accounts_follower_feed_details_befaft_r1);
-        AccountsFollowerFeedRequest firstRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) firstRequest
-                .buildResopnseFromJson(json);
-
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        request.setCurrentListing(captureListing);
-
-        HashMap<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("before", request.getBefore());
-        expectedMap.put("after", request.getAfter());
-
-        Map<String, String> actualMap = request.buildPayloadMap();
-        assertEquals(expectedMap, actualMap);
     }
 }

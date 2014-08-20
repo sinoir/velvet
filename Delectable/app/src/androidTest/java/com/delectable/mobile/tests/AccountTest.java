@@ -3,7 +3,7 @@ package com.delectable.mobile.tests;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.api.requests.AccountsContextRequest;
+import com.delectable.mobile.model.api.accounts.AccountContextResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,12 +22,10 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountsPrivateCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_private_ctx);
-        String expectedContext = "private";
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PRIVATE);
-        assertEquals(expectedContext, request.getContext());
+        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
+                AccountContextResponse.class);
+        Account actualAccount = responseObject.payload.account;
 
-        Account actualAccount = (Account) request.buildResopnseFromJson(json);
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
         assertEquals("Bednarek", actualAccount.getLname());
@@ -81,12 +79,10 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountsMyProfileCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_my_profile_ctx);
-        String expectedContext = "profile";
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PROFILE);
-        assertEquals(expectedContext, request.getContext());
 
-        Account actualAccount = (Account) request.buildResopnseFromJson(json);
+        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
+                AccountContextResponse.class);
+        Account actualAccount = responseObject.payload.account;
 
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
@@ -103,7 +99,6 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals("https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
                 actualAccount.getPhoto().getUrl());
 
-        assertEquals(expectedContext, actualAccount.getContext());
         assertEquals("jNHflR9U9xRQjA", actualAccount.getETag());
         assertEquals(-1, actualAccount.getCurrentUserRelationship().intValue());
         assertEquals(0, actualAccount.getCaptureSummaries().size());
@@ -111,12 +106,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountsOtherProfileCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_other_profile_ctx);
-        String expectedContext = "profile";
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PROFILE);
-        assertEquals(expectedContext, request.getContext());
-
-        Account actualAccount = (Account) request.buildResopnseFromJson(json);
+        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
+                AccountContextResponse.class);
+        Account actualAccount = responseObject.payload.account;
 
         assertEquals("51d24187b4db0164af000206", actualAccount.getId());
         assertEquals("James", actualAccount.getFname());
@@ -132,7 +124,6 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals("", actualAccount.getUrl());
         assertEquals("http://graph.facebook.com/1580152674/picture?width=200",
                 actualAccount.getPhoto().getUrl());
-        assertEquals("profile", actualAccount.getContext());
         assertEquals("H_Noq-ksM8U4Hw", actualAccount.getETag());
         assertEquals(0, actualAccount.getCurrentUserRelationship().intValue());
 
@@ -218,12 +209,10 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testGetFullName() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_other_profile_ctx);
-        String expectedContext = "profile";
-        AccountsContextRequest request = new AccountsContextRequest(
-                AccountsContextRequest.CONTEXT_PROFILE);
-        assertEquals(expectedContext, request.getContext());
+        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
+                AccountContextResponse.class);
+        Account actualAccount = responseObject.payload.account;
 
-        Account actualAccount = (Account) request.buildResopnseFromJson(json);
         String expectedName = "James Wooldridge";
         assertEquals(expectedName, actualAccount.getFullName());
     }

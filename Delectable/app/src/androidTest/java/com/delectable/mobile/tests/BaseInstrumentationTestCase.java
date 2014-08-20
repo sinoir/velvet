@@ -1,5 +1,7 @@
 package com.delectable.mobile.tests;
 
+import com.google.gson.Gson;
+
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.tests.utils.Helpers;
 
@@ -12,6 +14,8 @@ import android.content.SharedPreferences;
 import android.test.InstrumentationTestCase;
 
 public class BaseInstrumentationTestCase extends InstrumentationTestCase {
+
+    Gson mGson = new Gson();
 
     @Override
     protected void setUp() throws Exception {

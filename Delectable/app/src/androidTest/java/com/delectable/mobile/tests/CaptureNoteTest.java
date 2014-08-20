@@ -67,7 +67,6 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
         assertEquals(false, actualParticipantAccount.getInfluencer().booleanValue());
         assertEquals(1, actualParticipantAccount.getInfluencerTitles().size());
         assertEquals("", actualParticipantAccount.getInfluencerTitles().get(0));
-        assertEquals("minimal", actualParticipantAccount.getContext());
         assertEquals("Q9Jt95E_VkIKAQ", actualParticipantAccount.getETag());
     }
 }

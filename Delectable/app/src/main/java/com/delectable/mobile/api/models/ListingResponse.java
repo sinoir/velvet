@@ -33,6 +33,9 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         setClassType(classType);
     }
 
+    public ListingResponse() {
+    }
+
     // TODO: Figure out if we can make this a static method, with the generic stuff..
     public ListingResponse<T> buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
@@ -51,6 +54,7 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         this.more = more;
     }
 
+    // TODO: Remove Invalidate -> this is in the new BaseResponse
     public boolean getInvalidate() {
         return invalidate;
     }
@@ -168,12 +172,16 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
     }
 
     public ArrayList<T> getSortedCombinedData() {
+        if (mAllCombinedDataMap == null) {
+            updateCombinedData();
+        }
         ArrayList<T> sortedList = new ArrayList<T>(mAllCombinedDataMap.values());
         Collections.sort(sortedList, T.CreatedAtDescendingComparator);
         return sortedList;
     }
 
     public void combineWithPreviousListing(ListingResponse previousListing) {
+        previousListing.updateCombinedData();
         mAllCombinedDataMap = previousListing.getAllCombinedDataMap();
         updateCombinedData();
     }

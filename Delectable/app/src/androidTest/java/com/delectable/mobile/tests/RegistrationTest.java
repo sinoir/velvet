@@ -1,20 +1,14 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.Config;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.LocalNotifications;
 import com.delectable.mobile.api.models.Registration;
-import com.delectable.mobile.api.requests.RegistrationsFacebook;
-import com.delectable.mobile.api.requests.RegistrationsLogin;
-import com.delectable.mobile.api.requests.RegistrationsRegister;
+import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegistrationTest extends BaseInstrumentationTestCase {
 
@@ -28,117 +22,16 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         super.tearDown();
     }
 
-    public void testGetPayloadFieldsForRegisterAction() {
-        RegistrationsRegister request = new RegistrationsRegister();
-        String[] actualFields = request.getPayloadFields();
-        String[] expectedFields = new String[]{
-                "session_type",
-                "email",
-                "password",
-                "fname",
-                "lname",
-        };
-        for (int i = 0; i < expectedFields.length; i++) {
-            assertEquals(expectedFields[i], actualFields[i]);
-        }
-    }
-
-    public void testGetPayloadFieldsForLoginAction() {
-        RegistrationsLogin request = new RegistrationsLogin();
-        String[] actualFields = request.getPayloadFields();
-        String[] expectedFields = new String[]{
-                "session_type",
-                "email",
-                "password",
-        };
-        for (int i = 0; i < expectedFields.length; i++) {
-            assertEquals(expectedFields[i], actualFields[i]);
-        }
-    }
-
-    public void testGetPayloadFieldsForFacebookAction() {
-        RegistrationsFacebook request = new RegistrationsFacebook();
-        String[] actualFields = request.getPayloadFields();
-        String[] expectedFields = new String[]{
-                "session_type",
-                "facebook_token",
-                "facebook_token_expiration",
-        };
-        for (int i = 0; i < expectedFields.length; i++) {
-            assertEquals(expectedFields[i], actualFields[i]);
-        }
-    }
-
-    public void testActionApiPaths() {
-        RegistrationsRegister regRequest = new RegistrationsRegister();
-        RegistrationsLogin loginRequest = new RegistrationsLogin();
-        RegistrationsFacebook fbRequest = new RegistrationsFacebook();
-
-        String basePath = "/v2/registrations/";
-        assertEquals(basePath + "register", regRequest.getResourceUrl());
-        assertEquals(basePath + "login", loginRequest.getResourceUrl());
-        assertEquals(basePath + "facebook", fbRequest.getResourceUrl());
-    }
-
-    public void testBuildPayloadMapForRegistrationAction() {
-        RegistrationsRegister request = new RegistrationsRegister();
-        request.setEmail("Some Email");
-        request.setPassword("Some Password");
-        request.setFname("First Name");
-        request.setLname("Last Name");
-        assertEquals(Config.DEFAULT_SESSION_TYPE, request.getSessionType());
-
-        Map<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("session_type", request.getSessionType());
-        expectedMap.put("email", request.getEmail());
-        expectedMap.put("password", request.getPassword());
-        expectedMap.put("fname", request.getFname());
-        expectedMap.put("lname", request.getLname());
-
-        Map<String, String> actualMap = request.buildPayloadMap();
-        assertEquals(expectedMap, actualMap);
-    }
-
-    public void testBuildPayloadMapFoLoginAction() {
-        RegistrationsLogin request = new RegistrationsLogin();
-        request.setEmail("Some Email");
-        request.setPassword("Some Password");
-        assertEquals(Config.DEFAULT_SESSION_TYPE, request.getSessionType());
-
-        Map<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("session_type", request.getSessionType());
-        expectedMap.put("email", request.getEmail());
-        expectedMap.put("password", request.getPassword());
-
-        Map<String, String> actualMap = request.buildPayloadMap();
-        assertEquals(expectedMap, actualMap);
-    }
-
-    public void testBuildPayloadMapForFacebookAction() {
-        RegistrationsFacebook request = new RegistrationsFacebook();
-        request.setFacebookToken("Some Token");
-        request.setFacebookTokenExpiration(1234.034);
-        assertEquals(Config.DEFAULT_SESSION_TYPE, request.getSessionType());
-
-        Map<String, String> expectedMap = new HashMap<String, String>();
-        expectedMap.put("session_type", request.getSessionType());
-        expectedMap.put("facebook_token", request.getFacebookToken());
-        expectedMap.put("facebook_token_expiration",
-                request.getFacebookTokenExpiration().toString());
-
-        Map<String, String> actualMap = request.buildPayloadMap();
-        assertEquals(expectedMap, actualMap);
-    }
-
     public void testParsePayloadForAction() throws JSONException {
-        Registration someRegistration = buildTestModel();
         JSONObject json = loadJsonObjectFromResource(R.raw.test_registration_success_response);
 
-        Registration actualRegistration = (Registration) someRegistration.buildFromJson(json);
-        assertEquals("537e2f09753490201d00084f", actualRegistration.getSessionKey());
-        assertEquals("OwcHeVvNMQ", actualRegistration.getSessionToken());
+        RegistrationLoginResponse actualRegistration = mGson.fromJson(json.toString(),
+                RegistrationLoginResponse.class);
+        Account actualAccount = actualRegistration.payload.account;
 
-        Account actualAccount = actualRegistration.getAccount();
+        assertEquals("537e2f09753490201d00084f", actualRegistration.payload.session_key);
+        assertEquals("OwcHeVvNMQ", actualRegistration.payload.session_token);
+
         AccountConfig actualAConfig = actualAccount.getAccountConfig();
         Identifier actualIdentifier = actualAccount.getIdentifiers().get(0);
         LocalNotifications actualNotif = actualAccount.getLocalNotifs();
