@@ -1,5 +1,7 @@
 package com.delectable.mobile.controllers;
 
+import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
@@ -30,5 +32,9 @@ public class CaptureController {
 
     public void paginateFollowerFeed() {
         mJobManager.addJobInBackground(new FetchFollowerFeedJob(true));
+    }
+
+    public void addCommentToCapture(String captureId, CaptureComment captureComment) {
+        mJobManager.addJobInBackground(new AddCaptureCommentJob(captureId, captureComment));
     }
 }

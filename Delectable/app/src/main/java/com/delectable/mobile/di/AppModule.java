@@ -11,6 +11,7 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
+import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
@@ -19,6 +20,7 @@ import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
@@ -44,6 +46,7 @@ import de.greenrobot.event.EventBus;
                 SignInFragment.class,
                 NavigationDrawerFragment.class,
                 UserProfileFragment.class,
+                BaseCaptureDetailsFragment.class,
                 CaptureDetailsFragment.class,
                 RecentCapturesTabFragment.class,
                 FollowFeedTabFragment.class,
@@ -60,6 +63,7 @@ import de.greenrobot.event.EventBus;
                 FetchCaptureDetailsJob.class,
                 FetchAccountJob.class,
                 FollowAccountJob.class,
+                AddCaptureCommentJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
