@@ -80,8 +80,7 @@ public class FetchCaptureDetailsJob extends Job {
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
         // TODO check error type and see if a retry makes sense
-        mErrorMessage = throwable.getMessage();
-        Log.e(TAG + ".Error", mErrorMessage);
+        Log.e(TAG + ".Error", "", throwable);
         return false;
     }
 
