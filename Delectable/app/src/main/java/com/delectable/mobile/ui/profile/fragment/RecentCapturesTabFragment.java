@@ -1,21 +1,21 @@
 package com.delectable.mobile.ui.profile.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.AccountsNetworkController;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.BaseCaptureFeedListingRequest;
-import com.delectable.mobile.api.requests.CaptureFeedRequest;
+import com.delectable.mobile.controllers.CaptureController;
+import com.delectable.mobile.data.CaptureDetailsListingModel;
+import com.delectable.mobile.events.captures.UpdatedUserCaptureFeedEvent;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
 import com.delectable.mobile.ui.common.widget.OverScrollByListView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 // TODO / Note: Abstract something from FollowFeedTabFragment, these are almost identical.
 public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implements
@@ -32,13 +34,17 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
 
     private static final String sArgsUserId = "sArgsUserId";
 
+    @Inject
+    CaptureController mCaptureController;
+
+    @Inject
+    CaptureDetailsListingModel mCaptureDetailsListingModel;
+
     private View mView;
 
     private OverScrollByListView mListView;
 
     private FollowFeedAdapter mAdapter;
-
-    private AccountsNetworkController mAccountsNetworkController;
 
     private ListingResponse<CaptureDetails> mDetailsListing;
 
@@ -63,8 +69,9 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
+
         mCaptureDetails = new ArrayList<CaptureDetails>();
-        mAccountsNetworkController = new AccountsNetworkController(getActivity());
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
@@ -91,40 +98,47 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        loadLocalData();
+        mCaptureController.refreshUserCaptureFeed(mUserId);
     }
 
     public void setCallback(Callback callback) {
         mCallback = callback;
     }
 
-    private void loadData() {
-        BaseCaptureFeedListingRequest request = new CaptureFeedRequest(
-                BaseCaptureFeedListingRequest.CONTEXT_DETAILS);
-        request.setId(mUserId);
-        mAccountsNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
-                        mDetailsListing = (ListingResponse<CaptureDetails>) result;
-                        mCaptureDetails.clear();
-                        if (mDetailsListing != null) {
-                            mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
-                        } else {
-                            // TODO: Emptystate for no data?
-                        }
-                        mAdapter.notifyDataSetChanged();
-                    }
+    private void loadLocalData() {
+        new SafeAsyncTask<ListingResponse<CaptureDetails>>(this) {
+            @Override
+            protected ListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
+                return mCaptureDetailsListingModel.getUserCaptures(mUserId);
+            }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        showToastError(error.getMessage());
-                    }
+            @Override
+            protected void safeOnPostExecute(ListingResponse<CaptureDetails> data) {
+                mDetailsListing = data;
+                mCaptureDetails.clear();
+
+                mDetailsListing = data;
+                mCaptureDetails.clear();
+                if (mDetailsListing != null) {
+                    mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
+                } else {
+                    // TODO: Emptystate for no data?
                 }
-        );
+                mAdapter.notifyDataSetChanged();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void onEventMainThread(UpdatedUserCaptureFeedEvent event) {
+        if (!mUserId.equals(event.getAccountId())) {
+            return;
+        }
+        if (event.isSuccessful()) {
+            loadLocalData();
+        } else if (event.getErrorMessage() != null) {
+            showToastError(event.getErrorMessage());
+        }
     }
 
     @Override

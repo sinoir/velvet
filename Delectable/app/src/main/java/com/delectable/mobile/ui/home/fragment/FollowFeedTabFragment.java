@@ -1,18 +1,18 @@
 package com.delectable.mobile.ui.home.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.AccountsNetworkController;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
-import com.delectable.mobile.api.requests.BaseCaptureFeedListingRequest;
-import com.delectable.mobile.api.requests.CaptureFeedRequest;
+import com.delectable.mobile.controllers.CaptureController;
+import com.delectable.mobile.data.CaptureDetailsListingModel;
+import com.delectable.mobile.events.captures.UpdatedFollowerFeedEvent;
+import com.delectable.mobile.events.captures.UpdatedUserCaptureFeedEvent;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.util.SafeAsyncTask;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -21,16 +21,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         FollowFeedAdapter.FeedItemActionsHandler {
 
-    private static final String TAG = "FollowFeedTabFragment";
+    private static final String TAG = FollowFeedTabFragment.class.getSimpleName();
 
     private static final String sArgsUserId = "sArgsUserId";
+
+    @Inject
+    CaptureDetailsListingModel mCaptureListingModel;
+
+    @Inject
+    CaptureController mCaptureController;
 
     private View mView;
 
@@ -39,8 +46,6 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
     private ListView mListView;
 
     private FollowFeedAdapter mAdapter;
-
-    private AccountsNetworkController mAccountsNetworkController;
 
     private ListingResponse<CaptureDetails> mDetailsListing;
 
@@ -54,6 +59,7 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         // Required empty public constructor
     }
 
+    // FIXME Possibly split this up in 2 fragment classes, 1 for User's captures, and 1 for Following.
     public static FollowFeedTabFragment newInstance() {
         return newInstance(null);
     }
@@ -69,8 +75,9 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
+
         mCaptureDetails = new ArrayList<CaptureDetails>();
-        mAccountsNetworkController = new AccountsNetworkController(getActivity());
         mIsLoadingData = false;
         Bundle args = getArguments();
         if (args != null) {
@@ -100,6 +107,7 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void onResume() {
         super.onResume();
+        loadLocalData();
         refreshData();
     }
 
@@ -132,74 +140,112 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
     }
 
     private void refreshData() {
-        loadData(true);
+        loadRemoteData(true);
     }
 
     private void loadNextPage() {
+        // TODO: Pop this logic somewhere else, like "hasNextPage" or something...
         Log.d(TAG, "Load Next Page? " + mDetailsListing.getMore());
         // TODO: Figure out why last page returns invalidate and doesn't load more pages, why is more true?
         if (mDetailsListing != null &&
                 mDetailsListing.getMore() &&
                 (!mDetailsListing.getInvalidate()
                         || mDetailsListing.getBoundariesFromAfter() == null)) {
-            loadData(false);
+            loadRemoteData(false);
         }
     }
 
-    private void loadData(boolean isRefreshing) {
+    public void onEventMainThread(UpdatedFollowerFeedEvent event) {
+        //FIXME : Will Split this class in 2.
+        if (mUserId != null) {
+            return;
+        }
+        mRefreshContainer.setRefreshing(false);
+        mIsLoadingData = false;
+        if (event.isSuccessful()) {
+            loadLocalData();
+        } else if (event.getErrorMessage() != null) {
+            showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(UpdatedUserCaptureFeedEvent event) {
+        //FIXME : Will Split this class in 2.
+        if (mUserId == null || !mUserId.equals(event.getAccountId())) {
+            return;
+        }
+        mRefreshContainer.setRefreshing(false);
+        mIsLoadingData = false;
+        if (event.isSuccessful()) {
+            loadLocalData();
+        } else if (event.getErrorMessage() != null) {
+            showToastError(event.getErrorMessage());
+        }
+    }
+
+    private void loadLocalData() {
+        if (mUserId != null) {
+            loadUserCaptureFeed();
+        } else {
+            loadFollowFeed();
+        }
+    }
+
+    private void loadFollowFeed() {
+        new SafeAsyncTask<ListingResponse<CaptureDetails>>(this) {
+            @Override
+            protected ListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
+                Log.d(TAG, "Loading Local Follower Captures");
+                return mCaptureListingModel.getFollowerFeedCaptures();
+            }
+
+            @Override
+            protected void safeOnPostExecute(ListingResponse<CaptureDetails> data) {
+                Log.d(TAG, "Post Loading Local Follower Captures: " + data);
+                updateLocalData(data);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void loadUserCaptureFeed() {
+        new SafeAsyncTask<ListingResponse<CaptureDetails>>(this) {
+            @Override
+            protected ListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
+                return mCaptureListingModel.getUserCaptures(mUserId);
+            }
+
+            @Override
+            protected void safeOnPostExecute(ListingResponse<CaptureDetails> data) {
+                updateLocalData(data);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void updateLocalData(ListingResponse<CaptureDetails> data) {
+        mDetailsListing = data;
+        updateDisplayData();
+    }
+
+    private void loadRemoteData(boolean isRefreshing) {
         Log.d(TAG, "Load Data isRefreshing: ? " + isRefreshing);
         if (!mIsLoadingData) {
-            mIsLoadingData = true;
-            BaseCaptureFeedListingRequest request = makeCaptureRequest(isRefreshing);
-            performRequest(request);
-            mRefreshContainer.setRefreshing(true);
-        }
-    }
-
-    private BaseCaptureFeedListingRequest makeCaptureRequest(boolean isRefreshing) {
-        BaseCaptureFeedListingRequest request;
-        // If we have a user ID, we want to show the captures for that user id only
-        if (mUserId != null) {
-            request = new CaptureFeedRequest(BaseCaptureFeedListingRequest.CONTEXT_DETAILS);
-            request.setId(mUserId);
-        } else {
-            // Otherwise we want to display follower captures
-            request = new AccountsFollowerFeedRequest(
-                    BaseCaptureFeedListingRequest.CONTEXT_DETAILS);
-        }
-        request.setIsPullToRefresh(isRefreshing);
-
-        if (mDetailsListing != null) {
-            request.setCurrentListing(mDetailsListing);
-        }
-
-        return request;
-    }
-
-    private void performRequest(BaseCaptureFeedListingRequest request) {
-        Log.d(TAG, "Request: " + request);
-        mAccountsNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
-                        mDetailsListing = (ListingResponse<CaptureDetails>) result;
-                        mRefreshContainer.setRefreshing(false);
-                        mIsLoadingData = false;
-                        updateDisplayData();
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        mRefreshContainer.setRefreshing(false);
-                        mIsLoadingData = false;
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+            // TODO: Split fragments with base ..
+            if (mUserId != null) {
+                if (isRefreshing) {
+                    mCaptureController.refreshUserCaptureFeed(mUserId);
+                } else {
+                    mCaptureController.paginateUserCaptureFeed(mUserId);
                 }
-        );
+            } else {
+                if (isRefreshing) {
+                    mCaptureController.refreshFollowerFeed();
+                } else {
+                    mCaptureController.paginateFollowerFeed();
+                }
+            }
+        }
+        mIsLoadingData = true;
+        mRefreshContainer.setRefreshing(true);
     }
 
     private void updateDisplayData() {
