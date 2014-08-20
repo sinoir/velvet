@@ -8,8 +8,6 @@ import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
@@ -340,5 +338,36 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         ArrayList<CaptureDetails> expectedCombinedData = captureListing.getUpdates();
         ArrayList<CaptureDetails> actualCombinedData = captureListing.getSortedCombinedData();
         assertEquals(expectedCombinedData, actualCombinedData);
+    }
+
+    public void testGetAllCaptireIds() throws JSONException {
+        // Load "First Request" response - As if first resopnse without etag
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_befaft_r1);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+
+        // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
+        json = loadJsonObjectFromResource(
+                R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
+        feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> newListing = feedResponseObject.payload;
+
+        newListing.combineWithPreviousListing(captureListing);
+
+        ArrayList<String> actualAllCaptureIds = new ArrayList<String>();
+
+        actualAllCaptureIds.add("5396951b753490a7cd000888");
+        actualAllCaptureIds.add("5396917e753490bbed0002ff");
+        actualAllCaptureIds.add("539911291d2b1100d30001e4");
+        actualAllCaptureIds.add("539535d4753490713f000067");
+        actualAllCaptureIds.add("5397912a753490bc6500002b");
+        actualAllCaptureIds.add("53968f597534901ccf001253");
+        actualAllCaptureIds.add("53993eb5753490f5b3000989");
+        actualAllCaptureIds.add("539910ef753490b02e00002a");
+        actualAllCaptureIds.add("53993dbd753490bab00000a4");
+
+        assertEquals(actualAllCaptureIds, newListing.getAllIds());
     }
 }

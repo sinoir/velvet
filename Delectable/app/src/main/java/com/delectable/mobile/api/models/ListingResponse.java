@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListingResponse<T extends BaseListingElement> extends BaseResponse {
@@ -184,6 +185,13 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         previousListing.updateCombinedData();
         mAllCombinedDataMap = previousListing.getAllCombinedDataMap();
         updateCombinedData();
+    }
+
+    public List<String> getAllIds() {
+        updateCombinedData();
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.addAll(getAllCombinedDataMap().keySet());
+        return ids;
     }
 
     public Map<String, T> getAllCombinedDataMap() {
