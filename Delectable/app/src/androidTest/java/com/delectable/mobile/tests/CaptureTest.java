@@ -3,7 +3,6 @@ package com.delectable.mobile.tests;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 import com.delectable.mobile.api.requests.CapturesContextRequest;
 
 import org.json.JSONException;
@@ -29,6 +28,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testParseCaptureDetailsCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
+        // TODO: Fix Test..
         CapturesContextRequest request = new CapturesContextRequest();
         CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
 

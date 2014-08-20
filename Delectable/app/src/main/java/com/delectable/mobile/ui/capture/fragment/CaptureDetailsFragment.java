@@ -1,33 +1,40 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.requests.CapturesContextRequest;
+import com.delectable.mobile.controllers.CaptureController;
+import com.delectable.mobile.data.CaptureDetailsModel;
+import com.delectable.mobile.events.captures.UpdatedCaptureDetailsEvent;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
+import com.delectable.mobile.util.SafeAsyncTask;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import javax.inject.Inject;
 
 public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
-    public static final String TAG = "CaptureDetailsFragment";
+    private static final String TAG = CaptureDetailsFragment.class.getSimpleName();
 
     private static final String sArgsCaptureId = "sArgsCaptureId";
+
+    @Inject
+    CaptureController mCaptureController;
+
+    @Inject
+    CaptureDetailsModel mCaptureDetailsModel;
 
     private View mView;
 
     private CaptureDetailsView mCaptureDetailsView;
 
     private String mCaptureId;
-
-    private BaseNetworkController mNetworkController;
 
     private CaptureDetails mCaptureDetails;
 
@@ -46,7 +53,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNetworkController = new BaseNetworkController(getActivity());
+        App.injectMembers(this);
+
         Bundle args = getArguments();
         if (args != null) {
             mCaptureId = args.getString(sArgsCaptureId);
@@ -67,7 +75,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        mCaptureController.fetchCapture(mCaptureId);
+        loadLocalData();
     }
 
     @Override
@@ -75,26 +84,32 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         mCaptureDetailsView.updateData(mCaptureDetails);
     }
 
-    private void loadData() {
-        CapturesContextRequest request = new CapturesContextRequest();
-        request.setId(mCaptureId);
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
-                        mCaptureDetails = (CaptureDetails) result;
-                        mCaptureDetailsView.updateData(mCaptureDetails);
-                    }
+    private void loadLocalData() {
+        new SafeAsyncTask<CaptureDetails>(this) {
+            @Override
+            protected CaptureDetails safeDoInBackground(Void[] params) {
+                return mCaptureDetailsModel.getCapture(mCaptureId);
+            }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+            @Override
+            protected void safeOnPostExecute(CaptureDetails capture) {
+                mCaptureDetails = capture;
+                Log.d(TAG, "Loaded Capture: " + mCaptureDetails);
+                if (mCaptureDetails != null) {
+                    mCaptureDetailsView.updateData(mCaptureDetails);
                 }
-        );
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void onEventMainThread(UpdatedCaptureDetailsEvent event) {
+        if (!mCaptureId.equals(event.getCaptureId())) {
+            return;
+        }
+        if (event.isSuccessful()) {
+            loadLocalData();
+        } else if (event.getErrorMessage() != null) {
+            showToastError(event.getErrorMessage());
+        }
     }
 }

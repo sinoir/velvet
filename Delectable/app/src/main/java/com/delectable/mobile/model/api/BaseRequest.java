@@ -4,11 +4,11 @@ import com.delectable.mobile.Config;
 
 public class BaseRequest {
 
+    private final String sessionType = Config.DEFAULT_SESSION_TYPE;
+
     private String context;
 
     private String e_tag;
-
-    private final String sessionType = Config.DEFAULT_SESSION_TYPE;
 
     private String sessionKey;
 
@@ -32,4 +32,19 @@ public class BaseRequest {
         this.sessionToken = sessionToken;
     }
 
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String e_tag) {
+        this.e_tag = e_tag;
+    }
 }

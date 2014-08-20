@@ -2,7 +2,6 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.AccountsFollowerFeedRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +25,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
     public void testParseAccountFollowerFeedMinCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_min_ctx);
         String expectedContext = "minimal";
+        // TODO: Fix Test
         AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
                 AccountsFollowerFeedRequest.CONTEXT_MINIMAL);
         assertEquals(expectedContext, request.getContext());

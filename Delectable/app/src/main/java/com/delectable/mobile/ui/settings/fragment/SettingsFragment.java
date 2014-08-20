@@ -4,7 +4,6 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.AccountsNetworkController;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.BaseResponse;
@@ -44,7 +43,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -59,7 +57,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -77,8 +74,6 @@ public class SettingsFragment extends BaseFragment {
     private static final int CAMERA_REQUEST = 1;
 
     private String mUserId;
-
-    private AccountsNetworkController mAccountsNetworkController;
 
     private BaseNetworkController mNetworkController;
 
@@ -158,8 +153,7 @@ public class SettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        mAccountsNetworkController = new AccountsNetworkController(getActivity());
-        mNetworkController = new AccountsNetworkController(getActivity());
+        mNetworkController = new BaseNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
         mAccountController.fetchPrivateAccount(mUserId);
