@@ -68,4 +68,15 @@ public class ListingObject {
     public void setObjectIds(ArrayList<String> objectIds) {
         this.object_ids = objectIds;
     }
+
+    @Override
+    public String toString() {
+        return "ListingObject{" +
+                "e_tag='" + e_tag + '\'' +
+                ", more=" + more +
+                ", invalidate=" + invalidate +
+                ", boundaries=" + boundaries +
+                ", object_ids=" + object_ids +
+                '}';
+    }
 }
