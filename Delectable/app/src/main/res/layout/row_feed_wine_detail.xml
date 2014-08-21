@@ -79,8 +79,7 @@
             android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
             android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
             android:layout_toRightOf="@id/profile_image1"
-            android:text="@string/with"
-            android:visibility="gone" />
+            android:text="@string/with" />
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/tagged_user_image1"
