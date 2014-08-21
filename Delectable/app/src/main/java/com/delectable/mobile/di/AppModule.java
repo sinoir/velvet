@@ -12,6 +12,7 @@ import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
+import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
@@ -66,6 +67,7 @@ import de.greenrobot.event.EventBus;
                 FetchAccountJob.class,
                 FollowAccountJob.class,
                 AddCaptureCommentJob.class,
+                EditCaptureCommentJob.class,
                 LikeCaptureJob.class,
                 RateCaptureJob.class,
                 // Controllers

@@ -1,14 +1,11 @@
 package com.delectable.mobile.ui.capture.fragment;
 
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.requests.EditCommentRequest;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
+import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.ui.BaseFragment;
@@ -35,12 +32,9 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     @Inject
     CaptureController mCaptureController;
 
-    private BaseNetworkController mNetworkController;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNetworkController = new BaseNetworkController(getActivity());
     }
 
     public abstract void dataSetChanged();
@@ -77,7 +71,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                     @Override
                     public void onFinishWritingCommentAndRating(String comment, int rating) {
                         sendRating(capture, rating);
-                        if (firstUserComment != null) {
+                        if (firstUserComment != null && firstUserComment.getId() != null) {
                             firstUserComment.setComment(comment);
                             editComment(capture, firstUserComment);
                             dataSetChanged();
@@ -115,20 +109,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     private void editComment(CaptureDetails capture, final CaptureComment captureComment) {
-        EditCommentRequest request = new EditCommentRequest(capture, captureComment);
-        // TODO: Loader?
-        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Success
-            }
-
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to comment capture", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
+        mCaptureController.editCaptureComment(capture.getId(), captureComment.getId(),
+                captureComment.getComment());
     }
 
     @Override
@@ -179,6 +161,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     public void onEventMainThread(AddCaptureCommentEvent event) {
+        dataSetChanged();
+    }
+
+    public void onEventMainThread(EditedCaptureCommentEvent event) {
         dataSetChanged();
     }
 

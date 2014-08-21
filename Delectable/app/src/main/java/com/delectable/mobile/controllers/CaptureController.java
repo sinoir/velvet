@@ -1,7 +1,7 @@
 package com.delectable.mobile.controllers;
 
-import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
+import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
@@ -38,6 +38,11 @@ public class CaptureController {
 
     public void addCommentToCapture(String captureId, String captureComment) {
         mJobManager.addJobInBackground(new AddCaptureCommentJob(captureId, captureComment));
+    }
+
+    public void editCaptureComment(String captureId, String commentId, String captureComment) {
+        mJobManager.addJobInBackground(
+                new EditCaptureCommentJob(captureId, commentId, captureComment));
     }
 
     public void toggleLikeCapture(String captureId, String userId, boolean userLikesCapture) {
