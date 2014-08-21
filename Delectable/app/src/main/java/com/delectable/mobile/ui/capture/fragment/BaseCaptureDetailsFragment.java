@@ -6,11 +6,11 @@ import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.requests.EditCommentRequest;
-import com.delectable.mobile.api.requests.LikeCaptureActionRequest;
 import com.delectable.mobile.api.requests.RateCaptureRequest;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
+import com.delectable.mobile.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
@@ -96,22 +96,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         boolean userLikesCapture = !capture.doesUserLikeCapture(userId);
         capture.toggleUserLikesCapture(userId);
         dataSetChanged();
-        LikeCaptureActionRequest likeRequest = new LikeCaptureActionRequest(capture,
-                userLikesCapture);
-        mNetworkController.performRequest(likeRequest, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Success
-            }
-
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to like capture", Toast.LENGTH_SHORT).show();
-                // Reset like
-                capture.toggleUserLikesCapture(userId);
-                dataSetChanged();
-            }
-        });
+        mCaptureController.toggleLikeCapture(capture.getId(), userId, userLikesCapture);
     }
 
     private void sendComment(final CaptureDetails capture, String comment) {
@@ -208,6 +193,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     public void onEventMainThread(AddCaptureCommentEvent event) {
+        dataSetChanged();
+    }
+
+    public void onEventMainThread(LikedCaptureEvent event) {
         dataSetChanged();
     }
 }

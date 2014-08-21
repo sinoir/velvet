@@ -5,6 +5,7 @@ import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
+import com.delectable.mobile.jobs.captures.LikeCaptureJob;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -36,5 +37,9 @@ public class CaptureController {
 
     public void addCommentToCapture(String captureId, CaptureComment captureComment) {
         mJobManager.addJobInBackground(new AddCaptureCommentJob(captureId, captureComment));
+    }
+
+    public void toggleLikeCapture(String captureId, String userId, boolean userLikesCapture) {
+        mJobManager.addJobInBackground(new LikeCaptureJob(captureId, userId, userLikesCapture));
     }
 }
