@@ -13,6 +13,7 @@
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
     <string name="cancel">cancel</string>
+    <string name="dialog_cancel">Cancel</string>
 
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
@@ -176,6 +177,5 @@
     <string name="settings_import_from_facebook">Import from facebook</string>
     <string name="settings_choose_from_library">Choose from library</string>
     <string name="settings_take_photo">Take photo</string>
-
 
 </resources>

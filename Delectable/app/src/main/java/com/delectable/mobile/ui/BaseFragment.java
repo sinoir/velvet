@@ -1,5 +1,7 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
+
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -20,6 +22,9 @@ import de.greenrobot.event.EventBus;
 
 public class BaseFragment extends Fragment implements LifecycleProvider {
 
+    @Inject
+    EventBus mEventBus;
+
     private State state;
 
     private Set<LifecycleListener> lifecycleListeners;
@@ -32,13 +37,11 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
 
     private boolean mIsUsingCustomActionbarView = false;
 
-    @Inject
-    EventBus mEventBus;
-
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
         state = State.constructed;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +116,16 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         }
     }
 
+    public void showConfirmation(String title, String message, String positiveText,
+            int requestCode) {
+        ConfirmationDialog dialog = ConfirmationDialog
+                .newInstance(title, message, positiveText, this, requestCode);
+        dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
+    }
+
     /**
-     * * Override home icon with custom view with click listener
-     * <p/>
-     * Note: Having a title will push this view to the right of the title.
+     * * Override home icon with custom view with click listener <p/> Note: Having a title will push
+     * this view to the right of the title.
      *
      * @param resId    - Drawable resource
      * @param listener (Optional) - OnClick for the custom view
