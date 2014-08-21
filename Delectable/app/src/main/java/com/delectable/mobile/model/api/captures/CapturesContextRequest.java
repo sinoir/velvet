@@ -4,7 +4,7 @@ import com.delectable.mobile.model.api.BaseRequest;
 
 public class CapturesContextRequest extends BaseRequest {
 
-    CapturesContextPayload payload;
+    private CapturesContextPayload payload;
 
     public CapturesContextRequest(String captureId) {
         super("details");
@@ -31,8 +31,8 @@ public class CapturesContextRequest extends BaseRequest {
 
     public static class CapturesContextPayload {
 
-        String id;
+        private String id;
 
-        String tagging_id;
+        private String tagging_id;
     }
 }

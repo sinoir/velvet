@@ -50,6 +50,7 @@ public class CaptureDetails extends Capture {
      *                   detailed
      */
     public void updateWithNewCapture(CaptureDetails newCapture) {
+        private_ = newCapture.getPrivate();
         short_share_url = newCapture.getShortShareUrl();
         tweet = newCapture.getTweet();
         ratings = newCapture.getRatings();
@@ -60,6 +61,7 @@ public class CaptureDetails extends Capture {
         location_name = newCapture.getLocationName();
         liking_participants = newCapture.getLikingParticipants();
         commenting_participants = newCapture.getCommentingParticipants();
+        capturer_participant = newCapture.getCapturerParticipant();
         taggee_participants = newCapture.getTaggeeParticipants();
         comments = newCapture.getComments();
         e_tag = newCapture.getETag();
@@ -75,6 +77,19 @@ public class CaptureDetails extends Capture {
             }
         }
         return captureComments;
+    }
+
+    public CaptureComment getComment(String commentId) {
+        CaptureComment captureComment = null;
+        if (comments != null && comments.size() > 0) {
+            for (CaptureComment comment : comments) {
+                if (comment.id.equalsIgnoreCase(commentId)) {
+                    captureComment = comment;
+                    break;
+                }
+            }
+        }
+        return captureComment;
     }
 
     /**
@@ -298,7 +313,25 @@ public class CaptureDetails extends Capture {
         this.comments = comments;
     }
 
-    class TaggeeParticipants {
+    @Override
+    public String toString() {
+        return "CaptureDetails{" +
+                "short_share_url='" + short_share_url + '\'' +
+                ", tweet='" + tweet + '\'' +
+                ", ratings=" + ratings +
+                ", photo=" + photo +
+                ", base_wine=" + base_wine +
+                ", wine_profile=" + wine_profile +
+                ", transcription_error_message='" + transcription_error_message + '\'' +
+                ", location_name='" + location_name + '\'' +
+                ", liking_participants=" + liking_participants +
+                ", commenting_participants=" + commenting_participants +
+                ", taggee_participants=" + taggee_participants +
+                ", comments=" + comments +
+                '}';
+    }
+
+    public static class TaggeeParticipants {
 
         ArrayList<Account> registered;
 

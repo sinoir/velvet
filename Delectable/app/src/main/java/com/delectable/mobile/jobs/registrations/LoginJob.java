@@ -1,5 +1,6 @@
 package com.delectable.mobile.jobs.registrations;
 
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
@@ -7,7 +8,6 @@ import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
-import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;

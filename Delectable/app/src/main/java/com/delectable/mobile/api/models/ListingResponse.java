@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListingResponse<T extends BaseListingElement> extends BaseResponse {
@@ -33,6 +34,9 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         setClassType(classType);
     }
 
+    public ListingResponse() {
+    }
+
     // TODO: Figure out if we can make this a static method, with the generic stuff..
     public ListingResponse<T> buildFromJson(JSONObject jsonObj) {
         JSONObject payload = jsonObj.optJSONObject("payload");
@@ -51,6 +55,7 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
         this.more = more;
     }
 
+    // TODO: Remove Invalidate -> this is in the new BaseResponse
     public boolean getInvalidate() {
         return invalidate;
     }
@@ -168,14 +173,25 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
     }
 
     public ArrayList<T> getSortedCombinedData() {
+        if (mAllCombinedDataMap == null) {
+            updateCombinedData();
+        }
         ArrayList<T> sortedList = new ArrayList<T>(mAllCombinedDataMap.values());
         Collections.sort(sortedList, T.CreatedAtDescendingComparator);
         return sortedList;
     }
 
     public void combineWithPreviousListing(ListingResponse previousListing) {
+        previousListing.updateCombinedData();
         mAllCombinedDataMap = previousListing.getAllCombinedDataMap();
         updateCombinedData();
+    }
+
+    public List<String> getAllIds() {
+        updateCombinedData();
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.addAll(getAllCombinedDataMap().keySet());
+        return ids;
     }
 
     public Map<String, T> getAllCombinedDataMap() {

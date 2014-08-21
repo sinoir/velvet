@@ -9,6 +9,8 @@ public class BaseResponse {
     public String context;
 
     public boolean success;
+    
+    public boolean invalidate;
 
     private Error error;
 

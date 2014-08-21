@@ -4,37 +4,24 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.events.captures.UpdatedUserCaptureFeedEvent;
+import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.captures.CaptureFeedListingRequest;
 import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
-import com.delectable.mobile.net.NetworkClient;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class FetchUserCaptureFeedJob extends Job {
+public class FetchUserCaptureFeedJob extends BaseJob {
 
     private static final String TAG = FetchUserCaptureFeedJob.class.getSimpleName();
 
     @Inject
     CaptureDetailsListingModel mCapturesModel;
 
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
-    NetworkClient mNetworkClient;
-
     private String mAccountId;
 
     private boolean mIsPaginating;
-
-    private String mErrorMessage;
 
     public FetchUserCaptureFeedJob(String accountId, boolean isPaginating) {
         super(new Params(Priority.UX).requireNetwork().persist());
@@ -44,10 +31,12 @@ public class FetchUserCaptureFeedJob extends Job {
 
     @Override
     public void onAdded() {
+        super.onAdded();
     }
 
     @Override
     public void onRun() throws Throwable {
+        super.onRun();
         String endpoint = "/accounts/captures";
 
         CaptureFeedListingRequest request = new CaptureFeedListingRequest();
@@ -61,18 +50,12 @@ public class FetchUserCaptureFeedJob extends Job {
         }
         request.setIsPullToRefresh(!mIsPaginating);
 
-        CaptureFeedResponse response = mNetworkClient.post(endpoint, request,
+        CaptureFeedResponse response = getNetworkClient().post(endpoint, request,
                 CaptureFeedResponse.class);
 
-        if (response.getError() != null) {
-            mEventBus.post(new UpdatedUserCaptureFeedEvent(response.getError().getMessage(),
-                    mAccountId));
-            return;
-        }
-
-        ListingResponse<CaptureDetails> captureListing = response.payload;
+        ListingResponse<CaptureDetails> captureListing = response.getPayload();
         // Sometimes Payload may be null, not sure why
-        if (response.payload != null) {
+        if (response.getPayload() != null) {
             if (cachedCaptures != null) {
                 captureListing.combineWithPreviousListing(cachedCaptures);
                 captureListing.setETag(cachedCaptures.getETag());
@@ -80,23 +63,21 @@ public class FetchUserCaptureFeedJob extends Job {
             captureListing.updateCombinedData();
             mCapturesModel.saveUserCaptures(mAccountId, captureListing);
         }
-        mEventBus.post(new UpdatedUserCaptureFeedEvent(true, mAccountId));
+        getEventBus().post(new UpdatedUserCaptureFeedEvent(true, mAccountId));
     }
 
     @Override
     protected void onCancel() {
-        if (mErrorMessage != null) {
-            mEventBus.post(new UpdatedUserCaptureFeedEvent(mErrorMessage, mAccountId));
+        super.onCancel();
+        if (getErrorMessage() != null) {
+            getEventBus().post(new UpdatedUserCaptureFeedEvent(getErrorMessage(), mAccountId));
         } else {
-            mEventBus.post(new UpdatedUserCaptureFeedEvent(false, mAccountId));
+            getEventBus().post(new UpdatedUserCaptureFeedEvent(false, mAccountId));
         }
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        // TODO check error type and see if a retry makes sense
-        mErrorMessage = throwable.getMessage();
-        Log.e(TAG + ".Error", mErrorMessage);
-        return false;
+        return super.shouldReRunOnThrowable(throwable);
     }
 }

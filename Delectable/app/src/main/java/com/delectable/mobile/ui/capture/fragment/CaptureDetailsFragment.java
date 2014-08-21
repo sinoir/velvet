@@ -25,9 +25,6 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     private static final String sArgsCaptureId = "sArgsCaptureId";
 
     @Inject
-    CaptureController mCaptureController;
-
-    @Inject
     CaptureDetailsModel mCaptureDetailsModel;
 
     private View mView;

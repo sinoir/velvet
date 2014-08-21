@@ -1,15 +1,13 @@
 package com.delectable.mobile.ui.capture.fragment;
 
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.requests.CommentCaptureRequest;
-import com.delectable.mobile.api.requests.EditCommentRequest;
-import com.delectable.mobile.api.requests.LikeCaptureActionRequest;
-import com.delectable.mobile.api.requests.RateCaptureRequest;
+import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
+import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
+import com.delectable.mobile.events.captures.LikedCaptureEvent;
+import com.delectable.mobile.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
@@ -24,17 +22,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 public abstract class BaseCaptureDetailsFragment extends BaseFragment
         implements CaptureDetailsView.CaptureActionsHandler {
 
-    public static final String TAG = "BaseCaptureDetailsFragment";
+    private static final String TAG = BaseCaptureDetailsFragment.class.getSimpleName();
 
-    private BaseNetworkController mNetworkController;
+    @Inject
+    CaptureController mCaptureController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNetworkController = new BaseNetworkController(getActivity());
     }
 
     public abstract void dataSetChanged();
@@ -71,7 +71,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                     @Override
                     public void onFinishWritingCommentAndRating(String comment, int rating) {
                         sendRating(capture, rating);
-                        if (firstUserComment != null) {
+                        if (firstUserComment != null && firstUserComment.getId() != null) {
                             firstUserComment.setComment(comment);
                             editComment(capture, firstUserComment);
                             dataSetChanged();
@@ -90,28 +90,12 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         boolean userLikesCapture = !capture.doesUserLikeCapture(userId);
         capture.toggleUserLikesCapture(userId);
         dataSetChanged();
-        LikeCaptureActionRequest likeRequest = new LikeCaptureActionRequest(capture,
-                userLikesCapture);
-        mNetworkController.performRequest(likeRequest, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Success
-            }
-
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to like capture", Toast.LENGTH_SHORT).show();
-                // Reset like
-                capture.toggleUserLikesCapture(userId);
-                dataSetChanged();
-            }
-        });
+        mCaptureController.toggleLikeCapture(capture.getId(), userId, userLikesCapture);
     }
 
     private void sendComment(final CaptureDetails capture, String comment) {
-        CommentCaptureRequest request = new CommentCaptureRequest(capture, comment);
         // TODO: Loader?
-        // Temp comment for seamless UI
+        // Temp comment for instant UI
         final CaptureComment tempComment = new CaptureComment();
         tempComment.setAccountId(UserInfo.getUserId(getActivity()));
         tempComment.setComment(comment);
@@ -120,40 +104,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         }
         capture.getComments().add(tempComment);
         dataSetChanged();
-        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Merge new capture with old capture to retain sorting of the mCaptureDetails list
-                CaptureDetails newCapture = (CaptureDetails) result;
-                capture.updateWithNewCapture(newCapture);
-                dataSetChanged();
-            }
 
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to comment capture", Toast.LENGTH_SHORT)
-                        .show();
-                capture.getComments().remove(tempComment);
-                dataSetChanged();
-            }
-        });
+        mCaptureController.addCommentToCapture(capture.getId(), comment);
     }
 
     private void editComment(CaptureDetails capture, final CaptureComment captureComment) {
-        EditCommentRequest request = new EditCommentRequest(capture, captureComment);
-        // TODO: Loader?
-        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Success
-            }
-
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to comment capture", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
+        mCaptureController.editCaptureComment(capture.getId(), captureComment.getId(),
+                captureComment.getComment());
     }
 
     @Override
@@ -195,25 +152,27 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     private void sendRating(final CaptureDetails capture, final int rating) {
-        final String userId = UserInfo.getUserId(getActivity());
-        final int oldRating = capture.getRatingForId(userId);
-
-        RateCaptureRequest request = new RateCaptureRequest(capture, rating);
+        String userId = UserInfo.getUserId(getActivity());
+        // Instant UI update
         capture.updateRatingForUser(UserInfo.getUserId(getActivity()), rating);
         dataSetChanged();
-        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Success
-            }
+        // update rated capture
+        mCaptureController.rateCapture(capture.getId(), userId, rating);
+    }
 
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to rate capture", Toast.LENGTH_SHORT).show();
-                // Reset displayed rating
-                capture.updateRatingForUser(UserInfo.getUserId(getActivity()), oldRating);
-                dataSetChanged();
-            }
-        });
+    public void onEventMainThread(AddCaptureCommentEvent event) {
+        dataSetChanged();
+    }
+
+    public void onEventMainThread(EditedCaptureCommentEvent event) {
+        dataSetChanged();
+    }
+
+    public void onEventMainThread(LikedCaptureEvent event) {
+        dataSetChanged();
+    }
+
+    public void onEventMainThread(RatedCaptureEvent event) {
+        dataSetChanged();
     }
 }

@@ -1,19 +1,26 @@
 package com.delectable.mobile.tests;
 
+import com.google.gson.reflect.TypeToken;
+
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.CapturesContextRequest;
+import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
+import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
 
 public class CaptureTest extends BaseInstrumentationTestCase {
+
+    private Type mCaptureResponseType = new TypeToken<CaptureDetailsResponse>() {
+    }.getType();
 
     @Override
     protected void setUp() throws Exception {
@@ -27,10 +34,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testParseCaptureDetailsCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
-
-        // TODO: Fix Test..
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails actualCapture = responseObject.payload.capture;
 
         assertEquals("535be3177534906c8b0007d8", actualCapture.getId());
         assertEquals(1398530839.6019998, actualCapture.getCreatedAt());
@@ -119,7 +125,6 @@ public class CaptureTest extends BaseInstrumentationTestCase {
                 actualCapture.getCapturerParticipant().getPhoto().getUrl());
         assertEquals(false, actualCapture.getCapturerParticipant().getInfluencer().booleanValue());
         assertEquals("", actualCapture.getCapturerParticipant().getInfluencerTitles().get(0));
-        assertEquals("minimal", actualCapture.getCapturerParticipant().getContext());
         assertEquals("uk12p-STHmlsbA", actualCapture.getCapturerParticipant().getETag());
 
         assertEquals("52069ff93166785b5d003576",
@@ -132,7 +137,6 @@ public class CaptureTest extends BaseInstrumentationTestCase {
                 actualCapture.getCommentingParticipants().get(0).getInfluencer().booleanValue());
         assertEquals("",
                 actualCapture.getCommentingParticipants().get(0).getInfluencerTitles().get(0));
-        assertEquals("minimal", actualCapture.getCommentingParticipants().get(0).getContext());
         assertEquals("uk12p-STHmlsbA", actualCapture.getCommentingParticipants().get(0).getETag());
 
         assertEquals(0, actualCapture.getLikingParticipants().size());
@@ -150,15 +154,15 @@ public class CaptureTest extends BaseInstrumentationTestCase {
                 actualCapture.getRegisteredParticipants().get(0).getInfluencer().booleanValue());
         assertEquals("",
                 actualCapture.getRegisteredParticipants().get(0).getInfluencerTitles().get(0));
-        assertEquals("minimal", actualCapture.getRegisteredParticipants().get(0).getContext());
         assertEquals("tJIa96k_mnebug", actualCapture.getRegisteredParticipants().get(0).getETag());
     }
 
     public void testParseCaptureMinimalCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails actualCapture = responseObject.payload.capture;
 
         assertEquals("535be3177534906c8b0007d8", actualCapture.getId());
         assertEquals(1398530839.6019998, actualCapture.getCreatedAt());
@@ -237,8 +241,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testGetRatingPercentForId() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails actualCapture = responseObject.payload.capture;
         float expectedNoRating = -1.0f;
         float expectedGoodRating = 19.0f / 40.0f;
         assertEquals(expectedNoRating,
@@ -251,8 +256,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testGetRatingForId() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails actualCapture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails actualCapture = responseObject.payload.capture;
         int expectedNoRating = -1;
         int expectedGoodRating = 19;
         // Test Existing User with No Rating
@@ -267,8 +273,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testUpdateCaptureRating() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
 
         // Tests if user doesn't have a rating
         String userAccountId = "abc";
@@ -285,11 +292,26 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals(rating, capture.getRatings().get(userAccountId).intValue());
     }
 
+    public void testGetCommentForCommentIdFromCaptureWithComments() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
+
+        CaptureComment actualComment = capture.getComment("535be3177534906c8b0007e0");
+
+        String expectedCommentString = "Hard black berry. Simple acid. $25";
+        assertEquals(expectedCommentString, actualComment.getComment());
+    }
+
     public void testGetCommentForUserIdFromCaptureWithComments() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
+
         CaptureComment actualComment = capture.getCommentsForUserId("52069ff93166785b5d003576")
                 .get(0);
 
@@ -300,8 +322,10 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testGetCommentForUserIdFromCaptureWithCommentsAndBadUserId() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
+
         ArrayList<CaptureComment> actualComments = capture.getCommentsForUserId("unknown?");
 
         assertEquals(0, actualComments.size());
@@ -310,8 +334,10 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testGetCommentForUserIdFromCaptureWithNoComments() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
+
         // Clear comments with valud array list
         capture.getComments().clear();
         ArrayList<CaptureComment> actualComments = capture
@@ -327,8 +353,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testGetCreationDate() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
 
         Date expectedDate = new Date(1398530839601l);
         Date actualDate = capture.getCreatedAtDate();
@@ -337,27 +364,28 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testGetLikesCount() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+
         CaptureDetails capture = captureListing.getUpdates().get(3);
         assertEquals(3, capture.getLikesCount());
     }
 
     public void testGetLikesCounWithNullLikingParticipants() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
         assertEquals(0, capture.getLikesCount());
     }
 
     public void testDoesUserLikeCaptureWithLikingParticipants() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+
         CaptureDetails capture = captureListing.getUpdates().get(3);
         String userAccountId = "abc";
         assertFalse(capture.doesUserLikeCapture(userAccountId));
@@ -368,10 +396,10 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testToggleUserLikesCapture() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        AccountsFollowerFeedRequest request = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing = (ListingResponse<CaptureDetails>) request
-                .buildResopnseFromJson(json);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(json.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+
         CaptureDetails capture = captureListing.getUpdates().get(3);
         // Tests if user doesn't like capture, and toggling makes user like the capture
         String userAccountId = "abc";
@@ -388,8 +416,9 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testDoesUserLikeCaptureWithNullLikingParticipants() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_minimal_ctx);
-        CapturesContextRequest request = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) request.buildResopnseFromJson(json);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
         assertNull(capture.getLikingParticipants());
         String userAccountId = "";
         assertFalse(capture.doesUserLikeCapture(userAccountId));
@@ -421,24 +450,26 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testUpdateCaptureDetails() throws JSONException {
         // Get "Old" capture
         JSONObject jsonDetails = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
-        CapturesContextRequest capRequest = new CapturesContextRequest();
-        CaptureDetails capture = (CaptureDetails) capRequest.buildResopnseFromJson(jsonDetails);
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(jsonDetails.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
+        // Test with capture being private
+        capture.setPrivate(true);
 
         // Get "Updated" capture
         JSONObject jsonFeed = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_ctx);
-        AccountsFollowerFeedRequest listRequest = new AccountsFollowerFeedRequest(
-                AccountsFollowerFeedRequest.CONTEXT_DETAILS);
-        ListingResponse<CaptureDetails> captureListing
-                = (ListingResponse<CaptureDetails>) listRequest
-                .buildResopnseFromJson(
-                        jsonFeed);
+        CaptureFeedResponse feedResponseObject = mGson
+                .fromJson(jsonFeed.toString(), CaptureFeedResponse.class);
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+
         // this is just a test, ideally the updated capture will have the same ID
         CaptureDetails updatedCapture = captureListing.getUpdates().get(3);
         updatedCapture.setId(capture.getId());
 
         capture.updateWithNewCapture(updatedCapture);
 
+        assertEquals(updatedCapture.getPrivate(), capture.getPrivate());
         assertEquals(updatedCapture.getShortShareUrl(), capture.getShortShareUrl());
         assertEquals(updatedCapture.getTweet(), capture.getTweet());
         assertEquals(updatedCapture.getRatings(), capture.getRatings());
@@ -451,6 +482,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals(updatedCapture.getLikingParticipants(), capture.getLikingParticipants());
         assertEquals(updatedCapture.getCommentingParticipants(),
                 capture.getCommentingParticipants());
+        assertEquals(updatedCapture.getCapturerParticipant(), capture.getCapturerParticipant());
         assertEquals(updatedCapture.getTaggeeParticipants(), capture.getTaggeeParticipants());
         assertEquals(updatedCapture.getComments(), capture.getComments());
         assertEquals(updatedCapture.getETag(), capture.getETag());
