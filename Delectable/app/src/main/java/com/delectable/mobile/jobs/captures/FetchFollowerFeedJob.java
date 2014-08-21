@@ -62,11 +62,6 @@ public class FetchFollowerFeedJob extends Job {
         CaptureFeedResponse response = mNetworkClient
                 .post(endpoint, request, CaptureFeedResponse.class);
 
-        if (response.getError() != null) {
-            mEventBus.post(new UpdatedFollowerFeedEvent(response.getError().getMessage()));
-            return;
-        }
-
         ListingResponse<CaptureDetails> captureListing = response.payload;
         // Sometimes Payload may be null, not sure why
         if (response.payload != null) {

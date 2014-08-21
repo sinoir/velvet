@@ -54,12 +54,8 @@ public class LikeCaptureJob extends Job {
 
         ActionRequest request = new ActionRequest(mCaptureId, mIsLiked);
 
+        // Response has no payload, just "success"
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
-
-        if (response.getError() != null) {
-            mEventBus.post(new LikedCaptureEvent(response.getError().getMessage(), mCaptureId));
-            return;
-        }
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
         cachedCapture.toggleUserLikesCapture(mUserId);

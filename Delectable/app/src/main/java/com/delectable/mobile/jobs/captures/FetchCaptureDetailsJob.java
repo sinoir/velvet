@@ -56,12 +56,6 @@ public class FetchCaptureDetailsJob extends Job {
         CaptureDetailsResponse response = mNetworkClient
                 .post(endpoint, request, CaptureDetailsResponse.class);
 
-        if (response.getError() != null) {
-            mEventBus.post(new UpdatedCaptureDetailsEvent(response.getError().getMessage(),
-                    mCaptureId));
-            return;
-        }
-
         CaptureDetails capture = response.payload.capture;
 
         mCapturesModel.saveCaptureDetails(capture);

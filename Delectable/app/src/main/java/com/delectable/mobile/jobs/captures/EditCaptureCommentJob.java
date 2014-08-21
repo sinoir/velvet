@@ -56,13 +56,8 @@ public class EditCaptureCommentJob extends Job {
         EditCommentRequest request = new EditCommentRequest(mCaptureId, mCommentId,
                 mCaptureComment);
 
+        // Response has no payload, just "success"
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
-
-        if (response.getError() != null) {
-            mEventBus.post(new EditedCaptureCommentEvent(response.getError().getMessage(),
-                    mCaptureId));
-            return;
-        }
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
         if (cachedCapture.getComments() != null) {

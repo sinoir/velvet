@@ -56,13 +56,8 @@ public class RateCaptureJob extends Job {
 
         RateCaptureRequest request = new RateCaptureRequest(mCaptureId, mCaptureRating);
 
+        // Response has no payload, just "success"
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
-
-        if (response.getError() != null) {
-            mEventBus.post(new RatedCaptureEvent(response.getError().getMessage(),
-                    mCaptureId));
-            return;
-        }
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
         if (cachedCapture.getRatings() == null) {

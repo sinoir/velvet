@@ -64,12 +64,6 @@ public class FetchUserCaptureFeedJob extends Job {
         CaptureFeedResponse response = mNetworkClient.post(endpoint, request,
                 CaptureFeedResponse.class);
 
-        if (response.getError() != null) {
-            mEventBus.post(new UpdatedUserCaptureFeedEvent(response.getError().getMessage(),
-                    mAccountId));
-            return;
-        }
-
         ListingResponse<CaptureDetails> captureListing = response.payload;
         // Sometimes Payload may be null, not sure why
         if (response.payload != null) {

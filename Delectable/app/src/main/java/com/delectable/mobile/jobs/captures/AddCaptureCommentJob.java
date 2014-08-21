@@ -51,15 +51,8 @@ public class AddCaptureCommentJob extends Job {
 
         CommentCaptureRequest request = new CommentCaptureRequest(mCaptureId, mCaptureComment);
 
-        CaptureDetailsResponse response = mNetworkClient
-                .post(endpoint, request, CaptureDetailsResponse.class);
-
-        if (response.getError() != null) {
-            Log.i(TAG, "Response Error: " + response.getError());
-            mEventBus.post(new AddCaptureCommentEvent(response.getError().getMessage(),
-                    mCaptureId));
-            return;
-        }
+        CaptureDetailsResponse response = mNetworkClient.post(endpoint, request,
+                CaptureDetailsResponse.class);
 
         CaptureDetails capture = response.payload.capture;
 
