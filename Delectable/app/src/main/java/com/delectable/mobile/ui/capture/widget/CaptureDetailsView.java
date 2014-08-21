@@ -405,7 +405,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void launchTaggedUserListing(CaptureDetails capture);
 
-        public void discardCapture(CaptureDetails capture);
+        public void discardCaptureClicked(CaptureDetails capture);
 
         public void editCapture(CaptureDetails capture);
     }

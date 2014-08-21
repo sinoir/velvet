@@ -1,10 +1,12 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
+import com.delectable.mobile.events.captures.DeletedCaptureEvent;
 import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.events.captures.RatedCaptureEvent;
@@ -12,6 +14,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
+import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
@@ -25,12 +28,20 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public abstract class BaseCaptureDetailsFragment extends BaseFragment
-        implements CaptureDetailsView.CaptureActionsHandler {
+        implements CaptureDetailsView.CaptureActionsHandler,
+        ConfirmationDialog.ConfirmationDialogCallback {
 
     private static final String TAG = BaseCaptureDetailsFragment.class.getSimpleName();
 
+    private static final int REQUEST_DELETE_CONFIRMATION = 100;
+
     @Inject
     CaptureController mCaptureController;
+
+    /**
+     * Capture ready to be deleted or other things, for when the user either clicks OK.
+     */
+    private CaptureDetails mTempCaptureForAction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,8 +152,15 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void discardCapture(CaptureDetails capture) {
-        // TODO: Discard / Delete Capture
+    public void discardCaptureClicked(CaptureDetails capture) {
+        mTempCaptureForAction = capture;
+        showConfirmation(getActivity().getString(R.string.remove),
+                getActivity().getString(R.string.capture_remove),
+                getActivity().getString(R.string.remove), REQUEST_DELETE_CONFIRMATION);
+    }
+
+    public void deleteCapture(CaptureDetails capture) {
+        mCaptureController.deleteCapture(capture.getId());
     }
 
     @Override
@@ -160,6 +178,26 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         mCaptureController.rateCapture(capture.getId(), userId, rating);
     }
 
+    //region Confirmation Dialog callbacks
+    public void onConfirmationOk(int requestCode) {
+        switch (requestCode) {
+            case REQUEST_DELETE_CONFIRMATION:
+                deleteCapture(mTempCaptureForAction);
+                mTempCaptureForAction = null;
+                break;
+        }
+    }
+
+    public void onConfirmationCancel(int requetCode) {
+        switch (requetCode) {
+            case REQUEST_DELETE_CONFIRMATION:
+                mTempCaptureForAction = null;
+                break;
+        }
+    }
+    //endregion
+
+    //region EventBus Events
     public void onEventMainThread(AddCaptureCommentEvent event) {
         dataSetChanged();
     }
@@ -175,4 +213,9 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public void onEventMainThread(RatedCaptureEvent event) {
         dataSetChanged();
     }
+
+    public void onEventMainThread(DeletedCaptureEvent event) {
+        dataSetChanged();
+    }
+    //endregion
 }

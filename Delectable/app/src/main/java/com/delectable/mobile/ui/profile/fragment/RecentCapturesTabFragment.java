@@ -176,6 +176,13 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }
     }
 
+    @Override
+    public void deleteCapture(CaptureDetails capture) {
+        super.deleteCapture(capture);
+        mCaptureDetails.remove(capture);
+        mAdapter.notifyDataSetChanged();
+    }
+
     public interface Callback {
 
         /**
