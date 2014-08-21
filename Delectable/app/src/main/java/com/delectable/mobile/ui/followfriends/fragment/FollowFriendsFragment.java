@@ -67,7 +67,7 @@ public class FollowFriendsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_viewpager_with_tabstrip, container, false);
         ButterKnife.inject(this, view);
 
         mViewPager.setAdapter(mTabsAdapter);
