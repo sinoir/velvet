@@ -79,6 +79,19 @@ public class CaptureDetails extends Capture {
         return captureComments;
     }
 
+    public CaptureComment getComment(String commentId) {
+        CaptureComment captureComment = null;
+        if (comments != null && comments.size() > 0) {
+            for (CaptureComment comment : comments) {
+                if (comment.id.equalsIgnoreCase(commentId)) {
+                    captureComment = comment;
+                    break;
+                }
+            }
+        }
+        return captureComment;
+    }
+
     /**
      * Get % of Rating
      *

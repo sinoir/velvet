@@ -292,6 +292,19 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals(rating, capture.getRatings().get(userAccountId).intValue());
     }
 
+    public void testGetCommentForCommentIdFromCaptureWithComments() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
+
+        CaptureDetailsResponse responseObject = mGson
+                .fromJson(json.toString(), CaptureDetailsResponse.class);
+        CaptureDetails capture = responseObject.payload.capture;
+
+        CaptureComment actualComment = capture.getComment("535be3177534906c8b0007e0");
+
+        String expectedCommentString = "Hard black berry. Simple acid. $25";
+        assertEquals(expectedCommentString, actualComment.getComment());
+    }
+
     public void testGetCommentForUserIdFromCaptureWithComments() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
 
