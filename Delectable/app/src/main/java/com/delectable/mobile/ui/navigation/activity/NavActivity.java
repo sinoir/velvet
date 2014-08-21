@@ -4,6 +4,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
+import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
+import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
@@ -87,7 +89,7 @@ public class NavActivity extends BaseActivity
                 break;
             case NavHeader.NAV_FIND_FRIENDS:
                 // TODO: Find People Screen
-                Toast.makeText(this, "Show Find People", Toast.LENGTH_SHORT).show();
+                fragment = new FollowFriendsFragment();
                 break;
             case NavHeader.NAV_SEARCH:
                 // TODO: Search Screen
