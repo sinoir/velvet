@@ -157,6 +157,10 @@
     <dimen name="follow_friends_horizontal_spacing">16dp</dimen>
     <dimen name="follow_friends_name_text_size">16sp</dimen>
     <dimen name="follow_friends_follow_button_height">30dp</dimen>
+    <dimen name="follow_friends_list_header_height">48dp</dimen>
+    <dimen name="follow_friends_list_text_size">18dp</dimen>
+
+
     <dimen name="follow_experts_row_height">85dp</dimen>
     <dimen name="follow_experts_profile_picture_width">40dp</dimen>
     <dimen name="follow_experts_bio_text_size">14sp</dimen>

@@ -128,13 +128,21 @@
         <item quantity="other">%d people found this helpful</item>
     </plurals>
 
-
     <!-- Wine Capture Flow Screens-->
     <string name="capture_submit_leave_comment_hint">Write a comment or taste note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
     <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
     <string name="capture_submit_post">Post</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
+
+    <!--Follow Friends -->
+    <string name="follow_friends_title">Follow Friends</string>
+    <string name="follow_friends_wine_experts">wine experts</string>
+    <string name="follow_friends_contacts">contacts</string>
+    <string name="follow_friends_invite_to_delectable">invite to delectable</string>
+    <string name="follow_friends_facebook">facebook</string>
+    <string name="follow_friends_twitter">twitter</string>
+
 
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>
