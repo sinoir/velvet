@@ -1,6 +1,5 @@
 package com.delectable.mobile.jobs.captures;
 
-import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
@@ -12,8 +11,6 @@ import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
 import android.util.Log;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -36,9 +33,9 @@ public class AddCaptureCommentJob extends Job {
 
     private String mCaptureId;
 
-    private CaptureComment mCaptureComment;
+    private String mCaptureComment;
 
-    public AddCaptureCommentJob(String captureId, CaptureComment captureComment) {
+    public AddCaptureCommentJob(String captureId, String captureComment) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
         mCaptureId = captureId;
         mCaptureComment = captureComment;
@@ -46,27 +43,19 @@ public class AddCaptureCommentJob extends Job {
 
     @Override
     public void onAdded() {
-        // Update local model
-        CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
-        if (cachedCapture.getComments() == null) {
-            cachedCapture.setComments(new ArrayList<CaptureComment>());
-        }
-        cachedCapture.getComments().add(mCaptureComment);
-        mCapturesModel.saveCaptureDetails(cachedCapture);
-        mEventBus.post(new AddCaptureCommentEvent(true, mCaptureId));
     }
 
     @Override
     public void onRun() throws Throwable {
         String endpoint = "/captures/comment";
 
-        CommentCaptureRequest request = new CommentCaptureRequest(mCaptureId,
-                mCaptureComment.getComment());
+        CommentCaptureRequest request = new CommentCaptureRequest(mCaptureId, mCaptureComment);
 
         CaptureDetailsResponse response = mNetworkClient
                 .post(endpoint, request, CaptureDetailsResponse.class);
 
         if (response.getError() != null) {
+            Log.i(TAG, "Response Error: " + response.getError());
             mEventBus.post(new AddCaptureCommentEvent(response.getError().getMessage(),
                     mCaptureId));
             return;

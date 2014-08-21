@@ -36,7 +36,7 @@ public class CaptureController {
         mJobManager.addJobInBackground(new FetchFollowerFeedJob(true));
     }
 
-    public void addCommentToCapture(String captureId, CaptureComment captureComment) {
+    public void addCommentToCapture(String captureId, String captureComment) {
         mJobManager.addJobInBackground(new AddCaptureCommentJob(captureId, captureComment));
     }
 

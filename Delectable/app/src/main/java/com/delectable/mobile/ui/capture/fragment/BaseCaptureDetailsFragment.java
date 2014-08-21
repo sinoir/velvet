@@ -111,7 +111,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         capture.getComments().add(tempComment);
         dataSetChanged();
 
-        mCaptureController.addCommentToCapture(capture.getId(), tempComment);
+        mCaptureController.addCommentToCapture(capture.getId(), comment);
     }
 
     private void editComment(CaptureDetails capture, final CaptureComment captureComment) {
