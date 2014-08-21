@@ -5,11 +5,10 @@ import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
-import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
-import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 
 import android.app.ActionBar;
 import android.app.FragmentManager;
