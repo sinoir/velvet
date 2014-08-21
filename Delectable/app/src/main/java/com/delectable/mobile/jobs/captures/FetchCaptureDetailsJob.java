@@ -3,33 +3,20 @@ package com.delectable.mobile.jobs.captures;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.events.captures.UpdatedCaptureDetailsEvent;
+import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
 import com.delectable.mobile.model.api.captures.CapturesContextRequest;
-import com.delectable.mobile.net.NetworkClient;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class FetchCaptureDetailsJob extends Job {
+public class FetchCaptureDetailsJob extends BaseJob {
 
     private static final String TAG = FetchCaptureDetailsJob.class.getSimpleName();
 
     @Inject
     CaptureDetailsModel mCapturesModel;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
-    NetworkClient mNetworkClient;
-
-    private String mErrorMessage;
 
     private String mCaptureId;
 
@@ -40,10 +27,12 @@ public class FetchCaptureDetailsJob extends Job {
 
     @Override
     public void onAdded() {
+        super.onAdded();
     }
 
     @Override
     public void onRun() throws Throwable {
+        super.onRun();
         String endpoint = "/captures/context";
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
@@ -53,29 +42,27 @@ public class FetchCaptureDetailsJob extends Job {
             request.setETag(cachedCapture.getETag());
         }
 
-        CaptureDetailsResponse response = mNetworkClient
+        CaptureDetailsResponse response = getNetworkClient()
                 .post(endpoint, request, CaptureDetailsResponse.class);
 
         CaptureDetails capture = response.getCapturePayload();
 
         mCapturesModel.saveCaptureDetails(capture);
-        mEventBus.post(new UpdatedCaptureDetailsEvent(true, mCaptureId));
+        getEventBus().post(new UpdatedCaptureDetailsEvent(true, mCaptureId));
     }
 
     @Override
     protected void onCancel() {
-        if (mErrorMessage != null) {
-            mEventBus.post(new UpdatedCaptureDetailsEvent(mErrorMessage, mCaptureId));
+        super.onCancel();
+        if (getErrorMessage() != null) {
+            getEventBus().post(new UpdatedCaptureDetailsEvent(getErrorMessage(), mCaptureId));
         } else {
-            mEventBus.post(new UpdatedCaptureDetailsEvent(false, mCaptureId));
+            getEventBus().post(new UpdatedCaptureDetailsEvent(false, mCaptureId));
         }
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        // TODO check error type and see if a retry makes sense
-        Log.e(TAG + ".Error", "", throwable);
-        return false;
+        return super.shouldReRunOnThrowable(throwable);
     }
-
 }

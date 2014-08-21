@@ -4,33 +4,20 @@ import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
+import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseResponse;
 import com.delectable.mobile.model.api.captures.EditCommentRequest;
-import com.delectable.mobile.net.NetworkClient;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class EditCaptureCommentJob extends Job {
+public class EditCaptureCommentJob extends BaseJob {
 
     private static final String TAG = EditCaptureCommentJob.class.getSimpleName();
 
     @Inject
     CaptureDetailsModel mCapturesModel;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
-    NetworkClient mNetworkClient;
-
-    private String mErrorMessage;
 
     private String mCaptureId;
 
@@ -47,17 +34,19 @@ public class EditCaptureCommentJob extends Job {
 
     @Override
     public void onAdded() {
+        super.onAdded();
     }
 
     @Override
     public void onRun() throws Throwable {
+        super.onRun();
         String endpoint = "/captures/edit_comment";
 
         EditCommentRequest request = new EditCommentRequest(mCaptureId, mCommentId,
                 mCaptureComment);
 
         // Response has no payload, just "success"
-        BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
+        BaseResponse response = getNetworkClient().post(endpoint, request, BaseResponse.class);
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
         if (cachedCapture.getComments() != null) {
@@ -71,23 +60,21 @@ public class EditCaptureCommentJob extends Job {
         mCapturesModel.saveCaptureDetails(cachedCapture);
 
         mCapturesModel.saveCaptureDetails(cachedCapture);
-        mEventBus.post(new EditedCaptureCommentEvent(true, mCaptureId));
+        getEventBus().post(new EditedCaptureCommentEvent(true, mCaptureId));
     }
 
     @Override
     protected void onCancel() {
-        if (mErrorMessage != null) {
-            mEventBus.post(new EditedCaptureCommentEvent(mErrorMessage, mCaptureId));
+        super.onCancel();
+        if (getErrorMessage() != null) {
+            getEventBus().post(new EditedCaptureCommentEvent(getErrorMessage(), mCaptureId));
         } else {
-            mEventBus.post(new EditedCaptureCommentEvent(false, mCaptureId));
+            getEventBus().post(new EditedCaptureCommentEvent(false, mCaptureId));
         }
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        // TODO check error type and see if a retry makes sense
-        Log.e(TAG + ".Error", "", throwable);
-        return false;
+        return super.shouldReRunOnThrowable(throwable);
     }
-
 }

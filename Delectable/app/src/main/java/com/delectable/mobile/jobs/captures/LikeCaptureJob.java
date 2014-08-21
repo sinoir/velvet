@@ -3,33 +3,20 @@ package com.delectable.mobile.jobs.captures;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.events.captures.LikedCaptureEvent;
+import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.ActionRequest;
 import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.net.NetworkClient;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class LikeCaptureJob extends Job {
+public class LikeCaptureJob extends BaseJob {
 
     private static final String TAG = LikeCaptureJob.class.getSimpleName();
 
     @Inject
     CaptureDetailsModel mCapturesModel;
-
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
-    NetworkClient mNetworkClient;
-
-    private String mErrorMessage;
 
     private String mCaptureId;
 
@@ -46,37 +33,38 @@ public class LikeCaptureJob extends Job {
 
     @Override
     public void onAdded() {
+        super.onAdded();
     }
 
     @Override
     public void onRun() throws Throwable {
+        super.onRun();
         String endpoint = "/captures/like";
 
         ActionRequest request = new ActionRequest(mCaptureId, mIsLiked);
 
         // Response has no payload, just "success"
-        BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
+        BaseResponse response = getNetworkClient().post(endpoint, request, BaseResponse.class);
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
         cachedCapture.toggleUserLikesCapture(mUserId);
 
         mCapturesModel.saveCaptureDetails(cachedCapture);
-        mEventBus.post(new LikedCaptureEvent(true, mCaptureId));
+        getEventBus().post(new LikedCaptureEvent(true, mCaptureId));
     }
 
     @Override
     protected void onCancel() {
-        if (mErrorMessage != null) {
-            mEventBus.post(new LikedCaptureEvent(mErrorMessage, mCaptureId));
+        super.onCancel();
+        if (getErrorMessage() != null) {
+            getEventBus().post(new LikedCaptureEvent(getErrorMessage(), mCaptureId));
         } else {
-            mEventBus.post(new LikedCaptureEvent(false, mCaptureId));
+            getEventBus().post(new LikedCaptureEvent(false, mCaptureId));
         }
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        // TODO check error type and see if a retry makes sense
-        Log.e(TAG + ".Error", "", throwable);
-        return false;
+        return super.shouldReRunOnThrowable(throwable);
     }
 }
