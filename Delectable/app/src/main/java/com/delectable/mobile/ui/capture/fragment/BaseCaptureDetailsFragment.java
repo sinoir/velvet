@@ -6,11 +6,11 @@ import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.requests.EditCommentRequest;
-import com.delectable.mobile.api.requests.RateCaptureRequest;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.events.captures.LikedCaptureEvent;
+import com.delectable.mobile.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
@@ -170,26 +170,12 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     private void sendRating(final CaptureDetails capture, final int rating) {
-        final String userId = UserInfo.getUserId(getActivity());
-        final int oldRating = capture.getRatingForId(userId);
-
-        RateCaptureRequest request = new RateCaptureRequest(capture, rating);
+        String userId = UserInfo.getUserId(getActivity());
+        // Instant UI update
         capture.updateRatingForUser(UserInfo.getUserId(getActivity()), rating);
         dataSetChanged();
-        mNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                // Success
-            }
-
-            @Override
-            public void onFailed(RequestError error) {
-                Toast.makeText(getActivity(), "Failed to rate capture", Toast.LENGTH_SHORT).show();
-                // Reset displayed rating
-                capture.updateRatingForUser(UserInfo.getUserId(getActivity()), oldRating);
-                dataSetChanged();
-            }
-        });
+        // update rated capture
+        mCaptureController.rateCapture(capture.getId(), userId, rating);
     }
 
     public void onEventMainThread(AddCaptureCommentEvent event) {
@@ -197,6 +183,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     public void onEventMainThread(LikedCaptureEvent event) {
+        dataSetChanged();
+    }
+
+    public void onEventMainThread(RatedCaptureEvent event) {
         dataSetChanged();
     }
 }
