@@ -244,8 +244,11 @@ public class CaptureDetailsView extends RelativeLayout {
         PrettyTime p = new PrettyTime();
         captureTimeLocation = p.format(mCaptureData.getCreatedAtDate());
 
-        // TODO: Add Location once location we find capture with location...
         String location = "";
+        if (mCaptureData.getLocationName() != null) {
+            location = " " + getResources()
+                    .getString(R.string.cap_feed_at_location, mCaptureData.getLocationName());
+        }
         captureTimeLocation += location;
 
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, mProfileImage2);
