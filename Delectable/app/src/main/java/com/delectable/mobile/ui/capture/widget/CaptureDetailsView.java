@@ -14,6 +14,7 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,8 @@ import butterknife.InjectView;
 import butterknife.InjectViews;
 
 public class CaptureDetailsView extends RelativeLayout {
+
+    private static final String TAG = CaptureDetailsView.class.getSimpleName();
 
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
@@ -48,7 +51,7 @@ public class CaptureDetailsView extends RelativeLayout {
     protected List<CircleImageView> mTaggedParticipantImages;
 
     @InjectView(R.id.more_tagged_user_button)
-    protected ImageView mMoreTaggedParticipantsButton;
+    protected TextView mMoreTaggedParticipantsButton;
 
     @InjectView(R.id.capturer_comments_container)
     protected RelativeLayout mCapturerCommentsContainer;
@@ -192,9 +195,13 @@ public class CaptureDetailsView extends RelativeLayout {
             }
         }
 
-        if (taggedParticipants.size() == 3) {
+        // TODO: Figure out why taggedParticipants doesn't have more than 3 items, when the response has more than 3...
+        // this doesn't work yet
+        if (taggedParticipants.size() > 3) {
             // TODO: Add Touchstate to Open more tagged profile listing
             mMoreTaggedParticipantsButton.setVisibility(View.VISIBLE);
+            // Show + remainder # of tagged participants
+            mMoreTaggedParticipantsButton.setText("+" + (taggedParticipants.size() - 3));
             mMoreTaggedParticipantsButton.setOnClickListener(
                     new View.OnClickListener() {
                         @Override

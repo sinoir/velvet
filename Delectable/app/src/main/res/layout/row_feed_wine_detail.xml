@@ -116,15 +116,18 @@
             android:visibility="gone" />
 
         <!-- TODO: Plus Image Button Icon -->
-        <ImageView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/more_tagged_user_button"
             android:layout_width="@dimen/small_profile_image_size"
             android:layout_height="@dimen/small_profile_image_size"
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
             android:layout_toRightOf="@id/tagged_user_image3"
-            android:src="@drawable/ab_profile_normal"
-            android:visibility="gone" />
+            android:background="@drawable/btn_gray_circle"
+            android:gravity="center"
+            android:textColor="@color/d_dark_gray"
+            android:visibility="gone"
+            app:fontName="whitney_medium" />
 
         <View
             android:id="@+id/vertical_divider1"
