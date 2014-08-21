@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
             android:background="@color/d_medium_gray"
             android:scaleType="centerCrop" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/producer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,9 +29,10 @@
             android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
             android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/cap_feed_row_top_text_font_size" />
+            android:textSize="@dimen/cap_feed_row_top_text_font_size"
+            app:fontName="whitney_medium_sc" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/wine_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +42,8 @@
             android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
             android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/cap_feed_row_bottom_text_font_size" />
+            android:textSize="@dimen/cap_feed_row_bottom_text_font_size"
+            app:fontName="whitney_medium_sc" />
 
         <!--TODO: Mini upside down Triangle -->
         <View
@@ -71,7 +74,7 @@
             android:layout_centerInParent="true"
             android:src="@drawable/ab_profile_normal" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/with_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +82,9 @@
             android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
             android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
             android:layout_toRightOf="@id/profile_image1"
-            android:text="@string/with" />
+            android:text="@string/with"
+            android:textColor="@color/d_medium_gray"
+            app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/tagged_user_image1"
@@ -150,26 +155,26 @@
             android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
             android:src="@drawable/ab_profile_normal" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/profile_image2"
             android:layout_toRightOf="@id/profile_image2"
-            android:text="Adam Bednarek"
-            android:textSize="@dimen/cap_feed_comment_text_size" />
+            android:textSize="@dimen/cap_feed_comment_text_size"
+            app:fontName="whitney_medium" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/user_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
             android:layout_toRightOf="@id/profile_image2"
-            android:text="Soft in texture with a jolt of acidity lifting the blackberry"
             android:textColor="@color/d_dark_gray"
-            android:textSize="@dimen/cap_feed_comment_text_size" />
+            android:textSize="@dimen/cap_feed_comment_text_size"
+            app:fontName="whitney_book" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/capture_time_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -177,9 +182,9 @@
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
             android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
             android:layout_toRightOf="@id/profile_image2"
-            android:text="2 min ago at Foo Land"
             android:textColor="@color/d_dark_gray"
-            android:textSize="12sp" />
+            android:textSize="14sp"
+            app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.RatingsBarView
             android:id="@+id/capturer_rating_bar"
@@ -197,7 +202,7 @@
             android:layout_below="@id/capturer_rating_bar"
             android:orientation="vertical" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/rate_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -206,7 +211,8 @@
             android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
             android:text="@string/cap_feed_add_rating"
             android:textColor="@color/btn_text_blue"
-            android:textSize="@dimen/cap_feed_comment_text_size" />
+            android:textSize="@dimen/cap_feed_comment_text_size"
+            app:fontName="whitney_book" />
 
         <View
             android:id="@+id/vertical_divider2"
@@ -243,13 +249,14 @@
                 android:layout_toRightOf="@id/comment_button"
                 android:background="@drawable/btn_like" />
 
-            <TextView
+            <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/likes_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/like_button"
-                android:text="0 likes" />
+                android:textColor="@color/d_medium_gray"
+                app:fontName="whitney_medium" />
 
             <!-- TODO: Implement Overflow action when we get details on what should be listed -->
             <ImageButton
