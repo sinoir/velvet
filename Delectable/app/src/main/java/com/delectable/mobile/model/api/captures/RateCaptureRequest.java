@@ -4,7 +4,7 @@ import com.delectable.mobile.model.api.BaseRequest;
 
 public class RateCaptureRequest extends BaseRequest {
 
-    RateCapturePayload payload;
+    private RateCapturePayload payload;
 
     public RateCaptureRequest(String captureId, int userRating) {
         payload = new RateCapturePayload();
@@ -14,8 +14,8 @@ public class RateCaptureRequest extends BaseRequest {
 
     public static class RateCapturePayload {
 
-        String id;
+        private String id;
 
-        String rating;
+        private String rating;
     }
 }

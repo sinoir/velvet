@@ -4,7 +4,7 @@ import com.delectable.mobile.model.api.BaseRequest;
 
 public class CommentCaptureRequest extends BaseRequest {
 
-    CommentCapturePayload payload;
+    private CommentCapturePayload payload;
 
     public CommentCaptureRequest(String captureId, String userComment) {
         payload = new CommentCapturePayload();
@@ -14,8 +14,8 @@ public class CommentCaptureRequest extends BaseRequest {
 
     public static class CommentCapturePayload {
 
-        String id;
+        private String id;
 
-        String comment;
+        private String comment;
     }
 }

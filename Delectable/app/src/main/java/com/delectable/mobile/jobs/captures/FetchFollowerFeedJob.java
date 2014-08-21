@@ -62,9 +62,9 @@ public class FetchFollowerFeedJob extends Job {
         CaptureFeedResponse response = mNetworkClient
                 .post(endpoint, request, CaptureFeedResponse.class);
 
-        ListingResponse<CaptureDetails> captureListing = response.payload;
+        ListingResponse<CaptureDetails> captureListing = response.getPayload();
         // Sometimes Payload may be null, not sure why
-        if (response.payload != null) {
+        if (response.getPayload() != null) {
             if (cachedCaptures != null) {
                 captureListing.combineWithPreviousListing(cachedCaptures);
             }

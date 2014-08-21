@@ -5,7 +5,7 @@ import com.delectable.mobile.model.api.BaseRequest;
 
 public class EditCommentRequest extends BaseRequest {
 
-    EditCommentPayload payload;
+    private EditCommentPayload payload;
 
     public EditCommentRequest(String captureId, String commentId, String comment) {
         payload = new EditCommentPayload();
@@ -17,11 +17,10 @@ public class EditCommentRequest extends BaseRequest {
     public static class EditCommentPayload {
 
         // Capture ID
-        String id;
+        private String id;
 
-        // Comment ID
-        String comment_id;
+        private String comment_id;
 
-        String comment;
+        private String comment;
     }
 }
