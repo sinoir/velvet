@@ -252,13 +252,15 @@
                 android:layout_toRightOf="@id/like_button"
                 android:text="0 likes" />
 
-            <!-- Overflow Icon -->
+            <!-- TODO: Implement Overflow action when we get details on what should be listed -->
             <ImageButton
                 android:id="@+id/menu_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_options"
+                android:visibility="gone" />
 
         </RelativeLayout>
     </RelativeLayout>
