@@ -38,7 +38,7 @@ public class HomeFragment extends BaseFragment {
 
         String currentUserId = UserInfo.getUserId(getActivity());
 
-        mView = inflater.inflate(R.layout.fragment_home, container, false);
+        mView = inflater.inflate(R.layout.fragment_viewpager_with_tabstrip, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);

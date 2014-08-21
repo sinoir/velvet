@@ -4,6 +4,8 @@
     <!-- colors based on style guide from here:
     https://quip.com/MyqKAYPFRbJt -->
 
+    <color name="transparent">#00000000</color>
+
     <!-- Primary -->
     <!-- d_blue and d_blue_pressed are used for text links -->
     <color name="d_blue">#0699cc</color>
@@ -28,6 +30,12 @@
     <color name="d_gray_disabled_done_button">#D2D2D2</color>
     <color name="d_blue_default_done_button">#0099CC</color>
     <color name="d_blue_pressed_done_button">#0080B3</color>
+
+    <!-- Follow Friends Tabs-->
+    <color name="d_navy_experts_tab">@color/d_dark_navy</color>
+    <color name="d_yellow_contacts_tab">#F5A628</color>
+    <color name="d_blue_facebook_tab">#3B5998</color>
+    <color name="d_blue_twitter_tab">#55ACEE</color>
 
     <!-- Transparent Whites -->
     <!-- 20% opacity -->
