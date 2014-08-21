@@ -3,11 +3,11 @@
 <com.delectable.mobile.ui.common.widget.FontTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    app:fontName="whitney_medium_sc"
-    android:textSize="@dimen/follow_friends_list_text_size"
-    android:paddingLeft="@dimen/follow_friends_horizontal_spacing"
+    android:layout_height="@dimen/follow_friends_list_header_height"
     android:gravity="center_vertical|left"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/follow_friends_horizontal_spacing"
     android:text="wine experts"
     android:textColor="@color/d_medium_gray"
-    android:layout_height="@dimen/follow_friends_list_header_height"
-    android:orientation="vertical" />
+    android:textSize="@dimen/follow_friends_list_text_size"
+    app:fontName="whitney_medium_sc" />
