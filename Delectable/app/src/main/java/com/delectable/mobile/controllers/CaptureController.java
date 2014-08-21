@@ -1,6 +1,7 @@
 package com.delectable.mobile.controllers;
 
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
+import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
@@ -51,5 +52,9 @@ public class CaptureController {
 
     public void rateCapture(String captureId, String userId, int rating) {
         mJobManager.addJobInBackground(new RateCaptureJob(captureId, userId, rating));
+    }
+
+    public void deleteCapture(String captureId) {
+        mJobManager.addJobInBackground(new DeleteCaptureJob(captureId));
     }
 }
