@@ -6,5 +6,9 @@ import com.delectable.mobile.model.api.BaseResponse;
 
 public class CaptureFeedResponse extends BaseResponse {
 
-    public ListingResponse<CaptureDetails> payload;
+    private ListingResponse<CaptureDetails> payload;
+
+    public ListingResponse<CaptureDetails> getPayload() {
+        return payload;
+    }
 }

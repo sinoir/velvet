@@ -1,12 +1,12 @@
 package com.delectable.mobile.jobs.accounts;
 
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.accounts.AccountContextRequest;
 import com.delectable.mobile.model.api.accounts.AccountContextResponse;
-import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;

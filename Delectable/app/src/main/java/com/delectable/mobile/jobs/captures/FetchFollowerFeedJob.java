@@ -5,35 +5,22 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.events.captures.UpdatedFollowerFeedEvent;
+import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.captures.CaptureFeedListingRequest;
 import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
-import com.delectable.mobile.net.NetworkClient;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class FetchFollowerFeedJob extends Job {
+public class FetchFollowerFeedJob extends BaseJob {
 
     private static final String TAG = FetchFollowerFeedJob.class.getSimpleName();
 
     @Inject
     CaptureDetailsListingModel mCapturesModel;
 
-    @Inject
-    EventBus mEventBus;
-
-    @Inject
-    NetworkClient mNetworkClient;
-
     private boolean mIsPaginating;
-
-    private String mErrorMessage;
 
     public FetchFollowerFeedJob(boolean isPaginating) {
         super(new Params(Priority.UX).requireNetwork().persist());
@@ -42,10 +29,12 @@ public class FetchFollowerFeedJob extends Job {
 
     @Override
     public void onAdded() {
+        super.onAdded();
     }
 
     @Override
     public void onRun() throws Throwable {
+        super.onRun();
         String endpoint = "/accounts/follower_feed";
 
         CaptureFeedListingRequest request = new CaptureFeedListingRequest();
@@ -59,17 +48,12 @@ public class FetchFollowerFeedJob extends Job {
         }
         request.setIsPullToRefresh(!mIsPaginating);
 
-        CaptureFeedResponse response = mNetworkClient
+        CaptureFeedResponse response = getNetworkClient()
                 .post(endpoint, request, CaptureFeedResponse.class);
 
-        if (response.getError() != null) {
-            mEventBus.post(new UpdatedFollowerFeedEvent(response.getError().getMessage()));
-            return;
-        }
-
-        ListingResponse<CaptureDetails> captureListing = response.payload;
+        ListingResponse<CaptureDetails> captureListing = response.getPayload();
         // Sometimes Payload may be null, not sure why
-        if (response.payload != null) {
+        if (response.getPayload() != null) {
             if (cachedCaptures != null) {
                 captureListing.combineWithPreviousListing(cachedCaptures);
             }
@@ -77,23 +61,21 @@ public class FetchFollowerFeedJob extends Job {
             captureListing.updateCombinedData();
             mCapturesModel.saveFollowerFeedCaptures(captureListing);
         }
-        mEventBus.post(new UpdatedFollowerFeedEvent(true));
+        getEventBus().post(new UpdatedFollowerFeedEvent(true));
     }
 
     @Override
     protected void onCancel() {
-        if (mErrorMessage != null) {
-            mEventBus.post(new UpdatedFollowerFeedEvent(mErrorMessage));
+        super.onCancel();
+        if (getErrorMessage() != null) {
+            getEventBus().post(new UpdatedFollowerFeedEvent(getErrorMessage()));
         } else {
-            mEventBus.post(new UpdatedFollowerFeedEvent(false));
+            getEventBus().post(new UpdatedFollowerFeedEvent(false));
         }
     }
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        // TODO check error type and see if a retry makes sense
-        mErrorMessage = throwable.getMessage();
-        Log.e(TAG + ".Error", mErrorMessage);
-        return false;
+        return super.shouldReRunOnThrowable(throwable);
     }
 }

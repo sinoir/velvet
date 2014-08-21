@@ -4,9 +4,11 @@ import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
+import com.delectable.mobile.model.local.ListingObject;
 import com.iainconnor.objectcache.CacheManager;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -24,21 +26,26 @@ public class CaptureDetailsListingModel {
     public static final String TYPE_FOLLOWING_CAPTURES = KEY_PREFIX + "following";
 
     @Inject
+    CaptureDetailsModel mCaptureDetailsModel;
+
+    @Inject
     CacheManager mCache;
 
-    private Type mClassType = new TypeToken<ListingResponse<CaptureDetails>>() {
+    private Type mClassType = new TypeToken<ListingObject>() {
     }.getType();
 
     //region Save CaptureListing methods
     private void saveCaptureListing(String type, String accountId,
             ListingResponse<CaptureDetails> captureListing) {
-        mCache.put(type + accountId, captureListing);
+        ListingObject listingObject = new ListingObject(captureListing);
+        mCache.put(type + accountId, listingObject);
+        // Save all captures separately
+        for (CaptureDetails capture : captureListing.getSortedCombinedData()) {
+            mCaptureDetailsModel.saveCaptureDetails(capture);
+        }
     }
 
     public void saveUserCaptures(String accountId, ListingResponse<CaptureDetails> captureListing) {
-        // TODO: Should store each capture separately in a CaptureDetailsModel
-        // For example: we should recombine the data later when we fetch it, this lets us cache
-        // each individual capture instead of having to make a duplicate copy
         saveCaptureListing(TYPE_USER_CAPTURES, accountId, captureListing);
     }
 
@@ -54,10 +61,13 @@ public class CaptureDetailsListingModel {
 
     //region Get CaptureListing Methods
     private ListingResponse<CaptureDetails> getCaptureListing(String type, String accountId) {
-        // TODO: Should retrieve each capture separately and merge it into the listingResponse Object.
         String key = type + accountId;
-        ListingResponse<CaptureDetails> captures = (ListingResponse<CaptureDetails>) mCache.get(key,
-                ListingResponse.class, mClassType);
+        ListingObject listingObject = (ListingObject) mCache.get(key, ListingObject.class,
+                mClassType);
+        if (listingObject == null) {
+            return null;
+        }
+        ListingResponse<CaptureDetails> captures = buildFromListingObject(listingObject);
         return captures;
     }
 
@@ -74,4 +84,23 @@ public class CaptureDetailsListingModel {
         return getCaptureListing(TYPE_FOLLOWING_CAPTURES, "");
     }
     //endregion
+
+    //Helper builder for converting ListingObject to ListingResponse
+    public ListingResponse<CaptureDetails> buildFromListingObject(ListingObject object) {
+        ListingResponse<CaptureDetails> captureListing = new ListingResponse<CaptureDetails>();
+        captureListing.setBoundaries(object.getBoundaries());
+        captureListing.setETag(object.getETag());
+        captureListing.setMore(object.getMore());
+        ArrayList<CaptureDetails> captures = new ArrayList<CaptureDetails>();
+        for (String captureId : object.getObjectIds()) {
+            CaptureDetails capture = mCaptureDetailsModel.getCapture(captureId);
+            if (capture != null) {
+                captures.add(capture);
+            }
+        }
+        captureListing.setUpdates(captures);
+        captureListing.updateCombinedData();
+
+        return captureListing;
+    }
 }

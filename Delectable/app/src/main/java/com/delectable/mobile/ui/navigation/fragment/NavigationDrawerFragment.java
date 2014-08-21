@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.ListingResponse;
@@ -13,7 +14,6 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.model.local.Account;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
@@ -57,6 +57,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
+    @Inject
+    AccountController mAccountController;
+
+    @Inject
+    AccountModel mAccountModel;
+
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
@@ -88,12 +94,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private ListingResponse<ActivityRecipient> mActivityRecipientListing;
 
     private int mCurrentSelectedNavItem = 0;
-
-    @Inject
-    AccountController mAccountController;
-
-    @Inject
-    AccountModel mAccountModel;
 
     public NavigationDrawerFragment() {
     }

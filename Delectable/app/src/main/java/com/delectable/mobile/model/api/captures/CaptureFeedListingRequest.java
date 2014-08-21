@@ -8,7 +8,7 @@ public class CaptureFeedListingRequest extends BaseRequest {
 
     protected static final String CONTEXT_DETAILS = "details";
 
-    CaptureFeedListingPayload payload;
+    private CaptureFeedListingPayload payload;
 
     /**
      * Make request to get Follower Capture Feed
@@ -25,7 +25,6 @@ public class CaptureFeedListingRequest extends BaseRequest {
         if (currentListing != null) {
             // TODO: Check invalidate to reset / get new data without etag.
             setETag(currentListing.getETag());
-            setContext(currentListing.getContext());
             payload.before = currentListing.getBoundariesToBefore();
             payload.after = currentListing.getBoundariesToAfter();
         }
@@ -73,12 +72,12 @@ public class CaptureFeedListingRequest extends BaseRequest {
 
     public static class CaptureFeedListingPayload {
 
-        String id;
+        private String id;
 
-        String before;
+        private String before;
 
-        String after;
+        private String after;
 
-        Boolean suppress_before;
+        private Boolean suppress_before;
     }
 }
