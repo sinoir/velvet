@@ -17,18 +17,17 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class NetworkClient {
+public class NetworkClient extends BaseNetworkClient {
 
     private static final String TAG = NetworkClient.class.getSimpleName();
-
 
     private static final String USER_AGENT = "DelectableAndroid";
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private OkHttpClient mClient = new OkHttpClient();
-
     private Gson mGson = new Gson();
+
+    private OkHttpClient mClient = new OkHttpClient();
 
     /**
      * Convenience method that calls {@link #post(String, BaseRequest, Class, boolean)} with
@@ -61,40 +60,7 @@ public class NetworkClient {
                 .build();
         Response response = mClient.newCall(request).execute();
 
-        //handle HTTP errors
-        if (!response.isSuccessful()) {
-            String errorMessage = "Request Error " + response.code() + ": " + response.toString();
-            Log.i(requestName, "error: " + errorMessage);
-            throw new IOException(errorMessage);
-        }
-        //be careful, calling this ResponseBody.string() method more than once wipes out the string
-        String responseBody = response.body().string();
-        Log.i(requestName, "response: " + responseBody);
-        T responseObj = mGson.fromJson(responseBody, responseClass);
-
-        //handle Gson parsing errors
-        if (responseObj == null) {
-            String errorMessage = "Error parsing response into JSON";
-            Log.i(requestName, "error: " + errorMessage);
-            throw new IOException(errorMessage);
-        }
-
-        //handle API errors
-        if (!responseObj.success) {
-
-            if (responseObj.getError() == null) {
-                String errorMessage = "API Error with no message.";
-                Log.i(requestName, "error: " + errorMessage);
-                throw new IOException(errorMessage);
-            }
-
-            String errorMessage = "Error " + responseObj.getError().getCode() + ": " +
-                    responseObj.getError().getMessage();
-            Log.i(requestName, "error: " + errorMessage);
-            throw new IOException(errorMessage);
-        }
-
-        return responseObj;
+        return handleResponse(response, requestName, responseClass);
     }
 
     private String getAbsolutePath() {
