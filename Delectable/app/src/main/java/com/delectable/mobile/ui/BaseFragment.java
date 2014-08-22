@@ -1,7 +1,13 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.facebook.Session;
+import com.iainconnor.objectcache.CacheManager;
+
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -11,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -19,6 +26,12 @@ import javax.inject.Inject;
 import de.greenrobot.event.EventBus;
 
 public class BaseFragment extends Fragment implements LifecycleProvider {
+
+    @Inject
+    EventBus mEventBus;
+
+    @Inject
+    CacheManager mCache;
 
     private State state;
 
@@ -32,13 +45,11 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
 
     private boolean mIsUsingCustomActionbarView = false;
 
-    @Inject
-    EventBus mEventBus;
-
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
         state = State.constructed;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +124,32 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         }
     }
 
+    public void signout() {
+        // Close FB Session
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            session.closeAndClearTokenInformation();
+        }
+
+        // Clear User Data
+        UserInfo.onSignOut(getActivity());
+        try {
+            // TODO: run this on background thread?  Also, might be handy to be selective on what gets deleted.
+            mCache.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Launch Sign Up / Log In screen
+        Intent launchIntent = new Intent();
+        launchIntent.setClass(getActivity(), LoginActivity.class);
+        startActivity(launchIntent);
+        getActivity().finish();
+    }
+
     /**
-     * * Override home icon with custom view with click listener
-     * <p/>
-     * Note: Having a title will push this view to the right of the title.
+     * * Override home icon with custom view with click listener <p/> Note: Having a title will push
+     * this view to the right of the title.
      *
      * @param resId    - Drawable resource
      * @param listener (Optional) - OnClick for the custom view
