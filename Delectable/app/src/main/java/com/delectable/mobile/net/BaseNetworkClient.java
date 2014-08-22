@@ -36,7 +36,7 @@ public class BaseNetworkClient {
         }
 
         //handle API errors
-        if (!responseObj.success) {
+        if (!responseObj.isSuccess()) {
 
             if (responseObj.getError() == null) {
                 String errorMessage = "API Error with no message.";

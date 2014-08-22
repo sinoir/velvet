@@ -2,15 +2,15 @@ package com.delectable.mobile.model.api;
 
 public class BaseResponse {
 
-    public String e_tag;
-
     public boolean e_tag_match;
 
-    public String context;
+    private String e_tag;
 
-    public boolean success;
-    
-    public boolean invalidate;
+    private String context;
+
+    private boolean success;
+
+    private boolean invalidate;
 
     private Error error;
 
