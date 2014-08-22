@@ -3,6 +3,7 @@ package com.delectable.mobile.di;
 import com.delectable.mobile.App;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.CaptureController;
+import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.Cache;
@@ -21,9 +22,11 @@ import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
 import com.delectable.mobile.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.jobs.captures.RateCaptureJob;
+import com.delectable.mobile.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
+import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
@@ -79,10 +82,12 @@ import de.greenrobot.event.EventBus;
                 RateCaptureJob.class,
                 DeleteCaptureJob.class,
                 FetchInfluencerSuggestionsJob.class,
+                SearchFoursquareVenuesJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
-                RegistrationController.class
+                RegistrationController.class,
+                FoursquareController.class
         }
 )
 public class AppModule {
@@ -110,6 +115,12 @@ public class AppModule {
     @Singleton
     NetworkClient provideNetworkClient() {
         return new NetworkClient();
+    }
+
+    @Provides
+    @Singleton
+    FoursquareNetworkClient provideFoursquareNetworkClient() {
+        return new FoursquareNetworkClient();
     }
 
 }
