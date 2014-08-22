@@ -17,9 +17,9 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class FollowAccountJob extends Job {
+public class oldFollowAccountJob extends Job {
 
-    private static final String TAG = FollowAccountJob.class.getSimpleName();
+    private static final String TAG = oldFollowAccountJob.class.getSimpleName();
 
     @Inject
     AccountModel mAccountModel;
@@ -36,7 +36,7 @@ public class FollowAccountJob extends Job {
 
     private int mOriginalUserRelationship;
 
-    public FollowAccountJob(String id, boolean follow) {
+    public oldFollowAccountJob(String id, boolean follow) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
         mAccountId = id;
         mFollow = follow;
