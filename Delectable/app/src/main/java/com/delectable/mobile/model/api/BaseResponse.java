@@ -40,6 +40,11 @@ public class BaseResponse {
 
         private String message;
 
+        public Error(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
         public int getCode() {
             return code;
         }
