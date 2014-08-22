@@ -1,6 +1,8 @@
 package com.delectable.mobile.api.models;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 public class AccountMinimal {
@@ -47,6 +49,10 @@ public class AccountMinimal {
         this.lname = lname;
     }
 
+    public String getFullName() {
+        return getFname() + " " + getLname();
+    }
+
     public boolean isShadowbanned() {
         return shadowbanned;
     }
@@ -77,6 +83,13 @@ public class AccountMinimal {
 
     public void setInfluencerTitles(List<String> influencer_titles) {
         this.influencer_titles = influencer_titles;
+    }
+
+    /**
+     * @return Returns influencer titles in a comma delimited String.
+     */
+    public String getInfluencerTitlesString() {
+        return StringUtils.join(influencer_titles, ",");
     }
 
     public String getContext() {
