@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- made for RelativeLayout-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/follow_experts_row_height">
+
+    <com.delectable.mobile.ui.common.widget.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/follow_experts_profile_picture_width"
+        android:layout_height="@dimen/follow_experts_profile_picture_width"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/follow_friends_horizontal_spacing"
+        android:src="@drawable/no_photo" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_toLeftOf="@+id/follow_button"
+        android:layout_toRightOf="@+id/profile_image"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Katherine Cooper"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/follow_friends_name_text_size"
+        app:fontName="whitney_medium" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/influencer_titles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_toLeftOf="@+id/follow_button"
+        android:layout_toRightOf="@+id/profile_image"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Wine and beverage director on the ferry between SF and Sausalito"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/follow_experts_bio_text_size"
+        app:fontName="whitney_medium" />
+
+    <ImageButton
+        android:id="@+id/follow_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/follow_friends_follow_button_height"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
+        android:layout_marginRight="@dimen/follow_friends_horizontal_spacing"
+        android:layout_marginTop="@dimen/follow_experts_follow_button_top_margin"
+        android:background="@null"
+        android:src="@drawable/btn_follow" />
+</merge>
