@@ -14,6 +14,7 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,46 +22,72 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.InjectViews;
 
 public class CaptureDetailsView extends RelativeLayout {
 
-    private ImageView mWineImage;
+    private static final String TAG = CaptureDetailsView.class.getSimpleName();
 
-    private TextView mProducerName;
+    @InjectView(R.id.wine_image)
+    protected ImageView mWineImage;
 
-    private TextView mWineName;
+    @InjectView(R.id.producer_name)
+    protected TextView mProducerName;
 
-    private View mTaggedParticipantsContainer;
+    @InjectView(R.id.wine_name)
+    protected TextView mWineName;
 
-    private CircleImageView mProfileImage1;
+    @InjectView(R.id.tagged_participants_container)
+    protected View mTaggedParticipantsContainer;
 
-    private ArrayList<CircleImageView> mTaggedParticipantImages;
+    @InjectView(R.id.profile_image1)
+    protected CircleImageView mProfileImage1;
 
-    private ImageView mMoreTaggedParticipantsButton;
+    @InjectViews({R.id.tagged_user_image1, R.id.tagged_user_image2, R.id.tagged_user_image3})
+    protected List<CircleImageView> mTaggedParticipantImages;
 
-    private RelativeLayout mCapturerCommentsContainer;
+    @InjectView(R.id.more_tagged_user_button)
+    protected TextView mMoreTaggedParticipantsButton;
 
-    private CircleImageView mProfileImage2;
+    @InjectView(R.id.capturer_comments_container)
+    protected RelativeLayout mCapturerCommentsContainer;
 
-    private TextView mUserName;
+    @InjectView(R.id.profile_image2)
+    protected CircleImageView mProfileImage2;
 
-    private TextView mUserComment;
+    @InjectView(R.id.user_name)
+    protected TextView mUserName;
 
-    private TextView mCaptureTimeLocation;
+    @InjectView(R.id.user_comment)
+    protected TextView mUserComment;
 
-    private RatingsBarView mUserCaptureRatingBar;
+    @InjectView(R.id.capture_time_location)
+    protected TextView mCaptureTimeLocation;
 
-    private LinearLayout mParticipantsCommentsRatingsContainer;
+    @InjectView(R.id.capturer_rating_bar)
+    protected RatingsBarView mUserCaptureRatingBar;
 
-    private View mRateButton;
+    @InjectView(R.id.participants_comments_ratings_container)
+    protected LinearLayout mParticipantsCommentsRatingsContainer;
 
-    private View mCommentButton;
+    @InjectView(R.id.rate_button)
+    protected View mRateButton;
 
-    private View mLikeButton;
+    @InjectView(R.id.comment_button)
+    protected View mCommentButton;
 
-    private TextView mLikesCount;
+    @InjectView(R.id.like_button)
+    protected View mLikeButton;
 
-    private View mMenuButton;
+    @InjectView(R.id.likes_count)
+    protected TextView mLikesCount;
+
+    @InjectView(R.id.menu_button)
+    protected View mMenuButton;
 
     private Context mContext;
 
@@ -82,39 +109,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         View.inflate(context, R.layout.row_feed_wine_detail, this);
 
-        // Top Wine Section
-        mWineImage = (ImageView) findViewById(R.id.wine_image);
-        mProducerName = (TextView) findViewById(R.id.producer_name);
-        mWineName = (TextView) findViewById(R.id.wine_name);
-
-        // Tagged Participants Section
-        mTaggedParticipantsContainer = findViewById(R.id.tagged_participants_container);
-        mProfileImage1 = (CircleImageView) findViewById(R.id.profile_image1);
-        mTaggedParticipantImages = new ArrayList<CircleImageView>();
-        mTaggedParticipantImages.add((CircleImageView) findViewById(R.id.tagged_user_image1));
-        mTaggedParticipantImages.add((CircleImageView) findViewById(R.id.tagged_user_image2));
-        mTaggedParticipantImages.add((CircleImageView) findViewById(R.id.tagged_user_image3));
-        mMoreTaggedParticipantsButton = (ImageView) findViewById(R.id.more_tagged_user_button);
-
-        // User Comment/Rating
-        mCapturerCommentsContainer = (RelativeLayout) findViewById(
-                R.id.capturer_comments_container);
-        mProfileImage2 = (CircleImageView) findViewById(R.id.profile_image2);
-        mUserName = (TextView) findViewById(R.id.user_name);
-        mUserComment = (TextView) findViewById(R.id.user_comment);
-        mCaptureTimeLocation = (TextView) findViewById(R.id.capture_time_location);
-        mUserCaptureRatingBar = (RatingsBarView) findViewById(R.id.capturer_rating_bar);
-
-        // Participants Comment/Rating
-        mParticipantsCommentsRatingsContainer = (LinearLayout) findViewById(
-                R.id.participants_comments_ratings_container);
-
-        // Action buttons:
-        mRateButton = findViewById(R.id.rate_button);
-        mCommentButton = findViewById(R.id.comment_button);
-        mLikeButton = findViewById(R.id.like_button);
-        mLikesCount = (TextView) findViewById(R.id.likes_count);
-        mMenuButton = findViewById(R.id.menu_button);
+        ButterKnife.inject(this);
     }
 
     public void updateData(CaptureDetails captureData) {
@@ -200,9 +195,13 @@ public class CaptureDetailsView extends RelativeLayout {
             }
         }
 
-        if (taggedParticipants.size() == 3) {
+        // TODO: Figure out why taggedParticipants doesn't have more than 3 items, when the response has more than 3...
+        // this doesn't work yet
+        if (taggedParticipants.size() > 3) {
             // TODO: Add Touchstate to Open more tagged profile listing
             mMoreTaggedParticipantsButton.setVisibility(View.VISIBLE);
+            // Show + remainder # of tagged participants
+            mMoreTaggedParticipantsButton.setText("+" + (taggedParticipants.size() - 3));
             mMoreTaggedParticipantsButton.setOnClickListener(
                     new View.OnClickListener() {
                         @Override

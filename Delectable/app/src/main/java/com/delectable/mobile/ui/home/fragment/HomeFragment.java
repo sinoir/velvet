@@ -5,10 +5,7 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.registration.activity.LoginActivity;
-import com.facebook.Session;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -72,32 +69,15 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.home_menu, menu);
+        // TODO: Search in Menu
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // TODO: Remove once settings is ready with Sign Out
-            case R.id.sign_out:
-                logout();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void logout() {
-        // TODO: Some Common Logout function
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            session.closeAndClearTokenInformation();
-        }
-        UserInfo.onSignOut(getActivity());
-        Intent launchIntent = new Intent();
-        launchIntent.setClass(getActivity(), LoginActivity.class);
-        startActivity(launchIntent);
-        getActivity().finish();
     }
 }

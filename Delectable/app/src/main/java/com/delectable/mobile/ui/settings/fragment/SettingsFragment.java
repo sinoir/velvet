@@ -27,12 +27,10 @@ import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
-import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
-import com.facebook.Session;
 
 import android.app.Activity;
 import android.content.Context;
@@ -755,19 +753,6 @@ public class SettingsFragment extends BaseFragment {
         return BuildConfig.VERSION_NAME;
     }
 
-
-    public void signout() {
-        // TODO: Some Common Logout function- grabbed straight from HomeFragment
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            session.closeAndClearTokenInformation();
-        }
-        UserInfo.onSignOut(getActivity());
-        Intent launchIntent = new Intent();
-        launchIntent.setClass(getActivity(), LoginActivity.class);
-        startActivity(launchIntent);
-        getActivity().finish();
-    }
     //endregion
 
     /**
