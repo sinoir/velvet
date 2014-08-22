@@ -14,10 +14,10 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
 import com.delectable.mobile.ui.common.dialog.CommentDialog;
-import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,8 +28,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public abstract class BaseCaptureDetailsFragment extends BaseFragment
-        implements CaptureDetailsView.CaptureActionsHandler,
-        ConfirmationDialog.ConfirmationDialogCallback {
+        implements CaptureDetailsView.CaptureActionsHandler {
 
     private static final String TAG = BaseCaptureDetailsFragment.class.getSimpleName();
 
@@ -178,23 +177,17 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         mCaptureController.rateCapture(capture.getId(), userId, rating);
     }
 
-    //region Confirmation Dialog callbacks
-    public void onConfirmationOk(int requestCode) {
-        switch (requestCode) {
-            case REQUEST_DELETE_CONFIRMATION:
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_DELETE_CONFIRMATION) {
+            if (resultCode == Activity.RESULT_OK) {
                 deleteCapture(mTempCaptureForAction);
-                mTempCaptureForAction = null;
-                break;
+            }
+            mTempCaptureForAction = null;
         }
     }
 
-    public void onConfirmationCancel(int requetCode) {
-        switch (requetCode) {
-            case REQUEST_DELETE_CONFIRMATION:
-                mTempCaptureForAction = null;
-                break;
-        }
-    }
     //endregion
 
     //region EventBus Events

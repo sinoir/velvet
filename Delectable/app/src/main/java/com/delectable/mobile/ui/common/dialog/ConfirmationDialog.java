@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.common.dialog;
 import com.delectable.mobile.R;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -52,28 +53,21 @@ public class ConfirmationDialog extends DialogFragment {
                 .setPositiveButton(mOkText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (getTargetFragment() instanceof ConfirmationDialogCallback) {
-                            ((ConfirmationDialogCallback) getTargetFragment())
-                                    .onConfirmationOk(getTargetRequestCode());
+                        if (getTargetFragment() != null) {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(),
+                                    Activity.RESULT_OK, null);
                         }
                     }
                 })
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (getTargetFragment() instanceof ConfirmationDialogCallback) {
-                            ((ConfirmationDialogCallback) getTargetFragment())
-                                    .onConfirmationCancel(getTargetRequestCode());
+                        if (getTargetFragment() != null) {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(),
+                                    Activity.RESULT_CANCELED, null);
                         }
                     }
                 });
         return builder.create();
-    }
-
-    public static interface ConfirmationDialogCallback {
-
-        public void onConfirmationOk(int requestCode);
-
-        public void onConfirmationCancel(int requestCode);
     }
 }
