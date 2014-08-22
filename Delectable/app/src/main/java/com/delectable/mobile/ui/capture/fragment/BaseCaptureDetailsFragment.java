@@ -1,10 +1,12 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
+import com.delectable.mobile.events.captures.DeletedCaptureEvent;
 import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.events.captures.RatedCaptureEvent;
@@ -15,6 +17,7 @@ import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +32,15 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     private static final String TAG = BaseCaptureDetailsFragment.class.getSimpleName();
 
+    private static final int REQUEST_DELETE_CONFIRMATION = 100;
+
     @Inject
     CaptureController mCaptureController;
+
+    /**
+     * Capture ready to be deleted or other things, for when the user either clicks OK.
+     */
+    private CaptureDetails mTempCaptureForAction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,8 +151,15 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void discardCapture(CaptureDetails capture) {
-        // TODO: Discard / Delete Capture
+    public void discardCaptureClicked(CaptureDetails capture) {
+        mTempCaptureForAction = capture;
+        showConfirmation(getActivity().getString(R.string.remove),
+                getActivity().getString(R.string.capture_remove),
+                getActivity().getString(R.string.remove), REQUEST_DELETE_CONFIRMATION);
+    }
+
+    public void deleteCapture(CaptureDetails capture) {
+        mCaptureController.deleteCapture(capture.getId());
     }
 
     @Override
@@ -160,6 +177,20 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         mCaptureController.rateCapture(capture.getId(), userId, rating);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_DELETE_CONFIRMATION) {
+            if (resultCode == Activity.RESULT_OK) {
+                deleteCapture(mTempCaptureForAction);
+            }
+            mTempCaptureForAction = null;
+        }
+    }
+
+    //endregion
+
+    //region EventBus Events
     public void onEventMainThread(AddCaptureCommentEvent event) {
         dataSetChanged();
     }
@@ -175,4 +206,9 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public void onEventMainThread(RatedCaptureEvent event) {
         dataSetChanged();
     }
+
+    public void onEventMainThread(DeletedCaptureEvent event) {
+        dataSetChanged();
+    }
+    //endregion
 }

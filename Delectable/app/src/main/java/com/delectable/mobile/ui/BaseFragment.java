@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui;
 
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.facebook.Session;
 import com.iainconnor.objectcache.CacheManager;
@@ -122,6 +123,13 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         if (getActivity() != null) {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void showConfirmation(String title, String message, String positiveText,
+            int requestCode) {
+        ConfirmationDialog dialog = ConfirmationDialog
+                .newInstance(title, message, positiveText, this, requestCode);
+        dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
 
     public void signout() {

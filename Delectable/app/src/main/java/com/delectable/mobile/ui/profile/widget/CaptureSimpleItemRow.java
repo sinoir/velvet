@@ -229,7 +229,7 @@ public class CaptureSimpleItemRow extends RelativeLayout {
     @OnClick(R.id.discard_capture)
     protected void discardCaptureClicked() {
         if (mActionsHandler != null) {
-            mActionsHandler.discardCapture(mCaptureData);
+            mActionsHandler.discardCaptureClicked(mCaptureData);
         }
     }
 

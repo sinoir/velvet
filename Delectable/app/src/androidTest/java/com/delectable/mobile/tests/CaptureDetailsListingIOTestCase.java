@@ -19,7 +19,7 @@ public class CaptureDetailsListingIOTestCase extends BaseInstrumentationTestCase
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
         CaptureFeedResponse feedResponseObject = mGson.fromJson(json.toString(),
                 CaptureFeedResponse.class);
-        mFollowFeedListing = feedResponseObject.payload;
+        mFollowFeedListing = feedResponseObject.getPayload();
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.delectable.mobile.model.api;
 
-import com.delectable.mobile.model.api.BaseRequest;
-
 public class ActionRequest extends BaseRequest {
 
     ActionPayload payload;
+
+    public ActionRequest(String id) {
+        payload = new ActionPayload();
+        payload.id = id;
+    }
 
     public ActionRequest(String id, boolean action) {
         payload = new ActionPayload();
@@ -16,6 +19,6 @@ public class ActionRequest extends BaseRequest {
 
         String id;
 
-        boolean action;
+        Boolean action;
     }
 }

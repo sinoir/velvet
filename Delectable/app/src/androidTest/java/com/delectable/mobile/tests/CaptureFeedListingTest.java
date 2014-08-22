@@ -29,7 +29,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> actualListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());
@@ -120,7 +120,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> actualListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
         assertTrue(feedResponseObject.invalidate);
 
@@ -244,13 +244,13 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
         // Load "Second Request" response, as if getting a request with etag / before / after
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_befaft_r2);
 
         feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> newListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
 
         newListing.combineWithPreviousListing(captureListing);
 
@@ -274,13 +274,13 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
         feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> newListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
 
         newListing.combineWithPreviousListing(captureListing);
 
@@ -302,7 +302,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
         String expectedEtag = captureListing.getETag();
         String expectedContext = captureListing.getContext();
@@ -323,7 +323,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_null_payload);
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> actualListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
         assertNull(actualListing);
     }
 
@@ -333,7 +333,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
         ArrayList<CaptureDetails> expectedCombinedData = captureListing.getUpdates();
         ArrayList<CaptureDetails> actualCombinedData = captureListing.getSortedCombinedData();
@@ -346,13 +346,13 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         CaptureFeedResponse feedResponseObject = mGson
                 .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
         feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> newListing = feedResponseObject.payload;
+        ListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
 
         newListing.combineWithPreviousListing(captureListing);
 

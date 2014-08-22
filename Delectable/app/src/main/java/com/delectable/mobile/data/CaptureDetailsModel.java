@@ -28,4 +28,8 @@ public class CaptureDetailsModel {
     public void saveCaptureDetails(CaptureDetails captureDetails) {
         mCache.put(KEY_PREFIX + captureDetails.getId(), captureDetails);
     }
+
+    public void deleteCaptureDetails(String captureId) {
+        mCache.unset(KEY_PREFIX + captureId);
+    }
 }
