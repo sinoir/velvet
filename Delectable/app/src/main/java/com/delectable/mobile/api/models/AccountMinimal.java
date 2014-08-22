@@ -7,6 +7,12 @@ import java.util.List;
 
 public class AccountMinimal {
 
+    public static transient int RELATION_TYPE_SELF = -1;
+
+    public static transient int RELATION_TYPE_NONE = 0;
+
+    public static transient int RELATION_TYPE_FOLLOWING = 1;
+
     private String id;
 
     private String fname;
@@ -24,6 +30,9 @@ public class AccountMinimal {
     private String context;
 
     private String e_tag;
+
+    int current_user_relationship;
+
 
     public String getId() {
         return id;
@@ -106,6 +115,30 @@ public class AccountMinimal {
 
     public void setETag(String e_tag) {
         this.e_tag = e_tag;
+    }
+
+    public int getCurrentUserRelationship() {
+        return current_user_relationship;
+    }
+
+    public void setCurrentUserRelationship(int current_user_relationship) {
+        this.current_user_relationship = current_user_relationship;
+    }
+
+    public boolean isUserRelationshipTypeSelf() {
+        return checkRelationship(RELATION_TYPE_SELF);
+    }
+
+    public boolean isUserRelationshipTypeFollowing() {
+        return checkRelationship(RELATION_TYPE_FOLLOWING);
+    }
+
+    public boolean isUserRelationshipTypeNone() {
+        return checkRelationship(RELATION_TYPE_NONE);
+    }
+
+    private boolean checkRelationship(int relationshipType) {
+        return current_user_relationship == relationshipType;
     }
 
 
