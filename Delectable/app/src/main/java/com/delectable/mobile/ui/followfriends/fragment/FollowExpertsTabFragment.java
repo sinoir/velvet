@@ -65,7 +65,7 @@ public class FollowExpertsTabFragment extends BaseFragment
             return;
         }
         //event error
-        Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_SHORT).show();
+        showToastError(event.getErrorMessage());
 
     }
 
