@@ -2,6 +2,7 @@ package com.delectable.mobile.controllers;
 
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.path.android.jobqueue.JobManager;
 
@@ -23,6 +24,10 @@ public class AccountController {
 
     public void oldFollowAccount(String id, boolean follow) {
         mJobManager.addJobInBackground(new oldFollowAccountJob(id, follow));
+    }
+
+    public void followAccount(String id, boolean follow) {
+        mJobManager.addJobInBackground(new FollowAccountJob(id, follow));
     }
 
     public void fetchInfluencerSuggestions() {
