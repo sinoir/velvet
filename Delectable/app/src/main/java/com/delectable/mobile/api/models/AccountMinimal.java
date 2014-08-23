@@ -141,5 +141,17 @@ public class AccountMinimal {
         return current_user_relationship == relationshipType;
     }
 
+    @Override
+    public String toString() {
+        return "AccountMinimal{" +
+                "id='" + id + '\'' +
+                ", fname='" + fname + '\'' +
+                ", lname='" + lname + '\'' +
+                ", photo=" + photo +
+                ", influencer=" + influencer +
+                ", influencer_titles=" + influencer_titles +
+                ", e_tag=" + e_tag +
+                "}";
+    }
 
 }
