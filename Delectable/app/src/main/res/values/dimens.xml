@@ -71,8 +71,6 @@
     <dimen name="reset_password_dialog_header_height">60dp</dimen>
 
 
-
-
     <!-- User Profile Dimens -->
     <dimen name="profile_vertical_spacing">9dp</dimen>
     <dimen name="profile_horizontal_text_spacing">15dp</dimen>
@@ -184,8 +182,7 @@
     <!-- Set Profile Pic Dialog -->
     <dimen name="set_profile_pic_dialog_row_text_size">16sp</dimen>
 
-
-
-
+    <!-- Tag people -->
+    <dimen name="tag_row_height">50dp</dimen>
 
 </resources>

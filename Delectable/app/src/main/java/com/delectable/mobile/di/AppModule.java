@@ -38,6 +38,7 @@ import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
+import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
 
@@ -61,6 +62,7 @@ import de.greenrobot.event.EventBus;
                 FollowFeedTabFragment.class,
                 SettingsFragment.class,
                 FollowExpertsTabFragment.class,
+                TagPeopleFragment.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
