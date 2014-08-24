@@ -65,7 +65,7 @@ public class FollowExpertsRow extends RelativeLayout {
         updateData(account.getPhoto().getUrl(),
                 account.getFullName(),
                 account.getInfluencerTitlesString(),
-                false);
+                account.isUserRelationshipTypeFollowing());
     }
 
     @OnClick(R.id.follow_button)
