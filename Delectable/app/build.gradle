@@ -26,9 +26,7 @@ android {
 
 repositories {
     mavenCentral()
-    maven {
-        url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/'
-    }
+    maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
 }
 
 dependencies {
@@ -52,4 +50,5 @@ dependencies {
     compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT@aar'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
+    compile project(':google-play-services_lib')
 }
