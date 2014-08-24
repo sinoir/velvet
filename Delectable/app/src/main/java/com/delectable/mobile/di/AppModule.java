@@ -29,6 +29,7 @@ import com.delectable.mobile.jobs.registrations.RegisterJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
@@ -62,6 +63,7 @@ import de.greenrobot.event.EventBus;
                 FollowFeedTabFragment.class,
                 SettingsFragment.class,
                 FollowExpertsTabFragment.class,
+                FoursquareVenueSelectionFragment.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
