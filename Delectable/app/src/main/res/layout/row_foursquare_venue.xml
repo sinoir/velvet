@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="@dimen/foursquare_venue_row_height"
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical">
 
@@ -11,11 +11,11 @@
         android:id="@+id/location_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="@dimen/foursquare_text_vertical_spacing"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:textColor="@color/d_black"
-        android:textSize="16sp"
+        android:textSize="@dimen/foursquare_location_name_text_size"
         app:fontName="whitney_medium" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
@@ -23,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/location_name"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:textColor="@color/d_medium_gray"
-        android:textSize="14sp"
+        android:textSize="@dimen/foursquare_location_address_text_size"
         app:fontName="whitney_book" />
 </RelativeLayout>
