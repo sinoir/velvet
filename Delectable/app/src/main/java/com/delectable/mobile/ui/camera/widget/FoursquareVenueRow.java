@@ -5,7 +5,6 @@ import com.delectable.mobile.model.api.foursquare.FoursquareVenueItem;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,17 +38,7 @@ public class FoursquareVenueRow extends RelativeLayout {
     }
 
     public void updateVenueData(FoursquareVenueItem foursquareVenueItem) {
-        if (foursquareVenueItem.getName() != null) {
-            mLocationName.setText(foursquareVenueItem.getName());
-        } else {
-            Log.wtf(TAG, "Foursquare Name shouldn't be null");
-            mLocationName.setText("");
-        }
-
-        if (foursquareVenueItem.getAddress() != null) {
-            mLocationAddress.setText(foursquareVenueItem.getAddress());
-        } else {
-            mLocationAddress.setText("");
-        }
+        mLocationName.setText(foursquareVenueItem.getName());
+        mLocationAddress.setText(foursquareVenueItem.getAddress());
     }
 }
