@@ -7,11 +7,15 @@ import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.requests.CaptureRequest;
 import com.delectable.mobile.api.requests.ProvisionCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
+import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,7 +28,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,6 +44,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final String sArgsImageData = "sArgsImageData";
 
+    private static final int REQUEST_TAG_FRIENDS = 8000;
+
     @InjectView(R.id.comment_edit_text)
     protected EditText mCommentEditText;
 
@@ -44,7 +53,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     protected RatingSeekBar mRatingSeekBar;
 
     @InjectView(R.id.drinking_with_who)
-    protected View mDrinkingWithWhoButton;
+    protected TextView mDrinkingWithWhoButton;
 
     @InjectView(R.id.drinking_where)
     protected View mDrinkingWhereButton;
@@ -88,6 +97,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private CaptureDetails mCaptureResult;
 
+    private ArrayList<TaggeeContact> mTaggeeContacts;
+
     public static WineCaptureSubmitFragment newInstance(Bitmap imageData) {
         WineCaptureSubmitFragment fragment = new WineCaptureSubmitFragment();
         Bundle args = new Bundle();
@@ -127,6 +138,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         setupButtonListeners();
         setupRatingSeekBar();
 
+        updateWithFriendsUI();
         return mView;
     }
 
@@ -141,6 +153,30 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         getActivity().getActionBar().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_TAG_FRIENDS:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+                    Bundle args = data.getExtras();
+                    mTaggeeContacts = args
+                            .getParcelableArrayList(TagPeopleFragment.RESULT_SELECTED_CONTACTS);
+                } else {
+                    mTaggeeContacts = null;
+                }
+        }
+    }
+
+    private void updateWithFriendsUI() {
+        if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
+            mDrinkingWithWhoButton.setText(getResources()
+                    .getQuantityString(R.plurals.with_friends, mTaggeeContacts.size(),
+                            mTaggeeContacts.size()));
+        } else {
+            mDrinkingWithWhoButton.setText(R.string.capture_submit_drinking_with_who_text);
+        }
     }
 
     private void setupPostButtonToActionBar() {
@@ -280,10 +316,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
         mCaptureRequest.setRating(mCurrentRating);
 
+        if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
+            mCaptureRequest.setTaggees(mTaggeeContacts);
+        }
+
         // TODO: Add Label Scan ID ?
         // TODO: Add Foursquare ID
         // TODO: Add Coordinates
-        // TODO: Add Taggees
     }
 
     private void postCapture() {
@@ -294,7 +333,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnClick(R.id.drinking_with_who)
     protected void selectDrinkingPartners() {
-        // TODO: Drinking Partners Screen
+        TagPeopleFragment fragment = TagPeopleFragment
+                .newInstance(this, REQUEST_TAG_FRIENDS, mTaggeeContacts);
+        launchNextFragment(fragment);
     }
 
     @OnClick(R.id.drinking_where)
