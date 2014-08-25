@@ -1,6 +1,6 @@
 package com.delectable.mobile.ui.tagpeople.widget;
 
-import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.TaggeeContact;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class TagPeopleAdapter extends BaseAdapter {
 
-    private ArrayList<AccountMinimal> mDelectaFriends;
+    private ArrayList<TaggeeContact> mDelectaFriends;
 
     // TODO: Extend with FB Friends
-    public TagPeopleAdapter(ArrayList<AccountMinimal> delectaFriends) {
+    public TagPeopleAdapter(ArrayList<TaggeeContact> delectaFriends) {
         mDelectaFriends = delectaFriends;
     }
 
@@ -23,7 +23,7 @@ public class TagPeopleAdapter extends BaseAdapter {
     }
 
     @Override
-    public AccountMinimal getItem(int position) {
+    public TaggeeContact getItem(int position) {
         return mDelectaFriends.get(position);
     }
 
@@ -37,8 +37,8 @@ public class TagPeopleAdapter extends BaseAdapter {
         TagPeopleRow row = (TagPeopleRow) convertView;
         if (row == null) {
             row = new TagPeopleRow(parent.getContext());
-            AccountMinimal account = getItem(position);
-            row.updateData(account.getFullName());
+            TaggeeContact taggee = getItem(position);
+            row.updateData(taggee.getFullName());
         }
         return row;
     }

@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.tagpeople.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FetchedDelectafriendsEvent;
 import com.delectable.mobile.ui.BaseFragment;
@@ -29,6 +30,10 @@ import butterknife.OnClick;
 
 public class TagPeopleFragment extends BaseFragment {
 
+    public static final String RESULT_SELECTED_CONTACTS = "result_selected_contacts";
+
+    private static final String PARAMS_SELECTED_CONTACTS = "params_selected_contacts";
+
     private static final String TAG = TagPeopleFragment.class.getSimpleName();
 
     @InjectView(R.id.list_view)
@@ -43,16 +48,22 @@ public class TagPeopleFragment extends BaseFragment {
     @Inject
     AccountController mAccountController;
 
-    ArrayList<AccountMinimal> mDelectaFriends;
+    ArrayList<TaggeeContact> mDelectaFriends;
 
-    ArrayList<AccountMinimal> mSelectedItems;
+    ArrayList<TaggeeContact> mSelectedItems;
 
     private View mView;
 
     private TagPeopleAdapter mAdapter;
 
-    public static TagPeopleFragment newInstance(Fragment targetFragment, int requestCode) {
+    public static TagPeopleFragment newInstance(Fragment targetFragment, int requestCode,
+            ArrayList<TaggeeContact> selectedContacts) {
         TagPeopleFragment fragment = new TagPeopleFragment();
+        Bundle args = new Bundle();
+        if (selectedContacts != null) {
+            args.putParcelableArrayList(PARAMS_SELECTED_CONTACTS, selectedContacts);
+        }
+        fragment.setArguments(args);
         fragment.setTargetFragment(targetFragment, requestCode);
         return fragment;
     }
@@ -62,8 +73,16 @@ public class TagPeopleFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
 
-        mDelectaFriends = new ArrayList<AccountMinimal>();
-        mSelectedItems = new ArrayList<AccountMinimal>();
+        mDelectaFriends = new ArrayList<TaggeeContact>();
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mSelectedItems = args.getParcelableArrayList(PARAMS_SELECTED_CONTACTS);
+        }
+
+        if (mSelectedItems == null) {
+            mSelectedItems = new ArrayList<TaggeeContact>();
+        }
     }
 
     @Override
@@ -73,13 +92,26 @@ public class TagPeopleFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.fragment_tag_people, container, false);
         ButterKnife.inject(this, mView);
 
+        setHasOptionsMenu(true);
+        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getTargetFragment() != null) {
+                    getTargetFragment()
+                            .onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,
+                                    null);
+                }
+                getActivity().onBackPressed();
+            }
+        });
+
         mAdapter = new TagPeopleAdapter(mDelectaFriends);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AccountMinimal obj = mAdapter.getItem(position);
+                TaggeeContact obj = mAdapter.getItem(position);
                 if (mSelectedItems.contains(obj)) {
                     mSelectedItems.remove(obj);
                 } else {
@@ -103,7 +135,7 @@ public class TagPeopleFragment extends BaseFragment {
         if (getTargetFragment() != null) {
             Intent data = new Intent();
             Bundle extras = new Bundle();
-            // TODO: Pass in Selected Friends to Bundle
+            extras.putParcelableArrayList(RESULT_SELECTED_CONTACTS, mSelectedItems);
             data.putExtras(extras);
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
         }
@@ -121,14 +153,32 @@ public class TagPeopleFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Updates Selected friends checks when we pass selected friends from previous screen
+     */
+    private void updateSelectedFriends() {
+        if (mSelectedItems == null) {
+            return;
+        }
+        // When coming back from another fragment with checked items, mark them as checked
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            if (mSelectedItems.contains(mAdapter.getItem(i))) {
+                mListView.setItemChecked(i, true);
+            }
+        }
+        updateWithFriendsCount();
+    }
+
     public void onEventMainThread(FetchedDelectafriendsEvent event) {
         if (event.isSuccessful()) {
             mDelectaFriends.clear();
-            mDelectaFriends.addAll(event.getAccounts());
+            for (AccountMinimal account : event.getAccounts()) {
+                mDelectaFriends.add(new TaggeeContact(account));
+            }
             mAdapter.notifyDataSetChanged();
-            showToastError("You have " + event.getAccounts().size() + " Friends");
-        } else {
-            showToastError("Error: Failed to find friends.");
+            updateSelectedFriends();
+        } else if (event.getErrorMessage() != null) {
+            showToastError(event.getErrorMessage());
         }
     }
 }
