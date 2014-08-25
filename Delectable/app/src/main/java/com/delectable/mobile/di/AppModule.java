@@ -12,8 +12,10 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
+import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
+import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
@@ -77,6 +79,7 @@ import de.greenrobot.event.EventBus;
                 LoginFacebookJob.class,
                 FetchCaptureDetailsJob.class,
                 FetchAccountJob.class,
+                oldFollowAccountJob.class,
                 FollowAccountJob.class,
                 AddCaptureCommentJob.class,
                 EditCaptureCommentJob.class,
@@ -85,6 +88,7 @@ import de.greenrobot.event.EventBus;
                 DeleteCaptureJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 SearchFoursquareVenuesJob.class,
+                FetchDelectafriendsJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,

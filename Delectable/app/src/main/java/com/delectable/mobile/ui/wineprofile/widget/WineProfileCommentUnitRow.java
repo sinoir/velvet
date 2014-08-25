@@ -105,7 +105,7 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
         mUserName.setText(capturer.getFullName());
 
         //influencer title(s)
-        if (capturer.getInfluencer()) {
+        if (capturer.isInfluencer()) {
             String titles = capturer.getInfluencerTitlesString();
             if (titles.equals("")) {
                 mInfluencerTitles.setVisibility(View.GONE);

@@ -4,29 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-public class Account {
+public class Account extends AccountMinimal{
 
     // TODO avoid wrapper objects for primitive types
 
-    public static transient int RELATION_TYPE_SELF = -1;
-
-    public static transient int RELATION_TYPE_NONE = 0;
-
-    public static transient int RELATION_TYPE_FOLLOWING = 1;
-
-    String id;
 
     String email;
-
-    String fname;
-
-    String lname;
-
-    PhotoHash photo;
-
-    Boolean influencer;
-
-    List<String> influencer_titles;
 
     String bio;
 
@@ -64,40 +47,8 @@ public class Account {
 
     LocalNotifications local_notifs;
 
-    Integer current_user_relationship;
-
     List<CaptureSummary> capture_summaries;
 
-    String e_tag;
-
-    public boolean isUserRelationshipTypeSelf() {
-        return checkRelationship(RELATION_TYPE_SELF);
-    }
-
-    public boolean isUserRelationshipTypeFollowing() {
-        return checkRelationship(RELATION_TYPE_FOLLOWING);
-    }
-
-    public boolean isUserRelationshipTypeNone() {
-        return checkRelationship(RELATION_TYPE_NONE);
-    }
-
-    private boolean checkRelationship(int relationshipType) {
-        return (getCurrentUserRelationship() != null)
-                && (getCurrentUserRelationship().intValue() == relationshipType);
-    }
-
-    public String getFullName() {
-        return getFname() + " " + getLname();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -105,53 +56,6 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
-    public void setLname(String lname) {
-        this.lname = lname;
-    }
-
-    public PhotoHash getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(PhotoHash photo) {
-        this.photo = photo;
-    }
-
-    public Boolean getInfluencer() {
-        return influencer;
-    }
-
-    public void setInfluencer(Boolean influencer) {
-        this.influencer = influencer;
-    }
-
-    public List<String> getInfluencerTitles() {
-        return influencer_titles;
-    }
-
-    public void setInfluencerTitles(List<String> influencer_titles) {
-        this.influencer_titles = influencer_titles;
-    }
-
-    /**
-     * @return Returns influencer titles in a comma delimited String.
-     */
-    public String getInfluencerTitlesString() {
-        return StringUtils.join(influencer_titles, ",");
     }
 
     public String getBio() {
@@ -313,20 +217,8 @@ public class Account {
         this.capture_summaries = capture_summaries;
     }
 
-    public Integer getCurrentUserRelationship() {
-        return current_user_relationship;
-    }
-
     public void setCurrentUserRelationship(Integer current_user_relationship) {
         this.current_user_relationship = current_user_relationship;
-    }
-
-    public String getETag() {
-        return e_tag;
-    }
-
-    public void setETag(String eTag) {
-        this.e_tag = eTag;
     }
 
     /**
@@ -356,13 +248,13 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "id='" + id + '\'' +
+                "id='" + getId() + '\'' +
                 ", email='" + email + '\'' +
-                ", fname='" + fname + '\'' +
-                ", lname='" + lname + '\'' +
-                ", photo=" + photo +
-                ", influencer=" + influencer +
-                ", influencer_titles=" + influencer_titles +
+                ", fname='" + getFname() + '\'' +
+                ", lname='" + getLname() + '\'' +
+                ", photo=" + getPhoto() +
+                ", influencer=" + isInfluencer() +
+                ", influencer_titles=" + getInfluencerTitlesString() +
                 ", bio='" + bio + '\'' +
                 ", follower_count=" + follower_count +
                 ", wishlist_count=" + wishlist_count +
@@ -383,8 +275,8 @@ public class Account {
                 ", local_notifs=" + local_notifs +
                 ", current_user_relationship=" + current_user_relationship +
                 ", capture_summaries=" + capture_summaries +
-                ", e_tag=" + e_tag +
-                "} " + super.toString();
+                ", e_tag=" + getETag() +
+                "}";
     }
 
     class ClientState {

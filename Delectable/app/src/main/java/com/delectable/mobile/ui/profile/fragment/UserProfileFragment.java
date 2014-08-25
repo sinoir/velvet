@@ -322,7 +322,7 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public void toggleFollowUserClicked(final boolean isFollowingSelected) {
         Log.d(TAG, "Toggle Following? " + isFollowingSelected);
-        mAccountController.followAccount(mUserId, isFollowingSelected);
+        mAccountController.oldFollowAccount(mUserId, isFollowingSelected);
     }
 
     @Override
