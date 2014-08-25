@@ -46,6 +46,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final int REQUEST_TAG_FRIENDS = 8000;
 
+    private static final int REQUEST_LOCATION = 9000;
+
     @InjectView(R.id.comment_edit_text)
     protected EditText mCommentEditText;
 
@@ -56,7 +58,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     protected TextView mDrinkingWithWhoButton;
 
     @InjectView(R.id.drinking_where)
-    protected View mDrinkingWhereButton;
+    protected TextView mDrinkingWhereButton;
 
     @InjectView(R.id.share_facebook)
     protected Switch mShareFacebookButton;
@@ -99,6 +101,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private ArrayList<TaggeeContact> mTaggeeContacts;
 
+    private String mLocationName;
+
+    private String mFoursquareId;
+
     public static WineCaptureSubmitFragment newInstance(Bitmap imageData) {
         WineCaptureSubmitFragment fragment = new WineCaptureSubmitFragment();
         Bundle args = new Bundle();
@@ -138,7 +144,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         setupButtonListeners();
         setupRatingSeekBar();
 
+        // OnCreate gets called after onActivityResult, so we should update the UI accordingly
+        updateLocationUI();
         updateWithFriendsUI();
+
         return mView;
     }
 
@@ -166,6 +175,20 @@ public class WineCaptureSubmitFragment extends BaseFragment {
                 } else {
                     mTaggeeContacts = null;
                 }
+                break;
+            case REQUEST_LOCATION:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+                    Bundle args = data.getExtras();
+                    mLocationName = args
+                            .getString(FoursquareVenueSelectionFragment.RESULT_FOURSQUARE_NAME);
+                    mFoursquareId = args
+                            .getString(FoursquareVenueSelectionFragment.RESULT_FOURSQUARE_ID);
+                } else {
+                    // User Canceled, reset info
+                    mLocationName = null;
+                    mFoursquareId = null;
+                }
+                break;
         }
     }
 
@@ -176,6 +199,15 @@ public class WineCaptureSubmitFragment extends BaseFragment {
                             mTaggeeContacts.size()));
         } else {
             mDrinkingWithWhoButton.setText(R.string.capture_submit_drinking_with_who_text);
+
+        }
+    }
+
+    private void updateLocationUI() {
+        if (mLocationName != null) {
+            mDrinkingWhereButton.setText(getString(R.string.cap_feed_at_location, mLocationName));
+        } else {
+            mDrinkingWhereButton.setText(R.string.capture_submit_drinking_where_text);
         }
     }
 
@@ -319,9 +351,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
             mCaptureRequest.setTaggees(mTaggeeContacts);
         }
+        if (mFoursquareId != null) {
+            mCaptureRequest.setFoursquareLocationId(mFoursquareId);
+        }
 
         // TODO: Add Label Scan ID ?
-        // TODO: Add Foursquare ID
         // TODO: Add Coordinates
     }
 
@@ -340,7 +374,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnClick(R.id.drinking_where)
     protected void selectDrinkingLocation() {
-        // TODO: Location Listing
+        FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment.newInstance(
+                this, REQUEST_LOCATION);
+        launchNextFragment(fragment);
     }
 
     @OnCheckedChanged(R.id.share_facebook)
@@ -360,7 +396,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mMakePrivateButton.setChecked(true);
         }
     }
-
 
     @OnCheckedChanged(R.id.share_instagram)
     protected void shareCaptureOnInstagram(CompoundButton view, boolean isChecked) {

@@ -1,21 +1,36 @@
 package com.delectable.mobile.ui;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import com.delectable.mobile.R;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     private boolean mIsFromDeepLink;
 
     private Uri mDeepLinkUriData;
+
+    private GoogleApiClient mGoogleApiClient;
+
+    private LocationRequest mLocationRequest;
+
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +47,26 @@ public abstract class BaseActivity extends Activity {
         } else {
             mIsFromDeepLink = false;
         }
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+
+        super.onStop();
     }
 
     /**
@@ -72,5 +107,48 @@ public abstract class BaseActivity extends Activity {
     public Uri getDeepLinkUriData() {
         return mDeepLinkUriData;
     }
+
+    public Location getLastLocation() {
+        return mLastLocation;
+    }
+
+    /**
+     * Update Last location by pinging the LocationService once.
+     */
+    public void updateLastLocation() {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // We only want 1 update
+        mLocationRequest.setNumUpdates(1);
+
+        LocationServices.FusedLocationApi
+                .requestLocationUpdates(mGoogleApiClient, mLocationRequest, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        // We just want to update once, and remove the listener
+                        mLastLocation = location;
+                        Log.d(TAG, "Updated Location:" + location);
+                    }
+                });
+    }
+
+    //region Google Play Services Callbacks
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "On LocationServices Connected: " + bundle);
+        updateLastLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // TODO : Properly handle different error scenarios, i.e: Google Play Services is missing.
+        Log.e(TAG, "On LocationServices Connection Failed: " + connectionResult);
+    }
+    //endregion
 
 }

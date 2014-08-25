@@ -185,4 +185,10 @@
     <!-- Tag people -->
     <dimen name="tag_row_height">50dp</dimen>
 
+    <!-- Location / Foursquare listing ui -->
+    <dimen name="foursquare_venue_row_height">72dp</dimen>
+    <dimen name="foursquare_text_vertical_spacing">4dp</dimen>
+    <dimen name="foursquare_location_name_text_size">16sp</dimen>
+    <dimen name="foursquare_location_address_text_size">14sp</dimen>
+
 </resources>

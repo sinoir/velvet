@@ -60,7 +60,7 @@ public class FetchAccountJob extends Job {
         AccountContextResponse response = mNetworkClient
                 .post(endpoint, request, AccountContextResponse.class);
 
-        if (!response.e_tag_match) {
+        if (!response.isETagMatch()) {
             Account account = response.payload.account;
             mAccountModel.saveAccount(account);
             mEventBus.post(new UpdatedAccountEvent(account.getId()));
