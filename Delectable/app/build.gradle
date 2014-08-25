@@ -50,5 +50,5 @@ dependencies {
     compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT@aar'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
-    compile project(':google-play-services_lib')
+    compile 'com.google.android.gms:play-services:5.0.+'
 }

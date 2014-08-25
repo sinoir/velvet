@@ -1,2 +1,2 @@
-include ':app', ':facebook', ':google-play-services_lib'
+include ':app', ':facebook'
 include ':viewPagerIndicator'
