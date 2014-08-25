@@ -14,6 +14,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.HashMap;
 
+//TODO: Someday should clean up Foursquare and maybe add it to its own package, etc. 
 public class FoursquareNetworkClient extends BaseNetworkClient {
 
     private static final String TAG = FoursquareNetworkClient.class.getSimpleName();
