@@ -26,17 +26,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
             android:textColor="@color/d_white"
-            android:textSize="18sp"
+            android:textSize="@dimen/tag_with_people_text_size"
             app:fontName="whitney_book" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_next" />
     </RelativeLayout>
 </RelativeLayout>
