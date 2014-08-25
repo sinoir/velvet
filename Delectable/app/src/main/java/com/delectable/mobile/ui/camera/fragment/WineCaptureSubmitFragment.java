@@ -12,6 +12,8 @@ import com.delectable.mobile.api.requests.ProvisionCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -37,6 +40,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final String sArgsImageData = "sArgsImageData";
 
+    private static final int REQUEST_LOCATION = 9000;
+
     @InjectView(R.id.comment_edit_text)
     protected EditText mCommentEditText;
 
@@ -47,7 +52,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     protected View mDrinkingWithWhoButton;
 
     @InjectView(R.id.drinking_where)
-    protected View mDrinkingWhereButton;
+    protected TextView mDrinkingWhereButton;
 
     @InjectView(R.id.share_facebook)
     protected Switch mShareFacebookButton;
@@ -88,6 +93,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private CaptureDetails mCaptureResult;
 
+    private String mLocationName;
+
+    private String mFoursquareId;
+
     public static WineCaptureSubmitFragment newInstance(Bitmap imageData) {
         WineCaptureSubmitFragment fragment = new WineCaptureSubmitFragment();
         Bundle args = new Bundle();
@@ -127,6 +136,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         setupButtonListeners();
         setupRatingSeekBar();
 
+        // OnCreate gets called after onActivityResult, so we should update the UI accordingly
+        updateLocationUI();
+
         return mView;
     }
 
@@ -141,6 +153,32 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         getActivity().getActionBar().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_LOCATION:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+                    Bundle args = data.getExtras();
+                    mLocationName = args
+                            .getString(FoursquareVenueSelectionFragment.RESULT_FOURSQUARE_NAME);
+                    mFoursquareId = args
+                            .getString(FoursquareVenueSelectionFragment.RESULT_FOURSQUARE_ID);
+                } else {
+                    // User Canceled, reset info
+                    mLocationName = null;
+                    mFoursquareId = null;
+                }
+        }
+    }
+
+    private void updateLocationUI() {
+        if (mLocationName != null) {
+            mDrinkingWhereButton.setText(getString(R.string.cap_feed_at_location, mLocationName));
+        } else {
+            mDrinkingWhereButton.setText(R.string.capture_submit_drinking_where_text);
+        }
     }
 
     private void setupPostButtonToActionBar() {
@@ -280,8 +318,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
         mCaptureRequest.setRating(mCurrentRating);
 
+        if (mFoursquareId != null) {
+            mCaptureRequest.setFoursquareLocationId(mFoursquareId);
+        }
+
         // TODO: Add Label Scan ID ?
-        // TODO: Add Foursquare ID
         // TODO: Add Coordinates
         // TODO: Add Taggees
     }
@@ -299,7 +340,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnClick(R.id.drinking_where)
     protected void selectDrinkingLocation() {
-        // TODO: Location Listing
+        FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment
+                .newInstance(this, REQUEST_LOCATION);
+        launchNextFragment(fragment);
     }
 
     @OnCheckedChanged(R.id.share_facebook)

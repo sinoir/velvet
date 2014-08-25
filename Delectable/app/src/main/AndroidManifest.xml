@@ -4,12 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:allowBackup="true"
         android:name=".App"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/DelectableTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.delectable.mobile.MainActivity"
@@ -25,10 +28,10 @@
         </activity>
 
         <activity
-            android:theme="@style/DelectableTheme.NoActionBar"
             android:name="com.delectable.mobile.ui.registration.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme.NoActionBar" />
 
         <activity
             android:name=".ui.navigation.activity.NavActivity"
@@ -98,5 +101,6 @@
     <!-- for reading photos from phones that have them on external storage-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

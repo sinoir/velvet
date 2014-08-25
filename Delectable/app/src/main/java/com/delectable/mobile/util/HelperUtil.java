@@ -2,6 +2,7 @@ package com.delectable.mobile.util;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import android.location.Location;
 import android.net.Uri;
 
 import java.util.Map;
@@ -38,5 +39,23 @@ public class HelperUtil {
         }
         Uri builtUri = uriBuilder.build();
         return fullUrl + builtUri.toString();
+    }
+
+    /**
+     * Get the latitude and longitude from the Location object returned by Location Services.
+     *
+     * @param currentLocation A Location object containing the current location
+     * @return The latitude and longitude of the current location separated by a comma, or empty
+     * string if no location is available.
+     */
+    public static String getLatLngFromLocation(Location currentLocation) {
+        // If the location is valid
+        if (currentLocation != null) {
+            // Return the latitude and longitude as strings
+            return currentLocation.getLatitude() + "," + currentLocation.getLongitude();
+        } else {
+            // Otherwise, return the empty string
+            return "";
+        }
     }
 }

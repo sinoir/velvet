@@ -2,15 +2,15 @@ package com.delectable.mobile.model.api;
 
 public class BaseResponse {
 
-    public String e_tag;
-
     public boolean e_tag_match;
 
-    public String context;
+    private String e_tag;
 
-    public boolean success;
-    
-    public boolean invalidate;
+    private String context;
+
+    private boolean success;
+
+    private boolean invalidate;
 
     private Error error;
 
@@ -39,6 +39,11 @@ public class BaseResponse {
         private int code;
 
         private String message;
+
+        public Error(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
 
         public int getCode() {
             return code;
