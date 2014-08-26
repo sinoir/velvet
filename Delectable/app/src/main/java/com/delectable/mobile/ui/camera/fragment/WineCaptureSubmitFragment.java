@@ -7,10 +7,12 @@ import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.requests.CaptureRequest;
 import com.delectable.mobile.api.requests.ProvisionCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
+import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,6 +31,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
@@ -40,6 +44,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final String sArgsImageData = "sArgsImageData";
 
+    private static final int REQUEST_TAG_FRIENDS = 8000;
+
     private static final int REQUEST_LOCATION = 9000;
 
     @InjectView(R.id.comment_edit_text)
@@ -49,7 +55,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     protected RatingSeekBar mRatingSeekBar;
 
     @InjectView(R.id.drinking_with_who)
-    protected View mDrinkingWithWhoButton;
+    protected TextView mDrinkingWithWhoButton;
 
     @InjectView(R.id.drinking_where)
     protected TextView mDrinkingWhereButton;
@@ -92,6 +98,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     private boolean mIsWaitingOnDataUplaodToFinish = true;
 
     private CaptureDetails mCaptureResult;
+
+    private ArrayList<TaggeeContact> mTaggeeContacts;
 
     private String mLocationName;
 
@@ -138,6 +146,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
         // OnCreate gets called after onActivityResult, so we should update the UI accordingly
         updateLocationUI();
+        updateWithFriendsUI();
 
         return mView;
     }
@@ -158,6 +167,15 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
+            case REQUEST_TAG_FRIENDS:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+                    Bundle args = data.getExtras();
+                    mTaggeeContacts = args
+                            .getParcelableArrayList(TagPeopleFragment.RESULT_SELECTED_CONTACTS);
+                } else {
+                    mTaggeeContacts = null;
+                }
+                break;
             case REQUEST_LOCATION:
                 if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
                     Bundle args = data.getExtras();
@@ -170,6 +188,18 @@ public class WineCaptureSubmitFragment extends BaseFragment {
                     mLocationName = null;
                     mFoursquareId = null;
                 }
+                break;
+        }
+    }
+
+    private void updateWithFriendsUI() {
+        if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
+            mDrinkingWithWhoButton.setText(getResources()
+                    .getQuantityString(R.plurals.with_friends, mTaggeeContacts.size(),
+                            mTaggeeContacts.size()));
+        } else {
+            mDrinkingWithWhoButton.setText(R.string.capture_submit_drinking_with_who_text);
+
         }
     }
 
@@ -318,13 +348,15 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
         mCaptureRequest.setRating(mCurrentRating);
 
+        if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
+            mCaptureRequest.setTaggees(mTaggeeContacts);
+        }
         if (mFoursquareId != null) {
             mCaptureRequest.setFoursquareLocationId(mFoursquareId);
         }
 
         // TODO: Add Label Scan ID ?
         // TODO: Add Coordinates
-        // TODO: Add Taggees
     }
 
     private void postCapture() {
@@ -335,13 +367,15 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnClick(R.id.drinking_with_who)
     protected void selectDrinkingPartners() {
-        // TODO: Drinking Partners Screen
+        TagPeopleFragment fragment = TagPeopleFragment
+                .newInstance(this, REQUEST_TAG_FRIENDS, mTaggeeContacts);
+        launchNextFragment(fragment);
     }
 
     @OnClick(R.id.drinking_where)
     protected void selectDrinkingLocation() {
-        FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment
-                .newInstance(this, REQUEST_LOCATION);
+        FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment.newInstance(
+                this, REQUEST_LOCATION);
         launchNextFragment(fragment);
     }
 
@@ -362,7 +396,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mMakePrivateButton.setChecked(true);
         }
     }
-
 
     @OnCheckedChanged(R.id.share_instagram)
     protected void shareCaptureOnInstagram(CompoundButton view, boolean isChecked) {
