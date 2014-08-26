@@ -7,6 +7,7 @@ import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
+import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.path.android.jobqueue.JobManager;
 
@@ -37,6 +38,7 @@ public class AccountController {
     public void fetchInfluencerSuggestions(String id) {
         mJobManager.addJobInBackground(new FetchInfluencerSuggestionsJob(id));
     }
+
     public void fetchFacebookSuggestions(String id) {
         mJobManager.addJobInBackground(new FetchFacebookSuggestionsJob(id));
     }
@@ -52,6 +54,10 @@ public class AccountController {
     //region Settings Screen
     public void facebookifyProfilePhoto() {
         mJobManager.addJobInBackground(new FacebookifyProfilePhotoJob());
+    }
+
+    public void provisionProfilePhoto() {
+        mJobManager.addJobInBackground(new ProvisionProfilePhotoJob());
     }
     //endregion
 

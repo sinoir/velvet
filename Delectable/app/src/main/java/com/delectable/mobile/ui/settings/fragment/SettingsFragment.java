@@ -13,7 +13,6 @@ import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsProvisionProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateProfilePhotoRequest;
@@ -24,6 +23,7 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FacebookifyProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
+import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
@@ -162,6 +162,11 @@ public class SettingsFragment extends BaseFragment {
      * Used to keep track of the user's original phone number.
      */
     private Identifier mPhoneIdentifier;
+
+    /**
+     * Used to keep track of which photo to send to S3 after provisioning
+     */
+    private Bitmap mPhoto;
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -393,26 +398,17 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void provisionProfilePhoto(final Bitmap photo) {
-        AccountsProvisionProfilePhotoRequest request = new AccountsProvisionProfilePhotoRequest();
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        ProvisionCapture provision = (ProvisionCapture) result;
-                        Log.d(TAG, "provision successful: " + provision.getHeaders().getUrl());
-                        sendPhotoToS3(photo, provision);
-                    }
+        mPhoto = photo;
+        mAccountController.provisionProfilePhoto();
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsProvisionProfilePhotoRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
+    public void onEventMainThread(ProvisionProfilePhotoEvent event) {
+        if (event.isSuccessful()) {
+            ProvisionCapture provision = event.getProvisionCapture();
+            sendPhotoToS3(mPhoto, provision);
+            return;
+        }
+        showToastError(event.getErrorMessage());
     }
 
     private void sendPhotoToS3(Bitmap photo, final ProvisionCapture provision) {
