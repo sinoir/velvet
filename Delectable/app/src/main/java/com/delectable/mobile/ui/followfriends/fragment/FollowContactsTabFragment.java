@@ -19,6 +19,5 @@ public class FollowContactsTabFragment extends BaseFragment{
         TextView tv = new TextView(getActivity());
         tv.setText(TAG);
         return tv;
-
     }
 }

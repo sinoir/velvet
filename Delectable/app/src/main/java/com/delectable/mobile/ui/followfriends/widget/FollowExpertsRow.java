@@ -32,7 +32,7 @@ public class FollowExpertsRow extends RelativeLayout {
 
     private AccountMinimal mAccount;
 
-    private ActionsHandler mActionsHandler;
+    private FollowActionsHandler mActionsHandler;
 
     public FollowExpertsRow(Context context) {
         this(context, null);
@@ -48,7 +48,7 @@ public class FollowExpertsRow extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    public void setActionsHandler(ActionsHandler actionsHandler) {
+    public void setActionsHandler(FollowActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 
@@ -75,11 +75,4 @@ public class FollowExpertsRow extends RelativeLayout {
             mActionsHandler.toggleFollow(mAccount, v.isSelected());
         }
     }
-
-
-    public static interface ActionsHandler {
-
-        public void toggleFollow(AccountMinimal account, boolean isFollowing);
-    }
-
 }

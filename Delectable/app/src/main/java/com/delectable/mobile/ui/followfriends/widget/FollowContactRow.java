@@ -24,7 +24,7 @@ public class FollowContactRow extends RelativeLayout {
 
     private AccountMinimal mAccount;
 
-    private ActionsHandler mActionsHandler;
+    private FollowActionsHandler mActionsHandler;
 
     public FollowContactRow(Context context) {
         this(context, null);
@@ -40,7 +40,7 @@ public class FollowContactRow extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    public void setActionsHandler(ActionsHandler actionsHandler) {
+    public void setActionsHandler(FollowActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 
@@ -61,10 +61,4 @@ public class FollowContactRow extends RelativeLayout {
             mActionsHandler.toggleFollow(mAccount, v.isSelected());
         }
     }
-
-    public static interface ActionsHandler {
-
-        public void toggleFollow(AccountMinimal account, boolean isFollowing);
-    }
-
 }
