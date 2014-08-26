@@ -4,7 +4,7 @@ import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseRequest;
-import com.delectable.mobile.model.api.accounts.AccountsFriendSuggestionsResponse;
+import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 /**
@@ -32,8 +32,8 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
     public void onRun() throws Throwable {
         String endpoint = getEndpoint();
         BaseRequest request = new BaseRequest(); //empty payload, so we use baserequest
-        AccountsFriendSuggestionsResponse response = getNetworkClient().post(endpoint, request,
-                AccountsFriendSuggestionsResponse.class);
+        AccountMinimalListResponse response = getNetworkClient().post(endpoint, request,
+                AccountMinimalListResponse.class);
         getEventBus()
                 .post(new FetchFriendSuggestionsEvent(mId, response.getPayload().getAccounts()));
     }

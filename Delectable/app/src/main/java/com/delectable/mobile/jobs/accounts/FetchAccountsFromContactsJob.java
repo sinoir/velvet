@@ -6,7 +6,7 @@ import com.delectable.mobile.events.accounts.FetchedAccountsFromContactsEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.accounts.AccountContactListSuggestionsRequest;
-import com.delectable.mobile.model.api.accounts.AccountDelectafriendsResponse;
+import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 import java.util.List;
@@ -38,8 +38,8 @@ public class FetchAccountsFromContactsJob extends BaseJob {
 
         AccountContactListSuggestionsRequest request = new AccountContactListSuggestionsRequest(
                 contacts, null);
-        AccountDelectafriendsResponse response = getNetworkClient()
-                .post(endpoint, request, AccountDelectafriendsResponse.class);
+        AccountMinimalListResponse response = getNetworkClient()
+                .post(endpoint, request, AccountMinimalListResponse.class);
         // TODO: Pass up Contacts that aren't in the payload to suggest to invite
         getEventBus()
                 .post(new FetchedAccountsFromContactsEvent(response.getPayload().getAccounts()));
