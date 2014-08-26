@@ -15,16 +15,15 @@ import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateProfileRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
@@ -383,10 +382,17 @@ public class SettingsFragment extends BaseFragment {
     }
 
     //region Setting Profile Photo Endpoints
+
+    /**
+     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     */
     private void facebookifyProfilePhoto() {
         mAccountController.facebookifyProfilePhoto();
     }
 
+    /**
+     * The callback for {@link #facebookifyProfilePhoto()} and {@link #updateProfilePicture(ProvisionCapture)}
+     */
     public void onEventMainThread(UpdatedProfilePhotoEvent event) {
         if (event.isSuccessful()) {
             PhotoHash photoHash = event.getPhoto();
@@ -406,6 +412,7 @@ public class SettingsFragment extends BaseFragment {
         if (event.isSuccessful()) {
             ProvisionCapture provision = event.getProvisionCapture();
             sendPhotoToS3(mPhoto, provision);
+            mPhoto = null;
             return;
         }
         showToastError(event.getErrorMessage());
@@ -433,30 +440,15 @@ public class SettingsFragment extends BaseFragment {
                 }
         );
     }
+
+    /**
+     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     */
+    private void updateProfilePicture(ProvisionCapture provision) {
+        mAccountController.updateProfilePhoto(provision);
+    }
     //endregion
 
-    private void updateProfilePicture(ProvisionCapture provision) {
-        AccountsUpdateProfilePhotoRequest request = new AccountsUpdateProfilePhotoRequest(
-                provision.getBucket(), provision.getFilename());
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        PhotoHash photoHash = (PhotoHash) result;
-                        Log.d(TAG, "updateProfilePicture successful: " + photoHash.getUrl());
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsUpdateProfilePhotoRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
-    }
 
     /**
      * Parameters can be null.
