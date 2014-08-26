@@ -1,10 +1,7 @@
 package com.delectable.mobile.events.accounts;
 
-import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.events.BaseEvent;
-
-import java.util.ArrayList;
 
 public class FacebookifyProfilePhotoEvent extends BaseEvent {
 

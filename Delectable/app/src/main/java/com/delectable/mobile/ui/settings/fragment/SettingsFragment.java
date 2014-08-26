@@ -13,7 +13,6 @@ import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsFacebookifyProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsProvisionProfilePhotoRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;

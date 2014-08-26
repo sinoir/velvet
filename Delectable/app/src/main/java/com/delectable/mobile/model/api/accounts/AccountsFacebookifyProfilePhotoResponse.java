@@ -1,10 +1,7 @@
 package com.delectable.mobile.model.api.accounts;
 
-import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.model.api.BaseResponse;
-
-import java.util.ArrayList;
 
 public class AccountsFacebookifyProfilePhotoResponse extends BaseResponse {
 
