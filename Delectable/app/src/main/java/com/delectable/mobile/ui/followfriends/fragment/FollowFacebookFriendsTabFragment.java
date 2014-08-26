@@ -29,7 +29,7 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         ListView listview = (ListView) inflater
-                .inflate(R.layout.fragment_listview, container, false);
+                .inflate(R.layout.fragment_listview_no_divider, container, false);
         listview.setAdapter(mAdapter);
         return listview;
     }
