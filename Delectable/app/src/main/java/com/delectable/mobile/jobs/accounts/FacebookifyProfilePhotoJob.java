@@ -1,10 +1,10 @@
 package com.delectable.mobile.jobs.accounts;
 
-import com.delectable.mobile.events.accounts.FacebookifyProfilePhotoEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseRequest;
-import com.delectable.mobile.model.api.accounts.AccountsFacebookifyProfilePhotoResponse;
+import com.delectable.mobile.model.api.accounts.AccountsPhotoHashResponse;
 import com.path.android.jobqueue.Params;
 
 public class FacebookifyProfilePhotoJob extends BaseJob {
@@ -19,15 +19,15 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
     public void onRun() throws Throwable {
         String endpoint = "/accounts/facebookify_profile_photo";
         BaseRequest request = new BaseRequest(); //empty payload, so we use baserequest
-        AccountsFacebookifyProfilePhotoResponse response = getNetworkClient()
+        AccountsPhotoHashResponse response = getNetworkClient()
                 .post(endpoint, request,
-                        AccountsFacebookifyProfilePhotoResponse.class);
+                        AccountsPhotoHashResponse.class);
         getEventBus()
-                .post(new FacebookifyProfilePhotoEvent(response.getPayload().getPhoto()));
+                .post(new UpdatedProfilePhotoEvent(response.getPayload().getPhoto()));
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FacebookifyProfilePhotoEvent(TAG + " " + getErrorMessage()));
+        getEventBus().post(new UpdatedProfilePhotoEvent(TAG + " " + getErrorMessage()));
     }
 }

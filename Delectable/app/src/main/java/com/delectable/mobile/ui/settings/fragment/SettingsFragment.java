@@ -21,7 +21,7 @@ import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.accounts.FacebookifyProfilePhotoEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
@@ -387,7 +387,7 @@ public class SettingsFragment extends BaseFragment {
         mAccountController.facebookifyProfilePhoto();
     }
 
-    public void onEventMainThread(FacebookifyProfilePhotoEvent event) {
+    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
         if (event.isSuccessful()) {
             PhotoHash photoHash = event.getPhoto();
             mUserAccount.setPhoto(photoHash);

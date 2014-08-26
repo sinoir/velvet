@@ -3,7 +3,12 @@ package com.delectable.mobile.model.api.accounts;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.model.api.BaseResponse;
 
-public class AccountsFacebookifyProfilePhotoResponse extends BaseResponse {
+/**
+ * These endpoints have this response:
+ * /accounts/update_profile_photo
+ * /accounts/facebookify_profile_photo
+ */
+public class AccountsPhotoHashResponse extends BaseResponse {
 
     private Payload payload;
 
