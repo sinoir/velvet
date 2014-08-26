@@ -28,6 +28,6 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FacebookifyProfilePhotoEvent(getErrorMessage()));
+        getEventBus().post(new FacebookifyProfilePhotoEvent(TAG + " " + getErrorMessage()));
     }
 }
