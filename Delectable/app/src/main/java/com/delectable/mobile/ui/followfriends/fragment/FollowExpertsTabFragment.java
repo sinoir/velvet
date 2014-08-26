@@ -21,6 +21,11 @@ public class FollowExpertsTabFragment extends BaseFollowFriendsTabFragment {
     }
 
     @Override
+    protected String getEventId() {
+        return TAG;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         ListView listview = (ListView) inflater
@@ -33,7 +38,7 @@ public class FollowExpertsTabFragment extends BaseFollowFriendsTabFragment {
     public void onResume() {
         super.onResume();
         if (mAccounts == null) {
-            mAccountController.fetchInfluencerSuggestions();
+            mAccountController.fetchInfluencerSuggestions(getEventId());
         }
     }
 

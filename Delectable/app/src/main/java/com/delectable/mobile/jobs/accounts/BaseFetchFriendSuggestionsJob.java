@@ -15,8 +15,15 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
 
     private static final String TAG = BaseFetchFriendSuggestionsJob.class.getSimpleName();
 
-    public BaseFetchFriendSuggestionsJob() {
+    private String mId;
+
+    /**
+     *
+     * @param id The id that will be passed onto the Event upon completion of the job.
+     */
+    protected BaseFetchFriendSuggestionsJob(String id) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
+        mId = id;
     }
 
     public abstract String getEndpoint();
@@ -28,11 +35,11 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
         AccountsInfluencerSuggestionsResponse response = getNetworkClient().post(endpoint, request,
                 AccountsInfluencerSuggestionsResponse.class);
         getEventBus()
-                .post(new FetchFriendSuggestionsEvent(response.getPayload().getAccounts()));
+                .post(new FetchFriendSuggestionsEvent(mId, response.getPayload().getAccounts()));
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FetchFriendSuggestionsEvent(getErrorMessage()));
+        getEventBus().post(new FetchFriendSuggestionsEvent(mId, getErrorMessage()));
     }
 }

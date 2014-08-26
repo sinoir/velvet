@@ -44,6 +44,12 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
 
     protected abstract BaseAccountsMinimalAdapter getAdapter();
 
+    /**
+     * Used to ensure that the request sent matches the event that we receive.
+     * @return
+     */
+    protected abstract String getEventId();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +57,9 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
     }
 
     public void onEventMainThread(FetchFriendSuggestionsEvent event) {
+        if (!event.getId().equals(getEventId())) {
+            return; //id's don't match, this event wasn't from our request
+        }
         if (event.isSuccessful()) {
             mAccounts = event.getAccounts();
             getAdapter().setAccounts(event.getAccounts());
