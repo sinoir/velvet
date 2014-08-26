@@ -26,6 +26,9 @@ public class FollowFriendsFragment extends BaseFragment {
     @InjectView(R.id.tabstrip)
     protected SlidingPagerTabStrip mTabStrip;
 
+    @InjectView(R.id.tab_divider)
+    protected View mTabDivider;
+
     private SlidingPagerAdapter mTabsAdapter;
 
     @Override
@@ -70,6 +73,7 @@ public class FollowFriendsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_viewpager_with_tabstrip, container, false);
         ButterKnife.inject(this, view);
 
+        mTabDivider.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
         return view;
