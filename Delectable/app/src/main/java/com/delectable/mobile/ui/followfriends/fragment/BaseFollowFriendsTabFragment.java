@@ -74,7 +74,9 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         String accountId = event.getAccountId();
         AccountMinimal account = mAccountsExpectingUpdate.remove(accountId);
         int relationship = mAccountExpectedRelationship.remove(accountId);
-
+        if (account == null) {
+            return; //account didn't exist in the hashmap, means this event wasn't called from this fragment
+        }
         if (event.isSuccessful()) {
             account.setCurrentUserRelationship(relationship);
         } else {
