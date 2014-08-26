@@ -5,10 +5,7 @@ import com.delectable.mobile.model.api.BaseResponse;
 
 import java.util.ArrayList;
 
-/**
- * The /accounts/facebook_suggestions endpoint also uses this response object.
- */
-public class AccountsInfluencerSuggestionsResponse extends BaseResponse {
+public class AccountsFriendSuggestionsResponse extends BaseResponse {
 
     private Payload payload;
 
