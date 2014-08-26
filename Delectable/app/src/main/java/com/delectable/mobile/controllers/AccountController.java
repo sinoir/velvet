@@ -3,6 +3,7 @@ package com.delectable.mobile.controllers;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
+import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
@@ -32,8 +33,11 @@ public class AccountController {
         mJobManager.addJobInBackground(new FollowAccountJob(id, follow));
     }
 
-    public void fetchInfluencerSuggestions() {
-        mJobManager.addJobInBackground(new FetchInfluencerSuggestionsJob());
+    public void fetchInfluencerSuggestions(String id) {
+        mJobManager.addJobInBackground(new FetchInfluencerSuggestionsJob(id));
+    }
+    public void fetchFacebookSuggestions(String id) {
+        mJobManager.addJobInBackground(new FetchFacebookSuggestionsJob(id));
     }
 
     public void fetchDelectafriends() {

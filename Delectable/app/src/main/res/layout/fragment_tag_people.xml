@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/with_container"
+        android:choiceMode="multipleChoice"
+        android:divider="@null" />
+
+    <RelativeLayout
+        android:id="@+id/with_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tag_row_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/d_blue_default_done_button"
+        android:visibility="gone">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/with_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:textColor="@color/d_white"
+            android:textSize="@dimen/tag_with_people_text_size"
+            app:fontName="whitney_book" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_next" />
+    </RelativeLayout>
+</RelativeLayout>
