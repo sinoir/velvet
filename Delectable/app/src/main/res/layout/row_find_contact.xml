@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/follow_contact_row_height">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
+        android:layout_toLeftOf="@+id/follow_button"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="Katherine Cooper"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/follow_friends_name_text_size"
+        app:fontName="whitney_medium" />
+
+    <ImageButton
+        android:id="@+id/follow_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
+        android:layout_marginRight="@dimen/follow_friends_horizontal_spacing"
+        android:background="@null"
+        android:src="@drawable/btn_follow" />
+</RelativeLayout>
