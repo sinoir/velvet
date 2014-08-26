@@ -164,6 +164,8 @@
     <dimen name="follow_experts_bio_text_size">14sp</dimen>
     <dimen name="follow_experts_follow_button_top_margin">21dp</dimen>
 
+    <dimen name="follow_contact_row_height">48dp</dimen>
+
     <!-- Settings Screen -->
     <dimen name="settings_view_horizontal_padding">33dp</dimen>
     <dimen name="settings_profile_image_height">83dp</dimen>
