@@ -5,7 +5,7 @@ import com.delectable.mobile.model.api.BaseResponse;
 
 import java.util.ArrayList;
 
-public class AccountsFriendSuggestionsResponse extends BaseResponse {
+public class AccountMinimalListResponse extends BaseResponse {
 
     private Payload payload;
 

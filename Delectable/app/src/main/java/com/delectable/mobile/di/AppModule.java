@@ -9,9 +9,11 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.data.CaptureDetailsModel;
+import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
@@ -35,9 +37,9 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
+import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.RecentCapturesTabFragment;
@@ -69,6 +71,7 @@ import de.greenrobot.event.EventBus;
                 FollowFeedTabFragment.class,
                 SettingsFragment.class,
                 FollowExpertsTabFragment.class,
+                FollowContactsTabFragment.class,
                 FollowFacebookFriendsTabFragment.class,
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
@@ -76,6 +79,7 @@ import de.greenrobot.event.EventBus;
                 AccountModel.class,
                 CaptureDetailsModel.class,
                 CaptureDetailsListingModel.class,
+                DeviceContactsModel.class,
                 // Jobs
                 BaseJob.class,
                 FetchFollowerFeedJob.class,
@@ -96,6 +100,7 @@ import de.greenrobot.event.EventBus;
                 FetchFacebookSuggestionsJob.class,
                 SearchFoursquareVenuesJob.class,
                 FetchDelectafriendsJob.class,
+                FetchAccountsFromContactsJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
