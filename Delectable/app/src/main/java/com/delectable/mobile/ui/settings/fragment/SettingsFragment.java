@@ -23,6 +23,7 @@ import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.accounts.FacebookifyProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
@@ -379,27 +380,17 @@ public class SettingsFragment extends BaseFragment {
 
     //region Setting Profile Photo Endpoints
     private void facebookifyProfilePhoto() {
-        AccountsFacebookifyProfilePhotoRequest request
-                = new AccountsFacebookifyProfilePhotoRequest();
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        PhotoHash photoHash = (PhotoHash) result;
-                        Log.d(TAG, "facebookify profile photo successful: " + photoHash.getUrl());
-                        mUserAccount.setPhoto(photoHash);
-                        updateUI();
-                    }
+        mAccountController.facebookifyProfilePhoto();
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsFacebookifyProfilePhotoRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                });
+    public void onEventMainThread(FacebookifyProfilePhotoEvent event) {
+        if (event.isSuccessful()) {
+            PhotoHash photoHash = event.getPhoto();
+            mUserAccount.setPhoto(photoHash);
+            updateUI();
+            return;
+        }
+        showToastError(event.getErrorMessage());
     }
 
     private void provisionProfilePhoto(final Bitmap photo) {

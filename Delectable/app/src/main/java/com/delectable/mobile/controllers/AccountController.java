@@ -1,5 +1,6 @@
 package com.delectable.mobile.controllers;
 
+import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
@@ -47,5 +48,11 @@ public class AccountController {
     public void fetchAccountsFromContacts() {
         mJobManager.addJobInBackground(new FetchAccountsFromContactsJob());
     }
+
+    //region Settings Screen
+    public void facebookifyProfilePhoto() {
+        mJobManager.addJobInBackground(new FacebookifyProfilePhotoJob());
+    }
+    //endregion
 
 }

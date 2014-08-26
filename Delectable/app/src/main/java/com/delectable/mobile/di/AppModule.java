@@ -12,6 +12,7 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
+import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
@@ -101,6 +102,7 @@ import de.greenrobot.event.EventBus;
                 SearchFoursquareVenuesJob.class,
                 FetchDelectafriendsJob.class,
                 FetchAccountsFromContactsJob.class,
+                FacebookifyProfilePhotoJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
