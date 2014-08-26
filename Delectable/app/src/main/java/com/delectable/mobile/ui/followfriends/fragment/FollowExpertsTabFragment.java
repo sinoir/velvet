@@ -7,7 +7,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.followfriends.widget.FollowExpertsRow;
+import com.delectable.mobile.ui.followfriends.widget.FollowActionsHandler;
 import com.delectable.mobile.ui.followfriends.widget.InfluencerAccountsAdapter;
 
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 public class FollowExpertsTabFragment extends BaseFragment
-        implements FollowExpertsRow.ActionsHandler {
+        implements FollowActionsHandler {
 
     @Inject
     protected AccountController mAccountController;
@@ -53,10 +53,10 @@ public class FollowExpertsTabFragment extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-            ListView listview = (ListView) inflater
-                    .inflate(R.layout.fragment_listview, container, false);
-            listview.setAdapter(mAdapter);
-            return listview;
+        ListView listview = (ListView) inflater
+                .inflate(R.layout.fragment_listview, container, false);
+        listview.setAdapter(mAdapter);
+        return listview;
     }
 
     @Override

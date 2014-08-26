@@ -7,6 +7,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.widget.ContactsAdapter;
+import com.delectable.mobile.ui.followfriends.widget.FollowActionsHandler;
 import com.delectable.mobile.ui.followfriends.widget.FollowContactRow;
 import com.delectable.mobile.ui.followfriends.widget.FollowExpertsRow;
 import com.delectable.mobile.ui.followfriends.widget.InfluencerAccountsAdapter;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class FollowFacebookFriendsTabFragment extends BaseFragment implements FollowContactRow.ActionsHandler{
+public class FollowFacebookFriendsTabFragment extends BaseFragment implements FollowActionsHandler {
 
     private static final String TAG = FollowFacebookFriendsTabFragment.class.getSimpleName();
 

@@ -14,9 +14,9 @@ public class InfluencerAccountsAdapter extends BaseAdapter {
 
     private ArrayList<AccountMinimal> mAccounts = new ArrayList<AccountMinimal>();
 
-    private FollowExpertsRow.ActionsHandler mActionsHandler;
+    private FollowActionsHandler mActionsHandler;
 
-    public InfluencerAccountsAdapter(FollowExpertsRow.ActionsHandler actionsHandler) {
+    public InfluencerAccountsAdapter(FollowActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 

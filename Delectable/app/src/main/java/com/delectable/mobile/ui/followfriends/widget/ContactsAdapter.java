@@ -14,9 +14,9 @@ public class ContactsAdapter extends BaseAdapter {
 
     private ArrayList<AccountMinimal> mAccounts = new ArrayList<AccountMinimal>();
 
-    private FollowContactRow.ActionsHandler mActionsHandler;
+    private FollowActionsHandler mActionsHandler;
 
-    public ContactsAdapter(FollowContactRow.ActionsHandler actionsHandler) {
+    public ContactsAdapter(FollowActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 
