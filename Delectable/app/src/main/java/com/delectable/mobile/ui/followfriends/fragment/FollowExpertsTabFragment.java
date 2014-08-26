@@ -25,7 +25,7 @@ public class FollowExpertsTabFragment extends BaseFragment
         implements FollowExpertsRow.ActionsHandler {
 
     @Inject
-    AccountController mAccountController;
+    protected AccountController mAccountController;
 
     private static final String TAG = FollowExpertsTabFragment.class.getSimpleName();
 
@@ -53,10 +53,10 @@ public class FollowExpertsTabFragment extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        ListView listview = (ListView) inflater
-                .inflate(R.layout.fragment_listview, container, false);
-        listview.setAdapter(mAdapter);
-        return listview;
+            ListView listview = (ListView) inflater
+                    .inflate(R.layout.fragment_listview, container, false);
+            listview.setAdapter(mAdapter);
+            return listview;
     }
 
     @Override
