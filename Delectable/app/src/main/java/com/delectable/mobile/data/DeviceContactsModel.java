@@ -9,6 +9,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DeviceContactsModel {
@@ -30,6 +31,7 @@ public class DeviceContactsModel {
     private static final String[] DATA_PROJECTION = new String[]{
             ContactsContract.Data.MIMETYPE,
             ContactsContract.CommonDataKinds.Email._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
             ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
             ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME,
             ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -38,7 +40,7 @@ public class DeviceContactsModel {
 
     // Filter selection to : mimetype = 'email' or mimetype = 'phonenumber'
     private static final String PHONE_EMAIL_SELECTION =
-            ContactsContract.Data.LOOKUP_KEY + " = ?" + " AND (" +
+            ContactsContract.Data.IN_VISIBLE_GROUP + " = 1" + " AND (" +
                     ContactsContract.Data.MIMETYPE + " = " +
                     "'" + ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE + "'"
                     + " OR " +
@@ -53,6 +55,9 @@ public class DeviceContactsModel {
 
     public List<TaggeeContact> loadDeviceContactsAsTageeContacts() {
         ArrayList<TaggeeContact> contacts = new ArrayList<TaggeeContact>();
+
+        // Hashmap representing Contact with LookupId
+        HashMap<String, TaggeeContact> contactHashMap = new HashMap<String, TaggeeContact>();
 
         Log.i(TAG, "Loading Contacts");
 
@@ -79,43 +84,33 @@ public class DeviceContactsModel {
                                 .getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                 String displayName = contactsCursor.getString(
                         contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                TaggeeContact contact = lookupDeviceContact(lookupKey, displayName);
-                contacts.add(contact);
+                TaggeeContact contact = new TaggeeContact();
+                contact.setEmailAddresses(new ArrayList<String>());
+                contact.setPhoneNumbers(new ArrayList<String>());
+                contact.setFname(displayName);
+                contactHashMap.put(lookupKey, contact);
             } while (contactsCursor.moveToNext());
         }
         contactsCursor.close();
 
-        Log.i(TAG, "Loaded Contacts: " + contacts);
-
-        return contacts;
-    }
-
-    /**
-     * Build a TaggeeContact from Device Contact
-     *
-     * @param lookupKey   - Lookup key to find a contact
-     * @param displayName - Default display name if first and last name doesn't exist
-     */
-    public TaggeeContact lookupDeviceContact(String lookupKey, String displayName) {
-        TaggeeContact contact = new TaggeeContact();
-        // Emails and Phone Numbers that will be linked to this Contact
-        ArrayList<String> emails = new ArrayList<String>();
-        ArrayList<String> phoneNumbers = new ArrayList<String>();
+        // Populate Contacts with Data
 
         // Uri / Query to fetch Emails, Phone #s and Given name for specified Contact
         Uri dataUri = ContactsContract.Data.CONTENT_URI;
-        String[] selectionArgs = new String[]{lookupKey};
         Cursor dataCursor = App.getInstance().getContentResolver().query(
                 dataUri,
                 DATA_PROJECTION,
                 PHONE_EMAIL_SELECTION,
-                selectionArgs,
+                null,
                 null);
         if (dataCursor.getCount() > 0) {
             dataCursor.moveToFirst();
 
             // Loop through all the results, it's 1 of 3 possible mime types (email, phone, name)
             do {
+                String lookupKey = dataCursor
+                        .getString(dataCursor
+                                .getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                 String mimeType = dataCursor
                         .getString(dataCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
                 // If it's an email, add it to the list of Emails
@@ -123,7 +118,9 @@ public class DeviceContactsModel {
                     String emailAddress = dataCursor.getString(
                             dataCursor.getColumnIndex(
                                     ContactsContract.CommonDataKinds.Email.ADDRESS));
-                    emails.add(emailAddress);
+                    if (contactHashMap.containsKey(lookupKey)) {
+                        contactHashMap.get(lookupKey).getEmailAddresses().add(emailAddress);
+                    }
                     // If it's a Phone #, add it to the list of Phone #s
                 } else if (mimeType
                         .equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)) {
@@ -131,7 +128,9 @@ public class DeviceContactsModel {
                             dataCursor
                                     .getColumnIndex(
                                             ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    phoneNumbers.add(phoneNumber);
+                    if (contactHashMap.containsKey(lookupKey)) {
+                        contactHashMap.get(lookupKey).getPhoneNumbers().add(phoneNumber);
+                    }
                     // Set First/last name
                 } else if (mimeType
                         .equals(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)) {
@@ -139,21 +138,22 @@ public class DeviceContactsModel {
                             ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
                     String familyName = dataCursor.getString(dataCursor.getColumnIndex(
                             ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
-                    contact.setFname(givenName);
-                    contact.setLname(familyName);
+                    if (contactHashMap.containsKey(lookupKey)) {
+                        if (givenName == null && familyName != null) {
+                            contactHashMap.get(lookupKey).setFname(null);
+                        } else if (givenName != null) {
+                            contactHashMap.get(lookupKey).setFname(givenName);
+                            contactHashMap.get(lookupKey).setLname(familyName);
+                        }
+                    }
                 }
             } while (dataCursor.moveToNext());
         }
         dataCursor.close();
 
-        // Create the Contact
-        // If First and Last names are null, set First name to display name, which is probably the email
-        if (contact.getFname() == null && contact.getLname() == null) {
-            contact.setFname(displayName);
-        }
-        contact.setEmailAddresses(emails);
-        contact.setPhoneNumbers(phoneNumbers);
-        return contact;
-    }
+        contacts.addAll(contactHashMap.values());
+        Log.i(TAG, "Loaded Contacts: " + contacts);
 
+        return contacts;
+    }
 }
