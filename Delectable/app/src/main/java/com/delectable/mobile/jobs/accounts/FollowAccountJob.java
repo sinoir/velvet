@@ -1,24 +1,11 @@
 package com.delectable.mobile.jobs.accounts;
 
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.data.AccountModel;
-import com.delectable.mobile.events.accounts.FetchInfluencerSuggestionsEvent;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
-import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseResponse;
 import com.delectable.mobile.model.api.accounts.AccountFollowRequest;
-import com.delectable.mobile.net.NetworkClient;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
-import android.util.Log;
-
-import javax.inject.Inject;
-
-import de.greenrobot.event.EventBus;
 
 public class FollowAccountJob extends BaseJob {
 

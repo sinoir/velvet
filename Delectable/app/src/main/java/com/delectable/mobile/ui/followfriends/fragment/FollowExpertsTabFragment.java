@@ -4,7 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.events.accounts.FetchInfluencerSuggestionsEvent;
+import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.widget.FollowExpertsRow;
@@ -82,7 +82,7 @@ public class FollowExpertsTabFragment extends BaseFragment
         mAdapter.notifyDataSetChanged();
     }
 
-    public void onEventMainThread(FetchInfluencerSuggestionsEvent event) {
+    public void onEventMainThread(FetchFriendSuggestionsEvent event) {
         if (event.isSuccessful()) {
             mAccounts = event.getAccounts();
             mAdapter.setAccounts(event.getAccounts());

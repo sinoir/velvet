@@ -5,15 +5,20 @@ import com.delectable.mobile.events.BaseEvent;
 
 import java.util.ArrayList;
 
-public class FetchInfluencerSuggestionsEvent extends BaseEvent{
+/**
+ * This event occurs for these endpoints:
+ * /accounts/influencer_suggestions
+ * /accounts/facebook_suggestions
+ */
+public class FetchFriendSuggestionsEvent extends BaseEvent{
 
     private ArrayList<AccountMinimal> mAccounts;
 
-    public FetchInfluencerSuggestionsEvent(String errorMessage) {
+    public FetchFriendSuggestionsEvent(String errorMessage) {
         super(errorMessage);
     }
 
-    public FetchInfluencerSuggestionsEvent(ArrayList<AccountMinimal> accounts) {
+    public FetchFriendSuggestionsEvent(ArrayList<AccountMinimal> accounts) {
         super(true);
         mAccounts = accounts;
     }

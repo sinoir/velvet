@@ -1,6 +1,6 @@
 package com.delectable.mobile.jobs.accounts;
 
-import com.delectable.mobile.events.accounts.FetchInfluencerSuggestionsEvent;
+import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseRequest;
@@ -28,11 +28,11 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
         AccountsInfluencerSuggestionsResponse response = getNetworkClient().post(endpoint, request,
                 AccountsInfluencerSuggestionsResponse.class);
         getEventBus()
-                .post(new FetchInfluencerSuggestionsEvent(response.getPayload().getAccounts()));
+                .post(new FetchFriendSuggestionsEvent(response.getPayload().getAccounts()));
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FetchInfluencerSuggestionsEvent(getErrorMessage()));
+        getEventBus().post(new FetchFriendSuggestionsEvent(getErrorMessage()));
     }
 }
