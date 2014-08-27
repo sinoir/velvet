@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 public class ProvisionCapture extends BaseResponse {
 
-    String bucket;
+    private String bucket;
 
-    String filename;
+    private String filename;
 
-    String url;
+    private String url;
 
-    HashMap<String, String> headers;
+    private HashMap<String, String> headers;
 
     public String getBucket() {
         return bucket;

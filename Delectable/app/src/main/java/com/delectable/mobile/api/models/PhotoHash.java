@@ -24,9 +24,9 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
 
     private static final long serialVersionUID = -7494546096166895300L;
 
-    String url;
+    private String url;
 
-    ChildResolution child_resolutions;
+    private ChildResolution child_resolutions;
 
     public PhotoHash() {
     }
@@ -134,25 +134,25 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         private static final long serialVersionUID = 6186001967269219062L;
 
         @SerializedName("50")
-        String size_nano;
+        private String size_nano;
 
         @SerializedName("110")
-        String size_micro;
+        private String size_micro;
 
         @SerializedName("150")
-        String size_thumb;
+        private String size_thumb;
 
         @SerializedName("250")
-        String size_250;
+        private String size_250;
 
         @SerializedName("450")
-        String size_450;
+        private String size_450;
 
         @SerializedName("640")
-        String size_medium;
+        private String size_medium;
 
         @SerializedName("1280")
-        String size_blur;
+        private String size_blur;
 
         public ChildResolution() {
         }

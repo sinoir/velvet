@@ -14,18 +14,18 @@ public class CreatePendingCaptureRequest extends BaseRequest {
 
     public static class Payload {
 
-        String bucket;
+        private String bucket;
 
-        String filename;
+        private String filename;
 
         // TODO: are these required?
-        String label_scan_id;
+        private String label_scan_id;
 
-        Boolean from_camera_roll;
+        private Boolean from_camera_roll;
 
-        Integer capture_longitude;
+        private Integer capture_longitude;
 
-        Integer capture_latitude;
+        private Integer capture_latitude;
     }
 
 }

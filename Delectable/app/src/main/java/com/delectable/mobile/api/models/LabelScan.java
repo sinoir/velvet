@@ -4,9 +4,9 @@ import java.util.List;
 
 public class LabelScan {
 
-    String id;
+    private String id;
 
-    List<BaseWine> matches;
+    private List<BaseWine> matches;
 
     public String getId() {
         return id;

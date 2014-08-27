@@ -22,9 +22,9 @@ public class PhotoUploadRequest extends BaseRequest {
 
     public static class Payload {
 
-        String bucket;
+        private String bucket;
 
-        String filename;
+        private String filename;
 
         public String getBucket() {
 

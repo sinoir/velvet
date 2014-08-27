@@ -17,6 +17,6 @@ public class CreatePendingCaptureResponse extends BaseResponse {
 
     public static class Payload {
 
-        PendingCapture pending_capture;
+        private PendingCapture pending_capture;
     }
 }

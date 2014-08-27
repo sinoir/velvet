@@ -17,6 +17,6 @@ public class LabelScanResponse extends BaseResponse {
 
     public static class LabelScanPayload {
 
-        LabelScan label_scan;
+        private LabelScan label_scan;
     }
 }

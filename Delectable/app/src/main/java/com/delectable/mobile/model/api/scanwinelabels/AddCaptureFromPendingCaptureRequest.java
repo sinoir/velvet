@@ -77,26 +77,26 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
 
         private static final long serialVersionUID = -8045685864917603357L;
 
-        String pending_capture_id;
+        private String pending_capture_id;
 
         @SerializedName("private")
-        Boolean private_;
+        private Boolean private_;
 
-        Integer rating;
+        private Integer rating;
 
-        String note;
+        private String note;
 
-        Boolean share_tw;
+        private Boolean share_tw;
 
-        String user_tw; // Only required if share_tw it True
+        private String user_tw; // Only required if share_tw it True
 
-        Boolean share_fb;
+        private Boolean share_fb;
 
-        String user_country_code;
+        private String user_country_code;
 
-        String foursquare_location_id;
+        private String foursquare_location_id;
 
-        List<TaggeeContact> taggees;
+        private List<TaggeeContact> taggees;
 
         public Payload() {
         }

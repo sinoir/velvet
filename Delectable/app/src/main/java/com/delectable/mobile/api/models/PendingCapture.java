@@ -4,25 +4,25 @@ import java.util.List;
 
 public class PendingCapture {
 
-    String id;
+    private String id;
 
-    Float created_at;
+    private Float created_at;
 
-    PhotoHash photo;
+    private PhotoHash photo;
 
-    Boolean from_camera_roll;
+    private Boolean from_camera_roll;
 
-    Float capture_latitude;
+    private Float capture_latitude;
 
-    Float capture_longitude;
+    private Float capture_longitude;
 
-    BaseWine base_wine;
+    private BaseWine base_wine;
 
-    WineProfile wine_profile;
+    private WineProfile wine_profile;
 
-    String transcription_error_message;
+    private String transcription_error_message;
 
-    List<Match> matches;
+    private List<Match> matches;
 
     public String getId() {
         return id;
@@ -106,9 +106,9 @@ public class PendingCapture {
 
     public static class Match {
 
-        Float score;
+        private Float score;
 
-        BaseWine base_wine;
+        private BaseWine base_wine;
 
         public Float getScore() {
             return score;

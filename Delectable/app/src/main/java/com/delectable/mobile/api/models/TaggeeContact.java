@@ -25,19 +25,19 @@ public class TaggeeContact implements Parcelable, Serializable {
 
     private static final long serialVersionUID = -248001638605165056L;
 
-    String id;
+    private String id;
 
-    String fb_id;
+    private String fb_id;
 
-    String fname;
+    private String fname;
 
-    String lname;
+    private String lname;
 
-    PhotoHash photo;
+    private PhotoHash photo;
 
-    ArrayList<String> phone_numbers;
+    private ArrayList<String> phone_numbers;
 
-    ArrayList<String> email_addresses;
+    private ArrayList<String> email_addresses;
 
     public TaggeeContact() {
     }
