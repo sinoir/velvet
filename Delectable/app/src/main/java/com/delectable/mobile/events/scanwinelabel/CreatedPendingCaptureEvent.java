@@ -15,4 +15,8 @@ public class CreatedPendingCaptureEvent extends BaseEvent {
     public CreatedPendingCaptureEvent(String errorMessage) {
         super(errorMessage);
     }
+
+    public PendingCapture getPendingCapture() {
+        return mPendingCapture;
+    }
 }

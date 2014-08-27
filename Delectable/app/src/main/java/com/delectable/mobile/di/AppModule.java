@@ -31,6 +31,7 @@ import com.delectable.mobile.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
+import com.delectable.mobile.jobs.scanwinelabel.AddCaptureFromPendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUplaodJob;
 import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
@@ -108,6 +109,7 @@ import de.greenrobot.event.EventBus;
                 BasePhotoUplaodJob.class,
                 IdentifyLabelJob.class,
                 CreatePendingCaptureJob.class,
+                AddCaptureFromPendingCaptureJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
