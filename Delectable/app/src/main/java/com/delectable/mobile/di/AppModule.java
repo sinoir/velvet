@@ -31,8 +31,10 @@ import com.delectable.mobile.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
+import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUplaodJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
@@ -101,6 +103,7 @@ import de.greenrobot.event.EventBus;
                 SearchFoursquareVenuesJob.class,
                 FetchDelectafriendsJob.class,
                 FetchAccountsFromContactsJob.class,
+                BasePhotoUplaodJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
@@ -139,6 +142,12 @@ public class AppModule {
     @Singleton
     FoursquareNetworkClient provideFoursquareNetworkClient() {
         return new FoursquareNetworkClient();
+    }
+
+    @Provides
+    @Singleton
+    S3ImageUploadNetworkClient provideS3ImageUploadNetworkClient() {
+        return new S3ImageUploadNetworkClient();
     }
 
 }
