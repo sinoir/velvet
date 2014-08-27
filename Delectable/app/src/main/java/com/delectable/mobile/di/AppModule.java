@@ -12,12 +12,20 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
+import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
+import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
+import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
+import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
@@ -101,6 +109,14 @@ import de.greenrobot.event.EventBus;
                 SearchFoursquareVenuesJob.class,
                 FetchDelectafriendsJob.class,
                 FetchAccountsFromContactsJob.class,
+                FacebookifyProfilePhotoJob.class,
+                ProvisionProfilePhotoJob.class,
+                UpdateProfilePhotoJob.class,
+                UpdateProfileJob.class,
+                UpdateSettingJob.class,
+                AddIdentifierJob.class,
+                UpdateIdentifierJob.class,
+                RemoveIdentifierJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,

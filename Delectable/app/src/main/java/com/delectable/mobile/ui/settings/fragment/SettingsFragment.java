@@ -7,24 +7,20 @@ import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsFacebookifyProfilePhotoRequest;
-import com.delectable.mobile.api.requests.AccountsProvisionProfilePhotoRequest;
-import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateProfilePhotoRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateProfileRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
+import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
@@ -66,29 +62,6 @@ import butterknife.OnClick;
 public class SettingsFragment extends BaseFragment {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
-
-    private BaseNetworkController.RequestCallback IdentifierChangeCallback
-            = new BaseNetworkController.RequestCallback() {
-        @Override
-        public void onSuccess(BaseResponse result) {
-            Log.d(TAG, "Received Results! " + result);
-            //update user object with new identifiers listing
-            IdentifiersListing identifiersListing = (IdentifiersListing) result;
-            ArrayList<Identifier> identifiers = identifiersListing.getIdentifiers();
-            mUserAccount.setIdentifiers(identifiers);
-            updateUI();
-        }
-
-        @Override
-        public void onFailed(RequestError error) {
-            String message = " Accounts Add/Update/Remove Identifier failed: " +
-                    error.getCode() + " error: " + error.getMessage();
-            Log.d(TAG, message);
-            showToastError(message);
-            //TODO figure out how to handle error UI wise
-            updateUI(); //updating ui so that user entered text is reverted back to original
-        }
-    };
 
     private static final int SELECT_PHOTO_REQUEST = 0;
 
@@ -147,8 +120,6 @@ public class SettingsFragment extends BaseFragment {
     TextView mVersionText;
 
     private String mUserId;
-
-    private BaseNetworkController mNetworkController;
     //endregion
 
     private Account mUserAccount;
@@ -163,6 +134,11 @@ public class SettingsFragment extends BaseFragment {
      */
     private Identifier mPhoneIdentifier;
 
+    /**
+     * Used to keep track of which photo to send to S3 after provisioning
+     */
+    private Bitmap mPhoto;
+
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
@@ -173,7 +149,6 @@ public class SettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        mNetworkController = new BaseNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
         mAccountController.fetchPrivateAccount(mUserId);
@@ -378,51 +353,40 @@ public class SettingsFragment extends BaseFragment {
     }
 
     //region Setting Profile Photo Endpoints
-    private void facebookifyProfilePhoto() {
-        AccountsFacebookifyProfilePhotoRequest request
-                = new AccountsFacebookifyProfilePhotoRequest();
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        PhotoHash photoHash = (PhotoHash) result;
-                        Log.d(TAG, "facebookify profile photo successful: " + photoHash.getUrl());
-                        mUserAccount.setPhoto(photoHash);
-                        updateUI();
-                    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsFacebookifyProfilePhotoRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                });
+    /**
+     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     */
+    private void facebookifyProfilePhoto() {
+        mAccountController.facebookifyProfilePhoto();
+    }
+
+    /**
+     * The callback for {@link #facebookifyProfilePhoto()} and {@link #updateProfilePicture(ProvisionCapture)}
+     */
+    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
+        if (event.isSuccessful()) {
+            PhotoHash photoHash = event.getPhoto();
+            mUserAccount.setPhoto(photoHash);
+            updateUI();
+            return;
+        }
+        showToastError(event.getErrorMessage());
     }
 
     private void provisionProfilePhoto(final Bitmap photo) {
-        AccountsProvisionProfilePhotoRequest request = new AccountsProvisionProfilePhotoRequest();
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        ProvisionCapture provision = (ProvisionCapture) result;
-                        Log.d(TAG, "provision successful: " + provision.getHeaders().getUrl());
-                        sendPhotoToS3(photo, provision);
-                    }
+        mPhoto = photo;
+        mAccountController.provisionProfilePhoto();
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsProvisionProfilePhotoRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
+    public void onEventMainThread(ProvisionProfilePhotoEvent event) {
+        if (event.isSuccessful()) {
+            ProvisionCapture provision = event.getProvisionCapture();
+            sendPhotoToS3(mPhoto, provision);
+            mPhoto = null;
+            return;
+        }
+        showToastError(event.getErrorMessage());
     }
 
     private void sendPhotoToS3(Bitmap photo, final ProvisionCapture provision) {
@@ -447,64 +411,33 @@ public class SettingsFragment extends BaseFragment {
                 }
         );
     }
-    //endregion
-
-    private void updateProfilePicture(ProvisionCapture provision) {
-        AccountsUpdateProfilePhotoRequest request = new AccountsUpdateProfilePhotoRequest(
-                provision.getBucket(), provision.getFilename());
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        PhotoHash photoHash = (PhotoHash) result;
-                        Log.d(TAG, "updateProfilePicture successful: " + photoHash.getUrl());
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsUpdateProfilePhotoRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
-    }
 
     /**
-     * Parameters can be null.
+     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
      */
-    private void updateProfile(final String fname, final String lname, final String url,
-            final String bio) {
-        AccountsUpdateProfileRequest request = new AccountsUpdateProfileRequest();
-        request.setFname(fname);
-        request.setLname(lname);
-        request.setUrl(url);
-        request.setBio(bio);
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        mUserAccount.setFname(fname);
-                        mUserAccount.setLname(lname);
-                        mUserAccount.setUrl(url);
-                        mUserAccount.setBio(bio);
-                        updateUI();
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsUpdateProfileRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                        updateUI(); //revert ui back to it's original state
-                    }
-                }
-        );
+    private void updateProfilePicture(ProvisionCapture provision) {
+        mAccountController.updateProfilePhoto(provision);
     }
+    //endregion
+
+
+    //region Profile Updates
+    private void updateProfile(String fname, String lname, String url, String bio) {
+        mAccountController.updateProfile(fname, lname, url, bio);
+    }
+
+    public void onEventMainThread(UpdatedProfileEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount.setFname(event.getFname());
+            mUserAccount.setLname(event.getLname());
+            mUserAccount.setUrl(event.getUrl());
+            mUserAccount.setBio(event.getBio());
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
+    }
+
 
     private void modifyPhone(String number) {
         modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
@@ -538,7 +471,7 @@ public class SettingsFragment extends BaseFragment {
             if (replacementValue == null || replacementValue.equals("")) {
                 return;
             }
-            addIdentifier(currentValue, type);
+            addIdentifier(replacementValue, type);
             return;
         }
         //by this point, null phone identifiers will have been handled
@@ -554,41 +487,38 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void addIdentifier(String string, String type) {
-        AccountsAddIdentifierRequest request = new AccountsAddIdentifierRequest(string, type);
-        mNetworkController.performRequest(request, IdentifierChangeCallback);
+        mAccountController.addIdentifier(string, type);
     }
 
     private void updateIdentifier(Identifier identifier, String string) {
-        AccountsUpdateIdentifierRequest request = new AccountsUpdateIdentifierRequest(identifier,
-                string);
-        mNetworkController.performRequest(request, IdentifierChangeCallback);
+        mAccountController.updateIdentifier(identifier, string);
     }
 
     private void removeIdentifier(Identifier identifier) {
-        AccountsRemoveIdentifierRequest request = new AccountsRemoveIdentifierRequest(identifier);
-        mNetworkController.performRequest(request, IdentifierChangeCallback);
+        mAccountController.removeIdentifier(identifier);
     }
 
-    private void updateAccountSettings(String key, boolean setting) {
-        AccountsUpdateSettingRequest request = new AccountsUpdateSettingRequest(key, setting);
-        Log.d(TAG, request.toString());
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
-                    }
+    public void onEventMainThread(UpdatedIdentifiersListingEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount.setIdentifiers(event.getIdentifiers());
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsUpdateSettingRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
+    private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
+        mAccountController.updateSetting(key, setting);
+    }
+
+    public void onEventMainThread(UpdatedSettingEvent event) {
+        if (event.isSuccessful()) {
+            event.getKey();
+            mUserAccount.getAccountConfig().setSetting(event.getKey(), event.getSetting());
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
     }
     //endregion
 
@@ -647,6 +577,7 @@ public class SettingsFragment extends BaseFragment {
         facebookifyProfilePhoto();
     }
     //endregion
+    //endregion
 
 
     //region Button Click Actions
@@ -660,16 +591,16 @@ public class SettingsFragment extends BaseFragment {
 
         v.setSelected(!v.isSelected());
 
-        String key = null;
+        AccountConfig.Key key = null;
         switch (v.getId()) {
             case R.id.following_phone_notification:
-                key = AccountsUpdateSettingRequest.PN_NEW_FOLLOWER;
+                key = AccountConfig.Key.PN_NEW_FOLLOWER;
                 break;
             case R.id.comment_phone_notification:
-                key = AccountsUpdateSettingRequest.PN_COMMENT_ON_OWN_WINE;
+                key = AccountConfig.Key.PN_COMMENT_ON_OWN_WINE;
                 break;
             case R.id.tagged_phone_notification:
-                key = AccountsUpdateSettingRequest.PN_TAGGED;
+                key = AccountConfig.Key.PN_TAGGED;
                 break;
             case R.id.following_email_notification:
                 //TODO following_email_notification
