@@ -5,6 +5,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
+import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
@@ -40,6 +41,7 @@ import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
+import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
@@ -80,6 +82,7 @@ import de.greenrobot.event.EventBus;
                 FollowFacebookFriendsTabFragment.class,
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
+                WineCaptureSubmitFragment.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
@@ -114,7 +117,8 @@ import de.greenrobot.event.EventBus;
                 AccountController.class,
                 CaptureController.class,
                 RegistrationController.class,
-                FoursquareController.class
+                FoursquareController.class,
+                WineScanController.class
         }
 )
 public class AppModule {
