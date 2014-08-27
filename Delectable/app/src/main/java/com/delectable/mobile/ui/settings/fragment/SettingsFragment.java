@@ -120,8 +120,6 @@ public class SettingsFragment extends BaseFragment {
     TextView mVersionText;
 
     private String mUserId;
-
-    private BaseNetworkController mNetworkController;
     //endregion
 
     private Account mUserAccount;
@@ -151,7 +149,6 @@ public class SettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        mNetworkController = new BaseNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
         mAccountController.fetchPrivateAccount(mUserId);
@@ -424,6 +421,7 @@ public class SettingsFragment extends BaseFragment {
     //endregion
 
 
+    //region Profile Updates
     private void updateProfile(String fname, String lname, String url, String bio) {
         mAccountController.updateProfile(fname, lname, url, bio);
     }
@@ -578,6 +576,7 @@ public class SettingsFragment extends BaseFragment {
     private void setFacebookPhotoAsProfile() {
         facebookifyProfilePhoto();
     }
+    //endregion
     //endregion
 
 
