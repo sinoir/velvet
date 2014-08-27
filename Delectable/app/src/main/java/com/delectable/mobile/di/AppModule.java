@@ -32,6 +32,7 @@ import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUplaodJob;
+import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
@@ -104,6 +105,7 @@ import de.greenrobot.event.EventBus;
                 FetchDelectafriendsJob.class,
                 FetchAccountsFromContactsJob.class,
                 BasePhotoUplaodJob.class,
+                IdentifyLabelJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
