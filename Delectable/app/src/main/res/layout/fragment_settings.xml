@@ -86,11 +86,18 @@
                 style="@style/SettingsRowTextLabel"
                 android:text="@string/settings_facebook_label" />
 
-            <EditText
+            <com.facebook.widget.LoginButton
+                android:id="@+id/facebook_sign_in"
+                style="@style/SettingsRowEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/facebook_value"
                 style="@style/SettingsRowEditText"
-                android:layout_toRightOf="@+id/facebook_label"
-                android:hint="@string/settings_facebook_hint" />
+                android:text="@string/settings_facebook_hint" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/SettingsRow">

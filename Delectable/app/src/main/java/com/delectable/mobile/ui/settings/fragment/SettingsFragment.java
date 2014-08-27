@@ -24,9 +24,14 @@ import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
+import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.LoginButton;
 
 import android.app.Activity;
 import android.content.Context;
@@ -92,8 +97,11 @@ public class SettingsFragment extends BaseFragment {
     @InjectView(R.id.phone_number_value)
     EditText mPhoneNumberField;
 
+    @InjectView(R.id.facebook_sign_in)
+    LoginButton mRealFacebookLoginButton;
+
     @InjectView(R.id.facebook_value)
-    EditText mFacebookField;
+    TextView mFacebookField;
 
     @InjectView(R.id.twitter_value)
     EditText mTwitterField;
@@ -139,6 +147,9 @@ public class SettingsFragment extends BaseFragment {
      */
     private Bitmap mPhoto;
 
+    private UiLifecycleHelper mFacebookUiHelper;
+
+
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
@@ -149,11 +160,16 @@ public class SettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+
+        mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
+        mFacebookUiHelper.onCreate(savedInstanceState);
+
         mUserId = UserInfo.getUserId(getActivity());
 
         mAccountController.fetchPrivateAccount(mUserId);
     }
 
+    //region Lifecycle
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -161,6 +177,8 @@ public class SettingsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         ButterKnife.inject(this, view);
+
+        mRealFacebookLoginButton.setFragment(this);
 
         //listens for done button on soft keyboard
         TextView.OnEditorActionListener doneListener = new TextView.OnEditorActionListener() {
@@ -209,6 +227,54 @@ public class SettingsFragment extends BaseFragment {
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFacebookUiHelper.onResume();
+        if (mUserAccount == null) {
+            loadCachedAccount();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mFacebookUiHelper.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            Bitmap bitmap = getImage(selectedImageUri);
+            if (bitmap == null) {
+                return; //unable to retrieve image from phone, don't do anything
+            }
+            mProfileImage.setImageBitmap(bitmap);
+            provisionProfilePhoto(bitmap);
+        }
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            mProfileImage.setImageBitmap(photo);
+            provisionProfilePhoto(photo);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mFacebookUiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mFacebookUiHelper.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mFacebookUiHelper.onSaveInstanceState(outState);
+    }
+    //endregion
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
@@ -271,25 +337,6 @@ public class SettingsFragment extends BaseFragment {
         return false;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            Bitmap bitmap = getImage(selectedImageUri);
-            if (bitmap == null) {
-                return; //unable to retrieve image from phone, don't do anything
-            }
-            mProfileImage.setImageBitmap(bitmap);
-            provisionProfilePhoto(bitmap);
-        }
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            mProfileImage.setImageBitmap(photo);
-            provisionProfilePhoto(photo);
-        }
-    }
-
     /**
      * @return Returns null if the image couldn't be retrieved.
      */
@@ -311,13 +358,6 @@ public class SettingsFragment extends BaseFragment {
     }
     //endregion
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mUserAccount == null) {
-            loadCachedAccount();
-        }
-    }
 
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
@@ -581,6 +621,11 @@ public class SettingsFragment extends BaseFragment {
 
 
     //region Button Click Actions
+    @OnClick(R.id.facebook_value)
+    protected void onFacebookConnectClick(View v) {
+        mRealFacebookLoginButton.performClick();
+    }
+
     @OnClick({R.id.following_phone_notification,
             R.id.comment_phone_notification,
             R.id.tagged_phone_notification,
@@ -731,6 +776,25 @@ public class SettingsFragment extends BaseFragment {
         mTaggedPhoneIcon.setSelected(taggedPhone);
 
         //TODO no fields for email notifications yet for API, implement when ready
+    }
+
+    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
+            Log.d(TAG + ".Facebook", "Session:" + session);
+            Log.d(TAG + ".Facebook", "Exception:" + exception);
+            // TODO: Handle errors and other conditions.
+            if (state.isOpened()) {
+                facebookConnect();
+            }
+        }
+    };
+
+    public void facebookConnect() {
+        Session session = Session.getActiveSession();
+
+        //TODO associate fb endpoint
     }
 
 }
