@@ -12,14 +12,14 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-public abstract class BasePhotoUplaodJob extends BaseJob {
+public abstract class BasePhotoUploadJob extends BaseJob {
 
     @Inject
     protected S3ImageUploadNetworkClient mS3ImageUploadNetworkClient;
 
     private byte[] mImageData;
 
-    public BasePhotoUplaodJob(byte[] imageData) {
+    public BasePhotoUploadJob(byte[] imageData) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
         mImageData = imageData;
     }

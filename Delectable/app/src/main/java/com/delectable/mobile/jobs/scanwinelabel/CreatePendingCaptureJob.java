@@ -7,7 +7,7 @@ import com.delectable.mobile.model.api.scanwinelabels.CreatePendingCaptureRespon
 
 import android.util.Log;
 
-public class CreatePendingCaptureJob extends BasePhotoUplaodJob {
+public class CreatePendingCaptureJob extends BasePhotoUploadJob {
 
     private static final String TAG = CreatePendingCaptureJob.class.getSimpleName();
 

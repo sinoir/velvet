@@ -7,7 +7,7 @@ import com.delectable.mobile.model.api.scanwinelabels.LabelScanResponse;
 
 import android.util.Log;
 
-public class IdentifyLabelJob extends BasePhotoUplaodJob {
+public class IdentifyLabelJob extends BasePhotoUploadJob {
 
     private static final String TAG = IdentifyLabelJob.class.getSimpleName();
 
