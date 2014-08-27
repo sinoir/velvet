@@ -9,6 +9,7 @@ import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.path.android.jobqueue.JobManager;
@@ -71,6 +72,10 @@ public class AccountController {
      */
     public void updateProfilePhoto(ProvisionCapture provisionCapture) {
         mJobManager.addJobInBackground(new UpdateProfilePhotoJob(provisionCapture));
+    }
+
+    public void updateProfile(String fname, String lname, String url, String bio) {
+        mJobManager.addJobInBackground(new UpdateProfileJob(fname, lname, url, bio));
     }
     //endregion
 

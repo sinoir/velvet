@@ -15,7 +15,6 @@ import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateProfileRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
@@ -23,6 +22,7 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
@@ -450,39 +450,22 @@ public class SettingsFragment extends BaseFragment {
     //endregion
 
 
-    /**
-     * Parameters can be null.
-     */
-    private void updateProfile(final String fname, final String lname, final String url,
-            final String bio) {
-        AccountsUpdateProfileRequest request = new AccountsUpdateProfileRequest();
-        request.setFname(fname);
-        request.setLname(lname);
-        request.setUrl(url);
-        request.setBio(bio);
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        mUserAccount.setFname(fname);
-                        mUserAccount.setLname(lname);
-                        mUserAccount.setUrl(url);
-                        mUserAccount.setBio(bio);
-                        updateUI();
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsUpdateProfileRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                        updateUI(); //revert ui back to it's original state
-                    }
-                }
-        );
+    private void updateProfile(String fname, String lname, String url, String bio) {
+        mAccountController.updateProfile(fname, lname, url, bio);
     }
+
+    public void onEventMainThread(UpdatedProfileEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount.setFname(event.getFname());
+            mUserAccount.setLname(event.getLname());
+            mUserAccount.setUrl(event.getUrl());
+            mUserAccount.setBio(event.getBio());
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
+    }
+
 
     private void modifyPhone(String number) {
         modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
