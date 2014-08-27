@@ -8,12 +8,9 @@ import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
@@ -65,29 +62,6 @@ import butterknife.OnClick;
 public class SettingsFragment extends BaseFragment {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
-
-    private BaseNetworkController.RequestCallback IdentifierChangeCallback
-            = new BaseNetworkController.RequestCallback() {
-        @Override
-        public void onSuccess(BaseResponse result) {
-            Log.d(TAG, "Received Results! " + result);
-            //update user object with new identifiers listing
-            IdentifiersListing identifiersListing = (IdentifiersListing) result;
-            ArrayList<Identifier> identifiers = identifiersListing.getIdentifiers();
-            mUserAccount.setIdentifiers(identifiers);
-            updateUI();
-        }
-
-        @Override
-        public void onFailed(RequestError error) {
-            String message = " Accounts Add/Update/Remove Identifier failed: " +
-                    error.getCode() + " error: " + error.getMessage();
-            Log.d(TAG, message);
-            showToastError(message);
-            //TODO figure out how to handle error UI wise
-            updateUI(); //updating ui so that user entered text is reverted back to original
-        }
-    };
 
     private static final int SELECT_PHOTO_REQUEST = 0;
 
@@ -519,9 +493,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void updateIdentifier(Identifier identifier, String string) {
-        AccountsUpdateIdentifierRequest request = new AccountsUpdateIdentifierRequest(identifier,
-                string);
-        mNetworkController.performRequest(request, IdentifierChangeCallback);
+        mAccountController.updateIdentifier(identifier, string);
     }
 
     private void removeIdentifier(Identifier identifier) {

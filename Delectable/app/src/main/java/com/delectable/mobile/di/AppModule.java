@@ -22,6 +22,7 @@ import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
@@ -114,6 +115,7 @@ import de.greenrobot.event.EventBus;
                 UpdateProfileJob.class,
                 UpdateSettingJob.class,
                 AddIdentifierJob.class,
+                UpdateIdentifierJob.class,
                 RemoveIdentifierJob.class,
                 // Controllers
                 AccountController.class,
