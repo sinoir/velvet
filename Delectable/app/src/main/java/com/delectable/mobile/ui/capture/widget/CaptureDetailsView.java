@@ -8,15 +8,14 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
+import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,14 +31,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private static final String TAG = CaptureDetailsView.class.getSimpleName();
 
-    @InjectView(R.id.wine_image)
-    protected ImageView mWineImage;
-
-    @InjectView(R.id.producer_name)
-    protected TextView mProducerName;
-
-    @InjectView(R.id.wine_name)
-    protected TextView mWineName;
+    @InjectView(R.id.wine_banner)
+    protected WineBannerView mWineBannerView;
 
     @InjectView(R.id.tagged_participants_container)
     protected View mTaggedParticipantsContainer;
@@ -131,11 +124,9 @@ public class CaptureDetailsView extends RelativeLayout {
         String producerName = mCaptureData.getDisplayTitle();
         String wineName = mCaptureData.getDisplayDescription();
 
-        ImageLoaderUtil.loadImageIntoView(mContext, wineImageUrl, mWineImage);
-        mProducerName.setText(producerName);
-        mWineName.setText(wineName);
+        mWineBannerView.updateViewWithData(wineImageUrl, producerName, wineName);
 
-        mWineImage.setOnClickListener(new View.OnClickListener() {
+        mWineBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mActionsHandler.launchWineProfile(mCaptureData);
