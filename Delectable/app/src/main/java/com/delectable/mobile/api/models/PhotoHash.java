@@ -7,7 +7,9 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PhotoHash extends BaseResponse implements Parcelable {
+import java.io.Serializable;
+
+public class PhotoHash extends BaseResponse implements Parcelable, Serializable {
 
     public static final Parcelable.Creator<PhotoHash> CREATOR
             = new Parcelable.Creator<PhotoHash>() {
@@ -20,11 +22,19 @@ public class PhotoHash extends BaseResponse implements Parcelable {
         }
     };
 
+    private static final long serialVersionUID = -7494546096166895300L;
+
     String url;
 
     ChildResolution child_resolutions;
 
     public PhotoHash() {
+    }
+
+    public PhotoHash(String url,
+            ChildResolution child_resolutions) {
+        this.url = url;
+        this.child_resolutions = child_resolutions;
     }
 
     private PhotoHash(Parcel in) {
@@ -119,7 +129,9 @@ public class PhotoHash extends BaseResponse implements Parcelable {
         dest.writeString(this.child_resolutions.size_blur);
     }
 
-    class ChildResolution {
+    public static class ChildResolution implements Serializable {
+
+        private static final long serialVersionUID = 6186001967269219062L;
 
         @SerializedName("50")
         String size_nano;
@@ -142,6 +154,20 @@ public class PhotoHash extends BaseResponse implements Parcelable {
         @SerializedName("1280")
         String size_blur;
 
+        public ChildResolution() {
+        }
+
+        public ChildResolution(String size_nano, String size_micro, String size_thumb,
+                String size_250, String size_450, String size_medium, String size_blur) {
+            this.size_nano = size_nano;
+            this.size_micro = size_micro;
+            this.size_thumb = size_thumb;
+            this.size_250 = size_250;
+            this.size_450 = size_450;
+            this.size_medium = size_medium;
+            this.size_blur = size_blur;
+        }
+
         @Override
         public String toString() {
             return "ChildResolution{" +
@@ -154,7 +180,5 @@ public class PhotoHash extends BaseResponse implements Parcelable {
                     ", size_blur='" + size_blur + '\'' +
                     '}';
         }
-
-
     }
 }
