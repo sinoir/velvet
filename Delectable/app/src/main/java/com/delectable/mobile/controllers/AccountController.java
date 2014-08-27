@@ -1,6 +1,7 @@
 package com.delectable.mobile.controllers;
 
 import com.delectable.mobile.api.models.AccountConfig;
+import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
@@ -10,6 +11,7 @@ import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
@@ -82,6 +84,10 @@ public class AccountController {
 
     public void updateSetting(AccountConfig.Key key, boolean setting) {
         mJobManager.addJobInBackground(new UpdateSettingJob(key, setting));
+    }
+
+    public void removeIdentifier(Identifier identifier) {
+        mJobManager.addJobInBackground(new RemoveIdentifierJob(identifier));
     }
     //endregion
 

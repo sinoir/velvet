@@ -14,7 +14,6 @@ import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
@@ -22,6 +21,7 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
@@ -527,8 +527,16 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void removeIdentifier(Identifier identifier) {
-        AccountsRemoveIdentifierRequest request = new AccountsRemoveIdentifierRequest(identifier);
-        mNetworkController.performRequest(request, IdentifierChangeCallback);
+        mAccountController.removeIdentifier(identifier);
+    }
+
+    public void onEventMainThread(UpdatedIdentifiersListingEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount.setIdentifiers(event.getIdentifiers());
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
     }
 
     private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
