@@ -2,7 +2,7 @@ package com.delectable.mobile.jobs.scanwinelabel;
 
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.model.api.scanwinelabels.LabelScanRequest;
+import com.delectable.mobile.model.api.scanwinelabels.PhotoUploadRequest;
 import com.delectable.mobile.model.api.scanwinelabels.LabelScanResponse;
 
 import android.util.Log;
@@ -26,7 +26,7 @@ public class IdentifyLabelJob extends BasePhotoUplaodJob {
 
         String endpoint = "/label_scans/identify";
         ProvisionCapture provisionCapture = uploadImage();
-        LabelScanRequest request = new LabelScanRequest(provisionCapture);
+        PhotoUploadRequest request = new PhotoUploadRequest(provisionCapture);
         LabelScanResponse response = getNetworkClient().post(endpoint, request,
                 LabelScanResponse.class);
 

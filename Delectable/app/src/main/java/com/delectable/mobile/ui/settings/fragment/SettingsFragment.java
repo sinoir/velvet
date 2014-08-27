@@ -3,19 +3,14 @@ package com.delectable.mobile.ui.settings.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
-import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
@@ -49,6 +44,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -281,12 +277,12 @@ public class SettingsFragment extends BaseFragment {
                 return; //unable to retrieve image from phone, don't do anything
             }
             mProfileImage.setImageBitmap(bitmap);
-            provisionProfilePhoto(bitmap);
+            updateProfilePicture(bitmap);
         }
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mProfileImage.setImageBitmap(photo);
-            provisionProfilePhoto(photo);
+            updateProfilePicture(photo);
         }
     }
 
@@ -362,7 +358,18 @@ public class SettingsFragment extends BaseFragment {
     }
 
     /**
-     * The callback for {@link #facebookifyProfilePhoto()} and {@link #updateProfilePicture(ProvisionCapture)}
+     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     */
+    private void updateProfilePicture(Bitmap photo) {
+        mPhoto = photo;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mPhoto.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        byte[] rawImageData = byteArrayOutputStream.toByteArray();
+        mAccountController.updateProfilePhoto(rawImageData);
+    }
+
+    /**
+     * The callback for {@link #facebookifyProfilePhoto()}
      */
     public void onEventMainThread(UpdatedProfilePhotoEvent event) {
         if (event.isSuccessful()) {
@@ -374,50 +381,6 @@ public class SettingsFragment extends BaseFragment {
         showToastError(event.getErrorMessage());
     }
 
-    private void provisionProfilePhoto(final Bitmap photo) {
-        mPhoto = photo;
-        mAccountController.provisionProfilePhoto();
-    }
-
-    public void onEventMainThread(ProvisionProfilePhotoEvent event) {
-        if (event.isSuccessful()) {
-            ProvisionCapture provision = event.getProvisionCapture();
-            sendPhotoToS3(mPhoto, provision);
-            mPhoto = null;
-            return;
-        }
-        showToastError(event.getErrorMessage());
-    }
-
-    private void sendPhotoToS3(Bitmap photo, final ProvisionCapture provision) {
-        S3ImageUploadController mImageUploadController = new S3ImageUploadController(getActivity(),
-                provision);
-        mImageUploadController.uploadImage(photo,
-                new BaseNetworkController.SimpleRequestCallback() {
-                    @Override
-                    public void onSucess() {
-                        Log.d(TAG, "Image Upload Done!");
-                        updateProfilePicture(provision);
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = S3ImageUploadController.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
-    }
-
-    /**
-     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
-     */
-    private void updateProfilePicture(ProvisionCapture provision) {
-        mAccountController.updateProfilePhoto(provision);
-    }
     //endregion
 
 

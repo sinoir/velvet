@@ -2,7 +2,6 @@ package com.delectable.mobile.controllers;
 
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
@@ -11,7 +10,6 @@ import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
-import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
@@ -65,19 +63,8 @@ public class AccountController {
         mJobManager.addJobInBackground(new FacebookifyProfilePhotoJob());
     }
 
-    public void provisionProfilePhoto() {
-        mJobManager.addJobInBackground(new ProvisionProfilePhotoJob());
-    }
-
-    /**
-     * Requires a photo provisioning and a successful S3 image upload before this endpoint can be
-     * called.
-     *
-     * @param provisionCapture The ProvisionCapture gotten from the accounts/provision_profile_photo
-     *                         endpoint
-     */
-    public void updateProfilePhoto(ProvisionCapture provisionCapture) {
-        mJobManager.addJobInBackground(new UpdateProfilePhotoJob(provisionCapture));
+    public void updateProfilePhoto(byte[] imageData) {
+        mJobManager.addJobInBackground(new UpdateProfilePhotoJob(imageData));
     }
 
     public void updateProfile(String fname, String lname, String url, String bio) {

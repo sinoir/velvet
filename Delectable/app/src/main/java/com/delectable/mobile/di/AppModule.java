@@ -21,7 +21,6 @@ import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
-import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
@@ -122,7 +121,6 @@ import de.greenrobot.event.EventBus;
                 CreatePendingCaptureJob.class,
                 AddCaptureFromPendingCaptureJob.class,
                 FacebookifyProfilePhotoJob.class,
-                ProvisionProfilePhotoJob.class,
                 UpdateProfilePhotoJob.class,
                 UpdateProfileJob.class,
                 UpdateSettingJob.class,
