@@ -158,7 +158,8 @@
     <string name="settings_phone_number_label">Phone number</string>
     <string name="settings_phone_number_hint">Enter phone number</string>
     <string name="settings_facebook_label">Facebook</string>
-    <string name="settings_facebook_hint">Connect</string>
+    <string name="settings_facebook_connect">Connect</string>
+    <string name="settings_facebook_connected">Connected</string>
     <string name="settings_twitter_label">Twitter</string>
     <string name="settings_twitter_hint">\@bearroast</string>
     <string name="settings_notification">notification</string>

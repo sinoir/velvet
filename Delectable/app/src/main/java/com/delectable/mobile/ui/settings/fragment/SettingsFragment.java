@@ -762,8 +762,15 @@ public class SettingsFragment extends BaseFragment {
         String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
         mPhoneNumberField.setText(mPhoneNumber);
 
-        //TODO connect facebook
-        //mFacebookField.setText(mUserAccount.getEmail());
+        if (mUserAccount.getFbId() != null) {
+            mFacebookField.setText(R.string.settings_facebook_connected);
+            mFacebookField.setSelected(true);
+            mFacebookField.setClickable(false);
+        } else {
+            mFacebookField.setText(R.string.settings_facebook_connect);
+            mFacebookField.setSelected(false);
+            mFacebookField.setClickable(true);
+        }
         //TODO connect twitter
         //mTwitterField.setText(mUserAccount.getEmail());
 
