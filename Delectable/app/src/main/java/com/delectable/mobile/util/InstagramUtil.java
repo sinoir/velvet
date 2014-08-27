@@ -2,8 +2,13 @@ package com.delectable.mobile.util;
 
 import com.delectable.mobile.App;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 public class InstagramUtil {
 
@@ -18,5 +23,20 @@ public class InstagramUtil {
             appInstalled = false;
         }
         return appInstalled;
+    }
+
+    public static void shareBitmapInInstagram(Activity activity, Bitmap bitmap, String caption) {
+        String url = MediaStore.Images.Media
+                .insertImage(activity.getContentResolver(), bitmap, "DelectableCapture",
+                        caption);
+        Uri uri = Uri.parse(url);
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        share.putExtra(Intent.EXTRA_TEXT, caption);
+        // Must set instagram package, otherwise it'll ask what app to share with
+        share.setPackage("com.instagram.android");
+        activity.startActivity(share);
     }
 }
