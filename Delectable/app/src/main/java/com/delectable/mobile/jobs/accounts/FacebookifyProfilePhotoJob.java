@@ -4,7 +4,7 @@ import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseRequest;
-import com.delectable.mobile.model.api.accounts.AccountsPhotoHashResponse;
+import com.delectable.mobile.model.api.accounts.PhotoHashResponse;
 import com.path.android.jobqueue.Params;
 
 public class FacebookifyProfilePhotoJob extends BaseJob {
@@ -19,9 +19,9 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
     public void onRun() throws Throwable {
         String endpoint = "/accounts/facebookify_profile_photo";
         BaseRequest request = new BaseRequest(); //empty payload, so we use baserequest
-        AccountsPhotoHashResponse response = getNetworkClient()
+        PhotoHashResponse response = getNetworkClient()
                 .post(endpoint, request,
-                        AccountsPhotoHashResponse.class);
+                        PhotoHashResponse.class);
         getEventBus()
                 .post(new UpdatedProfilePhotoEvent(response.getPayload().getPhoto()));
     }
