@@ -22,6 +22,7 @@ import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
@@ -109,6 +110,7 @@ import de.greenrobot.event.EventBus;
                 ProvisionProfilePhotoJob.class,
                 UpdateProfilePhotoJob.class,
                 UpdateProfileJob.class,
+                UpdateSettingJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,

@@ -7,6 +7,7 @@ import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.controllers.S3ImageUploadController;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.IdentifiersListing;
@@ -15,7 +16,6 @@ import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
-import com.delectable.mobile.api.requests.AccountsUpdateSettingRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
@@ -24,6 +24,7 @@ import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
@@ -530,26 +531,18 @@ public class SettingsFragment extends BaseFragment {
         mNetworkController.performRequest(request, IdentifierChangeCallback);
     }
 
-    private void updateAccountSettings(String key, boolean setting) {
-        AccountsUpdateSettingRequest request = new AccountsUpdateSettingRequest(key, setting);
-        Log.d(TAG, request.toString());
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        Log.d(TAG, "Received Results! " + result);
-                    }
+    private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
+        mAccountController.updateSetting(key, setting);
+    }
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        String message = AccountsUpdateSettingRequest.TAG + " failed: " +
-                                error.getCode() + " error: " + error.getMessage();
-                        Log.d(TAG, message);
-                        showToastError(message);
-                        //TODO figure out how to handle error UI wise
-                    }
-                }
-        );
+    public void onEventMainThread(UpdatedSettingEvent event) {
+        if (event.isSuccessful()) {
+            event.getKey();
+            mUserAccount.getAccountConfig().setSetting(event.getKey(), event.getSetting());
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
     }
     //endregion
 
@@ -621,16 +614,16 @@ public class SettingsFragment extends BaseFragment {
 
         v.setSelected(!v.isSelected());
 
-        String key = null;
+        AccountConfig.Key key = null;
         switch (v.getId()) {
             case R.id.following_phone_notification:
-                key = AccountsUpdateSettingRequest.PN_NEW_FOLLOWER;
+                key = AccountConfig.Key.PN_NEW_FOLLOWER;
                 break;
             case R.id.comment_phone_notification:
-                key = AccountsUpdateSettingRequest.PN_COMMENT_ON_OWN_WINE;
+                key = AccountConfig.Key.PN_COMMENT_ON_OWN_WINE;
                 break;
             case R.id.tagged_phone_notification:
-                key = AccountsUpdateSettingRequest.PN_TAGGED;
+                key = AccountConfig.Key.PN_TAGGED;
                 break;
             case R.id.following_email_notification:
                 //TODO following_email_notification

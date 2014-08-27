@@ -1,5 +1,6 @@
 package com.delectable.mobile.controllers;
 
+import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
@@ -11,6 +12,7 @@ import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.path.android.jobqueue.JobManager;
 
@@ -76,6 +78,10 @@ public class AccountController {
 
     public void updateProfile(String fname, String lname, String url, String bio) {
         mJobManager.addJobInBackground(new UpdateProfileJob(fname, lname, url, bio));
+    }
+
+    public void updateSetting(AccountConfig.Key key, boolean setting) {
+        mJobManager.addJobInBackground(new UpdateSettingJob(key, setting));
     }
     //endregion
 
