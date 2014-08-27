@@ -15,4 +15,8 @@ public class IdentifyLabelScanEvent extends BaseEvent {
     public IdentifyLabelScanEvent(String errorMessage) {
         super(errorMessage);
     }
+
+    public LabelScan getLabelScan() {
+        return mLabelScan;
+    }
 }
