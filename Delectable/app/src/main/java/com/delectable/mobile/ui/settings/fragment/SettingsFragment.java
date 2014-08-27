@@ -13,7 +13,6 @@ import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.IdentifiersListing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.api.requests.AccountsAddIdentifierRequest;
 import com.delectable.mobile.api.requests.AccountsUpdateIdentifierRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
@@ -500,7 +499,7 @@ public class SettingsFragment extends BaseFragment {
             if (replacementValue == null || replacementValue.equals("")) {
                 return;
             }
-            addIdentifier(currentValue, type);
+            addIdentifier(replacementValue, type);
             return;
         }
         //by this point, null phone identifiers will have been handled
@@ -516,8 +515,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void addIdentifier(String string, String type) {
-        AccountsAddIdentifierRequest request = new AccountsAddIdentifierRequest(string, type);
-        mNetworkController.performRequest(request, IdentifierChangeCallback);
+        mAccountController.addIdentifier(string, type);
     }
 
     private void updateIdentifier(Identifier identifier, String string) {

@@ -12,6 +12,7 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
+import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
@@ -112,6 +113,7 @@ import de.greenrobot.event.EventBus;
                 UpdateProfilePhotoJob.class,
                 UpdateProfileJob.class,
                 UpdateSettingJob.class,
+                AddIdentifierJob.class,
                 RemoveIdentifierJob.class,
                 // Controllers
                 AccountController.class,
