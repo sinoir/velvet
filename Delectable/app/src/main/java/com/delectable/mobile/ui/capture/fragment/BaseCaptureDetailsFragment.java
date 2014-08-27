@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -145,8 +144,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void launchTaggedUserListing(CaptureDetails capture) {
-        // TODO: Tagged User Listing
-        Toast.makeText(getActivity(), "All Tagged Users list", Toast.LENGTH_SHORT).show();
+        // TODO: Tagged User Listing if design exists
         Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
     }
 

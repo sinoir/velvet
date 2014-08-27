@@ -149,7 +149,8 @@
     <!-- Wine Banner -->
     <dimen name="wine_banner_triangle_width">14dp</dimen>
     <dimen name="wine_banner_triangle_height">7dp</dimen>
-    <dimen name="wine_banner_triangle_center_position">32dp</dimen>
+    <!-- Center position = left KeyLine + Half ProfileImage Width (16dp + (20dp/2)) -->
+    <dimen name="wine_banner_triangle_center_position">36dp</dimen>
 
     <!-- Follow Friends -->
     <dimen name="follow_friends_horizontal_spacing">16dp</dimen>
