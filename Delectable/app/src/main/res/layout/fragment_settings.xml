@@ -27,8 +27,7 @@
             android:hint="@string/settings_name_hint"
             android:imeOptions="actionDone"
             android:inputType="textPersonName"
-            android:singleLine="true"
-            android:text="Arnold Fishhorse" />
+            android:singleLine="true"/>
 
         <com.delectable.mobile.ui.common.widget.FontEditText
             android:id="@+id/short_bio"
