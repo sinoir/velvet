@@ -145,7 +145,7 @@
     <string name="follow_friends_invite_to_delectable">invite to delectable</string>
     <string name="follow_friends_facebook">facebook</string>
     <string name="follow_friends_twitter">twitter</string>
-
+    <string name="follow_friends_invite">Invite</string>
 
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>
