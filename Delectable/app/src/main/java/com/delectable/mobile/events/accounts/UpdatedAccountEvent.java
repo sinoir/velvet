@@ -7,7 +7,7 @@ public class UpdatedAccountEvent extends BaseEvent {
 
     private Account mAccount;
 
-    public  UpdatedAccountEvent(Account account) {
+    public UpdatedAccountEvent(Account account) {
         super(true);
         mAccount = account;
     }
@@ -16,7 +16,7 @@ public class UpdatedAccountEvent extends BaseEvent {
         super(errorMessage);
     }
 
-    public Account getAcount() {
+    public Account getAccount() {
         return mAccount;
     }
 }

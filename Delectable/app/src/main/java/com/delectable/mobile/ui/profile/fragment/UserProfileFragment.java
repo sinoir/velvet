@@ -9,7 +9,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
-import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
@@ -278,11 +278,20 @@ public class UserProfileFragment extends BaseFragment implements
 
     }
 
-    public void onEventMainThread(oldUpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+    public void onEventMainThread(UpdatedAccountEvent event) {
+        if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
-        loadData();
+        mUserAccount = event.getAccount();
+        if (mUserAccount != null) {
+            mCaptureDetails.clear();
+            if (mUserAccount.getCaptureSummaries() != null) {
+                for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
+                    mCaptureDetails.addAll(summary.getCaptures());
+                }
+            }
+            updateUIWithData();
+        }
     }
 
     public void onEventMainThread(FetchAccountFailedEvent event) {

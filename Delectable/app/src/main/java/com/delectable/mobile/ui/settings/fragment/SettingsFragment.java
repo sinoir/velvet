@@ -12,11 +12,11 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
+import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
-import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
@@ -357,11 +357,12 @@ public class SettingsFragment extends BaseFragment {
 
 
     //region Events
-    public void onEventMainThread(oldUpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+    public void onEventMainThread(UpdatedAccountEvent event) {
+        if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
-        loadCachedAccount();
+        mUserAccount = event.getAccount();
+        updateUI();
     }
     //endregion
 
