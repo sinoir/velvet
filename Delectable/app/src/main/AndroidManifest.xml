@@ -14,6 +14,22 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!-- TODO: Implement these once screens become available
+        <intent-filter android:label="">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+
+            <data
+                android:host="region"
+                android:scheme="delectable" />
+            <data
+                android:host="purchase"
+                android:scheme="delectable" />
+            <data
+                android:host="recommendations"
+                android:scheme="delectable" />
+        </intent-filter> -->
+
         <activity
             android:name="com.delectable.mobile.MainActivity"
             android:label="@string/app_name"
@@ -49,8 +65,11 @@
             android:screenOrientation="portrait">
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="captures"
+                    android:scheme="delectable" />
                 <data
                     android:host="account"
                     android:scheme="delectable" />
@@ -63,18 +82,27 @@
             android:screenOrientation="portrait">
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data
                     android:host="capture"
                     android:scheme="delectable" />
+
             </intent-filter>
         </activity>
 
         <activity
             android:name="com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter android:label="">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="base_wine"
+                    android:scheme="delectable" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="com.facebook.LoginActivity"
@@ -104,5 +132,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
 </manifest>
