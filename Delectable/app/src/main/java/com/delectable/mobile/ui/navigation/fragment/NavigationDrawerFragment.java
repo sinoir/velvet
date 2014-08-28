@@ -12,7 +12,6 @@ import com.delectable.mobile.api.requests.ActivityFeedRequest;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
@@ -303,11 +302,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
-        updateUIWithData(event.getAccount());
-    }
 
-    public void onEventMainThread(FetchAccountFailedEvent event) {
-        // TODO show error dialog
+        if (event.isSuccessful()) {
+            updateUIWithData(event.getAccount());
+            return;
+        }
+        showToastError(event.getErrorMessage());
     }
 
     private void loadActivityFeed() {

@@ -11,7 +11,6 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
-import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
@@ -361,14 +360,16 @@ public class SettingsFragment extends BaseFragment {
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
-        mUserAccount = event.getAccount();
-        updateUI();
+
+        if (event.isSuccessful()) {
+            mUserAccount = event.getAccount();
+            updateUI();
+            return;
+        }
+        showToastError(event.getErrorMessage());
+
     }
     //endregion
-
-    public void onEventMainThread(FetchAccountFailedEvent event) {
-        // TODO show error dialog
-    }
 
     //region API Requests
 
