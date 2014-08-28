@@ -55,7 +55,6 @@ public class InviteContactRow extends RelativeLayout {
 
     @OnClick(R.id.invite_button)
     protected void onInviteButtonClicked(View v) {
-        v.setSelected(!v.isSelected());
         if (mActionsHandler != null) {
             mActionsHandler.inviteContact(mContact);
         }
