@@ -59,6 +59,7 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
         if (event.isSuccessful()) {
             mAccounts = event.getAccounts();
             mAdapter.setAccounts(event.getAccounts());
+            mAdapter.setContacts(event.getContacts());
             mAdapter.notifyDataSetChanged();
             return;
         }

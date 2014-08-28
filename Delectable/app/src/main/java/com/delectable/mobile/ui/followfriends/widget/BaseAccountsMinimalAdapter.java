@@ -30,7 +30,7 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
     }
 
     @Override
-    public AccountMinimal getItem(int position) {
+    public Object getItem(int position) {
         return mAccounts.get(position);
     }
 

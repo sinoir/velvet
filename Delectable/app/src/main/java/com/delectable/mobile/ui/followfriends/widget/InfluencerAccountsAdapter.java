@@ -22,7 +22,7 @@ public class InfluencerAccountsAdapter extends BaseAccountsMinimalAdapter {
                     .inflate(R.layout.row_find_experts_with_sizing, parent, false);
             row.setActionsHandler(mActionsHandler);
         }
-        row.updateData(getItem(position));
+        row.updateData((com.delectable.mobile.api.models.AccountMinimal) getItem(position));
 
         return row;
     }
