@@ -21,11 +21,11 @@ public class CreatePendingCaptureRequest extends BaseRequest {
         // TODO: are these required?
         private String label_scan_id;
 
-        private Boolean from_camera_roll;
+        private boolean from_camera_roll;
 
-        private Integer capture_longitude;
+        private int capture_longitude;
 
-        private Integer capture_latitude;
+        private int capture_latitude;
     }
 
 }

@@ -34,7 +34,7 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
         this.payload.private_ = private_;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(int rating) {
         this.payload.rating = rating;
     }
 
@@ -80,17 +80,17 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
         private String pending_capture_id;
 
         @SerializedName("private")
-        private Boolean private_;
+        private boolean private_;
 
-        private Integer rating;
+        private int rating;
 
         private String note;
 
-        private Boolean share_tw;
+        private boolean share_tw;
 
         private String user_tw; // Only required if share_tw it True
 
-        private Boolean share_fb;
+        private boolean share_fb;
 
         private String user_country_code;
 
@@ -101,8 +101,8 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
         public Payload() {
         }
 
-        public Payload(String pending_capture_id, Boolean private_, Integer rating, String note,
-                Boolean share_tw, String user_tw, Boolean share_fb, String user_country_code,
+        public Payload(String pending_capture_id, boolean private_, int rating, String note,
+                boolean share_tw, String user_tw, boolean share_fb, String user_country_code,
                 String foursquare_location_id,
                 List<TaggeeContact> taggees) {
             this.pending_capture_id = pending_capture_id;

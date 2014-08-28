@@ -6,15 +6,15 @@ public class PendingCapture {
 
     private String id;
 
-    private Float created_at;
+    private double created_at;
 
     private PhotoHash photo;
 
-    private Boolean from_camera_roll;
+    private boolean from_camera_roll;
 
-    private Float capture_latitude;
+    private double capture_latitude;
 
-    private Float capture_longitude;
+    private double capture_longitude;
 
     private BaseWine base_wine;
 
@@ -32,11 +32,11 @@ public class PendingCapture {
         this.id = id;
     }
 
-    public Float getCreatedAt() {
+    public double getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(Float created_at) {
+    public void setCreatedAt(double created_at) {
         this.created_at = created_at;
     }
 
@@ -48,27 +48,27 @@ public class PendingCapture {
         this.photo = photo;
     }
 
-    public Boolean getFromCameraRoll() {
+    public boolean getFromCameraRoll() {
         return from_camera_roll;
     }
 
-    public void setFromCameraRoll(Boolean from_camera_roll) {
+    public void setFromCameraRoll(boolean from_camera_roll) {
         this.from_camera_roll = from_camera_roll;
     }
 
-    public Float getCaptureLatitude() {
+    public double getCaptureLatitude() {
         return capture_latitude;
     }
 
-    public void setCaptureLatitude(Float capture_latitude) {
+    public void setCaptureLatitude(double capture_latitude) {
         this.capture_latitude = capture_latitude;
     }
 
-    public Float getCaptureLongitude() {
+    public double getCaptureLongitude() {
         return capture_longitude;
     }
 
-    public void setCaptureLongitude(Float capture_longitude) {
+    public void setCaptureLongitude(double capture_longitude) {
         this.capture_longitude = capture_longitude;
     }
 
@@ -106,15 +106,15 @@ public class PendingCapture {
 
     public static class Match {
 
-        private Float score;
+        private double score;
 
         private BaseWine base_wine;
 
-        public Float getScore() {
+        public double getScore() {
             return score;
         }
 
-        public void setScore(Float score) {
+        public void setScore(double score) {
             this.score = score;
         }
 
