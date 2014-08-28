@@ -3,7 +3,7 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseResponse;
 import com.delectable.mobile.model.api.accounts.AccountFollowRequest;
@@ -51,7 +51,7 @@ public class oldFollowAccountJob extends Job {
                 mFollow ? Account.RELATION_TYPE_FOLLOWING : Account.RELATION_TYPE_NONE);
         mAccountModel.saveAccount(cachedAccount);
         // Inform UI that the model has changed
-        mEventBus.post(new UpdatedAccountEvent(mAccountId));
+        mEventBus.post(new oldUpdatedAccountEvent(mAccountId));
         Log.d(TAG, "FOLLOW: updated local model");
     }
 
@@ -72,7 +72,7 @@ public class oldFollowAccountJob extends Job {
         cachedAccount.setCurrentUserRelationship(mOriginalUserRelationship);
         mAccountModel.saveAccount(cachedAccount);
         // Inform UI that the model has changed
-        mEventBus.post(new UpdatedAccountEvent(mAccountId));
+        mEventBus.post(new oldUpdatedAccountEvent(mAccountId));
         // Inform UI that the request has failed
         mEventBus.post(new FollowAccountFailedEvent(mAccountId));
         Log.d(TAG, "FOLLOW: job was canceled!");

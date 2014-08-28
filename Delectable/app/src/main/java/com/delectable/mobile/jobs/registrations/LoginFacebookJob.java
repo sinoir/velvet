@@ -3,7 +3,7 @@ package com.delectable.mobile.jobs.registrations;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.AuthorizeFacebookRequest;
@@ -60,7 +60,7 @@ public class LoginFacebookJob extends Job {
         boolean newUser = response.payload.new_user;
         Account account = response.payload.account;
         mAccountModel.saveAccount(account);
-        mEventBus.post(new UpdatedAccountEvent(account.getId()));
+        mEventBus.post(new oldUpdatedAccountEvent(account.getId()));
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
         mEventBus.post(new LoginRegisterEvent(true));

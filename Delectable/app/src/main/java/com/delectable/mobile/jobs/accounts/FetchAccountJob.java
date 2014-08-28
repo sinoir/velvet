@@ -3,7 +3,7 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.accounts.AccountContextRequest;
 import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
@@ -63,7 +63,7 @@ public class FetchAccountJob extends Job {
         if (!response.isETagMatch()) {
             Account account = response.getPayload().getAccount();
             mAccountModel.saveAccount(account);
-            mEventBus.post(new UpdatedAccountEvent(account.getId()));
+            mEventBus.post(new oldUpdatedAccountEvent(account.getId()));
         }
 
     }

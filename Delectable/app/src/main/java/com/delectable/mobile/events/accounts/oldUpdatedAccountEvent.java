@@ -1,10 +1,10 @@
 package com.delectable.mobile.events.accounts;
 
-public class UpdatedAccountEvent {
+public class oldUpdatedAccountEvent {
 
     private String mAccountId;
 
-    public UpdatedAccountEvent(String id) {
+    public oldUpdatedAccountEvent(String id) {
         mAccountId = id;
     }
 

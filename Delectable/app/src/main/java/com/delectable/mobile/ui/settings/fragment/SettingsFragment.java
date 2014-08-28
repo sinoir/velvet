@@ -16,7 +16,7 @@ import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
@@ -24,7 +24,6 @@ import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
-import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -360,7 +359,7 @@ public class SettingsFragment extends BaseFragment {
 
 
     //region Events
-    public void onEventMainThread(UpdatedAccountEvent event) {
+    public void onEventMainThread(oldUpdatedAccountEvent event) {
         if (!mUserId.equals(event.getAccountId())) {
             return;
         }
