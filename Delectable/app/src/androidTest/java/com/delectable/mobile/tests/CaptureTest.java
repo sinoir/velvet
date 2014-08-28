@@ -123,7 +123,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals("Beeman", actualCapture.getCapturerParticipant().getLname());
         assertEquals("http://graph.facebook.com/542133246/picture?width=200",
                 actualCapture.getCapturerParticipant().getPhoto().getUrl());
-        assertEquals(false, actualCapture.getCapturerParticipant().getInfluencer().booleanValue());
+        assertEquals(false, actualCapture.getCapturerParticipant().isInfluencer());
         assertEquals("", actualCapture.getCapturerParticipant().getInfluencerTitles().get(0));
         assertEquals("uk12p-STHmlsbA", actualCapture.getCapturerParticipant().getETag());
 
@@ -134,7 +134,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals("http://graph.facebook.com/542133246/picture?width=200",
                 actualCapture.getCommentingParticipants().get(0).getPhoto().getUrl());
         assertEquals(false,
-                actualCapture.getCommentingParticipants().get(0).getInfluencer().booleanValue());
+                actualCapture.getCommentingParticipants().get(0).isInfluencer());
         assertEquals("",
                 actualCapture.getCommentingParticipants().get(0).getInfluencerTitles().get(0));
         assertEquals("uk12p-STHmlsbA", actualCapture.getCommentingParticipants().get(0).getETag());
@@ -151,7 +151,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         assertEquals("https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
                 actualCapture.getRegisteredParticipants().get(0).getPhoto().getUrl());
         assertEquals(false,
-                actualCapture.getRegisteredParticipants().get(0).getInfluencer().booleanValue());
+                actualCapture.getRegisteredParticipants().get(0).isInfluencer());
         assertEquals("",
                 actualCapture.getRegisteredParticipants().get(0).getInfluencerTitles().get(0));
         assertEquals("tJIa96k_mnebug", actualCapture.getRegisteredParticipants().get(0).getETag());

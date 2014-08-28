@@ -5,54 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <com.delectable.mobile.ui.common.widget.WineBannerView
         android:id="@+id/wine_banner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cap_feed_row_wine_banner_height"
-        android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing">
-
-        <!--TOOD: Placeholder for no image? -->
-        <ImageView
-            android:id="@+id/wine_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:background="@color/d_medium_gray"
-            android:scaleType="centerCrop" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/producer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/wine_name"
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-            android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/cap_feed_row_top_text_font_size"
-            app:fontName="whitney_medium_sc" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/wine_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
-            android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-            android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/cap_feed_row_bottom_text_font_size"
-            app:fontName="whitney_medium_sc" />
-
-        <!--TODO: Mini upside down Triangle -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="7dp"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/white" />
-
-    </RelativeLayout>
+        android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
+        app:showTriangleMask="true" />
 
     <RelativeLayout
         android:id="@+id/tagged_participants_container"

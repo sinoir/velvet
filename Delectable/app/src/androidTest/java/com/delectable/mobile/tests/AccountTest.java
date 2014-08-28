@@ -30,7 +30,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
         assertEquals("Bednarek", actualAccount.getLname());
-        assertEquals(false, actualAccount.getInfluencer().booleanValue());
+        assertEquals(false, actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
         assertEquals(0, actualAccount.getFollowerCount().intValue());
@@ -88,7 +88,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
         assertEquals("Bednarek", actualAccount.getLname());
-        assertEquals(false, actualAccount.getInfluencer().booleanValue());
+        assertEquals(false, actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
         assertEquals(0, actualAccount.getFollowerCount().intValue());
@@ -101,7 +101,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
                 actualAccount.getPhoto().getUrl());
 
         assertEquals("jNHflR9U9xRQjA", actualAccount.getETag());
-        assertEquals(-1, actualAccount.getCurrentUserRelationship().intValue());
+        assertEquals(-1, actualAccount.getCurrentUserRelationship());
         assertEquals(0, actualAccount.getCaptureSummaries().size());
     }
 
@@ -114,7 +114,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals("51d24187b4db0164af000206", actualAccount.getId());
         assertEquals("James", actualAccount.getFname());
         assertEquals("Wooldridge", actualAccount.getLname());
-        assertEquals(false, actualAccount.getInfluencer().booleanValue());
+        assertEquals(false, actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
         assertEquals(2, actualAccount.getFollowerCount().intValue());
@@ -126,7 +126,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals("http://graph.facebook.com/1580152674/picture?width=200",
                 actualAccount.getPhoto().getUrl());
         assertEquals("H_Noq-ksM8U4Hw", actualAccount.getETag());
-        assertEquals(0, actualAccount.getCurrentUserRelationship().intValue());
+        assertEquals(0, actualAccount.getCurrentUserRelationship());
 
         assertEquals(1, actualAccount.getCaptureSummaries().size());
         CaptureSummary firstCapSummary = actualAccount.getCaptureSummaries().get(0);

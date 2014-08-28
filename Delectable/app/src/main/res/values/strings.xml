@@ -16,6 +16,11 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
 
+    <!-- Common Errors -->
+    <string name="error_no_instagram">In order to post to instagram, you must have it installed on your device</string>
+    <string name="error_connect_facebook">In order to post to facebook, you must connect it to Delectable</string>
+    <string name="error_connect_twitter">In order to post to twitter, you must connect it to Delectable</string>
+
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
     <string name="login_sign_up">sign up</string>

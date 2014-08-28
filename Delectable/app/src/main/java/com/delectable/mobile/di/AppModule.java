@@ -5,6 +5,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
+import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
@@ -21,7 +22,6 @@ import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
-import com.delectable.mobile.jobs.accounts.ProvisionProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
@@ -40,10 +40,16 @@ import com.delectable.mobile.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
+import com.delectable.mobile.jobs.scanwinelabel.AddCaptureFromPendingCaptureJob;
+import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUploadJob;
+import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
+import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
+import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
@@ -84,6 +90,7 @@ import de.greenrobot.event.EventBus;
                 FollowFacebookFriendsTabFragment.class,
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
+                WineCaptureSubmitFragment.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
@@ -110,8 +117,11 @@ import de.greenrobot.event.EventBus;
                 SearchFoursquareVenuesJob.class,
                 FetchDelectafriendsJob.class,
                 FetchAccountsFromContactsJob.class,
+                BasePhotoUploadJob.class,
+                IdentifyLabelJob.class,
+                CreatePendingCaptureJob.class,
+                AddCaptureFromPendingCaptureJob.class,
                 FacebookifyProfilePhotoJob.class,
-                ProvisionProfilePhotoJob.class,
                 UpdateProfilePhotoJob.class,
                 UpdateProfileJob.class,
                 UpdateSettingJob.class,
@@ -123,7 +133,8 @@ import de.greenrobot.event.EventBus;
                 AccountController.class,
                 CaptureController.class,
                 RegistrationController.class,
-                FoursquareController.class
+                FoursquareController.class,
+                WineScanController.class
         }
 )
 public class AppModule {
@@ -157,6 +168,12 @@ public class AppModule {
     @Singleton
     FoursquareNetworkClient provideFoursquareNetworkClient() {
         return new FoursquareNetworkClient();
+    }
+
+    @Provides
+    @Singleton
+    S3ImageUploadNetworkClient provideS3ImageUploadNetworkClient() {
+        return new S3ImageUploadNetworkClient();
     }
 
 }

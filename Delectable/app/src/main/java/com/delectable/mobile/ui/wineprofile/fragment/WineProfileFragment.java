@@ -55,6 +55,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String sArgsPhotoHash = "photoHash";
 
+    private static final String sArgsBaseWineId = "baseWineId";
+
+    private static final String sArgsVintageId = "vintageId";
+
     private static final int CHOOSE_VINTAGE_DIALOG = 1;
 
     private View mVarietalContainer;
@@ -86,9 +90,15 @@ public class WineProfileFragment extends BaseFragment implements
 
     private PhotoHash mCapturePhotoHash;
 
+    private String mBaseWineId;
+
+    private String mVintageId;
+
     private BaseWine mBaseWine;
 
     private ListingResponse<CaptureNote> mCaptureNoteListing;
+
+    private WineBannerView mBanner;
 
 
     /**
@@ -107,6 +117,16 @@ public class WineProfileFragment extends BaseFragment implements
         return fragment;
     }
 
+    public static WineProfileFragment newInstance(String baseWineId,
+            String vintageId) {
+        WineProfileFragment fragment = new WineProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(sArgsBaseWineId, baseWineId);
+        args.putString(sArgsVintageId, vintageId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +135,9 @@ public class WineProfileFragment extends BaseFragment implements
         if (args != null) {
             mWineProfile = args.getParcelable(sArgsWineProfile);
             mCapturePhotoHash = args.getParcelable(sArgsPhotoHash);
+
+            mBaseWineId = args.getString(sArgsBaseWineId);
+            mVintageId = args.getString(sArgsVintageId);
         }
     }
 
@@ -127,8 +150,8 @@ public class WineProfileFragment extends BaseFragment implements
         //prepare header view
         View header = inflater.inflate(R.layout.wine_profile_header, null, false);
 
-        WineBannerView banner = (WineBannerView) header.findViewById(R.id.wine_banner_view);
-        banner.updateData(mWineProfile, mCapturePhotoHash, false);
+        mBanner = (WineBannerView) header.findViewById(R.id.wine_banner_view);
+        updateBannerData();
 
         mVarietalContainer = header.findViewById(R.id.varietal_container);
         mVarietalImageView = (ImageView) header.findViewById(R.id.varietal_color_icon);
@@ -161,6 +184,13 @@ public class WineProfileFragment extends BaseFragment implements
             }
         });
         return view;
+    }
+
+    private void updateBannerData() {
+        // TODO: Fix when getting data from API.
+        if (mWineProfile != null && mCapturePhotoHash != null) {
+            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+        }
     }
 
     @Override

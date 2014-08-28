@@ -122,8 +122,6 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 .fromJson(json.toString(), CaptureFeedResponse.class);
         ListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
-        assertTrue(feedResponseObject.invalidate);
-
         assertEquals(5, actualListing.getUpdates().size());
         CaptureDetails actualCapture = actualListing.getUpdates().get(2);
         assertEquals("538cbc831d2b119c4500008e", actualCapture.getId());
@@ -193,7 +191,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         assertEquals("Dönnhoff", actualCapture.getCapturerParticipant().getLname());
         assertEquals("http://graph.facebook.com/1034078462/picture?width=200",
                 actualCapture.getCapturerParticipant().getPhoto().getUrl());
-        assertEquals(true, actualCapture.getCapturerParticipant().getInfluencer().booleanValue());
+        assertEquals(true, actualCapture.getCapturerParticipant().isInfluencer());
         assertEquals("Owner/Winemaker Weingut Dönnhoff",
                 actualCapture.getCapturerParticipant().getInfluencerTitles().get(0));
         assertEquals("aedNQFIXBPjvow", actualCapture.getCapturerParticipant().getETag());
@@ -227,7 +225,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 "https://s3.amazonaws.com/delectable-profile-photos/kristen-murphy-1399171298-2678fc3b42ae_medium.jpg",
                 actualCapture.getLikingParticipants().get(1).getPhoto().getMediumUrl());
         assertEquals(true,
-                actualCapture.getLikingParticipants().get(1).getInfluencer().booleanValue());
+                actualCapture.getLikingParticipants().get(1).isInfluencer());
         assertEquals("Buyer Wine Library",
                 actualCapture.getLikingParticipants().get(1).getInfluencerTitles().get(0));
         assertEquals("h2jSaWRTOhAVMA", actualCapture.getLikingParticipants().get(1).getETag());

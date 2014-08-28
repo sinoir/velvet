@@ -1,23 +1,32 @@
 package com.delectable.mobile.ui.camera.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.controllers.S3ImageUploadController;
-import com.delectable.mobile.api.models.BaseResponse;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.requests.CaptureRequest;
-import com.delectable.mobile.api.requests.ProvisionCaptureRequest;
+import com.delectable.mobile.controllers.WineScanController;
+import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
+import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
+import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
+import com.delectable.mobile.model.api.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,9 +38,11 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -72,7 +83,20 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @InjectView(R.id.make_private)
     protected Switch mMakePrivateButton;
 
+    @InjectView(R.id.progress_bar)
+    protected View mProgressBar;
+
+    @Inject
+    protected WineScanController mWineScanController;
+
+    @Inject
+    protected AccountModel mAccountModel;
+
+    private Account mUserAccount;
+
     private Bitmap mCapturedImageBitmap;
+
+    private byte[] mRawImageData;
 
     private View mView;
 
@@ -80,30 +104,20 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private int mCurrentRating = -1;
 
-    private BaseNetworkController mNetworkController;
-
-    private S3ImageUploadController mImageUploadController;
-
-    private ProvisionCaptureRequest mProvisionRequest;
-
-    private ProvisionCapture mProvisionCapture;
-
-    private CaptureRequest mCaptureRequest;
-
-    // If provision capture hasn't been recieved yet before the user clicks post, set this to true
-    private boolean mIsWaitingOnProvisionCapture = false;
-
-    private boolean mIsWaitingOnImageUplaodToFinish = true;
-
-    private boolean mIsWaitingOnDataUplaodToFinish = true;
-
-    private CaptureDetails mCaptureResult;
-
     private ArrayList<TaggeeContact> mTaggeeContacts;
 
     private String mLocationName;
 
     private String mFoursquareId;
+
+    private AddCaptureFromPendingCaptureRequest mCaptureRequest;
+
+    private LabelScan mLabelScanResult;
+
+    private boolean mIsPostingCapture;
+
+    public WineCaptureSubmitFragment() {
+    }
 
     public static WineCaptureSubmitFragment newInstance(Bitmap imageData) {
         WineCaptureSubmitFragment fragment = new WineCaptureSubmitFragment();
@@ -116,13 +130,32 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         Bundle args = getArguments();
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+            mRawImageData = byteArrayOutputStream.toByteArray();
         }
-        mNetworkController = new BaseNetworkController(getActivity());
 
-        loadCaptureProvision();
+        mWineScanController.scanLabelInstantly(mRawImageData);
+        loadAccountData();
+    }
+
+    private void loadAccountData() {
+
+        new SafeAsyncTask<Account>(this) {
+            @Override
+            protected Account safeDoInBackground(Void[] params) {
+                return mAccountModel.getAccount(UserInfo.getUserId(getActivity()));
+            }
+
+            @Override
+            protected void safeOnPostExecute(Account account) {
+                mUserAccount = account;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -154,8 +187,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        // If the posting finished while the app was in the background, should launch details
-        shouldLaunchCaptureDetails();
     }
 
     @Override
@@ -247,94 +278,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         });
     }
 
-    private void loadCaptureProvision() {
-        mProvisionRequest = new ProvisionCaptureRequest();
-        mNetworkController
-                .performRequest(mProvisionRequest, new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        // TODO: Synchronize
-                        mProvisionCapture = (ProvisionCapture) result;
-                        sendCapturedImage();
-                        Log.d(TAG, "Capture Provision: " + mProvisionCapture);
-                        if (mIsWaitingOnProvisionCapture) {
-                            mIsWaitingOnProvisionCapture = false;
-                            sendCaptureData();
-                        }
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        requestFailed(error);
-                    }
-                });
-    }
-
-    private void sendCapturedImage() {
-        if (mProvisionCapture != null) {
-            mImageUploadController = new S3ImageUploadController(getActivity(), mProvisionCapture);
-            mImageUploadController.uploadImage(mCapturedImageBitmap,
-                    new BaseNetworkController.SimpleRequestCallback() {
-                        @Override
-                        public void onSucess() {
-                            Log.d(TAG, "Image Upload Done!");
-                            mIsWaitingOnImageUplaodToFinish = false;
-                            if (!mIsWaitingOnDataUplaodToFinish) {
-                                // Finish activity
-                            }
-                        }
-
-                        @Override
-                        public void onFailed(RequestError error) {
-                            requestFailed(error);
-                        }
-                    }
-            );
-        }
-    }
-
-    private void sendCaptureData() {
-        if (mProvisionCapture != null) {
-            mCaptureRequest = new CaptureRequest(mProvisionCapture);
-            updateCaptureRequestWithFormData();
-            mNetworkController
-                    .performRequest(mCaptureRequest, new BaseNetworkController.RequestCallback() {
-                        @Override
-                        public void onSuccess(BaseResponse result) {
-                            mCaptureResult = (CaptureDetails) result;
-                            mIsWaitingOnDataUplaodToFinish = false;
-                            shouldLaunchCaptureDetails();
-                        }
-
-                        @Override
-                        public void onFailed(RequestError error) {
-                            requestFailed(error);
-                        }
-                    });
-        }
-    }
-
-    private void shouldLaunchCaptureDetails() {
-        if (!mIsWaitingOnImageUplaodToFinish && mCaptureResult != null) {
-            // TODO: Finish, goto capture info screen
-            if (getActivity() != null) {
-                getActivity().finish();
-            }
-        }
-    }
-
-    private void requestFailed(RequestError error) {
-        if (getActivity() != null) {
-            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void updateCaptureRequestWithFormData() {
         if (mCaptureRequest == null) {
             return;
         }
 
         String comment = mCommentEditText.getText().toString();
+        // TODO: New API doesn't have note / comment field?
         if (comment.length() > 0) {
             mCaptureRequest.setNote(comment);
         }
@@ -342,8 +292,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (!mMakePrivateButton.isChecked()) {
             mCaptureRequest.setPrivate(true);
         } else {
-            mCaptureRequest.setShareFb(mShareFacebookButton.isSelected());
-            mCaptureRequest.setShareTw(mShareTwitterButton.isSelected());
+            mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
+            mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
+            if (mShareTwitterButton.isChecked()) {
+                mCaptureRequest.setUserTw(comment);
+            }
         }
 
         mCaptureRequest.setRating(mCurrentRating);
@@ -356,13 +309,86 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         }
 
         // TODO: Add Label Scan ID ?
-        // TODO: Add Coordinates
+        // TODO: Add Coordinates ?
     }
 
     private void postCapture() {
-        // TODO: Display some Loading indicator / Ability to cancel?
-        // TODO: Or have all this in a service separate from the main app, and use a bus to connect the data
-        sendCaptureData();
+        // TODO: Hide Keyboard if shown
+        if (mIsPostingCapture) {
+            return;
+        }
+        mIsPostingCapture = true;
+        mProgressBar.setVisibility(View.VISIBLE);
+        // TODO: Display some Loading indicator?
+        mWineScanController.createPendingCapture(mRawImageData);
+    }
+
+    public void onEventMainThread(IdentifyLabelScanEvent event) {
+        if (event.isSuccessful()) {
+            mLabelScanResult = event.getLabelScan();
+        } else {
+            mIsPostingCapture = false;
+            mProgressBar.setVisibility(View.GONE);
+            showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(CreatedPendingCaptureEvent event) {
+        if (event.isSuccessful()) {
+            mCaptureRequest = new AddCaptureFromPendingCaptureRequest(
+                    event.getPendingCapture().getId());
+            updateCaptureRequestWithFormData();
+            Log.i(TAG, "Adding Request: " + mCaptureRequest);
+            mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
+        } else {
+            mIsPostingCapture = false;
+            mProgressBar.setVisibility(View.GONE);
+            showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
+        if (event.isSuccessful()) {
+            // TODO: This bit should be called when user clicks "post", and then somehow handle the pending captures elsewhere..
+            // TODO: Test with Matches
+            if (mLabelScanResult != null && mLabelScanResult.getMatches() != null
+                    && mLabelScanResult.getMatches().size() > 0) {
+                launchWineProfile(mLabelScanResult.getMatches().get(0));
+            } else if (event.getCaptureDetails() != null) {
+                launchCapture(event.getCaptureDetails());
+            } else {
+                // This should never happen?
+                Log.wtf(TAG, "Created Capture with no Capture Details?");
+                getActivity().finish();
+            }
+            if (mShareInstagramButton.isChecked()) {
+                InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
+                        mCommentEditText.getText().toString());
+            }
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        mIsPostingCapture = false;
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void launchWineProfile(BaseWine wine) {
+        getActivity().finish();
+        Intent intent = new Intent();
+        // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
+        intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE, wine);
+        intent.setClass(getActivity(), WineProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchCapture(CaptureDetails capture) {
+        getActivity().finish();
+        // TODO :use deeplinks
+        Intent intent = new Intent();
+        // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
+        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID, capture.getId());
+        intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.drinking_with_who)
@@ -381,8 +407,12 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.share_facebook)
     protected void shareCaptureOnFacebook(CompoundButton view, boolean isChecked) {
-        // TODO: Facebook Connect
-        // TODO: What happens to Private when now it's "Post to Delectable?"
+        // TODO: Replace with real connect to FB and stuff?
+        if (mUserAccount.getFbId() == null) {
+            showToastError(R.string.error_connect_facebook);
+            view.setChecked(false);
+            return;
+        }
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }
@@ -390,8 +420,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.share_twitter)
     protected void shareCaptureOnTwitter(CompoundButton view, boolean isChecked) {
-        // TODO: Login With Twitter
-        mShareTwitterButton.setSelected(!mShareTwitterButton.isSelected());
+        // TODO: Check if user connected Twiter:
+        boolean isConnectedToTwitter = false;
+        if (!isConnectedToTwitter) {
+            showToastError(R.string.error_connect_twitter);
+            view.setChecked(false);
+            return;
+        }
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }
@@ -399,8 +434,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.share_instagram)
     protected void shareCaptureOnInstagram(CompoundButton view, boolean isChecked) {
-        // TODO: Login with Instagram
-        mShareInstagramButton.setSelected(!mShareInstagramButton.isSelected());
+        if (!InstagramUtil.isInstagramAvailable()) {
+            showToastError(R.string.error_no_instagram);
+            view.setChecked(false);
+            return;
+        }
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }

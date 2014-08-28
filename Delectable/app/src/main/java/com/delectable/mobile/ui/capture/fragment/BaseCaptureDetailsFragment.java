@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -129,7 +128,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
         if (capture.getWineProfile() != null) {
             intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE, capture.getWineProfile());
-            intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH, capture.getPhoto());
+            intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
+                    (android.os.Parcelable) capture.getPhoto());
             intent.setClass(getActivity(), WineProfileActivity.class);
             startActivity(intent);
         }
@@ -145,8 +145,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void launchTaggedUserListing(CaptureDetails capture) {
-        // TODO: Tagged User Listing
-        Toast.makeText(getActivity(), "All Tagged Users list", Toast.LENGTH_SHORT).show();
+        // TODO: Tagged User Listing if design exists
         Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
     }
 

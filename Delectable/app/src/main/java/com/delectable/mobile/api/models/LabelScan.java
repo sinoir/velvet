@@ -1,51 +1,26 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
+import java.util.List;
 
-import android.util.Log;
+public class LabelScan {
 
-// TODO: Test Class
-public class LabelScan extends BaseResponse {
+    private String id;
 
-    private static final String TAG = "LabelScan";
-
-    String id;
-
-    String photo;
-
-    BaseWine base_wine;
-
-    public static LabelScan buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        Log.d(TAG, "Label Response: " + jsonObj);
-        LabelScan newResource = null;
-        if (payloadObj != null && payloadObj.optJSONObject("label_scan") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("label_scan"), LabelScan.class);
-        }
-        return newResource;
-    }
+    private List<BaseWine> matches;
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public List<BaseWine> getMatches() {
+        return matches;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public BaseWine getBaseWine() {
-        return base_wine;
-    }
-
-    public void setBaseWine(BaseWine base_wine) {
-        this.base_wine = base_wine;
+    @Override
+    public String toString() {
+        return "LabelScan{" +
+                "id='" + id + '\'' +
+                ", matches=" + matches +
+                '}';
     }
 }

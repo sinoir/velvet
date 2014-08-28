@@ -125,6 +125,12 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         }
     }
 
+    public void showToastError(int stringResId) {
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), stringResId, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void showConfirmation(String title, String message, String positiveText,
             int requestCode) {
         ConfirmationDialog dialog = ConfirmationDialog
