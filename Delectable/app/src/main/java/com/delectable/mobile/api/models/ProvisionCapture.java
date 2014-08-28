@@ -1,24 +1,16 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
+import java.util.HashMap;
 
 public class ProvisionCapture extends BaseResponse {
 
-    String bucket;
+    private String bucket;
 
-    String filename;
+    private String filename;
 
-    Headers headers;
+    private String url;
 
-    public static ProvisionCapture buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        ProvisionCapture newResource = null;
-        if (payloadObj != null) {
-            newResource = buildFromJson(payloadObj, ProvisionCapture.class);
-        }
-
-        return newResource;
-    }
+    private HashMap<String, String> headers;
 
     public String getBucket() {
         return bucket;
@@ -36,11 +28,19 @@ public class ProvisionCapture extends BaseResponse {
         this.filename = filename;
     }
 
-    public Headers getHeaders() {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public HashMap<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Headers headers) {
+    public void setHeaders(HashMap<String, String> headers) {
         this.headers = headers;
     }
 
@@ -50,6 +50,6 @@ public class ProvisionCapture extends BaseResponse {
                 "bucket='" + bucket + '\'' +
                 ", filename='" + filename + '\'' +
                 ", headers=" + headers +
-                "} " + super.toString();
+                '}';
     }
 }

@@ -39,7 +39,7 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
         assertEquals("Bednarek", actualAccount.getLname());
-        assertFalse(actualAccount.getInfluencer());
+        assertFalse(actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
         assertEquals(0, actualAccount.getFollowerCount().intValue());

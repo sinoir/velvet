@@ -149,7 +149,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
             intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE,
                     captureDetails.getWineProfile());
             intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
-                    captureDetails.getPhoto());
+                    (android.os.Parcelable) captureDetails.getPhoto());
             intent.setClass(getActivity(), WineProfileActivity.class);
         } else {
             intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,

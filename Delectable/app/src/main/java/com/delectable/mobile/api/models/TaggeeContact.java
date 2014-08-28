@@ -7,9 +7,10 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TaggeeContact implements Parcelable {
+public class TaggeeContact implements Parcelable, Serializable {
 
     public static final Parcelable.Creator<TaggeeContact> CREATOR
             = new Parcelable.Creator<TaggeeContact>() {
@@ -22,19 +23,21 @@ public class TaggeeContact implements Parcelable {
         }
     };
 
-    String id;
+    private static final long serialVersionUID = -248001638605165056L;
 
-    String fb_id;
+    private String id;
 
-    String fname;
+    private String fb_id;
 
-    String lname;
+    private String fname;
 
-    PhotoHash photo;
+    private String lname;
 
-    ArrayList<String> phone_numbers;
+    private PhotoHash photo;
 
-    ArrayList<String> email_addresses;
+    private ArrayList<String> phone_numbers;
+
+    private ArrayList<String> email_addresses;
 
     public TaggeeContact() {
     }
@@ -48,6 +51,18 @@ public class TaggeeContact implements Parcelable {
         this.lname = account.getLname();
         this.photo = account.getPhoto();
         // We don't need phone #s or email addresses, those are for contacts from the device Contacts
+    }
+
+    public TaggeeContact(String id, String fb_id, String fname, String lname,
+            PhotoHash photo, ArrayList<String> phone_numbers,
+            ArrayList<String> email_addresses) {
+        this.id = id;
+        this.fb_id = fb_id;
+        this.fname = fname;
+        this.lname = lname;
+        this.photo = photo;
+        this.phone_numbers = phone_numbers;
+        this.email_addresses = email_addresses;
     }
 
     private TaggeeContact(Parcel in) {

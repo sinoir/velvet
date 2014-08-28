@@ -64,7 +64,7 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
         assertEquals("Beeman", actualParticipantAccount.getLname());
         assertEquals("http://graph.facebook.com/542133246/picture?width=200",
                 actualParticipantAccount.getPhoto().getUrl());
-        assertEquals(false, actualParticipantAccount.getInfluencer().booleanValue());
+        assertEquals(false, actualParticipantAccount.isInfluencer());
         assertEquals(1, actualParticipantAccount.getInfluencerTitles().size());
         assertEquals("", actualParticipantAccount.getInfluencerTitles().get(0));
         assertEquals("Q9Jt95E_VkIKAQ", actualParticipantAccount.getETag());
