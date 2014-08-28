@@ -9,6 +9,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -145,7 +146,7 @@ public class DeviceContactsModel {
                             ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
                     if (contactHashMap.containsKey(lookupKey)) {
                         if (givenName == null && familyName != null) {
-                            contactHashMap.get(lookupKey).setFname(null);
+                            contactHashMap.get(lookupKey).setFname(familyName);
                         } else if (givenName != null) {
                             contactHashMap.get(lookupKey).setFname(givenName);
                             contactHashMap.get(lookupKey).setLname(familyName);
@@ -162,6 +163,9 @@ public class DeviceContactsModel {
                 contacts.add(contact);
             }
         }
+
+        // Sort contacts
+        Collections.sort(contacts, new TaggeeContact.FullNameComparator());
         Log.i(TAG, "Loaded Contacts: " + contacts);
         Log.i(TAG, "Loaded Contacts Size: " + contacts.size());
 
