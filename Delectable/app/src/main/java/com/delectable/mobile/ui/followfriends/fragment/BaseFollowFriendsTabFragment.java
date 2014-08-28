@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
@@ -24,12 +25,12 @@ import javax.inject.Inject;
 public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         implements FollowActionsHandler {
 
+    private static final String TAG = BaseFollowFriendsTabFragment.class.getSimpleName();
+
     protected ArrayList<AccountMinimal> mAccounts;
 
     @Inject
     protected AccountController mAccountController;
-
-    private static final String TAG = BaseFollowFriendsTabFragment.class.getSimpleName();
 
     /**
      * these maps are used to retain references to Account objects expecting updates to their
@@ -46,7 +47,6 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
 
     /**
      * Used to ensure that the request sent matches the event that we receive.
-     * @return
      */
     protected abstract String getEventId();
 
@@ -93,5 +93,10 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         mAccountsExpectingUpdate.put(account.getId(), account);
         mAccountExpectedRelationship.put(account.getId(), relationship);
         mAccountController.followAccount(account.getId(), isFollowing);
+    }
+
+    @Override
+    public void inviteContact(TaggeeContact contact) {
+        // TODO: Invite Contact Dialog
     }
 }
