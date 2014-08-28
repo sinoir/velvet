@@ -6,7 +6,7 @@ import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.accounts.AccountContextRequest;
-import com.delectable.mobile.model.api.accounts.AccountContextResponse;
+import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
@@ -57,11 +57,11 @@ public class FetchAccountJob extends Job {
         AccountContextRequest request = new AccountContextRequest(
                 mIsPrivate ? "private" : "profile", eTag,
                 new AccountContextRequest.AccountContextPayload(mAccountId));
-        AccountContextResponse response = mNetworkClient
-                .post(endpoint, request, AccountContextResponse.class);
+        AccountPrivateResponse response = mNetworkClient
+                .post(endpoint, request, AccountPrivateResponse.class);
 
         if (!response.isETagMatch()) {
-            Account account = response.payload.account;
+            Account account = response.getPayload().getAccount();
             mAccountModel.saveAccount(account);
             mEventBus.post(new UpdatedAccountEvent(account.getId()));
         }
