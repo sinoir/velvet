@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.controllers.AccountController;
@@ -10,7 +11,11 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.widget.BaseAccountsMinimalAdapter;
 import com.delectable.mobile.ui.followfriends.widget.FollowActionsHandler;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,6 +102,38 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
 
     @Override
     public void inviteContact(TaggeeContact contact) {
-        // TODO: Invite Contact Dialog
+        // TODO: Invite Contact Dialog someday?  No Designs.. many ways of doing this
+        // Right now: Pick first email from contacts, and try to open email app
+        // If no email exists, try sending SMS
+        if (contact.getEmailAddresses().size() > 0) {
+            inviteViaEmail(contact.getEmailAddresses().get(0));
+        } else if (contact.getPhoneNumbers().size() > 0) {
+            inviteViaSms(contact.getPhoneNumbers().get(0));
+        }
+    }
+
+    private void inviteViaEmail(String email) {
+        try {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse("mailto:" + email));
+            emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_body));
+            startActivity(Intent.createChooser(emailIntent, "Send mail:"));
+        } catch (ActivityNotFoundException ex) {
+            showToastError(getString(R.string.error_no_email_client));
+        }
+    }
+
+    private void inviteViaSms(String phone) {
+        try {
+            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+            smsIntent.setData(Uri.parse("smsto:"));
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            smsIntent.putExtra("address", phone);
+            smsIntent.putExtra("sms_body", getString(R.string.invite_body));
+            startActivity(smsIntent);
+        } catch (ActivityNotFoundException ex) {
+            Log.e(TAG, "SMS Failed: ", ex);
+            showToastError(getString(R.string.error_sms_failed));
+        }
     }
 }

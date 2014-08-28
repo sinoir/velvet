@@ -16,6 +16,8 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
 
+    <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
+
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
     <string name="login_sign_up">sign up</string>
@@ -187,5 +189,7 @@
     <string name="settings_import_from_facebook">Import from facebook</string>
     <string name="settings_choose_from_library">Choose from library</string>
     <string name="settings_take_photo">Take photo</string>
+    <string name="error_no_email_client">There is no email client installed</string>
+    <string name="error_sms_failed">SMS failed</string>
 
 </resources>
