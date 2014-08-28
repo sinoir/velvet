@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class TaggeeContact implements Parcelable, Serializable {
 
@@ -121,7 +122,17 @@ public class TaggeeContact implements Parcelable, Serializable {
     }
 
     public String getFullName() {
-        return fname + " " + lname;
+        if (lname != null && fname != null) {
+            return fname + " " + lname;
+        }
+        if (fname != null && lname == null) {
+            return fname;
+        }
+        if (lname != null && fname == null) {
+            return lname;
+        }
+
+        return null;
     }
 
     public String getId() {
@@ -254,5 +265,13 @@ public class TaggeeContact implements Parcelable, Serializable {
         result = 31 * result + (phone_numbers != null ? phone_numbers.hashCode() : 0);
         result = 31 * result + (email_addresses != null ? email_addresses.hashCode() : 0);
         return result;
+    }
+
+    public static class FullNameComparator implements Comparator<TaggeeContact> {
+
+        @Override
+        public int compare(TaggeeContact lhs, TaggeeContact rhs) {
+            return lhs.getFullName().compareTo(rhs.getFullName());
+        }
     }
 }
