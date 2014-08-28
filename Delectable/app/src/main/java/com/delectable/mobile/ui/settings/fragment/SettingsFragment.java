@@ -14,6 +14,7 @@ import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.ProvisionProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.oldUpdatedAccountEvent;
@@ -24,6 +25,7 @@ import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
+import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -625,6 +627,34 @@ public class SettingsFragment extends BaseFragment {
         mRealFacebookLoginButton.performClick();
     }
 
+    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
+            Log.d(TAG + ".Facebook", "Session:" + session);
+            Log.d(TAG + ".Facebook", "Exception:" + exception);
+            // TODO: Handle errors and other conditions.
+            if (state.isOpened()) {
+                facebookConnect();
+            }
+        }
+    };
+
+    public void facebookConnect() {
+        Session session = Session.getActiveSession();
+        mAccountController.associateFacebook(session.getAccessToken(),
+                DateHelperUtil.doubleFromDate(session.getExpirationDate()));
+    }
+
+    public void onEventMainThread(AssociateFacebookEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount = event.getAcount();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
+    }
+
     @OnClick({R.id.following_phone_notification,
             R.id.comment_phone_notification,
             R.id.tagged_phone_notification,
@@ -784,23 +814,5 @@ public class SettingsFragment extends BaseFragment {
         //TODO no fields for email notifications yet for API, implement when ready
     }
 
-    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
-            Log.d(TAG + ".Facebook", "Session:" + session);
-            Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
-            if (state.isOpened()) {
-                facebookConnect();
-            }
-        }
-    };
-
-    public void facebookConnect() {
-        Session session = Session.getActiveSession();
-
-        //TODO associate fb endpoint
-    }
 
 }
