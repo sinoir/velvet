@@ -16,6 +16,7 @@ import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.InstagramUtil;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -327,7 +328,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             } else if (event.getCaptureDetails() != null) {
                 launchCapture(event.getCaptureDetails());
             } else {
+                // This should never happen?
+                Log.wtf(TAG, "Created Capture with no Capture Details?");
                 getActivity().finish();
+            }
+            if (mShareInstagramButton.isChecked()) {
+                InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
+                        mCommentEditText.getText().toString());
             }
         } else {
             showToastError(event.getErrorMessage());
@@ -381,7 +388,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @OnCheckedChanged(R.id.share_twitter)
     protected void shareCaptureOnTwitter(CompoundButton view, boolean isChecked) {
         // TODO: Login With Twitter
-        mShareTwitterButton.setSelected(!mShareTwitterButton.isSelected());
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }
@@ -389,8 +395,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.share_instagram)
     protected void shareCaptureOnInstagram(CompoundButton view, boolean isChecked) {
-        // TODO: Login with Instagram
-        mShareInstagramButton.setSelected(!mShareInstagramButton.isSelected());
+        if (!InstagramUtil.isInstagramAvailable()) {
+            showToastError(R.string.error_no_instagram);
+            view.setChecked(false);
+            return;
+        }
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }
