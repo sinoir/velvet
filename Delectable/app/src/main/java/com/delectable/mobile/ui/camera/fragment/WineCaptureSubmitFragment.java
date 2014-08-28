@@ -2,11 +2,14 @@ package com.delectable.mobile.ui.camera.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.controllers.WineScanController;
+import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
@@ -17,11 +20,13 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,7 +87,12 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     protected View mProgressBar;
 
     @Inject
-    WineScanController mWineScanController;
+    protected WineScanController mWineScanController;
+
+    @Inject
+    protected AccountModel mAccountModel;
+
+    private Account mUserAccount;
 
     private Bitmap mCapturedImageBitmap;
 
@@ -130,6 +140,22 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         }
 
         mWineScanController.scanLabelInstantly(mRawImageData);
+        loadAccountData();
+    }
+
+    private void loadAccountData() {
+
+        new SafeAsyncTask<Account>(this) {
+            @Override
+            protected Account safeDoInBackground(Void[] params) {
+                return mAccountModel.getAccount(UserInfo.getUserId(getActivity()));
+            }
+
+            @Override
+            protected void safeOnPostExecute(Account account) {
+                mUserAccount = account;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -266,8 +292,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (!mMakePrivateButton.isChecked()) {
             mCaptureRequest.setPrivate(true);
         } else {
-            mCaptureRequest.setShareFb(mShareFacebookButton.isSelected());
-            mCaptureRequest.setShareTw(mShareTwitterButton.isSelected());
+            mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
+            mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
+            if (mShareTwitterButton.isChecked()) {
+                mCaptureRequest.setUserTw(comment);
+            }
         }
 
         mCaptureRequest.setRating(mCurrentRating);
@@ -378,8 +407,12 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.share_facebook)
     protected void shareCaptureOnFacebook(CompoundButton view, boolean isChecked) {
-        // TODO: Facebook Connect
-        // TODO: What happens to Private when now it's "Post to Delectable?"
+        // TODO: Replace with real connect to FB and stuff?
+        if (mUserAccount.getFbId() == null) {
+            showToastError(R.string.error_connect_facebook);
+            view.setChecked(false);
+            return;
+        }
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }
@@ -387,7 +420,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.share_twitter)
     protected void shareCaptureOnTwitter(CompoundButton view, boolean isChecked) {
-        // TODO: Login With Twitter
+        // TODO: Check if user connected Twiter:
+        boolean isConnectedToTwitter = false;
+        if (!isConnectedToTwitter) {
+            showToastError(R.string.error_connect_twitter);
+            view.setChecked(false);
+            return;
+        }
         if (isChecked) {
             mMakePrivateButton.setChecked(true);
         }
