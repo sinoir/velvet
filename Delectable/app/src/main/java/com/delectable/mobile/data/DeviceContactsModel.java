@@ -21,7 +21,6 @@ public class DeviceContactsModel {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
             ContactsContract.Contacts.LOOKUP_KEY,
-            ContactsContract.Contacts.HAS_PHONE_NUMBER,
     };
 
     // Filter Contacts to only show contacts that are meant to be visible
@@ -46,7 +45,7 @@ public class DeviceContactsModel {
                     "'" + ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE + "'"
                     + " OR " +
                     ContactsContract.Data.MIMETYPE + " = " +
-                    "'" + ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE + "'"
+                    "'" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "'"
                     + " OR " +
                     ContactsContract.Data.MIMETYPE + " = " +
                     "'" + ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE + "')";
@@ -114,32 +113,28 @@ public class DeviceContactsModel {
 
             // Loop through all the results, it's 1 of 3 possible mime types (email, phone, name)
             do {
-                String lookupKey = dataCursor
-                        .getString(dataCursor
-                                .getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-                String mimeType = dataCursor
-                        .getString(dataCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+                String lookupKey = dataCursor.getString(
+                        dataCursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                String mimeType = dataCursor.getString(
+                        dataCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
                 // If it's an email, add it to the list of Emails
                 if (mimeType.equals(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)) {
-                    String emailAddress = dataCursor.getString(
-                            dataCursor.getColumnIndex(
-                                    ContactsContract.CommonDataKinds.Email.ADDRESS));
+                    String emailAddress = dataCursor.getString(dataCursor
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
                     if (contactHashMap.containsKey(lookupKey)) {
                         contactHashMap.get(lookupKey).getEmailAddresses().add(emailAddress);
                     }
                     // If it's a Phone #, add it to the list of Phone #s
                 } else if (mimeType
                         .equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)) {
-                    String phoneNumber = dataCursor.getString(
-                            dataCursor
-                                    .getColumnIndex(
-                                            ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String phoneNumber = dataCursor.getString(dataCursor
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     if (contactHashMap.containsKey(lookupKey)) {
                         contactHashMap.get(lookupKey).getPhoneNumbers().add(phoneNumber);
                     }
                     // Set First/last name
-                } else if (mimeType
-                        .equals(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)) {
+                } else if (mimeType.equals(
+                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)) {
                     String givenName = dataCursor.getString(dataCursor.getColumnIndex(
                             ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
                     String familyName = dataCursor.getString(dataCursor.getColumnIndex(
