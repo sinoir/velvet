@@ -53,6 +53,11 @@ public class DeviceContactsModel {
     public DeviceContactsModel() {
     }
 
+    /**
+     * Load all Contacts with Phone # and/or Email Addresses
+     *
+     * Note: Any contact with no real contact info like email / phone # is disregarded / ignored
+     */
     public List<TaggeeContact> loadDeviceContactsAsTageeContacts() {
         ArrayList<TaggeeContact> contacts = new ArrayList<TaggeeContact>();
 
@@ -151,8 +156,14 @@ public class DeviceContactsModel {
         }
         dataCursor.close();
 
-        contacts.addAll(contactHashMap.values());
+        // Only Add contacts that have contact info, like Email and/or Phone #
+        for (TaggeeContact contact : contactHashMap.values()) {
+            if (contact.getPhoneNumbers().size() > 0 || contact.getEmailAddresses().size() > 0) {
+                contacts.add(contact);
+            }
+        }
         Log.i(TAG, "Loaded Contacts: " + contacts);
+        Log.i(TAG, "Loaded Contacts Size: " + contacts.size());
 
         return contacts;
     }
