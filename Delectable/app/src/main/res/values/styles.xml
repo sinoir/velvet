@@ -136,15 +136,16 @@
     </style>
 
     <style name="SettingsEditText" parent="SettingsBaseTextStyle">
+        <item name="fontName">whitney_book</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_row_height</item>
-        <item name="android:background">@drawable/bg_settings_bottom_border</item>
         <item name="android:gravity">center_horizontal|bottom</item>
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>
     </style>
 
     <style name="SettingsCategoryLabel">
+        <item name="fontName">whitney_medium_sc</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_row_height</item>
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
@@ -163,6 +164,7 @@
 
 
     <style name="SettingsRowTextLabel" parent="SettingsBaseTextStyle">
+        <item name="fontName">whitney_medium</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -170,6 +172,7 @@
     </style>
 
     <style name="SettingsRowEditText" parent="SettingsBaseTextStyle">
+        <item name="fontName">whitney_book</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_alignParentRight">true</item>
@@ -206,6 +209,7 @@
     </style>
 
     <style name="SettingsAboutCategoryRow">
+        <item name="fontName">whitney_medium</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_row_height</item>
         <item name="android:paddingLeft">@dimen/general_row_horizontal_spacing</item>

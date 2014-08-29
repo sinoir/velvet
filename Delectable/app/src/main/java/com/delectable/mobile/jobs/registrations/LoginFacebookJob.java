@@ -6,7 +6,7 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.registrations.RegistrationFacebookRequest;
+import com.delectable.mobile.model.api.registrations.AuthorizeFacebookRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationFacebookResponse;
 import com.delectable.mobile.net.NetworkClient;
 import com.path.android.jobqueue.Job;
@@ -49,18 +49,18 @@ public class LoginFacebookJob extends Job {
     public void onRun() throws Throwable {
 
         String endpoint = "/registrations/facebook";
-        RegistrationFacebookRequest request = new RegistrationFacebookRequest(
-                new RegistrationFacebookRequest.RegistrationFacebookPayload(mFacebookToken,
-                        mFacebookTokenExpiration));
+        String deviceId = null; //TODO grab deviceid and pass in
+        AuthorizeFacebookRequest request = new AuthorizeFacebookRequest(deviceId, mFacebookToken,
+                mFacebookTokenExpiration);
         RegistrationFacebookResponse response = mNetworkClient
-                .post(endpoint, request, RegistrationFacebookResponse.class);
+                .post(endpoint, request, RegistrationFacebookResponse.class, false);
 
         String sessionKey = response.payload.session_key;
         String sessionToken = response.payload.session_token;
         boolean newUser = response.payload.new_user;
         Account account = response.payload.account;
         mAccountModel.saveAccount(account);
-        mEventBus.post(new UpdatedAccountEvent(account.getId()));
+        mEventBus.post(new UpdatedAccountEvent(account));
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
         mEventBus.post(new LoginRegisterEvent(true));

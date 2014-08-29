@@ -51,7 +51,7 @@ public class oldFollowAccountJob extends Job {
                 mFollow ? Account.RELATION_TYPE_FOLLOWING : Account.RELATION_TYPE_NONE);
         mAccountModel.saveAccount(cachedAccount);
         // Inform UI that the model has changed
-        mEventBus.post(new UpdatedAccountEvent(mAccountId));
+        mEventBus.post(new UpdatedAccountEvent(cachedAccount));
         Log.d(TAG, "FOLLOW: updated local model");
     }
 
@@ -72,7 +72,7 @@ public class oldFollowAccountJob extends Job {
         cachedAccount.setCurrentUserRelationship(mOriginalUserRelationship);
         mAccountModel.saveAccount(cachedAccount);
         // Inform UI that the model has changed
-        mEventBus.post(new UpdatedAccountEvent(mAccountId));
+        mEventBus.post(new UpdatedAccountEvent(cachedAccount));
         // Inform UI that the request has failed
         mEventBus.post(new FollowAccountFailedEvent(mAccountId));
         Log.d(TAG, "FOLLOW: job was canceled!");
