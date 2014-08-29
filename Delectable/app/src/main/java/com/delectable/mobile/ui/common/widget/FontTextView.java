@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.util.Font;
+import com.delectable.mobile.util.FontEnum;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -31,10 +31,10 @@ public class FontTextView extends TextView {
         if (!isInEditMode()) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.FontTextView);
             int fontIntValue = a.getInt(R.styleable.FontTextView_fontName,
-                    Font.WHITNEY_BLACK.ordinal());
+                    FontEnum.WHITNEY_BLACK.ordinal());
             a.recycle();
 
-            Font font = Font.values()[fontIntValue];
+            FontEnum font = FontEnum.values()[fontIntValue];
             setTypeface(font);
         }
     }
@@ -42,7 +42,7 @@ public class FontTextView extends TextView {
     /**
      * Convenience method that calls {@link #setTypeface(android.graphics.Typeface)}
      */
-    public void setTypeface(Font font) {
+    public void setTypeface(FontEnum font) {
         Typeface typeface = Typeface
                 .createFromAsset(getContext().getAssets(), "fonts/" + font.getFileName());
         setTypeface(typeface);
