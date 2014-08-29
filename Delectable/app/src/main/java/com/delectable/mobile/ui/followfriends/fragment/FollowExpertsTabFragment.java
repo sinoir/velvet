@@ -30,6 +30,7 @@ public class FollowExpertsTabFragment extends BaseFollowFriendsTabFragment {
             Bundle savedInstanceState) {
         ListView listview = (ListView) inflater
                 .inflate(R.layout.fragment_listview, container, false);
+        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_wine_experts);
         listview.setAdapter(mAdapter);
         return listview;
     }

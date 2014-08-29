@@ -30,6 +30,7 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
             Bundle savedInstanceState) {
         ListView listview = (ListView) inflater
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
+        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_facebook);
         listview.setAdapter(mAdapter);
         return listview;
     }

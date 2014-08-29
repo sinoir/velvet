@@ -13,8 +13,7 @@ public class InfluencerAccountsAdapter extends BaseAccountsMinimalAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    protected View getFollowRow(int position, View convertView, ViewGroup parent) {
         FollowExpertsRow row = (FollowExpertsRow) convertView;
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());

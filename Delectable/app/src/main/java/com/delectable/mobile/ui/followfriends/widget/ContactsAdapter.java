@@ -9,7 +9,6 @@ import org.apache.commons.lang3.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +16,6 @@ import java.util.List;
 public class ContactsAdapter extends BaseAccountsMinimalAdapter {
 
     private static final String TAG = ContactsAdapter.class.getSimpleName();
-
-    private static final int TYPE_HEADER = 0;
-
-    private static final int TYPE_ACCOUNT = 1;
 
     private static final int TYPE_CONTACT = 2;
 
@@ -54,8 +49,8 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
      * We have 2 fixed headers + 2 sections
      */
     private void updateRanges() {
-        // Position for offset for show contacts , 2 headers + num accounts
-        int contactSectionStartOffset = 2;
+        // Position for offset for show contacts , # headers + num accounts
+        int contactSectionStartOffset = getNumHeaders();
         if (mAccounts.size() == 0) {
             // Negative range for no Accounts
             mAccountPositionRange = Range.between(-1, -1);
@@ -73,6 +68,19 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
             mContactPositionRange = Range.between(contactSectionStartOffset,
                     mContacts.size() + contactSectionStartOffset);
         }
+    }
+
+    /**
+     * Get # of headers,
+     *
+     * @return - 1 or higher.  Top Header is required. this is meant for if 2nd header is displayed
+     */
+    private int getNumHeaders() {
+        // If no Contacts exist, dont' show the Invite header
+        if (mContacts == null || mContacts.size() == 0) {
+            return 1;
+        }
+        return 2;
     }
 
 
@@ -105,13 +113,13 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
         if (position != 0) {
             return Integer.valueOf(R.string.follow_friends_invite_to_delectable);
         }
-        return Integer.valueOf(R.string.follow_friends_contacts);
+        return getTopHeaderTitleResId();
     }
 
     @Override
     public int getCount() {
-        // 2 headers + size of Accounts and Contacts
-        return 2 + mAccounts.size() + mContacts.size();
+        // # headers + size of Accounts and Contacts
+        return getNumHeaders() + mAccounts.size() + mContacts.size();
     }
 
     @Override
@@ -134,7 +142,8 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
         return null;
     }
 
-    private View getFollowRow(int position, View convertView, ViewGroup parent) {
+    @Override
+    protected View getFollowRow(int position, View convertView, ViewGroup parent) {
         FollowContactRow row = (FollowContactRow) convertView;
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -156,18 +165,6 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
             row.setActionsHandler(mActionsHandler);
         }
         row.updateData((TaggeeContact) getItem(position));
-
-        return row;
-    }
-
-    private View getHeaderRow(int position, View convertView, ViewGroup parent) {
-        TextView row = (TextView) convertView;
-        if (row == null) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            row = (TextView) inflater
-                    .inflate(R.layout.header_find_people, parent, false);
-        }
-        row.setText((Integer) getItem(position));
 
         return row;
     }
