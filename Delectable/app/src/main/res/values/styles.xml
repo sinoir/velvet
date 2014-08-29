@@ -54,6 +54,15 @@
         <item name="fontName">whitney_book</item>
     </style>
 
+    <!-- User Profile Styles -->
+    <style name="UserProfileCountTexts">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">@dimen/profile_counts_text_size</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
     <!-- Wine Capture Submit Styles -->
     <style name="WineCaptureFlow_optionsLabel">
         <item name="android:layout_width">match_parent</item>

@@ -25,9 +25,9 @@
         custom:strokeColor="@android:color/transparent"
         custom:strokeWidth="0dp" />
 
-    <Button
+    <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/follow_button"
-        android:layout_width="210dp"
+        android:layout_width="@dimen/profile_follow_button_width"
         android:layout_height="@dimen/button_height"
         android:layout_below="@id/pager_indicator"
         android:layout_centerHorizontal="true"
@@ -35,7 +35,8 @@
         android:background="@drawable/btn_follow_background"
         android:gravity="center"
         android:textColor="@color/d_white"
-        android:textSize="@dimen/button_text_size"
-        android:visibility="gone" />
+        android:textSize="@dimen/profile_follow_button_text_size"
+        android:visibility="gone"
+        custom:fontName="whitney_medium" />
 
 </merge>

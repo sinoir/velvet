@@ -74,9 +74,11 @@
     <!-- User Profile Dimens -->
     <dimen name="profile_vertical_spacing">9dp</dimen>
     <dimen name="profile_horizontal_text_spacing">15dp</dimen>
-    <dimen name="profile_username_text_size">24sp</dimen>
+    <dimen name="profile_username_text_size">20sp</dimen>
     <dimen name="profile_counts_text_size">16sp</dimen>
     <dimen name="profile_bio_text_size">16sp</dimen>
+    <dimen name="profile_follow_button_text_size">17sp</dimen>
+    <dimen name="profile_follow_button_width">210dp</dimen>
     <dimen name="profile_pager_header_height">160dp</dimen>
 
     <!-- Comment Unit -->
