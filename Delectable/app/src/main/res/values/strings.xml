@@ -15,8 +15,12 @@
     <string name="cancel">cancel</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
-
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
+
+    <!-- Common Errors -->
+    <string name="error_no_instagram">In order to post to instagram, you must have it installed on your device</string>
+    <string name="error_connect_facebook">In order to post to facebook, you must connect it to Delectable</string>
+    <string name="error_connect_twitter">In order to post to twitter, you must connect it to Delectable</string>
 
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
