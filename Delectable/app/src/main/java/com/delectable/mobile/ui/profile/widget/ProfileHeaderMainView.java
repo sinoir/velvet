@@ -35,6 +35,7 @@ public class ProfileHeaderMainView extends LinearLayout {
             int defStyle) {
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header_main, this);
+        setOrientation(VERTICAL);
 
         mUserImageView = (CircleImageView) findViewById(R.id.profile_image1);
         mUserNameTextView = (TextView) findViewById(R.id.user_name);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,4 +15,4 @@
         android:textColor="@color/d_white"
         android:textSize="@dimen/profile_bio_text_size" />
 
-</RelativeLayout>
+</merge>
