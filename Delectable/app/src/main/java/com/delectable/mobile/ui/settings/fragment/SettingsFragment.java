@@ -756,7 +756,7 @@ public class SettingsFragment extends BaseFragment {
         String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
         mPhoneNumberField.setText(mPhoneNumber);
 
-        if (mUserAccount.getFbId() != null) {
+        if (mUserAccount.isFacebookConnected()) {
             mFacebookField.setText(R.string.settings_facebook_connected);
             mFacebookField.setSelected(true);
             mFacebookField.setClickable(false);

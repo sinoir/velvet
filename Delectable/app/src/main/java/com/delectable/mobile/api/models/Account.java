@@ -245,6 +245,10 @@ public class Account extends AccountMinimal{
         return null;
     }
 
+    public boolean isFacebookConnected() {
+        return fb_id == null ? false : true;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
