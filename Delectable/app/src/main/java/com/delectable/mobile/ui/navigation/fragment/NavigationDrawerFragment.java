@@ -110,7 +110,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
             mCurrentSelectedNavItem = savedInstanceState.getInt(STATE_SELECTED_POSITION);
         }
 
-        selectItem(mCurrentSelectedNavItem);
+        navItemSelected(mCurrentSelectedNavItem);
 
         // Fetch user profile once per app launch
         mAccountController.fetchProfile(mUserId);
@@ -266,19 +266,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
-        mCurrentSelectedNavItem = position;
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
-        }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
-        if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
-        }
-    }
-
     private void loadData() {
         // Asynchronously retreive profile from local model
         new SafeAsyncTask<Account>(this) {
@@ -371,7 +358,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
-    public void navItemClicked(int navItem) {
+    public void navItemSelected(int navItem) {
+        mCurrentSelectedNavItem = navItem;
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
