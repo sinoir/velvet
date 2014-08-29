@@ -201,4 +201,10 @@
     <dimen name="navigation_user_name_text_size">20sp</dimen>
     <dimen name="navigation_header_detail_text_size">14sp</dimen>
 
+    <!-- Recent Activity Feed -->
+    <dimen name="recent_activity_time_ago_text_size">12sp</dimen>
+    <dimen name="recent_activity_right_image_size">25dp</dimen>
+    <dimen name="recent_activity_top_padding">10dp</dimen>
+
+
 </resources>
