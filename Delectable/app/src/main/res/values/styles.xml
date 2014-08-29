@@ -42,6 +42,16 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textColor">@color/nav_text_item_color</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="NavigationUserProfileCountTexts">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">@dimen/navigation_header_detail_text_size</item>
+        <item name="fontName">whitney_book</item>
     </style>
 
     <!-- Wine Capture Submit Styles -->
@@ -57,8 +67,7 @@
     </style>
 
     <!-- TODO: Customize Switch Style -->
-    <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel">
-    </style>
+    <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel"></style>
 
     <style name="WineCaptureDividers" parent="VerticalDivider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>

@@ -196,4 +196,9 @@
     <dimen name="foursquare_location_name_text_size">16sp</dimen>
     <dimen name="foursquare_location_address_text_size">14sp</dimen>
 
+    <!-- Navigation menu stuff -->
+    <dimen name="navigation_user_profile_image_size">65dp</dimen>
+    <dimen name="navigation_user_name_text_size">20sp</dimen>
+    <dimen name="navigation_header_detail_text_size">14sp</dimen>
+
 </resources>

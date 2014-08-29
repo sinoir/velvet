@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/d_white">
@@ -12,44 +13,37 @@
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
-            android:layout_width="65dp"
+            android:layout_width="@dimen/navigation_user_profile_image_size"
             android:layout_height="65dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:src="@drawable/no_photo" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/nav_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/profile_image1"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/profile_image1"
-            android:textSize="20sp" />
+            android:textSize="@dimen/navigation_user_name_text_size"
+            app:fontName="whitney_book" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/followers_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/NavigationUserProfileCountTexts"
             android:layout_alignBottom="@id/profile_image1"
-            android:layout_marginBottom="10dp"
-            android:layout_toRightOf="@+id/profile_image1"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="14sp" />
+            android:layout_toRightOf="@+id/profile_image1" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/following_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/NavigationUserProfileCountTexts"
             android:layout_alignBottom="@id/profile_image1"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/followers_count"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="14sp" />
+            android:layout_toRightOf="@+id/followers_count" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/user_bio_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +53,8 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:textSize="14sp" />
+            android:textSize="@dimen/navigation_header_detail_text_size"
+            app:fontName="whitney_book" />
 
         <View
             android:layout_width="match_parent"
@@ -77,25 +72,25 @@
         android:layout_below="@+id/navigation_profile"
         android:orientation="vertical">
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_home"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_home"
             android:text="@string/navigation_home" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_find_friends"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_friends"
             android:text="@string/navigation_find_friends" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_search"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_search"
             android:text="@string/navigation_search" />
 
-        <TextView
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_settings"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_settings"
@@ -109,15 +104,16 @@
         android:layout_below="@id/navigation_items"
         android:background="@color/d_light_gray" />
 
-    <TextView
+    <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/header_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/vertical_divider"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/navigation_recent_activity_header"
-        android:textColor="@color/d_medium_gray" />
+        android:textColor="@color/d_medium_gray"
+        app:fontName="whitney_medium_sc" />
 </merge>
