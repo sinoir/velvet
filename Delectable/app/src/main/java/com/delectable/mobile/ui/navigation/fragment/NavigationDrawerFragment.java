@@ -305,6 +305,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         if (event.isSuccessful()) {
             updateUIWithData(event.getAccount());
+            
+            // Update Push notification stuff after user logs in / updates account.
+            // TODO: Put this somewhere else that makes more sense..
+            try {
+                App.getInstance().updateKahunaAttributes();
+            } catch (Exception ex) {
+                Log.wtf(TAG, "Kahuna Failed", ex);
+            }
             return;
         }
         showToastError(event.getErrorMessage());
