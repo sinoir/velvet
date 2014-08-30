@@ -1,7 +1,6 @@
 package com.delectable.mobile.data;
 
 import com.delectable.mobile.App;
-import com.delectable.mobile.api.models.Registration;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,7 +15,10 @@ public class UserInfo {
 
     private static final String PROPERTY_USER_ID = "userId";
 
-    public static void onSignIn(String userId, String sessionKey, String sessionToken) {
+    private static final String PROPERTY_USER_EMAIL = "userEmail";
+
+    public static void onSignIn(String userId, String sessionKey, String sessionToken,
+            String email) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
 
@@ -24,16 +26,7 @@ public class UserInfo {
         editor.putString(PROPERTY_USER_ID, userId);
         editor.putString(PROPERTY_SESSION_KEY, sessionKey);
         editor.putString(PROPERTY_SESSION_TOKEN, sessionToken);
-        editor.commit();
-    }
-
-    public static void onSignIn(Context context, Registration newRegistration) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_SESSION_KEY, newRegistration.getSessionKey());
-        editor.putString(PROPERTY_SESSION_TOKEN, newRegistration.getSessionToken());
-        editor.putString(PROPERTY_USER_ID, newRegistration.getAccount().getId());
+        editor.putString(PROPERTY_USER_EMAIL, email);
         editor.commit();
     }
 
@@ -44,6 +37,7 @@ public class UserInfo {
         editor.remove(PROPERTY_SESSION_KEY);
         editor.remove(PROPERTY_SESSION_TOKEN);
         editor.remove(PROPERTY_USER_ID);
+        editor.remove(PROPERTY_USER_EMAIL);
         editor.commit();
     }
 
@@ -65,5 +59,10 @@ public class UserInfo {
     public static String getUserId(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(PROPERTY_USER_ID, null);
+    }
+
+    public static String getUserEmail(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        return prefs.getString(PROPERTY_USER_EMAIL, null);
     }
 }

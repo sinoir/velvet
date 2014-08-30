@@ -62,9 +62,9 @@ public class LoginFacebookJob extends Job {
         mAccountModel.saveAccount(account);
         mEventBus.post(new UpdatedAccountEvent(account));
 
-        UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
+        UserInfo.onSignIn(account.getId(), sessionKey, sessionToken,
+                account.getEmail());
         mEventBus.post(new LoginRegisterEvent(true));
-
     }
 
     @Override
