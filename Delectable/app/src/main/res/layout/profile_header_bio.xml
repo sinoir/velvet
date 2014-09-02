@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/user_bio_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,6 +14,7 @@
         android:paddingLeft="@dimen/profile_horizontal_text_spacing"
         android:paddingRight="@dimen/profile_horizontal_text_spacing"
         android:textColor="@color/d_white"
-        android:textSize="@dimen/profile_bio_text_size" />
+        android:textSize="@dimen/profile_bio_text_size"
+        app:fontName="whitney_book" />
 
-</RelativeLayout>
+</merge>

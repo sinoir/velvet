@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.util.ColorsUtil;
+import com.delectable.mobile.util.FontEnum;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class SlidingPagerTabStrip extends RelativeLayout {
 
@@ -139,7 +139,7 @@ public class SlidingPagerTabStrip extends RelativeLayout {
     }
 
     private void addTextTab(final int position) {
-        TextView tvTab = new TextView(getContext());
+        FontTextView tvTab = new FontTextView(getContext());
         ColorStateList colorStateList = getResources()
                 .getColorStateList(mPagerAdapter.getTabTitleColor(position));
         CharSequence title = mPagerAdapter.getPageTitle(position) == null ? ""
@@ -151,8 +151,8 @@ public class SlidingPagerTabStrip extends RelativeLayout {
         tvTab.setTextAppearance(getContext(), mTabTextAppearance);
         tvTab.setTextColor(colorStateList);
         tvTab.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTabTextSize);
+        tvTab.setTypeface(FontEnum.WHITNEY_BOOK_SC);
 
-        // TODO: Set right typeface/font
         addTab(position, tvTab);
     }
 

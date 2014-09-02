@@ -87,7 +87,6 @@ public class NavActivity extends BaseActivity
                 fragment = new HomeFragment();
                 break;
             case NavHeader.NAV_FIND_FRIENDS:
-                // TODO: Find People Screen
                 fragment = new FollowFriendsFragment();
                 break;
             case NavHeader.NAV_SEARCH:

@@ -1,7 +1,7 @@
 package com.delectable.mobile.util;
 
 //This is mapped directly to attrs.xml's fontName enum, changes here should be reflected there as well
-public enum Font {
+public enum FontEnum {
 
     WHITNEY_BLACK("Whitney-Black-Adv.otf"),
     WHITNEY_BLACK_ITAL("Whitney-BlackItal-Adv.otf"),
@@ -22,7 +22,7 @@ public enum Font {
 
     private String mFileName;
 
-    private Font(String fileName) {
+    private FontEnum(String fileName) {
         mFileName = fileName;
     }
 
