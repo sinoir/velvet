@@ -7,6 +7,7 @@ import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -111,6 +112,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
 
     @Inject
     RegistrationController mRegistrationController;
+
+    private LoadingCircleDialog mLoadingDialog;
 
     //region Lifecycle
     @Override
@@ -219,6 +222,7 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     //endregion
 
     //region Button Action Listeners
+
     /**
      * Listens for done button on soft keyboard.
      */
@@ -317,6 +321,11 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     //endregion
 
     public void onEventMainThread(LoginRegisterEvent registerEvent) {
+
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
+
         if (registerEvent.isSuccessful()) {
             startActivity(new Intent(getActivity(), NavActivity.class));
             getActivity().finish();
@@ -340,6 +349,9 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     };
 
     public void facebookLogin() {
+        mLoadingDialog = new LoadingCircleDialog();
+        mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
+
         Session session = Session.getActiveSession();
         mRegistrationController.facebookLogin(session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
