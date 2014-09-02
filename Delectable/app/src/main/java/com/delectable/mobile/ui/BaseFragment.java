@@ -8,12 +8,14 @@ import com.iainconnor.objectcache.CacheManager;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -75,6 +77,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onPause() {
         super.onPause();
         state = State.paused;
+        hideKeyboard();
     }
 
     @Override
@@ -159,6 +162,16 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         launchIntent.setClass(getActivity(), LoginActivity.class);
         startActivity(launchIntent);
         getActivity().finish();
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            inputManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+            view.clearFocus();
+        }
     }
 
     /**
