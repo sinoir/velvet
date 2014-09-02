@@ -7,9 +7,6 @@ import com.kahuna.sdk.KahunaAnalytics;
 import android.app.Application;
 import android.util.Log;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import dagger.ObjectGraph;
 
 public class App extends Application {
@@ -41,8 +38,6 @@ public class App extends Application {
                     .onAppCreate(this, BuildConfig.KAHUNA_SECRET, BuildConfig.KAHUNA_PUSH_ID);
             KahunaAnalytics.setPushReceiver(PushReceiver.class);
             updateKahunaAttributes();
-            // TODO: Enable / Disable dialog
-            KahunaAnalytics.enablePush();
         } catch (Exception ex) {
             Log.wtf(TAG, "Kahuna Failed", ex);
         }
@@ -55,11 +50,9 @@ public class App extends Application {
             String username = UserInfo.getUserId(this);
             String email = UserInfo.getUserEmail(this);
 
-            Map<String, String> attributes = new HashMap<String, String>();
-            attributes.put("username", username);
-            attributes.put("email", email);
-            Log.d(TAG, "Pass in Attributes: " + attributes);
-            KahunaAnalytics.setUserAttributes(attributes);
+            KahunaAnalytics.setUsernameAndEmail(username, email);
+            // TODO: Enable / Disable dialog in Settings?
+            KahunaAnalytics.enablePush();
         }
     }
 }
