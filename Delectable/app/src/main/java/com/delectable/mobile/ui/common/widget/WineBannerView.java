@@ -20,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * This view has a picture of the wine capture, as well as the producer and wine name in the bottom
  * left hand corner. Used in the Wine Profile screen, Wine Capture screen, and also in the Follower
@@ -29,15 +32,21 @@ public class WineBannerView extends RelativeLayout {
 
     private static final String TAG = WineBannerView.class.getSimpleName();
 
+    @InjectView(R.id.wine_image)
+    protected ImageView mWineImage;
+
+    @InjectView(R.id.gradient_backdrop)
+    protected View mGradientView;
+
+    @InjectView(R.id.producer_name)
+    protected TextView mProducerName;
+
+    @InjectView(R.id.wine_name)
+    protected TextView mWineName;
+
     boolean mShowTriangleMask;
 
     private int mTriangleCenterPosition;
-
-    private ImageView mWineImage;
-
-    private TextView mProducerName;
-
-    private TextView mWineName;
 
     private Paint mPaint;
 
@@ -65,10 +74,7 @@ public class WineBannerView extends RelativeLayout {
         a.recycle();
 
         View.inflate(context, R.layout.wine_banner_view, this);
-
-        mWineImage = (ImageView) findViewById(R.id.wine_image);
-        mProducerName = (TextView) findViewById(R.id.producer_name);
-        mWineName = (TextView) findViewById(R.id.wine_name);
+        ButterKnife.inject(this);
 
         //paint object to draw upside down triangle
         mPaint = new Paint();
@@ -132,6 +138,18 @@ public class WineBannerView extends RelativeLayout {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
         mProducerName.setText(producerName);
         mWineName.setText(wineName);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+
+        // Halve the height of the backdrop view
+        RelativeLayout.LayoutParams layoutParams = (LayoutParams) mGradientView.getLayoutParams();
+        layoutParams.height = height / 2;
+        mGradientView.setLayoutParams(layoutParams);
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
