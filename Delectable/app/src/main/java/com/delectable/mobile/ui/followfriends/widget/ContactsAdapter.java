@@ -4,8 +4,6 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
 
-import org.apache.commons.lang3.Range;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,53 +19,38 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
 
     private List<TaggeeContact> mContacts = new ArrayList<TaggeeContact>();
 
-    // Stores the range where the position for Account objects are in the list view
-    private Range<Integer> mAccountPositionRange;
-
-    // Stores the range where the position for Contact objects are in the list view
-    private Range<Integer> mContactPositionRange;
-
     public ContactsAdapter(FollowActionsHandler actionsHandler) {
         super(actionsHandler);
-        updateRanges();
     }
 
     @Override
     public void setAccounts(ArrayList<AccountMinimal> accounts) {
         super.setAccounts(accounts);
-        updateRanges();
     }
 
     public void setContacts(List<TaggeeContact> contacts) {
         mContacts = contacts;
-        updateRanges();
     }
 
-    /**
-     * Update Ranges that contains the position of each sections
-     *
-     * We have 2 fixed headers + 2 sections
-     */
-    private void updateRanges() {
-        // Position for offset for show contacts , # headers + num accounts
-        int contactSectionStartOffset = getNumHeaders();
-        if (mAccounts.size() == 0) {
-            // Negative range for no Accounts
-            mAccountPositionRange = Range.between(-1, -1);
-            // First offset is for the 2 headers
-        } else {
-            mAccountPositionRange = Range.between(1, mAccounts.size());
-            contactSectionStartOffset += mAccountPositionRange.getMaximum();
-        }
+    private boolean isTypeContact(int position) {
+        int firstContactRowPosition = mAccounts.size() + getNumHeaders();
+        return position >= firstContactRowPosition;
+    }
 
-        if (mContacts.size() == 0) {
-            // Negative range for no Contacts
-            mContactPositionRange = Range.between(-1, -1);
-        } else {
-            // Skip 1 for the Contacts header
-            mContactPositionRange = Range.between(contactSectionStartOffset,
-                    mContacts.size() + contactSectionStartOffset);
-        }
+    private boolean isTypeHeader(int position) {
+        return position == 0 || position == mAccounts.size() + 1;
+    }
+
+    private boolean isTypeAccount(int position) {
+        return position > 0 && position <= mAccounts.size();
+    }
+
+    private int getAccountOffsetPosition(int position) {
+        return position - 1;
+    }
+
+    private int getContactOffsetPosition(int position) {
+        return position - (mAccounts.size() + getNumHeaders());
     }
 
     /**
@@ -86,10 +69,10 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (mAccountPositionRange.contains(position)) {
+        if (isTypeAccount(position)) {
             return TYPE_ACCOUNT;
         }
-        if (mContactPositionRange.contains(position)) {
+        if (isTypeContact(position)) {
             return TYPE_CONTACT;
         }
         return TYPE_HEADER;
@@ -105,9 +88,9 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
         switch (getItemViewType(position)) {
             case TYPE_ACCOUNT:
                 // Accounts is offset by beginning of range
-                return mAccounts.get(position - mAccountPositionRange.getMinimum());
+                return mAccounts.get(getAccountOffsetPosition(position));
             case TYPE_CONTACT:
-                return mContacts.get(position - mContactPositionRange.getMinimum());
+                return mContacts.get(getContactOffsetPosition(position));
         }
         // Otherwise it's an Invite Header:
         if (position != 0) {
