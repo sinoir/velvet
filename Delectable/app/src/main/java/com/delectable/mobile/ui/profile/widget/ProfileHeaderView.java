@@ -9,8 +9,8 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     private ProfileHeaderActionListener mActionListener;
 
-    private Button mFollowButton;
+    private TextView mFollowButton;
 
     private boolean mIsFollowing = false;
 
@@ -73,7 +73,7 @@ public class ProfileHeaderView extends RelativeLayout implements
         mFollowText = context.getString(R.string.profile_follow);
         mUnfollowText = context.getString(R.string.profile_unfollow);
 
-        mFollowButton = (Button) findViewById(R.id.follow_button);
+        mFollowButton = (TextView) findViewById(R.id.follow_button);
 
         // Setup FollowButton Click Listener
         mFollowButton.setOnClickListener(new OnClickListener() {

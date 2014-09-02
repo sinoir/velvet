@@ -68,7 +68,7 @@ public class RegisterJob extends Job {
         String sessionToken = response.payload.session_token;
         Account account = response.payload.account;
         mAccountModel.saveAccount(account);
-        mEventBus.post(new UpdatedAccountEvent(account.getId()));
+        mEventBus.post(new UpdatedAccountEvent(account));
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken);
         mEventBus.post(new LoginRegisterEvent(true));

@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.common.widget;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Capture;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
@@ -7,6 +8,7 @@ import com.delectable.mobile.ui.profile.widget.CaptureSimpleItemRow;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -91,12 +93,12 @@ public class FollowFeedAdapter extends BaseAdapter {
         switch (mCurrentViewType) {
             case VIEW_TYPE_DETAILED:
                 Log.d(TAG, "Displaying Detailed List Items");
-                view = getDetailedListingView(position, convertView);
+                view = getDetailedListingView(position, convertView, parent);
                 break;
             case VIEW_TYPE_SIMPLE:
             default:
                 Log.d(TAG, "Displaying Simple List Items");
-                view = getSimpleListingView(position, convertView);
+                view = getSimpleListingView(position, convertView, parent);
                 break;
         }
 
@@ -107,27 +109,32 @@ public class FollowFeedAdapter extends BaseAdapter {
         return view;
     }
 
-    private View getDetailedListingView(int position, View convertView) {
+    private View getDetailedListingView(int position, View convertView, ViewGroup parent) {
         CaptureDetailsView rowView = null;
         CaptureDetails capture = mData.get(position);
 
         rowView = (CaptureDetailsView) convertView;
 
         if (rowView == null) {
-            rowView = new CaptureDetailsView(mContext);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            rowView = (CaptureDetailsView) inflater.inflate(R.layout.row_feed_wine_detail_impl,
+                    parent, false);
             rowView.setActionsHandler(mCaptureActionsHandler);
         }
         rowView.updateData(capture);
         return rowView;
     }
 
-    public View getSimpleListingView(int position, View convertView) {
+    public View getSimpleListingView(int position, View convertView, ViewGroup parent) {
         CaptureSimpleItemRow rowView = null;
         CaptureDetails capture = mData.get(position);
 
         rowView = (CaptureSimpleItemRow) convertView;
 
         if (rowView == null) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            rowView = (CaptureSimpleItemRow) inflater.inflate(R.layout.row_simple_wine_detail_impl,
+                    parent, false);
             rowView = new CaptureSimpleItemRow(mContext);
             rowView.setActionsHandler(mCaptureActionsHandler);
         }

@@ -63,7 +63,8 @@ public class ActivityFeedRow extends RelativeLayout {
                     .loadImageIntoView(getContext(), data.getLeftImageLink().getPhoto().getUrl(),
                             mLeftImage);
         } else {
-            mLeftImage.setVisibility(View.GONE);
+            // TODO: Figure out if we should fill in the empty left image space with the text, but then how do the dividers look, etc?
+            mLeftImage.setVisibility(View.INVISIBLE);
             mLeftImage.setImageDrawable(null);
         }
 

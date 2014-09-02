@@ -1,9 +1,10 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.model.api.accounts.AccountContextResponse;
+import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +23,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountsPrivateCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_private_ctx);
-        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
-                AccountContextResponse.class);
-        Account actualAccount = responseObject.payload.account;
+        AccountPrivateResponse responseObject = mGson.fromJson(json.toString(),
+                AccountPrivateResponse.class);
+        Account actualAccount = responseObject.getPayload().getAccount();
 
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
@@ -80,9 +81,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
     public void testParseAccountsMyProfileCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_my_profile_ctx);
 
-        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
-                AccountContextResponse.class);
-        Account actualAccount = responseObject.payload.account;
+        AccountPrivateResponse responseObject = mGson.fromJson(json.toString(),
+                AccountPrivateResponse.class);
+        Account actualAccount = responseObject.getPayload().getAccount();
 
         assertEquals("537e2f09753490201d00084e", actualAccount.getId());
         assertEquals("Adam", actualAccount.getFname());
@@ -106,8 +107,8 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountsOtherProfileCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_other_profile_ctx);
-        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
-                AccountContextResponse.class);
+        AccountPrivateResponse responseObject = mGson.fromJson(json.toString(),
+                AccountPrivateResponse.class);
         Account actualAccount = responseObject.payload.account;
 
         assertEquals("51d24187b4db0164af000206", actualAccount.getId());
@@ -209,9 +210,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testGetFullName() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_other_profile_ctx);
-        AccountContextResponse responseObject = mGson.fromJson(json.toString(),
-                AccountContextResponse.class);
-        Account actualAccount = responseObject.payload.account;
+        AccountPrivateResponse responseObject = mGson.fromJson(json.toString(),
+                AccountPrivateResponse.class);
+        Account actualAccount = responseObject.getPayload().getAccount();
 
         String expectedName = "James Wooldridge";
         assertEquals(expectedName, actualAccount.getFullName());

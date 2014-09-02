@@ -10,7 +10,7 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
+import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
@@ -19,9 +19,14 @@ import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
+import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.LoginButton;
 
 import android.app.Activity;
 import android.content.Context;
@@ -88,8 +93,11 @@ public class SettingsFragment extends BaseFragment {
     @InjectView(R.id.phone_number_value)
     EditText mPhoneNumberField;
 
+    @InjectView(R.id.facebook_sign_in)
+    LoginButton mRealFacebookLoginButton;
+
     @InjectView(R.id.facebook_value)
-    EditText mFacebookField;
+    TextView mFacebookField;
 
     @InjectView(R.id.twitter_value)
     EditText mTwitterField;
@@ -135,6 +143,9 @@ public class SettingsFragment extends BaseFragment {
      */
     private Bitmap mPhoto;
 
+    private UiLifecycleHelper mFacebookUiHelper;
+
+
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
@@ -145,11 +156,16 @@ public class SettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+
+        mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
+        mFacebookUiHelper.onCreate(savedInstanceState);
+
         mUserId = UserInfo.getUserId(getActivity());
 
         mAccountController.fetchPrivateAccount(mUserId);
     }
 
+    //region Lifecycle
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -157,6 +173,8 @@ public class SettingsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         ButterKnife.inject(this, view);
+
+        mRealFacebookLoginButton.setFragment(this);
 
         //listens for done button on soft keyboard
         TextView.OnEditorActionListener doneListener = new TextView.OnEditorActionListener() {
@@ -205,6 +223,35 @@ public class SettingsFragment extends BaseFragment {
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFacebookUiHelper.onResume();
+        if (mUserAccount == null) {
+            loadCachedAccount();
+        }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mFacebookUiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mFacebookUiHelper.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mFacebookUiHelper.onSaveInstanceState(outState);
+    }
+    //endregion
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
@@ -307,26 +354,22 @@ public class SettingsFragment extends BaseFragment {
     }
     //endregion
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mUserAccount == null) {
-            loadCachedAccount();
-        }
-    }
 
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+        if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
-        loadCachedAccount();
+
+        if (event.isSuccessful()) {
+            mUserAccount = event.getAccount();
+            updateUI();
+            return;
+        }
+        showToastError(event.getErrorMessage());
+
     }
     //endregion
-
-    public void onEventMainThread(FetchAccountFailedEvent event) {
-        // TODO show error dialog
-    }
 
     //region API Requests
 
@@ -544,6 +587,39 @@ public class SettingsFragment extends BaseFragment {
 
 
     //region Button Click Actions
+    @OnClick(R.id.facebook_value)
+    protected void onFacebookConnectClick(View v) {
+        mRealFacebookLoginButton.performClick();
+    }
+
+    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
+            Log.d(TAG + ".Facebook", "Session:" + session);
+            Log.d(TAG + ".Facebook", "Exception:" + exception);
+            // TODO: Handle errors and other conditions.
+            if (state.isOpened()) {
+                facebookConnect();
+            }
+        }
+    };
+
+    public void facebookConnect() {
+        Session session = Session.getActiveSession();
+        mAccountController.associateFacebook(session.getAccessToken(),
+                DateHelperUtil.doubleFromDate(session.getExpirationDate()));
+    }
+
+    public void onEventMainThread(AssociateFacebookEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount = event.getAcount();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
+    }
+
     @OnClick({R.id.following_phone_notification,
             R.id.comment_phone_notification,
             R.id.tagged_phone_notification,
@@ -680,8 +756,15 @@ public class SettingsFragment extends BaseFragment {
         String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
         mPhoneNumberField.setText(mPhoneNumber);
 
-        //TODO connect facebook
-        //mFacebookField.setText(mUserAccount.getEmail());
+        if (mUserAccount.isFacebookConnected()) {
+            mFacebookField.setText(R.string.settings_facebook_connected);
+            mFacebookField.setSelected(true);
+            mFacebookField.setClickable(false);
+        } else {
+            mFacebookField.setText(R.string.settings_facebook_connect);
+            mFacebookField.setSelected(false);
+            mFacebookField.setClickable(true);
+        }
         //TODO connect twitter
         //mTwitterField.setText(mUserAccount.getEmail());
 
@@ -695,5 +778,6 @@ public class SettingsFragment extends BaseFragment {
 
         //TODO no fields for email notifications yet for API, implement when ready
     }
+
 
 }

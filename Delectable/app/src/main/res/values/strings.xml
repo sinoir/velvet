@@ -160,13 +160,14 @@
     <string name="settings_website_hint">Website</string>
     <string name="settings_account">account</string>
     <string name="settings_email_label">Email</string>
-    <string name="settings_email_hint">hello@goat.com</string>
+    <string name="settings_email_hint">hello@delectable.com</string>
     <string name="settings_phone_number_label">Phone number</string>
     <string name="settings_phone_number_hint">Enter phone number</string>
     <string name="settings_facebook_label">Facebook</string>
-    <string name="settings_facebook_hint">Connect</string>
+    <string name="settings_facebook_connect">Connect</string>
+    <string name="settings_facebook_connected">Connected</string>
     <string name="settings_twitter_label">Twitter</string>
-    <string name="settings_twitter_hint">\@bearroast</string>
+    <string name="settings_twitter_hint">\@twitter</string>
     <string name="settings_notification">notification</string>
     <string name="settings_following_you">Following you</string>
     <string name="settings_comment_on_your_wine">Comment on your wine</string>

@@ -74,9 +74,11 @@
     <!-- User Profile Dimens -->
     <dimen name="profile_vertical_spacing">9dp</dimen>
     <dimen name="profile_horizontal_text_spacing">15dp</dimen>
-    <dimen name="profile_username_text_size">24sp</dimen>
+    <dimen name="profile_username_text_size">20sp</dimen>
     <dimen name="profile_counts_text_size">16sp</dimen>
     <dimen name="profile_bio_text_size">16sp</dimen>
+    <dimen name="profile_follow_button_text_size">17sp</dimen>
+    <dimen name="profile_follow_button_width">210dp</dimen>
     <dimen name="profile_pager_header_height">160dp</dimen>
 
     <!-- Comment Unit -->
@@ -196,5 +198,16 @@
     <dimen name="foursquare_text_vertical_spacing">4dp</dimen>
     <dimen name="foursquare_location_name_text_size">16sp</dimen>
     <dimen name="foursquare_location_address_text_size">14sp</dimen>
+
+    <!-- Navigation menu stuff -->
+    <dimen name="navigation_user_profile_image_size">65dp</dimen>
+    <dimen name="navigation_user_name_text_size">20sp</dimen>
+    <dimen name="navigation_header_detail_text_size">14sp</dimen>
+
+    <!-- Recent Activity Feed -->
+    <dimen name="recent_activity_time_ago_text_size">12sp</dimen>
+    <dimen name="recent_activity_right_image_size">25dp</dimen>
+    <dimen name="recent_activity_top_padding">10dp</dimen>
+
 
 </resources>

@@ -22,17 +22,12 @@ public class ActivityFeedAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
 
-    private String mActivityFeedTitle;
-
     private ActivityFeedRow.ActivityActionsHandler mActionsHandler;
 
     public ActivityFeedAdapter(Context context, ArrayList<ActivityRecipient> feedData) {
         mActivityFeedData = feedData;
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        mActivityFeedTitle = context.getResources()
-                .getString(R.string.navigation_recent_activity_header);
     }
 
     @Override
@@ -55,7 +50,9 @@ public class ActivityFeedAdapter extends BaseAdapter {
         ActivityFeedRow rowView = (ActivityFeedRow) convertView;
         ActivityRecipient data = getItem(position);
         if (rowView == null) {
-            rowView = new ActivityFeedRow(mContext);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            rowView = (ActivityFeedRow) inflater
+                    .inflate(R.layout.row_activity_feed_impl, parent, false);
         }
         rowView.updateData(data);
         rowView.setActionsHandler(mActionsHandler);

@@ -82,7 +82,7 @@ public class NavHeader extends RelativeLayout {
         int navIndex = mNavigationItems.indexOf(navItem);
         Log.d(TAG, "Clicked Nav Item: " + navIndex);
         if (mActionListener != null && !wasCurrentViewAlreadySelected) {
-            mActionListener.navItemClicked(navIndex);
+            mActionListener.navItemSelected(navIndex);
         }
     }
 
@@ -148,6 +148,6 @@ public class NavHeader extends RelativeLayout {
 
         public void navHeaderUserImageClicked();
 
-        public void navItemClicked(int navItem);
+        public void navItemSelected(int navItem);
     }
 }

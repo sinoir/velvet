@@ -1,46 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge
+    android:id="@+id/top_profile_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/d_dark_navy">
 
-    <RelativeLayout
-        android:id="@+id/top_profile_container"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/profile_header_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_pager_header_height" />
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/pager_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/profile_header_viewpager"
+        android:background="@color/d_dark_navy"
+        android:padding="@dimen/circle_pager_indicator_padding"
+        custom:fillColor="@color/d_white_80op"
+        custom:pageColor="@color/d_white_20op"
+        custom:radius="@dimen/circle_pager_indicator_radius"
+        custom:strokeColor="@android:color/transparent"
+        custom:strokeWidth="0dp" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/profile_header_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_pager_header_height" />
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/follow_button"
+        android:layout_width="@dimen/profile_follow_button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_below="@id/pager_indicator"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/profile_vertical_spacing"
+        android:background="@drawable/btn_follow_background"
+        android:gravity="center"
+        android:textColor="@color/d_white"
+        android:textSize="@dimen/profile_follow_button_text_size"
+        android:visibility="gone"
+        custom:fontName="whitney_medium" />
 
-        <com.viewpagerindicator.CirclePageIndicator
-            android:id="@+id/pager_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_header_viewpager"
-            android:background="@color/d_dark_navy"
-            android:padding="@dimen/circle_pager_indicator_padding"
-            custom:fillColor="@color/d_white_80op"
-            custom:pageColor="@color/d_white_20op"
-            custom:radius="@dimen/circle_pager_indicator_radius"
-            custom:strokeColor="@android:color/transparent"
-            custom:strokeWidth="0dp" />
-
-        <Button
-            android:id="@+id/follow_button"
-            android:layout_width="210dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_below="@id/pager_indicator"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/profile_vertical_spacing"
-            android:background="@drawable/btn_follow_background"
-            android:gravity="center"
-            android:textColor="@color/d_white"
-            android:textSize="@dimen/button_text_size"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-</RelativeLayout>
+</merge>

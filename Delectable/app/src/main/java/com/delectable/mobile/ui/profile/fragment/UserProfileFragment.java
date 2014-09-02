@@ -7,7 +7,6 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
-import com.delectable.mobile.events.accounts.FetchAccountFailedEvent;
 import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
@@ -279,14 +278,24 @@ public class UserProfileFragment extends BaseFragment implements
     }
 
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+        if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
-        loadData();
-    }
 
-    public void onEventMainThread(FetchAccountFailedEvent event) {
-        // TODO show error dialog
+        if (event.isSuccessful()) {
+            mUserAccount = event.getAccount();
+            if (mUserAccount != null) {
+                mCaptureDetails.clear();
+                if (mUserAccount.getCaptureSummaries() != null) {
+                    for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
+                        mCaptureDetails.addAll(summary.getCaptures());
+                    }
+                }
+                updateUIWithData();
+            }
+            return;
+        }
+        showToastError(event.getErrorMessage());
     }
 
     public void onEventMainThread(FollowAccountFailedEvent event) {

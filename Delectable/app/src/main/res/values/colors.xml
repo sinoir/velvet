@@ -45,5 +45,4 @@
 
     <!-- Transparent Blacks -->
     <color name="d_black_10op">#1A000000</color>
-    <color name="d_black_25op">#40000000</color>
 </resources>
