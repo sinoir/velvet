@@ -7,6 +7,7 @@ import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.data.CaptureDetailsModel;
@@ -96,6 +97,7 @@ import de.greenrobot.event.EventBus;
                 CaptureDetailsModel.class,
                 CaptureDetailsListingModel.class,
                 DeviceContactsModel.class,
+                BaseWineModel.class,
                 // Jobs
                 BaseJob.class,
                 FetchFollowerFeedJob.class,
