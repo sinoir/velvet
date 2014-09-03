@@ -230,7 +230,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
                             mTaggeeContacts.size()));
         } else {
             mDrinkingWithWhoButton.setText(R.string.capture_submit_drinking_with_who_text);
-
         }
     }
 
@@ -350,10 +349,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
         if (event.isSuccessful()) {
             // TODO: This bit should be called when user clicks "post", and then somehow handle the pending captures elsewhere..
-            // TODO: Test with Matches
-            if (mLabelScanResult != null && mLabelScanResult.getMatches() != null
-                    && mLabelScanResult.getMatches().size() > 0) {
-                launchWineProfile(mLabelScanResult.getMatches().get(0));
+            if (mLabelScanResult != null && mLabelScanResult.getBaseWineMatches() != null
+                    && mLabelScanResult.getBaseWineMatches().size() > 0) {
+                launchWineProfile(mLabelScanResult.getBaseWineMatches().get(0));
             } else if (event.getCaptureDetails() != null) {
                 launchCapture(event.getCaptureDetails());
             } else {
@@ -372,11 +370,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    private void launchWineProfile(BaseWine wine) {
+    private void launchWineProfile(BaseWine baseWine) {
         getActivity().finish();
         Intent intent = new Intent();
         // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
-        intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE, wine);
+        intent.putExtra(WineProfileActivity.PARAMS_BASE_WINE_ID, baseWine.getId());
+        intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
+                (android.os.Parcelable) baseWine.getPhoto());
         intent.setClass(getActivity(), WineProfileActivity.class);
         startActivity(intent);
     }

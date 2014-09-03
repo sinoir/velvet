@@ -1,19 +1,27 @@
 package com.delectable.mobile.api.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LabelScan {
 
     private String id;
 
-    private List<BaseWine> matches;
+    private ArrayList<MatchObject> matches;
 
     public String getId() {
         return id;
     }
 
-    public List<BaseWine> getMatches() {
-        return matches;
+    public List<BaseWine> getBaseWineMatches() {
+        if (matches == null) {
+            return null;
+        }
+        ArrayList<BaseWine> wineMatches = new ArrayList<BaseWine>();
+        for (MatchObject match : matches) {
+            wineMatches.add(match.base_wine);
+        }
+        return wineMatches;
     }
 
     @Override
@@ -22,5 +30,12 @@ public class LabelScan {
                 "id='" + id + '\'' +
                 ", matches=" + matches +
                 '}';
+    }
+
+    public static class MatchObject {
+
+        private double score;
+
+        private BaseWine base_wine;
     }
 }
