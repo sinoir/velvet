@@ -153,6 +153,13 @@
     <string name="follow_friends_twitter">twitter</string>
     <string name="follow_friends_invite">Invite</string>
 
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search for wines or people</string>
+    <string name="search_wines">wines</string>
+    <string name="search_people">people</string>
+
+
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>
     <string name="settings_name_hint">Name</string>
