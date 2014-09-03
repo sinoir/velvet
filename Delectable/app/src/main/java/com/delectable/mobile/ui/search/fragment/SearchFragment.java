@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class SearchFragment extends BaseFragment implements SearchView.OnQueryTextListener{
+public class SearchFragment extends BaseFragment {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
@@ -69,20 +69,6 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Custom Back Arrow...
-        inflater.inflate(R.menu.search_menu, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint(getString(R.string.search_hint));
-        searchView.setOnQueryTextListener(this);
-        //TODO platform bug with setIconifiedByDefault, makes searchview look wierd
-        //searchView.setIconifiedByDefault(false);
-        //super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
@@ -92,17 +78,5 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         mTabStrip.setViewPager(mViewPager);
 
         return rootView;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Log.d(TAG + ".onQueryTextSubmit", query);
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        Log.d(TAG + ".onQueryTextChange", newText);
-        return false;
     }
 }
