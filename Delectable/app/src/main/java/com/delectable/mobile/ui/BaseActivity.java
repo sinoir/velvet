@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationServices;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.kahuna.sdk.KahunaAnalytics;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -64,12 +65,13 @@ public abstract class BaseActivity extends Activity
         super.onStart();
 
         mGoogleApiClient.connect();
+        KahunaAnalytics.start();
     }
 
     @Override
     protected void onStop() {
         mGoogleApiClient.disconnect();
-
+        KahunaAnalytics.stop();
         super.onStop();
     }
 

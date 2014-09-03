@@ -1,6 +1,5 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
@@ -109,7 +108,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_other_profile_ctx);
         AccountPrivateResponse responseObject = mGson.fromJson(json.toString(),
                 AccountPrivateResponse.class);
-        Account actualAccount = responseObject.payload.account;
+        Account actualAccount = responseObject.getPayload().getAccount();
 
         assertEquals("51d24187b4db0164af000206", actualAccount.getId());
         assertEquals("James", actualAccount.getFname());

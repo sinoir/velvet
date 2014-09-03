@@ -1,7 +1,5 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.Registration;
 import com.delectable.mobile.data.UserInfo;
 
 import android.content.Context;
@@ -9,38 +7,47 @@ import android.content.SharedPreferences;
 
 public class UserInfoTest extends BaseAndroidTestCase {
 
-    Registration mTestRegistration;
+    private String mExpectedToken;
+
+    private String mExpectedKey;
+
+    private String mExpectedId;
+
+    private String mExpectedEmail;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mTestRegistration = new Registration();
-        mTestRegistration.setSessionToken("Session Token");
-        mTestRegistration.setSessionKey("Session Key");
-        mTestRegistration.setAccount(new Account());
-        mTestRegistration.getAccount().setId("my user id");
+        mExpectedToken = "Session Token";
+        mExpectedKey = "Session Key";
+        mExpectedId = "someiD";
+        mExpectedEmail = "some@email.com";
     }
 
     @Override
     protected void tearDown() throws Exception {
-        mTestRegistration = null;
+        mExpectedToken = null;
+        mExpectedKey = null;
+        mExpectedId = null;
+        mExpectedEmail = null;
         super.tearDown();
     }
 
 
     public void testOnSignIn() {
-        UserInfo.onSignIn(getContext(), mTestRegistration);
+        UserInfo.onSignIn(mExpectedId, mExpectedKey, mExpectedToken, mExpectedEmail);
         SharedPreferences prefs = getContext().getSharedPreferences(UserInfo.PREFERENCES,
                 Context.MODE_PRIVATE);
-        assertEquals(mTestRegistration.getSessionKey(), UserInfo.getSessionKey(getContext()));
-        assertEquals(mTestRegistration.getSessionToken(), UserInfo.getSessionToken(getContext()));
-        assertEquals(mTestRegistration.getAccount().getId(), UserInfo.getUserId(getContext()));
+        assertEquals(mExpectedKey, UserInfo.getSessionKey(getContext()));
+        assertEquals(mExpectedToken, UserInfo.getSessionToken(getContext()));
+        assertEquals(mExpectedId, UserInfo.getUserId(getContext()));
+        assertEquals(mExpectedEmail, UserInfo.getUserEmail(getContext()));
 
-        assertEquals(3, prefs.getAll().size());
+        assertEquals(4, prefs.getAll().size());
     }
 
     public void testOnSignOut() {
-        UserInfo.onSignIn(getContext(), mTestRegistration);
+        UserInfo.onSignIn(mExpectedId, mExpectedKey, mExpectedToken, mExpectedEmail);
         UserInfo.onSignOut(getContext());
         SharedPreferences prefs = getContext().getSharedPreferences(UserInfo.PREFERENCES,
                 Context.MODE_PRIVATE);
@@ -53,7 +60,7 @@ public class UserInfoTest extends BaseAndroidTestCase {
     public void testIsSignedIn() {
         assertFalse(UserInfo.isSignedIn(getContext()));
 
-        UserInfo.onSignIn(getContext(), mTestRegistration);
+        UserInfo.onSignIn(mExpectedId, mExpectedKey, mExpectedToken, mExpectedEmail);
         assertTrue(UserInfo.isSignedIn(getContext()));
 
         UserInfo.onSignOut(getContext());

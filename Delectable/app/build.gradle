@@ -10,6 +10,9 @@ android {
         versionName '1.0'
         testPackageName "com.delectable.mobile.tests"
         testApplicationId 'com.delectable.mobile.tests'
+        // API Keys (same for both release and debug)
+        buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
+        buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
     }
 
     signingConfigs {
