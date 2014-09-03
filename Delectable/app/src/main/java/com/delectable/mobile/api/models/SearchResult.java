@@ -1,55 +1,22 @@
 package com.delectable.mobile.api.models;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+import com.delectable.mobile.model.api.BaseResponse;
 
-public class SearchResult extends BaseResponse {
 
-    @Expose
-    String q;
+public class SearchResult<T> extends BaseResponse {
 
-    @Expose
-    Integer offset;
+    private String q;
 
-    @Expose
-    Integer limit;
+    private int offset;
 
-    @Expose
-    Integer total;
+    private int limit;
 
-    @Expose
-    Integer search_time;
+    private int total;
 
-    ArrayList<SearchHit> hits;
+    private int search_time;
 
-    public static SearchResult buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadJson = jsonObj.optJSONObject("payload");
-        SearchResult searchResult = buildFromJsonForExposedObjects(payloadJson, SearchResult.class);
-        JSONArray jsonHitsArray = payloadJson.optJSONArray("hits");
-        // Parse SearchHits based on result type (Either BaseWine or Account)
-        if (jsonHitsArray != null &&
-                payloadJson != null &&
-                jsonHitsArray.length() > 0 &&
-                jsonHitsArray.optJSONObject(0).optString("type") != null) {
-            String type = jsonHitsArray.optJSONObject(0).optString("type");
-            if (type.equalsIgnoreCase("base_wine")) {
-                Type listType = new TypeToken<List<SearchHit<BaseWine>>>() {
-                }.getType();
-                ArrayList<SearchHit> wineHits = new Gson()
-                        .fromJson(jsonHitsArray.toString(), listType);
-                searchResult.setHits(wineHits);
-            }// TODO: Set hits for Accounts
-        }
-        return searchResult;
-    }
+    ArrayList<SearchHit<T>> hits;
 
     public String getQ() {
         return q;
@@ -59,43 +26,43 @@ public class SearchResult extends BaseResponse {
         this.q = q;
     }
 
-    public Integer getOffset() {
+    public int getOffset() {
         return offset;
     }
 
-    public void setOffset(Integer offset) {
+    public void setOffset(int offset) {
         this.offset = offset;
     }
 
-    public Integer getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    public void setLimit(Integer limit) {
+    public void setLimit(int limit) {
         this.limit = limit;
     }
 
-    public Integer getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 
-    public Integer getSearchTime() {
+    public int getSearchTime() {
         return search_time;
     }
 
-    public void setSearchTime(Integer search_time) {
+    public void setSearchTime(int search_time) {
         this.search_time = search_time;
     }
 
-    public ArrayList<SearchHit> getHits() {
+    public ArrayList<SearchHit<T>> getHits() {
         return hits;
     }
 
-    public void setHits(ArrayList<SearchHit> hits) {
+    public void setHits(ArrayList<SearchHit<T>> hits) {
         this.hits = hits;
     }
 
