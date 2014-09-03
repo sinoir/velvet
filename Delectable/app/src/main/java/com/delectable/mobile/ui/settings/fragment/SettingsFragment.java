@@ -185,10 +185,7 @@ public class SettingsFragment extends BaseFragment {
                     String text = editText.getText().toString();
                     updateInfo(editText, text);
 
-                    //hide keyboard
-                    InputMethodManager inputManager = (InputMethodManager)
-                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.toggleSoftInput(0, 0);
+                    hideKeyboard();
                     return true;
                 }
                 return false;

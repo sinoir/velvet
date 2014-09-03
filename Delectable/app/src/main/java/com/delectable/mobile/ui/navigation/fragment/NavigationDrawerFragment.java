@@ -247,6 +247,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                hideKeyboard();
                 if (!isAdded()) {
                     return;
                 }

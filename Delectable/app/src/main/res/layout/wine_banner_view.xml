@@ -13,6 +13,13 @@
         android:background="@color/d_medium_gray"
         android:scaleType="centerCrop" />
 
+    <View
+        android:id="@+id/gradient_backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_wine_banner_gradient" />
+
     <TextView
         android:id="@+id/producer_name"
         android:layout_width="wrap_content"
