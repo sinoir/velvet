@@ -261,6 +261,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 postCapture();
             }
         });
