@@ -65,6 +65,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
         ButterKnife.inject(this, mView);
 
         setupCameraSurface(mCameraPreview);
+        mCameraPreview.setScaleToFitY(true);
 
         return mView;
     }
