@@ -8,6 +8,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 
 import android.app.ActionBar;
@@ -19,10 +20,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private static final String TAG = NavActivity.class.getSimpleName();
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -90,8 +92,7 @@ public class NavActivity extends BaseActivity
                 fragment = new FollowFriendsFragment();
                 break;
             case NavHeader.NAV_SEARCH:
-                // TODO: Search Screen
-                Toast.makeText(this, "Show Search", Toast.LENGTH_SHORT).show();
+                fragment = new SearchFragment();
                 break;
             case NavHeader.NAV_SETTINGS:
                 fragment = new SettingsFragment();
