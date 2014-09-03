@@ -45,6 +45,7 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
             Bundle savedInstanceState) {
         ListView listview = (ListView) inflater
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
+        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_contacts);
         listview.setAdapter(mAdapter);
         return listview;
     }
@@ -59,6 +60,7 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
         if (event.isSuccessful()) {
             mAccounts = event.getAccounts();
             mAdapter.setAccounts(event.getAccounts());
+            mAdapter.setContacts(event.getContacts());
             mAdapter.notifyDataSetChanged();
             return;
         }

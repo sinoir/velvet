@@ -18,14 +18,17 @@
         android:textSize="@dimen/follow_friends_name_text_size"
         app:fontName="whitney_medium" />
 
-    <ImageButton
-        android:id="@+id/follow_button"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/invite_button"
+        android:layout_width="@dimen/follow_friends_invite_btn_width"
+        android:layout_height="@dimen/follow_friends_invite_btn_height"
         android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
         android:layout_marginRight="@dimen/follow_friends_horizontal_spacing"
-        android:background="@null"
-        android:src="@drawable/btn_follow" />
+        android:background="@drawable/btn_social_signin_up_bg"
+        android:gravity="center"
+        android:text="@string/follow_friends_invite"
+        android:textColor="@color/d_medium_gray"
+        app:fontName="whitney_medium" />
 </merge>

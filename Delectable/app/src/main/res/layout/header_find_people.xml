@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.delectable.mobile.ui.common.widget.FontTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/follow_contact_row_height"
+    android:background="@drawable/bg_bottom_border_white_bg"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:textColor="@color/d_medium_gray"
+    android:textSize="@dimen/settings_text_size"
+    app:fontName="whitney_medium_sc" />

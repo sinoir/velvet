@@ -15,6 +15,7 @@
     <string name="cancel">cancel</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
+    <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
     <string name="error_no_instagram">In order to post to instagram, you must have it installed on your device</string>
@@ -150,7 +151,7 @@
     <string name="follow_friends_invite_to_delectable">invite to delectable</string>
     <string name="follow_friends_facebook">facebook</string>
     <string name="follow_friends_twitter">twitter</string>
-
+    <string name="follow_friends_invite">Invite</string>
 
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>
@@ -193,5 +194,7 @@
     <string name="settings_import_from_facebook">Import from facebook</string>
     <string name="settings_choose_from_library">Choose from library</string>
     <string name="settings_take_photo">Take photo</string>
+    <string name="error_no_email_client">There is no email client installed</string>
+    <string name="error_sms_failed">SMS failed</string>
 
 </resources>

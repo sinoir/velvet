@@ -13,8 +13,7 @@ public class InfluencerAccountsAdapter extends BaseAccountsMinimalAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    protected View getFollowRow(int position, View convertView, ViewGroup parent) {
         FollowExpertsRow row = (FollowExpertsRow) convertView;
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -22,7 +21,7 @@ public class InfluencerAccountsAdapter extends BaseAccountsMinimalAdapter {
                     .inflate(R.layout.row_find_experts_with_sizing, parent, false);
             row.setActionsHandler(mActionsHandler);
         }
-        row.updateData(getItem(position));
+        row.updateData((com.delectable.mobile.api.models.AccountMinimal) getItem(position));
 
         return row;
     }

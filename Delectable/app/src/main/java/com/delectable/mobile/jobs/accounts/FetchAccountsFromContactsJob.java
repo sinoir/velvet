@@ -1,5 +1,6 @@
 package com.delectable.mobile.jobs.accounts;
 
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.events.accounts.FetchedAccountsFromContactsEvent;
@@ -9,6 +10,7 @@ import com.delectable.mobile.model.api.accounts.AccountContactListSuggestionsReq
 import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FetchAccountsFromContactsJob extends BaseJob {
@@ -40,9 +42,10 @@ public class FetchAccountsFromContactsJob extends BaseJob {
                 contacts, null);
         AccountMinimalListResponse response = getNetworkClient()
                 .post(endpoint, request, AccountMinimalListResponse.class);
-        // TODO: Pass up Contacts that aren't in the payload to suggest to invite
-        getEventBus()
-                .post(new FetchedAccountsFromContactsEvent(response.getPayload().getAccounts()));
+
+        ArrayList<AccountMinimal> accounts = response.getPayload().getAccounts();
+        // Note: No way to remove any contact from the contacts list
+        getEventBus().post(new FetchedAccountsFromContactsEvent(accounts, contacts));
     }
 
     @Override
