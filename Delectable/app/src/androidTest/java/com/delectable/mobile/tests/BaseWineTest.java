@@ -1,12 +1,12 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.SearchResult;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
+import com.delectable.mobile.api.models.SearchResult;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.BaseWinesContext;
 import com.delectable.mobile.api.requests.BaseWinesSearch;
+import com.delectable.mobile.model.api.wines.BaseWineResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +35,8 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         assertEquals(1395, actualSearchResult.getTotal().intValue());
 
         assertEquals(2, actualSearchResult.getHits().size());
-        SearchHit<BaseWine> actualFirstHit = (SearchHit<BaseWine>) actualSearchResult.getHits().get(0);
+        SearchHit<BaseWine> actualFirstHit = (SearchHit<BaseWine>) actualSearchResult.getHits()
+                .get(0);
         assertEquals(154.30392, actualFirstHit.getScore());
         assertEquals("base_wine", actualFirstHit.getType());
 
@@ -69,8 +70,10 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
     public void testParseBaseWineProfile() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_profile_ctx);
-        BaseWinesContext request = new BaseWinesContext();
-        BaseWine actualBaseWine  = (BaseWine) request.buildResopnseFromJson(json);
+
+        BaseWineResponse responseObject = mGson.fromJson(json.toString(), BaseWineResponse.class);
+
+        BaseWine actualBaseWine = responseObject.getBaseWine();
 
         assertEquals("5305ba538953f6d73900543d", actualBaseWine.getId());
         assertEquals(1, actualBaseWine.getRatingsSummary().getAllCount());
@@ -118,7 +121,7 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         assertEquals("profile", actualBaseWine.getContext());
         assertEquals("tmC2M7VCWpKZ4g", actualBaseWine.getETag());
 
-        assertEquals(1,actualBaseWine.getWineProfiles().size());
+        assertEquals(1, actualBaseWine.getWineProfiles().size());
         WineProfile firstWineProfile = actualBaseWine.getWineProfiles().get(0);
         assertEquals("50e86605a6d027d09d00025a", firstWineProfile.getId());
         assertEquals(1, firstWineProfile.getRatingsSummary().getAllCount());
