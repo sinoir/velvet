@@ -2,6 +2,7 @@ package com.delectable.mobile.di;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
@@ -45,6 +46,7 @@ import com.delectable.mobile.jobs.scanwinelabel.AddCaptureFromPendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUploadJob;
 import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
+import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
@@ -64,6 +66,7 @@ import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
 
@@ -92,6 +95,7 @@ import de.greenrobot.event.EventBus;
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
                 WineCaptureSubmitFragment.class,
+                WineProfileFragment.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
@@ -131,12 +135,14 @@ import de.greenrobot.event.EventBus;
                 UpdateIdentifierJob.class,
                 RemoveIdentifierJob.class,
                 AssociateFacebookJob.class,
+                FetchBaseWineJob.class,
                 // Controllers
                 AccountController.class,
                 CaptureController.class,
                 RegistrationController.class,
                 FoursquareController.class,
-                WineScanController.class
+                WineScanController.class,
+                BaseWineController.class,
         }
 )
 public class AppModule {
