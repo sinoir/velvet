@@ -217,7 +217,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
         mBaseWineController.fetchBaseWine(mBaseWineId);
         if (mCaptureNoteListing == null) {
-            loadCaptureNotesData(IdType.BASE_WINE, mWineProfile.getBaseWineId());
+            loadCaptureNotesData(IdType.BASE_WINE, mBaseWineId);
         }
     }
 
