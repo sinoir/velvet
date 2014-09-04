@@ -1,21 +1,11 @@
 package com.delectable.mobile.ui.followfriends.widget;
 
-import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.ui.common.widget.BaseFollowAccountRow;
-import com.delectable.mobile.ui.common.widget.CircleImageView;
-import com.delectable.mobile.ui.common.widget.FontTextView;
-import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class FollowExpertsRow extends BaseFollowAccountRow {
 
