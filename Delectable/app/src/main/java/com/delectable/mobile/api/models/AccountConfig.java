@@ -81,123 +81,123 @@ public class AccountConfig {
     }
 
 
-    Boolean pn_new_follower;
+    private boolean pn_new_follower;
 
-    Boolean pn_like_on_own_wine;
+    private boolean pn_like_on_own_wine;
 
-    Boolean pn_purchase_offer_made;
+    private boolean pn_purchase_offer_made;
 
-    Boolean pn_experiment;
+    private boolean pn_experiment;
 
-    Integer tagging_test;
+    private int tagging_test;
 
-    Boolean pn_comment_response;
+    private boolean pn_comment_response;
 
-    Boolean passive_vintank_sharing;
+    private boolean passive_vintank_sharing;
 
-    Boolean pn_capture_transcribed;
+    private boolean pn_capture_transcribed;
 
-    Boolean pn_tagged;
+    private boolean pn_tagged;
 
-    Boolean pn_comment_on_own_wine;
+    private boolean pn_comment_on_own_wine;
 
-    Boolean passive_og_sharing;
+    private boolean passive_og_sharing;
 
-    Boolean pn_friend_joined;
+    private boolean pn_friend_joined;
 
-    public Boolean getPnNewFollower() {
+    public boolean getPnNewFollower() {
         return pn_new_follower;
     }
 
-    public void setPnNewFollower(Boolean pn_new_follower) {
+    public void setPnNewFollower(boolean pn_new_follower) {
         this.pn_new_follower = pn_new_follower;
     }
 
-    public Boolean getPnLikeOnOwnWine() {
+    public boolean getPnLikeOnOwnWine() {
         return pn_like_on_own_wine;
     }
 
-    public void setPnLikeOnOwnWine(Boolean pn_like_on_own_wine) {
+    public void setPnLikeOnOwnWine(boolean pn_like_on_own_wine) {
         this.pn_like_on_own_wine = pn_like_on_own_wine;
     }
 
-    public Boolean getPnPurchaseOfferMade() {
+    public boolean getPnPurchaseOfferMade() {
         return pn_purchase_offer_made;
     }
 
-    public void setPnPurchaseOfferMade(Boolean pn_purchase_offer_made) {
+    public void setPnPurchaseOfferMade(boolean pn_purchase_offer_made) {
         this.pn_purchase_offer_made = pn_purchase_offer_made;
     }
 
-    public Boolean getPnExperiment() {
+    public boolean getPnExperiment() {
         return pn_experiment;
     }
 
-    public void setPnExperiment(Boolean pn_experiment) {
+    public void setPnExperiment(boolean pn_experiment) {
         this.pn_experiment = pn_experiment;
     }
 
-    public Integer getTaggingTest() {
+    public int getTaggingTest() {
         return tagging_test;
     }
 
-    public void setTaggingTest(Integer tagging_test) {
+    public void setTaggingTest(int tagging_test) {
         this.tagging_test = tagging_test;
     }
 
-    public Boolean getPnCommentResponse() {
+    public boolean getPnCommentResponse() {
         return pn_comment_response;
     }
 
-    public void setPnCommentResponse(Boolean pn_comment_response) {
+    public void setPnCommentResponse(boolean pn_comment_response) {
         this.pn_comment_response = pn_comment_response;
     }
 
-    public Boolean getPassiveVintankSharing() {
+    public boolean getPassiveVintankSharing() {
         return passive_vintank_sharing;
     }
 
-    public void setPassiveVintankSharing(Boolean passive_vintank_sharing) {
+    public void setPassiveVintankSharing(boolean passive_vintank_sharing) {
         this.passive_vintank_sharing = passive_vintank_sharing;
     }
 
-    public Boolean getPnCaptureTranscribed() {
+    public boolean getPnCaptureTranscribed() {
         return pn_capture_transcribed;
     }
 
-    public void setPnCaptureTranscribed(Boolean pn_capture_transcribed) {
+    public void setPnCaptureTranscribed(boolean pn_capture_transcribed) {
         this.pn_capture_transcribed = pn_capture_transcribed;
     }
 
-    public Boolean getPnTagged() {
+    public boolean getPnTagged() {
         return pn_tagged;
     }
 
-    public void setPnTagged(Boolean pn_tagged) {
+    public void setPnTagged(boolean pn_tagged) {
         this.pn_tagged = pn_tagged;
     }
 
-    public Boolean getPnCommentOnOwnWine() {
+    public boolean getPnCommentOnOwnWine() {
         return pn_comment_on_own_wine;
     }
 
-    public void setPnCommentOnOwnWine(Boolean pn_comment_on_own_wine) {
+    public void setPnCommentOnOwnWine(boolean pn_comment_on_own_wine) {
         this.pn_comment_on_own_wine = pn_comment_on_own_wine;
     }
 
-    public Boolean getPassiveOgSharing() {
+    public boolean getPassiveOgSharing() {
         return passive_og_sharing;
     }
 
-    public void setPassiveOgSharing(Boolean passive_og_sharing) {
+    public void setPassiveOgSharing(boolean passive_og_sharing) {
         this.passive_og_sharing = passive_og_sharing;
     }
 
-    public Boolean getPnFriendJoined() {
+    public boolean getPnFriendJoined() {
         return pn_friend_joined;
     }
 
-    public void setPnFriendJoined(Boolean pn_friend_joined) {
+    public void setPnFriendJoined(boolean pn_friend_joined) {
         this.pn_friend_joined = pn_friend_joined;
     }
 }
