@@ -5,7 +5,7 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.models.SearchResult;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.BaseWinesSearch;
+import com.delectable.mobile.model.api.basewines.BaseWinesSearchResponse;
 import com.delectable.mobile.model.api.wines.BaseWineResponse;
 
 import org.json.JSONException;
@@ -25,18 +25,18 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
     public void testParseBaseWineSearchResults() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_search_min_ctx);
-        BaseWinesSearch request = new BaseWinesSearch();
-        SearchResult actualSearchResult = (SearchResult) request.buildResopnseFromJson(json);
+        BaseWinesSearchResponse response = mGson
+                .fromJson(json.toString(), BaseWinesSearchResponse.class);
+        SearchResult<BaseWine> payload = response.getPayload();
 
-        assertEquals("Napa Valley", actualSearchResult.getQ());
-        assertEquals(0, actualSearchResult.getOffset().intValue());
-        assertEquals(2, actualSearchResult.getLimit().intValue());
-        assertEquals(234, actualSearchResult.getSearchTime().intValue());
-        assertEquals(1395, actualSearchResult.getTotal().intValue());
+        assertEquals("Napa Valley", payload.getQ());
+        assertEquals(0, payload.getOffset());
+        assertEquals(2, payload.getLimit());
+        assertEquals(234, payload.getSearchTime());
+        assertEquals(1395, payload.getTotal());
 
-        assertEquals(2, actualSearchResult.getHits().size());
-        SearchHit<BaseWine> actualFirstHit = (SearchHit<BaseWine>) actualSearchResult.getHits()
-                .get(0);
+        assertEquals(2, payload.getHits().size());
+        SearchHit<BaseWine> actualFirstHit = payload.getHits().get(0);
         assertEquals(154.30392, actualFirstHit.getScore());
         assertEquals("base_wine", actualFirstHit.getType());
 
@@ -72,7 +72,6 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_profile_ctx);
 
         BaseWineResponse responseObject = mGson.fromJson(json.toString(), BaseWineResponse.class);
-
         BaseWine actualBaseWine = responseObject.getBaseWine();
 
         assertEquals("5305ba538953f6d73900543d", actualBaseWine.getId());

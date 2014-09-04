@@ -32,36 +32,36 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(false, actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
-        assertEquals(0, actualAccount.getFollowerCount().intValue());
-        assertEquals(2, actualAccount.getFollowingCount().intValue());
-        assertEquals(0, actualAccount.getCaptureCount().intValue());
-        assertEquals(0, actualAccount.getRegionCount().intValue());
-        assertEquals(0, actualAccount.getWishlistCount().intValue());
+        assertEquals(0, actualAccount.getFollowerCount());
+        assertEquals(2, actualAccount.getFollowingCount());
+        assertEquals(0, actualAccount.getCaptureCount());
+        assertEquals(0, actualAccount.getRegionCount());
+        assertEquals(0, actualAccount.getWishlistCount());
         assertEquals("", actualAccount.getUrl());
         assertEquals("https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
                 actualAccount.getPhoto().getUrl());
 
-        assertEquals(false, actualAccount.getAccountConfig().getPassiveOgSharing().booleanValue());
+        assertEquals(false, actualAccount.getAccountConfig().getPassiveOgSharing());
         assertEquals(false,
-                actualAccount.getAccountConfig().getPassiveVintankSharing().booleanValue());
+                actualAccount.getAccountConfig().getPassiveVintankSharing());
         assertEquals(true,
-                actualAccount.getAccountConfig().getPnCaptureTranscribed().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnCommentOnOwnWine().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnCommentResponse().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnExperiment().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnFriendJoined().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnLikeOnOwnWine().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnNewFollower().booleanValue());
+                actualAccount.getAccountConfig().getPnCaptureTranscribed());
+        assertEquals(true, actualAccount.getAccountConfig().getPnCommentOnOwnWine());
+        assertEquals(true, actualAccount.getAccountConfig().getPnCommentResponse());
+        assertEquals(true, actualAccount.getAccountConfig().getPnExperiment());
+        assertEquals(true, actualAccount.getAccountConfig().getPnFriendJoined());
+        assertEquals(true, actualAccount.getAccountConfig().getPnLikeOnOwnWine());
+        assertEquals(true, actualAccount.getAccountConfig().getPnNewFollower());
         assertEquals(true,
-                actualAccount.getAccountConfig().getPnPurchaseOfferMade().booleanValue());
-        assertEquals(true, actualAccount.getAccountConfig().getPnTagged().booleanValue());
-        assertEquals(0, actualAccount.getAccountConfig().getTaggingTest().intValue());
+                actualAccount.getAccountConfig().getPnPurchaseOfferMade());
+        assertEquals(true, actualAccount.getAccountConfig().getPnTagged());
+        assertEquals(0, actualAccount.getAccountConfig().getTaggingTest());
 
         assertEquals("email", actualAccount.getIdentifiers().get(0).getType());
         assertEquals("537e2f09753490201d000851", actualAccount.getIdentifiers().get(0).getId());
         assertEquals("adam@ad60.com", actualAccount.getIdentifiers().get(0).getString());
-        assertEquals(false, actualAccount.getIdentifiers().get(0).getVerified().booleanValue());
-        assertEquals(true, actualAccount.getIdentifiers().get(0).getPrimary().booleanValue());
+        assertEquals(false, actualAccount.getIdentifiers().get(0).getVerified());
+        assertEquals(true, actualAccount.getIdentifiers().get(0).getPrimary());
 
         assertEquals("CALIFORNIA", actualAccount.getSourcingState());
         assertEquals(0, actualAccount.getShippingAddresses().size());
@@ -70,11 +70,11 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
         assertEquals(0, actualAccount.getActivityFeedTsLast());
         assertEquals(true, actualAccount.getFtueCompleted());
-        assertEquals(true, actualAccount.getLocalNotifs().getSendLnOne().booleanValue());
-        assertEquals(true, actualAccount.getLocalNotifs().getSendLnTwo().booleanValue());
-        assertEquals(false, actualAccount.getLocalNotifs().getSendLnThree().booleanValue());
-        assertEquals(false, actualAccount.getLocalNotifs().getSendLnFour().booleanValue());
-        assertEquals(false, actualAccount.getLocalNotifs().getSendLnFive().booleanValue());
+        assertEquals(true, actualAccount.getLocalNotifs().getSendLnOne());
+        assertEquals(true, actualAccount.getLocalNotifs().getSendLnTwo());
+        assertEquals(false, actualAccount.getLocalNotifs().getSendLnThree());
+        assertEquals(false, actualAccount.getLocalNotifs().getSendLnFour());
+        assertEquals(false, actualAccount.getLocalNotifs().getSendLnFive());
     }
 
     public void testParseAccountsMyProfileCtx() throws JSONException {
@@ -90,11 +90,11 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(false, actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
-        assertEquals(0, actualAccount.getFollowerCount().intValue());
-        assertEquals(2, actualAccount.getFollowingCount().intValue());
-        assertEquals(0, actualAccount.getCaptureCount().intValue());
-        assertEquals(0, actualAccount.getRegionCount().intValue());
-        assertEquals(0, actualAccount.getWishlistCount().intValue());
+        assertEquals(0, actualAccount.getFollowerCount());
+        assertEquals(2, actualAccount.getFollowingCount());
+        assertEquals(0, actualAccount.getCaptureCount());
+        assertEquals(0, actualAccount.getRegionCount());
+        assertEquals(0, actualAccount.getWishlistCount());
         assertEquals("", actualAccount.getUrl());
         assertEquals("https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
                 actualAccount.getPhoto().getUrl());
@@ -116,11 +116,11 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(false, actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
-        assertEquals(2, actualAccount.getFollowerCount().intValue());
-        assertEquals(6, actualAccount.getFollowingCount().intValue());
-        assertEquals(39, actualAccount.getCaptureCount().intValue());
-        assertEquals(30, actualAccount.getRegionCount().intValue());
-        assertEquals(0, actualAccount.getWishlistCount().intValue());
+        assertEquals(2, actualAccount.getFollowerCount());
+        assertEquals(6, actualAccount.getFollowingCount());
+        assertEquals(39, actualAccount.getCaptureCount());
+        assertEquals(30, actualAccount.getRegionCount());
+        assertEquals(0, actualAccount.getWishlistCount());
         assertEquals("", actualAccount.getUrl());
         assertEquals("http://graph.facebook.com/1580152674/picture?width=200",
                 actualAccount.getPhoto().getUrl());

@@ -2,24 +2,24 @@ package com.delectable.mobile.api.models;
 
 public class PaymentMethod {
 
-    String id;
+    private String id;
 
-    Boolean primary;
+    private boolean primary;
 
-    String last_four;
+    private String last_four;
 
-    String type;
+    private String type;
 
-    String expiration;
+    private String expiration;
 
     // Note: These should never be persisted locally
-    String number;
+    private String number;
 
-    String exp_month;
+    private String exp_month;
 
-    String exp_year;
+    private String exp_year;
 
-    String cvc;
+    private String cvc;
 
     public String getId() {
         return id;
@@ -29,11 +29,11 @@ public class PaymentMethod {
         this.id = id;
     }
 
-    public Boolean getPrimary() {
+    public boolean getPrimary() {
         return primary;
     }
 
-    public void setPrimary(Boolean primary) {
+    public void setPrimary(boolean primary) {
         this.primary = primary;
     }
 

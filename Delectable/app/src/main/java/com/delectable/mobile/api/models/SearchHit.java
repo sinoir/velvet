@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.models;
 
-public class SearchHit<T extends BaseResponse> {
+public class SearchHit<T> {
 
-    String type;
+    private String type;
 
-    Double score;
+    private double score;
 
-    T object;
+    private T object;
 
     public String getType() {
         return type;
@@ -20,7 +20,7 @@ public class SearchHit<T extends BaseResponse> {
         return score;
     }
 
-    public void setScore(Double score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

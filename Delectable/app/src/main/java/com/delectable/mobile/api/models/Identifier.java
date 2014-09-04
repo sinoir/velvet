@@ -11,15 +11,15 @@ public class Identifier {
         public static final String PHONE = "phone";
     }
 
-    String id;
+    private String id;
 
-    Boolean primary;
+    private boolean primary;
 
-    String type;
+    private String type;
 
-    Boolean verified;
+    private boolean verified;
 
-    String string;
+    private String string;
 
     public String getId() {
         return id;
@@ -29,11 +29,11 @@ public class Identifier {
         this.id = id;
     }
 
-    public Boolean getPrimary() {
+    public boolean getPrimary() {
         return primary;
     }
 
-    public void setPrimary(Boolean primary) {
+    public void setPrimary(boolean primary) {
         this.primary = primary;
     }
 
@@ -45,11 +45,11 @@ public class Identifier {
         this.type = type;
     }
 
-    public Boolean getVerified() {
+    public boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 

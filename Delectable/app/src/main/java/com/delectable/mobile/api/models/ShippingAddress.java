@@ -2,29 +2,29 @@ package com.delectable.mobile.api.models;
 
 public class ShippingAddress {
 
-    String id;
+    private String id;
 
-    Boolean primary;
+    private boolean primary;
 
-    String title;
+    private String title;
 
-    String fname;
+    private String fname;
 
-    String lname;
+    private String lname;
 
-    String phone;
+    private String phone;
 
-    String email;
+    private String email;
 
-    String addr1;
+    private String addr1;
 
-    String addr2;
+    private String addr2;
 
-    String city;
+    private String city;
 
-    String state;
+    private String state;
 
-    String zip;
+    private String zip;
 
     public String getId() {
         return id;
@@ -34,11 +34,11 @@ public class ShippingAddress {
         this.id = id;
     }
 
-    public Boolean getPrimary() {
+    public boolean getPrimary() {
         return primary;
     }
 
-    public void setPrimary(Boolean primary) {
+    public void setPrimary(boolean primary) {
         this.primary = primary;
     }
 

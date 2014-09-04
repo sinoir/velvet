@@ -3,6 +3,7 @@ package com.delectable.mobile.di;
 import com.delectable.mobile.App;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.BaseWineController;
+import com.delectable.mobile.controllers.BaseWinesController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
@@ -25,11 +26,13 @@ import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.jobs.accounts.SearchAccountsJob;
 import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
+import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
@@ -64,6 +67,8 @@ import com.delectable.mobile.ui.profile.fragment.RecentCapturesTabFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
+import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
+import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
@@ -95,6 +100,8 @@ import de.greenrobot.event.EventBus;
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
                 WineCaptureSubmitFragment.class,
+                SearchWinesTabFragment.class,
+                SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
                 // Models
                 AccountModel.class,
@@ -135,14 +142,17 @@ import de.greenrobot.event.EventBus;
                 UpdateIdentifierJob.class,
                 RemoveIdentifierJob.class,
                 AssociateFacebookJob.class,
+                SearchWinesJob.class,
+                SearchAccountsJob.class,
                 FetchBaseWineJob.class,
                 // Controllers
                 AccountController.class,
+                BaseWinesController.class,
                 CaptureController.class,
                 RegistrationController.class,
                 FoursquareController.class,
                 WineScanController.class,
-                BaseWineController.class,
+                BaseWineController.class
         }
 )
 public class AppModule {

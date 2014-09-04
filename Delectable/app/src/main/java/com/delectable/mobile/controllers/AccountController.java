@@ -12,11 +12,13 @@ import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.jobs.accounts.SearchAccountsJob;
 import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
+import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -57,6 +59,10 @@ public class AccountController {
 
     public void fetchAccountsFromContacts() {
         mJobManager.addJobInBackground(new FetchAccountsFromContactsJob());
+    }
+
+    public void searchAccounts(String query, int offset, int limit) {
+        mJobManager.addJobInBackground(new SearchAccountsJob(query, offset, limit));
     }
 
     //region Settings Screen
