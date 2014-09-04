@@ -3,7 +3,6 @@ package com.delectable.mobile.di;
 import com.delectable.mobile.App;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.BaseWineController;
-import com.delectable.mobile.controllers.BaseWinesController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
