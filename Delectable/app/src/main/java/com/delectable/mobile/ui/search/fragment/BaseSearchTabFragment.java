@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.search.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 
@@ -16,6 +17,7 @@ public abstract class BaseSearchTabFragment extends BaseFragment implements Sear
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         setHasOptionsMenu(true);
     }
 
