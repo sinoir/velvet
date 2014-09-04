@@ -68,7 +68,7 @@ public class SearchResult<T> extends BaseResponse {
 
     @Override
     public String toString() {
-        return "BaseSearch{" +
+        return "SearchResult{" +
                 "q='" + q + '\'' +
                 ", offset=" + offset +
                 ", limit=" + limit +

@@ -26,6 +26,7 @@ import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.jobs.accounts.SearchAccountsJob;
 import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
@@ -142,6 +143,7 @@ import de.greenrobot.event.EventBus;
                 RemoveIdentifierJob.class,
                 AssociateFacebookJob.class,
                 SearchWinesJob.class,
+                SearchAccountsJob.class,
                 FetchBaseWineJob.class,
                 // Controllers
                 AccountController.class,
@@ -150,7 +152,7 @@ import de.greenrobot.event.EventBus;
                 RegistrationController.class,
                 FoursquareController.class,
                 WineScanController.class,
-                BaseWineController.class,
+                BaseWineController.class
         }
 )
 public class AppModule {

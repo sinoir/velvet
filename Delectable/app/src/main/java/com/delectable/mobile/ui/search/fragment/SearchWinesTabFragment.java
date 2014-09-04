@@ -42,6 +42,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment {
     }
 
     public void onEventMainThread(SearchWinesEvent event) {
+        //TODO handle response
         Log.d(TAG + ".onEventMainThread", "SearchWineEvent");
         if (event.isSuccessful()) {
             Log.d(TAG + ".SearchWineEvent", event.getResult().getHits().toString());
