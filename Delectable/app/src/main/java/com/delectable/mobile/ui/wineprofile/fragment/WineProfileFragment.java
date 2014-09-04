@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.wineprofile.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
@@ -10,9 +11,11 @@ import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.BaseWinesContext;
 import com.delectable.mobile.api.requests.CaptureNotesRequest;
 import com.delectable.mobile.api.requests.HelpfulActionRequest;
+import com.delectable.mobile.controllers.BaseWineController;
+import com.delectable.mobile.data.BaseWineModel;
+import com.delectable.mobile.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
@@ -43,6 +46,8 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler {
@@ -60,6 +65,12 @@ public class WineProfileFragment extends BaseFragment implements
     private static final String sArgsVintageId = "vintageId";
 
     private static final int CHOOSE_VINTAGE_DIALOG = 1;
+
+    @Inject
+    BaseWineController mBaseWineController;
+
+    @Inject
+    BaseWineModel mBaseWineModel;
 
     private View mVarietalContainer;
 
@@ -130,6 +141,7 @@ public class WineProfileFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         mNetworkController = new BaseNetworkController(getActivity());
         Bundle args = getArguments();
         if (args != null) {
@@ -138,6 +150,9 @@ public class WineProfileFragment extends BaseFragment implements
 
             mBaseWineId = args.getString(sArgsBaseWineId);
             mVintageId = args.getString(sArgsVintageId);
+        }
+        if (mBaseWineId == null && mWineProfile != null) {
+            mBaseWineId = mWineProfile.getBaseWineId();
         }
     }
 
@@ -187,7 +202,6 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void updateBannerData() {
-        // TODO: Fix when getting data from API.
         if (mWineProfile != null && mCapturePhotoHash != null) {
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         }
@@ -201,8 +215,9 @@ public class WineProfileFragment extends BaseFragment implements
         if (mBaseWine == null) {
             loadBaseWineData();
         }
+        mBaseWineController.fetchBaseWine(mBaseWineId);
         if (mCaptureNoteListing == null) {
-            loadCaptureNotesData(IdType.BASE_WINE, mWineProfile.getBaseWineId());
+            loadCaptureNotesData(IdType.BASE_WINE, mBaseWineId);
         }
     }
 
@@ -225,25 +240,34 @@ public class WineProfileFragment extends BaseFragment implements
 
     private void loadBaseWineData() {
         //retrieve full base wine information
-        BaseWinesContext request = new BaseWinesContext();
-        request.setId(mWineProfile.getBaseWineId());
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        mBaseWine = (BaseWine) result;
-                        updateBaseWineData();
-                    }
+        mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
+        if (mBaseWine == null) {
+            return;
+        }
+        if (mBaseWine.getWineProfiles() != null
+                && mBaseWine.getWineProfiles().size() > 0) {
+            // TODO: Loop Through Wine Profiles to get Vintage.  Will require this for price / purchasing.
+            // TODO: Possibly create a helper method in BaseWine: mBaseWine.getWineByVintage("")
+            mWineProfile = mBaseWine.getWineProfiles().get(0);
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
+        }
+        if (mCapturePhotoHash == null) {
+            mCapturePhotoHash = mBaseWine.getPhoto();
+        }
+        updateBannerData();
+        updateBaseWineData();
+    }
+
+    public void onEventMainThread(UpdatedBaseWineEvent event) {
+        if (!mBaseWineId.equals(event.getBaseWineId())) {
+            return;
+        }
+
+        if (event.isSuccessful()) {
+            loadBaseWineData();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
     }
 
     /**
@@ -364,6 +388,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     private void updateCaptureNotesData() {
         mCaptureNotes.clear();
+        // TODO : Fix , this shouldn't be null
+        if (mCaptureNoteListing == null) {
+            return;
+        }
         mCaptureNotes.addAll(mCaptureNoteListing.getUpdates());
         mAdapter.notifyDataSetChanged();
     }

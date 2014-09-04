@@ -1,15 +1,22 @@
 package com.delectable.mobile.jobs.scanwinelabel;
 
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.model.api.scanwinelabels.PhotoUploadRequest;
 import com.delectable.mobile.model.api.scanwinelabels.LabelScanResponse;
+import com.delectable.mobile.model.api.scanwinelabels.PhotoUploadRequest;
 
 import android.util.Log;
+
+import javax.inject.Inject;
 
 public class IdentifyLabelJob extends BasePhotoUploadJob {
 
     private static final String TAG = IdentifyLabelJob.class.getSimpleName();
+
+    @Inject
+    BaseWineModel mBaseWineModel;
 
     public IdentifyLabelJob(byte[] imageData) {
         super(imageData);
@@ -27,9 +34,15 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
         String endpoint = "/label_scans/identify";
         ProvisionCapture provisionCapture = uploadImage();
         PhotoUploadRequest request = new PhotoUploadRequest(provisionCapture);
+        request.setContext("profile");
         LabelScanResponse response = getNetworkClient().post(endpoint, request,
                 LabelScanResponse.class);
 
+        if (response.getLabelScan() != null && response.getLabelScan().getBaseWineMatches() != null) {
+            for (BaseWine baseWine : response.getLabelScan().getBaseWineMatches()) {
+                mBaseWineModel.saveBaseWine(baseWine);
+            }
+        }
         Log.d(TAG, "Scanneed label Payload: " + response.getLabelScan());
         getEventBus().post(new IdentifyLabelScanEvent(response.getLabelScan()));
     }
