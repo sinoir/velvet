@@ -2,12 +2,14 @@ package com.delectable.mobile.di;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.BaseWinesController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.data.CaptureDetailsModel;
@@ -46,6 +48,7 @@ import com.delectable.mobile.jobs.scanwinelabel.AddCaptureFromPendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUploadJob;
 import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
+import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
@@ -67,6 +70,7 @@ import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
 
@@ -97,11 +101,13 @@ import de.greenrobot.event.EventBus;
                 WineCaptureSubmitFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
+                WineProfileFragment.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
                 CaptureDetailsListingModel.class,
                 DeviceContactsModel.class,
+                BaseWineModel.class,
                 // Jobs
                 BaseJob.class,
                 FetchFollowerFeedJob.class,
@@ -136,13 +142,15 @@ import de.greenrobot.event.EventBus;
                 RemoveIdentifierJob.class,
                 AssociateFacebookJob.class,
                 SearchWinesJob.class,
+                FetchBaseWineJob.class,
                 // Controllers
                 AccountController.class,
                 BaseWinesController.class,
                 CaptureController.class,
                 RegistrationController.class,
                 FoursquareController.class,
-                WineScanController.class
+                WineScanController.class,
+                BaseWineController.class,
         }
 )
 public class AppModule {

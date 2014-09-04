@@ -5,8 +5,8 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.models.SearchResult;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.BaseWinesContext;
 import com.delectable.mobile.model.api.basewines.BaseWinesSearchResponse;
+import com.delectable.mobile.model.api.wines.BaseWineResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,8 +70,9 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
     public void testParseBaseWineProfile() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_profile_ctx);
-        BaseWinesContext request = new BaseWinesContext();
-        BaseWine actualBaseWine = (BaseWine) request.buildResopnseFromJson(json);
+
+        BaseWineResponse responseObject = mGson.fromJson(json.toString(), BaseWineResponse.class);
+        BaseWine actualBaseWine = responseObject.getBaseWine();
 
         assertEquals("5305ba538953f6d73900543d", actualBaseWine.getId());
         assertEquals(1, actualBaseWine.getRatingsSummary().getAllCount());
