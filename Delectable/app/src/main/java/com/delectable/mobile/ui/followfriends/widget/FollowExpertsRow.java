@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.followfriends.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.ui.common.widget.BaseFollowAccountRow;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -16,19 +17,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class FollowExpertsRow extends RelativeLayout {
+public class FollowExpertsRow extends BaseFollowAccountRow {
 
-    @InjectView(R.id.profile_image)
-    protected CircleImageView mProfileImage;
-
-    @InjectView(R.id.name)
-    protected FontTextView mName;
-
-    @InjectView(R.id.influencer_titles)
-    protected FontTextView mInfluencerTitles;
-
-    @InjectView(R.id.follow_button)
-    protected ImageButton mFollowButton;
 
     private AccountMinimal mAccount;
 
@@ -44,20 +34,10 @@ public class FollowExpertsRow extends RelativeLayout {
 
     public FollowExpertsRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        View.inflate(context, R.layout.row_find_experts, this);
-        ButterKnife.inject(this);
     }
 
     public void setActionsHandler(FollowActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
-    }
-
-    private void updateData(String profileImageUrl, String name, String influencerTitles,
-            boolean isFollowing) {
-        ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mProfileImage);
-        mName.setText(name);
-        mInfluencerTitles.setText(influencerTitles);
-        mFollowButton.setSelected(isFollowing);
     }
 
     public void updateData(AccountMinimal account) {
@@ -68,9 +48,9 @@ public class FollowExpertsRow extends RelativeLayout {
                 account.isUserRelationshipTypeFollowing());
     }
 
-    @OnClick(R.id.follow_button)
+    @Override
     protected void onFollowButtonClick(ImageButton v) {
-        v.setSelected(!v.isSelected());
+        super.onFollowButtonClick(v);
         if (mActionsHandler != null) {
             mActionsHandler.toggleFollow(mAccount, v.isSelected());
         }
