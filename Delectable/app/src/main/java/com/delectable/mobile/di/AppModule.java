@@ -146,7 +146,6 @@ import de.greenrobot.event.EventBus;
                 FetchBaseWineJob.class,
                 // Controllers
                 AccountController.class,
-                BaseWinesController.class,
                 CaptureController.class,
                 RegistrationController.class,
                 FoursquareController.class,
