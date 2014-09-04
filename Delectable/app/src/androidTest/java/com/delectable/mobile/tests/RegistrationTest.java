@@ -42,31 +42,31 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         assertFalse(actualAccount.isInfluencer());
         assertEquals("", actualAccount.getInfluencerTitles().get(0));
         assertEquals("", actualAccount.getBio());
-        assertEquals(0, actualAccount.getFollowerCount().intValue());
-        assertEquals(0, actualAccount.getFollowerCount().intValue());
-        assertEquals(0, actualAccount.getCaptureCount().intValue());
-        assertEquals(0, actualAccount.getRegionCount().intValue());
-        assertEquals(0, actualAccount.getWishlistCount().intValue());
+        assertEquals(0, actualAccount.getFollowerCount());
+        assertEquals(0, actualAccount.getFollowerCount());
+        assertEquals(0, actualAccount.getCaptureCount());
+        assertEquals(0, actualAccount.getRegionCount());
+        assertEquals(0, actualAccount.getWishlistCount());
         assertEquals("", actualAccount.getUrl());
         assertEquals("https://s3.amazonaws.com/delectableStockPhotos/no_photo.png",
                 actualAccount.getPhoto().getUrl());
-        assertEquals(false, actualAConfig.getPassiveOgSharing().booleanValue());
-        assertEquals(false, actualAConfig.getPassiveVintankSharing().booleanValue());
-        assertEquals(true, actualAConfig.getPnCaptureTranscribed().booleanValue());
-        assertEquals(true, actualAConfig.getPnCommentOnOwnWine().booleanValue());
-        assertEquals(true, actualAConfig.getPnCommentResponse().booleanValue());
-        assertEquals(true, actualAConfig.getPnExperiment().booleanValue());
-        assertEquals(true, actualAConfig.getPnFriendJoined().booleanValue());
-        assertEquals(true, actualAConfig.getPnLikeOnOwnWine().booleanValue());
-        assertEquals(true, actualAConfig.getPnNewFollower().booleanValue());
-        assertEquals(true, actualAConfig.getPnPurchaseOfferMade().booleanValue());
-        assertEquals(true, actualAConfig.getPnTagged().booleanValue());
-        assertEquals(0, actualAConfig.getTaggingTest().intValue());
+        assertEquals(false, actualAConfig.getPassiveOgSharing());
+        assertEquals(false, actualAConfig.getPassiveVintankSharing());
+        assertEquals(true, actualAConfig.getPnCaptureTranscribed());
+        assertEquals(true, actualAConfig.getPnCommentOnOwnWine());
+        assertEquals(true, actualAConfig.getPnCommentResponse());
+        assertEquals(true, actualAConfig.getPnExperiment());
+        assertEquals(true, actualAConfig.getPnFriendJoined());
+        assertEquals(true, actualAConfig.getPnLikeOnOwnWine());
+        assertEquals(true, actualAConfig.getPnNewFollower());
+        assertEquals(true, actualAConfig.getPnPurchaseOfferMade());
+        assertEquals(true, actualAConfig.getPnTagged());
+        assertEquals(0, actualAConfig.getTaggingTest());
         assertEquals("email", actualIdentifier.getType());
         assertEquals("537e2f09753490201d000851", actualIdentifier.getId());
         assertEquals("adam@ad60.com", actualIdentifier.getString());
-        assertEquals(false, actualIdentifier.getVerified().booleanValue());
-        assertEquals(true, actualIdentifier.getPrimary().booleanValue());
+        assertEquals(false, actualIdentifier.getVerified());
+        assertEquals(true, actualIdentifier.getPrimary());
 
         assertEquals(0, actualAccount.getShippingAddresses().size());
         assertEquals(0, actualAccount.getPaymentMethods().size());
@@ -74,11 +74,11 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         // TODO: custom parse these
         assertEquals(0, actualAccount.getActivityFeedTsLast());
         assertEquals(false, actualAccount.getFtueCompleted());
-        assertEquals(true, actualNotif.getSendLnOne().booleanValue());
-        assertEquals(true, actualNotif.getSendLnTwo().booleanValue());
-        assertEquals(false, actualNotif.getSendLnThree().booleanValue());
-        assertEquals(false, actualNotif.getSendLnFour().booleanValue());
-        assertEquals(false, actualNotif.getSendLnFive().booleanValue());
+        assertEquals(true, actualNotif.getSendLnOne());
+        assertEquals(true, actualNotif.getSendLnTwo());
+        assertEquals(false, actualNotif.getSendLnThree());
+        assertEquals(false, actualNotif.getSendLnFour());
+        assertEquals(false, actualNotif.getSendLnFive());
     }
 
     private Registration buildTestModel() {

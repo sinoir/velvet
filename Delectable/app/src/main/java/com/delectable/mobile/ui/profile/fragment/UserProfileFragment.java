@@ -307,8 +307,7 @@ public class UserProfileFragment extends BaseFragment implements
 
         String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
         String imageUrl = mUserAccount.getPhoto().getUrl();
-        int numCaptures = mUserAccount.getCaptureCount() != null ?
-                mUserAccount.getCaptureCount() : 0;
+        int numCaptures = mUserAccount.getCaptureCount();
 
         mProfileHeaderView.setWineCount(numCaptures);
 
