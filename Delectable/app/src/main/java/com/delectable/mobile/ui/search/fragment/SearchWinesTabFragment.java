@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
-import com.delectable.mobile.controllers.BaseWinesController;
+import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.events.basewines.SearchWinesEvent;
 
 import android.os.Bundle;
@@ -18,7 +18,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment {
     private static final String TAG = SearchWinesTabFragment.class.getSimpleName();
 
     @Inject
-    BaseWinesController mBaseWinesController;
+    BaseWineController mBaseWinesController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

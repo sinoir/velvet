@@ -1,5 +1,6 @@
 package com.delectable.mobile.controllers;
 
+import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
 import com.path.android.jobqueue.JobManager;
 
@@ -12,6 +13,10 @@ public class BaseWineController {
 
     public void fetchBaseWine(String baseWineId) {
         mJobManager.addJobInBackground(new FetchBaseWineJob(baseWineId));
+    }
+
+    public void searchWine(String query, int offset, int limit) {
+        mJobManager.addJobInBackground(new SearchWinesJob(query, offset, limit));
     }
 
 }
