@@ -31,7 +31,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment {
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mBaseWinesController.searchWine(query, 0, 20);
+        mBaseWinesController.searchWine(query, 0, 20); //TODO more than 20 results/pagination?
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
         return false;

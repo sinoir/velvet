@@ -3,13 +3,18 @@ package com.delectable.mobile.ui.search.fragment;
 
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.SearchAccountsEvent;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.search.widget.AccountSearchAdapter;
 import com.delectable.mobile.ui.search.widget.SearchPeopleRow;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -28,9 +33,20 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
         return mAdapter;
     }
 
+    /**
+     * these maps are used to retain references to Account objects expecting updates to their
+     * relationship status. This way, when the FollowAccountEvent returns, we don't have to iterate
+     * through our account list to find the account object to modify.
+     */
+    private HashMap<String, AccountSearch> mAccountsExpectingUpdate
+            = new HashMap<String, AccountSearch>();
+
+    private HashMap<String, Integer> mAccountExpectedRelationship
+            = new HashMap<String, Integer>();
+
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mAccountController.searchAccounts(query, 0, 20);
+        mAccountController.searchAccounts(query, 0, 20); //TODO more than 20 results/pagination?
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
         return false;
@@ -56,15 +72,38 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         AccountSearch account = mAdapter.getItem(position);
-        goToUserProfile(account);
+        launchUserProfile(account);
     }
 
-    private void goToUserProfile(AccountSearch account) {
-        //TODO implement
+    private void launchUserProfile(AccountSearch account) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, account.getId());
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void toggleFollow(AccountSearch account, boolean isFollowing) {
-        //TODO implement
+        int relationship = isFollowing ? AccountSearch.RELATION_TYPE_FOLLOWING
+                : AccountSearch.RELATION_TYPE_NONE;
+        mAccountsExpectingUpdate.put(account.getId(), account);
+        mAccountExpectedRelationship.put(account.getId(), relationship);
+        mAccountController.followAccount(account.getId(), isFollowing);
+    }
+
+    public void onEventMainThread(FollowAccountEvent event) {
+        String accountId = event.getAccountId();
+        AccountSearch account = mAccountsExpectingUpdate.remove(accountId);
+        int relationship = mAccountExpectedRelationship.remove(accountId);
+        if (account == null) {
+            return; //account didn't exist in the hashmap, means this event wasn't called from this fragment
+        }
+        if (event.isSuccessful()) {
+            account.setCurrentUserRelationship(relationship);
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        //will reset following toggle button back to original setting if error
+        getAdapter().notifyDataSetChanged();
     }
 }
