@@ -16,7 +16,7 @@ public class SearchResult<T> extends BaseResponse {
 
     private int search_time;
 
-    ArrayList<SearchHit<T>> hits;
+    private ArrayList<SearchHit<T>> hits;
 
     public String getQ() {
         return q;
