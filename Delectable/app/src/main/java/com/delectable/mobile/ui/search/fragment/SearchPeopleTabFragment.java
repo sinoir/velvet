@@ -1,52 +1,38 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
-import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.SearchAccountsEvent;
 import com.delectable.mobile.ui.search.widget.AccountSearchAdapter;
 import com.delectable.mobile.ui.search.widget.SearchPeopleRow;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.BaseAdapter;
 
 import javax.inject.Inject;
 
 public class SearchPeopleTabFragment extends BaseSearchTabFragment
-        implements AdapterView.OnItemClickListener, SearchPeopleRow.ActionsHandler {
+        implements SearchPeopleRow.ActionsHandler {
 
     private static final String TAG = SearchPeopleTabFragment.class.getSimpleName();
 
     private AccountSearchAdapter mAdapter = new AccountSearchAdapter(this);
 
     @Inject
-    AccountController mAccountController;
+    protected AccountController mAccountController;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-
-        ListView listview = (ListView) inflater.inflate(R.layout.fragment_listview, container,
-                false);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(this);
-
-        //TODO make better one, no designs for this empty state
-        TextView tv = new TextView(getActivity());
-        tv.setText(TAG);
-        listview.setEmptyView(tv);
-        return listview;
+    protected BaseAdapter getAdapter() {
+        return mAdapter;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
         mAccountController.searchAccounts(query, 0, 20);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyStateTextView.setVisibility(View.GONE);
         return false;
     }
 
@@ -56,11 +42,14 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
     }
 
     public void onEventMainThread(SearchAccountsEvent event) {
+        mProgressBar.setVisibility(View.GONE);
         if (event.isSuccessful()) {
             mAdapter.setHits(event.getResult().getHits());
             mAdapter.notifyDataSetChanged();
+            mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
         } else {
             showToastError(event.getErrorMessage());
+            mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet
         }
     }
 

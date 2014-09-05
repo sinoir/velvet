@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="@color/d_white"
+        android:divider="@color/d_light_gray"
+        android:dividerHeight="1dp" />
+
+    <!--TODO test on android L, this is using negative margin to make the progress bar appear more compact -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="-8dp"
+        android:layout_marginTop="-6dp"
+        android:indeterminateOnly="true"
+        android:visibility="gone" />
+
+    <!--TODO placeholder textview, no designs for empty state -->
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/empty_state_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:text="Start a new search"
+        android:textColor="@color/d_black"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:fontName="whitney_medium" />
+</RelativeLayout>

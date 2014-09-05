@@ -4,12 +4,10 @@ package com.delectable.mobile.ui.search.fragment;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.events.basewines.SearchWinesEvent;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 
 import javax.inject.Inject;
 
@@ -21,12 +19,8 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment {
     BaseWineController mBaseWinesController;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-
-        TextView tv = new TextView(getActivity());
-        tv.setText(TAG);
-        return tv;
+    protected BaseAdapter getAdapter() {
+        return null;
     }
 
     @Override
@@ -49,5 +43,10 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment {
         } else {
             showToastError(event.getErrorMessage());
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
