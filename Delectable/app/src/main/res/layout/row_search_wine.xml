@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/search_wine_row_height">
+
+    <!--TODO placeholder image for wine? -->
+    <ImageView
+        android:id="@+id/wine_image"
+        android:layout_width="@dimen/search_wine_image_width"
+        android:layout_height="@dimen/search_wine_image_width"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/search_wine_horizontal_spacing"
+        android:src="@color/d_medium_gray" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/producer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/wine_image"
+        android:layout_toRightOf="@+id/wine_image"
+        android:ellipsize="end"
+        android:layout_marginRight="@dimen/search_wine_horizontal_spacing"
+        android:singleLine="true"
+        android:text="La Rame"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="@dimen/search_wine_text_size"
+        app:fontName="whitney_medium_sc" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/wine_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/producer_name"
+        android:layout_toRightOf="@+id/wine_image"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_marginRight="@dimen/search_wine_horizontal_spacing"
+        android:text="Sauvignon Blanc 2012"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/search_wine_text_size"
+        app:fontName="whitney_book" />
+</merge>
