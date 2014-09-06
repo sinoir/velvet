@@ -28,6 +28,8 @@ import butterknife.InjectView;
 public abstract class BaseSearchTabFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 
+    private static final String TAG = BaseSearchTabFragment.class.getSimpleName();
+
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
@@ -49,6 +51,7 @@ public abstract class BaseSearchTabFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // TODO: Custom Back Arrow...
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.search_menu, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();

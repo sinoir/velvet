@@ -44,7 +44,6 @@ public class SearchFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 
         //set up tab icons and fragments
         SlidingPagerAdapter.SlidingPagerItem wines = new SlidingPagerAdapter.SlidingPagerItem(
