@@ -46,6 +46,7 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        super.onQueryTextSubmit(query);
         mAccountController.searchAccounts(query, 0, 20); //TODO more than 20 results/pagination?
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);

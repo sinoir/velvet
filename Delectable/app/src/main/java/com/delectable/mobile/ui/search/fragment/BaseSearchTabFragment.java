@@ -30,6 +30,8 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
     private static final String TAG = BaseSearchTabFragment.class.getSimpleName();
 
+    protected SearchView mSearchView;
+
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
@@ -54,11 +56,15 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.search_menu, menu);
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint(getString(R.string.search_hint));
-        searchView.setOnQueryTextListener(this);
+        mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        mSearchView.setQueryHint(getString(R.string.search_hint));
+        mSearchView.setOnQueryTextListener(this);
         //TODO platform bug with setIconifiedByDefault, makes searchview look wierd
         //searchView.setIconifiedByDefault(false);
+
+        if (!getAdapter().isEmpty()) {
+            mSearchView.clearFocus();
+        }
     }
 
     @Override
@@ -76,4 +82,16 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         mListView.setEmptyView(mEmptyStateTextView);
         return layout;
     }
+
+    /**
+     * Subclasses should call super on this method to ensure that the keyboard gets hidden when a
+     * query is made.
+     */
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mSearchView.clearFocus(); //hides keyboard
+        return false;
+    }
+
+
 }
