@@ -1,39 +1,62 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
+import com.delectable.mobile.api.models.AccountSearch;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.events.basewines.SearchWinesEvent;
+import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.search.widget.WineSearchAdapter;
+import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class SearchWinesTabFragment extends BaseSearchTabFragment {
+public class SearchWinesTabFragment extends BaseSearchTabFragment implements InfiniteScrollAdapter.ActionsHandler{
 
     private static final String TAG = SearchWinesTabFragment.class.getSimpleName();
 
+    private WineSearchAdapter mAdapter = new WineSearchAdapter(this);
+
     @Inject
-    BaseWineController mBaseWinesController;
+    protected BaseWineController mBaseWinesController;
+
+    //number of items we fetch at a time
+    private final int LIMIT = 20; //TODO 20 items per fetch/more?
+
+    private String mCurrentQuery;
+
+    private boolean mLoadingNextPage = false;
+
+    /**
+     * If zero is returned for the current search query, then we know we've reached the end of the
+     * list. Should disable infinite scroll. Gets reset with each new search.
+     */
+    private boolean mEndOfList = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-
-        TextView tv = new TextView(getActivity());
-        tv.setText(TAG);
-        return tv;
+    protected BaseAdapter getAdapter() {
+        return mAdapter;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.d(TAG + ".onQueryTextSubmit", query);
-        mBaseWinesController.searchWine(query, 0, 20);
-        return false;
+        super.onQueryTextSubmit(query);
+        mEndOfList = false; //new search query, reset this flag
+        mAdapter.getItems().clear(); //clear current data set
+        mCurrentQuery = query;
+        mBaseWinesController.searchWine(query, 0, LIMIT);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyStateTextView.setVisibility(View.GONE);
+        return true;
     }
 
     @Override
@@ -42,12 +65,47 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment {
     }
 
     public void onEventMainThread(SearchWinesEvent event) {
-        //TODO handle response
-        Log.d(TAG + ".onEventMainThread", "SearchWineEvent");
+        mProgressBar.setVisibility(View.GONE);
         if (event.isSuccessful()) {
-            Log.d(TAG + ".SearchWineEvent", event.getResult().getHits().toString());
+
+            ArrayList<SearchHit<BaseWine>> hits = event.getResult().getHits();
+            if (hits.size() == 0) {
+                mEndOfList = true;
+            }
+
+            mAdapter.getItems().addAll(hits);
+            mAdapter.notifyDataSetChanged();
+            mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
         } else {
             showToastError(event.getErrorMessage());
+            mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        BaseWine baseWine = mAdapter.getItem(position);
+        launchWineProfile(baseWine);
+    }
+
+    private void launchWineProfile(BaseWine baseWine) {
+        Intent intent = new Intent();
+        intent.putExtra(WineProfileActivity.PARAMS_BASE_WINE_ID, baseWine.getId());
+        //TODO photohash gets passed in put it doesn't get used with the base_wine_id in WineProfileActivity
+        intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH, (Parcelable)baseWine.getPhoto());
+        intent.setClass(getActivity(), WineProfileActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void shouldLoadNextPage() {
+        if (mEndOfList) {
+            return; //end of list, don't infinite scroll
+        }
+        if (mLoadingNextPage) {
+            return; //current loading next page, don't start next page call yet
+        }
+        mBaseWinesController.searchWine(mCurrentQuery, mAdapter.getCount(), LIMIT);
+        mLoadingNextPage = true;
     }
 }

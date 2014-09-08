@@ -17,6 +17,10 @@ public class SearchAccountsJob extends BaseJob {
 
     private int mLimit;
 
+    /**
+     * @param offset The index of the first item that we want.
+     * @param limit  How many items to retrieve at once.
+     */
     public SearchAccountsJob(String q, int offset, int limit) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
         mQ = q;

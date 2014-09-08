@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -58,6 +60,16 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         super.onCreate(savedInstanceState);
         state = State.created;
         mActionBar = getActivity().getActionBar();
+        setHasOptionsMenu(true);
+    }
+
+    /**
+     * subclasses should call super on this method in order to ensure that the actionbar doesn't
+     * have any menu item artifacts from other fragemnts.
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
     }
 
     @Override

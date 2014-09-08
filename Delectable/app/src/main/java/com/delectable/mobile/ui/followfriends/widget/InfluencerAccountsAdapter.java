@@ -18,7 +18,7 @@ public class InfluencerAccountsAdapter extends BaseAccountsMinimalAdapter {
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             row = (FollowExpertsRow) inflater
-                    .inflate(R.layout.row_find_experts_with_sizing, parent, false);
+                    .inflate(R.layout.row_find_experts_impl, parent, false);
             row.setActionsHandler(mActionsHandler);
         }
         row.updateData((com.delectable.mobile.api.models.AccountMinimal) getItem(position));

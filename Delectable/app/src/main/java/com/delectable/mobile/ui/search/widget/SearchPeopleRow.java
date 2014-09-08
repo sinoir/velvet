@@ -1,40 +1,39 @@
-package com.delectable.mobile.ui.followfriends.widget;
+package com.delectable.mobile.ui.search.widget;
 
-import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.ui.common.widget.BaseFollowAccountRow;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 
-public class FollowExpertsRow extends BaseFollowAccountRow {
+public class SearchPeopleRow extends BaseFollowAccountRow {
 
+    private AccountSearch mAccount;
 
-    private AccountMinimal mAccount;
+    private ActionsHandler mActionsHandler;
 
-    private FollowActionsHandler mActionsHandler;
-
-    public FollowExpertsRow(Context context) {
+    public SearchPeopleRow(Context context) {
         this(context, null);
     }
 
-    public FollowExpertsRow(Context context, AttributeSet attrs) {
+    public SearchPeopleRow(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public FollowExpertsRow(Context context, AttributeSet attrs, int defStyle) {
+    public SearchPeopleRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public void setActionsHandler(FollowActionsHandler actionsHandler) {
+    public void setActionsHandler(ActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 
-    public void updateData(AccountMinimal account) {
+    public void updateData(AccountSearch account) {
         mAccount = account;
         updateData(account.getPhoto().getUrl(),
                 account.getFullName(),
-                account.getInfluencerTitlesString(),
+                account.getBio(),
                 account.isUserRelationshipTypeFollowing());
     }
 
@@ -44,5 +43,10 @@ public class FollowExpertsRow extends BaseFollowAccountRow {
         if (mActionsHandler != null) {
             mActionsHandler.toggleFollow(mAccount, v.isSelected());
         }
+    }
+
+    public interface ActionsHandler {
+
+        public void toggleFollow(AccountSearch account, boolean isFollowing);
     }
 }

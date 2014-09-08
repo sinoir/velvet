@@ -104,6 +104,19 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         return this.child_resolutions.size_blur;
     }
 
+    public String getSmallest() {
+        return this.child_resolutions.getSmallest();
+    }
+
+    public String getLargest() {
+        return this.child_resolutions.getLargest();
+    }
+
+    public String getBestThumb() {
+        return this.child_resolutions.getBestThumb();
+    }
+
+
     @Override
     public String toString() {
         return "PhotoHash{" +
@@ -166,6 +179,59 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
             this.size_450 = size_450;
             this.size_medium = size_medium;
             this.size_blur = size_blur;
+        }
+
+        public String getSmallest() {
+            String[] sizes = {
+                    size_nano,
+                    size_micro,
+                    size_thumb,
+                    size_250,
+                    size_450,
+                    size_medium,
+                    size_blur
+            };
+            return getTopPhoto(sizes);
+        }
+
+        public String getLargest() {
+            String[] sizes = {
+                    size_blur,
+                    size_medium,
+                    size_450,
+                    size_250,
+                    size_thumb,
+                    size_micro,
+                    size_nano
+            };
+            return getTopPhoto(sizes);
+        }
+
+        /**
+         * Returns a thumbnail size photo if it exists, if not then then it returns the next higher
+         * resolution photo.
+         */
+        public String getBestThumb() {
+            String[] sizes = {
+                    size_thumb,
+                    size_250,
+                    size_450,
+                    size_medium,
+                    size_blur
+            };
+            return getTopPhoto(sizes);
+        }
+
+        /**
+         * Returns the first non null photo url.
+         */
+        private String getTopPhoto(String[] photos) {
+            for (String size : photos) {
+                if (size != null && !size.trim().equals("")) {
+                    return size;
+                }
+            }
+            return null;
         }
 
         @Override
