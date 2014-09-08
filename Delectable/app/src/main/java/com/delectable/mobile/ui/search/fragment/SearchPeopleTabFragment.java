@@ -2,9 +2,11 @@ package com.delectable.mobile.ui.search.fragment;
 
 
 import com.delectable.mobile.api.models.AccountSearch;
+import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.SearchAccountsEvent;
+import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.search.widget.AccountSearchAdapter;
 import com.delectable.mobile.ui.search.widget.SearchPeopleRow;
@@ -14,16 +16,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
 
 public class SearchPeopleTabFragment extends BaseSearchTabFragment
-        implements SearchPeopleRow.ActionsHandler {
+        implements SearchPeopleRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
     private static final String TAG = SearchPeopleTabFragment.class.getSimpleName();
 
-    private AccountSearchAdapter mAdapter = new AccountSearchAdapter(this);
+    private AccountSearchAdapter mAdapter = new AccountSearchAdapter(this, this);
 
     @Inject
     protected AccountController mAccountController;
@@ -32,6 +35,20 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
     protected BaseAdapter getAdapter() {
         return mAdapter;
     }
+
+    //number of items we fetch at a time
+    private final int LIMIT = 20; //TODO 20 items per fetch/more?
+
+    private String mCurrentQuery;
+
+    private boolean mLoadingNextPage = false;
+
+    /**
+     * If zero is returned for the current search query, then we know we've reached the end of the
+     * list. Should disable infinite scroll. Gets reset with each new search.
+     */
+    private boolean mEndOfList = false;
+
 
     /**
      * these maps are used to retain references to Account objects expecting updates to their
@@ -47,7 +64,10 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
     @Override
     public boolean onQueryTextSubmit(String query) {
         super.onQueryTextSubmit(query);
-        mAccountController.searchAccounts(query, 0, 20); //TODO more than 20 results/pagination?
+        mEndOfList = false; //new search query, reset this flag
+        mAdapter.getItems().clear(); //clear current data set
+        mCurrentQuery = query;
+        mAccountController.searchAccounts(query, 0, LIMIT);
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
         return false;
@@ -60,8 +80,15 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
 
     public void onEventMainThread(SearchAccountsEvent event) {
         mProgressBar.setVisibility(View.GONE);
+        mLoadingNextPage = false;
         if (event.isSuccessful()) {
-            mAdapter.setHits(event.getResult().getHits());
+
+            ArrayList<SearchHit<AccountSearch>> hits = event.getResult().getHits();
+            if (hits.size() == 0) {
+                mEndOfList = true;
+            }
+
+            mAdapter.getItems().addAll(hits);
             mAdapter.notifyDataSetChanged();
             mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
         } else {
@@ -107,4 +134,17 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
         //will reset following toggle button back to original setting if error
         getAdapter().notifyDataSetChanged();
     }
+
+    @Override
+    public void shouldLoadNextPage() {
+        if (mEndOfList) {
+            return; //end of list, don't infinite scroll
+        }
+        if (mLoadingNextPage) {
+            return; //current loading next page, don't start next page call yet
+        }
+        mAccountController.searchAccounts(mCurrentQuery, mAdapter.getCount(), LIMIT);
+        mLoadingNextPage = true;
+    }
+
 }

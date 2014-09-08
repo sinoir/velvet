@@ -3,53 +3,37 @@ package com.delectable.mobile.ui.search.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.SearchHit;
+import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
-import java.util.ArrayList;
 
 
-public class AccountSearchAdapter extends BaseAdapter {
+public class AccountSearchAdapter extends InfiniteScrollAdapter<SearchHit<AccountSearch>> {
 
-    private ArrayList<SearchHit<AccountSearch>> mHits = new ArrayList<SearchHit<AccountSearch>>();
+    private SearchPeopleRow.ActionsHandler mRowActionsHandler;
 
-    private SearchPeopleRow.ActionsHandler mActionsHandler;
-
-    public AccountSearchAdapter(SearchPeopleRow.ActionsHandler actionsHandler) {
-        mActionsHandler = actionsHandler;
-    }
-
-    public void setHits(ArrayList<SearchHit<AccountSearch>> hits) {
-        mHits = hits;
-    }
-
-
-    @Override
-    public int getCount() {
-        return mHits.size();
+    public AccountSearchAdapter(InfiniteScrollAdapter.ActionsHandler infiniteScrollHandler,
+            SearchPeopleRow.ActionsHandler rowActionsHandler) {
+        super(infiniteScrollHandler);
+        mRowActionsHandler = rowActionsHandler;
     }
 
     @Override
     public AccountSearch getItem(int position) {
-        return mHits.get(position).getObject();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+        return mItems.get(position).getObject();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        SearchPeopleRow row = (SearchPeopleRow) convertView;
+        View view = super.getView(position, convertView, parent);
+        SearchPeopleRow row = (SearchPeopleRow) view;
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             row = (SearchPeopleRow) inflater
                     .inflate(R.layout.row_search_people_impl, parent, false);
-            row.setActionsHandler(mActionsHandler);
+            row.setActionsHandler(mRowActionsHandler);
         }
         row.updateData(getItem(position));
 
