@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -59,6 +60,12 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setOnQueryTextListener(this);
+
+        //programmatically change search close icon, unable to change searchView attributes via xml styles
+        int closeButtonId = mSearchView.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView) mSearchView.findViewById(closeButtonId);
+        closeButton.setImageResource(R.drawable.btn_ab_close_search);
         //TODO platform bug with setIconifiedByDefault, makes searchview look wierd
         //searchView.setIconifiedByDefault(false);
 
