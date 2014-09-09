@@ -5,14 +5,11 @@ import android.os.Parcelable;
 
 public class VarietalsHash implements Parcelable {
 
-    String id;
+    private String id;
 
-    String name;
+    private String name;
 
-    String color;
-
-    public VarietalsHash() {
-    }
+    private String color;
 
     public String getId() {
         return id;

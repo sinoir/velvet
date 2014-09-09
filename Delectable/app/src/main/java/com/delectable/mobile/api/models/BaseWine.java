@@ -209,9 +209,9 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
         super.writeToParcel(dest, flags);
         dest.writeParcelable(this.ratings_summary, 0);
         dest.writeString(this.region_id);
-        dest.writeSerializable(this.region_path);
-        dest.writeSerializable(this.varietal_composition);
-        dest.writeSerializable(this.wine_profiles);
+        dest.writeTypedList(this.region_path);
+        dest.writeTypedList(this.varietal_composition);
+        dest.writeTypedList(this.wine_profiles);
         dest.writeString(this.default_wine_profile_id);
         dest.writeString(this.description);
         dest.writeByte(carbonation ? (byte) 1 : (byte) 0);
@@ -228,9 +228,9 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
         super(in);
         this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
         this.region_id = in.readString();
-        this.region_path = (ArrayList<RegionPath>) in.readSerializable();
-        this.varietal_composition = (ArrayList<VarietalsHash>) in.readSerializable();
-        this.wine_profiles = (ArrayList<WineProfile>) in.readSerializable();
+        in.readTypedList(this.region_path, RegionPath.CREATOR);
+        in.readTypedList(this.varietal_composition, VarietalsHash.CREATOR);
+        in.readTypedList(this.wine_profiles, WineProfile.CREATOR);
         this.default_wine_profile_id = in.readString();
         this.description = in.readString();
         this.carbonation = in.readByte() != 0;
