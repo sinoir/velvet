@@ -16,6 +16,8 @@
     <dimen name="general_icon_size">32dp</dimen>
     <dimen name="circle_pager_indicator_padding">20dp</dimen>
     <dimen name="circle_pager_indicator_radius">4dp</dimen>
+    <dimen name="custom_ab_title_text_size">22sp</dimen>
+    <dimen name="custom_ab_action_text_size">16sp</dimen>
 
     <!-- General Row Unit Spacing -->
     <!-- Used in:
@@ -177,7 +179,6 @@
     <dimen name="search_wine_text_size">16sp</dimen>
 
 
-
     <!-- Settings Screen -->
     <dimen name="settings_view_horizontal_padding">33dp</dimen>
     <dimen name="settings_profile_image_height">83dp</dimen>
@@ -216,6 +217,10 @@
     <dimen name="recent_activity_time_ago_text_size">12sp</dimen>
     <dimen name="recent_activity_right_image_size">25dp</dimen>
     <dimen name="recent_activity_top_padding">10dp</dimen>
+
+    <!-- Capture comment stuff -->
+    <dimen name="capture_comment_post_button_width">51dp</dimen>
+    <dimen name="capture_comment_post_button_height">36dp</dimen>
 
 
 </resources>
