@@ -2,8 +2,6 @@ package com.delectable.mobile.api.models;
 
 import com.delectable.mobile.R;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,64 +10,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class BaseWine extends BaseResponse implements Parcelable {
+public class BaseWine extends BaseWineMinimal implements Parcelable {
 
     private static final int MAX_REGION_PATHS = 4;
 
-    String id;
+    private RatingsSummaryHash ratings_summary;
 
-    RatingsSummaryHash ratings_summary;
+    private String region_id;
 
-    String producer_name;
+    private ArrayList<RegionPath> region_path;
 
-    String name;
+    private ArrayList<VarietalsHash> varietal_composition;
 
-    String region_id;
+    private ArrayList<WineProfile> wine_profiles;
 
-    ArrayList<RegionPath> region_path;
+    private String default_wine_profile_id;
 
-    ArrayList<VarietalsHash> varietal_composition;
+    private String description;
 
-    ArrayList<WineProfile> wine_profiles;
+    private boolean carbonation;
 
-    String default_wine_profile_id;
+    private String sweetness;
 
-    PhotoHash photo;
+    private String color;
 
-    String description;
+    private String forward_id;
 
-    boolean carbonation;
+    private String producer_id;
 
-    String sweetness;
-
-    String color;
-
-    String forward_id;
-
-    String producer_id;
-
-
-    public BaseWine() {
-        //no paramter constructor
-    }
-
-    public static BaseWine buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        BaseWine newResource = null;
-        if (payloadObj != null && payloadObj.optJSONObject("base_wine") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("base_wine"), BaseWine.class);
-        }
-
-        return newResource;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public RatingsSummaryHash getRatingsSummary() {
         return ratings_summary;
@@ -77,22 +45,6 @@ public class BaseWine extends BaseResponse implements Parcelable {
 
     public void setRatingsSummary(RatingsSummaryHash ratings_summary) {
         this.ratings_summary = ratings_summary;
-    }
-
-    public String getProducerName() {
-        return producer_name;
-    }
-
-    public void setProducerName(String producer_name) {
-        this.producer_name = producer_name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getRegionId() {
@@ -136,10 +88,10 @@ public class BaseWine extends BaseResponse implements Parcelable {
         }
 
         int stringResource = R.string.wine_profile_region_path_1_node;
-        if(regions.length==3) {
+        if (regions.length == 3) {
             stringResource = R.string.wine_profile_region_path_3_nodes;
         }
-        if(regions.length==2) {
+        if (regions.length == 2) {
             stringResource = R.string.wine_profile_region_path_2_nodes;
         }
         //regions.length==1 is already taken care of from original assignment
@@ -173,14 +125,6 @@ public class BaseWine extends BaseResponse implements Parcelable {
 
     public void setDefaultWineProfileId(String default_wine_profile_id) {
         this.default_wine_profile_id = default_wine_profile_id;
-    }
-
-    public PhotoHash getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(PhotoHash photo) {
-        this.photo = photo;
     }
 
     public String getDescription() {
@@ -234,23 +178,25 @@ public class BaseWine extends BaseResponse implements Parcelable {
     @Override
     public String toString() {
         return "BaseWine{" +
-                "id='" + id + '\'' +
-                ", ratings_summary=" + ratings_summary +
-                ", producer_name='" + producer_name + '\'' +
-                ", name='" + name + '\'' +
+                "id='" + getId() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", producer_name='" + getProducerName() + '\'' +
+                ", photo=" + getPhoto() +
+                ", context=" + getContext() +
+                ", e_tag=" + getETag() +
+                "ratings_summary=" + ratings_summary +
                 ", region_id='" + region_id + '\'' +
                 ", region_path=" + region_path +
                 ", varietal_composition=" + varietal_composition +
                 ", wine_profiles=" + wine_profiles +
                 ", default_wine_profile_id='" + default_wine_profile_id + '\'' +
-                ", photo=" + photo +
                 ", description='" + description + '\'' +
                 ", carbonation=" + carbonation +
                 ", sweetness='" + sweetness + '\'' +
                 ", color='" + color + '\'' +
                 ", forward_id='" + forward_id + '\'' +
                 ", producer_id='" + producer_id + '\'' +
-                "} " + super.toString();
+                '}';
     }
 
     @Override
@@ -260,57 +206,41 @@ public class BaseWine extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        super.writeToParcel(dest, flags);
         dest.writeParcelable(this.ratings_summary, 0);
-        dest.writeString(this.producer_name);
-        dest.writeString(this.name);
         dest.writeString(this.region_id);
-        dest.writeTypedList(this.region_path);
-        dest.writeTypedList(this.varietal_composition);
-        dest.writeTypedList(this.wine_profiles);
+        dest.writeSerializable(this.region_path);
+        dest.writeSerializable(this.varietal_composition);
+        dest.writeSerializable(this.wine_profiles);
         dest.writeString(this.default_wine_profile_id);
-        dest.writeParcelable(this.photo, 0);
         dest.writeString(this.description);
         dest.writeByte(carbonation ? (byte) 1 : (byte) 0);
         dest.writeString(this.sweetness);
         dest.writeString(this.color);
         dest.writeString(this.forward_id);
         dest.writeString(this.producer_id);
-        dest.writeString(this.context);
-        dest.writeString(this.e_tag);
+    }
+
+    public BaseWine() {
     }
 
     private BaseWine(Parcel in) {
-        this.id = in.readString();
+        super(in);
         this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
-        this.producer_name = in.readString();
-        this.name = in.readString();
         this.region_id = in.readString();
-        if (region_path == null) {
-            region_path = new ArrayList<RegionPath>();
-        }
-        in.readTypedList(this.region_path, RegionPath.CREATOR);
-        if (varietal_composition == null) {
-            varietal_composition = new ArrayList<VarietalsHash>();
-        }
-        in.readTypedList(this.varietal_composition, VarietalsHash.CREATOR);
-        if (wine_profiles == null) {
-            wine_profiles = new ArrayList<WineProfile>();
-        }
-        in.readTypedList(this.wine_profiles, WineProfile.CREATOR);
+        this.region_path = (ArrayList<RegionPath>) in.readSerializable();
+        this.varietal_composition = (ArrayList<VarietalsHash>) in.readSerializable();
+        this.wine_profiles = (ArrayList<WineProfile>) in.readSerializable();
         this.default_wine_profile_id = in.readString();
-        this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
         this.description = in.readString();
         this.carbonation = in.readByte() != 0;
         this.sweetness = in.readString();
         this.color = in.readString();
         this.forward_id = in.readString();
         this.producer_id = in.readString();
-        this.context = in.readString();
-        this.e_tag = in.readString();
     }
 
-    public static final Parcelable.Creator<BaseWine> CREATOR = new Parcelable.Creator<BaseWine>() {
+    public static final Creator<BaseWine> CREATOR = new Creator<BaseWine>() {
         public BaseWine createFromParcel(Parcel source) {
             return new BaseWine(source);
         }
