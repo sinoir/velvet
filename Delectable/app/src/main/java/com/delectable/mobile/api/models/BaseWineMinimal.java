@@ -73,9 +73,6 @@ public class BaseWineMinimal extends BaseResponse implements Parcelable {
         dest.writeParcelable(this.photo, 0);
     }
 
-    public BaseWineMinimal() {
-    }
-
     protected BaseWineMinimal(Parcel in) {
         super(in);
         this.id = in.readString();
@@ -84,4 +81,13 @@ public class BaseWineMinimal extends BaseResponse implements Parcelable {
         this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
     }
 
+    public static final Creator<BaseWineMinimal> CREATOR = new Creator<BaseWineMinimal>() {
+        public BaseWineMinimal createFromParcel(Parcel source) {
+            return new BaseWineMinimal(source);
+        }
+
+        public BaseWineMinimal[] newArray(int size) {
+            return new BaseWineMinimal[size];
+        }
+    };
 }

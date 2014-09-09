@@ -18,11 +18,11 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
 
     private String region_id;
 
-    private ArrayList<RegionPath> region_path;
+    private ArrayList<RegionPath> region_path = new ArrayList<RegionPath>();
 
-    private ArrayList<VarietalsHash> varietal_composition;
+    private ArrayList<VarietalsHash> varietal_composition = new ArrayList<VarietalsHash>();
 
-    private ArrayList<WineProfile> wine_profiles;
+    private ArrayList<WineProfile> wine_profiles = new ArrayList<WineProfile>();
 
     private String default_wine_profile_id;
 
@@ -219,9 +219,6 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
         dest.writeString(this.color);
         dest.writeString(this.forward_id);
         dest.writeString(this.producer_id);
-    }
-
-    public BaseWine() {
     }
 
     private BaseWine(Parcel in) {
