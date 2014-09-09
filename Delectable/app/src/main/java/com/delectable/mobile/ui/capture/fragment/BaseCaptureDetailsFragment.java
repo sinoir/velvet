@@ -11,9 +11,8 @@ import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
-import com.delectable.mobile.ui.common.dialog.CommentAndRateDialog;
-import com.delectable.mobile.ui.common.dialog.CommentDialog;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
@@ -33,6 +32,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     private static final int REQUEST_DELETE_CONFIRMATION = 100;
 
+    private static final int REQUEST_RATE_COMMENT_CAPTURE = 200;
+
+    private static final int REQUEST_COMMENT_CAPTURE = 300;
+
     @Inject
     CaptureController mCaptureController;
 
@@ -40,6 +43,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
      * Capture ready to be deleted or other things, for when the user either clicks OK.
      */
     private CaptureDetails mTempCaptureForAction;
+
+    private CaptureComment mTempUserComment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,48 +54,36 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public abstract void dataSetChanged();
 
     @Override
-    public void writeCommentForCapture(final CaptureDetails capture) {
-        CommentDialog dialog = new CommentDialog(getActivity(),
-                new CommentDialog.CommentDialogCallback() {
-                    @Override
-                    public void onFinishWritingComment(String comment) {
-                        sendComment(capture, comment);
-                    }
-                }
-        );
-        dialog.show();
+    public void writeCommentForCapture(CaptureDetails capture) {
+        mTempCaptureForAction = capture;
+        Intent intent = new Intent();
+        intent.putExtra(CaptureCommentRateActivity.PARAMS_IS_RATING, false);
+        intent.setClass(getActivity(), CaptureCommentRateActivity.class);
+        startActivityForResult(intent, REQUEST_COMMENT_CAPTURE);
     }
 
     @Override
-    public void rateAndCommentForCapture(final CaptureDetails capture) {
+    public void rateAndCommentForCapture(CaptureDetails capture) {
+        mTempCaptureForAction = capture;
         String userId = UserInfo.getUserId(getActivity());
         boolean isCurrentUserCapture = capture.getCapturerParticipant().getId()
                 .equalsIgnoreCase(userId);
         ArrayList<CaptureComment> comments = capture.getCommentsForUserId(userId);
-        final CaptureComment firstUserComment = comments.size() > 0 ? comments.get(0) : null;
+        mTempUserComment = comments.size() > 0 ? comments.get(0) : null;
         String currentUserCommentText = "";
 
-        if (firstUserComment != null && isCurrentUserCapture) {
-            currentUserCommentText = firstUserComment.getComment();
+        if (mTempUserComment != null && isCurrentUserCapture) {
+            currentUserCommentText = mTempUserComment.getComment();
         }
         int currentUserRating = capture.getRatingForId(userId);
-        CommentAndRateDialog dialog = new CommentAndRateDialog(getActivity(),
-                currentUserCommentText, currentUserRating,
-                new CommentAndRateDialog.CommentAndRateDialogCallback() {
-                    @Override
-                    public void onFinishWritingCommentAndRating(String comment, int rating) {
-                        sendRating(capture, rating);
-                        if (firstUserComment != null && firstUserComment.getId() != null) {
-                            firstUserComment.setComment(comment);
-                            editComment(capture, firstUserComment);
-                            dataSetChanged();
-                        } else {
-                            sendComment(capture, comment);
-                        }
-                    }
-                }
-        );
-        dialog.show();
+
+        Intent intent = new Intent();
+        intent.putExtra(CaptureCommentRateActivity.PARAMS_IS_RATING, true);
+        intent.putExtra(CaptureCommentRateActivity.PARAMS_RATING, currentUserRating);
+        intent.putExtra(CaptureCommentRateActivity.PARAMS_COMMENT, currentUserCommentText);
+
+        intent.setClass(getActivity(), CaptureCommentRateActivity.class);
+        startActivityForResult(intent, REQUEST_RATE_COMMENT_CAPTURE);
     }
 
     @Override
@@ -183,6 +176,34 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
             if (resultCode == Activity.RESULT_OK) {
                 deleteCapture(mTempCaptureForAction);
             }
+            mTempCaptureForAction = null;
+        }
+
+        if (requestCode == REQUEST_COMMENT_CAPTURE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                Log.i(TAG, "Request Data Comment Text: " + commentText);
+                sendComment(mTempCaptureForAction, commentText);
+            }
+            mTempCaptureForAction = null;
+        }
+
+        if (requestCode == REQUEST_RATE_COMMENT_CAPTURE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                int rating = data.getIntExtra(CaptureCommentRateFragment.DATA_RATING, -1);
+                Log.i(TAG, "Request Data Comment Text: " + commentText);
+                Log.i(TAG, "Request Data Rating: " + rating);
+                sendRating(mTempCaptureForAction, rating);
+                if (mTempUserComment != null && mTempUserComment.getId() != null) {
+                    mTempUserComment.setComment(commentText);
+                    editComment(mTempCaptureForAction, mTempUserComment);
+                    dataSetChanged();
+                } else {
+                    sendComment(mTempCaptureForAction, commentText);
+                }
+            }
+            mTempUserComment = null;
             mTempCaptureForAction = null;
         }
     }
