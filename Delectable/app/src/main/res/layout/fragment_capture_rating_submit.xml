@@ -77,7 +77,7 @@
         android:id="@+id/rating_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/comment_edit_text"
+        android:layout_below="@+id/comment_edit_text"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:visibility="visible">
 
@@ -85,7 +85,7 @@
             android:id="@+id/not_for_me"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/rate_seek_bar"
+            android:layout_alignLeft="@+id/rate_seek_bar"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/capture_submit_margins"
             android:text="@string/dialog_rating_notforme"
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignRight="@id/rate_seek_bar"
+            android:layout_alignRight="@+id/rate_seek_bar"
             android:layout_marginRight="@dimen/capture_submit_margins"
             android:text="@string/dialog_rating_loveit"
             android:textColor="@color/d_medium_gray"
