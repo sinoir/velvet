@@ -16,7 +16,107 @@
 #   public *;
 #}
 
+-keep public class * extends android.app.Application { *; }
+
+-keep public class com.delectable.mobile.di.AppModule { *; }
+
+
+#support library
+-dontwarn android.support.v4.**
+-dontwarn android.support.v13.**
+
 # greenrobot's EventBus
 -keepclassmembers class ** {
     public void onEvent*(**);
 }
+
+#okhttp
+-dontwarn com.squareup.okhttp.**
+#okio
+-dontwarn okio.**
+
+#butterknife
+#-dontwarn butterknife.Views$InjectViewProcessor
+-dontwarn butterknife.internal.**
+-keep class **$$ViewInjector { *; }
+-keepnames class * { @butterknife.InjectView *;}
+
+#dagger
+-dontwarn dagger.internal.**
+-dontwarn com.squareup.javawriter.**
+
+
+#Keep the annotated things annotated
+-keepattributes *Annotation*
+
+-keepclassmembers,allowobfuscation class * {
+    @javax.inject.* *;
+    @dagger.* *;
+    <init>();
+}
+
+# Keep the generated classes by dagger-compile
+-keep class **$$ModuleAdapter
+-keep class **$$InjectAdapter
+-keep class **$$StaticInjection
+
+#TODO this may be too broad, perhaps scope down
+-keepnames !abstract class com.delectable.mobile.**
+
+-keepnames class dagger.Lazy
+
+#may need to uncomment these classes if proguarded build fails, these are just the classes that have provides methods in AppModule
+#-keep class de.greenrobot.event.EventBus
+#-keep class com.delectable.mobile.jobs.MyJobManager
+#-keep class com.delectable.mobile.net.NetworkClient
+#-keep class com.iainconnor.objectcache.CacheManager
+#-keep class com.delectable.mobile.net.FoursquareNetworkClient
+#-keep class com.delectable.mobile.net.S3ImageUploadNetworkClient
+
+
+#facebook
+-keep class com.facebook.** { *; }
+-keepattributes Signature
+
+
+
+##---------------Begin: proguard configuration for Gson  ----------
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.delectable.mobile.api.** { *; }
+-keep class com.delectable.mobile.model.api.** { *; }
+
+
+##---------------End: proguard configuration for Gson  ----------
+
+
+
+##---------------Begin: proguard configuration for Google Play Services  ----------
+-keep class * extends java.util.ListResourceBundle {
+    protected Object[][] getContents();
+}
+
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+    public static final *** NULL;
+}
+
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
+
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+##---------------End: proguard configuration for Google Play Services  ----------
+

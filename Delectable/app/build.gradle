@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
@@ -13,6 +13,8 @@ android {
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
         buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
+        buildConfigField "boolean", "REPORT_CRASHES", "false"
+
     }
 
     signingConfigs {
@@ -36,7 +38,15 @@ android {
             debuggable true
             signingConfig signingConfigs.debug
         }
+        beta {
+            versionNameSuffix "-beta-" + getDate()
+            debuggable true
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
         release {
+            buildConfigField "boolean", "REPORT_CRASHES", "true"
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
@@ -49,6 +59,12 @@ android {
     }
 }
 
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
@@ -57,9 +73,9 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
-    compile 'com.android.support:support-v13:19.+'
+    compile 'com.android.support:support-v13:19.1'
     compile 'com.loopj.android:android-async-http:1.4.4@jar'
-    compile 'com.google.code.gson:gson:2.2.+'
+    compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.apache.commons:commons-lang3:3.1@jar'
     compile 'com.squareup.picasso:picasso:2.3.3'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
@@ -69,13 +85,13 @@ dependencies {
     compile project(':facebook')
     compile project(':viewPagerIndicator')
     compile 'com.jakewharton:butterknife:5.1.1'
-    compile 'com.squareup.dagger:dagger:1.2.2'
-    compile 'com.squareup.dagger:dagger-compiler:1.2.2'
+    //need to keep dagger at 1.1.0 (at least until dagger 2.0 comes out, bc proguard doesn't work with 1.2.2)
+    compile 'com.squareup.dagger:dagger:1.1.0'
+    compile 'com.squareup.dagger:dagger-compiler:1.1.0'
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT@aar'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
-    compile 'com.google.android.gms:play-services:5.0.+'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'com.google.android.gms:play-services:5.2.08'
     compile files('libs/kahuna_473.jar')
 }
