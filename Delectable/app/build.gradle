@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 //keystore stuff
+//keystore_credentials.properties gitignored for security
 def versionPropsFile = file('keystore_credentials.properties')
 def store_password = "android"
 def key_alias = "androiddebugkey"
@@ -40,8 +41,8 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-        //TODO: Add Real Release Keystore with PW, or use an environment variable for PW
         release {
+            //release_keystore.jks gitignored for security
             storeFile file("../app/release_keystore.jks")
             storePassword store_password
             keyAlias key_alias
@@ -57,7 +58,7 @@ android {
         beta {
             versionNameSuffix "-beta-" + getDate()
             debuggable true
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
         }
