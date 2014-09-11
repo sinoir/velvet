@@ -92,6 +92,12 @@
         </activity>
 
         <activity
+            android:name="com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme.NoActionBar" />
+
+        <activity
             android:name="com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity"
             android:label=""
             android:screenOrientation="portrait">
