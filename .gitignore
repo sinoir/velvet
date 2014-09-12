@@ -35,3 +35,8 @@ target/
 build/
 
 .gradle
+
+#keystore stuff
+Delectable/app/release_keystore.jks
+Delectable/app/keystore_credentials.properties
+
