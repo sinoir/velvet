@@ -1,20 +1,18 @@
 package com.delectable.mobile.ui.search.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class SearchWineRow extends RelativeLayout {
 
@@ -48,7 +46,7 @@ public class SearchWineRow extends RelativeLayout {
         mWineName.setText(wineName);
     }
 
-    public void updateData(BaseWine baseWine) {
+    public void updateData(BaseWineMinimal baseWine) {
         updateData(baseWine.getPhoto().getBestThumb(),
                 baseWine.getProducerName(),
                 baseWine.getName());

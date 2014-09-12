@@ -5,12 +5,9 @@ import android.os.Parcelable;
 
 public class RegionPath implements Parcelable {
 
-    String id;
+    private String id;
 
-    String name;
-
-    public RegionPath() {
-    }
+    private String name;
 
     public String getId() {
         return id;

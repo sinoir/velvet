@@ -1,8 +1,7 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
-import com.delectable.mobile.api.models.AccountSearch;
-import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.events.basewines.SearchWinesEvent;
@@ -68,7 +67,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment implements Inf
         mProgressBar.setVisibility(View.GONE);
         if (event.isSuccessful()) {
 
-            ArrayList<SearchHit<BaseWine>> hits = event.getResult().getHits();
+            ArrayList<SearchHit<BaseWineMinimal>> hits = event.getResult().getHits();
             if (hits.size() == 0) {
                 mEndOfList = true;
             }
@@ -84,11 +83,11 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment implements Inf
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        BaseWine baseWine = mAdapter.getItem(position);
+        BaseWineMinimal baseWine = mAdapter.getItem(position);
         launchWineProfile(baseWine);
     }
 
-    private void launchWineProfile(BaseWine baseWine) {
+    private void launchWineProfile(BaseWineMinimal baseWine) {
         Intent intent = new Intent();
         intent.putExtra(WineProfileActivity.PARAMS_BASE_WINE_ID, baseWine.getId());
         //TODO photohash gets passed in put it doesn't get used with the base_wine_id in WineProfileActivity

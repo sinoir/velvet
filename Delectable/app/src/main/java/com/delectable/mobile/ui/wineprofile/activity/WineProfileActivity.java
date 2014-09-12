@@ -36,7 +36,7 @@ public class WineProfileActivity extends BaseActivity {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
             mBaseWineId = args.getString(PARAMS_BASE_WINE_ID);
-            mVintageId = args.getString(PARAMS_VINTAGE_ID);
+            mVintageId = args.getString(PARAMS_VINTAGE_ID); //TODO debug, vintage doesn't get used currently
         } else {
             // Check if Deep Link params contains data if the bundle args doesn't
             mBaseWineId = getDeepLinkParam("base_wine_id");
