@@ -1,0 +1,40 @@
+{
+    "success": true,
+    "payload": {
+        "type": 0,
+        "url": "",
+        "client-config": {
+            "monocle_mode": {
+                "enabled": false
+            },
+            "sharing": {
+                "fb_share_caption": "",
+                "fb_share_name": "Delectable for iPhone",
+                "fb_share_description": "Save, Share and Discover Wines."
+            },
+            "server_settings": {
+                "contact_list_batch_size": 80,
+                "max_batch_size": 50,
+                "retry_batch_size": 10,
+                "max_retries": 3
+            },
+            "appirater": {
+                "significant_events_until_rate_app_prompt": 3,
+                "uses_until_rate_app_prompt": 5,
+                "days_until_rate_app_prompt": 0,
+                "days_until_reminding_to_rate": 3
+            },
+            "sms_test": {
+                "sms_body": "join me on Delectable to find cool wines! delectable.com/invite",
+                "max_number_of_group_messages_to_send": 2,
+                "max_number_of_messages_in_group": 5,
+                "max_number_of_overflow_sms_invites": 0,
+                "email_subject": "Join me on Delectable",
+                "email_contents": "Hi!<br><br>I just joined Delectable. Follow me so we can remember and discover wine together!<br><br>Here's a link to download the app to your iPhone: <a href=\"http://del.ec/invite_email\">del.ec/invite_email</a>"
+            },
+            "capture_settings": {
+                "capture_string": "Identification usually takes 1-2 minutes, but we're a little swamped at the moment!\n\nYour wine will be identified shortly - thanks for your patience."
+            }
+        }
+    }
+}
