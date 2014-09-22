@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -23,10 +24,12 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     private int mCurrentViewType = VIEW_TYPE_DETAILED;
 
+    // Empty View type so we can always scroll
+    public static final int VIEW_TYPE_EMPTY = 2;
+
     private static final String TAG = FollowFeedAdapter.class.getSimpleName();
 
-    private static final int sNumberViewTypes = 2;
-
+    private static final int sNumberViewTypes = 3;
 
     private Activity mContext;
 
@@ -64,12 +67,12 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mData.size();
+        return mData.size() == 0 ? 1 : mData.size();
     }
 
     @Override
     public Capture getItem(int position) {
-        return mData.get(position);
+        return mData.size() == 0 ? null : mData.get(position);
     }
 
     @Override
@@ -84,13 +87,20 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
+        if (mData.size() == 0) {
+            return VIEW_TYPE_EMPTY;
+        }
         return mCurrentViewType;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-        switch (mCurrentViewType) {
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_EMPTY:
+                Log.d(TAG, "Displaying Empty View Items");
+                view = getEmptyView(position, convertView, parent);
+                break;
             case VIEW_TYPE_DETAILED:
                 Log.d(TAG, "Displaying Detailed List Items");
                 view = getDetailedListingView(position, convertView, parent);
@@ -107,6 +117,17 @@ public class FollowFeedAdapter extends BaseAdapter {
         }
 
         return view;
+    }
+
+    private View getEmptyView(int position, View convertView, ViewGroup parent) {
+        RelativeLayout rowView = (RelativeLayout) convertView;
+        if (rowView == null) {
+            // TODO: Can pop in empty state here.
+            // Note: Height of this must be same as parent to allow scrolling for empty views, used in UserProfile
+            rowView = new RelativeLayout(parent.getContext());
+            rowView.setMinimumHeight(parent.getHeight());
+        }
+        return rowView;
     }
 
     private View getDetailedListingView(int position, View convertView, ViewGroup parent) {
