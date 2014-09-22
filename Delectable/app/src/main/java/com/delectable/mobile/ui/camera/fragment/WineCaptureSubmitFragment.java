@@ -116,6 +116,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private boolean mIsPostingCapture;
 
+    private boolean mShouldPostingCaptureAfterScan;
+
     public WineCaptureSubmitFragment() {
     }
 
@@ -138,9 +140,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
             mRawImageData = byteArrayOutputStream.toByteArray();
         }
-
-        mWineScanController.scanLabelInstantly(mRawImageData);
+        mShouldPostingCaptureAfterScan = false;
         loadAccountData();
+        mWineScanController.scanLabelInstantly(mRawImageData);
     }
 
     private void loadAccountData() {
@@ -317,15 +319,25 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (mIsPostingCapture) {
             return;
         }
-        mIsPostingCapture = true;
+
         mProgressBar.setVisibility(View.VISIBLE);
-        // TODO: Display some Loading indicator?
-        mWineScanController.createPendingCapture(mRawImageData);
+
+        // Hold off from posting the capture if we haven't received a label scan result
+        if (mLabelScanResult != null) {
+            mIsPostingCapture = true;
+            mWineScanController.createPendingCapture(mRawImageData, mLabelScanResult.getId());
+        } else {
+            mShouldPostingCaptureAfterScan = true;
+        }
     }
 
     public void onEventMainThread(IdentifyLabelScanEvent event) {
         if (event.isSuccessful()) {
             mLabelScanResult = event.getLabelScan();
+            if (mShouldPostingCaptureAfterScan) {
+                mShouldPostingCaptureAfterScan = false;
+                postCapture();
+            }
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);

@@ -11,8 +11,12 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
 
     private static final String TAG = CreatePendingCaptureJob.class.getSimpleName();
 
-    public CreatePendingCaptureJob(byte[] imageData) {
+    private String mLabelScanId;
+
+    public CreatePendingCaptureJob(byte[] imageData, String labelScanId) {
         super(imageData);
+
+        mLabelScanId = labelScanId;
     }
 
     @Override
@@ -26,7 +30,8 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
 
         String endpoint = "/pending_captures/create";
         ProvisionCapture provisionCapture = uploadImage();
-        CreatePendingCaptureRequest request = new CreatePendingCaptureRequest(provisionCapture);
+        CreatePendingCaptureRequest request = new CreatePendingCaptureRequest(provisionCapture,
+                mLabelScanId);
         CreatePendingCaptureResponse response = getNetworkClient().post(endpoint, request,
                 CreatePendingCaptureResponse.class);
 
