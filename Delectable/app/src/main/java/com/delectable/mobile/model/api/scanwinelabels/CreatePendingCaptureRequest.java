@@ -7,9 +7,10 @@ public class CreatePendingCaptureRequest extends BaseRequest {
 
     private Payload payload = new Payload();
 
-    public CreatePendingCaptureRequest(ProvisionCapture provision) {
+    public CreatePendingCaptureRequest(ProvisionCapture provision, String labelScanId) {
         this.payload.bucket = provision.getBucket();
         this.payload.filename = provision.getFilename();
+        this.payload.label_scan_id = labelScanId;
     }
 
     public static class Payload {

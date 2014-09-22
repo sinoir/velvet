@@ -17,8 +17,8 @@ public class WineScanController {
         mJobManager.addJobInBackground(new IdentifyLabelJob(imageData));
     }
 
-    public void createPendingCapture(byte[] imageData) {
-        mJobManager.addJobInBackground(new CreatePendingCaptureJob(imageData));
+    public void createPendingCapture(byte[] imageData, String labelScanId) {
+        mJobManager.addJobInBackground(new CreatePendingCaptureJob(imageData, labelScanId));
     }
 
     public void addCaptureFromPendingCapture(AddCaptureFromPendingCaptureRequest capRequest) {
