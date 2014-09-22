@@ -1,11 +1,14 @@
 package com.delectable.mobile.ui.followfriends.widget;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.ui.common.widget.BaseFollowAccountRow;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
+
+import butterknife.OnClick;
 
 public class FollowExpertsRow extends BaseFollowAccountRow {
 
@@ -43,6 +46,13 @@ public class FollowExpertsRow extends BaseFollowAccountRow {
         super.onFollowButtonClick(v);
         if (mActionsHandler != null) {
             mActionsHandler.toggleFollow(mAccount, v.isSelected());
+        }
+    }
+
+    @OnClick(R.id.profile_image)
+    public void showUserProfile() {
+        if (mActionsHandler != null) {
+            mActionsHandler.showUserProfile(mAccount.getId());
         }
     }
 }
