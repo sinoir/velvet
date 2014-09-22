@@ -5,6 +5,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
+import com.delectable.mobile.controllers.MotdController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
@@ -41,6 +42,7 @@ import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
 import com.delectable.mobile.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.jobs.foursquare.SearchFoursquareVenuesJob;
+import com.delectable.mobile.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
@@ -111,6 +113,7 @@ import de.greenrobot.event.EventBus;
                 BaseWineModel.class,
                 // Jobs
                 BaseJob.class,
+                FetchMotdJob.class,
                 FetchFollowerFeedJob.class,
                 FetchUserCaptureFeedJob.class,
                 LoginJob.class,
@@ -146,6 +149,7 @@ import de.greenrobot.event.EventBus;
                 SearchAccountsJob.class,
                 FetchBaseWineJob.class,
                 // Controllers
+                MotdController.class,
                 AccountController.class,
                 CaptureController.class,
                 RegistrationController.class,

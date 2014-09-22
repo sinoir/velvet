@@ -2,7 +2,9 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.controllers.MotdController;
 import com.delectable.mobile.controllers.RegistrationController;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
@@ -23,6 +25,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -112,6 +115,9 @@ public abstract class BaseSignUpInFragment extends BaseFragment
 
     @Inject
     RegistrationController mRegistrationController;
+
+    @Inject
+    MotdController mMotdController;
 
     private LoadingCircleDialog mLoadingDialog;
 
@@ -327,6 +333,12 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         }
 
         if (registerEvent.isSuccessful()) {
+
+            //initialize Motd fetch
+            String deviceId = Settings.Secure.getString(
+                    getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+            mMotdController.getMotd(UserInfo.getSessionKey(getActivity()), deviceId);
+
             startActivity(new Intent(getActivity(), NavActivity.class));
             getActivity().finish();
             return;
