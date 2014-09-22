@@ -8,4 +8,6 @@ public interface FollowActionsHandler {
     public void toggleFollow(AccountMinimal account, boolean isFollowing);
 
     public void inviteContact(TaggeeContact contact);
+
+    public void showUserProfile(String accountId);
 }

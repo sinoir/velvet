@@ -10,6 +10,7 @@ import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.widget.BaseAccountsMinimalAdapter;
 import com.delectable.mobile.ui.followfriends.widget.FollowActionsHandler;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -110,6 +111,14 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         } else if (contact.getPhoneNumbers().size() > 0) {
             inviteViaSms(contact.getPhoneNumbers().get(0));
         }
+    }
+
+    @Override
+    public void showUserProfile(String accountId) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, accountId);
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
     }
 
     private void inviteViaEmail(String email) {
