@@ -50,6 +50,7 @@ import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
 import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
+import com.delectable.mobile.net.MotdNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
@@ -190,6 +191,12 @@ public class AppModule {
     @Singleton
     S3ImageUploadNetworkClient provideS3ImageUploadNetworkClient() {
         return new S3ImageUploadNetworkClient();
+    }
+
+    @Provides
+    @Singleton
+    MotdNetworkClient provideMotdNetworkClient() {
+        return new MotdNetworkClient();
     }
 
 }

@@ -3,17 +3,40 @@ package com.delectable.mobile.net;
 import com.google.gson.Gson;
 
 import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.util.HelperUtil;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.HashMap;
 
-public class BaseNetworkClient {
+public abstract class BaseNetworkClient {
 
     private String TAG = this.getClass().getSimpleName();
 
-    private Gson mGson = new Gson();
+    protected Gson mGson = new Gson();
+
+    protected OkHttpClient mClient = new OkHttpClient();
+
+    protected abstract String getBaseUrl();
+
+
+    public <T extends BaseResponse> T get(String path, HashMap<String, String> params,
+            Class<T> responseClass) throws IOException {
+        String requestUrl = HelperUtil.buildUrlWithParameters(getBaseUrl() + path, params);
+        String requestName = TAG + ".GET";
+        Log.i(requestName, "url: " + requestUrl);
+        Request request = new Request.Builder()
+                .url(requestUrl)
+                .get()
+                .build();
+        Response response = mClient.newCall(request).execute();
+
+        return handleResponse(response, requestName, responseClass);
+    }
 
     public <T extends BaseResponse> T handleResponse(Response response, String requestName,
             Class<T> responseClass) throws IOException {
