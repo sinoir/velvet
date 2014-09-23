@@ -24,7 +24,7 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     private int mCurrentViewType = VIEW_TYPE_DETAILED;
 
-    // Empty View type so we can always scroll
+    // Show Empty Row when there's no data to enable Scrolling of the ListView
     public static final int VIEW_TYPE_EMPTY = 2;
 
     private static final String TAG = FollowFeedAdapter.class.getSimpleName();
@@ -67,11 +67,13 @@ public class FollowFeedAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        // Show Empty Row when there's no data to enable Scrolling of the ListView
         return mData.size() == 0 ? 1 : mData.size();
     }
 
     @Override
     public Capture getItem(int position) {
+        // Show Empty Row when there's no data to enable Scrolling of the ListView
         return mData.size() == 0 ? null : mData.get(position);
     }
 
@@ -119,6 +121,9 @@ public class FollowFeedAdapter extends BaseAdapter {
         return view;
     }
 
+    /**
+     * Shows an Empty Row when there's no data to enable Scrolling of the ListView
+     */
     private View getEmptyView(int position, View convertView, ViewGroup parent) {
         RelativeLayout rowView = (RelativeLayout) convertView;
         if (rowView == null) {
