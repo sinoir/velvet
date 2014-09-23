@@ -1,6 +1,9 @@
 package com.delectable.mobile.data;
 
+import com.google.gson.Gson;
+
 import com.delectable.mobile.App;
+import com.delectable.mobile.api.models.Motd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,6 +19,8 @@ public class UserInfo {
     private static final String PROPERTY_USER_ID = "userId";
 
     private static final String PROPERTY_USER_EMAIL = "userEmail";
+
+    private static final String PROPERTY_MOTD = "motd";
 
     public static void onSignIn(String userId, String sessionKey, String sessionToken,
             String email) {
@@ -38,6 +43,17 @@ public class UserInfo {
         editor.remove(PROPERTY_SESSION_TOKEN);
         editor.remove(PROPERTY_USER_ID);
         editor.remove(PROPERTY_USER_EMAIL);
+        editor.remove(PROPERTY_MOTD);
+        editor.commit();
+    }
+
+    public static void setMotd(Motd motd) {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(motd);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_MOTD, jsonString);
         editor.commit();
     }
 
@@ -65,4 +81,16 @@ public class UserInfo {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(PROPERTY_USER_EMAIL, null);
     }
+
+    public static Motd getMotd(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        String jsonString = prefs.getString(PROPERTY_MOTD, null);
+        if (jsonString != null) {
+            Gson gson = new Gson();
+            Motd motd = gson.fromJson(jsonString, Motd.class);
+            return motd;
+        }
+        return null;
+    }
+
 }

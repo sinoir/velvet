@@ -103,7 +103,7 @@ dependencies {
     compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT@aar'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
-    compile 'com.google.android.gms:play-services:5.2.08'
+    compile 'com.google.android.gms:play-services:5.0.89'
     compile files('libs/kahuna_473.jar')
 }
 

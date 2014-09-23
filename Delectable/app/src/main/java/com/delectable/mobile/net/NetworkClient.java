@@ -7,6 +7,7 @@ import com.delectable.mobile.Config;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.model.api.BaseRequest;
 import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.util.HelperUtil;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -16,6 +17,7 @@ import com.squareup.okhttp.Response;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class NetworkClient extends BaseNetworkClient {
 
@@ -25,9 +27,10 @@ public class NetworkClient extends BaseNetworkClient {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private Gson mGson = new Gson();
-
-    private OkHttpClient mClient = new OkHttpClient();
+    @Override
+    protected String getBaseUrl() {
+        return Config.ServerInfo.SERVER_MOBILE_URL + Config.API_VERSION;
+    }
 
     /**
      * Convenience method that calls {@link #post(String, BaseRequest, Class, boolean)} with
@@ -50,21 +53,17 @@ public class NetworkClient extends BaseNetworkClient {
         }
         String requestString = mGson.toJson(requestObject);
         String requestName = TAG + "." + requestObject.getClass().getSimpleName();
-        Log.i(requestName, "url: " + getAbsolutePath() + endpoint);
+        Log.i(requestName, "url: " + getBaseUrl() + endpoint);
         Log.i(requestName, "body: " + requestString);
         RequestBody body = RequestBody.create(JSON, requestString);
         Request request = new Request.Builder()
-                .url(getAbsolutePath() + endpoint)
+                .url(getBaseUrl() + endpoint)
                 .addHeader("User-Agent", USER_AGENT)
                 .post(body)
                 .build();
         Response response = mClient.newCall(request).execute();
 
         return handleResponse(response, requestName, responseClass);
-    }
-
-    private String getAbsolutePath() {
-        return Config.ServerInfo.SERVER_MOBILE_URL + Config.API_VERSION;
     }
 
     private void authenticateRequest(BaseRequest request) {

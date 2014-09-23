@@ -5,6 +5,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
+import com.delectable.mobile.controllers.MotdController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
@@ -41,6 +42,7 @@ import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
 import com.delectable.mobile.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.jobs.foursquare.SearchFoursquareVenuesJob;
+import com.delectable.mobile.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
@@ -50,6 +52,7 @@ import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
 import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
+import com.delectable.mobile.net.MotdNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
@@ -110,6 +113,7 @@ import de.greenrobot.event.EventBus;
                 BaseWineModel.class,
                 // Jobs
                 BaseJob.class,
+                FetchMotdJob.class,
                 FetchFollowerFeedJob.class,
                 FetchUserCaptureFeedJob.class,
                 LoginJob.class,
@@ -145,6 +149,7 @@ import de.greenrobot.event.EventBus;
                 SearchAccountsJob.class,
                 FetchBaseWineJob.class,
                 // Controllers
+                MotdController.class,
                 AccountController.class,
                 CaptureController.class,
                 RegistrationController.class,
@@ -190,6 +195,12 @@ public class AppModule {
     @Singleton
     S3ImageUploadNetworkClient provideS3ImageUploadNetworkClient() {
         return new S3ImageUploadNetworkClient();
+    }
+
+    @Provides
+    @Singleton
+    MotdNetworkClient provideMotdNetworkClient() {
+        return new MotdNetworkClient();
     }
 
 }

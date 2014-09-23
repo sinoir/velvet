@@ -21,23 +21,8 @@ public class FoursquareNetworkClient extends BaseNetworkClient {
 
     private static final String API_ENDPOINT = "https://api.foursquare.com/v2/";
 
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-    private OkHttpClient mClient = new OkHttpClient();
-
-    private Gson mGson = new Gson();
-
-    public <T extends BaseResponse> T get(String path, HashMap<String, String> params,
-            Class<T> responseClass) throws IOException {
-        String requestUrl = HelperUtil.buildUrlWithParameters(API_ENDPOINT + path, params);
-        String requestName = TAG + ".Foursquare";
-        Log.i(requestName, "url: " + requestUrl);
-        Request request = new Request.Builder()
-                .url(requestUrl)
-                .get()
-                .build();
-        Response response = mClient.newCall(request).execute();
-
-        return handleResponse(response, requestName, responseClass);
+    @Override
+    protected String getBaseUrl() {
+        return API_ENDPOINT;
     }
 }

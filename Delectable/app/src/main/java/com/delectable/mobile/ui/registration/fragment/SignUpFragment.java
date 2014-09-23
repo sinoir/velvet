@@ -103,15 +103,6 @@ public class SignUpFragment extends BaseSignUpInFragment {
         mRegistrationController.register(email, password, fName, lName);
     }
 
-    public void onEventMainThread(LoginRegisterEvent registerEvent) {
-        if (registerEvent.isSuccessful()) {
-            startActivity(new Intent(getActivity(), NavActivity.class));
-            getActivity().finish();
-            return;
-        }
-        Toast.makeText(getActivity(), registerEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     protected void onGoogleButtonClick() {
         Log.d(TAG, "onGoogleButtonClick");
