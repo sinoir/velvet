@@ -40,3 +40,6 @@ build/
 Delectable/app/release_keystore.jks
 Delectable/app/keystore_credentials.properties
 
+#generated version.properties file for Jenkins S3
+Delectable/app/version.properties
+

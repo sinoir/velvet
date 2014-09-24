@@ -2,20 +2,30 @@ apply plugin: 'com.android.application'
 
 //keystore stuff
 //keystore_credentials.properties gitignored for security
-def versionPropsFile = file('keystore_credentials.properties')
+def keystoreCredsFile = file('keystore_credentials.properties')
 def store_password = "android"
 def key_alias = "androiddebugkey"
 def key_password = "android"
 
-if (versionPropsFile.canRead()) {
-    versionProps = new Properties()
+if (keystoreCredsFile.canRead()) {
+    keystoreProps = new Properties()
+    keystoreProps.load(new FileInputStream(keystoreCredsFile))
 
-    versionProps.load(new FileInputStream(versionPropsFile))
-
-    store_password = versionProps['STORE_PASSWORD'].toString()
-    key_alias = versionProps['KEY_ALIAS'].toString()
-    key_password = versionProps['KEY_PASSWORD'].toString()
+    store_password = keystoreProps['STORE_PASSWORD'].toString()
+    key_alias = keystoreProps['KEY_ALIAS'].toString()
+    key_password = keystoreProps['KEY_PASSWORD'].toString()
 }
+
+def build_date_var = getDate()
+
+//generate version.properties, for keeping track of the build date. For Jenkins S3.
+def propFile = new File("app/version.properties");
+propFile.createNewFile();
+def versionProps = new Properties()
+versionProps['BUILD_DATE']=build_date_var
+versionProps.store(propFile.newWriter(), null);
+
+
 
 android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
@@ -25,13 +35,11 @@ android {
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 1
         versionName '1.0'
-        testPackageName "com.delectable.mobile.tests"
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
         buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
-        buildConfigField "boolean", "REPORT_CRASHES", "false"
-
+        buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
     }
 
     signingConfigs {
@@ -51,22 +59,30 @@ android {
     }
 
     buildTypes {
+        //constants
+        def BOOLEAN = "boolean"
+        def TRUE = "true"
+        def FALSE = "false"
+        def REPORT_CRASHES = "REPORT_CRASHES"
+
         debug {
             debuggable true
             signingConfig signingConfigs.debug
+            buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
         }
-        beta {
-            versionNameSuffix "-beta-" + getDate()
+        alpha {
+            versionNameSuffix "-alpha-" + build_date_var
             debuggable true
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
+            buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
         }
         release {
-            buildConfigField "boolean", "REPORT_CRASHES", "true"
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
+            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
     }
     productFlavors {
@@ -106,9 +122,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:5.0.89'
     compile files('libs/kahuna_473.jar')
 }
-
-
-
 
 def getDate() {
     def date = new Date()
