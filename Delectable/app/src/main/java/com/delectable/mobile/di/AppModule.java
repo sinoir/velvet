@@ -1,11 +1,13 @@
 package com.delectable.mobile.di;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.MainActivity;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.MotdController;
+import com.delectable.mobile.controllers.VersionPropsFileController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
@@ -33,6 +35,7 @@ import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.delectable.mobile.jobs.basewines.SearchWinesJob;
+import com.delectable.mobile.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
@@ -85,6 +88,7 @@ import de.greenrobot.event.EventBus;
 
 @Module(
         injects = {
+                MainActivity.class,
                 // Fragments
                 BaseFragment.class,
                 SignUpFragment.class,
@@ -114,6 +118,7 @@ import de.greenrobot.event.EventBus;
                 // Jobs
                 BaseJob.class,
                 FetchMotdJob.class,
+                FetchVersionPropsJob.class,
                 FetchFollowerFeedJob.class,
                 FetchUserCaptureFeedJob.class,
                 LoginJob.class,
@@ -150,6 +155,7 @@ import de.greenrobot.event.EventBus;
                 FetchBaseWineJob.class,
                 // Controllers
                 MotdController.class,
+                VersionPropsFileController.class,
                 AccountController.class,
                 CaptureController.class,
                 RegistrationController.class,
