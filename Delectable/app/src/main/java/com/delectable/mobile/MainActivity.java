@@ -9,9 +9,14 @@ import com.delectable.mobile.ui.versionupgrade.dialog.VersionUpgradeDialog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -81,7 +86,7 @@ public class MainActivity extends Activity {
         }
 
         //event was successful
-        if (!event.shouldUpdate()) {
+        if (event.shouldUpdate()) {
             VersionUpgradeDialog dialog = VersionUpgradeDialog.newInstance();
             dialog.show(getFragmentManager(), VersionUpgradeDialog.TAG);
             dialog.setActionsHandler(ActionsHandler);
@@ -99,12 +104,25 @@ public class MainActivity extends Activity {
 
         @Override
         public void onUpgradeClick() {
-            //TODO need to make url/git branch dynamically grabbed
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(
-                    "https://s3.amazonaws.com/fermentationtank/android/master-alpha.html"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getS3Url()));
             startActivity(browserIntent);
         }
     };
+
+    private String getS3Url() {
+        String url = null;
+        try {
+            AssetManager assetManager = getAssets();
+            InputStream inputStream = assetManager.open("s3.properties");
+
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            url = properties.getProperty("S3_LINK");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
 
 
 }
