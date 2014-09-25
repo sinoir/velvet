@@ -22,6 +22,11 @@
     <string name="error_connect_facebook">In order to post to facebook, you must connect it to Delectable</string>
     <string name="error_connect_twitter">In order to post to twitter, you must connect it to Delectable</string>
 
+    <!-- Version Upgrade Dialog-->
+    <string name="version_upgrade_your_app_out_of_date">Your app is out of date, download the new one!</string>
+    <string name="version_upgrade_upgrade">upgrade</string>
+
+
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
     <string name="login_sign_up">sign up</string>
