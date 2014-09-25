@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/version_upgrade_dialog_height"
+    android:background="@color/d_white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/version_upgrade_dialog_horizontal_spacing"
+    android:paddingRight="@dimen/version_upgrade_dialog_horizontal_spacing">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/version_upgrade_dialog_header_height"
+        android:layout_marginBottom="@dimen/version_upgrade_dialog_vertical_spacing"
+        android:layout_marginTop="@dimen/version_upgrade_dialog_vertical_spacing"
+        android:gravity="center_vertical|left"
+        android:text="@string/version_upgrade_your_app_out_of_date"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="@dimen/version_upgrade_dialog_title_text_size"
+        app:fontName="whitney_book" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/cancel_textview"
+            style="@style/ResetPasswordDialogActionText"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical|left"
+            android:text="@string/cancel"
+            android:textColor="@color/text_dark_gray_to_black" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/upgrade_textview"
+            style="@style/ResetPasswordDialogActionText"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical|right"
+            android:text="@string/version_upgrade_upgrade"
+            android:textColor="@color/btn_text_blue" />
+    </RelativeLayout>
+</LinearLayout>
+
