@@ -48,6 +48,10 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler {
@@ -67,29 +71,40 @@ public class WineProfileFragment extends BaseFragment implements
     private static final int CHOOSE_VINTAGE_DIALOG = 1;
 
     @Inject
-    BaseWineController mBaseWineController;
+    protected BaseWineController mBaseWineController;
 
     @Inject
-    BaseWineModel mBaseWineModel;
+    protected BaseWineModel mBaseWineModel;
 
-    private View mVarietalContainer;
+    @InjectView(R.id.wine_banner_view)
+    protected WineBannerView mBanner;
 
-    private ImageView mVarietalImageView;
+    @InjectView(R.id.varietal_container)
+    protected View mVarietalContainer;
 
-    private TextView mVarietalTextView;
+    @InjectView(R.id.varietal_color_icon)
+    protected ImageView mVarietalImageView;
 
-    private TextView mRegionPathTextView;
+    @InjectView(R.id.varietal_name)
+    protected TextView mVarietalTextView;
 
-    private TextView mAllRatingsAverageTextView;
+    @InjectView(R.id.region_path_name)
+    protected TextView mRegionPathTextView;
 
-    private TextView mAllRatingsCountTextView;
+    @InjectView(R.id.all_ratings_average)
+    protected TextView mAllRatingsAverageTextView;
 
-    private TextView mProRatingsAverageTextView;
+    @InjectView(R.id.all_ratings_count)
+    protected TextView mAllRatingsCountTextView;
 
-    private TextView mProRatingsCountTextView;
+    @InjectView(R.id.pro_ratings_average)
+    protected TextView mProRatingsAverageTextView;
 
-    private TextView mAllYearsTextView;
+    @InjectView(R.id.pro_ratings_count)
+    protected TextView mProRatingsCountTextView;
 
+    @InjectView(R.id.all_years_textview)
+    protected TextView mAllYearsTextView;
 
     private BaseNetworkController mNetworkController;
 
@@ -108,8 +123,6 @@ public class WineProfileFragment extends BaseFragment implements
     private BaseWine mBaseWine;
 
     private ListingResponse<CaptureNote> mCaptureNoteListing;
-
-    private WineBannerView mBanner;
 
 
     /**
@@ -160,34 +173,14 @@ public class WineProfileFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
+
         ListView listview = (ListView) view.findViewById(R.id.list_view);
 
         //prepare header view
         View header = inflater.inflate(R.layout.wine_profile_header, null, false);
+        ButterKnife.inject(this, header);
 
-        mBanner = (WineBannerView) header.findViewById(R.id.wine_banner_view);
         updateBannerData();
-
-        mVarietalContainer = header.findViewById(R.id.varietal_container);
-        mVarietalImageView = (ImageView) header.findViewById(R.id.varietal_color_icon);
-        mVarietalTextView = (TextView) header.findViewById(R.id.varietal_name);
-        mRegionPathTextView = (TextView) header.findViewById(R.id.region_path_name);
-
-        mAllRatingsAverageTextView = (TextView) header.findViewById(R.id.all_ratings_average);
-        mAllRatingsCountTextView = (TextView) header.findViewById(R.id.all_ratings_count);
-        mProRatingsAverageTextView = (TextView) header.findViewById(R.id.pro_ratings_average);
-        mProRatingsCountTextView = (TextView) header.findViewById(R.id.pro_ratings_count);
-        mAllYearsTextView = (TextView) header.findViewById(R.id.all_years_textview);
-
-        mAllYearsTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWine);
-                dialog.setTargetFragment(WineProfileFragment.this,
-                        CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
-                dialog.show(getFragmentManager(), "dialog");
-            }
-        });
 
         listview.addHeaderView(header, null, false);
         listview.setAdapter(mAdapter);
@@ -205,6 +198,14 @@ public class WineProfileFragment extends BaseFragment implements
         if (mWineProfile != null && mCapturePhotoHash != null) {
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         }
+    }
+
+    @OnClick(R.id.all_years_textview)
+    protected void onAllYearsTextClick() {
+        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWine);
+        dialog.setTargetFragment(WineProfileFragment.this,
+                CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), "dialog");
     }
 
     @Override
