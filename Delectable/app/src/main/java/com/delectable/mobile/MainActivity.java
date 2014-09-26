@@ -90,6 +90,8 @@ public class MainActivity extends Activity {
         } else {
             launchIntent.setClass(getApplicationContext(), LoginActivity.class);
         }
+        // Prevent multiples of the same Activity to be launched when clicking Push notification
+        launchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(launchIntent);
 
         finish();
