@@ -36,6 +36,7 @@ public class KahunaUtil {
     public static void trackLogOut() {
         HashMap<String, String> attributes = new HashMap<String, String>();
         trackKahunaEvent("logout", attributes);
+        KahunaAnalytics.logout();
     }
 
     public static void trackFollowUser(String numFollowing, String lastUserName,
