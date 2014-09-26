@@ -7,13 +7,13 @@ public class CaptureNote extends Capture {
 
     public static int MAX_RATING_VALUE = 40;
 
-    Integer capturer_rating;
+    private int capturer_rating;
 
-    String note;
+    private String note;
 
-    String vintage;
+    private String vintage;
 
-    ArrayList<String> helpfuling_account_ids;
+    private ArrayList<String> helpfuling_account_ids;
 
     public float getRatingPercent() {
         float ratingPercent = -1.0f;
@@ -24,7 +24,7 @@ public class CaptureNote extends Capture {
         return ratingPercent;
     }
 
-    public Integer getCapturerRating() {
+    public int getCapturerRating() {
         return capturer_rating;
     }
 
@@ -59,10 +59,16 @@ public class CaptureNote extends Capture {
     @Override
     public String toString() {
         return "CaptureNote{" +
-                "capturer_rating=" + capturer_rating +
+                "id='" + getId() + '\'' +
+                ", created_at=" + getCreatedAt() +
+                ", private_=" + getPrivate() +
                 ", note='" + note + '\'' +
+                ", capturer_rating=" + capturer_rating +
                 ", vintage='" + vintage + '\'' +
                 ", helpfuling_account_ids=" + helpfuling_account_ids +
-                "} " + super.toString();
+                ", context='" + getContext() + '\'' +
+                ", e_tag='" + getETag() + '\'' +
+                ", capturer_participant=" + getCapturerParticipant() +
+                "}";
     }
 }

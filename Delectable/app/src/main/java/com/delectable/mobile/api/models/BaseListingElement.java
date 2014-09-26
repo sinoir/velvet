@@ -22,13 +22,12 @@ public abstract class BaseListingElement extends BaseResponse {
         }
     };
 
-    String id;
+    private String id;
 
-    Double created_at;
+    private double created_at;
 
     public Date getCreatedAtDate() {
-        double createdAtTime = created_at != null ? created_at.doubleValue() : 0.0f;
-        return DateHelperUtil.dateFromDouble(createdAtTime);
+        return DateHelperUtil.dateFromDouble(created_at);
     }
 
     public String getId() {
@@ -39,11 +38,11 @@ public abstract class BaseListingElement extends BaseResponse {
         this.id = id;
     }
 
-    public Double getCreatedAt() {
+    public double getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(Double created_at) {
+    public void setCreatedAt(double created_at) {
         this.created_at = created_at;
     }
 
@@ -52,6 +51,8 @@ public abstract class BaseListingElement extends BaseResponse {
         return "BaseListingElement{" +
                 "id='" + id + '\'' +
                 ", created_at=" + created_at +
+                ", context='" + getContext() + '\'' +
+                ", e_tag='" + getETag() + '\'' +
                 '}';
     }
 }
