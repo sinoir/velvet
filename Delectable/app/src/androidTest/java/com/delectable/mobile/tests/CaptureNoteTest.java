@@ -3,7 +3,7 @@ package com.delectable.mobile.tests;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.CaptureNotesRequest;
+import com.delectable.mobile.model.api.captures.CaptureNotesResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,10 +23,8 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
     public void testParseListingFirstQueryCaptureNote() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_notes_listing_first_query);
 
-        CaptureNotesRequest request = new CaptureNotesRequest();
-        ListingResponse<CaptureNote> actualListing = (ListingResponse<CaptureNote>) request
-                .buildResopnseFromJson(
-                        json);
+        CaptureNotesResponse response = mGson.fromJson(json.toString(), CaptureNotesResponse.class);
+        ListingResponse<CaptureNote> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());
