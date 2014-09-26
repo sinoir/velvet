@@ -11,7 +11,6 @@ import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.kahuna.sdk.KahunaAnalytics;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -19,8 +18,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.util.List;
 
 public abstract class BaseActivity extends Activity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -80,16 +77,10 @@ public abstract class BaseActivity extends Activity
      * Activity
      */
     public void finishDeepLinkActivity() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskInfoList = manager.getRunningTasks(1);
-        boolean isNavActivityInTask = taskInfoList.size() > 0 && taskInfoList.get(0).baseActivity
-                .getShortClassName().contains(
-                        "NavActivity");
-        if (!isNavActivityInTask) {
-            Intent launchIntent = new Intent();
-            launchIntent.setClass(getApplicationContext(), NavActivity.class);
-            startActivity(launchIntent);
-        }
+        Intent launchNavIntent = new Intent();
+        launchNavIntent.setClass(getApplicationContext(), NavActivity.class);
+        launchNavIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(launchNavIntent);
         super.finish();
     }
 
