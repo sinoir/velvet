@@ -1,13 +1,16 @@
 package com.delectable.mobile.jobs.accounts;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseResponse;
 import com.delectable.mobile.model.api.accounts.AccountFollowRequest;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
@@ -32,14 +35,14 @@ public class oldFollowAccountJob extends Job {
 
     private String mAccountId;
 
-    private boolean mFollow;
+    private boolean mIsFollowing;
 
     private int mOriginalUserRelationship;
 
     public oldFollowAccountJob(String id, boolean follow) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
         mAccountId = id;
-        mFollow = follow;
+        mIsFollowing = follow;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class oldFollowAccountJob extends Job {
         Account cachedAccount = mAccountModel.getAccount(mAccountId);
         mOriginalUserRelationship = cachedAccount.getCurrentUserRelationship();
         cachedAccount.setCurrentUserRelationship(
-                mFollow ? Account.RELATION_TYPE_FOLLOWING : Account.RELATION_TYPE_NONE);
+                mIsFollowing ? Account.RELATION_TYPE_FOLLOWING : Account.RELATION_TYPE_NONE);
         mAccountModel.saveAccount(cachedAccount);
         // Inform UI that the model has changed
         mEventBus.post(new UpdatedAccountEvent(cachedAccount));
@@ -57,12 +60,18 @@ public class oldFollowAccountJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
+        Account followingUserAccount = mAccountModel.getAccount(mAccountId);
+        Account currentUser = mAccountModel.getAccount(UserInfo.getUserId(App.getInstance()));
         String endpoint = "/accounts/follow";
         AccountFollowRequest request = new AccountFollowRequest(
-                new AccountFollowRequest.AccountFollowPayload(mAccountId, mFollow));
+                new AccountFollowRequest.AccountFollowPayload(mAccountId, mIsFollowing));
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
         // No need to update the UI since we did that before the actual request
         Log.d(TAG, "FOLLOW: synched with backend");
+        if (response.isSuccess() && followingUserAccount != null && mIsFollowing) {
+            KahunaUtil.trackFollowUser("" + currentUser.getFollowingCount(),
+                    followingUserAccount.getFullName(), followingUserAccount.getId());
+        }
     }
 
     @Override

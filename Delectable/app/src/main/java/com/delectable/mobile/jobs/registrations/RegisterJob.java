@@ -9,10 +9,13 @@ import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 import com.delectable.mobile.model.api.registrations.RegistrationsRegisterRequest;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
 import android.util.Log;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -72,6 +75,11 @@ public class RegisterJob extends Job {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
         mEventBus.post(new LoginRegisterEvent(true));
+
+        if (response.isSuccess()) {
+            KahunaUtil.trackSignUp("email", account.getFname(), account.getLname(),
+                    Calendar.getInstance().getTime());
+        }
     }
 
     @Override

@@ -9,8 +9,11 @@ import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.AuthorizeFacebookRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationFacebookResponse;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -65,6 +68,15 @@ public class LoginFacebookJob extends Job {
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken,
                 account.getEmail());
         mEventBus.post(new LoginRegisterEvent(true));
+
+        if (response.isSuccess()) {
+            if (newUser) {
+                KahunaUtil.trackSignUp("facebook", account.getFname(), account.getLname(),
+                        Calendar.getInstance().getTime());
+            } else {
+                KahunaUtil.trackLogin(account.getId(), account.getEmail());
+            }
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.SearchRequest;
 import com.delectable.mobile.model.api.basewines.BaseWinesSearchResponse;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
 public class SearchWinesJob extends BaseJob {
@@ -32,6 +33,9 @@ public class SearchWinesJob extends BaseJob {
         BaseWinesSearchResponse response = getNetworkClient().post(endpoint, request,
                 BaseWinesSearchResponse.class);
         getEventBus().post(new SearchWinesEvent(response.getPayload()));
+        if (response.isSuccess()) {
+            KahunaUtil.trackSearch();
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
 import com.delectable.mobile.model.api.captures.CommentCaptureRequest;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -47,6 +48,10 @@ public class AddCaptureCommentJob extends BaseJob {
 
         mCapturesModel.saveCaptureDetails(capture);
         getEventBus().post(new AddCaptureCommentEvent(true, mCaptureId));
+
+        if (response.isSuccess()) {
+            KahunaUtil.trackComment();
+        }
     }
 
     @Override

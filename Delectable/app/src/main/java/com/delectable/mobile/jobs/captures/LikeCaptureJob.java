@@ -7,6 +7,7 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.ActionRequest;
 import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -51,6 +52,10 @@ public class LikeCaptureJob extends BaseJob {
 
         mCapturesModel.saveCaptureDetails(cachedCapture);
         getEventBus().post(new LikedCaptureEvent(true, mCaptureId));
+
+        if (response.isSuccess() && mIsLiked) {
+            KahunaUtil.trackLikeCapture(mCaptureId, cachedCapture.getDisplayTitle());
+        }
     }
 
     @Override
