@@ -11,21 +11,26 @@ public class ServerInfo {
     public static final String API_VERSION = "/v2";
 
     public enum Environment {
-        PROD("https://api.delectable.com"),
-        MOBILE("http://mobile-api.delectable.com"),
-        STAGING("https://staging-api.delectable.com");
+        PROD("https://api.delectable.com", "http://motd.delectable.com/"),
+        MOBILE("http://mobile-api.delectable.com", "http://mobile-motd.delectable.com/"),
+        STAGING("https://staging-api.delectable.com", "http://staging-motd.delectable.com/");
 
         private String mUrl;
 
-        private Environment(String url) {
+        private String mMotdUrl;
+
+        private Environment(String url, String motdUrl) {
             mUrl = url;
+            mMotdUrl = motdUrl;
         }
 
         public String getUrl() {
             return mUrl;
         }
 
-        public static final String[] ALL = {PROD.getUrl(), MOBILE.getUrl(), STAGING.getUrl()};
+        public String getMotdUrl() {
+            return mMotdUrl;
+        }
     }
 
     public static final String PREFERENCES = "com.delectable.mobile.data.serverinfo";
