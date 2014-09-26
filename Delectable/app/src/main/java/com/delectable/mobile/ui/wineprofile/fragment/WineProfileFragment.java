@@ -2,7 +2,6 @@ package com.delectable.mobile.ui.wineprofile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
@@ -59,13 +58,13 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final int NO_AVG_RATING = -1;
 
-    private static final String sArgsWineProfile = "wineProfile";
+    private static final String WINE_PROFILE = "wineProfile";
 
-    private static final String sArgsPhotoHash = "photoHash";
+    private static final String PHOTO_HASH = "photoHash";
 
-    private static final String sArgsBaseWineId = "baseWineId";
+    private static final String BASE_WINE_ID = "baseWineId";
 
-    private static final String sArgsVintageId = "vintageId";
+    private static final String VINTAGE_ID = "vintageId";
 
     private static final int CHOOSE_VINTAGE_DIALOG = 1;
 
@@ -147,8 +146,8 @@ public class WineProfileFragment extends BaseFragment implements
             PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
-        args.putParcelable(sArgsWineProfile, wineProfile);
-        args.putParcelable(sArgsPhotoHash, capturePhotoHash);
+        args.putParcelable(WINE_PROFILE, wineProfile);
+        args.putParcelable(PHOTO_HASH, capturePhotoHash);
         fragment.setArguments(args);
         return fragment;
     }
@@ -157,8 +156,8 @@ public class WineProfileFragment extends BaseFragment implements
             String vintageId) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
-        args.putString(sArgsBaseWineId, baseWineId);
-        args.putString(sArgsVintageId, vintageId);
+        args.putString(BASE_WINE_ID, baseWineId);
+        args.putString(VINTAGE_ID, vintageId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -169,11 +168,11 @@ public class WineProfileFragment extends BaseFragment implements
         App.injectMembers(this);
         Bundle args = getArguments();
         if (args != null) {
-            mWineProfile = args.getParcelable(sArgsWineProfile);
-            mCapturePhotoHash = args.getParcelable(sArgsPhotoHash);
+            mWineProfile = args.getParcelable(WINE_PROFILE);
+            mCapturePhotoHash = args.getParcelable(PHOTO_HASH);
 
-            mBaseWineId = args.getString(sArgsBaseWineId);
-            mVintageId = args.getString(sArgsVintageId);
+            mBaseWineId = args.getString(BASE_WINE_ID);
+            mVintageId = args.getString(VINTAGE_ID);
         }
         if (mBaseWineId == null && mWineProfile != null) {
             mBaseWineId = mWineProfile.getBaseWineId();
