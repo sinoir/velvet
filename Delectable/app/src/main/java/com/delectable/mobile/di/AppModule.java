@@ -40,6 +40,7 @@ import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
+import com.delectable.mobile.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
 import com.delectable.mobile.jobs.captures.LikeCaptureJob;
@@ -153,6 +154,7 @@ import de.greenrobot.event.EventBus;
                 SearchWinesJob.class,
                 SearchAccountsJob.class,
                 FetchBaseWineJob.class,
+                FetchCaptureNotesJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,

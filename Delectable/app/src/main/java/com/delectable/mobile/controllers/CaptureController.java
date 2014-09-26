@@ -4,6 +4,7 @@ import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
+import com.delectable.mobile.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
 import com.delectable.mobile.jobs.captures.LikeCaptureJob;
@@ -56,5 +57,11 @@ public class CaptureController {
 
     public void deleteCapture(String captureId) {
         mJobManager.addJobInBackground(new DeleteCaptureJob(captureId));
+    }
+
+    public void fetchCaptureNotes(String baseWineId, String wineProfileId, Float before,
+            Float after, String includeCaptureNote) {
+        mJobManager.addJobInBackground(new FetchCaptureNotesJob(baseWineId, wineProfileId, before,
+                after, includeCaptureNote));
     }
 }

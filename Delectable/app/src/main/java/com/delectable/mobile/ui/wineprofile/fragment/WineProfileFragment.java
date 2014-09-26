@@ -11,10 +11,11 @@ import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.CaptureNotesRequest;
 import com.delectable.mobile.api.requests.HelpfulActionRequest;
 import com.delectable.mobile.controllers.BaseWineController;
+import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.BaseWineModel;
+import com.delectable.mobile.events.captures.FetchedCaptureNotesEvent;
 import com.delectable.mobile.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
@@ -72,6 +73,9 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Inject
     protected BaseWineController mBaseWineController;
+
+    @Inject
+    protected CaptureController mCaptureController;
 
     @Inject
     protected BaseWineModel mBaseWineModel;
@@ -228,10 +232,12 @@ public class WineProfileFragment extends BaseFragment implements
         switch (requestCode) {
             case CHOOSE_VINTAGE_DIALOG:
                 Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
+                //when All Years is selected from dialog
                 if (wine instanceof BaseWine) {
                     BaseWine baseWine = (BaseWine) wine;
                     loadCaptureNotesData(IdType.BASE_WINE, baseWine.getId());
                 }
+                //when a vintage year is selected from the dialog
                 if (wine instanceof WineProfile) {
                     WineProfile wineProfile = (WineProfile) wine;
                     loadCaptureNotesData(IdType.WINE_PROFILE, wineProfile.getId());
@@ -276,31 +282,24 @@ public class WineProfileFragment extends BaseFragment implements
      */
     private void loadCaptureNotesData(IdType idType, String id) {
         //retrieve captureNotes
-        CaptureNotesRequest captureReq = new CaptureNotesRequest();
         if (idType == IdType.BASE_WINE) {
-            captureReq.setBaseWineId(id);
+            mCaptureController.fetchCaptureNotes(id, null, null, null, null);
         }
         if (idType == IdType.WINE_PROFILE) {
-            captureReq.setWineProfileId(id);
+            mCaptureController.fetchCaptureNotes(null, id, null, null, null);
         }
-        mNetworkController.performRequest(captureReq,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        mCaptureNoteListing = (ListingResponse<CaptureNote>) result;
-                        updateCaptureNotesData();
-                    }
-
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
     }
+
+    public void onEventMainThread(FetchedCaptureNotesEvent event) {
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+            return;
+        }
+
+        mCaptureNoteListing = event.getListingResponse();
+        updateCaptureNotesData();
+    }
+
 
     private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
         HelpfulActionRequest request = new HelpfulActionRequest(captureNote, markHelpful);
