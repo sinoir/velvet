@@ -56,6 +56,14 @@ public class CaptureNote extends Capture {
         this.helpfuling_account_ids = helpfuling_account_ids;
     }
 
+    public void markHelpful(String userId) {
+        helpfuling_account_ids.add(userId);
+    }
+
+    public void unmarkHelpful(String userId) {
+        helpfuling_account_ids.remove(userId);
+    }
+
     @Override
     public String toString() {
         return "CaptureNote{" +

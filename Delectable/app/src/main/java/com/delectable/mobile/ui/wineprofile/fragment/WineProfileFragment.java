@@ -2,20 +2,19 @@ package com.delectable.mobile.ui.wineprofile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
 import com.delectable.mobile.api.controllers.BaseNetworkController;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.HelpfulActionRequest;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.BaseWineModel;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.captures.FetchedCaptureNotesEvent;
+import com.delectable.mobile.events.captures.MarkedCaptureHelpfulEvent;
 import com.delectable.mobile.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
@@ -34,7 +33,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +40,10 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -110,8 +108,6 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.all_years_textview)
     protected TextView mAllYearsTextView;
 
-    private BaseNetworkController mNetworkController;
-
     private ArrayList<CaptureNote> mCaptureNotes = new ArrayList<CaptureNote>();
 
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(mCaptureNotes, this);
@@ -127,6 +123,18 @@ public class WineProfileFragment extends BaseFragment implements
     private BaseWine mBaseWine;
 
     private ListingResponse<CaptureNote> mCaptureNoteListing;
+
+    /**
+     * these maps are used to retain references to {@link CaptureNote} objects expecting updates to
+     * their helpful status. This way, when the {@link MarkedCaptureHelpfulEvent} returns, we don't
+     * have to iterate through our {@link CaptureNote} list to find the {@link CaptureNote} object
+     * to modify.
+     */
+    private HashMap<String, CaptureNote> mCaptureNotesExpectingUpdate
+            = new HashMap<String, CaptureNote>();
+
+    private HashMap<String, Boolean> mCaptureNoteExpectedHelpfulStatus
+            = new HashMap<String, Boolean>();
 
 
     /**
@@ -159,7 +167,6 @@ public class WineProfileFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        mNetworkController = new BaseNetworkController(getActivity());
         Bundle args = getArguments();
         if (args != null) {
             mWineProfile = args.getParcelable(sArgsWineProfile);
@@ -300,26 +307,38 @@ public class WineProfileFragment extends BaseFragment implements
         updateCaptureNotesData();
     }
 
-
     private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
-        HelpfulActionRequest request = new HelpfulActionRequest(captureNote, markHelpful);
-        mNetworkController.performRequest(request,
-                new BaseNetworkController.RequestCallback() {
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        //TODO implement HelpfulActionRequests's buildResopnseFromJson in order to have the result return non-null
-                    }
+        mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
+        mCaptureNoteExpectedHelpfulStatus.put(captureNote.getId(), markHelpful);
 
-                    @Override
-                    public void onFailed(RequestError error) {
-                        Log.d(TAG, "Results Failed! " + error.getMessage() + " Code:" + error
-                                .getCode());
-                        // TODO: What to do with errors?
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
+        mCaptureController.markCaptureHelpful(captureNote, markHelpful);
     }
+
+    public void onEventMainThread(MarkedCaptureHelpfulEvent event) {
+        String captureId = event.getCaptureId();
+        CaptureNote captureNote = mCaptureNotesExpectingUpdate.remove(captureId);
+        Boolean expectedHelpful = mCaptureNoteExpectedHelpfulStatus.remove(captureId);
+        if (captureNote == null) {
+            return; //capturenote didn't exist in the hashmap, means this event wasn't called from this fragment
+        }
+
+        //the captureNote object's helpfuling account ids list was modified when the user pressed helpful,
+        // if the event errored we need to revert the list back to it's original form
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+
+            //revert helpfulness, bc event failed
+            String userId = UserInfo.getUserId(getActivity());
+            if (expectedHelpful) {
+                captureNote.unmarkHelpful(userId);
+            } else {
+                captureNote.markHelpful(userId);
+            }
+        }
+        //will reset following toggle button back to original setting if error
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     private void updateBaseWineData() {
 
