@@ -5,9 +5,12 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
 import com.delectable.mobile.model.api.scanwinelabels.AddCaptureFromPendingCaptureRequest;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
 import android.util.Log;
+
+import java.util.Calendar;
 
 public class AddCaptureFromPendingCaptureJob extends BaseJob {
 
@@ -37,6 +40,8 @@ public class AddCaptureFromPendingCaptureJob extends BaseJob {
 
         Log.d(TAG, "Added new Capture: " + response.getCapturePayload());
         getEventBus().post(new AddedCaptureFromPendingCaptureEvent(response.getCapturePayload()));
+        KahunaUtil.trackCreateCapture(Calendar.getInstance().getTime(),
+                response.getCapturePayload().getId());
     }
 
     @Override

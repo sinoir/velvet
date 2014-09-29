@@ -4,6 +4,7 @@ import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.delectable.mobile.util.KahunaUtil;
 import com.facebook.Session;
 import com.iainconnor.objectcache.CacheManager;
 
@@ -177,6 +178,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         launchIntent.setClass(getActivity(), LoginActivity.class);
         startActivity(launchIntent);
         getActivity().finish();
+        KahunaUtil.trackLogOut();
     }
 
     public void hideKeyboard() {
