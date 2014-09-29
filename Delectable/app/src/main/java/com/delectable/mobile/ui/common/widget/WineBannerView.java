@@ -111,9 +111,9 @@ public class WineBannerView extends RelativeLayout {
 
         String wineImageUrl;
         if (capturePhotoHash != null) {
-            wineImageUrl = capturePhotoHash.getUrl();
+            wineImageUrl = capturePhotoHash.get450Plus();
         } else {
-            wineImageUrl = wineProfile.getPhoto().getUrl();
+            wineImageUrl = wineProfile.getPhoto().get450Plus();
         }
         String producerName = wineProfile.getProducerName();
         String wineName = wineProfile.getName();

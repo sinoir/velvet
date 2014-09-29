@@ -29,7 +29,7 @@ public class NetworkClient extends BaseNetworkClient {
 
     @Override
     protected String getBaseUrl() {
-        return Config.ServerInfo.SERVER_MOBILE_URL + Config.API_VERSION;
+        return Config.ServerInfo.SERVER_PROD_URL + Config.API_VERSION;
     }
 
     /**
