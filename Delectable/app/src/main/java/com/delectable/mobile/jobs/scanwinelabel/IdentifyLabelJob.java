@@ -6,8 +6,11 @@ import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.model.api.scanwinelabels.LabelScanResponse;
 import com.delectable.mobile.model.api.scanwinelabels.PhotoUploadRequest;
+import com.delectable.mobile.util.KahunaUtil;
 
 import android.util.Log;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -38,13 +41,15 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
         LabelScanResponse response = getNetworkClient().post(endpoint, request,
                 LabelScanResponse.class);
 
-        if (response.getLabelScan() != null && response.getLabelScan().getBaseWineMatches() != null) {
+        if (response.getLabelScan() != null
+                && response.getLabelScan().getBaseWineMatches() != null) {
             for (BaseWine baseWine : response.getLabelScan().getBaseWineMatches()) {
                 mBaseWineModel.saveBaseWine(baseWine);
             }
         }
         Log.d(TAG, "Scanneed label Payload: " + response.getLabelScan());
         getEventBus().post(new IdentifyLabelScanEvent(response.getLabelScan()));
+        KahunaUtil.trackScanBottle(Calendar.getInstance().getTime());
     }
 
     @Override
