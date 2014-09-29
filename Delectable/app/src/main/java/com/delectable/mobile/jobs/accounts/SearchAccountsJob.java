@@ -37,9 +37,7 @@ public class SearchAccountsJob extends BaseJob {
         AccountsSearchResponse response = getNetworkClient().post(endpoint, request,
                 AccountsSearchResponse.class);
         getEventBus().post(new SearchAccountsEvent(response.getPayload()));
-        if (response.isSuccess()) {
-            KahunaUtil.trackSearch();
-        }
+        KahunaUtil.trackSearch();
     }
 
     @Override

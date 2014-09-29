@@ -69,13 +69,11 @@ public class LoginFacebookJob extends Job {
                 account.getEmail());
         mEventBus.post(new LoginRegisterEvent(true));
 
-        if (response.isSuccess()) {
-            if (newUser) {
-                KahunaUtil.trackSignUp("facebook", account.getFname(), account.getLname(),
-                        Calendar.getInstance().getTime());
-            } else {
-                KahunaUtil.trackLogin(account.getId(), account.getEmail());
-            }
+        if (newUser) {
+            KahunaUtil.trackSignUp("facebook", account.getFname(), account.getLname(),
+                    Calendar.getInstance().getTime());
+        } else {
+            KahunaUtil.trackLogin(account.getId(), account.getEmail());
         }
     }
 

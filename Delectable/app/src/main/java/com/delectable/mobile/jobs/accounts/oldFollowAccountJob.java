@@ -68,7 +68,7 @@ public class oldFollowAccountJob extends Job {
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
         // No need to update the UI since we did that before the actual request
         Log.d(TAG, "FOLLOW: synched with backend");
-        if (response.isSuccess() && followingUserAccount != null && mIsFollowing) {
+        if (followingUserAccount != null && mIsFollowing) {
             KahunaUtil.trackFollowUser("" + currentUser.getFollowingCount(),
                     followingUserAccount.getFullName(), followingUserAccount.getId());
         }

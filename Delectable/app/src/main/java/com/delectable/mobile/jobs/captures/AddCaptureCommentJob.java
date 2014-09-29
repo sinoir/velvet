@@ -49,9 +49,7 @@ public class AddCaptureCommentJob extends BaseJob {
         mCapturesModel.saveCaptureDetails(capture);
         getEventBus().post(new AddCaptureCommentEvent(true, mCaptureId));
 
-        if (response.isSuccess()) {
-            KahunaUtil.trackComment();
-        }
+        KahunaUtil.trackComment();
     }
 
     @Override

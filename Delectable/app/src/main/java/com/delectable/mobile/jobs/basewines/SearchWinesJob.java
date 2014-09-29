@@ -33,9 +33,7 @@ public class SearchWinesJob extends BaseJob {
         BaseWinesSearchResponse response = getNetworkClient().post(endpoint, request,
                 BaseWinesSearchResponse.class);
         getEventBus().post(new SearchWinesEvent(response.getPayload()));
-        if (response.isSuccess()) {
-            KahunaUtil.trackSearch();
-        }
+        KahunaUtil.trackSearch();
     }
 
     @Override

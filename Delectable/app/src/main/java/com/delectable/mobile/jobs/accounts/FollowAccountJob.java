@@ -43,7 +43,7 @@ public class FollowAccountJob extends BaseJob {
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
         getEventBus().post(new FollowAccountEvent(mAccountId, response.isSuccess()));
 
-        if (response.isSuccess() && followingUserAccount != null && mIsFollowing) {
+        if (followingUserAccount != null && mIsFollowing) {
             KahunaUtil.trackFollowUser("" + currentUser.getFollowingCount(),
                     followingUserAccount.getFullName(), followingUserAccount.getId());
         }

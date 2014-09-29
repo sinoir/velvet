@@ -53,7 +53,7 @@ public class LikeCaptureJob extends BaseJob {
         mCapturesModel.saveCaptureDetails(cachedCapture);
         getEventBus().post(new LikedCaptureEvent(true, mCaptureId));
 
-        if (response.isSuccess() && mIsLiked) {
+        if (mIsLiked) {
             KahunaUtil.trackLikeCapture(mCaptureId, cachedCapture.getDisplayTitle());
         }
     }

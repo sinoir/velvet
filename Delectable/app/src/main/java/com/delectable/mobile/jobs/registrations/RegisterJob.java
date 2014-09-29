@@ -76,10 +76,8 @@ public class RegisterJob extends Job {
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
         mEventBus.post(new LoginRegisterEvent(true));
 
-        if (response.isSuccess()) {
-            KahunaUtil.trackSignUp("email", account.getFname(), account.getLname(),
-                    Calendar.getInstance().getTime());
-        }
+        KahunaUtil.trackSignUp("email", account.getFname(), account.getLname(),
+                Calendar.getInstance().getTime());
     }
 
     @Override

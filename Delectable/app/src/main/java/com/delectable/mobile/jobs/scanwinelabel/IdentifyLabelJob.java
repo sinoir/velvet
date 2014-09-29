@@ -49,9 +49,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
         }
         Log.d(TAG, "Scanneed label Payload: " + response.getLabelScan());
         getEventBus().post(new IdentifyLabelScanEvent(response.getLabelScan()));
-        if (response.isSuccess()) {
-            KahunaUtil.trackScanBottle(Calendar.getInstance().getTime());
-        }
+        KahunaUtil.trackScanBottle(Calendar.getInstance().getTime());
     }
 
     @Override
