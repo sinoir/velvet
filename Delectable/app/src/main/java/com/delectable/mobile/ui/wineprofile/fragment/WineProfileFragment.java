@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-
+//TODO paginate capturenotes listview? go to another screen?
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler {
 
@@ -113,9 +112,7 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.all_years_textview)
     protected TextView mAllYearsTextView;
 
-    private ArrayList<CaptureNote> mCaptureNotes = new ArrayList<CaptureNote>();
-
-    private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(mCaptureNotes, this);
+    private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this);
 
     private WineProfile mWineProfile;
 
@@ -476,12 +473,11 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void updateCaptureNotesData() {
-        mCaptureNotes.clear();
         // TODO : Fix , this shouldn't be null
         if (mCaptureNoteListing == null) {
             return;
         }
-        mCaptureNotes.addAll(mCaptureNoteListing.getUpdates());
+        mAdapter.setCaptureNotes(mCaptureNoteListing.getUpdates());
         mAdapter.notifyDataSetChanged();
     }
 

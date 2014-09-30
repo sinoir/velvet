@@ -10,12 +10,11 @@ import java.util.ArrayList;
 
 public class CaptureNotesAdapter extends BaseAdapter {
 
-    private ArrayList<CaptureNote> mCaptureNotes;
+    private ArrayList<CaptureNote> mCaptureNotes = new ArrayList<CaptureNote>();
 
     private WineProfileCommentUnitRow.ActionsHandler mActionsHandler;
 
-    public CaptureNotesAdapter(ArrayList<CaptureNote> captureNotes, WineProfileCommentUnitRow.ActionsHandler actionsHandler) {
-        mCaptureNotes = captureNotes;
+    public CaptureNotesAdapter(WineProfileCommentUnitRow.ActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 
@@ -44,5 +43,9 @@ public class CaptureNotesAdapter extends BaseAdapter {
         }
         row.updateCaptureNoteData(mCaptureNotes.get(position));
         return row;
+    }
+
+    public void setCaptureNotes(ArrayList<CaptureNote> captureNotes) {
+        mCaptureNotes = captureNotes;
     }
 }
