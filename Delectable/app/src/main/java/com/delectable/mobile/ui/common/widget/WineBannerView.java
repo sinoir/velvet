@@ -126,7 +126,7 @@ public class WineBannerView extends RelativeLayout {
         updateViewWithData(wineImageUrl, producerName, wineName);
     }
 
-    //Wine Profile coming from Search Results screen uses this method
+    //Wine Profile coming from Search Wine, WineCaptureSubmit screen uses this method
     public void updateData(BaseWineMinimal baseWine) {
         String wineImageUrl = baseWine.getPhoto().get450Plus();
         String producerName = baseWine.getProducerName();

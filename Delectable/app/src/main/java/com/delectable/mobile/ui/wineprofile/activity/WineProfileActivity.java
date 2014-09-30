@@ -97,14 +97,15 @@ public class WineProfileActivity extends BaseActivity {
 
             WineProfileFragment fragment = null;
 
-            if (mBaseWineMinimal != null) {
-                //spawned from search fragment
-                fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
+            if (mWineProfile != null) {
+                //spawned from a Feed Fragment
+                fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
             } else if (mBaseWine!=null) {
                 //spawned from WineCaptureSubmit
                 fragment = WineProfileFragment.newInstance(mBaseWine);
-            } else if (mWineProfile != null && mCapturePhotoHash != null) {
-                fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
+            }else if (mBaseWineMinimal != null) {
+                //spawned from search fragment
+                fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
             } else if (mBaseWineId != null) {
                 //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
@@ -114,7 +115,6 @@ public class WineProfileActivity extends BaseActivity {
                     .add(R.id.container, fragment)
                     .commit();
         }
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

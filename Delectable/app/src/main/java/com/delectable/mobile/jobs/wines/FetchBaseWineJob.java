@@ -48,8 +48,8 @@ public class FetchBaseWineJob extends BaseJob {
         if (!response.isETagMatch()) {
             BaseWine baseWine = response.getBaseWine();
             mBaseWineModel.saveBaseWine(baseWine);
-            getEventBus().post(new UpdatedBaseWineEvent(true, mBaseWineId));
         }
+        getEventBus().post(new UpdatedBaseWineEvent(true, mBaseWineId));
     }
 
     @Override

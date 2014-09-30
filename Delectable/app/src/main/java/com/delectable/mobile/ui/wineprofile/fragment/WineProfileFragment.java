@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,8 +199,7 @@ public class WineProfileFragment extends BaseFragment implements
      * @param baseWineId required
      * @param vintageId  optional
      */
-    public static WineProfileFragment newInstance(String baseWineId,
-            String vintageId) {
+    public static WineProfileFragment newInstance(String baseWineId, String vintageId) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putString(BASE_WINE_ID, baseWineId);
@@ -214,11 +214,9 @@ public class WineProfileFragment extends BaseFragment implements
         App.injectMembers(this);
         Bundle args = getArguments();
         if (args != null) {
+            //spawned from Feed Fragment
             mWineProfile = args.getParcelable(WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PHOTO_HASH);
-
-            mBaseWineId = args.getString(BASE_WINE_ID);
-            mVintageId = args.getString(VINTAGE_ID);
 
             //spawned from Search
             mBaseWineMinimal = args.getParcelable(BASE_WINE_MINIMAL);
@@ -226,16 +224,23 @@ public class WineProfileFragment extends BaseFragment implements
             //spawned from WineCaptureSubmit
             mBaseWine = args.getParcelable(BASE_WINE);
 
+            //spawned from deep links
+            mBaseWineId = args.getString(BASE_WINE_ID);
+            mVintageId = args.getString(VINTAGE_ID);
         }
-        if (mBaseWineMinimal != null) {
+
+        //ensure mBaseWineId is not null, so we can use it to retrieve BaseWine and CaptureNotes
+        if (mWineProfile != null) {
+            //spawned from Feed Fragment
+            mBaseWineId = mWineProfile.getBaseWineId();
+        } else if (mBaseWineMinimal != null) {
             //spawned from Search
             mBaseWineId = mBaseWineMinimal.getId();
         } else if (mBaseWine != null) {
             //spawned from WineCaptureSubmitFragment
             mBaseWineId = mBaseWine.getId();
-        } else if (mBaseWineId == null && mWineProfile != null) {
-            mBaseWineId = mWineProfile.getBaseWineId();
         }
+        //if spawned from deeplinks, mBaseWineId wil be already populated
     }
 
     @Override
@@ -267,14 +272,16 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void updateBannerData() {
-        if (mBaseWineMinimal != null) {
+        if (mWineProfile != null) {
+            //spawned from Feed Fragment
+            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+        } else if (mBaseWineMinimal != null) {
             //spawned from Search Wines
             mBanner.updateData(mBaseWineMinimal);
         } else if (mBaseWine != null) {
             //spawned from WineCaptureSubmit
+            //also called after BaseWine is successfully fetched
             mBanner.updateData(mBaseWine);
-        } else if (mWineProfile != null && mCapturePhotoHash != null) {
-            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         }
     }
 
@@ -290,10 +297,9 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        //only load data if there is no base wine yet
-
         //not spawned from WineCaptureSubmit, need to fetch BaseWine
         if (mBaseWine == null) {
+            loadBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
         }
 
@@ -327,13 +333,8 @@ public class WineProfileFragment extends BaseFragment implements
         if (mBaseWine == null) {
             return;
         }
-        if (mBaseWine.getWineProfiles() != null
-                && mBaseWine.getWineProfiles().size() > 0) {
-            // TODO: Loop Through Wine Profiles to get Vintage.  Will require this for price / purchasing.
-            // TODO: Possibly create a helper method in BaseWine: mBaseWine.getWineByVintage("")
-            mWineProfile = mBaseWine.getWineProfiles().get(0);
 
-        }
+        //if spawned from a Feed Fragment, mCapturePhotoHash won't be null, we don't want to replace that capture photo with the basewine's photo
         if (mCapturePhotoHash == null) {
             mCapturePhotoHash = mBaseWine.getPhoto();
         }
