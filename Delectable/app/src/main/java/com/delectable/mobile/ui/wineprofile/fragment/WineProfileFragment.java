@@ -63,6 +63,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String PHOTO_HASH = "photoHash";
 
+    private static final String BASE_WINE = "baseWine";
+
     private static final String BASE_WINE_MINIMAL = "baseWineMinimal";
 
     private static final String BASE_WINE_ID = "baseWineId";
@@ -153,12 +155,24 @@ public class WineProfileFragment extends BaseFragment implements
      * @param capturePhotoHash {@link com.delectable.mobile.api.models.CaptureDetails
      *                         CaptureDetails}' PhotoHash. Pass in null to use WineProfile's image.
      */
+    //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfile wineProfile,
             PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(WINE_PROFILE, wineProfile);
         args.putParcelable(PHOTO_HASH, capturePhotoHash);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Launching from WineCaptureSubmitFragment.
+     */
+    public static WineProfileFragment newInstance(BaseWine baseWine) {
+        WineProfileFragment fragment = new WineProfileFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(BASE_WINE, baseWine);
         fragment.setArguments(args);
         return fragment;
     }
@@ -205,10 +219,21 @@ public class WineProfileFragment extends BaseFragment implements
 
             mBaseWineId = args.getString(BASE_WINE_ID);
             mVintageId = args.getString(VINTAGE_ID);
+
+            //spawned from Search
+            mBaseWineMinimal = args.getParcelable(BASE_WINE_MINIMAL);
+
+            //spawned from WineCaptureSubmit
+            mBaseWine = args.getParcelable(BASE_WINE);
+
         }
         if (mBaseWineMinimal != null) {
+            //spawned from Search
             mBaseWineId = mBaseWineMinimal.getId();
-        }else if (mBaseWineId == null && mWineProfile != null) {
+        } else if (mBaseWine != null) {
+            //spawned from WineCaptureSubmitFragment
+            mBaseWineId = mBaseWine.getId();
+        } else if (mBaseWineId == null && mWineProfile != null) {
             mBaseWineId = mWineProfile.getBaseWineId();
         }
     }
@@ -225,6 +250,9 @@ public class WineProfileFragment extends BaseFragment implements
         ButterKnife.inject(this, header);
 
         updateBannerData();
+        if (mBaseWine != null) {
+            updateBaseWineData();
+        }
 
         listview.addHeaderView(header, null, false);
         listview.setAdapter(mAdapter);
@@ -242,6 +270,9 @@ public class WineProfileFragment extends BaseFragment implements
         if (mBaseWineMinimal != null) {
             //spawned from Search Wines
             mBanner.updateData(mBaseWineMinimal);
+        } else if (mBaseWine != null) {
+            //spawned from WineCaptureSubmit
+            mBanner.updateData(mBaseWine);
         } else if (mWineProfile != null && mCapturePhotoHash != null) {
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         }
@@ -260,10 +291,12 @@ public class WineProfileFragment extends BaseFragment implements
         super.onResume();
 
         //only load data if there is no base wine yet
+
+        //not spawned from WineCaptureSubmit, need to fetch BaseWine
         if (mBaseWine == null) {
-            loadBaseWineData();
+            mBaseWineController.fetchBaseWine(mBaseWineId);
         }
-        mBaseWineController.fetchBaseWine(mBaseWineId);
+
         if (mCaptureNoteListing == null) {
             loadCaptureNotesData(IdType.BASE_WINE, mBaseWineId);
         }

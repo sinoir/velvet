@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.wineprofile.activity;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfile;
@@ -19,16 +20,21 @@ public class WineProfileActivity extends BaseActivity {
 
     private static final String PARAMS_CAPTURE_PHOTO_HASH = "PARAMS_CAPTURE_PHOTO_HASH";
 
-    private static final String PARAMS_BASE_WINE_ID = "PARAMS_BASE_WINE_ID";
-
-    private static final String PARAMS_VINTAGE_ID = "PARAMS_VINTAGE_ID";
+    private static final String PARAMS_BASE_WINE = "PARAMS_BASE_WINE";
 
     private static final String PARAMS_BASE_WINE_MINIMAL = "PARAMS_BASE_WINE_MINIMAL";
+
+    //Deep Link keys
+    private static final String DEEP_BASE_WINE_ID = "base_wine_id";
+
+    private static final String DEEP_BASE_VINTAGE_ID = "vintage_id";
 
 
     private WineProfile mWineProfile;
 
     private PhotoHash mCapturePhotoHash;
+
+    private BaseWine mBaseWine;
 
     private BaseWineMinimal mBaseWineMinimal;
 
@@ -49,23 +55,22 @@ public class WineProfileActivity extends BaseActivity {
     }
 
     /**
+     * see {@link WineProfileFragment#newInstance(BaseWine)}
+     */
+    public static Intent newIntent(Context packageContext, BaseWine baseWine) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_BASE_WINE, baseWine);
+        intent.setClass(packageContext, WineProfileActivity.class);
+        return intent;
+    }
+
+    /**
      * Called from Wine Search, Starts a {@link WineProfileActivity} with a {@link BaseWineMinimal}
      * object.
      */
     public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
-        intent.setClass(packageContext, WineProfileActivity.class);
-        return intent;
-    }
-
-    /**
-     * see {@link WineProfileFragment#newInstance(String baseWineId, String vintageId)}
-     */
-    public static Intent newIntent(Context packageContext, String baseWineId, String vintageId) {
-        Intent intent = new Intent();
-        intent.putExtra(PARAMS_BASE_WINE_ID, baseWineId);
-        intent.putExtra(PARAMS_VINTAGE_ID, vintageId);
         intent.setClass(packageContext, WineProfileActivity.class);
         return intent;
     }
@@ -79,15 +84,13 @@ public class WineProfileActivity extends BaseActivity {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
 
-            mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
+            mBaseWine = args.getParcelable(PARAMS_BASE_WINE);
 
-            mBaseWineId = args.getString(PARAMS_BASE_WINE_ID);
-            mVintageId = args
-                    .getString(PARAMS_VINTAGE_ID); //TODO debug, vintage doesn't get used currently
+            mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
         } else {
             // Check if Deep Link params contains data if the bundle args doesn't
-            mBaseWineId = getDeepLinkParam("base_wine_id");
-            mVintageId = getDeepLinkParam("vintage_id");
+            mBaseWineId = getDeepLinkParam(DEEP_BASE_WINE_ID);
+            mVintageId = getDeepLinkParam(DEEP_BASE_VINTAGE_ID);
         }
 
         if (savedInstanceState == null) {
@@ -95,11 +98,15 @@ public class WineProfileActivity extends BaseActivity {
             WineProfileFragment fragment = null;
 
             if (mBaseWineMinimal != null) {
-                //from search fragment
+                //spawned from search fragment
                 fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
+            } else if (mBaseWine!=null) {
+                //spawned from WineCaptureSubmit
+                fragment = WineProfileFragment.newInstance(mBaseWine);
             } else if (mWineProfile != null && mCapturePhotoHash != null) {
                 fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
             } else if (mBaseWineId != null) {
+                //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }
 

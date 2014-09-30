@@ -385,7 +385,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private void launchWineProfile(BaseWine baseWine) {
         getActivity().finish();
-        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine.getId(), null);
+        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine);
         startActivity(intent);
     }
 
