@@ -10,17 +10,18 @@ import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
 
 public class WineProfileActivity extends BaseActivity {
 
-    public static final String PARAMS_WINE_PROFILE = "PARAMS_WINE_PROFILE";
+    private static final String PARAMS_WINE_PROFILE = "PARAMS_WINE_PROFILE";
 
-    public static final String PARAMS_CAPTURE_PHOTO_HASH = "PARAMS_CAPTURE_PHOTO_HASH";
+    private static final String PARAMS_CAPTURE_PHOTO_HASH = "PARAMS_CAPTURE_PHOTO_HASH";
 
-    public static final String PARAMS_BASE_WINE_ID = "PARAMS_BASE_WINE_ID";
+    private static final String PARAMS_BASE_WINE_ID = "PARAMS_BASE_WINE_ID";
 
-    public static final String PARAMS_VINTAGE_ID = "PARAMS_VINTAGE_ID";
+    private static final String PARAMS_VINTAGE_ID = "PARAMS_VINTAGE_ID";
 
     private static final String PARAMS_BASE_WINE_MINIMAL = "PARAMS_BASE_WINE_MINIMAL";
 
@@ -35,6 +36,17 @@ public class WineProfileActivity extends BaseActivity {
 
     private String mVintageId;
 
+    /**
+     * see {@link WineProfileFragment#newInstance(WineProfile, PhotoHash)}
+     */
+    public static Intent newIntent(Context packageContext, WineProfile wineProfile,
+            PhotoHash capturePhotoHash) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_WINE_PROFILE, wineProfile);
+        intent.putExtra(PARAMS_CAPTURE_PHOTO_HASH, (Parcelable) capturePhotoHash);
+        intent.setClass(packageContext, WineProfileActivity.class);
+        return intent;
+    }
 
     /**
      * Called from Wine Search, Starts a {@link WineProfileActivity} with a {@link BaseWineMinimal}
@@ -43,6 +55,17 @@ public class WineProfileActivity extends BaseActivity {
     public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
+        intent.setClass(packageContext, WineProfileActivity.class);
+        return intent;
+    }
+
+    /**
+     * see {@link WineProfileFragment#newInstance(String baseWineId, String vintageId)}
+     */
+    public static Intent newIntent(Context packageContext, String baseWineId, String vintageId) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_BASE_WINE_ID, baseWineId);
+        intent.putExtra(PARAMS_VINTAGE_ID, vintageId);
         intent.setClass(packageContext, WineProfileActivity.class);
         return intent;
     }

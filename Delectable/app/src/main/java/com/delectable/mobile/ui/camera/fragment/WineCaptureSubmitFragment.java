@@ -385,12 +385,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private void launchWineProfile(BaseWine baseWine) {
         getActivity().finish();
-        Intent intent = new Intent();
-        // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
-        intent.putExtra(WineProfileActivity.PARAMS_BASE_WINE_ID, baseWine.getId());
-        intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
-                (android.os.Parcelable) baseWine.getPhoto());
-        intent.setClass(getActivity(), WineProfileActivity.class);
+        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine.getId(), null);
         startActivity(intent);
     }
 
