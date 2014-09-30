@@ -88,11 +88,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment implements Inf
     }
 
     private void launchWineProfile(BaseWineMinimal baseWine) {
-        Intent intent = new Intent();
-        intent.putExtra(WineProfileActivity.PARAMS_BASE_WINE_ID, baseWine.getId());
-        //TODO photohash gets passed in put it doesn't get used with the base_wine_id in WineProfileActivity
-        intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH, (Parcelable)baseWine.getPhoto());
-        intent.setClass(getActivity(), WineProfileActivity.class);
+        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine);
         startActivity(intent);
     }
 

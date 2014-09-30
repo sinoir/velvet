@@ -117,13 +117,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void launchWineProfile(CaptureDetails capture) {
-        Intent intent = new Intent();
         // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
         if (capture.getWineProfile() != null) {
-            intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE, capture.getWineProfile());
-            intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
-                    (android.os.Parcelable) capture.getPhoto());
-            intent.setClass(getActivity(), WineProfileActivity.class);
+            Intent intent = WineProfileActivity.newIntent(getActivity(), capture.getWineProfile(),
+                    capture.getPhoto());
             startActivity(intent);
         }
     }

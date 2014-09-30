@@ -50,7 +50,7 @@ public class CaptureDetails extends Capture {
      *                   detailed
      */
     public void updateWithNewCapture(CaptureDetails newCapture) {
-        private_ = newCapture.getPrivate();
+        setPrivate(newCapture.getPrivate());
         short_share_url = newCapture.getShortShareUrl();
         tweet = newCapture.getTweet();
         ratings = newCapture.getRatings();
@@ -61,7 +61,7 @@ public class CaptureDetails extends Capture {
         location_name = newCapture.getLocationName();
         liking_participants = newCapture.getLikingParticipants();
         commenting_participants = newCapture.getCommentingParticipants();
-        capturer_participant = newCapture.getCapturerParticipant();
+        setCapturerParticipant(newCapture.getCapturerParticipant());
         taggee_participants = newCapture.getTaggeeParticipants();
         comments = newCapture.getComments();
         e_tag = newCapture.getETag();

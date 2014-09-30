@@ -120,7 +120,7 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupTopWineDetails() {
-        String wineImageUrl = mCaptureData.getPhoto().get450Url();
+        String wineImageUrl = mCaptureData.getPhoto().get450Plus();
         if (wineImageUrl == null) {
             wineImageUrl = mCaptureData.getPhoto().getUrl();
         }

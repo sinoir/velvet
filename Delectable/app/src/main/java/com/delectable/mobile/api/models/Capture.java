@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 public abstract class Capture extends BaseListingElement {
 
     @SerializedName("private")
-    Boolean private_;
+    private boolean private_;
 
-    Account capturer_participant;
+    private Account capturer_participant;
 
-    public Boolean getPrivate() {
+    public boolean getPrivate() {
         return private_;
     }
 
-    public void setPrivate(Boolean private_) {
+    public void setPrivate(boolean private_) {
         this.private_ = private_;
     }
 
@@ -28,7 +28,11 @@ public abstract class Capture extends BaseListingElement {
     @Override
     public String toString() {
         return "Capture{" +
-                "private_=" + private_ +
+                "id='" + getId() + '\'' +
+                ", created_at=" + getCreatedAt() +
+                ", private_=" + private_ +
+                ", context='" + getContext() + '\'' +
+                ", e_tag='" + getETag() + '\'' +
                 ", capturer_participant=" + capturer_participant +
                 '}';
     }

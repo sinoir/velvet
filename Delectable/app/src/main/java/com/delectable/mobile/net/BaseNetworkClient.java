@@ -42,7 +42,7 @@ public abstract class BaseNetworkClient {
             Class<T> responseClass) throws IOException {
         //handle HTTP errors
         if (!response.isSuccessful()) {
-            String errorMessage = "Request Error " + response.code() + ": " + response.toString();
+            String errorMessage = "HTTP Request Error " + response.code() + ": " + response.toString();
             Log.i(requestName, "error: " + errorMessage);
             throw new IOException(errorMessage);
         }
@@ -67,7 +67,7 @@ public abstract class BaseNetworkClient {
                 throw new IOException(errorMessage);
             }
 
-            String errorMessage = "Error " + responseObj.getError().getCode() + ": " +
+            String errorMessage = "API Error " + responseObj.getError().getCode() + ": " +
                     responseObj.getError().getMessage();
             Log.i(requestName, "error: " + errorMessage);
             throw new IOException(errorMessage);

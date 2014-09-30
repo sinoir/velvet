@@ -146,11 +146,8 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         Intent intent = new Intent();
         // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
         if (captureDetails.getWineProfile() != null) {
-            intent.putExtra(WineProfileActivity.PARAMS_WINE_PROFILE,
-                    captureDetails.getWineProfile());
-            intent.putExtra(WineProfileActivity.PARAMS_CAPTURE_PHOTO_HASH,
-                    (android.os.Parcelable) captureDetails.getPhoto());
-            intent.setClass(getActivity(), WineProfileActivity.class);
+            intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
+                    captureDetails.getPhoto());
         } else {
             intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
                     captureDetails.getId());

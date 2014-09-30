@@ -116,6 +116,16 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         return this.child_resolutions.getBestThumb();
     }
 
+    /**
+     * see {@link ChildResolution#get450Plus()}
+     */
+    public String get450Plus() {
+        String imageUrl = this.child_resolutions.get450Plus();
+        if (imageUrl != null) {
+            return imageUrl;
+        }
+        return this.url;
+    }
 
     @Override
     public String toString() {
@@ -215,6 +225,18 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
             String[] sizes = {
                     size_thumb,
                     size_250,
+                    size_450,
+                    size_medium,
+                    size_blur
+            };
+            return getTopPhoto(sizes);
+        }
+
+        /**
+         * Returns the 450px or better image url.
+         */
+        public String get450Plus() {
+            String[] sizes = {
                     size_450,
                     size_medium,
                     size_blur

@@ -79,9 +79,9 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
                 //TODO caching might need to be done here
                 //currently this is only modifying the reference in memory and not performing any sort of syncing
                 if (v.isSelected()) {
-                    mCaptureNote.getHelpfulingAccountIds().add(UserInfo.getUserId(getContext()));
+                    mCaptureNote.markHelpful(UserInfo.getUserId(getContext()));
                 } else {
-                    mCaptureNote.getHelpfulingAccountIds().remove(UserInfo.getUserId(getContext()));
+                    mCaptureNote.unmarkHelpful(UserInfo.getUserId(getContext()));
                 }
                 updateHelpfulViews(mCaptureNote);
                 mActionsHandler.toggleHelpful(mCaptureNote, v.isSelected());
