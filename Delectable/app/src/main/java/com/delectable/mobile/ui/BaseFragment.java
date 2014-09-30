@@ -1,8 +1,10 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.delectable.mobile.util.KahunaUtil;
 import com.facebook.Session;
 import com.iainconnor.objectcache.CacheManager;
 
@@ -162,6 +164,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
 
         // Clear User Data
         UserInfo.onSignOut(getActivity());
+        ServerInfo.onSignOut(getActivity());
+
         try {
             // TODO: run this on background thread?  Also, might be handy to be selective on what gets deleted.
             mCache.clear();
@@ -174,6 +178,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         launchIntent.setClass(getActivity(), LoginActivity.class);
         startActivity(launchIntent);
         getActivity().finish();
+        KahunaUtil.trackLogOut();
     }
 
     public void hideKeyboard() {

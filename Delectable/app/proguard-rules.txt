@@ -120,3 +120,6 @@
 }
 ##---------------End: proguard configuration for Google Play Services  ----------
 
+#crashlytics
+-keepattributes SourceFile,LineNumberTable
+

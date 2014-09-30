@@ -1,13 +1,13 @@
 package com.delectable.mobile.net;
 
+import com.delectable.mobile.data.ServerInfo;
+
 public class MotdNetworkClient extends BaseNetworkClient {
 
     private static final String TAG = MotdNetworkClient.class.getSimpleName();
 
-    private static final String API_ENDPOINT = "http://motd.delectable.com/";
-
     @Override
     protected String getBaseUrl() {
-        return API_ENDPOINT;
+        return  ServerInfo.getEnvironment().getMotdUrl();
     }
 }

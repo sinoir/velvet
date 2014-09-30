@@ -1,15 +1,11 @@
 package com.delectable.mobile.net;
 
-import com.google.gson.Gson;
-
 import com.delectable.mobile.App;
-import com.delectable.mobile.Config;
+import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.model.api.BaseRequest;
 import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.util.HelperUtil;
 import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
@@ -17,7 +13,6 @@ import com.squareup.okhttp.Response;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class NetworkClient extends BaseNetworkClient {
 
@@ -29,7 +24,7 @@ public class NetworkClient extends BaseNetworkClient {
 
     @Override
     protected String getBaseUrl() {
-        return Config.ServerInfo.SERVER_PROD_URL + Config.API_VERSION;
+        return ServerInfo.getEnvironment().getUrl() + ServerInfo.API_VERSION;
     }
 
     /**

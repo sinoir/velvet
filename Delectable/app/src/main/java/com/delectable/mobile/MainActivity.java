@@ -1,11 +1,13 @@
 package com.delectable.mobile;
 
+import com.crashlytics.android.Crashlytics;
 import com.delectable.mobile.controllers.VersionPropsFileController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.builddatecheck.BuildDateCheckedEvent;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.ui.versionupgrade.dialog.VersionUpgradeDialog;
+import com.delectable.mobile.util.KahunaUtil;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,6 +35,20 @@ public class MainActivity extends Activity {
     @Inject
     VersionPropsFileController mController;
 
+    private VersionUpgradeDialog.ActionsHandler ActionsHandler
+            = new VersionUpgradeDialog.ActionsHandler() {
+        @Override
+        public void onCancelClick() {
+            launchNavOrLogin();
+        }
+
+        @Override
+        public void onUpgradeClick() {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getS3Url()));
+            startActivity(browserIntent);
+        }
+    };
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -54,6 +70,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(BuildConfig.REPORT_CRASHES) {
+            Crashlytics.start(this);
+        }
+        KahunaUtil.trackStart();
         App.injectMembers(this);
         setContentView(R.layout.activity_fragment_container);
 
@@ -74,6 +95,8 @@ public class MainActivity extends Activity {
         } else {
             launchIntent.setClass(getApplicationContext(), LoginActivity.class);
         }
+        // Prevent multiples of the same Activity to be launched when clicking Push notification
+        launchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(launchIntent);
 
         finish();
@@ -94,20 +117,6 @@ public class MainActivity extends Activity {
             launchNavOrLogin();
         }
     }
-
-    private VersionUpgradeDialog.ActionsHandler ActionsHandler
-            = new VersionUpgradeDialog.ActionsHandler() {
-        @Override
-        public void onCancelClick() {
-            launchNavOrLogin();
-        }
-
-        @Override
-        public void onUpgradeClick() {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getS3Url()));
-            startActivity(browserIntent);
-        }
-    };
 
     private String getS3Url() {
         String url = null;

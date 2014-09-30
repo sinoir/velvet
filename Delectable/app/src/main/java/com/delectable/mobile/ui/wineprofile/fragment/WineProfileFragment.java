@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.util.KahunaUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -143,6 +144,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     private HashMap<String, Boolean> mCaptureNoteExpectedHelpfulStatus
             = new HashMap<String, Boolean>();
+
+    private boolean mViewWineTracked = false;
 
 
     /**
@@ -460,6 +463,11 @@ public class WineProfileFragment extends BaseFragment implements
                 .getQuantityString(R.plurals.wine_profile_pro_ratings_count, proCount, proCount);
         mAllRatingsCountTextView.setText(allRatingsCount);
         mProRatingsCountTextView.setText(proRatingsCount);
+
+        if (!mViewWineTracked) {
+            KahunaUtil.trackViewWine(mBaseWineId, mBaseWine.getName());
+            mViewWineTracked = true;
+        }
     }
 
     /**

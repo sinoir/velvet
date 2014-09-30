@@ -9,6 +9,7 @@ import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
@@ -64,6 +65,8 @@ public class LoginJob extends Job {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
         mEventBus.post(new LoginRegisterEvent(true));
+
+        KahunaUtil.trackLogin(account.getId(), account.getEmail());
     }
 
     @Override

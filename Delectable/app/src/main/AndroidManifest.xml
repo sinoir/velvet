@@ -137,6 +137,9 @@
         <!-- END of Kahuna's push requirements -->
 
         <receiver android:name="com.delectable.mobile.PushReceiver" />
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="0fd239634fddfdd1edd0cdf8c5e684325dbd05bf" />
 
     </application>
 
@@ -172,6 +175,5 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
 </manifest>

@@ -1,6 +1,6 @@
 package com.delectable.mobile.api;
 
-import com.delectable.mobile.Config;
+import com.delectable.mobile.data.ServerInfo;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -19,7 +19,6 @@ public class NetworkClient {
     }
 
     private static String getAbsoluteUrl(String path) {
-        // TODO: Get selected server from possible stored Shared Prefs
-        return Config.ServerInfo.SERVER_MOBILE_URL + path;
+        return ServerInfo.getEnvironment().getUrl() + path;
     }
 }
