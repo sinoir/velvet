@@ -14,9 +14,9 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class FetchAccountJob extends BaseJob {
+public class FetchAccountProfileJob extends BaseJob {
 
-    private static final String TAG = FetchAccountJob.class.getSimpleName();
+    private static final String TAG = FetchAccountProfileJob.class.getSimpleName();
 
     @Inject
     AccountModel mAccountModel;
@@ -31,7 +31,7 @@ public class FetchAccountJob extends BaseJob {
 
     private boolean mIsPrivate;
 
-    public FetchAccountJob(String id, boolean isPrivate) {
+    public FetchAccountProfileJob(String id, boolean isPrivate) {
         super(new Params(Priority.UX).requireNetwork());
         mAccountId = id;
         mIsPrivate = isPrivate;
@@ -48,8 +48,7 @@ public class FetchAccountJob extends BaseJob {
 
         String endpoint = "/accounts/context";
         AccountContextRequest request = new AccountContextRequest(
-                mIsPrivate ? "private" : "profile", eTag,
-                new AccountContextRequest.AccountContextPayload(mAccountId));
+                mIsPrivate ? "private" : "profile", eTag, mAccountId);
         AccountPrivateResponse response = mNetworkClient
                 .post(endpoint, request, AccountPrivateResponse.class);
 
