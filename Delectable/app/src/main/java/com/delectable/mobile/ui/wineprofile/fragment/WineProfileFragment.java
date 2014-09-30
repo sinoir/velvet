@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.wineprofile.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
@@ -61,6 +62,8 @@ public class WineProfileFragment extends BaseFragment implements
     private static final String WINE_PROFILE = "wineProfile";
 
     private static final String PHOTO_HASH = "photoHash";
+
+    private static final String BASE_WINE_MINIMAL = "baseWineMinimal";
 
     private static final String BASE_WINE_ID = "baseWineId";
 
@@ -121,6 +124,12 @@ public class WineProfileFragment extends BaseFragment implements
 
     private BaseWine mBaseWine;
 
+    /**
+     * If this is not null, then it means this fragment was spawned from Search Wines.
+     */
+    private BaseWineMinimal mBaseWineMinimal;
+
+
     private ListingResponse<CaptureNote> mCaptureNoteListing;
 
     /**
@@ -137,7 +146,9 @@ public class WineProfileFragment extends BaseFragment implements
 
 
     /**
-     * Returns fragment that uses the capture photo as it's wine image.
+     * Returns fragment that uses the provided {@link PhotoHash} as it's wine image. Uses {@code
+     * wineProfile} to populate some basic wine metadata and inits request for {@link CaptureNote
+     * CaptureNotes} using the {@code baseWineId} in {@link WineProfile}.
      *
      * @param capturePhotoHash {@link com.delectable.mobile.api.models.CaptureDetails
      *                         CaptureDetails}' PhotoHash. Pass in null to use WineProfile's image.
@@ -152,6 +163,27 @@ public class WineProfileFragment extends BaseFragment implements
         return fragment;
     }
 
+    /**
+     * Search Wines uses this method to make make it's {@link WineProfileFragment}.
+     */
+    public static WineProfileFragment newInstance(BaseWineMinimal baseWine) {
+        WineProfileFragment fragment = new WineProfileFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(BASE_WINE_MINIMAL, baseWine);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
+    /**
+     * {@link WineProfileFragment} accessed by deep links will use this method to start up the
+     * fragment. It can contain either just {@code baseWineId}, or both {@code baseWineId} and
+     * {@code vintageId} (wine profile id). If the latter, then we must show {@link CaptureNote
+     * CaptureNotes} for that {@link WineProfile}.
+     *
+     * @param baseWineId required
+     * @param vintageId  optional
+     */
     public static WineProfileFragment newInstance(String baseWineId,
             String vintageId) {
         WineProfileFragment fragment = new WineProfileFragment();
@@ -174,7 +206,9 @@ public class WineProfileFragment extends BaseFragment implements
             mBaseWineId = args.getString(BASE_WINE_ID);
             mVintageId = args.getString(VINTAGE_ID);
         }
-        if (mBaseWineId == null && mWineProfile != null) {
+        if (mBaseWineMinimal != null) {
+            mBaseWineId = mBaseWineMinimal.getId();
+        }else if (mBaseWineId == null && mWineProfile != null) {
             mBaseWineId = mWineProfile.getBaseWineId();
         }
     }
@@ -205,7 +239,10 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void updateBannerData() {
-        if (mWineProfile != null && mCapturePhotoHash != null) {
+        if (mBaseWineMinimal != null) {
+            //spawned from Search Wines
+            mBanner.updateData(mBaseWineMinimal);
+        } else if (mWineProfile != null && mCapturePhotoHash != null) {
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         }
     }

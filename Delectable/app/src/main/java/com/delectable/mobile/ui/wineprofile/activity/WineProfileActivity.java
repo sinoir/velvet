@@ -1,11 +1,14 @@
 package com.delectable.mobile.ui.wineprofile.activity;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -19,13 +22,30 @@ public class WineProfileActivity extends BaseActivity {
 
     public static final String PARAMS_VINTAGE_ID = "PARAMS_VINTAGE_ID";
 
+    private static final String PARAMS_BASE_WINE_MINIMAL = "PARAMS_BASE_WINE_MINIMAL";
+
+
     private WineProfile mWineProfile;
 
     private PhotoHash mCapturePhotoHash;
 
+    private BaseWineMinimal mBaseWineMinimal;
+
     private String mBaseWineId;
 
     private String mVintageId;
+
+
+    /**
+     * Called from Wine Search, Starts a {@link WineProfileActivity} with a {@link BaseWineMinimal}
+     * object.
+     */
+    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
+        intent.setClass(packageContext, WineProfileActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +55,12 @@ public class WineProfileActivity extends BaseActivity {
         if (args != null) {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
+
+            mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
+
             mBaseWineId = args.getString(PARAMS_BASE_WINE_ID);
-            mVintageId = args.getString(PARAMS_VINTAGE_ID); //TODO debug, vintage doesn't get used currently
+            mVintageId = args
+                    .getString(PARAMS_VINTAGE_ID); //TODO debug, vintage doesn't get used currently
         } else {
             // Check if Deep Link params contains data if the bundle args doesn't
             mBaseWineId = getDeepLinkParam("base_wine_id");
@@ -44,12 +68,18 @@ public class WineProfileActivity extends BaseActivity {
         }
 
         if (savedInstanceState == null) {
+
             WineProfileFragment fragment = null;
-            if (mWineProfile != null && mCapturePhotoHash != null) {
+
+            if (mBaseWineMinimal != null) {
+                //from search fragment
+                fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
+            } else if (mWineProfile != null && mCapturePhotoHash != null) {
                 fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
             } else if (mBaseWineId != null) {
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }
+
             getFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)
                     .commit();

@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfile;
@@ -126,8 +127,8 @@ public class WineBannerView extends RelativeLayout {
     }
 
     //Wine Profile coming from Search Results screen uses this method
-    public void updateData(BaseWine baseWine) {
-        String wineImageUrl = baseWine.getPhoto().getUrl();
+    public void updateData(BaseWineMinimal baseWine) {
+        String wineImageUrl = baseWine.getPhoto().get450Plus();
         String producerName = baseWine.getProducerName();
         String wineName = baseWine.getName();
 
