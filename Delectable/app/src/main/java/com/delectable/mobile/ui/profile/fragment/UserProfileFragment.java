@@ -2,12 +2,12 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
-import com.delectable.mobile.events.accounts.FollowAccountFailedEvent;
+import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ObservableScrollView;
@@ -42,10 +42,10 @@ public class UserProfileFragment extends BaseFragment implements
     private static final String sArgsUserId = "sArgsUserId";
 
     @Inject
-    AccountController mAccountController;
+    protected AccountController mAccountController;
 
     @Inject
-    AccountModel mAccountModel;
+    protected AccountModel mAccountModel;
 
     private View mView;
 
@@ -57,7 +57,7 @@ public class UserProfileFragment extends BaseFragment implements
 
     private SlidingPagerAdapter mTabsAdapter;
 
-    private Account mUserAccount;
+    private AccountProfile mUserAccount;
 
     private List<CaptureDetails> mCaptureDetails;
 
@@ -298,7 +298,7 @@ public class UserProfileFragment extends BaseFragment implements
         showToastError(event.getErrorMessage());
     }
 
-    public void onEventMainThread(FollowAccountFailedEvent event) {
+    public void onEventMainThread(FollowAccountEvent event) {
         // TODO show error dialog
     }
 
@@ -330,7 +330,7 @@ public class UserProfileFragment extends BaseFragment implements
     @Override
     public void toggleFollowUserClicked(final boolean isFollowingSelected) {
         Log.d(TAG, "Toggle Following? " + isFollowingSelected);
-        mAccountController.oldFollowAccount(mUserId, isFollowingSelected);
+        mAccountController.followAccount(mUserId, isFollowingSelected);
     }
 
     @Override

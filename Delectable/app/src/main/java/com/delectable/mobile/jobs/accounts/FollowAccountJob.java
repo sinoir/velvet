@@ -2,6 +2,7 @@ package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
@@ -35,8 +36,8 @@ public class FollowAccountJob extends BaseJob {
 
     @Override
     public void onRun() throws Throwable {
-        Account followingUserAccount = mAccountModel.getAccount(mAccountId);
-        Account currentUser = mAccountModel.getAccount(UserInfo.getUserId(App.getInstance()));
+        AccountProfile followingUserAccount = mAccountModel.getAccount(mAccountId);
+        Account currentUser = UserInfo.getAccountPrivate(App.getInstance());
         String endpoint = "/accounts/follow";
         AccountFollowRequest request = new AccountFollowRequest(
                 new AccountFollowRequest.AccountFollowPayload(mAccountId, mIsFollowing));

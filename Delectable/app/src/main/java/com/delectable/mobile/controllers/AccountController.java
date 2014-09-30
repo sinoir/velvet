@@ -18,7 +18,6 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
-import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -35,10 +34,6 @@ public class AccountController {
 
     public void fetchAccountPrivate(String id) {
         mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
-    }
-
-    public void oldFollowAccount(String id, boolean follow) {
-        mJobManager.addJobInBackground(new oldFollowAccountJob(id, follow));
     }
 
     public void followAccount(String id, boolean follow) {

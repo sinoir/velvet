@@ -34,7 +34,6 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
-import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
@@ -130,7 +129,6 @@ import de.greenrobot.event.EventBus;
                 FetchCaptureDetailsJob.class,
                 FetchAccountProfileJob.class,
                 FetchAccountPrivateJob.class,
-                oldFollowAccountJob.class,
                 FollowAccountJob.class,
                 AddCaptureCommentJob.class,
                 EditCaptureCommentJob.class,

@@ -3,6 +3,7 @@ package com.delectable.mobile.data;
 import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountProfile;
 import com.iainconnor.objectcache.CacheManager;
 
 import java.lang.reflect.Type;
@@ -16,14 +17,14 @@ public class AccountModel {
     @Inject
     CacheManager mCache;
 
-    private Type mAccountType = new TypeToken<Account>() {
+    private Type mAccountType = new TypeToken<AccountProfile>() {
     }.getType();
 
-    public Account getAccount(String id) {
-        return (Account) mCache.get(KEY_PREFIX + id, Account.class, mAccountType);
+    public AccountProfile getAccount(String id) {
+        return (AccountProfile) mCache.get(KEY_PREFIX + id, AccountProfile.class, mAccountType);
     }
 
-    public void saveAccount(Account account) {
+    public void saveAccount(AccountProfile account) {
         mCache.put(KEY_PREFIX + account.getId(), account);
     }
 
