@@ -1,8 +1,10 @@
 package com.delectable.mobile.ui.profile.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.SimpleViewPagerAdapter;
+import com.delectable.mobile.util.ImageLoaderUtil;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import android.content.Context;
@@ -30,8 +32,6 @@ public class ProfileHeaderView extends RelativeLayout implements
     private ProfileHeaderActionListener mActionListener;
 
     private TextView mFollowButton;
-
-    private boolean mIsFollowing = false;
 
     private String mFollowText;
 
@@ -77,26 +77,47 @@ public class ProfileHeaderView extends RelativeLayout implements
 
         // Setup FollowButton Click Listener
         mFollowButton.setOnClickListener(new OnClickListener() {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 if (mActionListener != null) {
-                                                     mActionListener.toggleFollowUserClicked(
-                                                             !mIsFollowing);
-                                                 }
-                                                 /*
-                                                 // No need to do that, UI refreshes itself when Account gets updated
-                                                 if (mIsFollowing) {
-                                                     setFollowingState(STATE_NOT_FOLLOWING);
-                                                 } else {
-                                                     setFollowingState(STATE_FOLLOWING);
-                                                 }
-                                                 */
-                                             }
-                                         }
-        );
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected()); //inverse selection
+
+                boolean shouldFollow = v.isSelected();
+                int followingState = shouldFollow ? STATE_FOLLOWING : STATE_NOT_FOLLOWING;
+                setFollowingState(followingState);
+                if (mActionListener != null) {
+                    mActionListener.toggleFollowUserClicked(v.isSelected());
+                }
+            }
+        });
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
+
+    /**
+     * Convenience method to set all views with AccountProfile data.
+     */
+    public void setDataToView(AccountProfile account) {
+        String userName = account.getFname() + " " + account.getLname();
+        String imageUrl = account.getPhoto().getUrl();
+        int numCaptures = account.getCaptureCount();
+
+        setWineCount(numCaptures);
+
+        ImageLoaderUtil.loadImageIntoView(getContext(), imageUrl, getUserImageView());
+        setUserName(userName);
+        setFollowerCount(account.getFollowerCount());
+        setFollowingCount(account.getFollowingCount());
+        setUserBio(account.getBio());
+
+        if (account.isUserRelationshipTypeSelf()) {
+            setFollowingState(STATE_SELF);
+        } else if (account.isUserRelationshipTypeFollowing()) {
+            setFollowingState(STATE_FOLLOWING);
+        } else {
+            setFollowingState(STATE_NOT_FOLLOWING);
+        }
+    }
+
 
     public CircleImageView getUserImageView() {
         return mProfileHeaderMainView.getUserImageView();
@@ -125,17 +146,14 @@ public class ProfileHeaderView extends RelativeLayout implements
     public void setFollowingState(int state) {
         switch (state) {
             case STATE_FOLLOWING:
-                mIsFollowing = true;
                 updateButtonToUnfollow();
                 shouldShowFollowButton(true);
                 break;
             case STATE_NOT_FOLLOWING:
-                mIsFollowing = false;
                 updateButtonToFollowing();
                 shouldShowFollowButton(true);
                 break;
             case STATE_SELF:
-                mIsFollowing = false;
                 shouldShowFollowButton(false);
                 break;
         }

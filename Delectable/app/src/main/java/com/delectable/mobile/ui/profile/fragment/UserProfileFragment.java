@@ -3,12 +3,10 @@ package com.delectable.mobile.ui.profile.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountProfile;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
@@ -29,7 +27,6 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -58,8 +55,6 @@ public class UserProfileFragment extends BaseFragment implements
     private SlidingPagerAdapter mTabsAdapter;
 
     private AccountProfile mUserAccount;
-
-    private List<CaptureDetails> mCaptureDetails;
 
     private String mUserId;
 
@@ -124,14 +119,10 @@ public class UserProfileFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        mCaptureDetails = new ArrayList<CaptureDetails>();
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(sArgsUserId);
         }
-
-        // fetch profile to check for updates (we're using eTags, so no big deal)
-        mAccountController.fetchProfile(mUserId);
         mLastScrollY = 0;
     }
 
@@ -189,6 +180,9 @@ public class UserProfileFragment extends BaseFragment implements
         // from a saved state.
         getRecentCapturesTabFragment().setCallback(this);
         getTopRatedTabFragment().setCallback(this);
+
+        // fetch profile to check for updates (we're using eTags, so no big deal)
+        mAccountController.fetchProfile(mUserId);
     }
 
     @Override
@@ -265,34 +259,19 @@ public class UserProfileFragment extends BaseFragment implements
         mUserAccount = mAccountModel.getAccount(mUserId);
         if (mUserAccount != null) {
             Log.d(TAG, "CACHE HIT for profile: " + mUserId);
-            mCaptureDetails.clear();
-            if (mUserAccount.getCaptureSummaries() != null
-                    && mUserAccount.getCaptureSummaries().size() > 0) {
-                for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                    mCaptureDetails.addAll(summary.getCaptures());
-                }
-            }
             updateUIWithData();
         }
 
     }
 
-    public void onEventMainThread(UpdatedAccountEvent event) {
+    public void onEventMainThread(UpdatedAccountProfileEvent event) {
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
 
         if (event.isSuccessful()) {
             mUserAccount = event.getAccount();
-            if (mUserAccount != null) {
-                mCaptureDetails.clear();
-                if (mUserAccount.getCaptureSummaries() != null) {
-                    for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                        mCaptureDetails.addAll(summary.getCaptures());
-                    }
-                }
-                updateUIWithData();
-            }
+            updateUIWithData();
             return;
         }
         showToastError(event.getErrorMessage());
@@ -302,29 +281,8 @@ public class UserProfileFragment extends BaseFragment implements
         // TODO show error dialog
     }
 
-
     private void updateUIWithData() {
-
-        String userName = mUserAccount.getFname() + " " + mUserAccount.getLname();
-        String imageUrl = mUserAccount.getPhoto().getUrl();
-        int numCaptures = mUserAccount.getCaptureCount();
-
-        mProfileHeaderView.setWineCount(numCaptures);
-
-        ImageLoaderUtil.loadImageIntoView(getActivity(), imageUrl,
-                mProfileHeaderView.getUserImageView());
-        mProfileHeaderView.setUserName(userName);
-        mProfileHeaderView.setFollowerCount(mUserAccount.getFollowerCount());
-        mProfileHeaderView.setFollowingCount(mUserAccount.getFollowingCount());
-        mProfileHeaderView.setUserBio(mUserAccount.getBio());
-
-        if (mUserAccount.isUserRelationshipTypeSelf()) {
-            mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_SELF);
-        } else if (mUserAccount.isUserRelationshipTypeFollowing()) {
-            mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_FOLLOWING);
-        } else {
-            mProfileHeaderView.setFollowingState(ProfileHeaderView.STATE_NOT_FOLLOWING);
-        }
+        mProfileHeaderView.setDataToView(mUserAccount);
     }
 
     @Override

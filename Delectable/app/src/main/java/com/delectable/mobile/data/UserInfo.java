@@ -8,6 +8,7 @@ import com.delectable.mobile.api.models.Motd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class UserInfo {
 
@@ -73,8 +74,7 @@ public class UserInfo {
     }
 
     public static boolean isSignedIn(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        return prefs.getAll().size() > 0;
+        return getSessionToken(context) != null;
     }
 
     public static String getSessionToken(Context context) {
