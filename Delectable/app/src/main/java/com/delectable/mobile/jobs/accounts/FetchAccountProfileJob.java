@@ -1,6 +1,7 @@
 package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.jobs.BaseJob;
@@ -29,12 +30,9 @@ public class FetchAccountProfileJob extends BaseJob {
 
     private String mAccountId;
 
-    private boolean mIsPrivate;
-
-    public FetchAccountProfileJob(String id, boolean isPrivate) {
+    public FetchAccountProfileJob(String id) {
         super(new Params(Priority.UX).requireNetwork());
         mAccountId = id;
-        mIsPrivate = isPrivate;
     }
 
     @Override
@@ -47,8 +45,7 @@ public class FetchAccountProfileJob extends BaseJob {
         }
 
         String endpoint = "/accounts/context";
-        AccountContextRequest request = new AccountContextRequest(
-                mIsPrivate ? "private" : "profile", eTag, mAccountId);
+        AccountContextRequest request = new AccountContextRequest(Account.Context.PROFILE, eTag, mAccountId);
         AccountPrivateResponse response = mNetworkClient
                 .post(endpoint, request, AccountPrivateResponse.class);
 

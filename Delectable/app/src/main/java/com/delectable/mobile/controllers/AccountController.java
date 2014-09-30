@@ -5,6 +5,7 @@ import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
@@ -29,11 +30,11 @@ public class AccountController {
     JobManager mJobManager;
 
     public void fetchProfile(String id) {
-        mJobManager.addJobInBackground(new FetchAccountProfileJob(id, false));
+        mJobManager.addJobInBackground(new FetchAccountProfileJob(id));
     }
 
-    public void fetchPrivateAccount(String id) {
-        mJobManager.addJobInBackground(new FetchAccountProfileJob(id, true));
+    public void fetchAccountPrivate(String id) {
+        mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
     }
 
     public void oldFollowAccount(String id, boolean follow) {
