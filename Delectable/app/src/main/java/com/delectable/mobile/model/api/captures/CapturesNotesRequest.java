@@ -6,8 +6,8 @@ public class CapturesNotesRequest extends BaseRequest {
 
     private Payload payload;
 
-    public CapturesNotesRequest(String base_wine_id, String wine_profile_id, Float before,
-            Float after, String include_capture_note) {
+    public CapturesNotesRequest(String base_wine_id, String wine_profile_id, String before,
+            String after, String include_capture_note) {
         this.payload = new Payload(base_wine_id, wine_profile_id, before, after,
                 include_capture_note);
     }
@@ -18,14 +18,13 @@ public class CapturesNotesRequest extends BaseRequest {
 
         private String wine_profile_id;
 
-        //Float not float because this can be null
-        private Float before;
+        private String before;
 
-        private Float after;
+        private String after;
 
         private String include_capture_note;
 
-        public Payload(String base_wine_id, String wine_profile_id, Float before, Float after,
+        public Payload(String base_wine_id, String wine_profile_id, String before, String after,
                 String include_capture_note) {
             this.base_wine_id = base_wine_id;
             this.wine_profile_id = wine_profile_id;

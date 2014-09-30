@@ -61,8 +61,8 @@ public class CaptureController {
         mJobManager.addJobInBackground(new DeleteCaptureJob(captureId));
     }
 
-    public void fetchCaptureNotes(String baseWineId, String wineProfileId, Float before,
-            Float after, String includeCaptureNote) {
+    public void fetchCaptureNotes(String baseWineId, String wineProfileId, String before,
+            String after, String includeCaptureNote) {
         mJobManager.addJobInBackground(new FetchCaptureNotesJob(baseWineId, wineProfileId, before,
                 after, includeCaptureNote));
     }

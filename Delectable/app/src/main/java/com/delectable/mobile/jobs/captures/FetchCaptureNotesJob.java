@@ -16,13 +16,13 @@ public class FetchCaptureNotesJob extends BaseJob {
 
     private String mWineProfileId;
 
-    private Float mBefore;
+    private String mBefore;
 
-    private Float mAfter;
+    private String mAfter;
 
     private String mIncludeCaptureNote;
 
-    public FetchCaptureNotesJob(String baseWineId, String wineProfileId, Float before, Float after,
+    public FetchCaptureNotesJob(String baseWineId, String wineProfileId, String before, String after,
             String includeCaptureNote) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
 
