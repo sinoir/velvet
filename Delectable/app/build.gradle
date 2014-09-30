@@ -1,4 +1,14 @@
+buildscript {
+    repositories {
+        maven { url 'http://download.crashlytics.com/maven' }
+    }
+
+    dependencies {
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'crashlytics'
 
 //keystore stuff
 //keystore_credentials.properties gitignored for security
@@ -72,11 +82,11 @@ android {
         }
         alpha {
             versionNameSuffix "-alpha-" + build_date_var
-            debuggable true
+            debuggable false
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
-            buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
+            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
         release {
             runProguard false
@@ -95,6 +105,7 @@ android {
 repositories {
     mavenCentral()
     maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
+    maven { url 'http://download.crashlytics.com/maven' }
 }
 
 dependencies {
@@ -120,6 +131,7 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
     compile 'com.google.android.gms:play-services:5.0.89'
+    compile 'com.crashlytics.android:crashlytics:1.+'
     compile files('libs/kahuna_489.jar')
 }
 

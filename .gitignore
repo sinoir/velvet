@@ -43,3 +43,5 @@ Delectable/app/keystore_credentials.properties
 #generated version.properties file for Jenkins S3
 Delectable/app/version.properties
 
+#crashlytics generated file
+Delectable/app/src/main/res/values/com_crashlytics_export_strings.xml

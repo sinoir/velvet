@@ -9,6 +9,12 @@
     android:paddingLeft="@dimen/general_row_horizontal_spacing"
     android:paddingRight="@dimen/general_row_horizontal_spacing">
 
+    <Spinner
+        android:id="@+id/debug_spinner"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="48dp"/>
+
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/signup_button"
         android:layout_width="match_parent"

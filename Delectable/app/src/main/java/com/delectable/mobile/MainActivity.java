@@ -1,5 +1,6 @@
 package com.delectable.mobile;
 
+import com.crashlytics.android.Crashlytics;
 import com.delectable.mobile.controllers.VersionPropsFileController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.builddatecheck.BuildDateCheckedEvent;
@@ -69,6 +70,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(BuildConfig.REPORT_CRASHES) {
+            Crashlytics.start(this);
+        }
         KahunaUtil.trackStart();
         App.injectMembers(this);
         setContentView(R.layout.activity_fragment_container);
