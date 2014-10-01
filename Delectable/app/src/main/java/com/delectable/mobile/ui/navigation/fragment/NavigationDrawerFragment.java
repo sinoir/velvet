@@ -33,13 +33,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import javax.inject.Inject;
 
 
 public class NavigationDrawerFragment extends BaseFragment implements
-        NavHeader.NavHeaderActionListener, ActivityFeedRow.ActivityActionsHandler {
+        NavHeader.NavHeaderActionListener, ActivityFeedRow.ActivityActionsHandler,
+        AdapterView.OnItemClickListener {
 
     private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
@@ -49,7 +51,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
     @Inject
-    AccountController mAccountController;
+    protected AccountController mAccountController;
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -65,7 +67,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private View mFragmentContainerView;
 
-    private ActivityFeedAdapter mActivityFeedAdapter;
+    private ActivityFeedAdapter mActivityFeedAdapter = new ActivityFeedAdapter(this);;
 
     private NavHeader mNavHeader;
 
@@ -111,8 +113,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         drawerListView.addHeaderView(mNavHeader);
         mNavHeader.setActionListener(this);
 
-        mActivityFeedAdapter = new ActivityFeedAdapter(this);
-
+        drawerListView.setOnItemClickListener(this);
         drawerListView.setAdapter(mActivityFeedAdapter);
         mNavHeader.setCurrentSelectedNavItem(mCurrentSelectedNavItem);
 
@@ -243,6 +244,24 @@ public class NavigationDrawerFragment extends BaseFragment implements
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        position--; //offset bc of header
+        ActivityRecipient feedItem = mActivityFeedAdapter.getItem(position);
+
+        //let click on row be absorbed by rightImageLink first. if that's null, then let the leftImageLink handle it.
+        if (feedItem.getRightImageLink() != null && feedItem.getRightImageLink().getUrl() != null) {
+            final String rightImageUrl = feedItem.getRightImageLink().getUrl();
+            openDeepLink(rightImageUrl);
+            return;
+        }
+
+        if (feedItem.getLeftImageLink() != null && feedItem.getLeftImageLink().getUrl() != null) {
+            final String leftImageUrl = feedItem.getLeftImageLink().getUrl();
+            openDeepLink(leftImageUrl);
+        }
     }
 
 
