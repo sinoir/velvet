@@ -71,8 +71,8 @@ public class ActivityFeedRow extends RelativeLayout {
         if (data.getRightImageLink() != null && data.getRightImageLink().getPhoto() != null) {
             mRightImage.setVisibility(View.VISIBLE);
             ImageLoaderUtil
-                    .loadImageIntoView(getContext(), data.getRightImageLink().getPhoto().getUrl(),
-                            mRightImage);
+                    .loadImageIntoView(getContext(),
+                            data.getRightImageLink().getPhoto().getSmallest(), mRightImage);
         } else {
             mRightImage.setVisibility(View.GONE);
             mRightImage.setImageDrawable(null);
