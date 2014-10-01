@@ -4,7 +4,6 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.LocalNotifications;
-import com.delectable.mobile.api.models.Registration;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 
 import org.json.JSONException;
@@ -79,16 +78,5 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         assertEquals(false, actualNotif.getSendLnThree());
         assertEquals(false, actualNotif.getSendLnFour());
         assertEquals(false, actualNotif.getSendLnFive());
-    }
-
-    private Registration buildTestModel() {
-        Registration regModel = new Registration();
-        // TODO: Replace with some Account info?
-        regModel.setAccount(new Account());
-        regModel.setSessionType("Some Session Type");
-        regModel.setSessionToken("Some Session Token");
-        regModel.setSessionKey("Some Session Key");
-
-        return regModel;
     }
 }

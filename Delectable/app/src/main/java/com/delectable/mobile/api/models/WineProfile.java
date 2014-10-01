@@ -2,6 +2,8 @@ package com.delectable.mobile.api.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.delectable.mobile.model.api.BaseResponse;
+
 
 public class WineProfile extends BaseResponse implements Parcelable {
 
@@ -44,6 +46,7 @@ public class WineProfile extends BaseResponse implements Parcelable {
     }
 
     private WineProfile(Parcel in) {
+        super(in);
         this.id = in.readString();
         this.ratings_summary = in.readParcelable(RatingsSummaryHash.class.getClassLoader());
         this.region_id = in.readString();
@@ -56,8 +59,6 @@ public class WineProfile extends BaseResponse implements Parcelable {
         this.description = in.readString();
         this.price = (Double) in.readValue(Double.class.getClassLoader());
         this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
-        this.context = in.readString();
-        this.e_tag = in.readString();
     }
 
     public String getId() {
@@ -168,9 +169,9 @@ public class WineProfile extends BaseResponse implements Parcelable {
                 ", base_wine_id='" + base_wine_id + '\'' +
                 ", price_text='" + price_text + '\'' +
                 ", price_status='" + price_status + '\'' +
-                ", e_tag='" + e_tag + '\'' +
+                ", e_tag='" + getETag() + '\'' +
                 ", description='" + description + '\'' +
-                ", context='" + context + '\'' +
+                ", context='" + getContext() + '\'' +
                 ", price=" + price +
                 ", photo=" + photo +
                 '}';
@@ -183,6 +184,7 @@ public class WineProfile extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeString(this.id);
         dest.writeParcelable(this.ratings_summary, 0);
         dest.writeString(this.region_id);
@@ -195,7 +197,5 @@ public class WineProfile extends BaseResponse implements Parcelable {
         dest.writeString(this.description);
         dest.writeValue(this.price);
         dest.writeParcelable(this.photo, flags);
-        dest.writeString(this.context);
-        dest.writeString(this.e_tag);
     }
 }

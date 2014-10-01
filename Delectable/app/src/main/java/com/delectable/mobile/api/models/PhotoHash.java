@@ -2,12 +2,13 @@ package com.delectable.mobile.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONObject;
+import com.delectable.mobile.model.api.BaseResponse;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+
 
 public class PhotoHash extends BaseResponse implements Parcelable, Serializable {
 
@@ -38,8 +39,8 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     }
 
     private PhotoHash(Parcel in) {
+        super(in);
         this.url = in.readString();
-
         this.child_resolutions = new ChildResolution();
         this.child_resolutions.size_nano = in.readString();
         this.child_resolutions.size_micro = in.readString();
@@ -48,16 +49,6 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         this.child_resolutions.size_450 = in.readString();
         this.child_resolutions.size_medium = in.readString();
         this.child_resolutions.size_blur = in.readString();
-    }
-
-    public static PhotoHash buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        PhotoHash newResource = null;
-        if (payloadObj != null && payloadObj.optJSONObject("photo") != null) {
-            JSONObject photoObj = payloadObj.optJSONObject("photo");
-            newResource = buildFromJson(photoObj, PhotoHash.class);
-        }
-        return newResource;
     }
 
     public String getUrl() {
@@ -150,6 +141,7 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeString(this.url);
         dest.writeString(this.child_resolutions.size_nano);
         dest.writeString(this.child_resolutions.size_micro);

@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.model.api.BaseResponse;
+
 public class WineSource extends BaseResponse {
 
     WineProfile wine_profile;  //minimal

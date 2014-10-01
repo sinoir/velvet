@@ -12,9 +12,7 @@ public class ListingObject {
 
     String e_tag;
 
-    Boolean more;
-
-    boolean invalidate;
+    boolean more;
 
     ListingResponse.Boundaries boundaries;
 
@@ -23,7 +21,6 @@ public class ListingObject {
     public ListingObject(ListingResponse<CaptureDetails> captureDetails) {
         e_tag = captureDetails.getETag();
         more = captureDetails.getMore();
-        invalidate = captureDetails.getInvalidate();
         boundaries = captureDetails.getBoundaries();
         object_ids = new ArrayList<String>();
         object_ids.addAll(captureDetails.getAllIds());
@@ -37,20 +34,12 @@ public class ListingObject {
         this.e_tag = e_tag;
     }
 
-    public Boolean getMore() {
+    public boolean getMore() {
         return more;
     }
 
     public void setMore(Boolean more) {
         this.more = more;
-    }
-
-    public boolean isInvalidate() {
-        return invalidate;
-    }
-
-    public void setInvalidate(boolean invalidate) {
-        this.invalidate = invalidate;
     }
 
     public ListingResponse.Boundaries getBoundaries() {
@@ -74,7 +63,6 @@ public class ListingObject {
         return "ListingObject{" +
                 "e_tag='" + e_tag + '\'' +
                 ", more=" + more +
-                ", invalidate=" + invalidate +
                 ", boundaries=" + boundaries +
                 ", object_ids=" + object_ids +
                 '}';

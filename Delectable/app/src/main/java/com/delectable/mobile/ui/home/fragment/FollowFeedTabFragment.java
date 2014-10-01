@@ -147,10 +147,8 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         // TODO: Pop this logic somewhere else, like "hasNextPage" or something...
         Log.d(TAG, "Load Next Page? " + mDetailsListing.getMore());
         // TODO: Figure out why last page returns invalidate and doesn't load more pages, why is more true?
-        if (mDetailsListing != null &&
-                mDetailsListing.getMore() &&
-                (!mDetailsListing.getInvalidate()
-                        || mDetailsListing.getBoundariesFromAfter() == null)) {
+        if (mDetailsListing != null && mDetailsListing.getMore()
+                && mDetailsListing.getBoundariesFromAfter() == null) {
             loadRemoteData(false);
         }
     }

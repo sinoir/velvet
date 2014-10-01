@@ -1,7 +1,5 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,16 +31,6 @@ public class CaptureDetails extends Capture {
 
     ArrayList<CaptureComment> comments;
 
-    public static CaptureDetails buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        CaptureDetails newResource = null;
-        if (payloadObj != null && payloadObj.optJSONObject("capture") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("capture"), CaptureDetails.class);
-        }
-
-        return newResource;
-    }
-
     /**
      * Updates existing capture with updated capture
      *
@@ -64,7 +52,7 @@ public class CaptureDetails extends Capture {
         setCapturerParticipant(newCapture.getCapturerParticipant());
         taggee_participants = newCapture.getTaggeeParticipants();
         comments = newCapture.getComments();
-        e_tag = newCapture.getETag();
+        setETag(newCapture.getETag());
     }
 
     public ArrayList<CaptureComment> getCommentsForUserId(String id) {
