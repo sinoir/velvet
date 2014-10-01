@@ -12,7 +12,6 @@ import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
-import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -277,9 +276,6 @@ public class UserProfileFragment extends BaseFragment implements
         showToastError(event.getErrorMessage());
     }
 
-    public void onEventMainThread(FollowAccountEvent event) {
-        // TODO show error dialog
-    }
 
     private void updateUIWithData() {
         mProfileHeaderView.setDataToView(mUserAccount);
@@ -287,8 +283,21 @@ public class UserProfileFragment extends BaseFragment implements
 
     @Override
     public void toggleFollowUserClicked(final boolean isFollowingSelected) {
-        Log.d(TAG, "Toggle Following? " + isFollowingSelected);
         mAccountController.followAccount(mUserId, isFollowingSelected);
+    }
+
+    public void onEventMainThread(FollowAccountEvent event) {
+        //follow account job wasn't fired from this fragment
+        if (!mUserId.equalsIgnoreCase(event.getAccountId())) {
+            return;
+        }
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+            updateUIWithData(); //will reset button back to original state
+        }
+        //we don't want to update the UI on success because if the user toggles the button very quickly, it'll look very sluggish when the request finally returns
+        //it's ok bc the API doesn't return error/false if updating to a status that it already is
     }
 
     @Override
