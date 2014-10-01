@@ -51,7 +51,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         assertEquals("5386a2077534901de4000004", actualFirstUpdateCapture.getId());
         assertEquals(1401332231.559, actualFirstUpdateCapture.getCreatedAt());
-        assertEquals(false, actualFirstUpdateCapture.getPrivate().booleanValue());
+        assertEquals(false, actualFirstUpdateCapture.getPrivate());
         assertEquals(33,
                 actualFirstUpdateCapture.getRatings().get("50493e4de498ee00020006e5").intValue());
         assertEquals(
@@ -126,7 +126,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         CaptureDetails actualCapture = actualListing.getUpdates().get(2);
         assertEquals("538cbc831d2b119c4500008e", actualCapture.getId());
         assertEquals(1401732227.191, actualCapture.getCreatedAt());
-        assertEquals(false, actualCapture.getPrivate().booleanValue());
+        assertEquals(false, actualCapture.getPrivate());
         assertEquals(-1, actualCapture.getRatings().get("53515c79753490e7b4000031").intValue());
         assertEquals(
                 "https://d2mvsg0ph94s7h.cloudfront.net/cornelius-donnhoff-1401732222-494dc9dc0d16.jpg",

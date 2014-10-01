@@ -19,9 +19,6 @@ import java.util.Date;
 
 public class CaptureTest extends BaseInstrumentationTestCase {
 
-    private Type mCaptureResponseType = new TypeToken<CaptureDetailsResponse>() {
-    }.getType();
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -40,7 +37,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         assertEquals("535be3177534906c8b0007d8", actualCapture.getId());
         assertEquals(1398530839.6019998, actualCapture.getCreatedAt());
-        assertEquals(false, actualCapture.getPrivate().booleanValue());
+        assertEquals(false, actualCapture.getPrivate());
 
         assertEquals(-1, actualCapture.getRatings().get("531626c71d2b11c1a400004e").intValue());
         assertEquals(19, actualCapture.getRatings().get("52069ff93166785b5d003576").intValue());
@@ -166,7 +163,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         assertEquals("535be3177534906c8b0007d8", actualCapture.getId());
         assertEquals(1398530839.6019998, actualCapture.getCreatedAt());
-        assertEquals(false, actualCapture.getPrivate().booleanValue());
+        assertEquals(false, actualCapture.getPrivate());
 
         assertEquals(-1, actualCapture.getRatings().get("531626c71d2b11c1a400004e").intValue());
         assertEquals(19, actualCapture.getRatings().get("52069ff93166785b5d003576").intValue());

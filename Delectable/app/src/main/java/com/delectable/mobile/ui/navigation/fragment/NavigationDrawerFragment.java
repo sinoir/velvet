@@ -2,15 +2,10 @@ package com.delectable.mobile.ui.navigation.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityRecipient;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.ActivityFeedRequest;
 import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
@@ -39,8 +34,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 

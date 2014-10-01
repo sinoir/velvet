@@ -138,7 +138,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         CaptureDetails firstCapDetail = firstCapSummary.getCaptures().get(0);
         assertEquals("536d6de9753490705c00011f", firstCapDetail.getId());
         assertEquals(1399680489.386, firstCapDetail.getCreatedAt());
-        assertEquals(false, firstCapDetail.getPrivate().booleanValue());
+        assertEquals(false, firstCapDetail.getPrivate());
         assertEquals(28, firstCapDetail.getRatings().get("51d24187b4db0164af000206").intValue());
         assertEquals(
                 "https://d2mvsg0ph94s7h.cloudfront.net/james-wooldridge-1399680465-1eb01e78bc36.jpg",
