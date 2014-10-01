@@ -2,16 +2,12 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.RatingsSummaryHash;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.WineProfilesContext;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
 
-/**
- * Created by wayne on 6/30/14.
- */
 public class RatingsSummaryTestCase extends BaseInstrumentationTestCase {
 
     @Override
@@ -24,10 +20,11 @@ public class RatingsSummaryTestCase extends BaseInstrumentationTestCase {
         super.tearDown();
     }
 
-    public void testRaringsParcelable() throws JSONException {
+    public void testRatingsParcelable() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
-        WineProfilesContext request = new WineProfilesContext();
-        WineProfile wine = (WineProfile) request.buildResopnseFromJson(json);
+        JSONObject payload = json.optJSONObject("payload");
+        JSONObject wineProfile = payload.optJSONObject("wine_profile");
+        WineProfile wine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
         RatingsSummaryHash expectedRatings = wine.getRatingsSummary();
 
         Parcel testParcel = Parcel.obtain();
