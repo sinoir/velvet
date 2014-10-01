@@ -105,6 +105,8 @@ public class MainActivity extends Activity {
     public void onEventMainThread(BuildDateCheckedEvent event) {
         if (!event.isSuccessful()) {
             Toast.makeText(this, event.getErrorMessage(), Toast.LENGTH_LONG).show();
+            //launch into app if call was unsuccessful
+            launchNavOrLogin();
             return;
         }
 
