@@ -4,7 +4,6 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +15,12 @@ public class ActivityFeedAdapter extends BaseAdapter {
 
     private static final String TAG = ActivityFeedAdapter.class.getSimpleName();
 
-    private ArrayList<ActivityRecipient> mActivityFeedData;
-
-    private Context mContext;
-
-    private LayoutInflater mInflater;
+    private ArrayList<ActivityRecipient> mActivityFeedData = new ArrayList<ActivityRecipient>();
 
     private ActivityFeedRow.ActivityActionsHandler mActionsHandler;
 
-    public ActivityFeedAdapter(Context context, ArrayList<ActivityRecipient> feedData) {
-        mActivityFeedData = feedData;
-        mContext = context;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public ActivityFeedAdapter(ActivityFeedRow.ActivityActionsHandler handler) {
+        mActionsHandler = handler;
     }
 
     @Override
@@ -51,8 +44,8 @@ public class ActivityFeedAdapter extends BaseAdapter {
         ActivityRecipient data = getItem(position);
         if (rowView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            rowView = (ActivityFeedRow) inflater
-                    .inflate(R.layout.row_activity_feed_impl, parent, false);
+            rowView = (ActivityFeedRow) inflater.inflate(R.layout.row_activity_feed_impl, parent,
+                    false);
         }
         rowView.updateData(data);
         rowView.setActionsHandler(mActionsHandler);
@@ -61,5 +54,9 @@ public class ActivityFeedAdapter extends BaseAdapter {
 
     public void setActionsHandler(ActivityFeedRow.ActivityActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
+    }
+
+    public void setItems(ArrayList<ActivityRecipient> items) {
+        mActivityFeedData = items;
     }
 }

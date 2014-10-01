@@ -7,8 +7,8 @@ import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.controllers.MotdController;
-import com.delectable.mobile.controllers.VersionPropsFileController;
 import com.delectable.mobile.controllers.RegistrationController;
+import com.delectable.mobile.controllers.VersionPropsFileController;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.BaseWineModel;
@@ -24,6 +24,7 @@ import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
+import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
@@ -121,6 +122,7 @@ import de.greenrobot.event.EventBus;
                 BaseJob.class,
                 FetchMotdJob.class,
                 FetchVersionPropsJob.class,
+                FetchActivityFeedJob.class,
                 FetchFollowerFeedJob.class,
                 FetchUserCaptureFeedJob.class,
                 LoginJob.class,

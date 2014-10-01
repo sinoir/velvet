@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class ActivityRecipient extends BaseListingElement {
 
-    String text;
+    private String text;
 
-    LinkObject selection_link;
+    private LinkObject selection_link;
 
-    ArrayList<RangeLink> text_links;
+    private ArrayList<RangeLink> text_links;
 
-    PhotoLink right_image_link;
+    private PhotoLink right_image_link;
 
-    PhotoLink left_image_link;
+    private PhotoLink left_image_link;
 
     public String getText() {
         return text;
@@ -54,7 +54,7 @@ public class ActivityRecipient extends BaseListingElement {
         this.left_image_link = left_image_link;
     }
 
-    public class LinkObject {
+    public static class LinkObject {
 
         String url;
 
@@ -67,7 +67,7 @@ public class ActivityRecipient extends BaseListingElement {
         }
     }
 
-    public class PhotoLink extends LinkObject {
+    public static class PhotoLink extends LinkObject {
 
         PhotoHash photo;
 
@@ -80,7 +80,7 @@ public class ActivityRecipient extends BaseListingElement {
         }
     }
 
-    public class RangeLink extends LinkObject {
+    public static class RangeLink extends LinkObject {
 
         ArrayList<Integer> range;
 
