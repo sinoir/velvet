@@ -1,25 +1,26 @@
 package com.delectable.mobile.model.api.accounts;
 
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.model.api.BaseRequest;
 
 public class AccountContextRequest extends BaseRequest {
 
-    AccountContextPayload payload;
+    private Payload payload;
 
-    public AccountContextRequest(String context, String e_tag, AccountContextPayload payload) {
-        super(context, e_tag);
-        this.payload = payload;
+    public AccountContextRequest(Account.Context context, String id) {
+        this(context, null, id);
     }
 
-    public AccountContextRequest(String context, AccountContextPayload payload) {
-        this(context, null, payload);
+    public AccountContextRequest(Account.Context context, String e_tag, String id) {
+        super(context.toString(), e_tag);
+        this.payload = new Payload(id);
     }
 
-    public static class AccountContextPayload {
+    public static class Payload {
 
-        String id;
+        private String id;
 
-        public AccountContextPayload(String id) {
+        public Payload(String id) {
             this.id = id;
         }
     }

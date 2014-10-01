@@ -5,7 +5,8 @@ import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
-import com.delectable.mobile.jobs.accounts.FetchAccountJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
@@ -17,8 +18,6 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
-import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
-import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -30,15 +29,11 @@ public class AccountController {
     JobManager mJobManager;
 
     public void fetchProfile(String id) {
-        mJobManager.addJobInBackground(new FetchAccountJob(id, false));
+        mJobManager.addJobInBackground(new FetchAccountProfileJob(id));
     }
 
-    public void fetchPrivateAccount(String id) {
-        mJobManager.addJobInBackground(new FetchAccountJob(id, true));
-    }
-
-    public void oldFollowAccount(String id, boolean follow) {
-        mJobManager.addJobInBackground(new oldFollowAccountJob(id, follow));
+    public void fetchAccountPrivate(String id) {
+        mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
     }
 
     public void followAccount(String id, boolean follow) {

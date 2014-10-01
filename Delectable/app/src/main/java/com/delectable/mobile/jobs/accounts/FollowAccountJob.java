@@ -2,6 +2,7 @@ package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
@@ -35,13 +36,23 @@ public class FollowAccountJob extends BaseJob {
 
     @Override
     public void onRun() throws Throwable {
-        Account followingUserAccount = mAccountModel.getAccount(mAccountId);
-        Account currentUser = mAccountModel.getAccount(UserInfo.getUserId(App.getInstance()));
+        AccountProfile followingUserAccount = mAccountModel.getAccount(mAccountId);
+        Account currentUser = UserInfo.getAccountPrivate(App.getInstance());
         String endpoint = "/accounts/follow";
         AccountFollowRequest request = new AccountFollowRequest(
                 new AccountFollowRequest.AccountFollowPayload(mAccountId, mIsFollowing));
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
-        getEventBus().post(new FollowAccountEvent(mAccountId, response.isSuccess()));
+
+        //TODO AccountModel will be populated when called from UserProfile, but won't be populated when coming from search or follow friends, might need to accept Account objects as job parameters in order to properly execute this and Kahuna calls
+        //write new relationship to account and cache
+        if (mAccountModel != null) {
+            int relationship = mIsFollowing ? AccountProfile.RELATION_TYPE_FOLLOWING
+                    : AccountProfile.RELATION_TYPE_NONE;
+            followingUserAccount.setCurrentUserRelationship(relationship);
+            mAccountModel.saveAccount(followingUserAccount);
+        }
+
+        mEventBus.post(new FollowAccountEvent(mAccountId, response.isSuccess()));
 
         if (followingUserAccount != null && mIsFollowing) {
             KahunaUtil.trackFollowUser("" + currentUser.getFollowingCount(),
@@ -51,6 +62,6 @@ public class FollowAccountJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FollowAccountEvent(mAccountId, getErrorMessage()));
+        getEventBus().post(new FollowAccountEvent(mAccountId, TAG + " " + getErrorMessage()));
     }
 }

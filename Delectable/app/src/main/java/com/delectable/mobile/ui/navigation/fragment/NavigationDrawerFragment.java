@@ -112,7 +112,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         navItemSelected(mCurrentSelectedNavItem);
 
         // Fetch user profile once per app launch
-        mAccountController.fetchProfile(mUserId);
+        mAccountController.fetchAccountPrivate(mUserId);
     }
 
     @Override
@@ -152,8 +152,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+
+        Account account = UserInfo.getAccountPrivate(getActivity());
+        updateUIWithData(account);
+        loadActivityFeed();
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -266,25 +270,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void loadData() {
-        // Asynchronously retreive profile from local model
-        new SafeAsyncTask<Account>(this) {
-            @Override
-            protected Account safeDoInBackground(Void[] params) {
-                return mAccountModel.getAccount(mUserId);
-            }
 
-            @Override
-            protected void safeOnPostExecute(Account account) {
-                if (account != null) {
-                    updateUIWithData(account);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        // TODO refactor this to load data from local model instead of requesting it from the API
-        loadActivityFeed();
-    }
 
     public void onEventMainThread(UpdatedAccountEvent event) {
         if (!mUserId.equals(event.getAccount().getId())) {

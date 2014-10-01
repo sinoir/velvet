@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.LabelScan;
@@ -89,9 +90,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Inject
     protected WineScanController mWineScanController;
 
-    @Inject
-    protected AccountModel mAccountModel;
-
     private Account mUserAccount;
 
     private Bitmap mCapturedImageBitmap;
@@ -141,24 +139,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mRawImageData = byteArrayOutputStream.toByteArray();
         }
         mShouldPostingCaptureAfterScan = false;
-        loadAccountData();
+        mUserAccount = UserInfo.getAccountPrivate(getActivity());
         mWineScanController.scanLabelInstantly(mRawImageData);
     }
 
-    private void loadAccountData() {
-
-        new SafeAsyncTask<Account>(this) {
-            @Override
-            protected Account safeDoInBackground(Void[] params) {
-                return mAccountModel.getAccount(UserInfo.getUserId(getActivity()));
-            }
-
-            @Override
-            protected void safeOnPostExecute(Account account) {
-                mUserAccount = account;
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

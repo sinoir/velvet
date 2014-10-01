@@ -29,7 +29,6 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -43,7 +42,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -70,9 +68,6 @@ public class SettingsFragment extends BaseFragment {
 
     @Inject
     AccountController mAccountController;
-
-    @Inject
-    AccountModel mAccountModel;
 
     //region Views
     @InjectView(R.id.profile_image)
@@ -162,7 +157,6 @@ public class SettingsFragment extends BaseFragment {
 
         mUserId = UserInfo.getUserId(getActivity());
 
-        mAccountController.fetchPrivateAccount(mUserId);
     }
 
     //region Lifecycle
@@ -226,15 +220,25 @@ public class SettingsFragment extends BaseFragment {
         super.onResume();
         mFacebookUiHelper.onResume();
         if (mUserAccount == null) {
-            loadCachedAccount();
+            mUserAccount = UserInfo.getAccountPrivate(getActivity());
         }
-    }
+        updateUI();
 
+        //fetch most recent account private from API
+        mAccountController.fetchAccountPrivate(mUserId);
+    }
 
     @Override
     public void onPause() {
         super.onPause();
         mFacebookUiHelper.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //cached out account object in case identifiers/profile items were modified
+        UserInfo.setAccountPrivate(mUserAccount);
     }
 
     @Override
@@ -249,6 +253,7 @@ public class SettingsFragment extends BaseFragment {
         mFacebookUiHelper.onSaveInstanceState(outState);
     }
     //endregion
+
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
@@ -369,24 +374,6 @@ public class SettingsFragment extends BaseFragment {
     //endregion
 
     //region API Requests
-
-    private void loadCachedAccount() {
-        // Asynchronously retreive profile from local model
-        new SafeAsyncTask<Account>(this) {
-            @Override
-            protected Account safeDoInBackground(Void[] params) {
-                return mAccountModel.getAccount(mUserId);
-            }
-
-            @Override
-            protected void safeOnPostExecute(Account account) {
-                if (account != null) {
-                    mUserAccount = account;
-                    updateUI();
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
 
     //region Setting Profile Photo Endpoints
 

@@ -16,6 +16,24 @@ public class AccountSearch {
 
     public static transient int RELATION_TYPE_FOLLOWING = 1;
 
+    public enum Context {
+        SEARCH("search"),
+        MINIMAL("minimal"),
+        PROFILE("profile"),
+        PRIVATE("private");
+
+        private String mContext;
+
+        private Context(String context) {
+
+            mContext = context;
+        }
+
+        public String toString() {
+            return mContext;
+        }
+    }
+
     private String id;
 
     private String fname;

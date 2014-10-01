@@ -3,10 +3,12 @@ package com.delectable.mobile.data;
 import com.google.gson.Gson;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Motd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class UserInfo {
 
@@ -21,6 +23,9 @@ public class UserInfo {
     private static final String PROPERTY_USER_EMAIL = "userEmail";
 
     private static final String PROPERTY_MOTD = "motd";
+
+    private static final String PROPERTY_ACCOUNT_PRIVATE = "accountPrivate";
+
 
     public static void onSignIn(String userId, String sessionKey, String sessionToken,
             String email) {
@@ -44,6 +49,7 @@ public class UserInfo {
         editor.remove(PROPERTY_USER_ID);
         editor.remove(PROPERTY_USER_EMAIL);
         editor.remove(PROPERTY_MOTD);
+        editor.remove(PROPERTY_ACCOUNT_PRIVATE);
         editor.commit();
     }
 
@@ -57,9 +63,18 @@ public class UserInfo {
         editor.commit();
     }
 
+    public static void setAccountPrivate(Account account) {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(account);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_ACCOUNT_PRIVATE, jsonString);
+        editor.commit();
+    }
+
     public static boolean isSignedIn(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        return prefs.getAll().size() > 0;
+        return getSessionToken(context) != null;
     }
 
     public static String getSessionToken(Context context) {
@@ -89,6 +104,17 @@ public class UserInfo {
             Gson gson = new Gson();
             Motd motd = gson.fromJson(jsonString, Motd.class);
             return motd;
+        }
+        return null;
+    }
+
+    public static Account getAccountPrivate(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        String jsonString = prefs.getString(PROPERTY_ACCOUNT_PRIVATE, null);
+        if (jsonString != null) {
+            Gson gson = new Gson();
+            Account account = gson.fromJson(jsonString, Account.class);
+            return account;
         }
         return null;
     }

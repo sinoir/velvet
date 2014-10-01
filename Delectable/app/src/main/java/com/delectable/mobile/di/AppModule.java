@@ -21,7 +21,8 @@ import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
-import com.delectable.mobile.jobs.accounts.FetchAccountJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
@@ -33,7 +34,6 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
-import com.delectable.mobile.jobs.accounts.oldFollowAccountJob;
 import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
@@ -127,8 +127,8 @@ import de.greenrobot.event.EventBus;
                 RegisterJob.class,
                 LoginFacebookJob.class,
                 FetchCaptureDetailsJob.class,
-                FetchAccountJob.class,
-                oldFollowAccountJob.class,
+                FetchAccountProfileJob.class,
+                FetchAccountPrivateJob.class,
                 FollowAccountJob.class,
                 AddCaptureCommentJob.class,
                 EditCaptureCommentJob.class,
