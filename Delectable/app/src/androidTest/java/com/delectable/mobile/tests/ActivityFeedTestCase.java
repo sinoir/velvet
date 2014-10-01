@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.ActivityFeedRequest;
+import com.delectable.mobile.model.api.accounts.AccountsActivityFeedResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,9 +23,11 @@ public class ActivityFeedTestCase extends BaseInstrumentationTestCase {
         // TODO: Update test when we get more non null data , such as getTextLinks() -> need to test the Range bit.
         JSONObject json = loadJsonObjectFromResource(R.raw.test_activity_feed_list);
         String expectedContext = "feed_element";
-        ActivityFeedRequest request = new ActivityFeedRequest();
 
-        ListingResponse<ActivityRecipient> actualListing = request.buildResopnseFromJson(json);
+        AccountsActivityFeedResponse response = mGson
+                .fromJson(json.toString(), AccountsActivityFeedResponse.class);
+        ListingResponse<ActivityRecipient> actualListing = response.getPayload();
+
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());
         assertNull(actualListing.getBoundariesFromSince());

@@ -1,8 +1,6 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.RatingsSummaryHash;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.requests.WineProfilesContext;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +21,9 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
 
     public void testParseWineProfileSubprofileContext() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
-        WineProfilesContext request = new WineProfilesContext();
-        WineProfile actualWine = (WineProfile) request.buildResopnseFromJson(json);
+        JSONObject payload = json.optJSONObject("payload");
+        JSONObject wineProfile = payload.optJSONObject("wine_profile");
+        WineProfile actualWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
         assertEquals(1, actualWine.getRatingsSummary().getAllCount());
@@ -33,7 +32,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         assertEquals(-1.0, actualWine.getRatingsSummary().getProAvg());
         assertEquals("2009", actualWine.getVintage());
         assertEquals("5305ba538953f6d73900543d", actualWine.getBaseWineId());
-        assertEquals(21.82, actualWine.getPrice().doubleValue());
+        assertEquals(21.82, actualWine.getPrice());
         assertEquals("confirmed", actualWine.getPriceStatus());
         assertEquals("subprofile", actualWine.getContext());
         assertEquals("XQr5adP35129_Q", actualWine.getETag());
@@ -43,8 +42,9 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
 
     public void testParseWineProfileMinimalContext() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_minimal_ctx);
-        WineProfilesContext request = new WineProfilesContext();
-        WineProfile actualWine = (WineProfile) request.buildResopnseFromJson(json);
+        JSONObject payload = json.optJSONObject("payload");
+        JSONObject wineProfile = payload.optJSONObject("wine_profile");
+        WineProfile actualWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
         assertNull(actualWine.getRatingsSummary());
@@ -52,7 +52,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         assertEquals("Napa Ridge", actualWine.getProducerName());
         assertEquals("Napa Valley Pinot Noir", actualWine.getName());
         assertEquals("5305ba538953f6d73900543d", actualWine.getBaseWineId());
-        assertEquals(21.82, actualWine.getPrice().doubleValue());
+        assertEquals(21.82, actualWine.getPrice());
         assertEquals("confirmed", actualWine.getPriceStatus());
 
         assertEquals(
@@ -81,8 +81,9 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
 
     public void testWineProfileParcelable() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
-        WineProfilesContext request = new WineProfilesContext();
-        WineProfile expectedWine = (WineProfile) request.buildResopnseFromJson(json);
+        JSONObject payload = json.optJSONObject("payload");
+        JSONObject wineProfile = payload.optJSONObject("wine_profile");
+        WineProfile expectedWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
 
         Parcel testParcel = Parcel.obtain();
 
@@ -101,7 +102,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         assertEquals(-1.0, actualWine.getRatingsSummary().getProAvg());
         assertEquals("2009", actualWine.getVintage());
         assertEquals("5305ba538953f6d73900543d", actualWine.getBaseWineId());
-        assertEquals(21.82, actualWine.getPrice().doubleValue());
+        assertEquals(21.82, actualWine.getPrice());
         assertEquals("confirmed", actualWine.getPriceStatus());
         assertEquals("subprofile", actualWine.getContext());
         assertEquals("XQr5adP35129_Q", actualWine.getETag());
@@ -111,8 +112,9 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
 
     public void testWinePhotoHash() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_minimal_ctx);
-        WineProfilesContext request = new WineProfilesContext();
-        WineProfile expectedWine = (WineProfile) request.buildResopnseFromJson(json);
+        JSONObject payload = json.optJSONObject("payload");
+        JSONObject wineProfile = payload.optJSONObject("wine_profile");
+        WineProfile expectedWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
 
         Parcel testParcel = Parcel.obtain();
 

@@ -8,6 +8,7 @@ import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
+import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
@@ -34,6 +35,10 @@ public class AccountController {
 
     public void fetchAccountPrivate(String id) {
         mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
+    }
+
+    public void fetchActivityFeed(String before, String after) {
+        mJobManager.addJobInBackground(new FetchActivityFeedJob(before, after));
     }
 
     public void followAccount(String id, boolean follow) {

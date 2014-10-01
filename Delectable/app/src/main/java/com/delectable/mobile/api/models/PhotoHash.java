@@ -105,7 +105,11 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     }
 
     public String getSmallest() {
-        return this.child_resolutions.getSmallest();
+        String imageUrl = this.child_resolutions.getSmallest();
+        if (imageUrl != null) {
+            return imageUrl;
+        }
+        return this.url;
     }
 
     public String getLargest() {
@@ -113,7 +117,11 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     }
 
     public String getBestThumb() {
-        return this.child_resolutions.getBestThumb();
+        String imageUrl = this.child_resolutions.getBestThumb();
+        if (imageUrl != null) {
+            return imageUrl;
+        }
+        return this.url;
     }
 
     /**

@@ -47,9 +47,9 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
 
         assertEquals("535be3177534906c8b0007d8", actualFirstUpdateNote.getId());
         assertEquals(1398530839.6019998, actualFirstUpdateNote.getCreatedAt());
-        assertEquals(false, actualFirstUpdateNote.getPrivate().booleanValue());
+        assertEquals(false, actualFirstUpdateNote.getPrivate());
         assertEquals("Hard black berry. Simple acid. $25", actualFirstUpdateNote.getNote());
-        assertEquals(19, actualFirstUpdateNote.getCapturerRating().intValue());
+        assertEquals(19, actualFirstUpdateNote.getCapturerRating());
         assertEquals("2012", actualFirstUpdateNote.getVintage());
         assertEquals(0, actualFirstUpdateNote.getHelpfulingAccountIds().size());
         assertEquals("note", actualFirstUpdateNote.getContext());

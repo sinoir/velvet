@@ -54,7 +54,7 @@ public class WineSourceTest extends BaseInstrumentationTestCase {
         assertEquals("Napa Ridge", actualWine.getProducerName());
         assertEquals("Napa Valley Pinot Noir", actualWine.getName());
         assertEquals("5305ba538953f6d73900543d", actualWine.getBaseWineId());
-        assertEquals(21.82, actualWine.getPrice().doubleValue());
+        assertEquals(21.82, actualWine.getPrice());
         assertEquals("confirmed", actualWine.getPriceStatus());
 
         assertEquals(

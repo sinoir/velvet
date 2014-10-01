@@ -2,16 +2,12 @@ package com.delectable.mobile.ui.navigation.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.RequestError;
-import com.delectable.mobile.api.controllers.BaseNetworkController;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityRecipient;
-import com.delectable.mobile.api.models.BaseResponse;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.requests.ActivityFeedRequest;
 import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
@@ -19,7 +15,6 @@ import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
-import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -27,7 +22,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -39,15 +33,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 
 public class NavigationDrawerFragment extends BaseFragment implements
-        NavHeader.NavHeaderActionListener, ActivityFeedRow.ActivityActionsHandler {
+        NavHeader.NavHeaderActionListener, ActivityFeedRow.ActivityActionsHandler,
+        AdapterView.OnItemClickListener {
 
     private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
@@ -57,10 +51,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
     @Inject
-    AccountController mAccountController;
-
-    @Inject
-    AccountModel mAccountModel;
+    protected AccountController mAccountController;
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -72,25 +63,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private View mView;
-
     private DrawerLayout mDrawerLayout;
-
-    private ListView mDrawerListView;
 
     private View mFragmentContainerView;
 
-    private ActivityFeedAdapter mActivityFeedAdapter;
+    private ActivityFeedAdapter mActivityFeedAdapter = new ActivityFeedAdapter(this);;
 
     private NavHeader mNavHeader;
 
     private String mUserId;
-
-    private BaseNetworkController mBaseNetworkController;
-
-    private ArrayList<ActivityRecipient> mActivityRecipients;
-
-    private ListingResponse<ActivityRecipient> mActivityRecipientListing;
 
     private int mCurrentSelectedNavItem = 0;
 
@@ -101,8 +82,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        mActivityRecipients = new ArrayList<ActivityRecipient>();
-        mBaseNetworkController = new BaseNetworkController(getActivity());
         mUserId = UserInfo.getUserId(getActivity());
 
         if (savedInstanceState != null) {
@@ -125,23 +104,20 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
-        mDrawerListView = (ListView) mView;
+        ListView drawerListView = (ListView) view;
 
         mNavHeader = new NavHeader(getActivity());
-        mDrawerListView.addHeaderView(mNavHeader);
+        drawerListView.addHeaderView(mNavHeader);
         mNavHeader.setActionListener(this);
 
-        mActivityFeedAdapter = new ActivityFeedAdapter(getActivity(), mActivityRecipients);
-
-        mDrawerListView.setAdapter(mActivityFeedAdapter);
+        drawerListView.setOnItemClickListener(this);
+        drawerListView.setAdapter(mActivityFeedAdapter);
         mNavHeader.setCurrentSelectedNavItem(mCurrentSelectedNavItem);
 
-        mActivityFeedAdapter.setActionsHandler(this);
-
-        return mView;
+        return view;
     }
 
     @Override
@@ -270,6 +246,23 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        position--; //offset bc of header
+        ActivityRecipient feedItem = mActivityFeedAdapter.getItem(position);
+
+        //let click on row be absorbed by rightImageLink first. if that's null, then let the leftImageLink handle it.
+        if (feedItem.getRightImageLink() != null && feedItem.getRightImageLink().getUrl() != null) {
+            final String rightImageUrl = feedItem.getRightImageLink().getUrl();
+            openDeepLink(rightImageUrl);
+            return;
+        }
+
+        if (feedItem.getLeftImageLink() != null && feedItem.getLeftImageLink().getUrl() != null) {
+            final String leftImageUrl = feedItem.getLeftImageLink().getUrl();
+            openDeepLink(leftImageUrl);
+        }
+    }
 
 
     public void onEventMainThread(UpdatedAccountEvent event) {
@@ -279,7 +272,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         if (event.isSuccessful()) {
             updateUIWithData(event.getAccount());
-            
+
             // Update Push notification stuff after user logs in / updates account.
             // TODO: Put this somewhere else that makes more sense..
             try {
@@ -293,27 +286,19 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     private void loadActivityFeed() {
-        ActivityFeedRequest request = new ActivityFeedRequest();
-        mBaseNetworkController.performRequest(request, new BaseNetworkController.RequestCallback() {
-            @Override
-            public void onSuccess(BaseResponse result) {
-                Log.d(TAG, "Result: " + result);
-                mActivityRecipientListing = (ListingResponse<ActivityRecipient>) result;
-                mActivityRecipients.clear();
-                if (mActivityRecipientListing != null) {
-                    mActivityRecipients.addAll(mActivityRecipientListing.getSortedCombinedData());
-                } else {
-                    // TODO: Empty State for no data?
-                }
-                mActivityFeedAdapter.notifyDataSetChanged();
-            }
+        mAccountController.fetchActivityFeed(null, null);
+    }
 
-            @Override
-            public void onFailed(RequestError error) {
-                Log.e(TAG, "Error Result? : " + error);
-                showToastError(error.getMessage());
-            }
-        });
+    public void onEventMainThread(FetchedActivityFeedEvent event) {
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+            return;
+        }
+
+        //TODO optimized to use etag
+        ListingResponse<ActivityRecipient> mActivityRecipientListing = event.getListingResponse();
+        mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
+        mActivityFeedAdapter.notifyDataSetChanged();
     }
 
     private void updateUIWithData(Account userAccount) {
