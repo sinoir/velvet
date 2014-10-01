@@ -1,19 +1,10 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
-
 public class WineSource extends BaseResponse {
 
-    WineProfile wine_profile;
+    WineProfile wine_profile;  //minimal
 
     PurchasedOffer purchase_offer;
-
-    public static WineSource buildFromJson(JSONObject jsonObject) {
-        JSONObject payloadObj = jsonObject.optJSONObject("payload");
-        WineSource newResource = buildFromJson(payloadObj, WineSource.class);
-        return newResource;
-    }
-
 
     public WineProfile getWineProfile() {
         return wine_profile;

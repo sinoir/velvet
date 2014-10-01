@@ -1,7 +1,5 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -60,17 +58,6 @@ public class WineProfile extends BaseResponse implements Parcelable {
         this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
         this.context = in.readString();
         this.e_tag = in.readString();
-    }
-
-    public static WineProfile buildFromJson(JSONObject jsonObj) {
-        JSONObject payloadObj = jsonObj.optJSONObject("payload");
-        WineProfile newResource = null;
-        if (payloadObj != null && payloadObj.optJSONObject("wine_profile") != null) {
-            newResource = buildFromJson(payloadObj.optJSONObject("wine_profile"),
-                    WineProfile.class);
-        }
-
-        return newResource;
     }
 
     public String getId() {
