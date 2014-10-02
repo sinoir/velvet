@@ -8,6 +8,7 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.AuthorizeFacebookRequest;
 import com.delectable.mobile.model.api.registrations.RegistrationFacebookResponse;
+import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
@@ -44,6 +45,7 @@ public class LoginFacebookJob extends BaseJob {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
         UserInfo.setAccountPrivate(account);
+        CrashlyticsUtil.onSignIn(account.getFullName(), account.getEmail(), account.getId(), sessionKey);
 
         mEventBus.post(new UpdatedAccountEvent(account));
         mEventBus.post(new LoginRegisterEvent(true));
