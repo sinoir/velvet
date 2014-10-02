@@ -110,7 +110,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         ListView drawerListView = (ListView) view;
 
         mNavHeader = new NavHeader(getActivity());
-        drawerListView.addHeaderView(mNavHeader);
+        drawerListView.addHeaderView(mNavHeader, null, false);
         mNavHeader.setActionListener(this);
 
         drawerListView.setOnItemClickListener(this);

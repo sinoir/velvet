@@ -68,7 +68,7 @@ public class NavHeader extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    @OnClick(R.id.profile_image1)
+    @OnClick({R.id.profile_image1, R.id.navigation_profile})
     void onProfileImageClicked() {
         if (mActionListener != null) {
             mActionListener.navHeaderUserImageClicked();
