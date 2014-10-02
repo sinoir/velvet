@@ -89,7 +89,7 @@ android {
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
