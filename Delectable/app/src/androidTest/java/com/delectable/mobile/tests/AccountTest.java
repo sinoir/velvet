@@ -1,12 +1,16 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
 import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
+import com.delectable.mobile.model.api.accounts.AccountsSearchResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.os.Parcel;
 
 public class AccountTest extends BaseInstrumentationTestCase {
 
@@ -18,6 +22,60 @@ public class AccountTest extends BaseInstrumentationTestCase {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+    }
+
+    public void testParseAccountSearchCtx() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_account_search);
+        AccountsSearchResponse response = mGson
+                .fromJson(json.toString(), AccountsSearchResponse.class);
+        AccountSearch actualAccount = response.getPayload().getHits().get(0).getObject();
+
+        assertEquals("search", actualAccount.getContext());
+        assertEquals("4fa99f83a717d80003000429", actualAccount.getId());
+        assertEquals("Jeff", actualAccount.getFname());
+        assertEquals("Songco", actualAccount.getLname());
+        assertEquals(
+                "https://s3.amazonaws.com/delectable-profile-photos/jeff-songco-1401509193-756bf4501216.jpg",
+                actualAccount.getPhoto().getUrl());
+        assertEquals(
+                "Operations @ Delectable. Have you SEEN Mark Herold's wine labels?! Michael McDermott is a god.",
+                actualAccount.getBio());
+        assertEquals(false, actualAccount.isInfluencer());
+        assertEquals(2, actualAccount.getInfluencerTitles().size());
+        assertEquals("the manager", actualAccount.getInfluencerTitles().get(0));
+        assertEquals("the dopeness", actualAccount.getInfluencerTitles().get(1));
+
+        assertEquals(0, actualAccount.getCurrentUserRelationship());
+    }
+
+    public void testAccountSearchParcelable() throws JSONException {
+
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_account_search);
+        AccountsSearchResponse response = mGson
+                .fromJson(json.toString(), AccountsSearchResponse.class);
+        AccountSearch expectedAccount = response.getPayload().getHits().get(0).getObject();
+
+        Parcel testParcel = Parcel.obtain();
+        expectedAccount.writeToParcel(testParcel, 0);
+
+        // Must reset Data position!!
+        testParcel.setDataPosition(0);
+
+        AccountSearch actualAccount = AccountSearch.CREATOR.createFromParcel(testParcel);
+
+        assertEquals(expectedAccount.getContext(), actualAccount.getContext());
+        assertEquals(expectedAccount.getId(), actualAccount.getId());
+        assertEquals(expectedAccount.getFname(), actualAccount.getFname());
+        assertEquals(expectedAccount.getLname(), actualAccount.getLname());
+        assertEquals(expectedAccount.getPhoto().getUrl(),
+                actualAccount.getPhoto().getUrl());
+        assertEquals(expectedAccount.getBio(), actualAccount.getBio());
+        assertEquals(expectedAccount.isInfluencer(), actualAccount.isInfluencer());
+        assertEquals(expectedAccount.getInfluencerTitles(), actualAccount.getInfluencerTitles());
+        assertEquals(expectedAccount.getInfluencerTitles().get(0), actualAccount.getInfluencerTitles().get(0));
+        assertEquals(expectedAccount.getInfluencerTitles().get(1), actualAccount.getInfluencerTitles().get(1));
+        assertEquals(expectedAccount.getCurrentUserRelationship(),
+                actualAccount.getCurrentUserRelationship());
     }
 
     public void testParseAccountsPrivateCtx() throws JSONException {
@@ -68,7 +126,7 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(0, actualAccount.getPaymentMethods().size());
         assertEquals("adam@ad60.com", actualAccount.getEmail());
 
-        assertEquals(0, actualAccount.getActivityFeedTsLast());
+        assertEquals(0.0f, actualAccount.getActivityFeedTsLast());
         assertEquals(true, actualAccount.getFtueCompleted());
         assertEquals(true, actualAccount.getLocalNotifs().getSendLnOne());
         assertEquals(true, actualAccount.getLocalNotifs().getSendLnTwo());

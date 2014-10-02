@@ -3,12 +3,16 @@ package com.delectable.mobile.api.models;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Account that is context search.
  */
-public class AccountSearch {
+public class AccountSearch implements Parcelable {
 
     public static transient int RELATION_TYPE_SELF = -1;
 
@@ -167,4 +171,49 @@ public class AccountSearch {
                 ", current_user_relationship=" + current_user_relationship +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.fname);
+        dest.writeString(this.lname);
+        dest.writeString(this.bio);
+        dest.writeParcelable(this.photo, 0);
+        dest.writeByte(influencer ? (byte) 1 : (byte) 0);
+        dest.writeStringList(this.influencer_titles);
+        dest.writeString(this.context);
+        dest.writeInt(this.current_user_relationship);
+    }
+
+    public AccountSearch() {
+    }
+
+    private AccountSearch(Parcel in) {
+        this.id = in.readString();
+        this.fname = in.readString();
+        this.lname = in.readString();
+        this.bio = in.readString();
+        this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
+        this.influencer = in.readByte() != 0;
+        this.influencer_titles = new ArrayList<String>();
+        in.readStringList(this.influencer_titles);
+        this.context = in.readString();
+        this.current_user_relationship = in.readInt();
+    }
+
+    public static final Parcelable.Creator<AccountSearch> CREATOR
+            = new Parcelable.Creator<AccountSearch>() {
+        public AccountSearch createFromParcel(Parcel source) {
+            return new AccountSearch(source);
+        }
+
+        public AccountSearch[] newArray(int size) {
+            return new AccountSearch[size];
+        }
+    };
 }
