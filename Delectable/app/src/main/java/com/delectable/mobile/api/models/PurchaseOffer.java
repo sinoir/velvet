@@ -2,28 +2,28 @@ package com.delectable.mobile.api.models;
 
 import java.util.ArrayList;
 
-public class PurchasedOffer {
+public class PurchaseOffer {
 
-    String id;
+    private String id;
 
-    String expiration;
+    private float expiration;
 
-    String vintage;
+    private String vintage;
 
-    Integer min_quant;
+    private int min_quant;
 
-    Integer max_quant;
+    private int max_quant;
 
-    Integer default_quant;
+    private int default_quant;
 
-    String marketing_message;
+    private String marketing_message;
 
     // TODO: What does Attributes hash look like?
     //ATTRIBUTES_HASH marketing_message_attributes;
 
-    ObjectNouns object_nouns;
+    private ObjectNouns object_nouns;
 
-    ArrayList<Pricing> pricing;
+    private ArrayList<Pricing> pricing;
 
     public String getId() {
         return id;
@@ -33,11 +33,11 @@ public class PurchasedOffer {
         this.id = id;
     }
 
-    public String getExpiration() {
+    public float getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(String expiration) {
+    public void setExpiration(float expiration) {
         this.expiration = expiration;
     }
 
@@ -49,27 +49,27 @@ public class PurchasedOffer {
         this.vintage = vintage;
     }
 
-    public Integer getMinQuant() {
+    public int getMinQuant() {
         return min_quant;
     }
 
-    public void setMinQuant(Integer min_quant) {
+    public void setMinQuant(int min_quant) {
         this.min_quant = min_quant;
     }
 
-    public Integer getMaxQuant() {
+    public int getMaxQuant() {
         return max_quant;
     }
 
-    public void setMaxQuant(Integer max_quant) {
+    public void setMaxQuant(int max_quant) {
         this.max_quant = max_quant;
     }
 
-    public Integer getDefaultQuant() {
+    public int getDefaultQuant() {
         return default_quant;
     }
 
-    public void setDefaultQuant(Integer default_quant) {
+    public void setDefaultQuant(int default_quant) {
         this.default_quant = default_quant;
     }
 
@@ -80,7 +80,6 @@ public class PurchasedOffer {
     public void setMarketingMessage(String marketing_message) {
         this.marketing_message = marketing_message;
     }
-
 
     public String getObjectSingularNoun() {
         return object_nouns != null ? object_nouns.singular : null;
@@ -99,7 +98,6 @@ public class PurchasedOffer {
     }
 
 
-
     public ArrayList<Pricing> getPricing() {
         return pricing;
     }
@@ -110,9 +108,9 @@ public class PurchasedOffer {
 
     @Override
     public String toString() {
-        return "PurchasedOffer{" +
+        return "PurchaseOffer{" +
                 "id='" + id + '\'' +
-                ", expiration='" + expiration + '\'' +
+                ", expiration=" + expiration +
                 ", vintage='" + vintage + '\'' +
                 ", min_quant=" + min_quant +
                 ", max_quant=" + max_quant +
@@ -123,10 +121,26 @@ public class PurchasedOffer {
                 '}';
     }
 
-    class ObjectNouns {
+    public static class ObjectNouns {
 
-        String singular;
+        private String singular;
 
-        String plural;
+        private String plural;
+
+        public String getSingular() {
+            return singular;
+        }
+
+        public String getPlural() {
+            return plural;
+        }
+
+        @Override
+        public String toString() {
+            return "ObjectNouns{" +
+                    "singular='" + singular + '\'' +
+                    ", plural='" + plural + '\'' +
+                    '}';
+        }
     }
 }

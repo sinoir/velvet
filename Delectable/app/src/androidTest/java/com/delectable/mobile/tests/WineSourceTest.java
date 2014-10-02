@@ -1,8 +1,7 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.PurchasedOffer;
+import com.delectable.mobile.api.models.PurchaseOffer;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.models.WineSource;
 import com.delectable.mobile.model.api.wineprofiles.WineProfilesSourceResponse;
 
 import org.json.JSONException;
@@ -24,28 +23,28 @@ public class WineSourceTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_source);
         WineProfilesSourceResponse response = mGson
                 .fromJson(json.toString(), WineProfilesSourceResponse.class);
-        WineSource actualSource = response.getPayload();
+        WineProfilesSourceResponse.PayLoad actualSource = response.getPayload();
 
-        PurchasedOffer actualPurchasedOffer = actualSource.getPurchaseOffer();
-        assertEquals("5384fc9a753490ae0d00013b", actualPurchasedOffer.getId());
-        assertEquals("2009", actualPurchasedOffer.getVintage());
-        assertEquals("1401408000", actualPurchasedOffer.getExpiration());
-        assertEquals(1, actualPurchasedOffer.getMinQuant().intValue());
-        assertEquals(12, actualPurchasedOffer.getMaxQuant().intValue());
-        assertEquals(1, actualPurchasedOffer.getDefaultQuant().intValue());
+        PurchaseOffer actualPurchaseOffer = actualSource.getPurchaseOffer();
+        assertEquals("5384fc9a753490ae0d00013b", actualPurchaseOffer.getId());
+        assertEquals("2009", actualPurchaseOffer.getVintage());
+        assertEquals("1401408000", actualPurchaseOffer.getExpiration());
+        assertEquals(1, actualPurchaseOffer.getMinQuant());
+        assertEquals(12, actualPurchaseOffer.getMaxQuant());
+        assertEquals(1, actualPurchaseOffer.getDefaultQuant());
 
-        assertEquals(12, actualPurchasedOffer.getPricing().size());
-        assertEquals(1, actualPurchasedOffer.getPricing().get(0).getQuantity().intValue());
-        assertEquals("$21.82", actualPurchasedOffer.getPricing().get(0).getPerBbottle());
-        assertEquals("$21.82", actualPurchasedOffer.getPricing().get(0).getWine());
-        assertEquals("$22.00", actualPurchasedOffer.getPricing().get(0).getShipping());
-        assertEquals("$0.00", actualPurchasedOffer.getPricing().get(0).getTax());
-        assertEquals("$43.82", actualPurchasedOffer.getPricing().get(0).getTotal());
+        assertEquals(12, actualPurchaseOffer.getPricing().size());
+        assertEquals(1, actualPurchaseOffer.getPricing().get(0).getQuantity().intValue());
+        assertEquals("$21.82", actualPurchaseOffer.getPricing().get(0).getPerBbottle());
+        assertEquals("$21.82", actualPurchaseOffer.getPricing().get(0).getWine());
+        assertEquals("$22.00", actualPurchaseOffer.getPricing().get(0).getShipping());
+        assertEquals("$0.00", actualPurchaseOffer.getPricing().get(0).getTax());
+        assertEquals("$43.82", actualPurchaseOffer.getPricing().get(0).getTotal());
 
-        assertEquals("bottle", actualPurchasedOffer.getObjectSingularNoun());
-        assertEquals("bottles", actualPurchasedOffer.getObjectPluralNoun());
+        assertEquals("bottle", actualPurchaseOffer.getObjectSingularNoun());
+        assertEquals("bottles", actualPurchaseOffer.getObjectPluralNoun());
         assertEquals("Order 12 bottles to get 1 cent shipping!",
-                actualPurchasedOffer.getMarketingMessage());
+                actualPurchaseOffer.getMarketingMessage());
 
         WineProfile actualWine = actualSource.getWineProfile();
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
