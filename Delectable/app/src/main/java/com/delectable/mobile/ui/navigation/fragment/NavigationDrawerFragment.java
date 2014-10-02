@@ -9,6 +9,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
@@ -67,13 +68,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private View mFragmentContainerView;
 
-    private ActivityFeedAdapter mActivityFeedAdapter = new ActivityFeedAdapter(this);;
+    private ActivityFeedAdapter mActivityFeedAdapter = new ActivityFeedAdapter(this);
 
     private NavHeader mNavHeader;
 
     private String mUserId;
 
     private int mCurrentSelectedNavItem = 0;
+
+    private Account mUserAccount;
 
     public NavigationDrawerFragment() {
     }
@@ -129,8 +132,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        Account account = UserInfo.getAccountPrivate(getActivity());
-        updateUIWithData(account);
+        mUserAccount = UserInfo.getAccountPrivate(getActivity());
+        updateUIWithData();
         loadActivityFeed();
     }
 
@@ -271,7 +274,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         if (event.isSuccessful()) {
-            updateUIWithData(event.getAccount());
+            mUserAccount = event.getAccount();
+            updateUIWithData();
 
             // Update Push notification stuff after user logs in / updates account.
             // TODO: Put this somewhere else that makes more sense..
@@ -283,6 +287,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
             return;
         }
         showToastError(event.getErrorMessage());
+    }
+
+    public void onEventMainThread(UpdatedProfileEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount.setFname(event.getFname());
+            mUserAccount.setLname(event.getLname());
+            updateUIWithData();
+        }
     }
 
     private void loadActivityFeed() {
@@ -301,15 +313,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mActivityFeedAdapter.notifyDataSetChanged();
     }
 
-    private void updateUIWithData(Account userAccount) {
-        if (userAccount == null) {
+    private void updateUIWithData() {
+        if (mUserAccount == null) {
             return;
         }
-        mNavHeader.setFollowerCount(userAccount.getFollowerCount());
-        mNavHeader.setFollowingCount(userAccount.getFollowingCount());
-        mNavHeader.setUserName(userAccount.getFullName());
-        mNavHeader.setUserBio(userAccount.getBio());
-        ImageLoaderUtil.loadImageIntoView(getActivity(), userAccount.getPhoto().getUrl(),
+        mNavHeader.setFollowerCount(mUserAccount.getFollowerCount());
+        mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
+        mNavHeader.setUserName(mUserAccount.getFullName());
+        mNavHeader.setUserBio(mUserAccount.getBio());
+        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
                 mNavHeader.getUserImageView());
     }
 
