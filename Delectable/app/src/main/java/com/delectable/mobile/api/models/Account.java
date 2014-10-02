@@ -108,7 +108,7 @@ public class Account extends AccountProfile {
         this.email = email;
     }
 
-    public int getActivityFeedTsLast() {
+    public float getActivityFeedTsLast() {
         return client_state != null ? client_state.activity_feed_ts_last : 0;
     }
 
@@ -238,7 +238,7 @@ public class Account extends AccountProfile {
 
     class ClientState {
 
-        private int activity_feed_ts_last;
+        private float activity_feed_ts_last;
     }
 
     class TutorialState {

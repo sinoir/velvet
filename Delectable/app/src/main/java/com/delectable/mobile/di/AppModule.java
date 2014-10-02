@@ -56,7 +56,7 @@ import com.delectable.mobile.jobs.scanwinelabel.AddCaptureFromPendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUploadJob;
 import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
-import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
+import com.delectable.mobile.jobs.basewines.FetchBaseWineJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.MotdNetworkClient;
 import com.delectable.mobile.net.NetworkClient;

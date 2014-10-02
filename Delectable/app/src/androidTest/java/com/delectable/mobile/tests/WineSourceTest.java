@@ -3,7 +3,7 @@ package com.delectable.mobile.tests;
 import com.delectable.mobile.api.models.PurchasedOffer;
 import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.models.WineSource;
-import com.delectable.mobile.api.requests.WineProfilesPricing;
+import com.delectable.mobile.model.api.wineprofiles.WineProfilesSourceResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +22,9 @@ public class WineSourceTest extends BaseInstrumentationTestCase {
 
     public void testParsedWineSource() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_source);
-
-        WineProfilesPricing request = new WineProfilesPricing();
-        WineSource actualSource = (WineSource) request.buildResopnseFromJson(json);
+        WineProfilesSourceResponse response = mGson
+                .fromJson(json.toString(), WineProfilesSourceResponse.class);
+        WineSource actualSource = response.getPayload();
 
         PurchasedOffer actualPurchasedOffer = actualSource.getPurchaseOffer();
         assertEquals("5384fc9a753490ae0d00013b", actualPurchasedOffer.getId());

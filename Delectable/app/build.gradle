@@ -89,7 +89,7 @@ android {
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
@@ -112,7 +112,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
     compile 'com.android.support:support-v13:19.1'
-    compile 'com.loopj.android:android-async-http:1.4.4@jar'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.apache.commons:commons-lang3:3.1@jar'
     compile 'com.squareup.picasso:picasso:2.3.3'

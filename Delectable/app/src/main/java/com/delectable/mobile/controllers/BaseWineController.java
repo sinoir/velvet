@@ -1,7 +1,7 @@
 package com.delectable.mobile.controllers;
 
 import com.delectable.mobile.jobs.basewines.SearchWinesJob;
-import com.delectable.mobile.jobs.wines.FetchBaseWineJob;
+import com.delectable.mobile.jobs.basewines.FetchBaseWineJob;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;

@@ -9,7 +9,7 @@
         android:id="@+id/navigation_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/d_off_white">
+        android:background="@drawable/bg_off_white_to_light_opacity">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"

@@ -2,7 +2,7 @@ package com.delectable.mobile.api.models;
 
 import java.util.HashMap;
 
-public class ProvisionCapture extends BaseResponse {
+public class ProvisionCapture {
 
     private String bucket;
 

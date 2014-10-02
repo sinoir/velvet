@@ -1,4 +1,4 @@
-package com.delectable.mobile.model.api.wines;
+package com.delectable.mobile.model.api.basewines;
 
 
 import com.delectable.mobile.api.models.BaseWine;

@@ -22,6 +22,9 @@
     <color name="d_dark_gray">#606060</color>
     <color name="d_black">#303030</color>
 
+    <!-- Grey on touch colors -->
+    <color name="d_off_white_10p_dark">#DCDCDC</color>
+
     <!-- Ratings -->
     <color name="d_red">#ff5500</color>
     <color name="d_orange">#ffb300</color>

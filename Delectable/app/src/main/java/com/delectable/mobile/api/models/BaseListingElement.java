@@ -5,7 +5,7 @@ import com.delectable.mobile.util.DateHelperUtil;
 import java.util.Comparator;
 import java.util.Date;
 
-public abstract class BaseListingElement extends BaseResponse {
+public abstract class BaseListingElement {
 
     /**
      * Sorts Elements by newest to oldest
@@ -25,6 +25,10 @@ public abstract class BaseListingElement extends BaseResponse {
     private String id;
 
     private double created_at;
+
+    private String context;
+
+    private String e_tag;
 
     public Date getCreatedAtDate() {
         return DateHelperUtil.dateFromDouble(created_at);
@@ -46,13 +50,29 @@ public abstract class BaseListingElement extends BaseResponse {
         this.created_at = created_at;
     }
 
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String e_tag) {
+        this.e_tag = e_tag;
+    }
+
     @Override
     public String toString() {
         return "BaseListingElement{" +
                 "id='" + id + '\'' +
                 ", created_at=" + created_at +
-                ", context='" + getContext() + '\'' +
-                ", e_tag='" + getETag() + '\'' +
+                ", context='" + context + '\'' +
+                ", e_tag='" + e_tag + '\'' +
                 '}';
     }
 }

@@ -1,68 +1,33 @@
 package com.delectable.mobile.api.models;
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListingResponse<T extends BaseListingElement> extends BaseResponse {
+public class ListingResponse<T extends BaseListingElement> {
 
     private static final String TAG = ListingResponse.class.getSimpleName();
 
-    Boolean more;
+    private Boundaries boundaries;
 
-    boolean invalidate;
+    private ArrayList<T> before;
 
-    Boundaries boundaries;
+    private ArrayList<T> after;
 
-    ArrayList<T> before;
+    private ArrayList<T> updates;
 
-    ArrayList<T> after;
+    private ArrayList<String> deletes;
 
-    ArrayList<T> updates;
+    private boolean more;
 
-    ArrayList<String> deletes;
+    private String e_tag;
 
-    Map<String, T> mAllCombinedDataMap;
+    private String context;
 
-    // Class Type is required for json parsing
-    public ListingResponse(Type classType) {
-        setClassType(classType);
-    }
+    private transient Map<String, T> mAllCombinedDataMap;
 
-    public ListingResponse() {
-    }
-
-    // TODO: Figure out if we can make this a static method, with the generic stuff..
-    public ListingResponse<T> buildFromJson(JSONObject jsonObj) {
-        JSONObject payload = jsonObj.optJSONObject("payload");
-        ListingResponse<T> newRegistration = buildFromJson(payload, getClassType());
-        if (newRegistration != null) {
-            newRegistration.invalidate = jsonObj.optBoolean("invalidate");
-        }
-        return newRegistration;
-    }
-
-    public Boolean getMore() {
-        return more;
-    }
-
-    public void setMore(Boolean more) {
-        this.more = more;
-    }
-
-    // TODO: Remove Invalidate -> this is in the new BaseResponse
-    public boolean getInvalidate() {
-        return invalidate;
-    }
-
-    public void setInvalidate(boolean invalidate) {
-        this.invalidate = invalidate;
-    }
 
     public String getBoundariesFromBefore() {
         if (boundaries != null && boundaries.from != null) {
@@ -144,6 +109,30 @@ public class ListingResponse<T extends BaseListingElement> extends BaseResponse 
 
     public void setDeletes(ArrayList<String> deletes) {
         this.deletes = deletes;
+    }
+
+    public boolean getMore() {
+        return more;
+    }
+
+    public void setMore(boolean more) {
+        this.more = more;
+    }
+
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String e_tag) {
+        this.e_tag = e_tag;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 
     public void updateCombinedData() {
