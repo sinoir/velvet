@@ -44,7 +44,10 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
         if (response.getLabelScan() != null
                 && response.getLabelScan().getBaseWineMatches() != null) {
             for (BaseWine baseWine : response.getLabelScan().getBaseWineMatches()) {
-                mBaseWineModel.saveBaseWine(baseWine);
+                // API sometimes returns a null value within the matches...
+                if (baseWine != null) {
+                    mBaseWineModel.saveBaseWine(baseWine);
+                }
             }
         }
         Log.d(TAG, "Scanneed label Payload: " + response.getLabelScan());
