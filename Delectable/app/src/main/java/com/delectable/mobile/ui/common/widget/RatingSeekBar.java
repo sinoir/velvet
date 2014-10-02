@@ -44,7 +44,6 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
         setProgressDrawable(mRatingsBar);
         Drawable thumb = getResources().getDrawable(R.drawable.btn_rating_bar_slider_normal);
         setThumb(thumb);
-        setThumbOffset(0);
 
         setOnSeekBarChangeListener(this);
     }
