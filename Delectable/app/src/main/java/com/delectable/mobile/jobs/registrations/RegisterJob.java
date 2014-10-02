@@ -10,6 +10,7 @@ import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 import com.delectable.mobile.model.api.registrations.RegistrationsRegisterRequest;
 import com.delectable.mobile.net.NetworkClient;
+import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
@@ -58,6 +59,9 @@ public class RegisterJob extends BaseJob {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
         UserInfo.setAccountPrivate(account);
+        CrashlyticsUtil.onSignIn(account.getFullName(), account.getEmail(), account.getId(),
+                sessionKey);
+
 
         mEventBus.post(new UpdatedAccountEvent(account));
         mEventBus.post(new LoginRegisterEvent(true));

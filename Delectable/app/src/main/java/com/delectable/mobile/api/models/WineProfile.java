@@ -18,29 +18,29 @@ public class WineProfile extends BaseResponse implements Parcelable {
         }
     };
 
-    String id;
+    private String id;
 
-    RatingsSummaryHash ratings_summary;
+    private RatingsSummaryHash ratings_summary;
 
-    String region_id;
+    private String region_id;
 
-    String vintage;
+    private String vintage;
 
-    String producer_name;
+    private String producer_name;
 
-    String name;
+    private String name;
 
-    String base_wine_id;
+    private String base_wine_id;
 
-    String price_text;
+    private String price_text;
 
-    String price_status;
+    private String price_status;
 
-    String description;
+    private String description;
 
-    Double price;
+    private double price;
 
-    PhotoHash photo;
+    private PhotoHash photo;
 
     public WineProfile() {
     }
@@ -141,11 +141,11 @@ public class WineProfile extends BaseResponse implements Parcelable {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
