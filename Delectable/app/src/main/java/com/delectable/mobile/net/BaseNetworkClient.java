@@ -2,6 +2,7 @@ package com.delectable.mobile.net;
 
 import com.google.gson.Gson;
 
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.model.api.BaseResponse;
 import com.delectable.mobile.util.HelperUtil;
 import com.squareup.okhttp.OkHttpClient;
@@ -42,7 +43,8 @@ public abstract class BaseNetworkClient {
             Class<T> responseClass) throws IOException {
         //handle HTTP errors
         if (!response.isSuccessful()) {
-            String errorMessage = "HTTP Request Error " + response.code() + ": " + response.toString();
+            String errorMessage = "HTTP Request Error " + response.code() + ": " + response
+                    .toString();
             Log.i(requestName, "error: " + errorMessage);
             throw new IOException(errorMessage);
         }
@@ -67,8 +69,19 @@ public abstract class BaseNetworkClient {
                 throw new IOException(errorMessage);
             }
 
-            String errorMessage = "API Error " + responseObj.getError().getCode() + ": " +
-                    responseObj.getError().getMessage();
+            //Construct meaningful error message
+            int errorCode = responseObj.getError().getCode();
+            String errorMessage = "API Error " + errorCode;
+            if (responseObj.getError().getMessage() != null) {
+                errorMessage += ": " + responseObj.getError().getMessage();
+            } else {
+                //there was no message in the error object, see if it exists in the ErrorUtil enum
+                ErrorUtil error = ErrorUtil.valueOfCode(errorCode);
+                if (error != ErrorUtil.UNDOCUMENTED_ERROR_CODE) {
+                    errorMessage += ": " + error.toString().toLowerCase();
+                }
+            }
+
             Log.i(requestName, "error: " + errorMessage);
             throw new IOException(errorMessage);
         }
