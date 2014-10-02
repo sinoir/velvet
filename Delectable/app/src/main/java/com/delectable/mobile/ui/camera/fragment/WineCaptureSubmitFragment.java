@@ -239,6 +239,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCommentEditText.clearFocus();
                 hideKeyboard();
                 postCapture();
             }
@@ -370,6 +371,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment.newInstance(
                 this, REQUEST_LOCATION);
         launchNextFragment(fragment);
+    }
+
+    @OnClick(R.id.progress_bar)
+    protected void progressClicked() {
+        //no-op -> prevent views below it from being selected
     }
 
     @OnCheckedChanged(R.id.share_facebook)
