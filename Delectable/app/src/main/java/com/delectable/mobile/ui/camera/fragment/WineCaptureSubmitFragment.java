@@ -3,31 +3,25 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.AccountProfile;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.controllers.WineScanController;
-import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.model.api.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
-import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.InstagramUtil;
-import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -142,7 +136,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
         mWineScanController.scanLabelInstantly(mRawImageData);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -345,17 +338,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
         if (event.isSuccessful()) {
-            // TODO: This bit should be called when user clicks "post", and then somehow handle the pending captures elsewhere..
-            if (mLabelScanResult != null && mLabelScanResult.getBaseWineMatches() != null
-                    && mLabelScanResult.getBaseWineMatches().size() > 0) {
-                launchWineProfile(mLabelScanResult.getBaseWineMatches().get(0));
-            } else if (event.getCaptureDetails() != null) {
-                launchCapture(event.getCaptureDetails());
-            } else {
-                // This should never happen?
-                Log.wtf(TAG, "Created Capture with no Capture Details?");
-                getActivity().finish();
-            }
+            launchCurrentUserProfile();
             if (mShareInstagramButton.isChecked()) {
                 InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
                         mCommentEditText.getText().toString());
@@ -367,19 +350,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    private void launchWineProfile(BaseWine baseWine) {
+    private void launchCurrentUserProfile() {
         getActivity().finish();
-        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine);
-        startActivity(intent);
-    }
-
-    private void launchCapture(CaptureDetails capture) {
-        getActivity().finish();
-        // TODO :use deeplinks
         Intent intent = new Intent();
-        // Don't launch the Wine Capture profile if the Wine is null, such as when the capture hasn't matched a Wine yet
-        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID, capture.getId());
-        intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserAccount.getId());
+        intent.setClass(getActivity(), UserProfileActivity.class);
         startActivity(intent);
     }
 
