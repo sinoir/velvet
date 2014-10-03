@@ -45,7 +45,7 @@ public class FollowAccountJob extends BaseJob {
 
         //TODO AccountModel will be populated when called from UserProfile, but won't be populated when coming from search or follow friends, might need to accept Account objects as job parameters in order to properly execute this and Kahuna calls
         //write new relationship to account and cache
-        if (mAccountModel != null) {
+        if (mAccountModel != null && followingUserAccount != null) {
             int relationship = mIsFollowing ? AccountProfile.RELATION_TYPE_FOLLOWING
                     : AccountProfile.RELATION_TYPE_NONE;
             followingUserAccount.setCurrentUserRelationship(relationship);
