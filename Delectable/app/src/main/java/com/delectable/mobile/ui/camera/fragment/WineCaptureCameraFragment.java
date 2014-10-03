@@ -3,12 +3,15 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
+import com.delectable.mobile.util.PhotoUtil;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -17,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -145,22 +147,37 @@ public class WineCaptureCameraFragment extends CameraFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PHOTO && resultCode == getActivity().RESULT_OK) {
             Uri selectedImageUri = data.getData();
-            try {
-                if (getActivity() != null) {
-                    // TODO: Background thread here or in resize screen?
-                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(
-                            getActivity().getContentResolver(), selectedImageUri);
-                    // TODO: Launch in a resizing UI as iOS ?
-                    launchOptionsScreen(selectedImage);
+            loadGalleryImage(selectedImageUri);
+        }
+    }
+
+    private void loadGalleryImage(final Uri selectedImageUri) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Bitmap selectedImage = null;
+                try {
+                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri);
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to open image", e);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Failed to open image", e);
-                if (getActivity() != null) {
-                    Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT)
-                            .show();
+                return selectedImage;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap selectedImage) {
+                super.onPostExecute(selectedImage);
+                if (selectedImage != null) {
+                    launchOptionsScreen(selectedImage);
+                } else {
+                    showToastError("Failed to load image");
                 }
             }
-        }
+        }.execute();
     }
 }
