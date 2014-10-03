@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
@@ -70,6 +71,12 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
             mAccounts = event.getAccounts();
             getAdapter().setAccounts(event.getAccounts());
             getAdapter().notifyDataSetChanged();
+            return;
+        }
+
+        // Ignore FB Auth Errors when User hasn't authenticated
+        if (ErrorUtil.FACEBOOK_AUTH_NOT_FOUND == event.getErrorCode()) {
+            // TODO: Show FB Connect Empty state with "Connect to FB"
             return;
         }
         //event error

@@ -8,8 +8,8 @@ import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 /**
- * The endpoints for fetching influencer suggestions and fetching facebook suggestions are
- * the same, this base class contains their shared logic.
+ * The endpoints for fetching influencer suggestions and fetching facebook suggestions are the same,
+ * this base class contains their shared logic.
  */
 public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
 
@@ -18,7 +18,6 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
     private String mId;
 
     /**
-     *
      * @param id The id that will be passed onto the Event upon completion of the job.
      */
     protected BaseFetchFriendSuggestionsJob(String id) {
@@ -40,6 +39,6 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FetchFriendSuggestionsEvent(mId, getErrorMessage()));
+        getEventBus().post(new FetchFriendSuggestionsEvent(mId, getErrorMessage(), getErrorCode()));
     }
 }
