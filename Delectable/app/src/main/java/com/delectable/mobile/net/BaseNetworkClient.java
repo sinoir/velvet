@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.util.DelException;
 import com.delectable.mobile.util.HelperUtil;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -16,17 +17,17 @@ import java.util.HashMap;
 
 public abstract class BaseNetworkClient {
 
-    private String TAG = this.getClass().getSimpleName();
-
     protected Gson mGson = new Gson();
 
     protected OkHttpClient mClient = new OkHttpClient();
+
+    private String TAG = this.getClass().getSimpleName();
 
     protected abstract String getBaseUrl();
 
 
     public <T extends BaseResponse> T get(String path, HashMap<String, String> params,
-            Class<T> responseClass) throws IOException {
+            Class<T> responseClass) throws IOException, DelException {
         String requestUrl = HelperUtil.buildUrlWithParameters(getBaseUrl() + path, params);
         String requestName = TAG + ".GET";
         Log.i(requestName, "url: " + requestUrl);
@@ -40,7 +41,7 @@ public abstract class BaseNetworkClient {
     }
 
     public <T extends BaseResponse> T handleResponse(Response response, String requestName,
-            Class<T> responseClass) throws IOException {
+            Class<T> responseClass) throws IOException, DelException {
         //handle HTTP errors
         if (!response.isSuccessful()) {
             String errorMessage = "HTTP Request Error " + response.code() + ": " + response
@@ -83,7 +84,7 @@ public abstract class BaseNetworkClient {
             }
 
             Log.i(requestName, "error: " + errorMessage);
-            throw new IOException(errorMessage);
+            throw new DelException(errorMessage, errorCode);
         }
         return responseObj;
     }
