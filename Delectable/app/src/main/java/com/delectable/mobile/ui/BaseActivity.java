@@ -11,6 +11,7 @@ import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.kahuna.sdk.KahunaAnalytics;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -72,6 +73,19 @@ public abstract class BaseActivity extends Activity
         super.onStop();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //grab fragment on top of the backstack and invoke it's onActivityResult to pass information back to fragment
+        //platform oddity, activities don't forward onActivityResult back to current fragment
+        int lastPosition = getFragmentManager().getBackStackEntryCount() - 1;
+        FragmentManager.BackStackEntry entry = getFragmentManager().getBackStackEntryAt(
+                lastPosition);
+        Fragment fragment = getFragmentManager().findFragmentByTag(entry.getName());
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
     /**
      * Should be called in place of finish() when the "Up" button is pressed from a deep linked
      * Activity
@@ -92,8 +106,11 @@ public abstract class BaseActivity extends Activity
                 android.R.animator.fade_in, android.R.animator.fade_out,
                 android.R.animator.fade_in, android.R.animator.fade_out);
 
-        transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
-        transaction.addToBackStack(null);
+        //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
+        //the fragment from the backstack in onActivityResult
+        String fragmentName = fragment.getClass().getSimpleName();
+        transaction.replace(R.id.container, fragment, fragmentName);
+        transaction.addToBackStack(fragmentName);
 
         transaction.commit();
     }
