@@ -45,7 +45,8 @@ public class LoginFacebookJob extends BaseJob {
 
         UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
         UserInfo.setAccountPrivate(account);
-        CrashlyticsUtil.onSignIn(account.getFullName(), account.getEmail(), account.getId(), sessionKey);
+        CrashlyticsUtil
+                .onSignIn(account.getFullName(), account.getEmail(), account.getId(), sessionKey);
 
         mEventBus.post(new UpdatedAccountEvent(account));
         mEventBus.post(new LoginRegisterEvent(true));
@@ -60,7 +61,7 @@ public class LoginFacebookJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new LoginRegisterEvent(TAG + " " + getErrorMessage()));
+        mEventBus.post(new LoginRegisterEvent(TAG + " " + getErrorMessage(), getErrorCode()));
     }
 
 }

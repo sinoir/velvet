@@ -1,7 +1,6 @@
 package com.delectable.mobile.jobs.registrations;
 
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
@@ -9,19 +8,11 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 import com.delectable.mobile.model.api.registrations.RegistrationsRegisterRequest;
-import com.delectable.mobile.net.NetworkClient;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
-import android.util.Log;
-
 import java.util.Calendar;
-
-import javax.inject.Inject;
-
-import de.greenrobot.event.EventBus;
 
 public class RegisterJob extends BaseJob {
 
@@ -62,7 +53,6 @@ public class RegisterJob extends BaseJob {
         CrashlyticsUtil.onSignIn(account.getFullName(), account.getEmail(), account.getId(),
                 sessionKey);
 
-
         mEventBus.post(new UpdatedAccountEvent(account));
         mEventBus.post(new LoginRegisterEvent(true));
 
@@ -72,7 +62,7 @@ public class RegisterJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new LoginRegisterEvent(TAG + " " + getErrorMessage()));
+        mEventBus.post(new LoginRegisterEvent(TAG + " " + getErrorMessage(), getErrorCode()));
     }
 
 }
