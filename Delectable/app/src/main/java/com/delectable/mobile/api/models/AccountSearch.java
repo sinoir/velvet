@@ -193,7 +193,7 @@ public class AccountSearch implements Parcelable {
     public AccountSearch() {
     }
 
-    private AccountSearch(Parcel in) {
+    protected AccountSearch(Parcel in) {
         this.id = in.readString();
         this.fname = in.readString();
         this.lname = in.readString();

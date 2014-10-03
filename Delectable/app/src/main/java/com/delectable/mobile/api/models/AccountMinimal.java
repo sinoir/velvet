@@ -1,11 +1,10 @@
 package com.delectable.mobile.api.models;
 
 
-import org.apache.commons.lang3.StringUtils;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.util.List;
-
-public class AccountMinimal extends AccountSearch{
+public class AccountMinimal extends AccountSearch implements Parcelable {
 
     private boolean shadowbanned;
 
@@ -44,4 +43,34 @@ public class AccountMinimal extends AccountSearch{
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeByte(shadowbanned ? (byte) 1 : (byte) 0);
+        dest.writeString(this.e_tag);
+    }
+
+    public AccountMinimal() {
+    }
+
+    protected AccountMinimal(Parcel in) {
+        super(in);
+        this.shadowbanned = in.readByte() != 0;
+        this.e_tag = in.readString();
+    }
+
+    public static final Creator<AccountMinimal> CREATOR = new Creator<AccountMinimal>() {
+        public AccountMinimal createFromParcel(Parcel source) {
+            return new AccountMinimal(source);
+        }
+
+        public AccountMinimal[] newArray(int size) {
+            return new AccountMinimal[size];
+        }
+    };
 }

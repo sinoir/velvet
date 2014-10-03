@@ -1,9 +1,11 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
+import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
 import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
 import com.delectable.mobile.model.api.accounts.AccountsSearchResponse;
 
@@ -72,11 +74,74 @@ public class AccountTest extends BaseInstrumentationTestCase {
         assertEquals(expectedAccount.getBio(), actualAccount.getBio());
         assertEquals(expectedAccount.isInfluencer(), actualAccount.isInfluencer());
         assertEquals(expectedAccount.getInfluencerTitles(), actualAccount.getInfluencerTitles());
-        assertEquals(expectedAccount.getInfluencerTitles().get(0), actualAccount.getInfluencerTitles().get(0));
-        assertEquals(expectedAccount.getInfluencerTitles().get(1), actualAccount.getInfluencerTitles().get(1));
+        assertEquals(expectedAccount.getInfluencerTitles().get(0),
+                actualAccount.getInfluencerTitles().get(0));
+        assertEquals(expectedAccount.getInfluencerTitles().get(1),
+                actualAccount.getInfluencerTitles().get(1));
         assertEquals(expectedAccount.getCurrentUserRelationship(),
                 actualAccount.getCurrentUserRelationship());
     }
+
+    public void testParseAccountMinimalCtx() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_fetch_influencer_suggestions_account_minimal_ctx);
+        AccountMinimalListResponse response = mGson
+                .fromJson(json.toString(), AccountMinimalListResponse.class);
+        AccountMinimal actualAccount = response.getPayload().getAccounts().get(0);
+
+        assertEquals("profile", actualAccount.getContext());
+        assertEquals("52953dd9d7f6c538b60000a0", actualAccount.getId());
+        assertEquals("Delectable", actualAccount.getFname());
+        assertEquals("Wine", actualAccount.getLname());
+        assertEquals(
+                "https://s3.amazonaws.com/delectable-profile-photos/delectable-wine-2-1403147780-b8d22c2b60c9.jpg",
+                actualAccount.getPhoto().getUrl());
+        assertEquals(
+                "Doing our part to make the world a more delicious place.",
+                actualAccount.getBio());
+        assertEquals(true, actualAccount.isInfluencer());
+        assertEquals(1, actualAccount.getInfluencerTitles().size());
+        assertEquals("Follow to learn about our favorite wines & people. ",
+                actualAccount.getInfluencerTitles().get(
+                        0));
+        assertEquals(0, actualAccount.getCurrentUserRelationship());
+        assertEquals(false, actualAccount.isShadowbanned());
+        assertEquals("kDULWFv0OcEGVg", actualAccount.getETag());
+    }
+
+    public void testAccountMinimalParcelable() throws JSONException {
+
+        JSONObject json = loadJsonObjectFromResource(
+                R.raw.test_fetch_influencer_suggestions_account_minimal_ctx);
+        AccountMinimalListResponse response = mGson
+                .fromJson(json.toString(), AccountMinimalListResponse.class);
+        AccountMinimal expectedAccount = response.getPayload().getAccounts().get(0);
+
+        Parcel testParcel = Parcel.obtain();
+        expectedAccount.writeToParcel(testParcel, 0);
+
+        // Must reset Data position!!
+        testParcel.setDataPosition(0);
+
+        AccountMinimal actualAccount = AccountMinimal.CREATOR.createFromParcel(testParcel);
+
+        assertEquals(expectedAccount.getContext(), actualAccount.getContext());
+        assertEquals(expectedAccount.getId(), actualAccount.getId());
+        assertEquals(expectedAccount.getFname(), actualAccount.getFname());
+        assertEquals(expectedAccount.getLname(), actualAccount.getLname());
+        assertEquals(expectedAccount.getPhoto().getUrl(),
+                actualAccount.getPhoto().getUrl());
+        assertEquals(expectedAccount.getBio(), actualAccount.getBio());
+        assertEquals(expectedAccount.isInfluencer(), actualAccount.isInfluencer());
+        assertEquals(expectedAccount.getInfluencerTitles(), actualAccount.getInfluencerTitles());
+        assertEquals(expectedAccount.getInfluencerTitles().get(0),
+                actualAccount.getInfluencerTitles().get(0));
+        assertEquals(expectedAccount.getCurrentUserRelationship(),
+                actualAccount.getCurrentUserRelationship());
+        assertEquals(expectedAccount.isShadowbanned(), actualAccount.isShadowbanned());
+        assertEquals(expectedAccount.getETag(), actualAccount.getETag());
+    }
+
 
     public void testParseAccountsPrivateCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_private_ctx);
