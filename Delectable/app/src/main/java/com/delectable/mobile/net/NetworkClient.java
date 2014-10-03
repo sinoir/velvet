@@ -5,6 +5,7 @@ import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.model.api.BaseRequest;
 import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.util.DelException;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -33,7 +34,7 @@ public class NetworkClient extends BaseNetworkClient {
      * registrations/register and registrations/login.
      */
     public <T extends BaseResponse> T post(String endpoint, BaseRequest requestObject,
-            Class<T> responseClass) throws IOException {
+            Class<T> responseClass) throws IOException, DelException {
         return post(endpoint, requestObject, responseClass, true);
     }
 
@@ -42,7 +43,7 @@ public class NetworkClient extends BaseNetworkClient {
      *                     the request.
      */
     public <T extends BaseResponse> T post(String endpoint, BaseRequest requestObject,
-            Class<T> responseClass, boolean authenticate) throws IOException {
+            Class<T> responseClass, boolean authenticate) throws IOException, DelException {
         if (authenticate) {
             authenticateRequest(requestObject);
         }

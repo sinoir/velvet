@@ -6,6 +6,7 @@ import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseRequest;
 import com.delectable.mobile.model.api.scanwinelabels.ProvisionPhotoResponse;
 import com.delectable.mobile.net.S3ImageUploadNetworkClient;
+import com.delectable.mobile.util.DelException;
 import com.path.android.jobqueue.Params;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public abstract class BasePhotoUploadJob extends BaseJob {
      * @return - Provision Capture
      * @throws IOException - If there was an error in loading a bitmap for S3 upload
      */
-    protected ProvisionCapture uploadImage() throws IOException {
+    protected ProvisionCapture uploadImage() throws IOException, DelException {
         ProvisionCapture provisionCapture = provisionPhotoUpload();
         mS3ImageUploadNetworkClient.uploadImage(getResizedImage(), provisionCapture);
         return provisionCapture;
@@ -63,7 +64,7 @@ public abstract class BasePhotoUploadJob extends BaseJob {
     /**
      * Get Provision for Capture Upload.  Gives us bucket and auth info to upload image to S3
      */
-    protected ProvisionCapture provisionPhotoUpload() throws IOException {
+    protected ProvisionCapture provisionPhotoUpload() throws IOException, DelException {
         BaseRequest request = new BaseRequest(); // Request with empty payload
         ProvisionPhotoResponse response = getNetworkClient().post(getProvisionEndpoint(), request,
                 ProvisionPhotoResponse.class);

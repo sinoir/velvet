@@ -1,13 +1,22 @@
 package com.delectable.mobile.events;
 
+import com.delectable.mobile.api.util.ErrorUtil;
+
 public class BaseEvent {
 
     private boolean mIsSuccessful;
 
     private String mErrorMessage;
 
+    private ErrorUtil mErrorCode;
+
     public BaseEvent(boolean isSuccessful) {
         mIsSuccessful = isSuccessful;
+    }
+
+    public BaseEvent(String errorMessage, ErrorUtil errorCode) {
+        this(errorMessage);
+        mErrorCode = errorCode;
     }
 
     public BaseEvent(String errorMessage) {
@@ -21,5 +30,9 @@ public class BaseEvent {
 
     public String getErrorMessage() {
         return mErrorMessage;
+    }
+
+    public ErrorUtil getErrorCode() {
+        return mErrorCode;
     }
 }
