@@ -1,11 +1,9 @@
 package com.delectable.mobile.api.models;
 
-import com.delectable.mobile.model.api.BaseResponse;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class BaseWineMinimal extends BaseResponse implements Parcelable {
+public class BaseWineMinimal implements Parcelable {
 
     private String id;
 
@@ -14,6 +12,10 @@ public class BaseWineMinimal extends BaseResponse implements Parcelable {
     private String producer_name;
 
     private PhotoHash photo;
+
+    private String e_tag;
+
+    private String context;
 
     public String getId() {
         return id;
@@ -47,6 +49,22 @@ public class BaseWineMinimal extends BaseResponse implements Parcelable {
         this.photo = photo;
     }
 
+    public String getETag() {
+        return e_tag;
+    }
+
+    public void setETag(String e_tag) {
+        this.e_tag = e_tag;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
     @Override
     public String toString() {
         return "BaseWineMinimal{" +
@@ -54,8 +72,8 @@ public class BaseWineMinimal extends BaseResponse implements Parcelable {
                 ", name='" + name + '\'' +
                 ", producer_name='" + producer_name + '\'' +
                 ", photo=" + photo +
-                ", context=" + getContext() +
-                ", e_tag=" + getETag() +
+                ", context=" + context +
+                ", e_tag=" + e_tag +
                 '}';
     }
 
@@ -66,19 +84,24 @@ public class BaseWineMinimal extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.producer_name);
         dest.writeParcelable(this.photo, 0);
+        dest.writeString(this.e_tag);
+        dest.writeString(this.context);
+    }
+
+    public BaseWineMinimal() {
     }
 
     protected BaseWineMinimal(Parcel in) {
-        super(in);
         this.id = in.readString();
         this.name = in.readString();
         this.producer_name = in.readString();
         this.photo = in.readParcelable(PhotoHash.class.getClassLoader());
+        this.e_tag = in.readString();
+        this.context = in.readString();
     }
 
     public static final Creator<BaseWineMinimal> CREATOR = new Creator<BaseWineMinimal>() {

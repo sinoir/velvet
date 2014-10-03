@@ -91,7 +91,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 actualFirstUpdateCapture.getWineProfile().getName());
         assertEquals("5305bb0fe5c5cb8a3a000a83",
                 actualFirstUpdateCapture.getWineProfile().getBaseWineId());
-        assertEquals(-1, actualFirstUpdateCapture.getWineProfile().getPrice().intValue());
+        assertEquals(-1, actualFirstUpdateCapture.getWineProfile().getPrice());
         assertEquals("impossible",
                 actualFirstUpdateCapture.getWineProfile().getPriceStatus());
         assertEquals(
