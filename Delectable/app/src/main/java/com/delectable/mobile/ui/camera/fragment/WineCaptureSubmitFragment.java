@@ -108,8 +108,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private boolean mIsPostingCapture;
 
-    private boolean mShouldPostingCaptureAfterScan;
-
     public WineCaptureSubmitFragment() {
     }
 
@@ -132,9 +130,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
             mRawImageData = byteArrayOutputStream.toByteArray();
         }
-        mShouldPostingCaptureAfterScan = false;
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
-        mWineScanController.scanLabelInstantly(mRawImageData);
     }
 
     @Override
@@ -166,6 +162,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        // If the user was posting the capture, and left the app, we'll goto User Profile.
+        // Right now there's no way to check if user has created a new capture yet or not.
+        // This is a quick and dirty hack
+        if (mIsPostingCapture) {
+            launchCurrentUserProfile();
+        }
     }
 
     @Override
@@ -293,29 +296,20 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     }
 
     private void postCapture() {
-        // TODO: Hide Keyboard if shown
         if (mIsPostingCapture) {
             return;
         }
 
         mProgressBar.setVisibility(View.VISIBLE);
 
-        // Hold off from posting the capture if we haven't received a label scan result
-        if (mLabelScanResult != null) {
-            mIsPostingCapture = true;
-            mWineScanController.createPendingCapture(mRawImageData, mLabelScanResult.getId());
-        } else {
-            mShouldPostingCaptureAfterScan = true;
-        }
+        mIsPostingCapture = true;
+        mWineScanController.scanLabelInstantly(mRawImageData);
     }
 
     public void onEventMainThread(IdentifyLabelScanEvent event) {
         if (event.isSuccessful()) {
             mLabelScanResult = event.getLabelScan();
-            if (mShouldPostingCaptureAfterScan) {
-                mShouldPostingCaptureAfterScan = false;
-                postCapture();
-            }
+            mWineScanController.createPendingCapture(mRawImageData, mLabelScanResult.getId());
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);
