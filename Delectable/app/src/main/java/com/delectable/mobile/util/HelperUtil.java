@@ -4,6 +4,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import android.location.Location;
 import android.net.Uri;
+import android.util.Patterns;
 
 import java.util.Map;
 
@@ -57,5 +58,12 @@ public class HelperUtil {
             // Otherwise, return the empty string
             return "";
         }
+    }
+
+    public static boolean isEmailValid(String email) {
+        if (email == null || email.trim().equals("")) {
+            return false;
+        }
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

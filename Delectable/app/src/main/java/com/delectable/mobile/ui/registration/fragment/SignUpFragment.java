@@ -2,11 +2,9 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.events.registrations.LoginRegisterEvent;
-import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.delectable.mobile.util.HelperUtil;
 import com.delectable.mobile.util.NameUtil;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,13 +12,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import butterknife.OnClick;
 
 public class SignUpFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignUpFragment.class.getSimpleName();
+
+    /**
+     * Sets whether the done button is enabled or not depending on whether the fields are all filled
+     * out.
+     */
+    private TextWatcher TextValidationWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Log.d(TAG, "afterTextChanged: " + s.toString());
+            //only enable done button if all fields are filled
+            if (invalidFieldExists()) {
+                getDoneButton().setEnabled(false);
+                return;
+            }
+            getDoneButton().setEnabled(true);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,36 +66,11 @@ public class SignUpFragment extends BaseSignUpInFragment {
         return rootView;
     }
 
-    /**
-     * Sets whether the done button is enabled or not depending on whether the fields are all filled
-     * out.
-     */
-    private TextWatcher TextValidationWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            Log.d(TAG, "afterTextChanged: " + s.toString());
-            //only enable done button if all fields are filled
-            if (emptyFieldExists()) {
-                getDoneButton().setEnabled(false);
-                return;
-            }
-            getDoneButton().setEnabled(true);
-        }
-    };
-
-    private boolean emptyFieldExists() {
+    private boolean invalidFieldExists() {
         if (getNameField().getText().toString().trim().equals("")) {
             return true;
         }
-        if (getEmailField().getText().toString().trim().equals("")) {
+        if (!HelperUtil.isEmailValid(getEmailField().getText().toString().trim())) {
             return true;
         }
         if (getPasswordField().getText().toString().trim().equals("")) {
@@ -89,7 +86,7 @@ public class SignUpFragment extends BaseSignUpInFragment {
 
     @Override
     protected void onDoneButtonClick() {
-        if (emptyFieldExists()) {
+        if (invalidFieldExists()) {
             return;
         }
         String nameEntered = getNameField().getText().toString().trim();

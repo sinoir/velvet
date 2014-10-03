@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
+import com.delectable.mobile.util.HelperUtil;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,31 @@ import butterknife.OnClick;
 public class SignInFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignInFragment.class.getSimpleName();
+
+    /**
+     * Sets whether the done button is enabled or not depending on whether the fields are all filled
+     * out.
+     */
+    private TextWatcher TextValidationWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Log.d(TAG, "afterTextChanged: " + s.toString());
+            //only enable done button if all fields are filled
+            if (invalidFieldExists()) {
+                getDoneButton().setEnabled(false);
+                return;
+            }
+            getDoneButton().setEnabled(true);
+        }
+    };
 
     private static final int RESET_PASSWORD_DIALOG = 0;
 
@@ -37,41 +63,6 @@ public class SignInFragment extends BaseSignUpInFragment {
         return rootView;
     }
 
-    /**
-     * Sets whether the done button is enabled or not depending on whether the fields are all filled
-     * out.
-     */
-    private TextWatcher TextValidationWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            Log.d(TAG, "afterTextChanged: " + s.toString());
-            //only enable done button if all fields are filled
-            if (emptyFieldExists()) {
-                getDoneButton().setEnabled(false);
-                return;
-            }
-            getDoneButton().setEnabled(true);
-        }
-    };
-
-    private boolean emptyFieldExists() {
-        if (getEmailField().getText().toString().trim().equals("")) {
-            return true;
-        }
-        if (getPasswordField().getText().toString().trim().equals("")) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     protected void onKeyboardDoneButtonClick() {
         onDoneButtonClick();
@@ -79,7 +70,7 @@ public class SignInFragment extends BaseSignUpInFragment {
 
     @Override
     protected void onDoneButtonClick() {
-        if (emptyFieldExists()) {
+        if (invalidFieldExists()) {
             return;
         }
         String email = getEmailField().getText().toString().trim();
@@ -87,7 +78,6 @@ public class SignInFragment extends BaseSignUpInFragment {
 
         mRegistrationController.login(email, password);
     }
-
 
     @OnClick(R.id.forgot_textview)
     protected void onForgotTextClick() {
@@ -101,6 +91,16 @@ public class SignInFragment extends BaseSignUpInFragment {
     protected void onGoogleButtonClick() {
         Log.d(TAG, "onGoogleButtonClick");
         //TODO implement google sign in
+    }
+
+    private boolean invalidFieldExists() {
+        if (!HelperUtil.isEmailValid(getEmailField().getText().toString().trim())) {
+            return true;
+        }
+        if (getPasswordField().getText().toString().trim().equals("")) {
+            return true;
+        }
+        return false;
     }
 
 }
