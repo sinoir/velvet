@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.MotdController;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.data.UserInfo;
@@ -37,7 +38,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +55,23 @@ import butterknife.OnClick;
 public abstract class BaseSignUpInFragment extends BaseFragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int LOADER_EMAIL_AUTOCOMPLETE = 0;
+
     //not making this TAG static in order to get the concrete class'name to show up in Logs
     private final String TAG = this.getClass().getSimpleName();
 
-    private static final int LOADER_EMAIL_AUTOCOMPLETE = 0;
+    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
+            Log.d(TAG + ".Facebook", "Session:" + session);
+            Log.d(TAG + ".Facebook", "Exception:" + exception);
+            // TODO: Handle errors and other conditions.
+            if (state.isOpened()) {
+                facebookLogin();
+            }
+        }
+    };
 
     //region Views
     @InjectView(R.id.sign_up_sign_in_title)
@@ -100,10 +113,36 @@ public abstract class BaseSignUpInFragment extends BaseFragment
 
     @InjectView(R.id.google_sign_in_text)
     protected FontTextView mGoogleTextView;
+    //endregion
 
     @InjectView(R.id.terms_privacy_container)
     protected LinearLayout mTermsPrivacyContainer;
-    //endregion
+
+    /**
+     * Listens for done button on soft keyboard.
+     */
+    protected TextView.OnEditorActionListener DoneActionListener
+            = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                onKeyboardDoneButtonClick();
+
+                //hide keyboard
+                InputMethodManager inputManager = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.toggleSoftInput(0, 0);
+                return true;
+            }
+            return false;
+        }
+    };
+
+    @Inject
+    RegistrationController mRegistrationController;
+
+    @Inject
+    MotdController mMotdController;
 
     private UiLifecycleHelper mFacebookUiHelper;
 
@@ -112,12 +151,6 @@ public abstract class BaseSignUpInFragment extends BaseFragment
      * in {@link com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog}
      */
     private String mPhoneEmail;
-
-    @Inject
-    RegistrationController mRegistrationController;
-
-    @Inject
-    MotdController mMotdController;
 
     private LoadingCircleDialog mLoadingDialog;
 
@@ -162,6 +195,7 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         super.onPause();
         mFacebookUiHelper.onPause();
     }
+    //endregion
 
     @Override
     public void onDestroy() {
@@ -174,7 +208,6 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         super.onSaveInstanceState(outState);
         mFacebookUiHelper.onSaveInstanceState(outState);
     }
-    //endregion
 
     //region Email Prepopulation
     @Override
@@ -210,44 +243,13 @@ public abstract class BaseSignUpInFragment extends BaseFragment
             mEmailField.setText(mPhoneEmail);
         }
     }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-    }
-
-    private interface ProfileQuery {
-
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
     //endregion
 
     //region Button Action Listeners
 
-    /**
-     * Listens for done button on soft keyboard.
-     */
-    protected TextView.OnEditorActionListener DoneActionListener
-            = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                onKeyboardDoneButtonClick();
-
-                //hide keyboard
-                InputMethodManager inputManager = (InputMethodManager)
-                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.toggleSoftInput(0, 0);
-                return true;
-            }
-            return false;
-        }
-    };
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    }
 
     /**
      * Gets called upon pressing done on the keyboard from the password field.
@@ -344,21 +346,12 @@ public abstract class BaseSignUpInFragment extends BaseFragment
             return;
         }
 
-        Toast.makeText(getActivity(), registerEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
-    }
-
-    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
-            Log.d(TAG + ".Facebook", "Session:" + session);
-            Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
-            if (state.isOpened()) {
-                facebookLogin();
-            }
+        if (ErrorUtil.INVALID_CREDENTIALS == registerEvent.getErrorCode()) {
+            showToastError(R.string.error_invalid_username_password);
+        } else {
+            showToastError(registerEvent.getErrorMessage());
         }
-    };
+    }
 
     public void facebookLogin() {
         mLoadingDialog = new LoadingCircleDialog();
@@ -367,6 +360,17 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         Session session = Session.getActiveSession();
         mRegistrationController.facebookLogin(session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
+    }
+
+    private interface ProfileQuery {
+
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
     }
 
 
