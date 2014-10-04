@@ -105,7 +105,13 @@ android {
 repositories {
     mavenCentral()
     maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
-    maven { url 'http://download.crashlytics.com/maven' }
+    maven {
+        url 'https://android-sdk.crashlytics.com/twittersdk/repo'
+        credentials {
+            username = 'sdk-user'
+            password = '5Y|3-ViTSt*8Hxu7Jj*97zzaC6+RUK9MPw_4kqbPMfWe4Iwc^$'
+        }
+    }
 }
 
 dependencies {
@@ -130,8 +136,27 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
     compile 'com.google.android.gms:play-services:5.0.89'
-    compile 'com.crashlytics.android:crashlytics:1.+'
     compile files('libs/kahuna_489.jar')
+
+    // Crashlytics Kit
+    compile('com.twitter.sdk.android:crashlytics:1.2.+@aar') {
+        transitive = true
+    }
+
+    // Twitter Kit
+    compile('com.twitter.sdk.android:core:0.2.+@aar') {
+        transitive = true
+    }
+
+    // Tweet UI Kit
+    compile('com.twitter.sdk.android:tweetui:0.2.+@aar') {
+        transitive = true
+    }
+
+    // MoPub Kit
+    compile('com.twitter.sdk.android:mopub:2.3.+@aar') {
+        transitive = true
+    }
 }
 
 def getDate() {

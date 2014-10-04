@@ -8,9 +8,9 @@ import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
+import com.delectable.mobile.events.accounts.AssociateTwitterEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
@@ -18,21 +18,25 @@ import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
-import com.delectable.mobile.util.SafeAsyncTask;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -94,8 +98,11 @@ public class SettingsFragment extends BaseFragment {
     @InjectView(R.id.facebook_value)
     TextView mFacebookField;
 
+    @InjectView(R.id.twitter_login_button)
+    TwitterLoginButton mHiddenTwitterLoginButton;
+
     @InjectView(R.id.twitter_value)
-    EditText mTwitterField;
+    FontTextView mTwitterField;
 
     @InjectView(R.id.following_phone_notification)
     ImageButton mFollowingPhoneIcon;
@@ -210,6 +217,8 @@ public class SettingsFragment extends BaseFragment {
         mEmailField.setOnFocusChangeListener(focusLossListener);
         mPhoneNumberField.setOnFocusChangeListener(focusLossListener);
 
+        mHiddenTwitterLoginButton.setCallback(TwitterCallback);
+
         mVersionText.setText(getString(R.string.settings_delectable_version, getAppVersion()));
 
         return view;
@@ -319,6 +328,8 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mHiddenTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
             Bitmap bitmap = getImage(selectedImageUri);
@@ -604,6 +615,54 @@ public class SettingsFragment extends BaseFragment {
         updateUI(); //ui reverts back to original state if error
     }
 
+    @OnClick(R.id.twitter_value)
+    protected void onTwitterConnectClick(View view) {
+        mHiddenTwitterLoginButton.performClick();
+    }
+
+    private Callback<TwitterSession> TwitterCallback = new Callback<TwitterSession>() {
+        @Override
+        public void success(Result<TwitterSession> twitterSessionResult) {
+
+            long twitterId = twitterSessionResult.data.getUserId();
+            String screenName = twitterSessionResult.data.getUserName();
+
+            //TODO improve when Twitter SDK is better documented
+            //This is ghetto bc there were no docs when I made this, didn't know how to use the data.getAuthToken().getAuthHeaders() method
+            //looks like this:
+            //authtoken: token=[TOKEN_VALUE],secret=[SECRET_VALUE]
+            String authCreds = twitterSessionResult.data.getAuthToken().toString();
+            String[] splitAuthCreds = authCreds.split(",");
+            String token = splitAuthCreds[0].split("token=")[1];
+            String tokenSecret = splitAuthCreds[1].split("secret=")[1];
+
+            //refreshing view before we make the call for immediate UI feed back
+            mUserAccount.setTwId(twitterId);
+            mUserAccount.setTwScreenName(screenName);
+            mUserAccount.setTwToken(token);
+            mUserAccount.setTwTokenSecret(tokenSecret);
+            updateUI();
+
+            mAccountController.associateTwitter(twitterId, token, tokenSecret, screenName);
+        }
+
+        @Override
+        public void failure(TwitterException e) {
+            //TODO debug this exception and show error, but don't show error if user clicked back intentionally
+            //showToastError("Twitter authentication failed");
+        }
+    };
+
+    public void onEventMainThread(AssociateTwitterEvent event) {
+        if (event.isSuccessful()) {
+            mUserAccount = event.getAcount();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+        updateUI(); //ui reverts back to original state if error
+    }
+
+
     @OnClick({R.id.following_phone_notification,
             R.id.comment_phone_notification,
             R.id.tagged_phone_notification,
@@ -748,6 +807,16 @@ public class SettingsFragment extends BaseFragment {
             mFacebookField.setText(R.string.settings_facebook_connect);
             mFacebookField.setSelected(false);
             mFacebookField.setClickable(true);
+        }
+
+        if (mUserAccount.isTwitterConnected()) {
+            mTwitterField.setText("@" + mUserAccount.getTwScreenName());
+            mTwitterField.setSelected(true);
+            mTwitterField.setClickable(false);
+        } else {
+            mTwitterField.setText(R.string.settings_facebook_connect);
+            mTwitterField.setSelected(false);
+            mTwitterField.setClickable(true);
         }
         //TODO connect twitter
         //mTwitterField.setText(mUserAccount.getEmail());

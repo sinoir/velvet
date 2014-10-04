@@ -27,7 +27,7 @@
             android:hint="@string/settings_name_hint"
             android:imeOptions="actionDone"
             android:inputType="textPersonName"
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
         <com.delectable.mobile.ui.common.widget.FontEditText
             android:id="@+id/short_bio"
@@ -97,8 +97,8 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/facebook_value"
                 style="@style/SettingsRowEditText"
-                android:textColor="@color/text_dark_gray_to_blue"
-                android:text="@string/settings_facebook_connect" />
+                android:text="@string/settings_facebook_connect"
+                android:textColor="@color/text_dark_gray_to_blue" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/SettingsRow">
@@ -108,7 +108,14 @@
                 style="@style/SettingsRowTextLabel"
                 android:text="@string/settings_twitter_label" />
 
-            <com.delectable.mobile.ui.common.widget.FontEditText
+            <!-- Hidden twitter Login Button, we programmatically invoke the click on this in order to start the twitter auth sdk-->
+            <com.twitter.sdk.android.core.identity.TwitterLoginButton
+                android:id="@+id/twitter_login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/twitter_value"
                 style="@style/SettingsRowEditText"
                 android:layout_toRightOf="@+id/twitter_label"
