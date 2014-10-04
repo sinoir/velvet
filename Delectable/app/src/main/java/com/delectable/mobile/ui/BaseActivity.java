@@ -20,6 +20,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BaseActivity extends Activity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -34,6 +38,12 @@ public abstract class BaseActivity extends Activity
     private LocationRequest mLocationRequest;
 
     private Location mLastLocation;
+
+    /**
+     * Track fragments that have been attached to the activity, so that we can easily forward out
+     * onActivityResult() messages to attached, visible fragments.
+     */
+    private List<WeakReference<Fragment>> mFragmentList = new ArrayList<WeakReference<Fragment>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +84,25 @@ public abstract class BaseActivity extends Activity
     }
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        mFragmentList.add(new WeakReference<Fragment>(fragment));
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //shoot onActivityResult out to attached and visible fragment
+        for (WeakReference<Fragment> ref : mFragmentList) {
+            Fragment fragment = ref.get();
+            if (fragment != null && fragment.isVisible()) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+        /*
+        alternative implementation that uses backstacks. Can't use this because NavActivity doesn't
+        maintain a backstack for the rootview screens
 
         //grab fragment on top of the backstack and invoke it's onActivityResult to pass information back to fragment
         //platform oddity, activities don't forward onActivityResult back to current fragment
@@ -84,6 +111,7 @@ public abstract class BaseActivity extends Activity
                 lastPosition);
         Fragment fragment = getFragmentManager().findFragmentByTag(entry.getName());
         fragment.onActivityResult(requestCode, resultCode, data);
+        */
     }
 
     /**
