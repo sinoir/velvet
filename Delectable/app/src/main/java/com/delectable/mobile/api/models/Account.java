@@ -179,6 +179,10 @@ public class Account extends AccountProfile {
         return tw_screen_name;
     }
 
+    public boolean isTwitterConnected() {
+        return tw_screen_name == null ? false : true;
+    }
+
     public void setTwScreenName(String tw_screen_name) {
         this.tw_screen_name = tw_screen_name;
     }

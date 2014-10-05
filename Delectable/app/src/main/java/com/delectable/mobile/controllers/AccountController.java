@@ -4,6 +4,7 @@ import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
+import com.delectable.mobile.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
@@ -95,7 +96,14 @@ public class AccountController {
     }
 
     public void associateFacebook(String facebookToken, double facebookTokenExpiration) {
-        mJobManager.addJobInBackground(new AssociateFacebookJob(facebookToken, facebookTokenExpiration));
+        mJobManager.addJobInBackground(
+                new AssociateFacebookJob(facebookToken, facebookTokenExpiration));
+    }
+
+    public void associateTwitter(long twitterId, String token, String tokenSecret,
+            String screenName) {
+        mJobManager.addJobInBackground(
+                new AssociateTwitterJob(twitterId, token, tokenSecret, screenName));
     }
     //endregion
 

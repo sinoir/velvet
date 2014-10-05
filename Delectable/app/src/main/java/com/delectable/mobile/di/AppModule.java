@@ -20,6 +20,7 @@ import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
+import com.delectable.mobile.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
@@ -154,6 +155,7 @@ import de.greenrobot.event.EventBus;
                 UpdateIdentifierJob.class,
                 RemoveIdentifierJob.class,
                 AssociateFacebookJob.class,
+                AssociateTwitterJob.class,
                 SearchWinesJob.class,
                 SearchAccountsJob.class,
                 FetchBaseWineJob.class,
