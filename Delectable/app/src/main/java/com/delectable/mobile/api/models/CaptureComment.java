@@ -4,7 +4,7 @@ public class CaptureComment {
 
     String id;
 
-    Double created_at;
+    double created_at;
 
     String comment;
 
@@ -18,11 +18,11 @@ public class CaptureComment {
         this.id = id;
     }
 
-    public Double getCreatedAt() {
+    public double getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(Double created_at) {
+    public void setCreatedAt(double created_at) {
         this.created_at = created_at;
     }
 

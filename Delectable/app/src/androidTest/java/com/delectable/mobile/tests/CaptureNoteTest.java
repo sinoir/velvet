@@ -1,6 +1,5 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
