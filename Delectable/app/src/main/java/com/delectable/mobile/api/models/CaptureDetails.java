@@ -23,9 +23,9 @@ public class CaptureDetails extends Capture {
 
     String location_name;
 
-    ArrayList<Account> liking_participants;
+    ArrayList<AccountMinimal> liking_participants;
 
-    ArrayList<Account> commenting_participants;
+    ArrayList<AccountMinimal> commenting_participants;
 
     TaggeeParticipants taggee_participants;
 
@@ -114,7 +114,7 @@ public class CaptureDetails extends Capture {
     public boolean doesUserLikeCapture(String accountId) {
         boolean likesCapture = false;
         if (liking_participants != null) {
-            for (Account account : liking_participants) {
+            for (AccountMinimal account : liking_participants) {
                 if (account.getId().equalsIgnoreCase(accountId)) {
                     likesCapture = true;
                     break;
@@ -127,7 +127,7 @@ public class CaptureDetails extends Capture {
     public void toggleUserLikesCapture(String accountId) {
         boolean userLikedCapture = false;
         if (liking_participants != null) {
-            for (Account account : liking_participants) {
+            for (AccountMinimal account : liking_participants) {
                 if (account.getId().equalsIgnoreCase(accountId)) {
                     userLikedCapture = true;
                     liking_participants.remove(account);
@@ -137,9 +137,9 @@ public class CaptureDetails extends Capture {
         }
         if (!userLikedCapture) {
             if (liking_participants == null) {
-                liking_participants = new ArrayList<Account>();
+                liking_participants = new ArrayList<AccountMinimal>();
             }
-            Account tempUserAccount = new Account();
+            AccountMinimal tempUserAccount = new AccountMinimal();
             tempUserAccount.setId(accountId);
             liking_participants.add(tempUserAccount);
         }
@@ -257,23 +257,23 @@ public class CaptureDetails extends Capture {
         this.location_name = location_name;
     }
 
-    public ArrayList<Account> getLikingParticipants() {
+    public ArrayList<AccountMinimal> getLikingParticipants() {
         return liking_participants;
     }
 
-    public void setLikingParticipants(ArrayList<Account> liking_participants) {
+    public void setLikingParticipants(ArrayList<AccountMinimal> liking_participants) {
         this.liking_participants = liking_participants;
     }
 
-    public ArrayList<Account> getCommentingParticipants() {
+    public ArrayList<AccountMinimal> getCommentingParticipants() {
         return commenting_participants;
     }
 
-    public void setCommentingParticipants(ArrayList<Account> commenting_participants) {
+    public void setCommentingParticipants(ArrayList<AccountMinimal> commenting_participants) {
         this.commenting_participants = commenting_participants;
     }
 
-    public ArrayList<Account> getRegisteredParticipants() {
+    public ArrayList<AccountMinimal> getRegisteredParticipants() {
         return taggee_participants != null ? taggee_participants.registered : null;
     }
 
@@ -304,7 +304,13 @@ public class CaptureDetails extends Capture {
     @Override
     public String toString() {
         return "CaptureDetails{" +
-                "short_share_url='" + short_share_url + '\'' +
+                "id='" + getId() + '\'' +
+                ", created_at=" + getCreatedAt() +
+                ", private_=" + getPrivate() +
+                ", context='" + getContext() + '\'' +
+                ", e_tag='" + getETag() + '\'' +
+                ", capturer_participant=" + getCapturerParticipant() +
+                ", short_share_url='" + short_share_url + '\'' +
                 ", tweet='" + tweet + '\'' +
                 ", ratings=" + ratings +
                 ", photo=" + photo +
@@ -321,7 +327,7 @@ public class CaptureDetails extends Capture {
 
     public static class TaggeeParticipants {
 
-        ArrayList<Account> registered;
+        ArrayList<AccountMinimal> registered;
 
         ArrayList<TaggeeContact> facebook;
 

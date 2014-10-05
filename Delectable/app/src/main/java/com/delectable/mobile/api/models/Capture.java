@@ -7,7 +7,7 @@ public abstract class Capture extends BaseListingElement {
     @SerializedName("private")
     private boolean private_;
 
-    private Account capturer_participant;
+    private AccountMinimal capturer_participant;
 
     public boolean getPrivate() {
         return private_;
@@ -17,11 +17,11 @@ public abstract class Capture extends BaseListingElement {
         this.private_ = private_;
     }
 
-    public Account getCapturerParticipant() {
+    public AccountMinimal getCapturerParticipant() {
         return capturer_participant;
     }
 
-    public void setCapturerParticipant(Account capturer_participant) {
+    public void setCapturerParticipant(AccountMinimal capturer_participant) {
         this.capturer_participant = capturer_participant;
     }
 
