@@ -3,33 +3,21 @@ package com.delectable.mobile.api.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CaptureDetails extends Capture {
+public class CaptureDetails extends CaptureMinimal {
 
-    public static int MAX_RATING_VALUE = 40;
+    private String transcription_error_message;
 
-    String short_share_url;
+    private String location_name;
 
-    String tweet;
+    private AccountMinimal capturer_participant;
 
-    HashMap<String, Integer> ratings;
+    private ArrayList<AccountMinimal> liking_participants;
 
-    PhotoHash photo;
+    private ArrayList<AccountMinimal> commenting_participants;
 
-    BaseWine base_wine;
+    private TaggeeParticipants taggee_participants;
 
-    WineProfile wine_profile;
-
-    String transcription_error_message;
-
-    String location_name;
-
-    ArrayList<AccountMinimal> liking_participants;
-
-    ArrayList<AccountMinimal> commenting_participants;
-
-    TaggeeParticipants taggee_participants;
-
-    ArrayList<CaptureComment> comments;
+    private ArrayList<CaptureComment> comments;
 
     /**
      * Updates existing capture with updated capture
@@ -39,12 +27,12 @@ public class CaptureDetails extends Capture {
      */
     public void updateWithNewCapture(CaptureDetails newCapture) {
         setPrivate(newCapture.getPrivate());
-        short_share_url = newCapture.getShortShareUrl();
-        tweet = newCapture.getTweet();
-        ratings = newCapture.getRatings();
-        photo = newCapture.getPhoto();
-        base_wine = newCapture.getBaseWine();
-        wine_profile = newCapture.getWineProfile();
+        setShortShareUrl(newCapture.getShortShareUrl());
+        setTweet(newCapture.getTweet());
+        setRatings(newCapture.getRatings());
+        setPhoto(newCapture.getPhoto());
+        setBaseWine(newCapture.getBaseWine());
+        setWineProfile(newCapture.getWineProfile());
         transcription_error_message = newCapture.getTranscriptionErrorMessage();
         location_name = newCapture.getLocationName();
         liking_participants = newCapture.getLikingParticipants();
@@ -80,32 +68,6 @@ public class CaptureDetails extends Capture {
         return captureComment;
     }
 
-    /**
-     * Get % of Rating
-     *
-     * @param id = User ID linked to Ratings Hash
-     * @return -1.0f if no rating exists, or value between 0.0f and 1.0f
-     */
-    public float getRatingPercentForId(String id) {
-        float ratingPercent = -1.0f;
-        ratingPercent = (float) getRatingForId(id) / MAX_RATING_VALUE;
-        if (ratingPercent <= 0.0f) {
-            ratingPercent = -1.0f;
-        }
-        return ratingPercent;
-    }
-
-    public int getRatingForId(String id) {
-        int rating = -1;
-        if (ratings != null && ratings.containsKey(id)) {
-            rating = ratings.get(id);
-        }
-        return rating;
-    }
-
-    public void updateRatingForUser(String id, int rating) {
-        ratings.put(id, rating);
-    }
 
     public int getLikesCount() {
         return liking_participants != null ? liking_participants.size() : 0;
@@ -193,54 +155,6 @@ public class CaptureDetails extends Capture {
         return desc;
     }
 
-    public String getShortShareUrl() {
-        return short_share_url;
-    }
-
-    public void setShortShareUrl(String short_share_url) {
-        this.short_share_url = short_share_url;
-    }
-
-    public String getTweet() {
-        return tweet;
-    }
-
-    public void setTweet(String tweet) {
-        this.tweet = tweet;
-    }
-
-    public HashMap<String, Integer> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(HashMap<String, Integer> ratings) {
-        this.ratings = ratings;
-    }
-
-    public PhotoHash getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(PhotoHash photo) {
-        this.photo = photo;
-    }
-
-    public BaseWine getBaseWine() {
-        return base_wine;
-    }
-
-    public void setBaseWine(BaseWine base_wine) {
-        this.base_wine = base_wine;
-    }
-
-    public WineProfile getWineProfile() {
-        return wine_profile;
-    }
-
-    public void setWineProfile(WineProfile wine_profile) {
-        this.wine_profile = wine_profile;
-    }
-
     public String getTranscriptionErrorMessage() {
         return transcription_error_message;
     }
@@ -255,6 +169,14 @@ public class CaptureDetails extends Capture {
 
     public void setLocationName(String location_name) {
         this.location_name = location_name;
+    }
+
+    public AccountMinimal getCapturerParticipant() {
+        return capturer_participant;
+    }
+
+    public void setCapturerParticipant(AccountMinimal capturer_participant) {
+        this.capturer_participant = capturer_participant;
     }
 
     public ArrayList<AccountMinimal> getLikingParticipants() {
@@ -309,13 +231,13 @@ public class CaptureDetails extends Capture {
                 ", private_=" + getPrivate() +
                 ", context='" + getContext() + '\'' +
                 ", e_tag='" + getETag() + '\'' +
-                ", capturer_participant=" + getCapturerParticipant() +
-                ", short_share_url='" + short_share_url + '\'' +
-                ", tweet='" + tweet + '\'' +
-                ", ratings=" + ratings +
-                ", photo=" + photo +
-                ", base_wine=" + base_wine +
-                ", wine_profile=" + wine_profile +
+                ", short_share_url='" + getShortShareUrl() + '\'' +
+                ", tweet='" + getTweet() + '\'' +
+                ", ratings=" + getRatings() +
+                ", photo=" + getPhoto() +
+                ", base_wine=" + getBaseWine() +
+                ", wine_profile=" + getWineProfile() +
+                ", capturer_participant=" + capturer_participant +
                 ", transcription_error_message='" + transcription_error_message + '\'' +
                 ", location_name='" + location_name + '\'' +
                 ", liking_participants=" + liking_participants +
