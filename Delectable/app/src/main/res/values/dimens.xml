@@ -19,6 +19,13 @@
     <dimen name="custom_ab_title_text_size">22sp</dimen>
     <dimen name="custom_ab_action_text_size">16sp</dimen>
 
+    <!-- General Dialog -->
+    <dimen name="dialog_horizontal_spacing">20dp</dimen>
+    <dimen name="dialog_vertical_spacing">30dp</dimen>
+    <dimen name="dialog_title_text_size">22sp</dimen>
+    <dimen name="dialog_action_text_size">20sp</dimen>
+    <dimen name="dialog_header_height">60dp</dimen>
+
     <!-- General Row Unit Spacing -->
     <!-- Used in:
     - Wine Unit (regular, maximum info, w/ description, w/o rating, w/message)
