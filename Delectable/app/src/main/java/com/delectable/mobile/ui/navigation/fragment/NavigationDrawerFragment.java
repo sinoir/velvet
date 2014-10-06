@@ -92,9 +92,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         navItemSelected(mCurrentSelectedNavItem);
-
-        // Fetch user profile once per app launch
-        mAccountController.fetchAccountPrivate(mUserId);
     }
 
     @Override
@@ -133,6 +130,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
         super.onResume();
 
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
+        // Must update / sync private account on Resume, for sycning issues.
+        // TODO: Need to create 1 object for private / public, otherwise we require special syncing code for the duplciate data, which doesn't exist.
+        mAccountController.fetchAccountPrivate(mUserId);
         updateUIWithData();
         loadActivityFeed();
     }
