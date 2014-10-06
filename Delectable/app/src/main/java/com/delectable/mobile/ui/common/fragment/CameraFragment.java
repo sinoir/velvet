@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.common.fragment;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.CameraUtil;
+import com.delectable.mobile.util.PhotoUtil;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -169,7 +170,7 @@ public class CameraFragment extends BaseFragment {
             BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
             // Gives us a Bitmap size that's small enough to handle quickly, 1024 is a rough max width/height to give us the appropriate sample size.  The resulting image won't be exact, and maybe a little larger.
-            options.inSampleSize = CameraUtil.calculateInSampleSize(options, 1024, 1024);
+            options.inSampleSize = PhotoUtil.calculateInSampleSize(options, 1024, 1024);
 
             // Make sure we reset the inJustDecodeBounds so we can create a bitmap
             options.inJustDecodeBounds = false;

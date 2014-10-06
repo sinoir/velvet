@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -162,7 +160,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri);
+                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to open image", e);
                 }
