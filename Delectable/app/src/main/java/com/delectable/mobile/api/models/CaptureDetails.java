@@ -1,7 +1,6 @@
 package com.delectable.mobile.api.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CaptureDetails extends CaptureMinimal {
 
@@ -66,6 +65,17 @@ public class CaptureDetails extends CaptureMinimal {
             }
         }
         return captureComment;
+    }
+
+    public boolean isUserTagged(String id) {
+        if (taggee_participants != null && taggee_participants.registered != null) {
+            for (AccountMinimal user : taggee_participants.registered) {
+                if (user.getId().equalsIgnoreCase(id)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

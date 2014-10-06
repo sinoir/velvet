@@ -335,13 +335,15 @@ public class CaptureDetailsView extends RelativeLayout {
         String likesCountText = mContext.getResources()
                 .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
         mLikesCount.setText(likesCountText);
-        String userId = UserInfo.getUserId(mContext);
-        boolean userLikesCapture = mCaptureData.doesUserLikeCapture(userId);
+        String currentUserId = UserInfo.getUserId(mContext);
+        boolean userLikesCapture = mCaptureData.doesUserLikeCapture(currentUserId);
         boolean isCurrentUserCapture = mCaptureData.getCapturerParticipant().getId()
-                .equalsIgnoreCase(userId);
+                .equalsIgnoreCase(currentUserId);
+        boolean isCurrentUserTaggedInCapture = mCaptureData.isUserTagged(currentUserId);
+        boolean userHasRatedCapture = mCaptureData.getRatingForId(currentUserId) > -1;
 
-        // Rating can only be done for user's capture:
-        if (isCurrentUserCapture) {
+        // Only show Tap for rating if user hasn't rated already, and is tagged in capture
+        if ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture) {
             mRateButton.setVisibility(View.VISIBLE);
         } else {
             mRateButton.setVisibility(View.GONE);
