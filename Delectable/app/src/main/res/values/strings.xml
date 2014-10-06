@@ -23,11 +23,10 @@
     <string name="error_connect_twitter">In order to post to twitter, you must connect it to Delectable</string>
 
     <string name="error_invalid_username_password">Invalid Email and/or Password.</string>
-    
+
     <!-- Version Upgrade Dialog-->
     <string name="version_upgrade_your_app_out_of_date">Your app is out of date, download the new one!</string>
     <string name="version_upgrade_upgrade">upgrade</string>
-
 
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
@@ -100,7 +99,10 @@
     <string name="profile_tab_top_rated">TOP RATED</string>
 
     <!-- Capture Feed -->
-    <string name="cap_feed_likes_count">%d likes</string>
+    <plurals name="cap_feed_likes_count">
+        <item quantity="one">1 like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
     <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
