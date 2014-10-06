@@ -5,6 +5,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.ui.BaseFragment;
@@ -180,6 +181,11 @@ public class UserProfileFragment extends BaseFragment implements
         getRecentCapturesTabFragment().setCallback(this);
         getTopRatedTabFragment().setCallback(this);
 
+        // Update User Private account info as well
+        // TODO: Need to store this as 1 object, storing duplciate account info is causing weird issues.
+        if (mUserId != null && mUserId.equals(UserInfo.getUserId(getActivity()))) {
+            mAccountController.fetchAccountPrivate(mUserId);
+        }
         // fetch profile to check for updates (we're using eTags, so no big deal)
         mAccountController.fetchProfile(mUserId);
     }
