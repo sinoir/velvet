@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(BuildConfig.REPORT_CRASHES) {
+        if (BuildConfig.REPORT_CRASHES) {
             Crashlytics.start(this);
         }
         KahunaUtil.trackStart();
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
             launchIntent.setClass(getApplicationContext(), LoginActivity.class);
         }
         // Prevent multiples of the same Activity to be launched when clicking Push notification
-        launchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        launchIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(launchIntent);
 
         finish();
@@ -134,7 +134,6 @@ public class MainActivity extends Activity {
         }
         return url;
     }
-
 
 }
 
