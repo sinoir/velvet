@@ -6,6 +6,7 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
@@ -107,7 +108,7 @@ public class WineBannerView extends RelativeLayout {
      */
     //Wine Profile screen (accessed from Follower Feed) uses this method to update their WineBannerView
     //Wine Profile screen (accessed from Wishlist) also uses this method, but also shows the vintage.
-    public void updateData(WineProfile wineProfile, PhotoHash capturePhotoHash,
+    public void updateData(WineProfileMinimal wineProfile, PhotoHash capturePhotoHash,
             boolean includeVintage) {
 
         String wineImageUrl;

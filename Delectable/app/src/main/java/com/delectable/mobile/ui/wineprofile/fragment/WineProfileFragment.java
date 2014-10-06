@@ -9,6 +9,7 @@ import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.BaseWineModel;
@@ -115,7 +116,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this);
 
-    private WineProfile mWineProfile;
+    private WineProfileMinimal mWineProfile;
 
     private PhotoHash mCapturePhotoHash;
 
@@ -157,7 +158,7 @@ public class WineProfileFragment extends BaseFragment implements
      *                         CaptureDetails}' PhotoHash. Pass in null to use WineProfile's image.
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
-    public static WineProfileFragment newInstance(WineProfile wineProfile,
+    public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
             PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();

@@ -15,6 +15,9 @@ public class CaptureNote extends Capture {
 
     private ArrayList<String> helpfuling_account_ids;
 
+    private AccountMinimal capturer_participant;
+
+
     public float getRatingPercent() {
         float ratingPercent = -1.0f;
         ratingPercent = (float) capturer_rating / MAX_RATING_VALUE;
@@ -64,6 +67,14 @@ public class CaptureNote extends Capture {
         helpfuling_account_ids.remove(userId);
     }
 
+    public AccountMinimal getCapturerParticipant() {
+        return capturer_participant;
+    }
+
+    public void setCapturerParticipant(AccountMinimal capturer_participant) {
+        this.capturer_participant = capturer_participant;
+    }
+
     @Override
     public String toString() {
         return "CaptureNote{" +
@@ -76,7 +87,7 @@ public class CaptureNote extends Capture {
                 ", helpfuling_account_ids=" + helpfuling_account_ids +
                 ", context='" + getContext() + '\'' +
                 ", e_tag='" + getETag() + '\'' +
-                ", capturer_participant=" + getCapturerParticipant() +
+                ", capturer_participant=" + capturer_participant +
                 "}";
     }
 }

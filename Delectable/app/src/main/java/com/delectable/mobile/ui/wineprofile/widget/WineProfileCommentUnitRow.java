@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
@@ -95,7 +95,7 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
 
     public void updateCaptureNoteData(CaptureNote captureNote) {
         mCaptureNote = captureNote;
-        Account capturer = captureNote.getCapturerParticipant();
+        AccountMinimal capturer = captureNote.getCapturerParticipant();
 
         //user image
         String profileImageUrl = getThumbnailParticipantPhotoFromAccount(capturer);
@@ -163,7 +163,7 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
 
 
     //TODO: possibly make this a static global method, this is copied from CaptureDetailsView
-    private String getThumbnailParticipantPhotoFromAccount(Account account) {
+    private String getThumbnailParticipantPhotoFromAccount(AccountMinimal account) {
         String profileImageUrl = "";
         if (account.getPhoto() != null) {
             if (account.getPhoto().getThumbUrl() != null) {

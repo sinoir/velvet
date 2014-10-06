@@ -5,6 +5,7 @@ import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 
@@ -30,7 +31,7 @@ public class WineProfileActivity extends BaseActivity {
     private static final String DEEP_BASE_VINTAGE_ID = "vintage_id";
 
 
-    private WineProfile mWineProfile;
+    private WineProfileMinimal mWineProfile;
 
     private PhotoHash mCapturePhotoHash;
 
@@ -43,9 +44,9 @@ public class WineProfileActivity extends BaseActivity {
     private String mVintageId;
 
     /**
-     * see {@link WineProfileFragment#newInstance(WineProfile, PhotoHash)}
+     * see {@link WineProfileFragment#newInstance(WineProfileMinimal, PhotoHash)}
      */
-    public static Intent newIntent(Context packageContext, WineProfile wineProfile,
+    public static Intent newIntent(Context packageContext, WineProfileMinimal wineProfile,
             PhotoHash capturePhotoHash) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_WINE_PROFILE, wineProfile);

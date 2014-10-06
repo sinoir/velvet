@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.capture.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.UserInfo;
@@ -142,9 +142,9 @@ public class CaptureDetailsView extends RelativeLayout {
                 mCaptureData.getCapturerParticipant());
 
         // TODO: Combine data from other participants objects
-        final ArrayList<Account> taggedParticipants =
+        final ArrayList<AccountMinimal> taggedParticipants =
                 mCaptureData.getRegisteredParticipants() != null
-                        ? mCaptureData.getRegisteredParticipants() : new ArrayList<Account>();
+                        ? mCaptureData.getRegisteredParticipants() : new ArrayList<AccountMinimal>();
 
         boolean hasCaptureParticipants = taggedParticipants.size() > 0;
 
@@ -285,12 +285,12 @@ public class CaptureDetailsView extends RelativeLayout {
 
         // TODO: Finalize Test out with feed with participants.
         // TODO: Show multiple comments for user
-        Account capturingAccount = mCaptureData.getCapturerParticipant();
-        ArrayList<Account> participants = mCaptureData.getCommentingParticipants();
+        AccountMinimal capturingAccount = mCaptureData.getCapturerParticipant();
+        ArrayList<AccountMinimal> participants = mCaptureData.getCommentingParticipants();
         int numDisplayedComments = 0;
         if (participants != null) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.VISIBLE);
-            for (Account participant : participants) {
+            for (AccountMinimal participant : participants) {
                 ArrayList<CaptureComment> comments = mCaptureData.getCommentsForUserId(
                         participant.getId());
                 int firstIndex = 0;
@@ -371,16 +371,12 @@ public class CaptureDetailsView extends RelativeLayout {
         // TODO : Menu Overlfow Does what?
     }
 
-    private String getThumbnailParticipantPhotoFromAccount(Account account) {
-        String profileImageUrl = "";
-        if (account.getPhoto() != null) {
-            if (account.getPhoto().getThumbUrl() != null) {
-                profileImageUrl = account.getPhoto().getThumbUrl();
-            } else {
-                profileImageUrl = account.getPhoto().getUrl();
-            }
+    private String getThumbnailParticipantPhotoFromAccount(AccountMinimal account) {
+        String profileImageUrl = account.getPhoto().getBestThumb();
+        if (profileImageUrl != null) {
+            return profileImageUrl;
         }
-        return profileImageUrl;
+        return "";
     }
 
 

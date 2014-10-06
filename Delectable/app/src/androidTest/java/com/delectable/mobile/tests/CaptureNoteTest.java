@@ -1,6 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.model.api.captures.CaptureNotesResponse;
@@ -55,7 +56,7 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
         assertEquals("note", actualFirstUpdateNote.getContext());
         assertEquals("q1hg15NVF3vasA", actualFirstUpdateNote.getETag());
 
-        Account actualParticipantAccount = actualFirstUpdateNote.getCapturerParticipant();
+        AccountMinimal actualParticipantAccount = actualFirstUpdateNote.getCapturerParticipant();
 
         assertEquals("52069ff93166785b5d003576", actualParticipantAccount.getId());
         assertEquals("Austin", actualParticipantAccount.getFname());

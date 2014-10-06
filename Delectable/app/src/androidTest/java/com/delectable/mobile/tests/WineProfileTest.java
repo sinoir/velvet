@@ -1,6 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,10 +45,9 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_minimal_ctx);
         JSONObject payload = json.optJSONObject("payload");
         JSONObject wineProfile = payload.optJSONObject("wine_profile");
-        WineProfile actualWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
+        WineProfileMinimal actualWine = mGson.fromJson(wineProfile.toString(), WineProfileMinimal.class);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
-        assertNull(actualWine.getRatingsSummary());
         assertEquals("2009", actualWine.getVintage());
         assertEquals("Napa Ridge", actualWine.getProducerName());
         assertEquals("Napa Valley Pinot Noir", actualWine.getName());
