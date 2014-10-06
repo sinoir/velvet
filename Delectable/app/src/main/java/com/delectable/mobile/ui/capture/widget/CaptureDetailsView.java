@@ -265,7 +265,7 @@ public class CaptureDetailsView extends RelativeLayout {
             mUserComment.setText("");
             mUserComment.setVisibility(View.GONE);
         }
-        if (capturePercent > 0.0f) {
+        if (capturePercent > -1.0f) {
             mUserCaptureRatingBar.setVisibility(View.VISIBLE);
             mUserCaptureRatingBar.setPercent(capturePercent);
         } else {
