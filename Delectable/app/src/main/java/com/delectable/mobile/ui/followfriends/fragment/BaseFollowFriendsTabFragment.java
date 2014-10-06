@@ -143,10 +143,9 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         try {
             Intent smsIntent = new Intent(Intent.ACTION_VIEW);
             smsIntent.setData(Uri.parse("smsto:"));
-            smsIntent.setType("vnd.android-dir/mms-sms");
             smsIntent.putExtra("address", phone);
             smsIntent.putExtra("sms_body", getString(R.string.invite_body));
-            startActivity(smsIntent);
+            startActivity(Intent.createChooser(smsIntent, "Send SMS:"));
         } catch (ActivityNotFoundException ex) {
             Log.e(TAG, "SMS Failed: ", ex);
             showToastError(getString(R.string.error_sms_failed));
