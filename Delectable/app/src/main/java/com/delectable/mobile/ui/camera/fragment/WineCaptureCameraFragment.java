@@ -115,10 +115,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnClick(R.id.flash_button)
     public void toggleFlashClicked() {
-        boolean isFlashOn = toggleFlash();
-        mFlashButton.setSelected(isFlashOn);
-        String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
-        mFlashButton.setText(flashText);
+        toggleFlash();
     }
 
     @Override
@@ -133,6 +130,15 @@ public class WineCaptureCameraFragment extends CameraFragment {
         int croppedHeight = Math.min((int) (frameHeight * previewScale), imageHeight);
 
         return Bitmap.createBitmap(bitmap, 0, 0, imageWidth, croppedHeight);
+    }
+
+    @Override
+    public boolean toggleFlash() {
+        boolean isFlashOn = super.toggleFlash();
+        mFlashButton.setSelected(isFlashOn);
+        String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
+        mFlashButton.setText(flashText);
+        return isFlashOn;
     }
 
     private void launchOptionsScreen(Bitmap imageData) {

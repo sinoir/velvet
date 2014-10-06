@@ -11,7 +11,6 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.hardware.Camera;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
@@ -31,12 +30,6 @@ public class CameraFragment extends BaseFragment {
     private int mCameraId = 0;
 
     private boolean mIsFlashOn = false;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onResume() {
@@ -64,6 +57,15 @@ public class CameraFragment extends BaseFragment {
             final Runnable postCameraOpenAction = new Runnable() {
                 public void run() {
                     mCameraView.udpateCamera(mCamera, mCameraId);
+                    // If Flash was already on, such as we tapped home and resumed the fragment.
+                    if (mIsFlashOn) {
+                        mIsFlashOn = false;
+                        toggleFlash();
+                    } else {
+                        // Turn flash off if it was on and we went "back" from next screen.
+                        mIsFlashOn = true;
+                        toggleFlash();
+                    }
                 }
             };
 
@@ -148,7 +150,6 @@ public class CameraFragment extends BaseFragment {
         }
         mCamera.setParameters(p);
     }
-
 
     public interface PictureTakenCallback {
 
