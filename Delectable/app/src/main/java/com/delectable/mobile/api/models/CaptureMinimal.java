@@ -39,12 +39,11 @@ public class CaptureMinimal extends Capture {
      * Get % of Rating
      *
      * @param id = User ID linked to Ratings Hash
-     * @return -1.0f if no rating exists, or value between 0.0f and 1.0f
+     * @return -1.0f if no rating exists
      */
     public float getRatingPercentForId(String id) {
-        float ratingPercent = -1.0f;
-        ratingPercent = (float) getRatingForId(id) / MAX_RATING_VALUE;
-        if (ratingPercent <= 0.0f) {
+        float ratingPercent = (float) getRatingForId(id) / MAX_RATING_VALUE;
+        if (ratingPercent < 0.0f) {
             ratingPercent = -1.0f;
         }
         return ratingPercent;
