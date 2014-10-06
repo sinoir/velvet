@@ -36,6 +36,7 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
+import com.delectable.mobile.jobs.basewines.FetchBaseWineJob;
 import com.delectable.mobile.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.jobs.captures.AddCaptureCommentJob;
@@ -53,11 +54,11 @@ import com.delectable.mobile.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
+import com.delectable.mobile.jobs.registrations.ResetPasswordJob;
 import com.delectable.mobile.jobs.scanwinelabel.AddCaptureFromPendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUploadJob;
 import com.delectable.mobile.jobs.scanwinelabel.CreatePendingCaptureJob;
 import com.delectable.mobile.jobs.scanwinelabel.IdentifyLabelJob;
-import com.delectable.mobile.jobs.basewines.FetchBaseWineJob;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.delectable.mobile.net.MotdNetworkClient;
 import com.delectable.mobile.net.NetworkClient;
@@ -74,6 +75,7 @@ import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.RecentCapturesTabFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
+import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
@@ -113,6 +115,8 @@ import de.greenrobot.event.EventBus;
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
+                // Dialogs
+                ResetPasswordDialog.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
@@ -128,6 +132,7 @@ import de.greenrobot.event.EventBus;
                 FetchUserCaptureFeedJob.class,
                 LoginJob.class,
                 RegisterJob.class,
+                ResetPasswordJob.class,
                 LoginFacebookJob.class,
                 FetchCaptureDetailsJob.class,
                 FetchAccountProfileJob.class,

@@ -58,6 +58,8 @@
     <string name="reset_password_dialog_title">Reset your password?</string>
     <string name="reset_password_dialog_email_hint">Enter your email address</string>
     <string name="reset_password_dialog_reset_password">reset password</string>
+    <string name="reset_password_dialog_msg_success">We have sent instructions on how to reset your password to %1$s</string>
+    <string name="reset_password_dialog_msg_failed">We could not reset the password for %1$s</string>
 
     <!-- Navigation -->
     <string name="navigation_drawer_open">Open</string>

@@ -3,9 +3,8 @@ package com.delectable.mobile.controllers;
 import com.delectable.mobile.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.jobs.registrations.LoginJob;
 import com.delectable.mobile.jobs.registrations.RegisterJob;
+import com.delectable.mobile.jobs.registrations.ResetPasswordJob;
 import com.path.android.jobqueue.JobManager;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -30,4 +29,9 @@ public class RegistrationController {
         mJobManager
                 .addJobInBackground(new LoginFacebookJob(facebookToken, facebookTokenExpiration));
     }
+
+    public void resetPassword(String email) {
+        mJobManager.addJobInBackground(new ResetPasswordJob(email));
+    }
+
 }
