@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.ui.common.widget.FontEditText;
+import com.delectable.mobile.util.HelperUtil;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -118,8 +120,13 @@ public class ResetPasswordDialog extends DialogFragment {
 
     @OnClick(R.id.reset_password_textview)
     protected void onResetPasswordClick() {
-        mRegistrationController.resetPassword(mEmailField.getText().toString());
-        // Dialog is dismissed by SignInFragment when password reset was successful
+        if (HelperUtil.isEmailValid(mEmailField.getText().toString().trim())) {
+            mRegistrationController.resetPassword(mEmailField.getText().toString().trim());
+            // Dialog is dismissed by SignInFragment when password reset was successful
+        } else {
+            Toast.makeText(getActivity(), R.string.reset_password_dialog_invalid_email,
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
 }
