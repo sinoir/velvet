@@ -1,5 +1,6 @@
 package com.delectable.mobile.jobs.accounts;
 
+import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
@@ -17,10 +18,10 @@ public class AddIdentifierJob extends BaseJob {
 
     private String mUserCountryCode;
 
-    public AddIdentifierJob(String string, String type, String userCountryCode) {
+    public AddIdentifierJob(String string, Identifier.Type type, String userCountryCode) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
         mString = string;
-        mType = type;
+        mType = type.toString();
         mUserCountryCode = userCountryCode;
     }
 

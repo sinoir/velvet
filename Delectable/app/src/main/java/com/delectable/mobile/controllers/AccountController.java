@@ -83,7 +83,7 @@ public class AccountController {
         mJobManager.addJobInBackground(new UpdateSettingJob(key, setting));
     }
 
-    public void addIdentifier(String string, String type) {
+    public void addIdentifier(String string, Identifier.Type type) {
         mJobManager.addJobInBackground(new AddIdentifierJob(string, type, null));
     }
 

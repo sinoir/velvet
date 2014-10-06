@@ -452,10 +452,10 @@ public class SettingsFragment extends BaseFragment {
      * Used to modify email and phone numbers. Determines whether an identifier should be added,
      * updated or deleted.
      *
-     * @param type see {@link com.delectable.mobile.api.models.Identifier.Type} values. Only used
-     *             for adding an identifier.
+     * @param type see {@link Identifier.Type} values. Only used for adding an identifier.
      */
-    private void modifyIdentifier(Identifier identifier, String replacementValue, String type) {
+    private void modifyIdentifier(Identifier identifier, String replacementValue,
+            Identifier.Type type) {
         String currentValue = null;
         //this identifier exists in the user object
         if (identifier != null) {
@@ -487,7 +487,7 @@ public class SettingsFragment extends BaseFragment {
         updateIdentifier(identifier, replacementValue);
     }
 
-    private void addIdentifier(String string, String type) {
+    private void addIdentifier(String string, Identifier.Type type) {
         mAccountController.addIdentifier(string, type);
     }
 

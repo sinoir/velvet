@@ -2,14 +2,24 @@ package com.delectable.mobile.api.models;
 
 public class Identifier {
 
-    public static class Type {
+    public enum Type {
+        FACEBOOK("facebook"),
+        EMAIL("email"),
+        PHONE("phone"),
+        TWITTER("twitter");
 
-        public static final String FACEBOOK = "facebook";
+        private String mLabel;
 
-        public static final String EMAIL = "email";
+        private Type(String label) {
+            mLabel = label;
+        }
 
-        public static final String PHONE = "phone";
+        @Override
+        public String toString() {
+            return mLabel;
+        }
     }
+
 
     private String id;
 
