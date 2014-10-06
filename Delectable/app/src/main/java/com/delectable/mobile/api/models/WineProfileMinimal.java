@@ -31,7 +31,8 @@ public class WineProfileMinimal extends BaseResponse implements Parcelable {
 
     private String base_wine_id;
 
-    private double price;
+    //price can return null from API
+    private Double price;
 
     private String price_status;
 
@@ -135,11 +136,11 @@ public class WineProfileMinimal extends BaseResponse implements Parcelable {
         this.description = description;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
