@@ -16,7 +16,7 @@ public class CaptureMinimal extends Capture {
 
     private BaseWine base_wine;
 
-    private WineProfile wine_profile;
+    private WineProfileMinimal wine_profile; //minimal
 
     /**
      * Updates existing capture with updated capture
@@ -103,11 +103,11 @@ public class CaptureMinimal extends Capture {
         this.base_wine = base_wine;
     }
 
-    public WineProfile getWineProfile() {
+    public WineProfileMinimal getWineProfile() {
         return wine_profile;
     }
 
-    public void setWineProfile(WineProfile wine_profile) {
+    public void setWineProfile(WineProfileMinimal wine_profile) {
         this.wine_profile = wine_profile;
     }
 
