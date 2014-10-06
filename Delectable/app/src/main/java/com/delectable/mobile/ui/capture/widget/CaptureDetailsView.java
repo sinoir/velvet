@@ -144,7 +144,8 @@ public class CaptureDetailsView extends RelativeLayout {
         // TODO: Combine data from other participants objects
         final ArrayList<AccountMinimal> taggedParticipants =
                 mCaptureData.getRegisteredParticipants() != null
-                        ? mCaptureData.getRegisteredParticipants() : new ArrayList<AccountMinimal>();
+                        ? mCaptureData.getRegisteredParticipants()
+                        : new ArrayList<AccountMinimal>();
 
         boolean hasCaptureParticipants = taggedParticipants.size() > 0;
 
@@ -331,7 +332,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private void setupActionButtonStates() {
         int numLikes = mCaptureData.getLikesCount();
-        String likesCountText = mContext.getString(R.string.cap_feed_likes_count, numLikes);
+        String likesCountText = mContext.getResources()
+                .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
         mLikesCount.setText(likesCountText);
         String userId = UserInfo.getUserId(mContext);
         boolean userLikesCapture = mCaptureData.doesUserLikeCapture(userId);
