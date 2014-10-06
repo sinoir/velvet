@@ -5,11 +5,13 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.api.models.ListingResponse;
+import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
+import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
@@ -267,6 +269,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
     }
 
+    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
+        if (event.isSuccessful()) {
+            PhotoHash photoHash = event.getPhoto();
+            mUserAccount.setPhoto(photoHash);
+            updateUIWithData();
+            return;
+        }
+        showToastError(event.getErrorMessage());
+    }
 
     public void onEventMainThread(UpdatedAccountEvent event) {
         if (!mUserId.equals(event.getAccount().getId())) {
