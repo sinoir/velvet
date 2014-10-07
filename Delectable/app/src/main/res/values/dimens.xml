@@ -18,6 +18,7 @@
     <dimen name="circle_pager_indicator_radius">4dp</dimen>
     <dimen name="custom_ab_title_text_size">22sp</dimen>
     <dimen name="custom_ab_action_text_size">16sp</dimen>
+    <dimen name="font_offset_whitney_medium_sc">3dp</dimen>
 
     <!-- General Dialog -->
     <dimen name="dialog_horizontal_spacing">20dp</dimen>
