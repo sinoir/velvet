@@ -1,5 +1,6 @@
 package com.delectable.mobile;
 
+import com.crashlytics.android.Crashlytics;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.di.AppModule;
 import com.delectable.mobile.util.TwitterUtil;
@@ -8,12 +9,7 @@ import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import android.app.Application;
-import android.content.res.AssetManager;
 import android.util.Log;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
@@ -53,7 +49,8 @@ public class App extends Application {
 
         mObjectGraph = ObjectGraph.create(new AppModule());
 
-        TwitterUtil.init(this);
+        TwitterAuthConfig authConfig = TwitterUtil.getAuthConfig(this);
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
     }
 
     public void updateKahunaAttributes() {

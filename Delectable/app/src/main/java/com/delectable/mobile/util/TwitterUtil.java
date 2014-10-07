@@ -18,8 +18,6 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 
-import io.fabric.sdk.android.Fabric;
-
 public class TwitterUtil {
 
     private static final String TAG = TwitterUtil.class.getSimpleName();
@@ -28,7 +26,7 @@ public class TwitterUtil {
 
     private static final int API_SECRET = 1;
 
-    public static void init(Context context) {
+    public static TwitterAuthConfig getAuthConfig(Context context) {
         String[] twitter = getTwitterApiKeyAndSecret(context);
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig(
@@ -36,7 +34,7 @@ public class TwitterUtil {
                         twitter[API_SECRET]);
         //Log.d(TAG, "twitter apikey: " + twitter[API_KEY]);
         //Log.d(TAG, "twitter apisecret: " + twitter[API_SCRET]);
-        Fabric.with(context, new Twitter(authConfig));
+        return authConfig;
     }
 
     private static String[] getTwitterApiKeyAndSecret(Context context) {
