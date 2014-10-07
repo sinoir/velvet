@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.util.HelperUtil;
 
@@ -73,6 +74,10 @@ public class SignInFragment extends BaseSignUpInFragment {
         if (invalidFieldExists()) {
             return;
         }
+
+        mLoadingDialog = new LoadingCircleDialog();
+        mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
+
         String email = getEmailField().getText().toString().trim();
         String password = getPasswordField().getText().toString().trim();
 
