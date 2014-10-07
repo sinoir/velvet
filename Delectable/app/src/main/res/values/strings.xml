@@ -33,7 +33,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="login_sign_up">sign up</string>
     <string name="login_already_have_account">Already have an account?&#160;</string>
-    <string name="login_login">Log in</string>
+    <string name="login_login">Sign in</string>
 
     <!-- Sign up Sign in -->
     <string name="sign_up_title">Sign up</string>
