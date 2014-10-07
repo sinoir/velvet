@@ -17,6 +17,11 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.TwitterUtil;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.models.Tweet;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -334,6 +339,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
         if (event.isSuccessful()) {
             launchCurrentUserProfile();
+            if (mShareTwitterButton.isChecked()) {
+                String tweet = event.getCaptureDetails().getTweet();
+                String shortUrl = event.getCaptureDetails().getShortShareUrl();
+                TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
+            }
             if (mShareInstagramButton.isChecked()) {
                 InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
                         mCommentEditText.getText().toString());
@@ -344,6 +354,20 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mIsPostingCapture = false;
         mProgressBar.setVisibility(View.GONE);
     }
+
+    private Callback<Tweet> TwitterCallback = new Callback<Tweet>() {
+        @Override
+        public void success(Result<Tweet> tweetResult) {
+            Log.d(TAG, "tweet success!");
+        }
+
+        @Override
+        public void failure(TwitterException e) {
+            Log.d(TAG, "tweet fail");
+            Log.d(TAG, "TwitterException", e);
+            showToastError("Tweet failed: " + e.getMessage());
+        }
+    };
 
     private void launchCurrentUserProfile() {
         getActivity().finish();
@@ -388,8 +412,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @OnCheckedChanged(R.id.share_twitter)
     protected void shareCaptureOnTwitter(CompoundButton view, boolean isChecked) {
         // TODO: Check if user connected Twiter:
-        boolean isConnectedToTwitter = false;
-        if (!isConnectedToTwitter) {
+        if (!TwitterUtil.isLoggedIn()) {
             showToastError(R.string.error_connect_twitter);
             view.setChecked(false);
             return;

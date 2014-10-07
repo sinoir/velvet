@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.followfriends.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.AccountMinimal;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ public class TwitterAccountsAdapter extends BaseAccountsMinimalAdapter {
                     .inflate(R.layout.row_find_twitter_friends_impl, parent, false);
             row.setActionsHandler(mActionsHandler);
         }
-        row.updateData((com.delectable.mobile.api.models.AccountMinimal) getItem(position));
+        row.updateData((AccountMinimal) getItem(position));
 
         return row;
     }
