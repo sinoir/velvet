@@ -187,6 +187,8 @@
 
     <dimen name="follow_contact_row_height">48dp</dimen>
 
+    <dimen name="follow_twitter_friend_row_height">72dp</dimen>
+
     <!--Search-->
     <dimen name="search_wine_row_height">90dp</dimen>
     <dimen name="search_wine_image_width">50dp</dimen>
