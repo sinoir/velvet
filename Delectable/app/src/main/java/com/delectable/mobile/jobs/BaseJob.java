@@ -12,6 +12,8 @@ import de.greenrobot.event.EventBus;
 
 public class BaseJob extends Job {
 
+    private static final int RETRY_LIMIT = 3;
+
     @Inject
     protected EventBus mEventBus;
 
@@ -49,6 +51,11 @@ public class BaseJob extends Job {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected int getRetryLimit() {
+        return RETRY_LIMIT;
     }
 
     public String getErrorMessage() {
