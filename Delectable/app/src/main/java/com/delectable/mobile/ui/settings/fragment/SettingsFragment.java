@@ -333,7 +333,9 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mFacebookUiHelper.onActivityResult(requestCode, resultCode, data);
         mHiddenTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
+
 
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
@@ -357,6 +359,19 @@ public class SettingsFragment extends BaseFragment {
                 removeIdentifier(twitterIdentifier);
             }
         }
+        if (requestCode == DISCONNECT_FACEBOOK && resultCode == Activity.RESULT_OK) {
+            // Close FB Session
+            Session session = Session.getActiveSession();
+            if (session != null) {
+                session.closeAndClearTokenInformation();
+            }
+            Identifier facebookIdentifier = mUserAccount.getFacebookIdentifier();
+            if (facebookIdentifier != null) {
+                removeIdentifier(facebookIdentifier);
+            }
+        }
+
+
 
     }
 
@@ -598,7 +613,12 @@ public class SettingsFragment extends BaseFragment {
     //region Button Click Actions
     @OnClick(R.id.facebook_value)
     protected void onFacebookConnectClick(View v) {
-        mRealFacebookLoginButton.performClick();
+        if (!v.isSelected()) {
+            mRealFacebookLoginButton.performClick();
+        } else {
+            showConfirmationNoTitle(getString(R.string.settings_disconnect_facebook),
+                    getString(R.string.settings_disconnect), null, DISCONNECT_FACEBOOK);
+        }
     }
 
     private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
@@ -822,11 +842,9 @@ public class SettingsFragment extends BaseFragment {
         if (mUserAccount.isFacebookConnected()) {
             mFacebookField.setText(R.string.settings_facebook_connected);
             mFacebookField.setSelected(true);
-            mFacebookField.setClickable(false);
         } else {
             mFacebookField.setText(R.string.settings_facebook_connect);
             mFacebookField.setSelected(false);
-            mFacebookField.setClickable(true);
         }
 
         if (mUserAccount.isTwitterConnected() && TwitterUtil.isLoggedIn()) {
