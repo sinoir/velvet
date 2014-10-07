@@ -13,6 +13,7 @@ import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.jobs.accounts.SearchAccountsJob;
@@ -52,6 +53,10 @@ public class AccountController {
 
     public void fetchFacebookSuggestions(String id) {
         mJobManager.addJobInBackground(new FetchFacebookSuggestionsJob(id));
+    }
+
+    public void fetchTwitterSuggestions(String id) {
+        mJobManager.addJobInBackground(new FetchTwitterSuggestionsJob(id));
     }
 
     public void fetchDelectafriends() {

@@ -29,6 +29,7 @@ import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.jobs.accounts.SearchAccountsJob;
@@ -70,6 +71,7 @@ import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
+import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.RecentCapturesTabFragment;
@@ -107,6 +109,7 @@ import de.greenrobot.event.EventBus;
                 FollowExpertsTabFragment.class,
                 FollowContactsTabFragment.class,
                 FollowFacebookFriendsTabFragment.class,
+                FollowTwitterFriendsTabFragment.class,
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
                 WineCaptureSubmitFragment.class,
@@ -140,6 +143,7 @@ import de.greenrobot.event.EventBus;
                 DeleteCaptureJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 FetchFacebookSuggestionsJob.class,
+                FetchTwitterSuggestionsJob.class,
                 SearchFoursquareVenuesJob.class,
                 FetchDelectafriendsJob.class,
                 FetchAccountsFromContactsJob.class,
