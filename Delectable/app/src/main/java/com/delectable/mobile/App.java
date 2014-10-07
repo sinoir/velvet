@@ -2,6 +2,7 @@ package com.delectable.mobile;
 
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.di.AppModule;
+import com.delectable.mobile.util.TwitterUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -24,10 +25,6 @@ public class App extends Application {
     private static App sInstance;
 
     private ObjectGraph mObjectGraph;
-
-    private static final int API_KEY = 0;
-
-    private static final int API_SECRET = 1;
 
     public App() {
         sInstance = this;
@@ -56,13 +53,7 @@ public class App extends Application {
 
         mObjectGraph = ObjectGraph.create(new AppModule());
 
-        String[] twitter = getTwitterApiKeyAndSecret();
-        TwitterAuthConfig authConfig =
-                new TwitterAuthConfig(
-                        twitter[API_KEY],
-                        twitter[API_SECRET]);
-        Fabric.with(this,
-                new Twitter(authConfig));
+        TwitterUtil.init(this);
     }
 
     public void updateKahunaAttributes() {
@@ -76,24 +67,5 @@ public class App extends Application {
         }
     }
 
-    private String[] getTwitterApiKeyAndSecret() {
-        String apiKey = null;
-        String apiSecret = null;
-        try {
-            AssetManager assetManager = getAssets();
-            InputStream inputStream = assetManager.open("twitter_credentials.properties");
 
-            Properties properties = new Properties();
-            properties.load(inputStream);
-            apiKey = properties.getProperty("API_KEY");
-            apiSecret = properties.getProperty("API_SECRET");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String[] twitterCreds = new String[2];
-        twitterCreds[API_KEY] = apiKey;
-        twitterCreds[API_SECRET] = apiSecret;
-        return twitterCreds;
-    }
 }

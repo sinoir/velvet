@@ -6,4 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/d_white"
+    android:listSelector="@color/transparent"
     android:divider="@null" />

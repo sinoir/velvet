@@ -689,6 +689,8 @@ public class SettingsFragment extends BaseFragment {
         @Override
         public void failure(TwitterException e) {
             //TODO debug this exception and show error, but don't show error if user clicked back intentionally
+            Log.d(TAG, "Twitter auth error", e);
+            Log.d(TAG, "Twitter error message:" + e.getMessage());
             //showToastError("Twitter authentication failed");
         }
     };

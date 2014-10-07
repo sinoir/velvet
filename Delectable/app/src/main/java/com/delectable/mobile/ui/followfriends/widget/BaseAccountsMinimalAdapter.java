@@ -99,6 +99,7 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
 
     protected abstract View getFollowRow(int position, View convertView, ViewGroup parent);
 
+    //TODO perhaps move this to be the listview's header
     protected View getHeaderRow(int position, View convertView, ViewGroup parent) {
         TextView row = (TextView) convertView;
         if (row == null) {
@@ -108,7 +109,7 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
         }
         // We use Resource ID
         row.setText((Integer) getItem(position));
-
+        row.setClickable(false);
         return row;
     }
 }
