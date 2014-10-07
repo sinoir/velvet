@@ -101,6 +101,18 @@ public class Account extends AccountProfile {
         return null;
     }
 
+    /**
+     * @return Returns {@code null} if identifier was not found.
+     */
+    public Identifier getIdentifier(String id) {
+        for (Identifier identifier : identifiers) {
+            if (id.equalsIgnoreCase(identifier.getId())) {
+                return identifier;
+            }
+        }
+        return null;
+    }
+
     public String getSourcingState() {
         return sourcing_state;
     }
