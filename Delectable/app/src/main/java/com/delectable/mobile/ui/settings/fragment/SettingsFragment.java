@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.TwitterUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -69,6 +70,10 @@ public class SettingsFragment extends BaseFragment {
     private static final int SELECT_PHOTO_REQUEST = 0;
 
     private static final int CAMERA_REQUEST = 1;
+
+    private static final int DISCONNECT_TWITTER = 2;
+
+    private static final int DISCONNECT_FACEBOOK = 3;
 
     @Inject
     AccountController mAccountController;
@@ -344,6 +349,15 @@ public class SettingsFragment extends BaseFragment {
             mProfileImage.setImageBitmap(photo);
             updateProfilePicture(photo);
         }
+
+        if (requestCode == DISCONNECT_TWITTER && resultCode == Activity.RESULT_OK) {
+            TwitterUtil.clearSession();
+            Identifier twitterIdentifier = mUserAccount.getTwitterIdentifier();
+            if (twitterIdentifier != null) {
+                removeIdentifier(twitterIdentifier);
+            }
+        }
+
     }
 
     /**
@@ -616,8 +630,14 @@ public class SettingsFragment extends BaseFragment {
     }
 
     @OnClick(R.id.twitter_value)
-    protected void onTwitterConnectClick(View view) {
-        mHiddenTwitterLoginButton.performClick();
+    protected void onTwitterConnectClick(FontTextView view) {
+        if (!view.isSelected()) {
+            //bring user to twitter login
+            mHiddenTwitterLoginButton.performClick();
+        } else {
+            showConfirmationNoTitle(getString(R.string.settings_disconnect_twitter),
+                    getString(R.string.settings_disconnect), null, DISCONNECT_TWITTER);
+        }
     }
 
     private Callback<TwitterSession> TwitterCallback = new Callback<TwitterSession>() {
@@ -809,17 +829,13 @@ public class SettingsFragment extends BaseFragment {
             mFacebookField.setClickable(true);
         }
 
-        if (mUserAccount.isTwitterConnected()) {
+        if (mUserAccount.isTwitterConnected() && TwitterUtil.isLoggedIn()) {
             mTwitterField.setText("@" + mUserAccount.getTwScreenName());
             mTwitterField.setSelected(true);
-            mTwitterField.setClickable(false);
         } else {
             mTwitterField.setText(R.string.settings_facebook_connect);
             mTwitterField.setSelected(false);
-            mTwitterField.setClickable(true);
         }
-        //TODO connect twitter
-        //mTwitterField.setText(mUserAccount.getEmail());
 
         //notifications
         boolean followingYouPhone = mUserAccount.getAccountConfig().getPnNewFollower();
