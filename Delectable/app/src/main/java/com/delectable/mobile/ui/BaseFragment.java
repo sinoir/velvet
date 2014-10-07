@@ -2,7 +2,7 @@ package com.delectable.mobile.ui;
 
 import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.ui.common.dialog.ConfirmationDialog;
+import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
@@ -149,10 +149,11 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         }
     }
 
-    public void showConfirmation(String title, String message, String positiveText,
+    public void showConfirmationNoTitle(String message, String positiveText, String negativeText,
             int requestCode) {
-        ConfirmationDialog dialog = ConfirmationDialog
-                .newInstance(title, message, positiveText, this, requestCode);
+        ConfirmationNoTitleDialog dialog = ConfirmationNoTitleDialog
+                .newInstance(message, positiveText, negativeText);
+        dialog.setTargetFragment(this, requestCode);
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
 

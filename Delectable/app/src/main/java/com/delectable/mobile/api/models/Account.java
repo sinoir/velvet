@@ -65,11 +65,48 @@ public class Account extends AccountProfile {
     }
 
     /**
-     * @return Returns the first phone identifier. Returns null if there is no phone identifier.
+     * @return Returns {@code null} if there is no email identifier.
+     */
+    public Identifier getEmailIdentifier() {
+        return getIdentifier(Identifier.Type.EMAIL);
+    }
+
+    /**
+     * @return Returns {@code null} if there is no facebook identifier.
+     */
+    public Identifier getFacebookIdentifier() {
+        return getIdentifier(Identifier.Type.FACEBOOK);
+    }
+
+    /**
+     * @return Returns {@code null} if twitter identifier was not found.
+     */
+    public Identifier getTwitterIdentifier() {
+        return getIdentifier(Identifier.Type.TWITTER);
+    }
+
+    /**
+     * @return Returns the first phone identifier. Returns {@code null} if there is no phone identifier.
      */
     public Identifier getPhoneIdentifier() {
+        return getIdentifier(Identifier.Type.PHONE);
+    }
+
+    public Identifier getIdentifier(Identifier.Type type) {
         for (Identifier identifier : identifiers) {
-            if (identifier.getType().equalsIgnoreCase(Identifier.Type.PHONE)) {
+            if (identifier.getType().equalsIgnoreCase(type.toString())) {
+                return identifier;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return Returns {@code null} if identifier was not found.
+     */
+    public Identifier getIdentifier(String id) {
+        for (Identifier identifier : identifiers) {
+            if (id.equalsIgnoreCase(identifier.getId())) {
                 return identifier;
             }
         }

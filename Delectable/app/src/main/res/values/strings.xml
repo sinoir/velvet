@@ -13,6 +13,7 @@
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
     <string name="cancel">cancel</string>
+    <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
@@ -210,6 +211,14 @@
     <string name="settings_import_from_facebook">Import from facebook</string>
     <string name="settings_choose_from_library">Choose from library</string>
     <string name="settings_take_photo">Take photo</string>
+
+    <!--Settings Twitter/Facebook Disconnect Dialog -->
+    <string name="settings_disconnect_twitter">Disconnect twitter account?</string>
+    <string name="settings_disconnect_facebook">Disconnect facebook account?</string>
+    <string name="settings_disconnect">disconnect</string>
+
+
+
     <string name="error_no_email_client">There is no email client installed</string>
     <string name="error_sms_failed">SMS failed</string>
 

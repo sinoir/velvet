@@ -8,7 +8,6 @@ import com.delectable.mobile.api.models.Motd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class UserInfo {
 
@@ -25,6 +24,8 @@ public class UserInfo {
     private static final String PROPERTY_MOTD = "motd";
 
     private static final String PROPERTY_ACCOUNT_PRIVATE = "accountPrivate";
+
+    private static final String PROPERTY_ACCOUNT_PRIVATE_TEMP = "accountPrivateTemp";
 
 
     public static void onSignIn(String userId, String sessionKey, String sessionToken,
@@ -118,5 +119,43 @@ public class UserInfo {
         }
         return null;
     }
+
+
+    /**
+     * TODO these two methods are not well implemented. The primary purpose is really just to
+     * provide a place to persist the account object's original state while it's awaiting updates
+     * from an endpoint. If said request returns in error, then we would roll back the real Account
+     * private object back to this original state. Specifically, I had a very hard time
+     * holding onto member objects in Jobs that had persist() called on them.
+     */
+    public static void setTempAccount(Account account) {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(account);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_ACCOUNT_PRIVATE_TEMP, jsonString);
+        editor.commit();
+    }
+
+    public static Account getTempAccountPrivate() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        String jsonString = prefs.getString(PROPERTY_ACCOUNT_PRIVATE_TEMP, null);
+        if (jsonString != null) {
+            Gson gson = new Gson();
+            Account account = gson.fromJson(jsonString, Account.class);
+            return account;
+        }
+        return null;
+    }
+
+    public static void clearTempAccount() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(PROPERTY_ACCOUNT_PRIVATE_TEMP);
+        editor.commit();
+    }
+
 
 }

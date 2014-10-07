@@ -142,9 +142,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     @Override
     public void discardCaptureClicked(CaptureDetails capture) {
         mTempCaptureForAction = capture;
-        showConfirmation(getActivity().getString(R.string.remove),
-                getActivity().getString(R.string.capture_remove),
-                getActivity().getString(R.string.remove), REQUEST_DELETE_CONFIRMATION);
+        showConfirmationNoTitle(getString(R.string.capture_remove), getString(R.string.remove),
+                null, REQUEST_DELETE_CONFIRMATION);
     }
 
     public void deleteCapture(CaptureDetails capture) {
