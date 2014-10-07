@@ -18,6 +18,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +32,7 @@ import javax.inject.Inject;
  * It leaves the retrieval of the data up to it's subclasses.
  */
 public abstract class BaseFollowFriendsTabFragment extends BaseFragment
-        implements FollowActionsHandler {
+        implements FollowActionsHandler, AdapterView.OnItemClickListener{
 
     private static final String TAG = BaseFollowFriendsTabFragment.class.getSimpleName();
 
@@ -152,4 +154,17 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
             showToastError(getString(R.string.error_sms_failed));
         }
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (getAdapter().getItem(position) instanceof AccountMinimal) {
+            launchUserProfile((AccountMinimal) getAdapter().getItem(position));
+        }
+    }
+
+    private void launchUserProfile(AccountMinimal accountMinimal) {
+        Intent intent = UserProfileActivity.newIntent(getActivity(), accountMinimal.getId());
+        startActivity(intent);
+    }
+
 }

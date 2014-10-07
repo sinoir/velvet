@@ -9,10 +9,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragment{
+public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragment {
 
     private static final String TAG = FollowTwitterFriendsTabFragment.class.getSimpleName();
 
@@ -35,6 +36,7 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
         mAdapter.setTopHeaderTitleResId(R.string.follow_friends_twitter);
         listview.setAdapter(mAdapter);
+        listview.setOnItemClickListener(this);
         return listview;
     }
 

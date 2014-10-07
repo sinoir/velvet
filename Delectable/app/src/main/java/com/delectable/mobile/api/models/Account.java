@@ -30,8 +30,6 @@ public class Account extends AccountProfile {
 
     private float tw_id;
 
-    private String tw_screen_name;
-
     private String tw_token;
 
     private String tw_token_secret;
@@ -212,17 +210,10 @@ public class Account extends AccountProfile {
         this.tw_id = tw_id;
     }
 
-    public String getTwScreenName() {
-        return tw_screen_name;
-    }
-
     public boolean isTwitterConnected() {
-        return tw_screen_name == null ? false : true;
+        return getTwScreenName() == null ? false : true;
     }
 
-    public void setTwScreenName(String tw_screen_name) {
-        this.tw_screen_name = tw_screen_name;
-    }
 
     public String getTwToken() {
         return tw_token;

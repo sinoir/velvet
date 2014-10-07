@@ -51,14 +51,14 @@ public class FollowTwitterFriendsRow extends RelativeLayout {
     public void updateData(AccountMinimal account) {
         mAccount = account;
         updateData(account.getFullName(),
-                account.getInfluencerTitlesString(),
+                "@"+account.getTwScreenName(),
                 account.isUserRelationshipTypeFollowing());
     }
 
-    public void updateData(String name, String influencerTitles,
+    public void updateData(String name, String twitterScreenName,
             boolean isFollowing) {
         mName.setText(name);
-        mInfluencerTitles.setText(influencerTitles);
+        mInfluencerTitles.setText(twitterScreenName);
         mFollowButton.setSelected(isFollowing);
     }
 
