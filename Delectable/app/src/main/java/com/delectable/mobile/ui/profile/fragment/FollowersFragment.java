@@ -7,6 +7,7 @@ import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.profile.widget.FollowersAdapter;
@@ -20,10 +21,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class FollowersFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, InfiniteScrollAdapter.ActionsHandler,
@@ -43,6 +48,19 @@ public class FollowersFragment extends BaseFragment
     private ArrayList<AccountMinimal> mAccounts;
 
     private BaseListingResponse<AccountMinimal> mFollowerListing;
+
+    @InjectView(R.id.list_view)
+    protected ListView mListView;
+
+    @InjectView(R.id.empty_state_layout)
+    protected View mEmptyStateLayout;
+
+    /**
+     * In the layout, this covers the loading circle complete when it's set to visible, so there's no
+     * need to hide the loading circle.
+     */
+    @InjectView(R.id.no_followers_textview)
+    protected FontTextView mNoFollowersText;
 
     /**
      * Flag to know when we are already fetching
@@ -74,11 +92,11 @@ public class FollowersFragment extends BaseFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview_w_loading, container, false);
-        ListView listview = (ListView) view.findViewById(R.id.list_view);
-        View emptyview = view.findViewById(R.id.progress_bar);
-        listview.setEmptyView(emptyview);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(this);
+        ButterKnife.inject(this, view);
+
+        mListView.setEmptyView(mEmptyStateLayout);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
         return view;
     }
 
@@ -89,28 +107,18 @@ public class FollowersFragment extends BaseFragment
         //start first fetch for followers
         if (mAccounts == null) {
             mFetching = true;
+            mNoFollowersText.setVisibility(View.GONE);
             mAccountController.fetchFollowers(mAccountId, null);
         }
     }
 
     public void onEventMainThread(UpdatedFollowersEvent event) {
-        Log.d(TAG, "UpdatedFollowersEvent: " + event.getAccountId());
-        Log.d(TAG, "mAccountId: " + mAccountId);
 
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
-        Log.d(TAG, "UpdatedFollowersEvent: match");
 
         mFetching = false;
-        if (!event.isSuccessful()) {
-            Log.d(TAG, "UpdatedFollowersEvent: fail");
-            showToastError(event.getErrorMessage());
-            return;
-        }
-
-        Log.d(TAG, "UpdatedFollowersEvent: success");
-
 
         //lazily instantiate
         if (mAccounts == null) {
@@ -118,10 +126,24 @@ public class FollowersFragment extends BaseFragment
             mAdapter.setItems(mAccounts);
         }
 
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+
+            //show no followers message if this was the first fetch, so that we're not showing the loading circle anymore
+            //it's ok when there's already data, because that will be showing on screen already
+            if (mAccounts.size() == 0) {
+                mNoFollowersText.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
+
         mFollowerListing = event.getFollowerListing();
         if (mFollowerListing != null) {
             mFollowerListing.combineInto(mAccounts);
             //mAdapter.setItems(mAccounts);
+        }
+        if (mAccounts.size() == 0) {
+            mNoFollowersText.setVisibility(View.VISIBLE);
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -153,6 +175,7 @@ public class FollowersFragment extends BaseFragment
         if (mFollowerListing.getMore()) {
             mAccountController.fetchFollowers(mAccountId, mFollowerListing);
             mFetching = true;
+            mNoFollowersText.setVisibility(View.GONE);
         }
     }
 
