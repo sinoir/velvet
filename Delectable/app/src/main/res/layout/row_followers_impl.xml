@@ -2,6 +2,6 @@
 
 <com.delectable.mobile.ui.profile.widget.FollowersRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/follow_experts_row_height"
+    android:layout_height="@dimen/general_row_height"
     android:background="@drawable/bg_white_to_light_opacity"
     android:descendantFocusability="blocksDescendants" />
