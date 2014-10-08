@@ -5,7 +5,7 @@ import com.delectable.mobile.util.DateHelperUtil;
 import java.util.Comparator;
 import java.util.Date;
 
-public abstract class BaseListingElement {
+public abstract class BaseListingElement implements IDable{
 
     /**
      * Sorts Elements by newest to oldest
