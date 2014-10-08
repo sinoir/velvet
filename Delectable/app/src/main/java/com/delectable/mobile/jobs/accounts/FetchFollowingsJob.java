@@ -3,14 +3,9 @@ package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
-import com.delectable.mobile.jobs.BaseJob;
-import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountsFollowersRequest;
-import com.delectable.mobile.model.api.accounts.AccountsFollowersResponse;
-import com.path.android.jobqueue.Params;
+import com.delectable.mobile.events.accounts.UpdatedFollowingsEvent;
 
-public class FetchFollowersJob extends BaseFetchFollowersFollowingsJob {
+public class FetchFollowingsJob extends BaseFetchFollowersFollowingsJob {
 
     private static final String TAG = FetchFollowersJob.class.getSimpleName();
 
@@ -19,24 +14,23 @@ public class FetchFollowersJob extends BaseFetchFollowersFollowingsJob {
      * @param listing The previous ListingResponse if paginating. Pass in {@code null} if making a
      *                fresh request.
      */
-    public FetchFollowersJob(String id, BaseListingResponse<AccountMinimal> listing) {
+    public FetchFollowingsJob(String id, BaseListingResponse<AccountMinimal> listing) {
         super(id, listing);
     }
 
     @Override
     protected String getEndpoint() {
-        return "/accounts/followers";
+        return "/accounts/following";
     }
 
     @Override
     protected void postSuccessEvent(String id, BaseListingResponse<AccountMinimal> accountListing) {
-        mEventBus.post(new UpdatedFollowersEvent(id, accountListing));
-
+        mEventBus.post(new UpdatedFollowingsEvent(id, accountListing));
     }
 
     @Override
     protected void onCancel() {
         super.onCancel();
-        mEventBus.post(new UpdatedFollowersEvent(getErrorMessage()));
+        mEventBus.post(new UpdatedFollowingsEvent(getErrorMessage()));
     }
 }
