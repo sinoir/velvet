@@ -34,7 +34,7 @@ public class SearchPeopleRow extends BaseFollowAccountRow {
         updateData(account.getPhoto().getUrl(),
                 account.getFullName(),
                 account.getBio(),
-                account.isUserRelationshipTypeFollowing());
+                account.getCurrentUserRelationship());
     }
 
     @Override

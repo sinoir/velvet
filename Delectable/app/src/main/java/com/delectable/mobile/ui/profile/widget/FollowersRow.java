@@ -35,7 +35,7 @@ public class FollowersRow extends BaseFollowAccountRow {
         updateData(account.getPhoto().getBestThumb(),
                 account.getFullName(),
                 account.getBio(),
-                account.isUserRelationshipTypeFollowing());
+                account.getCurrentUserRelationship());
     }
 
     @Override

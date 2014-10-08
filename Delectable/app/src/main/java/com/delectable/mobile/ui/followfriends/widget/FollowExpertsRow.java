@@ -38,7 +38,7 @@ public class FollowExpertsRow extends BaseFollowAccountRow {
         updateData(account.getPhoto().getUrl(),
                 account.getFullName(),
                 account.getInfluencerTitlesString(),
-                account.isUserRelationshipTypeFollowing());
+                account.getCurrentUserRelationship());
     }
 
     @Override

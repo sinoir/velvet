@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
@@ -42,13 +43,25 @@ public class BaseFollowAccountRow extends RelativeLayout {
     }
 
     protected void updateData(String profileImageUrl, String name, String influencerTitles,
-            boolean isFollowing) {
+            int relationship) {
         //set no_photo first, so that when the user flicks through the list, it doesn't show another account's picture
         ImageLoaderUtil.loadImageIntoView(getContext(), R.drawable.no_photo, mProfileImage);
         ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mProfileImage);
         mName.setText(name);
         mInfluencerTitles.setText(influencerTitles);
-        mFollowButton.setSelected(isFollowing);
+
+        //set state of follow button depending on relationship
+        if (relationship == AccountMinimal.RELATION_TYPE_SELF) {
+            mFollowButton.setVisibility(View.INVISIBLE);
+        }
+        if (relationship == AccountMinimal.RELATION_TYPE_NONE) {
+            mFollowButton.setVisibility(View.VISIBLE);
+            mFollowButton.setSelected(false);
+        }
+        if (relationship == AccountMinimal.RELATION_TYPE_FOLLOWING) {
+            mFollowButton.setVisibility(View.VISIBLE);
+            mFollowButton.setSelected(true);
+        }
     }
 
     @OnClick(R.id.follow_button)
