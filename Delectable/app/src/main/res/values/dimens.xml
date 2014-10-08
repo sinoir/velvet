@@ -229,6 +229,8 @@
     <dimen name="navigation_user_profile_image_size">65dp</dimen>
     <dimen name="navigation_user_name_text_size">20sp</dimen>
     <dimen name="navigation_header_detail_text_size">14sp</dimen>
+    <dimen name="navigation_username_margins">10dp</dimen>
+    <dimen name="navigation_bio_margins">15dp</dimen>
 
     <!-- Recent Activity Feed -->
     <dimen name="recent_activity_time_ago_text_size">12sp</dimen>
@@ -238,6 +240,5 @@
     <!-- Capture comment stuff -->
     <dimen name="capture_comment_post_button_width">51dp</dimen>
     <dimen name="capture_comment_post_button_height">36dp</dimen>
-
 
 </resources>
