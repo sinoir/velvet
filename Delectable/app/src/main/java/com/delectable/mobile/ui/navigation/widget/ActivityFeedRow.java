@@ -3,9 +3,8 @@ package com.delectable.mobile.ui.navigation.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
-
-import org.ocpsoft.prettytime.PrettyTime;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -50,8 +49,7 @@ public class ActivityFeedRow extends RelativeLayout {
     }
 
     public void updateData(ActivityRecipient data) {
-        PrettyTime p = new PrettyTime();
-        String activityTime = p.format(data.getCreatedAtDate());
+        String activityTime = DateHelperUtil.getPrettyTimePastOnly(data.getCreatedAtDate());
 
         mText.setText(data.getText());
         mTimeAgo.setText(activityTime);

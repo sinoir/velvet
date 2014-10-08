@@ -9,9 +9,8 @@ import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
+import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
-
-import org.ocpsoft.prettytime.PrettyTime;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -235,8 +234,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         capturePercent = mCaptureData.getRatingPercentForId(userAccountId);
 
-        PrettyTime p = new PrettyTime();
-        captureTimeLocation = p.format(mCaptureData.getCreatedAtDate());
+        captureTimeLocation = DateHelperUtil.getPrettyTimePastOnly(mCaptureData.getCreatedAtDate());
 
         String location = "";
         if (mCaptureData.getLocationName() != null) {

@@ -1,6 +1,9 @@
 package com.delectable.mobile.util;
 
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelperUtil {
@@ -33,5 +36,28 @@ public class DateHelperUtil {
 
     public static Date dateFromDouble(double dateDouble) {
         return new Date(longDateFromDouble(dateDouble));
+    }
+
+    /**
+     * Use PrettyTime to get the Time in "ago" or "just now"
+     *
+     * Helps Fix where we'll never get "moments from now" when diffToTime is current time, it should
+     * dispaly "moments ago"
+     *
+     * @param diffToTime - Time we want to diff to
+     */
+    public static String getPrettyTimePastOnly(Date diffToTime) {
+        PrettyTime p = new PrettyTime();
+        Calendar currentTime = Calendar.getInstance();
+        String prettyTime;
+        if (currentTime.before(diffToTime)) {
+            // If we did pretty format on the current time, it would show up as "moments from now"
+            // instead of "moments ago" or "just now"
+            currentTime.add(Calendar.SECOND, -10);
+            prettyTime = p.format(currentTime);
+        } else {
+            prettyTime = p.format(diffToTime);
+        }
+        return prettyTime;
     }
 }
