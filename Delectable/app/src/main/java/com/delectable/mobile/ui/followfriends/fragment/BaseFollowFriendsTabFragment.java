@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * It leaves the retrieval of the data up to it's subclasses.
  */
 public abstract class BaseFollowFriendsTabFragment extends BaseFragment
-        implements FollowActionsHandler, AdapterView.OnItemClickListener{
+        implements FollowActionsHandler, AdapterView.OnItemClickListener {
 
     private static final String TAG = BaseFollowFriendsTabFragment.class.getSimpleName();
 
@@ -76,9 +76,11 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
             return;
         }
 
-        // Ignore FB Auth Errors when User hasn't authenticated
-        if (ErrorUtil.FACEBOOK_AUTH_NOT_FOUND == event.getErrorCode()) {
+        // Ignore FB/Twitter Auth Errors when User hasn't authenticated
+        if (ErrorUtil.FACEBOOK_AUTH_NOT_FOUND == event.getErrorCode() ||
+                ErrorUtil.TWITTER_AUTH_NOT_FOUND == event.getErrorCode()) {
             // TODO: Show FB Connect Empty state with "Connect to FB"
+            // TODO: Show Twitter Connect Empty state with "Connect to Twitter"
             return;
         }
         //event error
