@@ -306,6 +306,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         if (event.isSuccessful()) {
             mUserAccount.setFname(event.getFname());
             mUserAccount.setLname(event.getLname());
+            mUserAccount.setBio(event.getBio());
             updateUIWithData();
         }
     }
