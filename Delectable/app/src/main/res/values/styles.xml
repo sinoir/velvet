@@ -54,7 +54,6 @@
     <style name="NavigationUserProfileCountTexts">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:textColor">@color/d_medium_gray</item>
         <item name="android:textSize">@dimen/navigation_header_detail_text_size</item>
         <item name="fontName">whitney_book</item>
