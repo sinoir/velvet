@@ -78,10 +78,10 @@ public class NavHeader extends RelativeLayout {
     @OnClick({R.id.navigation_home, R.id.navigation_search, R.id.navigation_find_friends,
             R.id.navigation_settings})
     void onNavigationClicked(View navItem) {
-        boolean wasCurrentViewAlreadySelected = toggleViewSelection(navItem);
+        toggleViewSelection(navItem);
         int navIndex = mNavigationItems.indexOf(navItem);
         Log.d(TAG, "Clicked Nav Item: " + navIndex);
-        if (mActionListener != null && !wasCurrentViewAlreadySelected) {
+        if (mActionListener != null) {
             mActionListener.navItemSelected(navIndex);
         }
     }
