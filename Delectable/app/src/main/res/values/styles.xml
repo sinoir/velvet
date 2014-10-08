@@ -54,7 +54,6 @@
     <style name="NavigationUserProfileCountTexts">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:textColor">@color/d_medium_gray</item>
         <item name="android:textSize">@dimen/navigation_header_detail_text_size</item>
         <item name="fontName">whitney_book</item>
@@ -134,6 +133,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/signup_in_social_signin_button_text_size</item>
         <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="android:textAllCaps">true</item>
         <item name="fontName">whitney_book_sc</item>
     </style>
 
@@ -163,7 +163,7 @@
     <style name="SettingsEditText" parent="SettingsBaseTextStyle">
         <item name="fontName">whitney_book</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/settings_row_height</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_horizontal|bottom</item>
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>

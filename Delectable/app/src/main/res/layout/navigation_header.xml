@@ -14,7 +14,7 @@
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
             android:layout_width="@dimen/navigation_user_profile_image_size"
-            android:layout_height="65dp"
+            android:layout_height="@dimen/navigation_user_profile_image_size"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/profile_image1"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/navigation_username_margins"
+            android:layout_marginTop="@dimen/navigation_username_margins"
             android:layout_toRightOf="@id/profile_image1"
             android:textSize="@dimen/navigation_user_name_text_size"
             app:fontName="whitney_book" />
@@ -33,13 +34,14 @@
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/followers_count"
             style="@style/NavigationUserProfileCountTexts"
-            android:layout_alignBottom="@id/profile_image1"
+            android:layout_below="@id/nav_user_name"
+            android:layout_marginBottom="10dp"
             android:layout_toRightOf="@+id/profile_image1" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/following_count"
             style="@style/NavigationUserProfileCountTexts"
-            android:layout_alignBottom="@id/profile_image1"
+            android:layout_below="@id/nav_user_name"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/followers_count" />
 
@@ -47,10 +49,10 @@
             android:id="@+id/user_bio_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_image1"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_below="@id/followers_count"
+            android:layout_marginBottom="@dimen/navigation_bio_margins"
+            android:layout_marginLeft="@dimen/navigation_bio_margins"
+            android:layout_marginRight="@dimen/navigation_bio_margins"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:textSize="@dimen/navigation_header_detail_text_size"

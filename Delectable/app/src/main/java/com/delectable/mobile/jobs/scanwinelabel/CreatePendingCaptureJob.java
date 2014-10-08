@@ -42,7 +42,7 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
     @Override
     protected void onCancel() {
         super.onCancel();
-        getEventBus().post(new CreatedPendingCaptureEvent(getErrorMessage()));
+        getEventBus().post(new CreatedPendingCaptureEvent(getErrorMessage(), getErrorCode()));
     }
 
     @Override

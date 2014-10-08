@@ -4,6 +4,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -14,6 +16,16 @@ public class UserProfileActivity extends BaseActivity {
     private static final String TAG = UserProfileActivity.class.getSimpleName();
 
     private String mUserId;
+
+    /**
+     * Inits UserProfileActivity with the provided userAccountId.
+     */
+    public static Intent newIntent(Context packageContext, String userAccountId) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, userAccountId);
+        intent.setClass(packageContext, UserProfileActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

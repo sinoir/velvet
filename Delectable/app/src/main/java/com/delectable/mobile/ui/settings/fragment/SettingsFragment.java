@@ -67,6 +67,54 @@ public class SettingsFragment extends BaseFragment {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
 
+    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
+            Log.d(TAG + ".Facebook", "Session:" + session);
+            Log.d(TAG + ".Facebook", "Exception:" + exception);
+            // TODO: Handle errors and other conditions.
+            if (state.isOpened()) {
+                facebookConnect();
+            }
+        }
+    };
+
+    private Callback<TwitterSession> TwitterCallback = new Callback<TwitterSession>() {
+        @Override
+        public void success(Result<TwitterSession> twitterSessionResult) {
+
+            long twitterId = twitterSessionResult.data.getUserId();
+            String screenName = twitterSessionResult.data.getUserName();
+
+            //TODO improve when Twitter SDK is better documented
+            //This is ghetto bc there were no docs when I made this, didn't know how to use the data.getAuthToken().getAuthHeaders() method
+            //looks like this:
+            //authtoken: token=[TOKEN_VALUE],secret=[SECRET_VALUE]
+            String authCreds = twitterSessionResult.data.getAuthToken().toString();
+            String[] splitAuthCreds = authCreds.split(",");
+            String token = splitAuthCreds[0].split("token=")[1];
+            String tokenSecret = splitAuthCreds[1].split("secret=")[1];
+
+            //refreshing view before we make the call for immediate UI feed back
+            mUserAccount.setTwId(twitterId);
+            mUserAccount.setTwScreenName(screenName);
+            mUserAccount.setTwToken(token);
+            mUserAccount.setTwTokenSecret(tokenSecret);
+            updateUI();
+
+            mAccountController.associateTwitter(twitterId, token, tokenSecret, screenName);
+        }
+
+        @Override
+        public void failure(TwitterException e) {
+            //TODO debug this exception and show error, but don't show error if user clicked back intentionally
+            Log.d(TAG, "Twitter auth error", e);
+            Log.d(TAG, "Twitter error message:" + e.getMessage());
+            //showToastError("Twitter authentication failed");
+        }
+    };
+
     private static final int SELECT_PHOTO_REQUEST = 0;
 
     private static final int CAMERA_REQUEST = 1;
@@ -126,12 +174,12 @@ public class SettingsFragment extends BaseFragment {
 
     @InjectView(R.id.tagged_email_notification)
     ImageButton mTaggedEmailIcon;
+    //endregion
 
     @InjectView(R.id.delectable_version)
     TextView mVersionText;
 
     private String mUserId;
-    //endregion
 
     private Account mUserAccount;
 
@@ -151,7 +199,6 @@ public class SettingsFragment extends BaseFragment {
     private Bitmap mPhoto;
 
     private UiLifecycleHelper mFacebookUiHelper;
-
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -254,6 +301,7 @@ public class SettingsFragment extends BaseFragment {
         //cached out account object in case identifiers/profile items were modified
         UserInfo.setAccountPrivate(mUserAccount);
     }
+    //endregion
 
     @Override
     public void onDestroy() {
@@ -266,8 +314,6 @@ public class SettingsFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
         mFacebookUiHelper.onSaveInstanceState(outState);
     }
-    //endregion
-
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
@@ -329,13 +375,13 @@ public class SettingsFragment extends BaseFragment {
         }
         return false;
     }
+    //endregion
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mFacebookUiHelper.onActivityResult(requestCode, resultCode, data);
         mHiddenTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
-
 
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
@@ -372,8 +418,12 @@ public class SettingsFragment extends BaseFragment {
         }
 
 
-
     }
+    //endregion
+
+    //region API Requests
+
+    //region Setting Profile Photo Endpoints
 
     /**
      * @return Returns null if the image couldn't be retrieved.
@@ -394,8 +444,6 @@ public class SettingsFragment extends BaseFragment {
             return null;
         }
     }
-    //endregion
-
 
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
@@ -411,11 +459,6 @@ public class SettingsFragment extends BaseFragment {
         showToastError(event.getErrorMessage());
 
     }
-    //endregion
-
-    //region API Requests
-
-    //region Setting Profile Photo Endpoints
 
     /**
      * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
@@ -423,6 +466,8 @@ public class SettingsFragment extends BaseFragment {
     private void facebookifyProfilePhoto() {
         mAccountController.facebookifyProfilePhoto();
     }
+
+    //endregion
 
     /**
      * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
@@ -448,9 +493,6 @@ public class SettingsFragment extends BaseFragment {
         showToastError(event.getErrorMessage());
     }
 
-    //endregion
-
-
     //region Profile Updates
     private void updateProfile(String fname, String lname, String url, String bio) {
         mAccountController.updateProfile(fname, lname, url, bio);
@@ -467,7 +509,6 @@ public class SettingsFragment extends BaseFragment {
         }
         updateUI(); //ui reverts back to original state if error
     }
-
 
     private void modifyPhone(String number) {
         modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
@@ -536,6 +577,7 @@ public class SettingsFragment extends BaseFragment {
         }
         updateUI(); //ui reverts back to original state if error
     }
+    //endregion
 
     private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
         mAccountController.updateSetting(key, setting);
@@ -550,8 +592,6 @@ public class SettingsFragment extends BaseFragment {
         }
         updateUI(); //ui reverts back to original state if error
     }
-    //endregion
-
 
     //region Profile Image Actions
     @OnClick(R.id.profile_image)
@@ -565,8 +605,9 @@ public class SettingsFragment extends BaseFragment {
         ArrayList<String> listItems = new ArrayList<String>();
         listItems.add(PHOTO_LIBRARY, getString(R.string.settings_choose_from_library));
         listItems.add(TAKE_PHOTO, getString(R.string.settings_take_photo));
-        //TODO hide facebook row if user is not facebook connected
-        listItems.add(FACEBOOK, getString(R.string.settings_import_from_facebook));
+        if (mUserAccount.getFbId() != null) {
+            listItems.add(FACEBOOK, getString(R.string.settings_import_from_facebook));
+        }
 
         SetProfilePicDialog dialog = SetProfilePicDialog.newInstance(listItems);
         dialog.setCallback(new SetProfilePicDialog.Callback() {
@@ -597,6 +638,8 @@ public class SettingsFragment extends BaseFragment {
 
         startActivityForResult(intent, SELECT_PHOTO_REQUEST);
     }
+    //endregion
+    //endregion
 
     private void launchCamera() {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -606,9 +649,6 @@ public class SettingsFragment extends BaseFragment {
     private void setFacebookPhotoAsProfile() {
         facebookifyProfilePhoto();
     }
-    //endregion
-    //endregion
-
 
     //region Button Click Actions
     @OnClick(R.id.facebook_value)
@@ -620,19 +660,6 @@ public class SettingsFragment extends BaseFragment {
                     getString(R.string.settings_disconnect), null, DISCONNECT_FACEBOOK);
         }
     }
-
-    private Session.StatusCallback mFacebookCallback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            Log.d(TAG + ".Facebook", "Session State: " + session.getState());
-            Log.d(TAG + ".Facebook", "Session:" + session);
-            Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
-            if (state.isOpened()) {
-                facebookConnect();
-            }
-        }
-    };
 
     public void facebookConnect() {
         Session session = Session.getActiveSession();
@@ -659,39 +686,6 @@ public class SettingsFragment extends BaseFragment {
                     getString(R.string.settings_disconnect), null, DISCONNECT_TWITTER);
         }
     }
-
-    private Callback<TwitterSession> TwitterCallback = new Callback<TwitterSession>() {
-        @Override
-        public void success(Result<TwitterSession> twitterSessionResult) {
-
-            long twitterId = twitterSessionResult.data.getUserId();
-            String screenName = twitterSessionResult.data.getUserName();
-
-            //TODO improve when Twitter SDK is better documented
-            //This is ghetto bc there were no docs when I made this, didn't know how to use the data.getAuthToken().getAuthHeaders() method
-            //looks like this:
-            //authtoken: token=[TOKEN_VALUE],secret=[SECRET_VALUE]
-            String authCreds = twitterSessionResult.data.getAuthToken().toString();
-            String[] splitAuthCreds = authCreds.split(",");
-            String token = splitAuthCreds[0].split("token=")[1];
-            String tokenSecret = splitAuthCreds[1].split("secret=")[1];
-
-            //refreshing view before we make the call for immediate UI feed back
-            mUserAccount.setTwId(twitterId);
-            mUserAccount.setTwScreenName(screenName);
-            mUserAccount.setTwToken(token);
-            mUserAccount.setTwTokenSecret(tokenSecret);
-            updateUI();
-
-            mAccountController.associateTwitter(twitterId, token, tokenSecret, screenName);
-        }
-
-        @Override
-        public void failure(TwitterException e) {
-            //TODO debug this exception and show error, but don't show error if user clicked back intentionally
-            //showToastError("Twitter authentication failed");
-        }
-    };
 
     public void onEventMainThread(AssociateTwitterEvent event) {
         if (event.isSuccessful()) {

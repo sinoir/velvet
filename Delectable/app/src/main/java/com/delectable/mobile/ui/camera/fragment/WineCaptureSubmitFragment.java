@@ -6,8 +6,10 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.BaseEvent;
 import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
@@ -17,6 +19,11 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.TwitterUtil;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.models.Tweet;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,6 +54,20 @@ import butterknife.OnClick;
 public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final String TAG = WineCaptureSubmitFragment.class.getSimpleName();
+
+    private Callback<Tweet> TwitterCallback = new Callback<Tweet>() {
+        @Override
+        public void success(Result<Tweet> tweetResult) {
+            Log.d(TAG, "tweet success!");
+        }
+
+        @Override
+        public void failure(TwitterException e) {
+            Log.d(TAG, "tweet fail");
+            Log.d(TAG, "TwitterException", e);
+            showToastError("Tweet failed: " + e.getMessage());
+        }
+    };
 
     private static final String sArgsImageData = "sArgsImageData";
 
@@ -313,7 +334,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);
-            showToastError(event.getErrorMessage());
+            handleEventErrorMessage(event);
         }
     }
 
@@ -327,22 +348,35 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);
-            showToastError(event.getErrorMessage());
+            handleEventErrorMessage(event);
         }
     }
 
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
         if (event.isSuccessful()) {
             launchCurrentUserProfile();
+            if (mShareTwitterButton.isChecked()) {
+                String tweet = event.getCaptureDetails().getTweet();
+                String shortUrl = event.getCaptureDetails().getShortShareUrl();
+                TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
+            }
             if (mShareInstagramButton.isChecked()) {
                 InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
                         mCommentEditText.getText().toString());
             }
         } else {
-            showToastError(event.getErrorMessage());
+            handleEventErrorMessage(event);
         }
         mIsPostingCapture = false;
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void handleEventErrorMessage(BaseEvent event) {
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(R.string.error_capture_wine_no_network);
+        } else {
+            showToastError(event.getErrorMessage());
+        }
     }
 
     private void launchCurrentUserProfile() {
@@ -388,8 +422,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @OnCheckedChanged(R.id.share_twitter)
     protected void shareCaptureOnTwitter(CompoundButton view, boolean isChecked) {
         // TODO: Check if user connected Twiter:
-        boolean isConnectedToTwitter = false;
-        if (!isConnectedToTwitter) {
+        if (!TwitterUtil.isLoggedIn()) {
             showToastError(R.string.error_connect_twitter);
             view.setChecked(false);
             return;

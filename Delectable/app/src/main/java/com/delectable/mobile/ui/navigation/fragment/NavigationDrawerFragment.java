@@ -93,7 +93,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
             mCurrentSelectedNavItem = savedInstanceState.getInt(STATE_SELECTED_POSITION);
         }
 
-        navItemSelected(mCurrentSelectedNavItem);
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedNavItem);
+        }
     }
 
     @Override
@@ -304,6 +306,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         if (event.isSuccessful()) {
             mUserAccount.setFname(event.getFname());
             mUserAccount.setLname(event.getLname());
+            mUserAccount.setBio(event.getBio());
             updateUIWithData();
         }
     }
@@ -362,11 +365,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void navItemSelected(int navItem) {
+        boolean wasNavAlreadySelected = mCurrentSelectedNavItem == navItem;
         mCurrentSelectedNavItem = navItem;
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null) {
+        if (mCallbacks != null && !wasNavAlreadySelected) {
             mCallbacks.onNavigationDrawerItemSelected(navItem);
         }
     }

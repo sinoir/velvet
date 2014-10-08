@@ -26,6 +26,7 @@
         android:text="@string/login_sign_up"
         android:textColor="@color/d_black"
         android:textSize="@dimen/login_signup_button_text_height"
+        android:textAllCaps="true"
         app:fontName="whitney_medium_sc" />
 
     <RelativeLayout

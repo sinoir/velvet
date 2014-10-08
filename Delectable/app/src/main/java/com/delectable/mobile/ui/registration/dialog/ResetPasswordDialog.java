@@ -1,13 +1,15 @@
 package com.delectable.mobile.ui.registration.dialog;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.ui.common.widget.FontEditText;
+import com.delectable.mobile.util.HelperUtil;
 
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,6 +31,9 @@ public class ResetPasswordDialog extends DialogFragment {
     private static final String TAG = ResetPasswordDialog.class.getSimpleName();
 
     public static final String EMAIL = "EMAIL";
+
+    @Inject
+    RegistrationController mRegistrationController;
 
     @InjectView(R.id.email_address_field)
     FontEditText mEmailField;
@@ -47,6 +55,7 @@ public class ResetPasswordDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.DelectableTheme_Dialog);
         if (getArguments() != null) {
             mPhoneEmail = getArguments().getString(EMAIL);
@@ -111,11 +120,14 @@ public class ResetPasswordDialog extends DialogFragment {
 
     @OnClick(R.id.reset_password_textview)
     protected void onResetPasswordClick() {
-        Log.d(TAG, "onResetPasswordClick");
-        //TODO connect to reset password endpoint, not live yet when this was made
-
+        if (HelperUtil.isEmailValid(mEmailField.getText().toString().trim())) {
+            mRegistrationController.resetPassword(mEmailField.getText().toString().trim());
+            // Dialog is dismissed by SignInFragment when password reset was successful
+        } else {
+            Toast.makeText(getActivity(), R.string.reset_password_dialog_invalid_email,
+                    Toast.LENGTH_LONG).show();
+        }
     }
-
 
 }
 

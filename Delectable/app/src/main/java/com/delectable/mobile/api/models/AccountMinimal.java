@@ -10,6 +10,9 @@ public class AccountMinimal extends AccountSearch implements Parcelable {
 
     private String e_tag;
 
+    //tw_screen_name only exists in the response for searching twitter friends
+    private String tw_screen_name;
+
     public boolean isShadowbanned() {
         return shadowbanned;
     }
@@ -26,6 +29,14 @@ public class AccountMinimal extends AccountSearch implements Parcelable {
         this.e_tag = e_tag;
     }
 
+    public String getTwScreenName() {
+        return tw_screen_name;
+    }
+
+    public void setTwScreenName(String tw_screen_name) {
+        this.tw_screen_name = tw_screen_name;
+    }
+
     @Override
     public String toString() {
         return "AccountMinimal{" +
@@ -40,6 +51,7 @@ public class AccountMinimal extends AccountSearch implements Parcelable {
                 ", current_user_relationship=" + getCurrentUserRelationship() +
                 ", shadowbanned=" + shadowbanned +
                 ", e_tag='" + e_tag + '\'' +
+                ", tw_screen_name='" + tw_screen_name + '\'' +
                 '}';
     }
 

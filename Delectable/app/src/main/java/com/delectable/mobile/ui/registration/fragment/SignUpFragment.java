@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.util.HelperUtil;
 import com.delectable.mobile.util.NameUtil;
 
@@ -89,6 +90,10 @@ public class SignUpFragment extends BaseSignUpInFragment {
         if (invalidFieldExists()) {
             return;
         }
+
+        mLoadingDialog = new LoadingCircleDialog();
+        mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
+
         String nameEntered = getNameField().getText().toString().trim();
         String email = getEmailField().getText().toString().trim();
         String password = getPasswordField().getText().toString().trim();

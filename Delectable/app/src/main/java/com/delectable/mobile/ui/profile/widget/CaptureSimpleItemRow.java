@@ -6,9 +6,8 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
+import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
-
-import org.ocpsoft.prettytime.PrettyTime;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -178,8 +177,7 @@ public class CaptureSimpleItemRow extends RelativeLayout {
     }
 
     private void updateCaptureTime() {
-        PrettyTime p = new PrettyTime();
-        String captureTime = p.format(mCaptureData.getCreatedAtDate());
+        String captureTime = DateHelperUtil.getPrettyTimePastOnly(mCaptureData.getCreatedAtDate());
         mCaptureTime.setText(captureTime);
     }
 

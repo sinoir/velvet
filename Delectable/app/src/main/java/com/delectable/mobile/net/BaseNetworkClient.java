@@ -14,6 +14,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public abstract class BaseNetworkClient {
 
@@ -22,6 +23,13 @@ public abstract class BaseNetworkClient {
     protected OkHttpClient mClient = new OkHttpClient();
 
     private String TAG = this.getClass().getSimpleName();
+
+    public BaseNetworkClient() {
+        // Configure OkHttp
+        mClient.setConnectTimeout(10, TimeUnit.SECONDS);
+        mClient.setWriteTimeout(10, TimeUnit.SECONDS);
+        mClient.setReadTimeout(30, TimeUnit.SECONDS);
+    }
 
     protected abstract String getBaseUrl();
 

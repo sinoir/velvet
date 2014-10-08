@@ -1,6 +1,8 @@
 package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
+import com.delectable.mobile.events.registrations.ResetPasswordEvent;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.util.HelperUtil;
 
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import butterknife.OnClick;
 
@@ -18,6 +21,8 @@ import butterknife.OnClick;
 public class SignInFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignInFragment.class.getSimpleName();
+
+    private ResetPasswordDialog mResetPasswordDialog;
 
     /**
      * Sets whether the done button is enabled or not depending on whether the fields are all filled
@@ -73,6 +78,10 @@ public class SignInFragment extends BaseSignUpInFragment {
         if (invalidFieldExists()) {
             return;
         }
+
+        mLoadingDialog = new LoadingCircleDialog();
+        mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
+
         String email = getEmailField().getText().toString().trim();
         String password = getPasswordField().getText().toString().trim();
 
@@ -82,9 +91,11 @@ public class SignInFragment extends BaseSignUpInFragment {
     @OnClick(R.id.forgot_textview)
     protected void onForgotTextClick() {
         Log.d(TAG, "onForgotTextClick");
-        ResetPasswordDialog dialog = ResetPasswordDialog.newInstance(getPhoneEmail());
-        dialog.setTargetFragment(this, RESET_PASSWORD_DIALOG); //callback goes to onActivityResult
-        dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
+        mResetPasswordDialog = ResetPasswordDialog.newInstance(getPhoneEmail());
+        mResetPasswordDialog
+                .setTargetFragment(this, RESET_PASSWORD_DIALOG); //callback goes to onActivityResult
+        mResetPasswordDialog
+                .show(getFragmentManager(), mResetPasswordDialog.getClass().getSimpleName());
     }
 
     @Override
@@ -101,6 +112,22 @@ public class SignInFragment extends BaseSignUpInFragment {
             return true;
         }
         return false;
+    }
+
+    public void onEventMainThread(ResetPasswordEvent event) {
+        String msg;
+
+        if (event.isSuccessful()) {
+            msg = String
+                    .format(getResources().getString(R.string.reset_password_dialog_msg_success),
+                            event.mEmail);
+            mResetPasswordDialog.dismiss();
+        } else {
+            msg = String.format(getResources().getString(R.string.reset_password_dialog_msg_failed),
+                    event.mEmail);
+        }
+
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
 }

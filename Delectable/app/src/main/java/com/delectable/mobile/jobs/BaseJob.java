@@ -6,13 +6,15 @@ import com.delectable.mobile.util.DelException;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
-import android.util.Log;
+import java.net.UnknownHostException;
 
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
 public class BaseJob extends Job {
+
+    private static final int RETRY_LIMIT = 3;
 
     @Inject
     protected EventBus mEventBus;
@@ -44,15 +46,23 @@ public class BaseJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        // TODO check error type and see if a retry makes sense
         mErrorMessage = throwable.getMessage();
         if (throwable instanceof DelException) {
             int error = ((DelException) throwable).getErrorCode();
             mErrorCode = ErrorUtil.valueOfCode(error);
+            return false;
         }
-        Log.e(TAG + ".Error", "", throwable);
+        if (throwable instanceof UnknownHostException) {
+            // Unknown Host will most likely mean there's no network / internet available
+            mErrorCode = ErrorUtil.NO_NETWORK_ERROR;
+            return false;
+        }
+        return true;
+    }
 
-        return false;
+    @Override
+    protected int getRetryLimit() {
+        return RETRY_LIMIT;
     }
 
     public String getErrorMessage() {
@@ -78,4 +88,5 @@ public class BaseJob extends Job {
     public NetworkClient getNetworkClient() {
         return mNetworkClient;
     }
+
 }

@@ -58,7 +58,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     @Override
     protected void onCancel() {
         super.onCancel();
-        getEventBus().post(new IdentifyLabelScanEvent(getErrorMessage()));
+        getEventBus().post(new IdentifyLabelScanEvent(getErrorMessage(), getErrorCode()));
     }
 
     @Override

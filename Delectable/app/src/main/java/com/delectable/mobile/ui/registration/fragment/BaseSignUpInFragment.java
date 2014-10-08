@@ -147,7 +147,7 @@ public abstract class BaseSignUpInFragment extends BaseFragment
      */
     private String mPhoneEmail;
 
-    private LoadingCircleDialog mLoadingDialog;
+    protected LoadingCircleDialog mLoadingDialog;
 
     //region Lifecycle
     @Override
