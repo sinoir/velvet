@@ -50,24 +50,23 @@ public enum ErrorUtil {
     OAUTH_GRANT_NOT_FOUND(11400),
     OAUTH_GRANT_UNAUTHORIZED(11405),
     OAUTH_GRANT_EXPIRED(11410),
-    UNDOCUMENTED_ERROR_CODE(-1);
+    UNDOCUMENTED_ERROR_CODE(-1),
+    // Local App Codes
+    NO_NETWORK_ERROR(50000);
 
-    private int mCode;
-
-    private ErrorUtil(int code) {
-        mCode = code;
-    }
-
-    public int getCode() {
-        return mCode;
-    }
-
-    private static final HashMap<Integer, ErrorUtil> ERRORS_BY_CODE = new HashMap<Integer, ErrorUtil>();
+    private static final HashMap<Integer, ErrorUtil> ERRORS_BY_CODE
+            = new HashMap<Integer, ErrorUtil>();
 
     static {
         for (ErrorUtil error : values()) {
             ERRORS_BY_CODE.put(error.getCode(), error);
         }
+    }
+
+    private int mCode;
+
+    private ErrorUtil(int code) {
+        mCode = code;
     }
 
     public static ErrorUtil valueOfCode(int code) {
@@ -76,6 +75,10 @@ public enum ErrorUtil {
             return error;
         }
         return UNDOCUMENTED_ERROR_CODE;
+    }
+
+    public int getCode() {
+        return mCode;
     }
 
 }
