@@ -6,8 +6,10 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.WineScanController;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.BaseEvent;
 import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
@@ -52,6 +54,20 @@ import butterknife.OnClick;
 public class WineCaptureSubmitFragment extends BaseFragment {
 
     private static final String TAG = WineCaptureSubmitFragment.class.getSimpleName();
+
+    private Callback<Tweet> TwitterCallback = new Callback<Tweet>() {
+        @Override
+        public void success(Result<Tweet> tweetResult) {
+            Log.d(TAG, "tweet success!");
+        }
+
+        @Override
+        public void failure(TwitterException e) {
+            Log.d(TAG, "tweet fail");
+            Log.d(TAG, "TwitterException", e);
+            showToastError("Tweet failed: " + e.getMessage());
+        }
+    };
 
     private static final String sArgsImageData = "sArgsImageData";
 
@@ -318,7 +334,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);
-            showToastError(event.getErrorMessage());
+            handleEventErrorMessage(event);
         }
     }
 
@@ -332,7 +348,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);
-            showToastError(event.getErrorMessage());
+            handleEventErrorMessage(event);
         }
     }
 
@@ -349,25 +365,19 @@ public class WineCaptureSubmitFragment extends BaseFragment {
                         mCommentEditText.getText().toString());
             }
         } else {
-            showToastError(event.getErrorMessage());
+            handleEventErrorMessage(event);
         }
         mIsPostingCapture = false;
         mProgressBar.setVisibility(View.GONE);
     }
 
-    private Callback<Tweet> TwitterCallback = new Callback<Tweet>() {
-        @Override
-        public void success(Result<Tweet> tweetResult) {
-            Log.d(TAG, "tweet success!");
+    private void handleEventErrorMessage(BaseEvent event) {
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(R.string.error_capture_wine_no_network);
+        } else {
+            showToastError(event.getErrorMessage());
         }
-
-        @Override
-        public void failure(TwitterException e) {
-            Log.d(TAG, "tweet fail");
-            Log.d(TAG, "TwitterException", e);
-            showToastError("Tweet failed: " + e.getMessage());
-        }
-    };
+    }
 
     private void launchCurrentUserProfile() {
         getActivity().finish();

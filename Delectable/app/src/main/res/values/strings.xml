@@ -25,6 +25,11 @@
 
     <string name="error_invalid_username_password">Invalid Email and/or Password.</string>
 
+    <string name="error_no_email_client">There is no email client installed</string>
+    <string name="error_sms_failed">SMS failed</string>
+
+    <string name="error_capture_wine_no_network">Failed to Capture Wine.  Please make sure you are connected to the internet.</string>
+
     <!-- Version Upgrade Dialog-->
     <string name="version_upgrade_your_app_out_of_date">Your app is out of date, download the new one!</string>
     <string name="version_upgrade_upgrade">upgrade</string>
@@ -219,10 +224,5 @@
     <string name="settings_disconnect_twitter">Disconnect twitter account?</string>
     <string name="settings_disconnect_facebook">Disconnect facebook account?</string>
     <string name="settings_disconnect">disconnect</string>
-
-
-
-    <string name="error_no_email_client">There is no email client installed</string>
-    <string name="error_sms_failed">SMS failed</string>
 
 </resources>

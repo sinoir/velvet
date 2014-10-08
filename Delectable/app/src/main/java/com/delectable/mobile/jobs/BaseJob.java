@@ -6,6 +6,8 @@ import com.delectable.mobile.util.DelException;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
+import java.net.UnknownHostException;
+
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
@@ -48,6 +50,11 @@ public class BaseJob extends Job {
         if (throwable instanceof DelException) {
             int error = ((DelException) throwable).getErrorCode();
             mErrorCode = ErrorUtil.valueOfCode(error);
+            return false;
+        }
+        if (throwable instanceof UnknownHostException) {
+            // Unknown Host will most likely mean there's no network / internet available
+            mErrorCode = ErrorUtil.NO_NETWORK_ERROR;
             return false;
         }
         return true;
