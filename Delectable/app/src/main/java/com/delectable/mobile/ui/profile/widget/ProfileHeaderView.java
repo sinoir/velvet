@@ -25,6 +25,8 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public static final int STATE_SELF = 2;
 
+    private final ArrayList<View> mPagerViews;
+
     private ProfileHeaderMainView mProfileHeaderMainView;
 
     private ProfileHeaderBioView mProfileHeaderBioView;
@@ -62,13 +64,15 @@ public class ProfileHeaderView extends RelativeLayout implements
         mProfileHeaderBioView = new ProfileHeaderBioView(context);
 
         // Setup ViewPager Adapter for Main/Bio
-        ArrayList<View> pagerViews = new ArrayList<View>();
-        pagerViews.add(mProfileHeaderMainView);
-        pagerViews.add(mProfileHeaderBioView);
-        mAdapter = new SimpleViewPagerAdapter(pagerViews);
+        mPagerViews = new ArrayList<View>();
+        mPagerViews.add(mProfileHeaderMainView);
+
+        mAdapter = new SimpleViewPagerAdapter(mPagerViews);
         mViewPager.setAdapter(mAdapter);
         // Must set pager to indicator after pager has adapter
         mIndicator.setViewPager(mViewPager);
+        // Default is invisible, unless we add bio view
+        mIndicator.setVisibility(View.INVISIBLE);
 
         mFollowText = context.getString(R.string.profile_follow);
         mUnfollowText = context.getString(R.string.profile_unfollow);
@@ -89,6 +93,24 @@ public class ProfileHeaderView extends RelativeLayout implements
                 }
             }
         });
+    }
+
+    private void addBioView() {
+        // Add only if view hasn't been added
+        if (!mPagerViews.contains(mProfileHeaderBioView)) {
+            mPagerViews.add(mProfileHeaderBioView);
+            mIndicator.setVisibility(View.VISIBLE);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void removeBioView() {
+        // Remove view if has already been added
+        if (mPagerViews.contains(mProfileHeaderBioView)) {
+            mPagerViews.remove(mProfileHeaderBioView);
+            mIndicator.setVisibility(View.INVISIBLE);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -118,7 +140,6 @@ public class ProfileHeaderView extends RelativeLayout implements
         }
     }
 
-
     public CircleImageView getUserImageView() {
         return mProfileHeaderMainView.getUserImageView();
     }
@@ -140,6 +161,11 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     public void setUserBio(String userBio) {
+        if (userBio != null && !userBio.trim().equals("")) {
+            addBioView();
+        } else {
+            removeBioView();
+        }
         mProfileHeaderBioView.setUserBio(userBio);
     }
 
