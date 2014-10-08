@@ -21,7 +21,7 @@ public abstract class BasePhotoUploadJob extends BaseJob {
     private byte[] mImageData;
 
     public BasePhotoUploadJob(byte[] imageData) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mImageData = imageData;
     }
 

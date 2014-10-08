@@ -19,7 +19,7 @@ public class AddCaptureFromPendingCaptureJob extends BaseJob {
     private AddCaptureFromPendingCaptureRequest mRequest;
 
     public AddCaptureFromPendingCaptureJob(AddCaptureFromPendingCaptureRequest request) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC).persist());
         // TODO: Possibly Save the request and then load the request from a cache to perform "async" requests?
         mRequest = request;
     }
@@ -47,7 +47,8 @@ public class AddCaptureFromPendingCaptureJob extends BaseJob {
     @Override
     protected void onCancel() {
         super.onCancel();
-        getEventBus().post(new AddedCaptureFromPendingCaptureEvent(getErrorMessage()));
+        getEventBus()
+                .post(new AddedCaptureFromPendingCaptureEvent(getErrorMessage(), getErrorCode()));
     }
 
     @Override

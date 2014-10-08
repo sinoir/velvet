@@ -1,6 +1,7 @@
 package com.delectable.mobile.events.scanwinelabel;
 
 import com.delectable.mobile.api.models.PendingCapture;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.events.BaseEvent;
 
 public class CreatedPendingCaptureEvent extends BaseEvent {
@@ -12,8 +13,8 @@ public class CreatedPendingCaptureEvent extends BaseEvent {
         mPendingCapture = pendingCapture;
     }
 
-    public CreatedPendingCaptureEvent(String errorMessage) {
-        super(errorMessage);
+    public CreatedPendingCaptureEvent(String errorMessage, ErrorUtil errorCode) {
+        super(errorMessage, errorCode);
     }
 
     public PendingCapture getPendingCapture() {
