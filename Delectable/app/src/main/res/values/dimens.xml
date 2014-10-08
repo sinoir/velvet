@@ -18,7 +18,6 @@
     <dimen name="circle_pager_indicator_radius">4dp</dimen>
     <dimen name="custom_ab_title_text_size">22sp</dimen>
     <dimen name="custom_ab_action_text_size">16sp</dimen>
-    <dimen name="font_offset_whitney_medium_sc">3dp</dimen>
 
     <!-- General Dialog -->
     <dimen name="dialog_horizontal_spacing">20dp</dimen>
@@ -48,7 +47,7 @@
     <!-- Signup/Login-->
     <dimen name="login_button_height">70dp</dimen>
     <dimen name="login_button_corner_radius">6dp</dimen>
-    <dimen name="login_signup_button_text_height">22dp</dimen>
+    <dimen name="login_signup_button_text_height">20dp</dimen>
     <dimen name="login_already_have_account_text_height">16sp</dimen>
 
 
@@ -61,21 +60,21 @@
     <dimen name="signup_in_done_button_height">36dp</dimen>
     <dimen name="signup_in_done_button_width">66dp</dimen>
     <dimen name="signup_in_done_button_corner_radius">4dp</dimen>
-    <dimen name="signup_in_done_button_text_height">16sp</dimen>
+    <dimen name="signup_in_done_button_text_height">14sp</dimen>
     <dimen name="signup_in_done_button_right_margin">20dp</dimen>
     <dimen name="signup_in_field_label_text_size">16sp</dimen>
     <dimen name="signup_in_field_text_size">16sp</dimen>
     <dimen name="signup_in_field_vertical_spacing">20dp</dimen>
     <!-- bottom half -->
     <dimen name="signup_in_bottom_half_horizontal_spacing">16dp</dimen>
-    <dimen name="signup_in_or_text_size">19sp</dimen>
+    <dimen name="signup_in_or_text_size">15sp</dimen>
     <dimen name="signup_in_or_height">60dp</dimen>
     <dimen name="signup_in_social_signin_button_height">70dp</dimen>
     <dimen name="signup_in_social_signin_button_stroke_width">1dp</dimen>
     <dimen name="signup_in_social_signin_button_corner_radius">6dp</dimen>
     <dimen name="signup_in_social_icon_height">30dp</dimen>
     <dimen name="signup_in_social_signin_button_horizontal_padding">23dp</dimen>
-    <dimen name="signup_in_social_signin_button_text_size">19sp</dimen>
+    <dimen name="signup_in_social_signin_button_text_size">17sp</dimen>
     <dimen name="signup_in_social_signin_button_vertical_spacing">15dp</dimen>
     <dimen name="signup_in_terms_privacy_height">60dp</dimen>
     <dimen name="signup_in_terms_privacy_text_size">14sp</dimen>
