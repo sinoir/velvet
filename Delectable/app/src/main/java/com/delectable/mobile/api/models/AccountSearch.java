@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Account that is context search.
  */
-public class AccountSearch implements Parcelable {
+public class AccountSearch implements Parcelable, IDable {
 
     public static transient int RELATION_TYPE_SELF = -1;
 

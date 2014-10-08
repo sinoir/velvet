@@ -9,19 +9,28 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 public class ProfileHeaderMainView extends LinearLayout {
 
-    private TextView mUserNameTextView;
+    @InjectView(R.id.user_name)
+    protected TextView mUserNameTextView;
 
-    private TextView mCaptureWineCountTextView;
+    @InjectView(R.id.capture_wine_count)
+    protected TextView mCaptureWineCountTextView;
 
-    private TextView mFollowerCountTextView;
+    @InjectView(R.id.followers_count)
+    protected TextView mFollowerCountTextView;
 
-    private TextView mFollowingCountTextView;
+    @InjectView(R.id.following_count)
+    protected TextView mFollowingCountTextView;
 
-    private CircleImageView mUserImageView;
+    @InjectView(R.id.profile_image1)
+    protected CircleImageView mUserImageView;
 
-    private ProfileHeaderMainViewActionListeners mActionListener;
+    private ActionListener mActionListener;
 
     public ProfileHeaderMainView(Context context) {
         this(context, null);
@@ -35,14 +44,8 @@ public class ProfileHeaderMainView extends LinearLayout {
             int defStyle) {
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header_main, this);
+        ButterKnife.inject(this);
         setOrientation(VERTICAL);
-
-        mUserImageView = (CircleImageView) findViewById(R.id.profile_image1);
-        mUserNameTextView = (TextView) findViewById(R.id.user_name);
-        mCaptureWineCountTextView = (TextView) findViewById(R.id.capture_wine_count);
-        mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
-        mFollowerCountTextView = (TextView) findViewById(R.id.followers_count);
-        mFollowingCountTextView = (TextView) findViewById(R.id.following_count);
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -84,17 +87,29 @@ public class ProfileHeaderMainView extends LinearLayout {
         return mFollowingCountTextView;
     }
 
-    public ProfileHeaderMainViewActionListeners getActionListener() {
+    public ActionListener getActionListener() {
         return mActionListener;
     }
 
-    public void setActionListener(
-            ProfileHeaderMainViewActionListeners actionListener) {
+    public void setActionListener(ActionListener actionListener) {
         mActionListener = actionListener;
     }
 
-    // TODO: Implement clicker for follow/following text views
-    public static interface ProfileHeaderMainViewActionListeners {
+    @OnClick(R.id.followers_count)
+    protected void onFollowersCountTextClick() {
+        if (mActionListener != null) {
+            mActionListener.followerCountClicked();
+        }
+    }
+
+    @OnClick(R.id.following_count)
+    protected void onFollowingCountTextClick() {
+        if (mActionListener != null) {
+            mActionListener.followingCountClicked();
+        }
+    }
+
+    public static interface ActionListener {
 
         public void followerCountClicked();
 
