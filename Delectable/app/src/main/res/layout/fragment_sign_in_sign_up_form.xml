@@ -141,45 +141,31 @@
                 android:textSize="@dimen/signup_in_or_text_size"
                 app:fontName="whitney_book_sc" />
 
-            <RelativeLayout
+            <com.delectable.mobile.ui.common.widget.Delectabutton
+                style="@style/delectabutton_large"
                 android:id="@+id/facebook_button"
-                style="@style/SignUpIn_social_button"
-                android:layout_below="@id/or_textview">
+                android:layout_below="@id/or_textview"
+                android:text="@string/signup_in_sign_in_using_facebook"
+                app:type="large"
+                app:icon="@drawable/ic_fb" />
 
-                <ImageView
-                    style="@style/SignUpIn_social_icon"
-                    android:src="@drawable/ic_fb" />
+            <com.facebook.widget.LoginButton
+                android:id="@+id/facebook_sign_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:duplicateParentState="true"
+                android:visibility="gone" />
 
-                <com.delectable.mobile.ui.common.widget.FontTextView
-                    android:id="@+id/facebook_sign_in_text"
-                    style="@style/SignUpIn_social_text"
-                    android:text="@string/signup_in_sign_in_using_facebook" />
-
-                <com.facebook.widget.LoginButton
-                    android:id="@+id/facebook_sign_in"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:duplicateParentState="true"
-                    android:visibility="gone" />
-            </RelativeLayout>
             <!--TODO implement google+ signin and unhide this button -->
-            <RelativeLayout
+            <com.delectable.mobile.ui.common.widget.Delectabutton
+                style="@style/delectabutton_large"
                 android:id="@+id/google_button"
-                style="@style/SignUpIn_social_button"
-                android:layout_below="@+id/facebook_button"
+                android:layout_below="@id/facebook_button"
                 android:layout_marginTop="@dimen/signup_in_social_signin_button_vertical_spacing"
-                android:visibility="gone">
-
-                <ImageView
-                    style="@style/SignUpIn_social_icon"
-                    android:src="@drawable/ic_gplus" />
-
-                <com.delectable.mobile.ui.common.widget.FontTextView
-                    android:id="@+id/google_sign_in_text"
-                    style="@style/SignUpIn_social_text"
-                    android:text="@string/signup_in_sign_in_using_google" />
-            </RelativeLayout>
+                android:text="@string/signup_in_sign_in_using_google"
+                app:icon="@drawable/ic_gplus"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/terms_privacy_container"

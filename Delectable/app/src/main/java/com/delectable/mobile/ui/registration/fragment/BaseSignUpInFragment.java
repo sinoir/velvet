@@ -8,6 +8,7 @@ import com.delectable.mobile.controllers.RegistrationController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
@@ -100,19 +101,13 @@ public abstract class BaseSignUpInFragment extends BaseFragment
      * facebook button.
      */
     @InjectView(R.id.facebook_button)
-    protected RelativeLayout mFacebookButton;
-
-    @InjectView(R.id.facebook_sign_in_text)
-    protected FontTextView mFacebookTextView;
+    protected Delectabutton mFacebookButton;
 
     @InjectView(R.id.facebook_sign_in)
     protected LoginButton mRealFacebookButton;
 
     @InjectView(R.id.google_button)
-    protected RelativeLayout mGoogleButton;
-
-    @InjectView(R.id.google_sign_in_text)
-    protected FontTextView mGoogleTextView;
+    protected Delectabutton mGoogleButton;
     //endregion
 
     @InjectView(R.id.terms_privacy_container)
@@ -265,7 +260,6 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         mRealFacebookButton.performClick();
     }
 
-
     @OnClick(R.id.google_button)
     protected abstract void onGoogleButtonClick();
     //endregion
@@ -299,20 +293,12 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         return mForgotTextView;
     }
 
-    public RelativeLayout getFacebookButton() {
+    public Delectabutton getFacebookButton() {
         return mFacebookButton;
     }
 
-    public FontTextView getFacebookTextView() {
-        return mFacebookTextView;
-    }
-
-    public RelativeLayout getGoogleButton() {
+    public Delectabutton getGoogleButton() {
         return mGoogleButton;
-    }
-
-    public FontTextView getGoogleTextView() {
-        return mGoogleTextView;
     }
 
     public LinearLayout getTermsPrivacyContainer() {

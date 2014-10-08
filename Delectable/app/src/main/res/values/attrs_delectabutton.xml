@@ -1,0 +1,10 @@
+<resources>
+    <declare-styleable name="Delectabutton">
+        <attr name="type" format="string" />.
+        <attr name="icon" format="reference" />
+        <attr name="android:textSize" />
+        <attr name="android:text" />
+        <attr name="android:enabled" />
+        <attr name="android:layout_width" />
+    </declare-styleable>
+</resources>

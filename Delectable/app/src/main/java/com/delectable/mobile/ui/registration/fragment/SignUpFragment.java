@@ -57,8 +57,8 @@ public class SignUpFragment extends BaseSignUpInFragment {
         getTitleTextView().setText(R.string.sign_up_title);
         getDoneButton().setEnabled(false);
         getForgotTextView().setVisibility(View.GONE);
-        getFacebookTextView().setText(R.string.signup_in_sign_up_using_facebook);
-        getGoogleTextView().setText(R.string.signup_in_sign_up_using_google);
+        getFacebookButton().setText(R.string.signup_in_sign_up_using_facebook);
+        getGoogleButton().setText(R.string.signup_in_sign_up_using_google);
 
         getNameField().addTextChangedListener(TextValidationWatcher);
         getEmailField().addTextChangedListener(TextValidationWatcher);
