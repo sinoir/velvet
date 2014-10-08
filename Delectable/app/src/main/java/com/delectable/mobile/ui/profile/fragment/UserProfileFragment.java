@@ -314,13 +314,11 @@ public class UserProfileFragment extends BaseFragment implements
 
     @Override
     public void followerCountClicked() {
-        Log.d(TAG, "followerCountClicked");
         launchNextFragment(FollowersFragment.newInstance(mUserId));
     }
 
     @Override
     public void followingCountClicked() {
-        Log.d(TAG, "followingCountClicked");
         launchNextFragment(FollowingFragment.newInstance(mUserId));
 
     }
