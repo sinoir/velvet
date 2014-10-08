@@ -13,6 +13,7 @@ import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
+import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -313,12 +314,13 @@ public class UserProfileFragment extends BaseFragment implements
 
     @Override
     public void followerCountClicked() {
-        // TODO: Do we do anything?
+        Log.d(TAG, "followerCountClicked");
+        launchNextFragment(FollowersFragment.newInstance(mUserId));
     }
 
     @Override
     public void followingCountClicked() {
-        // TODO: Do we do anything?
+        Log.d(TAG, "followingCountClicked");
     }
 
     @Override

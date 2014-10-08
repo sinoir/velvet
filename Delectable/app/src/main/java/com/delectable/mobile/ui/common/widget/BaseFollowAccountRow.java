@@ -43,6 +43,8 @@ public class BaseFollowAccountRow extends RelativeLayout {
 
     protected void updateData(String profileImageUrl, String name, String influencerTitles,
             boolean isFollowing) {
+        //set no_photo first, so that when the user flicks through the list, it doesn't show another account's picture
+        ImageLoaderUtil.loadImageIntoView(getContext(), R.drawable.no_photo, mProfileImage);
         ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mProfileImage);
         mName.setText(name);
         mInfluencerTitles.setText(influencerTitles);

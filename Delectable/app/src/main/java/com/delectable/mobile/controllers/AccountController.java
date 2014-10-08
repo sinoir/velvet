@@ -12,6 +12,7 @@ import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
+import com.delectable.mobile.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
@@ -41,6 +42,10 @@ public class AccountController {
 
     public void fetchActivityFeed(String before, String after) {
         mJobManager.addJobInBackground(new FetchActivityFeedJob(before, after));
+    }
+
+    public void fetchFollowers(String accountId, Float before, Float after) {
+        mJobManager.addJobInBackground(new FetchFollowersJob(accountId, before, after));
     }
 
     public void followAccount(String id, boolean follow) {

@@ -28,6 +28,7 @@ import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
+import com.delectable.mobile.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.jobs.accounts.FollowAccountJob;
@@ -75,6 +76,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabF
 import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
+import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
 import com.delectable.mobile.ui.profile.fragment.RecentCapturesTabFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
@@ -103,6 +105,7 @@ import de.greenrobot.event.EventBus;
                 SignInFragment.class,
                 NavigationDrawerFragment.class,
                 UserProfileFragment.class,
+                FollowersFragment.class,
                 BaseCaptureDetailsFragment.class,
                 CaptureDetailsFragment.class,
                 RecentCapturesTabFragment.class,
@@ -140,6 +143,7 @@ import de.greenrobot.event.EventBus;
                 FetchCaptureDetailsJob.class,
                 FetchAccountProfileJob.class,
                 FetchAccountPrivateJob.class,
+                FetchFollowersJob.class,
                 FollowAccountJob.class,
                 AddCaptureCommentJob.class,
                 EditCaptureCommentJob.class,
