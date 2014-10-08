@@ -35,6 +35,7 @@
             android:id="@+id/followers_count"
             style="@style/NavigationUserProfileCountTexts"
             android:layout_below="@id/nav_user_name"
+            android:layout_marginBottom="10dp"
             android:layout_toRightOf="@+id/profile_image1" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -52,7 +53,7 @@
             android:layout_marginBottom="@dimen/navigation_bio_margins"
             android:layout_marginLeft="@dimen/navigation_bio_margins"
             android:layout_marginRight="@dimen/navigation_bio_margins"
-            android:layout_marginTop="@dimen/navigation_bio_margins"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:textSize="@dimen/navigation_header_detail_text_size"
             app:fontName="whitney_book" />

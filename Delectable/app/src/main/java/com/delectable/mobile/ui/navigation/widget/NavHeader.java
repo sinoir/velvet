@@ -119,6 +119,11 @@ public class NavHeader extends RelativeLayout {
     }
 
     public void setUserBio(String bio) {
+        if (bio == null || bio.trim().equals("")) {
+            mUserBioTextView.setVisibility(View.GONE);
+        } else {
+            mUserBioTextView.setVisibility(View.VISIBLE);
+        }
         mUserBioTextView.setText(bio);
     }
 
