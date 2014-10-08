@@ -6,8 +6,8 @@ public class AccountsFollowersRequest extends BaseRequest {
 
     private Payload payload;
 
-    public AccountsFollowersRequest(String id, Float before, Float after) {
-        super();
+    public AccountsFollowersRequest(String e_tag, String id, String before, String after) {
+        super(null, e_tag);
         payload = new Payload(id, before, after);
     }
 
@@ -17,12 +17,12 @@ public class AccountsFollowersRequest extends BaseRequest {
         private String id;
 
         // optional – The first time a user's list is retrieved, this will be empty
-        private Float before;
+        private String before;
 
         // optional – The first time a user's list is retrieved, this will be empty
-        private Float after;
+        private String after;
 
-        public Payload(String id, Float before, Float after) {
+        public Payload(String id, String before, String after) {
             this.id = id;
             this.before = before;
             this.after = after;

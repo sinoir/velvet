@@ -3,7 +3,6 @@ package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
@@ -11,23 +10,31 @@ import com.delectable.mobile.model.api.accounts.AccountsFollowersRequest;
 import com.delectable.mobile.model.api.accounts.AccountsFollowersResponse;
 import com.path.android.jobqueue.Params;
 
-import javax.inject.Inject;
-
 public class FetchFollowersJob extends BaseJob {
 
     private static final String TAG = FetchFollowersJob.class.getSimpleName();
 
     private String mId;
 
-    private Float mBefore;
+    private String mBefore;
 
-    private Float mAfter;
+    private String mAfter;
 
-    public FetchFollowersJob(String id, Float before, Float after) {
+    private String mETag;
+
+    /**
+     * @param id      The id of the Account that you want to fetch followers for.
+     * @param listing The previous ListingResponse if paginating. Pass in {@code null} if making a
+     *                fresh request.
+     */
+    public FetchFollowersJob(String id, BaseListingResponse<AccountMinimal> listing) {
         super(new Params(Priority.UX).requireNetwork().persist());
         mId = id;
-        mBefore = before;
-        mAfter = after;
+        if (listing != null) {
+            mBefore = listing.getBoundariesToBefore();
+            mAfter = listing.getBoundariesToAfter();
+            mETag = listing.getETag();
+        }
     }
 
     @Override
@@ -40,18 +47,18 @@ public class FetchFollowersJob extends BaseJob {
         super.onRun();
         String endpoint = "/accounts/followers";
 
-        AccountsFollowersRequest request = new AccountsFollowersRequest(mId, mBefore, mAfter);
+        AccountsFollowersRequest request = new AccountsFollowersRequest(mETag, mId, mBefore,
+                mAfter);
 
         AccountsFollowersResponse response = getNetworkClient()
                 .post(endpoint, request, AccountsFollowersResponse.class);
 
         BaseListingResponse<AccountMinimal> accountListing = response.getPayload();
 
-        // Sometimes Payload may be null, maybe user has no followers
-        if (accountListing != null) {
-
-            getEventBus().post(new UpdatedFollowersEvent(mId, accountListing.getUpdates()));
-        }
+        // note: Sometimes payload may be null
+        // maybe user has no followers
+        // maybe list is completely up to date and e_tag_match is true
+        mEventBus.post(new UpdatedFollowersEvent(mId, accountListing));
     }
 
     @Override
