@@ -163,7 +163,7 @@
     <style name="SettingsEditText" parent="SettingsBaseTextStyle">
         <item name="fontName">whitney_book</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/settings_row_height</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_horizontal|bottom</item>
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>
