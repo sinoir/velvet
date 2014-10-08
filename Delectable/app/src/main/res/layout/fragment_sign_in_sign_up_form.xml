@@ -46,7 +46,7 @@
                 android:text="@string/signup_in_done"
                 android:textColor="@color/d_white"
                 android:textSize="@dimen/signup_in_done_button_text_height"
-                android:paddingBottom="@dimen/font_offset_whitney_medium_sc"
+                android:textAllCaps="true"
                 app:fontName="whitney_medium_sc" />
 
             <LinearLayout
@@ -140,7 +140,7 @@
                 android:text="@string/signup_in_or"
                 android:textColor="@color/d_dark_gray"
                 android:textSize="@dimen/signup_in_or_text_size"
-                android:paddingBottom="@dimen/font_offset_whitney_medium_sc"
+                android:textAllCaps="true"
                 app:fontName="whitney_book_sc" />
 
             <RelativeLayout

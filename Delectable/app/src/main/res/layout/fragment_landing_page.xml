@@ -26,7 +26,7 @@
         android:text="@string/login_sign_up"
         android:textColor="@color/d_black"
         android:textSize="@dimen/login_signup_button_text_height"
-        android:paddingBottom="@dimen/font_offset_whitney_medium_sc"
+        android:textAllCaps="true"
         app:fontName="whitney_medium_sc" />
 
     <RelativeLayout
@@ -44,7 +44,6 @@
             android:text="@string/login_already_have_account"
             android:textColor="@color/btn_text_white_to_grey"
             android:textSize="@dimen/login_already_have_account_text_height"
-            android:paddingBottom="@dimen/font_offset_whitney_medium_sc"
             app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
