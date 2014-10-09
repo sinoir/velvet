@@ -15,7 +15,9 @@ public class BaseFetchedFollowersEvent extends BaseEvent {
 
     private BaseListingResponse<AccountMinimal> mListing;
 
-    public BaseFetchedFollowersEvent(String accountId, BaseListingResponse<AccountMinimal> listing) {
+    private boolean mInvalidate;
+
+    public BaseFetchedFollowersEvent(String accountId, BaseListingResponse<AccountMinimal> listing, boolean invalidate) {
         super(true);
         mAccountId = accountId;
         mListing = listing;
@@ -31,5 +33,9 @@ public class BaseFetchedFollowersEvent extends BaseEvent {
 
     public BaseListingResponse<AccountMinimal> getListing() {
         return mListing;
+    }
+
+    public boolean isInvalidate() {
+        return mInvalidate;
     }
 }

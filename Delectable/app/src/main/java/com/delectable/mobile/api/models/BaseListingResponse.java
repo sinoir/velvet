@@ -133,11 +133,10 @@ public class BaseListingResponse<T extends IDable> {
     /**
      * Combines the provided items with the items from the response.
      */
-    public ArrayList<T> combineInto(ArrayList<T> items) {
+    public ArrayList<T> combineInto(ArrayList<T> items, boolean invalidate) {
 
-        //if the original array is empty, and before and after are also empty
-        //we know that we are starting from scratch
-        if (items.size() == 0 && before.size() == 0 && after.size() == 0) {
+        if (invalidate) {
+            items.clear();
             items.addAll(updates);
             return items;
         }

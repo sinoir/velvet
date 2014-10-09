@@ -13,6 +13,7 @@ public class BaseResponse implements Parcelable {
 
     private boolean success;
 
+    //shows up in the listing responses, tells use whether or not to dump the current list
     private boolean invalidate;
 
     private Error error;
@@ -35,6 +36,10 @@ public class BaseResponse implements Parcelable {
 
     public Error getError() {
         return error;
+    }
+
+    public boolean isInvalidate() {
+        return invalidate;
     }
 
     @Override

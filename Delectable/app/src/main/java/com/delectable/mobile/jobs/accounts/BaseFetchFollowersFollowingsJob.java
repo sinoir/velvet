@@ -39,7 +39,7 @@ public abstract class BaseFetchFollowersFollowingsJob extends BaseJob {
     protected abstract String getEndpoint();
 
     protected abstract void postSuccessEvent(String id,
-            BaseListingResponse<AccountMinimal> accountListing);
+            BaseListingResponse<AccountMinimal> accountListing, boolean invalidate);
 
     @Override
     public void onRun() throws Throwable {
@@ -57,6 +57,6 @@ public abstract class BaseFetchFollowersFollowingsJob extends BaseJob {
         // note: Sometimes payload may be null
         // maybe user has no followers
         // maybe list is completely up to date and e_tag_match is true
-        postSuccessEvent(mId, accountListing);
+        postSuccessEvent(mId, accountListing, response.isInvalidate());
     }
 }

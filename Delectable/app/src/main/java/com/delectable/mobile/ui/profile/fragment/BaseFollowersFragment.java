@@ -142,8 +142,9 @@ public abstract class BaseFollowersFragment extends BaseFragment
         }
 
         mFollowerListing = event.getListing();
+        boolean invalidate = event.isInvalidate();
         if (mFollowerListing != null) {
-            mFollowerListing.combineInto(mAccounts);
+            mFollowerListing.combineInto(mAccounts, invalidate);
             //mAdapter.setItems(mAccounts);
         }
         if (mAccounts.size() == 0) {
