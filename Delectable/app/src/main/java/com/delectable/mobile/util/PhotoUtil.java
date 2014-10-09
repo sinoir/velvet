@@ -1,6 +1,9 @@
 package com.delectable.mobile.util;
 
 import com.delectable.mobile.App;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,13 +11,16 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class PhotoUtil {
 
     private static final String TAG = PhotoUtil.class.getSimpleName();
 
-    public static Bitmap loadBitmapFromUri(Uri imageUri, int maxSize) throws IOException {
+    public static Bitmap loadBitmapFromUri(Uri imageUri, int maxSize)
+            throws Exception {
 
         // Load Sampled/Resized Bitmap (Prevents out of memory errors)
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -41,10 +47,33 @@ public class PhotoUtil {
         return adjustedBitmap;
     }
 
-    public static int getExifRotationInDegrees(Uri imageUri) throws IOException {
-        ExifInterface exif = new ExifInterface(imageUri.getPath());
-        int exifRotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_NORMAL);
+    public static int getExifRotationInDegrees(Uri imageUri)
+            throws Exception {
+        int exifRotation = 0;
+
+        InputStream imageIs = null;
+
+        try {
+            imageIs = App.getInstance().getContentResolver().openInputStream(imageUri);
+            BufferedInputStream imageBis = new BufferedInputStream(imageIs);
+            Metadata metadata = ImageMetadataReader.readMetadata(imageBis, false);
+
+            ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
+
+            if (exifIFD0Directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                exifRotation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (imageIs != null) {
+                    imageIs.close();
+                }
+            } catch (IOException io) {
+                // no-op
+            }
+        }
 
         if (exifRotation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;
