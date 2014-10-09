@@ -6,6 +6,17 @@
 
     <color name="transparent">#00000000</color>
 
+
+    <!-- Brand Colors -->
+    <color name="d_chestnut">#cd595a</color>
+    <color name="d_big_stone">#334858</color>
+    <color name="d_suva_gray">#94938f</color>
+    <color name="d_edward">#a3a7a6</color>
+    <color name="d_soft_amber">#dbc5b0</color>
+    <color name="d_dutch_white">#f8dfc2</color>
+    <color name="d_antique_white">#f9ebdf</color>
+
+
     <!-- Primary -->
     <!-- d_blue and d_blue_pressed are used for text links -->
     <color name="d_blue">#0699cc</color>

@@ -19,8 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.io.IOException;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -167,7 +165,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
                 Bitmap selectedImage = null;
                 try {
                     selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
-                } catch (IOException e) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);
                 }
                 return selectedImage;

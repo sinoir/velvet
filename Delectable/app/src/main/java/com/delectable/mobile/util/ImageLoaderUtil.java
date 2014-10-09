@@ -11,6 +11,22 @@ public class ImageLoaderUtil {
 
     private static Picasso sPicasso = null;
 
+    public static void loadImageIntoView(Context context, int imageResource, ImageView imageView) {
+        if (sPicasso == null) {
+            // Use custom Downloader to handle 302 redirected images
+            Picasso.Builder builder = new Picasso.Builder(context);
+            builder.downloader(new OkHttpDownloader(context.getApplicationContext()));
+            sPicasso = builder.build();
+        }
+
+        if (imageView instanceof CircleImageView) {
+            sPicasso.with(context).load(imageResource)
+                    .into(((CircleImageView) imageView).getPicassoTarget());
+        } else {
+            sPicasso.with(context).load(imageResource).into(imageView);
+        }
+    }
+
     public static void loadImageIntoView(Context context, String imageUrl, ImageView imageView) {
         if (sPicasso == null) {
             // Use custom Downloader to handle 302 redirected images

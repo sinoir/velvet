@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ProfileHeaderView extends RelativeLayout implements
-        ProfileHeaderMainView.ProfileHeaderMainViewActionListeners {
+        ProfileHeaderMainView.ActionListener {
 
     public static final int STATE_FOLLOWING = 0;
 
@@ -61,6 +61,7 @@ public class ProfileHeaderView extends RelativeLayout implements
         mIndicator = (CirclePageIndicator) findViewById(R.id.pager_indicator);
 
         mProfileHeaderMainView = new ProfileHeaderMainView(context);
+        mProfileHeaderMainView.setActionListener(this);
         mProfileHeaderBioView = new ProfileHeaderBioView(context);
 
         // Setup ViewPager Adapter for Main/Bio

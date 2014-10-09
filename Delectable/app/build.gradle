@@ -137,6 +137,8 @@ dependencies {
     compile 'com.path:android-priority-jobqueue:1.1.2'
     compile 'com.google.android.gms:play-services:5.0.89'
     compile files('libs/kahuna_489.jar')
+    compile files('libs/metadata-extractor-2.6.4.jar')
+    compile files('libs/xmpcore.jar')
 
     // Crashlytics Kit
     compile('com.twitter.sdk.android:crashlytics:1.2.+@aar') {
