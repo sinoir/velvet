@@ -194,8 +194,10 @@ public class CaptureSimpleItemRow extends RelativeLayout {
             mDiscardCapture.setVisibility(View.VISIBLE);
         }
 
-        // If not scanned, don't show buttons.
-        if (!isScanned) {
+        // If not scanned or capture is not current users's, don't show buttons.
+        String signedInAccountId = UserInfo.getUserId(getContext());
+        if (!isScanned ||
+                (signedInAccountId != null && !signedInAccountId.equals(mSelectedUserId))) {
             return;
         }
 
