@@ -24,8 +24,8 @@ public class FetchFollowingsJob extends BaseFetchFollowersFollowingsJob {
     }
 
     @Override
-    protected void postSuccessEvent(String id, BaseListingResponse<AccountMinimal> accountListing) {
-        mEventBus.post(new UpdatedFollowingsEvent(id, accountListing));
+    protected void postSuccessEvent(String id, BaseListingResponse<AccountMinimal> accountListing, boolean invalidate) {
+        mEventBus.post(new UpdatedFollowingsEvent(id, accountListing, invalidate));
     }
 
     @Override
