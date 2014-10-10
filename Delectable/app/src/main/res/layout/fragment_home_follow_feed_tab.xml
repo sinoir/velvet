@@ -45,6 +45,22 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/empty_view_you"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:padding="@dimen/spacing_large"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                style="@style/TextEmptyState"
+                android:text="@string/empty_recent_captures" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

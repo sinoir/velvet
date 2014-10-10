@@ -99,7 +99,7 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         mListView = (ListView) mView.findViewById(R.id.list_view);
 
         if (mUserId == null) {
-            // FOLLOWING Tab
+            // FOLLOWING tab
             View emptyView = mView.findViewById(R.id.empty_view_following);
             View followButton = emptyView.findViewById(R.id.search_friends_button);
             followButton.setOnClickListener(new View.OnClickListener() {
@@ -110,10 +110,9 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
             });
             mListView.setEmptyView(emptyView);
         } else {
-            // YOU Tab
-            // TODO
-            //View emptyView = mView.findViewById(R.id.empty_view_you);
-            //mListView.setEmptyView(emptyView);
+            // YOU tab
+            View emptyView = mView.findViewById(R.id.empty_view_you);
+            mListView.setEmptyView(emptyView);
         }
 
         mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, this, this);

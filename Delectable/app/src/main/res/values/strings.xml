@@ -80,6 +80,7 @@
     <!-- Empty states -->
     <string name="empty_following_feed">See what friends and experts are drinking by following their updates.</string>
     <string name="empty_following_feed_button">follow friends &amp; experts</string>
+    <string name="empty_recent_captures">You have not scanned any wines yet. Tap the camera button to get started.</string>
 
     <!-- Home -->
     <string name="home_tab_following">FOLLOWING</string>
