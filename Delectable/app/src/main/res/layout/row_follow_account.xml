@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- made for RelativeLayout-->
+<?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout-->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -14,33 +13,38 @@
         android:layout_margin="@dimen/follow_friends_horizontal_spacing"
         android:src="@drawable/no_photo" />
 
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/name"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/profile_image"
         android:layout_toLeftOf="@+id/follow_button"
         android:layout_toRightOf="@+id/profile_image"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="Katherine Cooper"
-        android:textColor="@color/d_black"
-        android:textSize="@dimen/follow_friends_name_text_size"
-        app:fontName="whitney_medium" />
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/follow_experts_profile_picture_width">
 
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/subtext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
-        android:layout_toLeftOf="@+id/follow_button"
-        android:layout_toRightOf="@+id/profile_image"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="Wine and beverage director on the ferry between SF and Sausalito"
-        android:textColor="@color/d_medium_gray"
-        android:textSize="@dimen/follow_experts_bio_text_size"
-        app:fontName="whitney_medium" />
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Katherine Cooper"
+            android:textColor="@color/d_black"
+            android:textSize="@dimen/follow_friends_name_text_size"
+            app:fontName="whitney_medium" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Wine and beverage director on the ferry between SF and Sausalito"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="@dimen/follow_experts_bio_text_size"
+            app:fontName="whitney_medium" />
+    </RelativeLayout>
 
     <ImageButton
         android:id="@+id/follow_button"
