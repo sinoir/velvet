@@ -48,7 +48,12 @@ public class BaseFollowAccountRow extends RelativeLayout {
         ImageLoaderUtil.loadImageIntoView(getContext(), R.drawable.no_photo, mProfileImage);
         ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mProfileImage);
         mName.setText(name);
-        mInfluencerTitles.setText(influencerTitles);
+        if (influencerTitles == null || influencerTitles.trim().equalsIgnoreCase("")) {
+            mInfluencerTitles.setVisibility(View.GONE);
+        } else {
+            mInfluencerTitles.setVisibility(View.VISIBLE);
+            mInfluencerTitles.setText(influencerTitles);
+        }
 
         //set state of follow button depending on relationship
         if (relationship == AccountMinimal.RELATION_TYPE_SELF) {
