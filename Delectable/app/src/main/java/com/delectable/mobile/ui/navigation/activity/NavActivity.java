@@ -1,6 +1,8 @@
 package com.delectable.mobile.ui.navigation.activity;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
@@ -17,10 +19,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
+
 public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String TAG = NavActivity.class.getSimpleName();
+
+    @Inject
+    EventBus mEventBus;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -35,6 +44,7 @@ public class NavActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
 
         setContentView(R.layout.activity_nav);
 
@@ -45,6 +55,24 @@ public class NavActivity extends BaseActivity
         // Set up the drawer.
         mNavigationDrawerFragment
                 .setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mEventBus.unregister(this);
+        } catch (Throwable t) {
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+        }
     }
 
     @Override
@@ -62,6 +90,10 @@ public class NavActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onEventMainThread(NavigationEvent event) {
+        onNavigationDrawerItemSelected(event.itemPosition);
     }
 
     @Override

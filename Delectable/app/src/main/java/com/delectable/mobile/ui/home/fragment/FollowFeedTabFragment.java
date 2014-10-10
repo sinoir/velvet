@@ -6,10 +6,12 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.events.captures.UpdatedFollowerFeedEvent;
 import com.delectable.mobile.events.captures.UpdatedUserCaptureFeedEvent;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.os.AsyncTask;
@@ -95,6 +97,24 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
         mRefreshContainer = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container);
 
         mListView = (ListView) mView.findViewById(R.id.list_view);
+
+        if (mUserId == null) {
+            // FOLLOWING Tab
+            View emptyView = mView.findViewById(R.id.empty_view_following);
+            View followButton = emptyView.findViewById(R.id.search_friends_button);
+            followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mEventBus.post(new NavigationEvent(NavHeader.NAV_FIND_FRIENDS));
+                }
+            });
+            mListView.setEmptyView(emptyView);
+        } else {
+            // YOU Tab
+            // TODO
+            //View emptyView = mView.findViewById(R.id.empty_view_you);
+            //mListView.setEmptyView(emptyView);
+        }
 
         mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, this, this);
         mListView.setAdapter(mAdapter);

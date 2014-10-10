@@ -36,10 +36,10 @@ import de.greenrobot.event.EventBus;
 public class BaseFragment extends Fragment implements LifecycleProvider {
 
     @Inject
-    EventBus mEventBus;
+    public EventBus mEventBus;
 
     @Inject
-    CacheManager mCache;
+    public CacheManager mCache;
 
     private State state;
 
