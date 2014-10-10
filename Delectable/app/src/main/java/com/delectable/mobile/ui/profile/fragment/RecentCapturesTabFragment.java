@@ -2,14 +2,16 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.controllers.CaptureController;
-import com.delectable.mobile.data.CaptureDetailsListingModel;
-import com.delectable.mobile.events.captures.UpdatedUserCaptureFeedEvent;
+import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.data.CaptureListingModel;
+import com.delectable.mobile.events.accounts.UpdatedAccountCapturesEvent;
+import com.delectable.mobile.model.api.accounts.AccountsCapturesRequest;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
-import com.delectable.mobile.ui.common.widget.FollowFeedAdapter;
+import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
+import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.OverScrollByListView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -22,37 +24,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 // TODO / Note: Abstract something from FollowFeedTabFragment, these are almost identical.
 public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implements
-        OverScrollByListView.ScrollByCallback {
+        OverScrollByListView.ScrollByCallback, InfiniteScrollAdapter.ActionsHandler {
 
     private static final String TAG = RecentCapturesTabFragment.class.getSimpleName();
 
-    private static final String sArgsUserId = "sArgsUserId";
+    private static final String ACCOUNT_ID = "ACCOUNT_ID";
 
     @Inject
-    CaptureController mCaptureController;
+    AccountController mAccountController;
 
     @Inject
-    CaptureDetailsListingModel mCaptureDetailsListingModel;
+    protected CaptureListingModel mCaptureListingModel;
 
     private View mView;
 
     private OverScrollByListView mListView;
 
-    private FollowFeedAdapter mAdapter;
+    private CaptureDetailsAdapter mAdapter;
 
-    private ListingResponse<CaptureDetails> mDetailsListing;
+    private BaseListingResponse<CaptureDetails> mCapturesListing;
 
-    private ArrayList<CaptureDetails> mCaptureDetails;
-
-    private String mUserId;
+    private String mAccountId;
 
     private Callback mCallback;
+
+    private boolean mFetching;
 
     public RecentCapturesTabFragment() {
         // Required empty public constructor
@@ -61,7 +61,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     public static RecentCapturesTabFragment newInstance(String userId) {
         RecentCapturesTabFragment fragment = new RecentCapturesTabFragment();
         Bundle args = new Bundle();
-        args.putString(sArgsUserId, userId);
+        args.putString(ACCOUNT_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,35 +71,35 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
 
-        mCaptureDetails = new ArrayList<CaptureDetails>();
         Bundle args = getArguments();
-        if (args != null) {
-            mUserId = args.getString(sArgsUserId);
+
+        if (args == null) {
+            throw new RuntimeException(TAG + " needs to be initialized with an accountId");
         }
+
+        mAccountId = args.getString(ACCOUNT_ID);
+        mAdapter = new CaptureDetailsAdapter(this, this, mAccountId);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.list_view_layout, container, false);
-
         mListView = (OverScrollByListView) mView.findViewById(android.R.id.list);
-
-        // Not handling pagination here
-        mAdapter = new FollowFeedAdapter(getActivity(), mCaptureDetails, null, this, mUserId);
-        mAdapter.setCurrentViewType(FollowFeedAdapter.VIEW_TYPE_SIMPLE);
-
         mListView.setAdapter(mAdapter);
         mListView.setCallback(this);
-
         return mView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadLocalData();
-        mCaptureController.refreshUserCaptureFeed(mUserId);
+
+        //start first fetch if there are no items
+        if (mAdapter.getItems().isEmpty()) {
+            loadLocalData();
+        }
     }
 
     public void setCallback(Callback callback) {
@@ -107,38 +107,79 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<ListingResponse<CaptureDetails>>(this) {
+        new SafeAsyncTask<BaseListingResponse<CaptureDetails>>(this) {
             @Override
-            protected ListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
-                return mCaptureDetailsListingModel.getUserCaptures(mUserId);
+            protected BaseListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
+                return mCaptureListingModel.getListing(mAccountId);
             }
 
             @Override
-            protected void safeOnPostExecute(ListingResponse<CaptureDetails> data) {
-                mDetailsListing = data;
-                mCaptureDetails.clear();
+            protected void safeOnPostExecute(BaseListingResponse<CaptureDetails> listing) {
 
-                mDetailsListing = data;
-                mCaptureDetails.clear();
-                if (mDetailsListing != null) {
-                    mCaptureDetails.addAll(mDetailsListing.getSortedCombinedData());
-                } else {
-                    // TODO: Emptystate for no data?
+                if (listing != null) {
+                    mCapturesListing = listing;
+                    //items were successfully retrieved from cache, set to view!
+                    mAdapter.setItems(listing.getUpdates());
+                    mAdapter.notifyDataSetChanged();
+                    return;
                 }
-                mAdapter.notifyDataSetChanged();
+
+                //only if there were no cache items do we make the call to fetch entries
+                mFetching = true;
+                mAccountController.fetchAccountCaptures(AccountsCapturesRequest.Context.DETAILS,
+                        mAccountId, null, false);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void onEventMainThread(UpdatedUserCaptureFeedEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+    public void onEventMainThread(UpdatedAccountCapturesEvent event) {
+        if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
-        if (event.isSuccessful()) {
-            loadLocalData();
-        } else if (event.getErrorMessage() != null) {
+
+        mFetching = false;
+
+        if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
+
+            //show no followers message if this was the first fetch, so that we're not showing the loading circle anymore
+            //it's ok when there's already data, because that will be showing on screen already
+            if (mAdapter.getItems().isEmpty()) {
+                //TODO noCapturesText.setVisibility(View.VISIBLE);
+            }
+            return;
         }
+
+        mCapturesListing = event.getListing();
+
+        if (mCapturesListing != null) {
+            mAdapter.setItems(mCapturesListing.getUpdates());
+        }
+        //if cacheListing is null, means there are no updates
+
+        if (mAdapter.getItems().isEmpty()) {
+            //TODO noCapturesText.setVisibility(View.VISIBLE);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void shouldLoadNextPage() {
+        Log.d(TAG, "shouldLoadNextPage");
+        if (mFetching) {
+            return;
+        }
+        Log.d(TAG, "shouldLoadNextPage:notFetching");
+
+        if (mCapturesListing == null) {
+            return; //reached end of list/there are no items, we do nothing.
+        }
+        Log.d(TAG, "shouldLoadNextPage:CapturesListingExists");
+
+        mFetching = true;
+        mAccountController.fetchAccountCaptures(AccountsCapturesRequest.Context.DETAILS,
+                mAccountId, mCapturesListing, false);
+        //mNoFollowersText.setVisibility(View.GONE);
     }
 
     @Override
@@ -152,7 +193,6 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
             intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
                     captureDetails.getId());
             intent.setClass(getActivity(), CaptureDetailsActivity.class);
-
         }
         startActivity(intent);
     }
@@ -176,9 +216,10 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     @Override
     public void deleteCapture(CaptureDetails capture) {
         super.deleteCapture(capture);
-        mCaptureDetails.remove(capture);
+        mAdapter.getItems().remove(capture);
         mAdapter.notifyDataSetChanged();
     }
+
 
     public interface Callback {
 

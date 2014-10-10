@@ -5,6 +5,7 @@
 
     <com.delectable.mobile.ui.common.widget.OverScrollByListView
         android:id="@android:id/list"
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"

@@ -15,6 +15,7 @@ import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.data.Cache;
 import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.data.CaptureDetailsModel;
+import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
@@ -22,6 +23,7 @@ import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountCapturesJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
@@ -130,6 +132,7 @@ import de.greenrobot.event.EventBus;
                 AccountModel.class,
                 CaptureDetailsModel.class,
                 CaptureDetailsListingModel.class,
+                CaptureListingModel.class,
                 DeviceContactsModel.class,
                 BaseWineModel.class,
                 // Jobs
@@ -148,6 +151,7 @@ import de.greenrobot.event.EventBus;
                 FetchAccountPrivateJob.class,
                 FetchFollowersJob.class,
                 FetchFollowingsJob.class,
+                FetchAccountCapturesJob.class,
                 FollowAccountJob.class,
                 AddCaptureCommentJob.class,
                 EditCaptureCommentJob.class,
