@@ -1,5 +1,7 @@
 package com.delectable.mobile.events;
 
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
+
 public class NavigationEvent {
 
     /**
@@ -9,6 +11,10 @@ public class NavigationEvent {
 
     public NavigationEvent(int itemPosition) {
         this.itemPosition = itemPosition;
+    }
+
+    public NavigationEvent() {
+        this(NavHeader.NAV_HOME);
     }
 
 }
