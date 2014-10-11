@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/camera_container"
-        android:background="@color/d_dark_navy">
+        android:background="@color/d_white"
+        android:clickable="true">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:layout_width="wrap_content"
