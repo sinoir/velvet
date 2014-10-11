@@ -21,6 +21,9 @@
     <!-- d_blue and d_blue_pressed are used for text links -->
     <color name="d_blue">#0699cc</color>
     <color name="d_blue_pressed">#0066BB</color>
+
+    <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
+    <color name="d_chestnut_pressed">#A14546</color>
     <color name="d_light_green">#7bcc2f</color>
     <color name="d_purple">#be3fde</color>
     <color name="d_dark_navy">#213240</color>
