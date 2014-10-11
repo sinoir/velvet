@@ -30,6 +30,7 @@ public class FollowersFragment extends BaseFollowersFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        setActionBarTitle(getString(R.string.followers_title));
         mNoFollowersText.setText(R.string.followers_no_followers);
         return view;
     }

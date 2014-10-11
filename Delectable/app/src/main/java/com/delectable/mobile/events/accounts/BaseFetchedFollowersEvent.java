@@ -21,6 +21,7 @@ public class BaseFetchedFollowersEvent extends BaseEvent {
         super(true);
         mAccountId = accountId;
         mListing = listing;
+        mInvalidate = invalidate;
     }
 
     public BaseFetchedFollowersEvent(String errorMessage) {

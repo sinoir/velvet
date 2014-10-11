@@ -53,7 +53,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
      * In the layout, this covers the loading circle complete when it's set to visible, so there's
      * no need to hide the loading circle.
      */
-    @InjectView(R.id.no_followers_textview)
+    @InjectView(R.id.nothing_to_display_textview)
     protected FontTextView mNoFollowersText;
 
     @Inject
@@ -62,8 +62,6 @@ public abstract class BaseFollowersFragment extends BaseFragment
     private FollowersAdapter mAdapter = new FollowersAdapter(this, this);
 
     private String mAccountId;
-
-    private ArrayList<AccountMinimal> mAccounts;
 
     private BaseListingResponse<AccountMinimal> mFollowerListing;
 
@@ -91,6 +89,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
         }
 
         mAccountId = args.getString(ACCOUNT_ID);
+
     }
 
     @Override
@@ -110,7 +109,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
         super.onResume();
 
         //start first fetch for followers
-        if (mAccounts == null) {
+        if (mAdapter.getItems().isEmpty()) {
             mFetching = true;
             mNoFollowersText.setVisibility(View.GONE);
             fetchAccounts(mAccountId, null);
@@ -121,36 +120,24 @@ public abstract class BaseFollowersFragment extends BaseFragment
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
-
         mFetching = false;
 
-        //lazily instantiate
-        if (mAccounts == null) {
-            mAccounts = new ArrayList<AccountMinimal>();
-            mAdapter.setItems(mAccounts);
+        if (mAdapter.getItems().isEmpty()) {
+            mNoFollowersText.setVisibility(View.VISIBLE);
         }
 
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
-
-            //show no followers message if this was the first fetch, so that we're not showing the loading circle anymore
-            //it's ok when there's already data, because that will be showing on screen already
-            if (mAccounts.size() == 0) {
-                mNoFollowersText.setVisibility(View.VISIBLE);
-            }
             return;
         }
 
         mFollowerListing = event.getListing();
         boolean invalidate = event.isInvalidate();
         if (mFollowerListing != null) {
-            mFollowerListing.combineInto(mAccounts, invalidate);
-            //mAdapter.setItems(mAccounts);
+            mFollowerListing.combineInto(mAdapter.getItems(), invalidate);
+            mAdapter.notifyDataSetChanged();
         }
-        if (mAccounts.size() == 0) {
-            mNoFollowersText.setVisibility(View.VISIBLE);
-        }
-        mAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -173,10 +160,15 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     @Override
     public void shouldLoadNextPage() {
-        Log.d(TAG, "shouldLoadNextPage");
+
         if (mFetching) {
             return;
         }
+
+        if (mFollowerListing == null) {
+            return; //reached end of list/there are no items, we do nothing.
+        }
+
         if (mFollowerListing.getMore()) {
             fetchAccounts(mAccountId, mFollowerListing);
             mFetching = true;
