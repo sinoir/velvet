@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/preview_image"
-        android:background="@color/d_dark_navy">
+        android:background="@color/d_white">
 
         <ImageButton
             android:id="@+id/cancel_button"
