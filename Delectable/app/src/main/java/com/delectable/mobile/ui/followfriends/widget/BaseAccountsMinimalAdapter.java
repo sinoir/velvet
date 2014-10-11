@@ -56,6 +56,8 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
     public int getCount() {
         if (mTopHeaderTitleResId == null) {
             return mAccounts.size();
+        } else if (mAccounts.isEmpty()) {
+            return 0;
         } else {
             return mAccounts.size() + 1;
         }
