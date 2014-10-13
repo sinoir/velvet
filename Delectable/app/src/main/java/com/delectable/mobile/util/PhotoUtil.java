@@ -60,7 +60,8 @@ public class PhotoUtil {
 
             ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
 
-            if (exifIFD0Directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+            if (exifIFD0Directory != null && exifIFD0Directory
+                    .containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
                 exifRotation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
             }
         } catch (Exception e) {
