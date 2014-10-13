@@ -534,6 +534,16 @@ public class SettingsFragment extends BaseFragment {
         return;
     }
 
+    private boolean validatePhoneNumber(String phoneNumber) {
+        // The API only accepts 10 or 11 digit numbers and ignore validating clear field, since phone number is optional
+        if (phoneNumber.length() != 10 && phoneNumber.length() != 11 && phoneNumber.length() != 0) {
+            showToastError("Invalid phone number entered");
+            updatePhoneNumberUI();
+            return false;
+        }
+        return true;
+    }
+
     private boolean validateNameField() {
         String fullName = mNameField.getText().toString();
         if (fullName.trim().equals("")) {
@@ -558,7 +568,9 @@ public class SettingsFragment extends BaseFragment {
 
     private void modifyPhone(String number) {
         number = number.replaceAll("[^0-9]", "");
-        modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
+        if (validatePhoneNumber(number)) {
+            modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
+        }
     }
 
     private void modifyEmail(String email) {
@@ -877,10 +889,7 @@ public class SettingsFragment extends BaseFragment {
         //grab primary identifier for user's email
         mPrimaryEmailIdentifier = mUserAccount.getPrimaryEmailIdentifier();
 
-        mPhoneIdentifier = mUserAccount.getPhoneIdentifier();
-        String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
-        mPhoneNumberField.setText(mPhoneNumber);
-        PhoneNumberUtils.formatNumber(mPhoneNumberField.getText(), PhoneNumberUtils.FORMAT_NANP);
+        updatePhoneNumberUI();
 
         if (mUserAccount.isFacebookConnected()) {
             mFacebookField.setText(R.string.settings_facebook_connected);
@@ -909,5 +918,11 @@ public class SettingsFragment extends BaseFragment {
         //TODO no fields for email notifications yet for API, implement when ready
     }
 
+    private void updatePhoneNumberUI() {
+        mPhoneIdentifier = mUserAccount.getPhoneIdentifier();
+        String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
+        mPhoneNumberField.setText(mPhoneNumber);
+        PhoneNumberUtils.formatNumber(mPhoneNumberField.getText(), PhoneNumberUtils.FORMAT_NANP);
+    }
 
 }
