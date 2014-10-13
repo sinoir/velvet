@@ -133,6 +133,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
             @Override
             public void onRatingsChanged(int rating) {
                 if (rating > -1) {
+                    mRating = rating;
                     mPostButton.setEnabled(true);
                 }
             }
@@ -161,7 +162,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
     public void postData() {
         Intent data = new Intent();
         data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString());
-        data.putExtra(DATA_RATING, mRatingSeekBar.getProgress());
+        data.putExtra(DATA_RATING, mRating);
         getActivity().setResult(Activity.RESULT_OK, data);
         getActivity().finish();
     }
