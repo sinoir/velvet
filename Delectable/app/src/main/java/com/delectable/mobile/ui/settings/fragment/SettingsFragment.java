@@ -322,22 +322,11 @@ public class SettingsFragment extends BaseFragment {
         if (v.getId() == R.id.email_value) {
             modifyEmail(text);
         }
-        //profile fields
+
         if (v.getId() == R.id.name ||
                 v.getId() == R.id.short_bio ||
                 v.getId() == R.id.website) {
-
-            if (!userProfileChanged()) {
-                return; //no need to call update
-            }
-
-            String[] name = NameUtil.getSplitName(mNameField.getText().toString());
-            String fName = name[NameUtil.FIRST_NAME];
-            String lName = name[NameUtil.LAST_NAME];
-            String url = mWebsiteField.getText().toString();
-            String bio = mShortBioField.getText().toString();
-
-            updateProfile(fName, lName, url, bio);
+            updateProfile();
         }
     }
 
@@ -494,8 +483,34 @@ public class SettingsFragment extends BaseFragment {
     }
 
     //region Profile Updates
-    private void updateProfile(String fname, String lname, String url, String bio) {
-        mAccountController.updateProfile(fname, lname, url, bio);
+
+    /**
+     * Updates Profile if changed or fields are validated
+     */
+    private void updateProfile() {
+        if (!userProfileChanged() || !validateNameField()) {
+            return; //no need to call update
+        }
+
+        //profile fields
+        String[] name = NameUtil.getSplitName(mNameField.getText().toString());
+        String fName = name[NameUtil.FIRST_NAME];
+        String lName = name[NameUtil.LAST_NAME];
+        String url = mWebsiteField.getText().toString();
+        String bio = mShortBioField.getText().toString();
+
+        mAccountController.updateProfile(fName, lName, url, bio);
+        return;
+    }
+
+    private boolean validateNameField() {
+        String fullName = mNameField.getText().toString();
+        if (fullName.trim().equals("")) {
+            showToastError("Name cannot be blank");
+            mNameField.setText(mUserAccount.getFullName());
+            return false;
+        }
+        return true;
     }
 
     public void onEventMainThread(UpdatedProfileEvent event) {
