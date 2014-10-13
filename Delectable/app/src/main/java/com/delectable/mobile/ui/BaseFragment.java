@@ -2,6 +2,7 @@ package com.delectable.mobile.ui;
 
 import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
@@ -36,7 +37,7 @@ import de.greenrobot.event.EventBus;
 public class BaseFragment extends Fragment implements LifecycleProvider {
 
     @Inject
-    EventBus mEventBus;
+    protected EventBus mEventBus;
 
     @Inject
     CacheManager mCache;
@@ -192,6 +193,10 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
             inputManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
             view.clearFocus();
         }
+    }
+
+    public void closeNavigationDrawer() {
+        mEventBus.post(new NavigationDrawerCloseEvent());
     }
 
     /**
