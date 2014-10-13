@@ -27,7 +27,7 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
-import com.delectable.mobile.model.api.accounts.AccountsCapturesRequest;
+import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -65,7 +65,7 @@ public class AccountController {
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public void fetchAccountCaptures(AccountsCapturesRequest.Context context, String accountId,
+    public void fetchAccountCaptures(CapturesContext context, String accountId,
             BaseListingResponse<CaptureDetails> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchAccountCapturesJob(context, accountId, listing, isPullToRefresh));

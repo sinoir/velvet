@@ -1,38 +1,59 @@
 package com.delectable.mobile.jobs.accounts;
 
+import com.google.gson.reflect.TypeToken;
+
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.events.accounts.UpdatedAccountCapturesEvent;
-import com.delectable.mobile.jobs.BaseJob;
-import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountsCapturesRequest;
-import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
-import com.path.android.jobqueue.Params;
+import com.delectable.mobile.jobs.BaseFetchListingJob;
+import com.delectable.mobile.model.api.BaseListingWrapperResponse;
+import com.delectable.mobile.model.api.accounts.CapturesContext;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchAccountCapturesJob extends BaseJob {
+public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails> {
 
     private static final String TAG = FetchAccountCapturesJob.class.getSimpleName();
 
-    private AccountsCapturesRequest.Context mContext;
-
-    private String mAccountId;
-
-    private String mBefore;
-
-    private String mAfter;
-
-    private String mETag;
-
-    private Boolean mIsPullToRefresh;
-
     @Inject
     protected CaptureListingModel mListingModel;
+
+    @Override
+    public String getEndpoint() {
+        return "/accounts/captures";
+    }
+
+    @Override
+    public BaseListingResponse<CaptureDetails> getCachedListing(String accountId) {
+        return mListingModel.getListing(mAccountId);
+    }
+
+    @Override
+    public void saveListingToCache(String accountId,
+            BaseListingResponse<CaptureDetails> apiListing) {
+        mListingModel.saveCurrentListing(mAccountId, apiListing);
+    }
+
+    @Override
+    public void postSuccessEvent(String accountId,
+            BaseListingResponse<CaptureDetails> cachedListing) {
+        mEventBus.post(new UpdatedAccountCapturesEvent(accountId, cachedListing));
+    }
+
+    @Override
+    public void postFailEvent(String accountId) {
+        mEventBus.post(new UpdatedAccountCapturesEvent(accountId, TAG + " " + getErrorMessage()));
+    }
+
+    @Override
+    public Type getResponseType() {
+        Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
+        }.getType();
+        return type;
+    }
 
     /**
      * @param accountId       Account that you want to fetch captures for.
@@ -40,74 +61,9 @@ public class FetchAccountCapturesJob extends BaseJob {
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public FetchAccountCapturesJob(AccountsCapturesRequest.Context context, String accountId,
+    public FetchAccountCapturesJob(CapturesContext context, String accountId,
             BaseListingResponse<CaptureDetails> captureListing,
             Boolean isPullToRefresh) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
-        mContext = context;
-        mAccountId = accountId;
-        if (captureListing != null) {
-            mBefore = captureListing.getBoundariesToBefore();
-            mAfter = captureListing.getBoundariesToAfter();
-            mETag = captureListing.getETag();
-        }
-        mIsPullToRefresh = isPullToRefresh;
-    }
-
-    public FetchAccountCapturesJob(AccountsCapturesRequest.Context context, String accountId,
-            String etag, String before,
-            String after, Boolean isPullToRefresh) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
-        mContext = context;
-        mAccountId = accountId;
-        mETag = etag;
-        mBefore = before;
-        mAfter = after;
-        mIsPullToRefresh = isPullToRefresh;
-    }
-
-    @Override
-    public void onRun() throws Throwable {
-        super.onRun();
-        String endpoint = "/accounts/captures";
-
-        AccountsCapturesRequest request = new AccountsCapturesRequest(mContext, mETag, mAccountId,
-                mBefore, mAfter, mIsPullToRefresh);
-
-        CaptureFeedResponse response = getNetworkClient().post(endpoint, request,
-                CaptureFeedResponse.class);
-
-        ListingResponse<CaptureDetails> apiListing = response.getPayload();
-        // note: Sometimes payload may be null
-        // maybe there are no captures
-        // maybe list is completely up to date and e_tag_match is true
-
-        BaseListingResponse<CaptureDetails> cachedListing = null;
-
-        //update cache if the listing exists
-        if (apiListing != null) {
-
-            //grab cached listing if it exist
-            cachedListing = mListingModel.getListing(mAccountId);
-            ArrayList<CaptureDetails> cachedCaptures = new ArrayList<CaptureDetails>();
-            if (cachedListing != null) {
-                cachedCaptures = cachedListing.getUpdates();
-            }
-
-            //combine listing into current capturesList, and then set that List as as the updates array
-            apiListing.combineInto(cachedCaptures, response.isInvalidate());
-            apiListing.clearLists();
-            apiListing.setUpdates(cachedCaptures);
-
-            cachedListing = mListingModel.saveCurrentListing(mAccountId, apiListing);
-        }
-
-        mEventBus.post(new UpdatedAccountCapturesEvent(mAccountId, cachedListing));
-    }
-
-    @Override
-    protected void onCancel() {
-        super.onCancel();
-        mEventBus.post(new UpdatedAccountCapturesEvent(getErrorMessage()));
+        super(context.toString(), accountId, captureListing, isPullToRefresh);
     }
 }

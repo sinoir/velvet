@@ -7,7 +7,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.events.accounts.UpdatedAccountCapturesEvent;
-import com.delectable.mobile.model.api.accounts.AccountsCapturesRequest;
+import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
@@ -142,7 +142,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
                 if (mAdapter.getItems().isEmpty()) {
                     //only if there were no cache items do we make the call to fetch entries
                     mFetching = true;
-                    mAccountController.fetchAccountCaptures(AccountsCapturesRequest.Context.DETAILS,
+                    mAccountController.fetchAccountCaptures(CapturesContext.DETAILS,
                             mAccountId, null, false);
                 }
 
@@ -188,7 +188,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }
 
         mFetching = true;
-        mAccountController.fetchAccountCaptures(AccountsCapturesRequest.Context.DETAILS,
+        mAccountController.fetchAccountCaptures(CapturesContext.DETAILS,
                 mAccountId, mCapturesListing, false);
         //mNoFollowersText.setVisibility(View.GONE);
     }

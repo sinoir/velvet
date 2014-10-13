@@ -30,8 +30,9 @@ public class UpdatedAccountCapturesEvent extends BaseEvent {
         mListing = listing;
     }
 
-    public UpdatedAccountCapturesEvent(String errorMessage) {
+    public UpdatedAccountCapturesEvent(String accountId, String errorMessage) {
         super(errorMessage);
+        mAccountId = accountId;
     }
 
     public String getAccountId() {
