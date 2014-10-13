@@ -43,6 +43,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -319,6 +320,8 @@ public class SettingsFragment extends BaseFragment {
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
+            PhoneNumberUtils
+                    .formatNumber(mPhoneNumberField.getText(), PhoneNumberUtils.FORMAT_NANP);
             modifyPhone(text);
         }
         if (v.getId() == R.id.email_value) {
@@ -554,6 +557,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void modifyPhone(String number) {
+        number = number.replaceAll("[^0-9]", "");
         modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
     }
 
@@ -876,6 +880,7 @@ public class SettingsFragment extends BaseFragment {
         mPhoneIdentifier = mUserAccount.getPhoneIdentifier();
         String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
         mPhoneNumberField.setText(mPhoneNumber);
+        PhoneNumberUtils.formatNumber(mPhoneNumberField.getText(), PhoneNumberUtils.FORMAT_NANP);
 
         if (mUserAccount.isFacebookConnected()) {
             mFacebookField.setText(R.string.settings_facebook_connected);
