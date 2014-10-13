@@ -65,10 +65,10 @@ public class AccountController {
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public void fetchAccountCaptures(CapturesContext context, String accountId,
+    public void fetchAccountCaptures(String requestId, CapturesContext context, String accountId,
             BaseListingResponse<CaptureDetails> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
-                new FetchAccountCapturesJob(context, accountId, listing, isPullToRefresh));
+                new FetchAccountCapturesJob(requestId, context, accountId, listing, isPullToRefresh));
     }
 
     public void followAccount(String id, boolean follow) {

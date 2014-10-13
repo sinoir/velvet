@@ -6,7 +6,7 @@ import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.CaptureListingModel;
-import com.delectable.mobile.events.accounts.UpdatedAccountCapturesEvent;
+import com.delectable.mobile.events.UpdatedListingEvent;
 import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
@@ -35,6 +35,8 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         OverScrollByListView.ScrollByCallback, InfiniteScrollAdapter.ActionsHandler {
 
     private static final String TAG = RecentCapturesTabFragment.class.getSimpleName();
+
+    private static final String CAPTURES_REQ = TAG + "_captures_req";
 
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
 
@@ -142,7 +144,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
                 if (mAdapter.getItems().isEmpty()) {
                     //only if there were no cache items do we make the call to fetch entries
                     mFetching = true;
-                    mAccountController.fetchAccountCaptures(CapturesContext.DETAILS,
+                    mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
                             mAccountId, null, false);
                 }
 
@@ -151,7 +153,10 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void onEventMainThread(UpdatedAccountCapturesEvent event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+        if (!CAPTURES_REQ.equals(event.getRequestId())) {
+            return;
+        }
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
@@ -188,7 +193,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }
 
         mFetching = true;
-        mAccountController.fetchAccountCaptures(CapturesContext.DETAILS,
+        mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
                 mAccountId, mCapturesListing, false);
         //mNoFollowersText.setVisibility(View.GONE);
     }

@@ -2,6 +2,7 @@ package com.delectable.mobile.jobs;
 
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.IDable;
+import com.delectable.mobile.events.UpdatedListingEvent;
 import com.delectable.mobile.model.api.BaseListingRequest;
 import com.delectable.mobile.model.api.BaseListingWrapperResponse;
 import com.path.android.jobqueue.Params;
@@ -9,9 +10,19 @@ import com.path.android.jobqueue.Params;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+/**
+ * This is an abstraction for all context listing jobs. Implementations that subclass from this Job
+ * class just need to implement the abstract methods for a successful job. {@link
+ * #getCachedListing(String)} and {@link #saveListingToCache(String, BaseListingResponse)} can
+ * optionally be implemented if the job requires caching to be performed. At the end of the Job, an
+ * {@link UpdatedListingEvent} will be broadcast with the type {@code T} generic that provided to
+ * this Job.
+ */
 public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
     private static final String TAG = BaseFetchListingJob.class.getSimpleName();
+
+    private String mRequestId;
 
     protected String mContext;
 
@@ -31,9 +42,10 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public BaseFetchListingJob(String context, String accountId,
+    public BaseFetchListingJob(String requestId, String context, String accountId,
             BaseListingResponse<T> listingResponse, Boolean isPullToRefresh) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
+        mRequestId = requestId;
         mContext = context;
         mAccountId = accountId;
         if (listingResponse != null) {
@@ -44,9 +56,11 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         mIsPullToRefresh = isPullToRefresh;
     }
 
-    public BaseFetchListingJob(String context, String accountId, String etag, String before,
+    public BaseFetchListingJob(String requestId, String context, String accountId, String etag,
+            String before,
             String after, Boolean isPullToRefresh) {
         super(new Params(Priority.SYNC).requireNetwork().persist());
+        mRequestId = requestId;
         mContext = context;
         mAccountId = accountId;
         mETag = etag;
@@ -76,11 +90,6 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
     protected void saveListingToCache(String accountId, BaseListingResponse<T> listing) {
         //empty body, allow implementer to handle caching only if they want
     }
-
-
-    protected abstract void postSuccessEvent(String accountId, BaseListingResponse<T> cachedListing);
-
-    protected abstract void postFailEvent(String accountId);
 
     /**
      * The concrete generic type needs to be provided in the subclass. Just use the code below with
@@ -130,12 +139,15 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
             saveListingToCache(mAccountId, apiListing);
         }
 
-        postSuccessEvent(mAccountId, apiListing);
+        mEventBus.post(new UpdatedListingEvent<T>(mRequestId, mAccountId, apiListing));
     }
 
     @Override
     protected void onCancel() {
         super.onCancel();
-        postFailEvent(mAccountId);
+        String jobName = this.getClass().getSimpleName();
+        mEventBus.post(new UpdatedListingEvent<T>(mRequestId, mAccountId,
+                jobName + " " + getErrorMessage()));
+
     }
 }

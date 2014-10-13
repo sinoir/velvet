@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.CaptureListingModel;
-import com.delectable.mobile.events.accounts.UpdatedAccountCapturesEvent;
 import com.delectable.mobile.jobs.BaseFetchListingJob;
 import com.delectable.mobile.model.api.BaseListingWrapperResponse;
 import com.delectable.mobile.model.api.accounts.CapturesContext;
@@ -38,17 +37,6 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
     }
 
     @Override
-    public void postSuccessEvent(String accountId,
-            BaseListingResponse<CaptureDetails> cachedListing) {
-        mEventBus.post(new UpdatedAccountCapturesEvent(accountId, cachedListing));
-    }
-
-    @Override
-    public void postFailEvent(String accountId) {
-        mEventBus.post(new UpdatedAccountCapturesEvent(accountId, TAG + " " + getErrorMessage()));
-    }
-
-    @Override
     public Type getResponseType() {
         Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
         }.getType();
@@ -61,9 +49,9 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public FetchAccountCapturesJob(CapturesContext context, String accountId,
+    public FetchAccountCapturesJob(String requestId, CapturesContext context, String accountId,
             BaseListingResponse<CaptureDetails> captureListing,
             Boolean isPullToRefresh) {
-        super(context.toString(), accountId, captureListing, isPullToRefresh);
+        super(requestId, context.toString(), accountId, captureListing, isPullToRefresh);
     }
 }
