@@ -335,7 +335,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
         mNavHeader.setUserBio(mUserAccount.getBio());
-        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
+        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
                 mNavHeader.getUserImageView());
     }
 

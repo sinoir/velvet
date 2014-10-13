@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.PhotoUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -38,6 +39,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -374,12 +376,7 @@ public class SettingsFragment extends BaseFragment {
 
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
-            Bitmap bitmap = getImage(selectedImageUri);
-            if (bitmap == null) {
-                return; //unable to retrieve image from phone, don't do anything
-            }
-            mProfileImage.setImageBitmap(bitmap);
-            updateProfilePicture(bitmap);
+            updateProfileImageWithUri(selectedImageUri);
         }
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -405,9 +402,40 @@ public class SettingsFragment extends BaseFragment {
                 removeIdentifier(facebookIdentifier);
             }
         }
-
-
     }
+
+    private void updateProfileImageWithUri(final Uri selectedImageUri) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Bitmap selectedImage = null;
+                try {
+                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to open image", e);
+                }
+                return selectedImage;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap selectedImage) {
+                super.onPostExecute(selectedImage);
+                if (selectedImage != null) {
+                    mProfileImage.setImageBitmap(selectedImage);
+                    updateProfilePicture(selectedImage);
+                } else {
+                    showToastError("Failed to load image");
+                }
+            }
+        }.execute();
+    }
+
     //endregion
 
     //region API Requests
@@ -833,7 +861,8 @@ public class SettingsFragment extends BaseFragment {
 
         //profile info
         ImageLoaderUtil
-                .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(), mProfileImage);
+                .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
+                        mProfileImage);
         mNameField.setText(mUserAccount.getFullName());
         mShortBioField.setText(mUserAccount.getBio());
         mWebsiteField.setText(mUserAccount.getUrl());
