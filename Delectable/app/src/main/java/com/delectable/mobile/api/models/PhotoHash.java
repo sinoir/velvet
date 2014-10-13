@@ -12,6 +12,17 @@ import java.io.Serializable;
 
 public class PhotoHash extends BaseResponse implements Parcelable, Serializable {
 
+    public static final Parcelable.Creator<PhotoHash> CREATOR
+            = new Parcelable.Creator<PhotoHash>() {
+        public PhotoHash createFromParcel(Parcel source) {
+            return new PhotoHash(source);
+        }
+
+        public PhotoHash[] newArray(int size) {
+            return new PhotoHash[size];
+        }
+    };
+
     private static final long serialVersionUID = -7494546096166895300L;
 
     private String url;
@@ -27,6 +38,11 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         this.child_resolutions = child_resolutions;
     }
 
+    private PhotoHash(Parcel in) {
+        super(in);
+        this.url = in.readString();
+        this.child_resolutions = in.readParcelable(ChildResolution.class.getClassLoader());
+    }
 
     public String getUrl() {
         return url;
@@ -85,8 +101,9 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     }
 
     public String getBestThumb() {
-        String imageUrl = this.child_resolutions.getBestThumb();
-        if (imageUrl != null) {
+        String imageUrl = this.child_resolutions != null ? this.child_resolutions.getBestThumb()
+                : null;
+        if (this.child_resolutions != null && imageUrl != null) {
             return imageUrl;
         }
         return this.url;
@@ -123,24 +140,17 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         dest.writeParcelable(this.child_resolutions, 0);
     }
 
-    private PhotoHash(Parcel in) {
-        super(in);
-        this.url = in.readString();
-        this.child_resolutions = in.readParcelable(ChildResolution.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<PhotoHash> CREATOR
-            = new Parcelable.Creator<PhotoHash>() {
-        public PhotoHash createFromParcel(Parcel source) {
-            return new PhotoHash(source);
-        }
-
-        public PhotoHash[] newArray(int size) {
-            return new PhotoHash[size];
-        }
-    };
-
     public static class ChildResolution implements Serializable, Parcelable {
+
+        public static final Creator<ChildResolution> CREATOR = new Creator<ChildResolution>() {
+            public ChildResolution createFromParcel(Parcel source) {
+                return new ChildResolution(source);
+            }
+
+            public ChildResolution[] newArray(int size) {
+                return new ChildResolution[size];
+            }
+        };
 
         private static final long serialVersionUID = 6186001967269219062L;
 
@@ -177,6 +187,16 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
             this.size_450 = size_450;
             this.size_medium = size_medium;
             this.size_blur = size_blur;
+        }
+
+        private ChildResolution(Parcel in) {
+            this.size_nano = in.readString();
+            this.size_micro = in.readString();
+            this.size_thumb = in.readString();
+            this.size_250 = in.readString();
+            this.size_450 = in.readString();
+            this.size_medium = in.readString();
+            this.size_blur = in.readString();
         }
 
         public String getSmallest() {
@@ -272,25 +292,5 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
             dest.writeString(this.size_medium);
             dest.writeString(this.size_blur);
         }
-
-        private ChildResolution(Parcel in) {
-            this.size_nano = in.readString();
-            this.size_micro = in.readString();
-            this.size_thumb = in.readString();
-            this.size_250 = in.readString();
-            this.size_450 = in.readString();
-            this.size_medium = in.readString();
-            this.size_blur = in.readString();
-        }
-
-        public static final Creator<ChildResolution> CREATOR = new Creator<ChildResolution>() {
-            public ChildResolution createFromParcel(Parcel source) {
-                return new ChildResolution(source);
-            }
-
-            public ChildResolution[] newArray(int size) {
-                return new ChildResolution[size];
-            }
-        };
     }
 }
