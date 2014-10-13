@@ -49,14 +49,17 @@ public class RateCaptureJob extends BaseJob {
         BaseResponse response = getNetworkClient().post(endpoint, request, BaseResponse.class);
 
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
-        if (cachedCapture.getRatings() == null) {
-            cachedCapture.setRatings(new HashMap<String, Integer>());
+        // Only save cached capture if cache exists
+        if (cachedCapture != null) {
+            if (cachedCapture.getRatings() == null) {
+                cachedCapture.setRatings(new HashMap<String, Integer>());
+            }
+            cachedCapture.getRatings().put(mUserId, mCaptureRating);
+            // Save updated rating
+            mCapturesModel.saveCaptureDetails(cachedCapture);
+            mCapturesModel.saveCaptureDetails(cachedCapture);
         }
-        cachedCapture.getRatings().put(mUserId, mCaptureRating);
-        // Save updated rating
-        mCapturesModel.saveCaptureDetails(cachedCapture);
 
-        mCapturesModel.saveCaptureDetails(cachedCapture);
         getEventBus().post(new RatedCaptureEvent(true, mCaptureId));
     }
 
