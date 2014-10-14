@@ -27,13 +27,13 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
 
     @Override
     public BaseListingResponse<CaptureDetails> getCachedListing(String accountId) {
-        return mListingModel.getListing(mAccountId);
+        return mListingModel.getUserCaptures(mAccountId);
     }
 
     @Override
     public void saveListingToCache(String accountId,
             BaseListingResponse<CaptureDetails> apiListing) {
-        mListingModel.saveCurrentListing(mAccountId, apiListing);
+        mListingModel.saveUserCaptures(mAccountId, apiListing);
     }
 
     @Override

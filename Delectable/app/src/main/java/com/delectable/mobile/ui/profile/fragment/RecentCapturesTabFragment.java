@@ -128,7 +128,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         new SafeAsyncTask<BaseListingResponse<CaptureDetails>>(this) {
             @Override
             protected BaseListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
-                return mCaptureListingModel.getListing(mAccountId);
+                return mCaptureListingModel.getUserCaptures(mAccountId);
             }
 
             @Override
