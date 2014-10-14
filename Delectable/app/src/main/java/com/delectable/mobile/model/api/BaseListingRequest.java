@@ -1,32 +1,12 @@
-package com.delectable.mobile.model.api.accounts;
+package com.delectable.mobile.model.api;
 
-import com.delectable.mobile.model.api.BaseRequest;
-
-//TODO perhaps rename this into a more generic ListingRequest name
-public class AccountsCapturesRequest extends BaseRequest {
-
-    public enum Context {
-        MINIMAL("minimal"),
-        DETAILS("details");
-
-        private String mLabel;
-
-        private Context(String label) {
-
-            mLabel = label;
-        }
-
-        public String toString() {
-            return mLabel;
-        }
-    }
-
+public class BaseListingRequest extends BaseRequest {
 
     private Payload payload;
 
-    public AccountsCapturesRequest(Context context, String e_tag, String id, String before, String after,
+    public BaseListingRequest(String context, String e_tag, String id, String before, String after,
             Boolean supress_before) {
-        super(context.toString(), e_tag);
+        super(context, e_tag);
         payload = new Payload(id, before, after, supress_before);
     }
 

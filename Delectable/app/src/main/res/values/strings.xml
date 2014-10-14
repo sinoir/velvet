@@ -108,7 +108,9 @@
     <string name="profile_tab_top_rated">top rated</string>
 
     <!-- Followers -->
+    <string name="followers_title">Followers</string>
     <string name="followers_no_followers">Looks like there are no followers.</string>
+    <string name="following_title">Following</string>
     <string name="following_not_following_anyone">Looks like no one\'s getting followed.</string>
 
 

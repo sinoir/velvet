@@ -17,6 +17,7 @@ import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.data.DeviceContactsModel;
+import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
@@ -90,6 +91,7 @@ import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
@@ -127,12 +129,14 @@ import de.greenrobot.event.EventBus;
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
                 // Dialogs
+                ChooseVintageDialog.class,
                 ResetPasswordDialog.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
                 CaptureDetailsListingModel.class,
                 CaptureListingModel.class,
+                FollowersFollowingModel.class,
                 DeviceContactsModel.class,
                 BaseWineModel.class,
                 // Jobs

@@ -31,7 +31,7 @@ public class SearchPeopleRow extends BaseFollowAccountRow {
 
     public void updateData(AccountSearch account) {
         mAccount = account;
-        updateData(account.getPhoto().getUrl(),
+        updateData(account.getPhoto().getBestThumb(),
                 account.getFullName(),
                 account.getBio(),
                 account.getCurrentUserRelationship());

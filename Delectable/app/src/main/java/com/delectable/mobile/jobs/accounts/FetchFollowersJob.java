@@ -1,26 +1,39 @@
 package com.delectable.mobile.jobs.accounts;
 
 
+import com.google.gson.reflect.TypeToken;
+
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
-import com.delectable.mobile.jobs.BaseJob;
-import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountsFollowersRequest;
-import com.delectable.mobile.model.api.accounts.AccountsFollowersResponse;
-import com.path.android.jobqueue.Params;
+import com.delectable.mobile.data.FollowersFollowingModel;
+import com.delectable.mobile.jobs.BaseFetchListingJob;
+import com.delectable.mobile.model.api.BaseListingWrapperResponse;
 
-public class FetchFollowersJob extends BaseFetchFollowersFollowingsJob {
+import java.lang.reflect.Type;
+
+import javax.inject.Inject;
+
+public class FetchFollowersJob extends BaseFetchListingJob<AccountMinimal> {
 
     private static final String TAG = FetchFollowersJob.class.getSimpleName();
 
+    @Inject
+    protected FollowersFollowingModel mListingModel;
+
+
     /**
-     * @param id      The id of the Account that you want to fetch followers for.
-     * @param listing The previous ListingResponse if paginating. Pass in {@code null} if making a
-     *                fresh request.
+     * @param requestId       for the implementing UI to validate the callback Event.
+     * @param accountId       The id of the Account that you want to fetch followers for.
+     * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
+     *                        making a fresh request.
+     * @param isPullToRefresh whether or not user pull to refresh. If so, the listing will only
+     *                        return recent updates and not paginate the list for past items.
      */
-    public FetchFollowersJob(String id, BaseListingResponse<AccountMinimal> listing) {
-        super(id, listing);
+    public FetchFollowersJob(String requestId, String accountId,
+            BaseListingResponse<AccountMinimal> listing,
+            Boolean isPullToRefresh) {
+        //context is not passed in bc this endpoint only returns account minimal contexts
+        super(requestId, null, accountId, listing, isPullToRefresh);
     }
 
     @Override
@@ -29,14 +42,20 @@ public class FetchFollowersJob extends BaseFetchFollowersFollowingsJob {
     }
 
     @Override
-    protected void postSuccessEvent(String id, BaseListingResponse<AccountMinimal> accountListing, boolean invalidate) {
-        mEventBus.post(new UpdatedFollowersEvent(id, accountListing, invalidate));
-
+    protected BaseListingResponse<AccountMinimal> getCachedListing(String accountId) {
+        return mListingModel.getFollowersListing(accountId);
     }
 
     @Override
-    protected void onCancel() {
-        super.onCancel();
-        mEventBus.post(new UpdatedFollowersEvent(getErrorMessage()));
+    protected void saveListingToCache(String accountId,
+            BaseListingResponse<AccountMinimal> listing) {
+        mListingModel.saveCurrentFollowersListing(accountId, listing);
+    }
+
+    @Override
+    public Type getResponseType() {
+        Type type = new TypeToken<BaseListingWrapperResponse<AccountMinimal>>() {
+        }.getType();
+        return type;
     }
 }

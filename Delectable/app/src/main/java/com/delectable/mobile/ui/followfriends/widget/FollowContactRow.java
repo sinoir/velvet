@@ -61,4 +61,11 @@ public class FollowContactRow extends RelativeLayout {
             mActionsHandler.toggleFollow(mAccount, v.isSelected());
         }
     }
+
+    @OnClick(R.id.name)
+    public void showUserProfile() {
+        if (mActionsHandler != null && mAccount != null) {
+            mActionsHandler.showUserProfile(mAccount.getId());
+        }
+    }
 }

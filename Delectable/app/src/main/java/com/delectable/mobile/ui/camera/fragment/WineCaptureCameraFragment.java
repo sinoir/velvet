@@ -69,6 +69,14 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        // Re-enable the Capture Button
+        mCaptureButton.setEnabled(true);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         getActivity().getActionBar().hide();
@@ -88,6 +96,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnClick(R.id.capture_button)
     protected void captureCameraImage() {
+        // Prevent user from clicking many times
+        mCaptureButton.setEnabled(false);
         takeJpegCroppedPicture(new PictureTakenCallback() {
             @Override
             public void onBitmapCaptured(Bitmap bitmap) {

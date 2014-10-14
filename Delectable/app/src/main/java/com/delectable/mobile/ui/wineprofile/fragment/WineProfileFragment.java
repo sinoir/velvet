@@ -288,7 +288,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     @OnClick(R.id.all_years_textview)
     protected void onAllYearsTextClick() {
-        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWine);
+        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
         dialog.setTargetFragment(WineProfileFragment.this,
                 CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
         dialog.show(getFragmentManager(), "dialog");

@@ -6,11 +6,12 @@ import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.CaptureListingModel;
-import com.delectable.mobile.events.accounts.UpdatedAccountCapturesEvent;
-import com.delectable.mobile.model.api.accounts.AccountsCapturesRequest;
+import com.delectable.mobile.events.UpdatedListingEvent;
+import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.OverScrollByListView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
@@ -26,11 +27,16 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 // TODO / Note: Abstract something from FollowFeedTabFragment, these are almost identical.
 public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implements
         OverScrollByListView.ScrollByCallback, InfiniteScrollAdapter.ActionsHandler {
 
     private static final String TAG = RecentCapturesTabFragment.class.getSimpleName();
+
+    private static final String CAPTURES_REQ = TAG + "_captures_req";
 
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
 
@@ -40,9 +46,19 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     @Inject
     protected CaptureListingModel mCaptureListingModel;
 
-    private View mView;
+    @InjectView(android.R.id.list)
+    protected OverScrollByListView mListView;
 
-    private OverScrollByListView mListView;
+    @InjectView(R.id.empty_state_layout)
+    protected View mEmptyStateLayout;
+
+    /**
+     * In the layout, this covers the loading circle complete when it's set to visible, so there's
+     * no need to hide the loading circle.
+     */
+    @InjectView(R.id.nothing_to_display_textview)
+    protected FontTextView mNoCapturesTextView;
+
 
     private CaptureDetailsAdapter mAdapter;
 
@@ -85,11 +101,13 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.list_view_layout, container, false);
-        mListView = (OverScrollByListView) mView.findViewById(android.R.id.list);
+        View view = inflater.inflate(R.layout.list_view_layout, container, false);
+        ButterKnife.inject(this, view);
+
         mListView.setAdapter(mAdapter);
+        mListView.setEmptyView(mEmptyStateLayout);
         mListView.setCallback(this);
-        return mView;
+        return view;
     }
 
     @Override
@@ -121,32 +139,36 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
                     //items were successfully retrieved from cache, set to view!
                     mAdapter.setItems(listing.getUpdates());
                     mAdapter.notifyDataSetChanged();
-                    return;
                 }
 
-                //only if there were no cache items do we make the call to fetch entries
-                mFetching = true;
-                mAccountController.fetchAccountCaptures(AccountsCapturesRequest.Context.DETAILS,
-                        mAccountId, null, false);
+                if (mAdapter.getItems().isEmpty()) {
+                    //only if there were no cache items do we make the call to fetch entries
+                    mFetching = true;
+                    mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
+                            mAccountId, null, false);
+                }
+
+
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void onEventMainThread(UpdatedAccountCapturesEvent event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+        if (!CAPTURES_REQ.equals(event.getRequestId())) {
+            return;
+        }
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
 
         mFetching = false;
 
+        if (mAdapter.getItems().isEmpty()) {
+            mNoCapturesTextView.setVisibility(View.VISIBLE);
+        }
+
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
-
-            //show no followers message if this was the first fetch, so that we're not showing the loading circle anymore
-            //it's ok when there's already data, because that will be showing on screen already
-            if (mAdapter.getItems().isEmpty()) {
-                //TODO noCapturesText.setVisibility(View.VISIBLE);
-            }
             return;
         }
 
@@ -157,27 +179,21 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }
         //if cacheListing is null, means there are no updates
 
-        if (mAdapter.getItems().isEmpty()) {
-            //TODO noCapturesText.setVisibility(View.VISIBLE);
-        }
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void shouldLoadNextPage() {
-        Log.d(TAG, "shouldLoadNextPage");
         if (mFetching) {
             return;
         }
-        Log.d(TAG, "shouldLoadNextPage:notFetching");
 
         if (mCapturesListing == null) {
             return; //reached end of list/there are no items, we do nothing.
         }
-        Log.d(TAG, "shouldLoadNextPage:CapturesListingExists");
 
         mFetching = true;
-        mAccountController.fetchAccountCaptures(AccountsCapturesRequest.Context.DETAILS,
+        mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
                 mAccountId, mCapturesListing, false);
         //mNoFollowersText.setVisibility(View.GONE);
     }
