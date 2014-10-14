@@ -13,6 +13,7 @@ import com.squareup.okhttp.Response;
 import android.util.Log;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -48,8 +49,22 @@ public abstract class BaseNetworkClient {
         return handleResponse(response, requestName, responseClass);
     }
 
+    /**
+     * Convenience method for responses that don't use generics.
+     */
     public <T extends BaseResponse> T handleResponse(Response response, String requestName,
             Class<T> responseClass) throws IOException, DelException {
+        return handleResponse(response, requestName, responseClass, null);
+    }
+
+    /**
+     * @param response      http response to be validated for errors.
+     * @param requestName   used for logging purposes.
+     * @param responseClass pass in Class if not using generics.
+     * @param responseType  pass in Type if using generics.
+     */
+    public <T extends BaseResponse> T handleResponse(Response response, String requestName,
+            Class<T> responseClass, Type responseType) throws IOException, DelException {
         //handle HTTP errors
         if (!response.isSuccessful()) {
             String errorMessage = "HTTP Request Error " + response.code() + ": " + response
@@ -60,7 +75,15 @@ public abstract class BaseNetworkClient {
         //be careful, calling this ResponseBody.string() method more than once wipes out the string
         String responseBody = response.body().string();
         Log.i(requestName, "response: " + responseBody);
-        T responseObj = mGson.fromJson(responseBody, responseClass);
+
+        T responseObj;
+
+        if (responseClass != null) {
+            responseObj = mGson.fromJson(responseBody, responseClass);
+        } else {
+            //generics can only be handled with the Type class
+            responseObj = mGson.fromJson(responseBody, responseType);
+        }
 
         //handle Gson parsing errors
         if (responseObj == null) {

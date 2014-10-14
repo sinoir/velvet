@@ -5,25 +5,24 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.events.accounts.BaseFetchedFollowersEvent;
-import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
+import com.delectable.mobile.data.FollowersFollowingModel;
+import com.delectable.mobile.events.UpdatedListingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.profile.widget.FollowersAdapter;
 import com.delectable.mobile.ui.profile.widget.FollowersRow;
+import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -31,8 +30,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * The base class for Following and Follower fragments. Leaves the implementation of the fetch up to the subclass,
- * as well as the event implemenation.
+ * The base class for Following and Follower fragments. Leaves the implementation of the fetch up to
+ * the subclass, as well as the event implemenation.
  */
 public abstract class BaseFollowersFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, InfiniteScrollAdapter.ActionsHandler,
@@ -53,17 +52,18 @@ public abstract class BaseFollowersFragment extends BaseFragment
      * In the layout, this covers the loading circle complete when it's set to visible, so there's
      * no need to hide the loading circle.
      */
-    @InjectView(R.id.no_followers_textview)
+    @InjectView(R.id.nothing_to_display_textview)
     protected FontTextView mNoFollowersText;
 
     @Inject
     protected AccountController mAccountController;
 
+    @Inject
+    protected FollowersFollowingModel mListingModel;
+
     private FollowersAdapter mAdapter = new FollowersAdapter(this, this);
 
     private String mAccountId;
-
-    private ArrayList<AccountMinimal> mAccounts;
 
     private BaseListingResponse<AccountMinimal> mFollowerListing;
 
@@ -72,7 +72,10 @@ public abstract class BaseFollowersFragment extends BaseFragment
      */
     private boolean mFetching;
 
-    protected abstract void fetchAccounts(String accountId, BaseListingResponse<AccountMinimal> accountListing);
+    protected abstract BaseListingResponse<AccountMinimal> getCachedListing(String accountId);
+
+    protected abstract void fetchAccounts(String accountId,
+            BaseListingResponse<AccountMinimal> accountListing);
 
 
     protected void setArguments(String accountId) {
@@ -91,6 +94,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
         }
 
         mAccountId = args.getString(ACCOUNT_ID);
+
     }
 
     @Override
@@ -109,46 +113,62 @@ public abstract class BaseFollowersFragment extends BaseFragment
     public void onResume() {
         super.onResume();
 
-        //start first fetch for followers
-        if (mAccounts == null) {
-            mFetching = true;
-            mNoFollowersText.setVisibility(View.GONE);
-            fetchAccounts(mAccountId, null);
+        if (mAdapter.getItems().isEmpty()) {
+            loadLocalData();
         }
     }
 
-    protected void handleFetchFollowersEvent(BaseFetchedFollowersEvent event) {
+    private void loadLocalData() {
+        new SafeAsyncTask<BaseListingResponse<AccountMinimal>>(this) {
+            @Override
+            protected BaseListingResponse<AccountMinimal> safeDoInBackground(Void[] params) {
+                return getCachedListing(mAccountId);
+            }
+
+            @Override
+            protected void safeOnPostExecute(BaseListingResponse<AccountMinimal> listing) {
+
+                if (listing != null) {
+                    mFollowerListing = listing;
+                    //items were successfully retrieved from cache, set to view!
+                    mAdapter.setItems(listing.getUpdates());
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                if (mAdapter.getItems().isEmpty()) {
+                    //only if there were no cache items do we make the call to fetch entries
+                    mFetching = true;
+                    //start first fetch for followers
+                    fetchAccounts(mAccountId, null);
+                }
+
+
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    protected void handleFetchFollowersEvent(UpdatedListingEvent<AccountMinimal> event) {
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
 
         mFetching = false;
 
-        //lazily instantiate
-        if (mAccounts == null) {
-            mAccounts = new ArrayList<AccountMinimal>();
-            mAdapter.setItems(mAccounts);
+        if (mAdapter.getItems().isEmpty()) {
+            mNoFollowersText.setVisibility(View.VISIBLE);
         }
 
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
-
-            //show no followers message if this was the first fetch, so that we're not showing the loading circle anymore
-            //it's ok when there's already data, because that will be showing on screen already
-            if (mAccounts.size() == 0) {
-                mNoFollowersText.setVisibility(View.VISIBLE);
-            }
             return;
         }
 
         mFollowerListing = event.getListing();
         if (mFollowerListing != null) {
-            mFollowerListing.combineInto(mAccounts);
-            //mAdapter.setItems(mAccounts);
+            mAdapter.setItems(mFollowerListing.getUpdates());
         }
-        if (mAccounts.size() == 0) {
-            mNoFollowersText.setVisibility(View.VISIBLE);
-        }
+        //if cacheListing is null, means there are no updates
+
         mAdapter.notifyDataSetChanged();
     }
 
@@ -157,6 +177,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
     public void toggleFollow(AccountMinimal account, boolean isFollowing) {
         int relationship = isFollowing ? AccountMinimal.RELATION_TYPE_FOLLOWING
                 : AccountMinimal.RELATION_TYPE_NONE;
+        //TODO implement follow
     }
 
     @Override
@@ -172,10 +193,15 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     @Override
     public void shouldLoadNextPage() {
-        Log.d(TAG, "shouldLoadNextPage");
+
         if (mFetching) {
             return;
         }
+
+        if (mFollowerListing == null) {
+            return; //reached end of list/there are no items, we do nothing.
+        }
+
         if (mFollowerListing.getMore()) {
             fetchAccounts(mAccountId, mFollowerListing);
             mFetching = true;

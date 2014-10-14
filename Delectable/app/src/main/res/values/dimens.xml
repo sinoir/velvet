@@ -104,7 +104,7 @@
     <dimen name="profile_bio_text_size">16sp</dimen>
     <dimen name="profile_follow_button_text_size">17sp</dimen>
     <dimen name="profile_follow_button_width">210dp</dimen>
-    <dimen name="profile_pager_header_height">160dp</dimen>
+    <dimen name="profile_pager_header_height">170dp</dimen>
 
     <!-- Comment Unit -->
     <dimen name="comment_unit_user_name_font_size">15sp</dimen>

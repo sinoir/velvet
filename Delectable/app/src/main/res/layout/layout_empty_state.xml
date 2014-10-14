@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/empty_state_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/general_row_height"
+        android:layout_marginTop="16dp" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/nothing_to_display_textview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/general_row_height"
+        android:layout_marginTop="16dp"
+        android:background="@color/d_white"
+        android:gravity="center"
+        android:text="Nope, nothing here."
+        android:textColor="@color/d_black"
+        android:textSize="16dp"
+        android:visibility="gone"
+        app:fontName="whitney_medium" />
+</RelativeLayout>

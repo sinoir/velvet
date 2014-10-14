@@ -130,14 +130,31 @@ public class BaseListingResponse<T extends IDable> {
         this.context = context;
     }
 
-    /**
-     * Combines the provided items with the items from the response.
-     */
-    public ArrayList<T> combineInto(ArrayList<T> items) {
 
-        //if the original array is empty, and before and after are also empty
-        //we know that we are starting from scratch
-        if (items.size() == 0 && before.size() == 0 && after.size() == 0) {
+    /**
+     * Clears the before, after, updates, and deletes lists. Used when saving a ListingResponse
+     * to cache, so that we can then in turn set our entire current list as our updates list.
+     */
+    public void clearLists() {
+        before.clear();
+        after.clear();
+        updates.clear();
+        deletes.clear();
+    }
+
+    /**
+     * Combines the provided items with the items from the response. If invalidate is true, it will
+     * dump all the items in the array and add all the updates into the items array.
+     */
+    public ArrayList<T> combineInto(ArrayList<T> items, boolean invalidate) {
+
+        //initialize array in case user passes in null value
+        if (items == null) {
+            items = new ArrayList<T>();
+        }
+
+        if (invalidate) {
+            items.clear();
             items.addAll(updates);
             return items;
         }
@@ -213,9 +230,14 @@ public class BaseListingResponse<T extends IDable> {
 
     public static class Boundaries {
 
-        Boundary from;
+        private Boundary from;
 
-        Boundary to;
+        private Boundary to;
+
+        public Boundaries(Boundary from, Boundary to) {
+            this.from = from;
+            this.to = to;
+        }
 
         @Override
         public String toString() {
@@ -228,11 +250,17 @@ public class BaseListingResponse<T extends IDable> {
 
     public static class Boundary {
 
-        String before;
+        private String before;
 
-        String after;
+        private String after;
 
-        String since;
+        private String since;
+
+        public Boundary(String before, String after, String since) {
+            this.before = before;
+            this.after = after;
+            this.since = since;
+        }
 
         @Override
         public String toString() {
