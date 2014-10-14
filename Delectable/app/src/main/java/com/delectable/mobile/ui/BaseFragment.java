@@ -54,6 +54,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
 
     private boolean mIsUsingCustomActionbarView = false;
 
+    private boolean mHasCustomActionBarTitle;
+
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
         state = State.constructed;
@@ -121,6 +123,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         super.onDestroy();
         state = State.destroyed;
         lifecycleListeners.clear();
+        if (mHasCustomActionBarTitle) {
+            getActivity().getActionBar().setTitle(null);
+        }
     }
 
     @Override
@@ -156,6 +161,13 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
                 .newInstance(message, positiveText, negativeText);
         dialog.setTargetFragment(this, requestCode);
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
+    }
+
+    protected void setActionBarTitle(String title) {
+        mHasCustomActionBarTitle = true;
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(title);
+        }
     }
 
     public void signout() {

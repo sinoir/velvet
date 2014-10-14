@@ -104,10 +104,7 @@ public class CaptureSimpleItemRow extends RelativeLayout {
     private void updateWineInfo() {
         String captureTitle = mCaptureData.getDisplayTitle();
         String captureName = mCaptureData.getDisplayDescription();
-        String captureImageUrl = mCaptureData.getPhoto().getThumbUrl();
-        if (captureImageUrl == null || captureImageUrl.equals("")) {
-            captureImageUrl = mCaptureData.getPhoto().getUrl();
-        }
+        String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
 
         mProducerName.setText(captureTitle);
         mWineName.setText(captureName);
