@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.controllers.AccountController;
@@ -90,7 +91,7 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
 
             mAdapter.getItems().addAll(hits);
             mAdapter.notifyDataSetChanged();
-            mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
+            mEmptyStateTextView.setText(getResources().getString(R.string.empty_search_people));
         } else {
             showToastError(event.getErrorMessage());
             mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet

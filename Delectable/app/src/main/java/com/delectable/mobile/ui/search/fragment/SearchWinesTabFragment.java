@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.controllers.BaseWineController;
@@ -10,7 +11,6 @@ import com.delectable.mobile.ui.search.widget.WineSearchAdapter;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -74,7 +74,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment implements Inf
 
             mAdapter.getItems().addAll(hits);
             mAdapter.notifyDataSetChanged();
-            mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
+            mEmptyStateTextView.setText(getResources().getString(R.string.empty_search_wines));
         } else {
             showToastError(event.getErrorMessage());
             mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet

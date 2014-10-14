@@ -8,11 +8,8 @@ import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.UserInfo;
-<<<<<<< Temporary merge branch 1
 import com.delectable.mobile.events.NavigationDrawerCloseEvent;
-=======
 import com.delectable.mobile.events.NavigationEvent;
-import com.delectable.mobile.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;

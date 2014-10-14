@@ -40,7 +40,7 @@ public abstract class BaseSearchTabFragment extends BaseFragment
     @InjectView(R.id.progress_bar)
     protected ProgressBar mProgressBar;
 
-    @InjectView(R.id.empty_state_text_view)
+    @InjectView(R.id.empty_view_search)
     protected FontTextView mEmptyStateTextView;
 
     protected abstract BaseAdapter getAdapter();
@@ -94,9 +94,8 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
         mListView.setAdapter(getAdapter());
         mListView.setOnItemClickListener(this);
-
-        //TODO make better one, no designs for this empty state
         mListView.setEmptyView(mEmptyStateTextView);
+
         return layout;
     }
 

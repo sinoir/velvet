@@ -85,6 +85,8 @@
     <string name="connect_facebook_button">connect to facebook</string>
     <string name="empty_twitter">Connect your account to Twitter. We never spam anyone.</string>
     <string name="connect_twitter_button">connect to twitter</string>
+    <string name="empty_search_wines">No wines with that name.</string>
+    <string name="empty_search_people">No people with that name.</string>
 
     <!-- Home -->
     <string name="home_tab_following">FOLLOWING</string>
