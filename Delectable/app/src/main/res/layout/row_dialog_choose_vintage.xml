@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:gravity="center"
-        android:text="2012"
         android:textColor="@color/d_black"
         android:textSize="@dimen/choose_vintage_dialog_year_text_size" />
 
@@ -24,7 +23,6 @@
         android:layout_marginLeft="@dimen/general_text_horizontal_spacing"
         android:layout_toLeftOf="@+id/rating"
         android:gravity="center_vertical"
-        android:text="(19 ratings)"
         android:textColor="@color/d_medium_gray"
         android:textSize="@dimen/choose_vintage_dialog_ratings_count_text_size" />
 
@@ -36,7 +34,6 @@
         android:layout_marginLeft="@dimen/general_text_horizontal_spacing"
         android:gravity="center_vertical|right"
         android:singleLine="true"
-        android:text="10.0/10"
         android:textColor="@color/d_light_green"
         android:textSize="@dimen/choose_vintage_dialog_rating_text_size" />
 </merge>
