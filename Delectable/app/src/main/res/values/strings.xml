@@ -87,7 +87,7 @@
     <string name="profile_following">following</string>
     <string name="profile_find_people">Find People</string>
     <string name="profile_follow">Follow</string>
-    <string name="profile_unfollow">Unfollow</string>
+    <string name="profile_following_cap">Following</string>
     <string name="with">with</string>
 
     <string name="following_count">%d following</string>
