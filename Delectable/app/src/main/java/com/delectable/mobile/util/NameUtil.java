@@ -14,17 +14,18 @@ public class NameUtil {
      * @return Returns a String[] where the first name is index 0, and the last name is index 1.
      */
     public static String[] getSplitName(String fullName) {
-
         String[] name = new String[2];
-
-        //purge new lines
-        fullName = fullName.replaceAll("\\r\\n|\\r|\\n", "");
 
         if (fullName == null || fullName.equals("")) {
             name[FIRST_NAME] = "";
             name[LAST_NAME] = "";
             return name;
         }
+
+        //purge new lines
+        fullName = fullName.replaceAll("\\r\\n|\\r|\\n", "");
+        // Remove Leading and Trailing spaces
+        fullName = fullName.trim();
 
         //split name by whitespace
         String[] splitName = fullName.split("\\s+");

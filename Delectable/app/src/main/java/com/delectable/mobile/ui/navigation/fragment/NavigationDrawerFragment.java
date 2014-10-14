@@ -9,6 +9,7 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.NavigationEvent;
+import com.delectable.mobile.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
@@ -336,7 +337,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
         mNavHeader.setUserBio(mUserAccount.getBio());
-        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(),
+        ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
                 mNavHeader.getUserImageView());
     }
 
@@ -393,6 +394,16 @@ public class NavigationDrawerFragment extends BaseFragment implements
             showToastError(ex.getLocalizedMessage());
         }
     }
+
+    //region EventBus events
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(NavigationDrawerCloseEvent event) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+    }
+
+    //endregion
 
     /**
      * Callbacks interface that all activities using this fragment must implement.

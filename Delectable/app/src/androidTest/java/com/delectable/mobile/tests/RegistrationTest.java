@@ -71,7 +71,7 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
         assertEquals(0, actualAccount.getPaymentMethods().size());
         assertEquals("adam@ad60.com", actualAccount.getEmail());
         // TODO: custom parse these
-        assertEquals(0, actualAccount.getActivityFeedTsLast());
+        assertEquals(0.0f, actualAccount.getActivityFeedTsLast());
         assertEquals(false, actualAccount.getFtueCompleted());
         assertEquals(true, actualNotif.getSendLnOne());
         assertEquals(true, actualNotif.getSendLnTwo());

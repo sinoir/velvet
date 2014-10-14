@@ -3,11 +3,13 @@ package com.delectable.mobile.controllers;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
 import com.delectable.mobile.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.jobs.accounts.FacebookifyProfilePhotoJob;
+import com.delectable.mobile.jobs.accounts.FetchAccountCapturesJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountPrivateJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountProfileJob;
 import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
@@ -25,6 +27,7 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
+import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -47,12 +50,45 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchActivityFeedJob(before, after));
     }
 
-    public void fetchFollowers(String accountId, BaseListingResponse<AccountMinimal> listing) {
-        mJobManager.addJobInBackground(new FetchFollowersJob(accountId, listing));
+    /**
+     * @param requestId       Unique identifier for Event callback.
+     * @param accountId       Account that you want to fetch captures for.
+     * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
+     *                        making a fresh request.
+     * @param isPullToRefresh true if user invoke this call via a pull to refresh.
+     */
+    public void fetchFollowers(String requestId, String accountId,
+            BaseListingResponse<AccountMinimal> listing, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchFollowersJob(requestId, accountId, listing, isPullToRefresh));
     }
 
-    public void fetchFollowings(String accountId, BaseListingResponse<AccountMinimal> listing) {
-        mJobManager.addJobInBackground(new FetchFollowingsJob(accountId, listing));
+    /**
+     * @param requestId       Unique identifier for Event callback.
+     * @param accountId       Account that you want to fetch captures for.
+     * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
+     *                        making a fresh request.
+     * @param isPullToRefresh true if user invoke this call via a pull to refresh.
+     */
+    public void fetchFollowings(String requestId, String accountId,
+            BaseListingResponse<AccountMinimal> listing, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchFollowingsJob(requestId, accountId, listing, isPullToRefresh));
+    }
+
+    /**
+     * @param requestId       Unique identifier for Event callback.
+     * @param context         Context type for capture
+     * @param accountId       Account that you want to fetch captures for.
+     * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
+     *                        making a fresh request.
+     * @param isPullToRefresh true if user invoke this call via a pull to refresh.
+     */
+    public void fetchAccountCaptures(String requestId, CapturesContext context, String accountId,
+            BaseListingResponse<CaptureDetails> listing, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchAccountCapturesJob(requestId, context, accountId, listing,
+                        isPullToRefresh));
     }
 
     public void followAccount(String id, boolean follow) {

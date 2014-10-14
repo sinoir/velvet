@@ -2,6 +2,7 @@ package com.delectable.mobile.ui;
 
 import com.delectable.mobile.data.ServerInfo;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
@@ -39,7 +40,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public EventBus mEventBus;
 
     @Inject
-    public CacheManager mCache;
+    CacheManager mCache;
 
     private State state;
 
@@ -52,6 +53,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     private RelativeLayout mCustomActionBarView;
 
     private boolean mIsUsingCustomActionbarView = false;
+
+    private boolean mHasCustomActionBarTitle;
 
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
@@ -120,6 +123,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         super.onDestroy();
         state = State.destroyed;
         lifecycleListeners.clear();
+        if (mHasCustomActionBarTitle) {
+            getActivity().getActionBar().setTitle(null);
+        }
     }
 
     @Override
@@ -157,6 +163,13 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
 
+    protected void setActionBarTitle(String title) {
+        mHasCustomActionBarTitle = true;
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(title);
+        }
+    }
+
     public void signout() {
         // Close FB Session
         Session session = Session.getActiveSession();
@@ -192,6 +205,10 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
             inputManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
             view.clearFocus();
         }
+    }
+
+    public void closeNavigationDrawer() {
+        mEventBus.post(new NavigationDrawerCloseEvent());
     }
 
     /**

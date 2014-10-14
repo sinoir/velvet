@@ -120,8 +120,8 @@ public class ProfileHeaderView extends RelativeLayout implements
      * Convenience method to set all views with AccountProfile data.
      */
     public void setDataToView(AccountProfile account) {
-        String userName = account.getFname() + " " + account.getLname();
-        String imageUrl = account.getPhoto().getUrl();
+        String userName = account.getFullName();
+        String imageUrl = account.getPhoto().getBestThumb();
         int numCaptures = account.getCaptureCount();
 
         setWineCount(numCaptures);

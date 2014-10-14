@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -72,6 +73,15 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         if (!getAdapter().isEmpty()) {
             mSearchView.clearFocus();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Close Nav drawer if opened:
+        if (item.getItemId() == mSearchView.getId()) {
+            closeNavigationDrawer();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
