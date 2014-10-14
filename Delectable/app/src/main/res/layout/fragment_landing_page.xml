@@ -5,9 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@color/d_white"
     android:paddingLeft="@dimen/general_row_horizontal_spacing"
     android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:src="@drawable/landing_screen_logo"/>
 
     <Spinner
         android:id="@+id/debug_spinner"
