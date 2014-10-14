@@ -17,6 +17,7 @@ import com.delectable.mobile.data.CaptureDetailsListingModel;
 import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.data.DeviceContactsModel;
+import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.MyJobManager;
 import com.delectable.mobile.jobs.accounts.AddIdentifierJob;
@@ -133,6 +134,7 @@ import de.greenrobot.event.EventBus;
                 CaptureDetailsModel.class,
                 CaptureDetailsListingModel.class,
                 CaptureListingModel.class,
+                FollowersFollowingModel.class,
                 DeviceContactsModel.class,
                 BaseWineModel.class,
                 // Jobs

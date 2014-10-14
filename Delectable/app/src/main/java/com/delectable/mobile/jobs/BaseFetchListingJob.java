@@ -12,9 +12,7 @@ import java.util.ArrayList;
 
 /**
  * This is an abstraction for all context listing jobs. Implementations that subclass from this Job
- * class just need to implement the abstract methods for a successful job. {@link
- * #getCachedListing(String)} and {@link #saveListingToCache(String, BaseListingResponse)} can
- * optionally be implemented if the job requires caching to be performed. At the end of the Job, an
+ * class just need to implement the abstract methods for a successful job. At the end of the Job, an
  * {@link UpdatedListingEvent} will be broadcast with the type {@code T} generic that provided to
  * this Job.
  */
@@ -77,19 +75,14 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
     /**
      * Lets the subclass handle the retrieval of it's cached listing.
      */
-    protected BaseListingResponse<T> getCachedListing(String accountId) {
-        //empty body, allow implementer to handle caching only if they want
-        return null; //returning null is the same as if there was nothing in the cache
-    }
+    protected abstract BaseListingResponse<T> getCachedListing(String accountId);
 
     /**
      * Lets the subclass handle saving the listing to cache. The ListingResponse provided here will
      * be pass onwards to the success event. If there are any changes made to the object during the
      * save to cache, they will be reflected in the event.
      */
-    protected void saveListingToCache(String accountId, BaseListingResponse<T> listing) {
-        //empty body, allow implementer to handle caching only if they want
-    }
+    protected abstract void saveListingToCache(String accountId, BaseListingResponse<T> listing);
 
     /**
      * The concrete generic type needs to be provided in the subclass. Just use the code below with
@@ -139,6 +132,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
             saveListingToCache(mAccountId, apiListing);
         }
 
+        //if apiListing returns null to the event, means list is up to date!
         mEventBus.post(new UpdatedListingEvent<T>(mRequestId, mAccountId, apiListing));
     }
 
