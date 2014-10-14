@@ -30,7 +30,6 @@
         <com.delectable.mobile.ui.common.widget.Delectabutton
             android:id="@+id/connect_facebook_button"
             style="@style/delectabutton_large"
-            app:type="large"
             app:icon="@drawable/ic_fb"
             android:text="@string/connect_facebook_button" />
 
@@ -57,8 +56,7 @@
             android:id="@+id/connect_twitter_button"
             style="@style/delectabutton_large"
             android:text="@string/connect_twitter_button"
-            app:icon="@drawable/ic_find_twitter_pressed"
-            app:type="large" />
+            app:icon="@drawable/ic_find_twitter_pressed" />
 
     </LinearLayout>
 

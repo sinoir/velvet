@@ -148,7 +148,6 @@
                 android:id="@+id/facebook_button"
                 android:layout_below="@id/or_textview"
                 android:text="@string/signup_in_sign_in_using_facebook"
-                app:type="large"
                 app:icon="@drawable/ic_fb" />
 
             <com.facebook.widget.LoginButton

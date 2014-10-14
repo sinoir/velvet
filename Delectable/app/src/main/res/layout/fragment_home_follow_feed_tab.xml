@@ -39,7 +39,6 @@
             <com.delectable.mobile.ui.common.widget.Delectabutton
                 android:id="@+id/search_friends_button"
                 style="@style/delectabutton_large"
-                app:type="large"
                 app:icon="@drawable/ic_nav_drawer_friends_normal"
                 android:text="@string/empty_following_feed_button" />
 
