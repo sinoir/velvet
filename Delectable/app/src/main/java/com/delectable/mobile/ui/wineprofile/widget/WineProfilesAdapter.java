@@ -25,7 +25,7 @@ public class WineProfilesAdapter extends BaseAdapter {
 
     private BaseWine mBaseWine;
 
-    private ArrayList<WineProfile> mWineProfiles;
+    private ArrayList<WineProfile> mWineProfiles = new ArrayList<WineProfile>();
 
     public WineProfilesAdapter() {
 
@@ -70,9 +70,9 @@ public class WineProfilesAdapter extends BaseAdapter {
                     .inflate(R.layout.row_dialog_choose_vintage_with_sizing, parent, false);
         }
 
-        if (position == FIRST_ROW) {
+        if (position == FIRST_ROW && mBaseWine != null) {
             row.updateData(mBaseWine);
-        } else {
+        } else if (mWineProfiles.size() > 0) {
             position -= FIRST_ROW_OFFSET; //adjust position so show the correct wine profile data
             row.updateData(mWineProfiles.get(position));
         }
