@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.PhotoUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -38,9 +39,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -317,27 +320,18 @@ public class SettingsFragment extends BaseFragment {
 
     private void updateInfo(EditText v, String text) {
         if (v.getId() == R.id.phone_number_value) {
+            PhoneNumberUtils
+                    .formatNumber(mPhoneNumberField.getText(), PhoneNumberUtils.FORMAT_NANP);
             modifyPhone(text);
         }
         if (v.getId() == R.id.email_value) {
             modifyEmail(text);
         }
-        //profile fields
+
         if (v.getId() == R.id.name ||
                 v.getId() == R.id.short_bio ||
                 v.getId() == R.id.website) {
-
-            if (!userProfileChanged()) {
-                return; //no need to call update
-            }
-
-            String[] name = NameUtil.getSplitName(mNameField.getText().toString());
-            String fName = name[NameUtil.FIRST_NAME];
-            String lName = name[NameUtil.LAST_NAME];
-            String url = mWebsiteField.getText().toString();
-            String bio = mShortBioField.getText().toString();
-
-            updateProfile(fName, lName, url, bio);
+            updateProfile();
         }
     }
 
@@ -385,12 +379,7 @@ public class SettingsFragment extends BaseFragment {
 
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
-            Bitmap bitmap = getImage(selectedImageUri);
-            if (bitmap == null) {
-                return; //unable to retrieve image from phone, don't do anything
-            }
-            mProfileImage.setImageBitmap(bitmap);
-            updateProfilePicture(bitmap);
+            updateProfileImageWithUri(selectedImageUri);
         }
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -416,9 +405,40 @@ public class SettingsFragment extends BaseFragment {
                 removeIdentifier(facebookIdentifier);
             }
         }
-
-
     }
+
+    private void updateProfileImageWithUri(final Uri selectedImageUri) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Bitmap selectedImage = null;
+                try {
+                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to open image", e);
+                }
+                return selectedImage;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap selectedImage) {
+                super.onPostExecute(selectedImage);
+                if (selectedImage != null) {
+                    mProfileImage.setImageBitmap(selectedImage);
+                    updateProfilePicture(selectedImage);
+                } else {
+                    showToastError("Failed to load image");
+                }
+            }
+        }.execute();
+    }
+
     //endregion
 
     //region API Requests
@@ -494,8 +514,44 @@ public class SettingsFragment extends BaseFragment {
     }
 
     //region Profile Updates
-    private void updateProfile(String fname, String lname, String url, String bio) {
-        mAccountController.updateProfile(fname, lname, url, bio);
+
+    /**
+     * Updates Profile if changed or fields are validated
+     */
+    private void updateProfile() {
+        if (!userProfileChanged() || !validateNameField()) {
+            return; //no need to call update
+        }
+
+        //profile fields
+        String[] name = NameUtil.getSplitName(mNameField.getText().toString());
+        String fName = name[NameUtil.FIRST_NAME];
+        String lName = name[NameUtil.LAST_NAME];
+        String url = mWebsiteField.getText().toString();
+        String bio = mShortBioField.getText().toString();
+
+        mAccountController.updateProfile(fName, lName, url, bio);
+        return;
+    }
+
+    private boolean validatePhoneNumber(String phoneNumber) {
+        // The API only accepts 10 or 11 digit numbers and ignore validating clear field, since phone number is optional
+        if (phoneNumber.length() != 10 && phoneNumber.length() != 11 && phoneNumber.length() != 0) {
+            showToastError("Invalid phone number entered");
+            updatePhoneNumberUI();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateNameField() {
+        String fullName = mNameField.getText().toString();
+        if (fullName.trim().equals("")) {
+            showToastError("Name cannot be blank");
+            mNameField.setText(mUserAccount.getFullName());
+            return false;
+        }
+        return true;
     }
 
     public void onEventMainThread(UpdatedProfileEvent event) {
@@ -511,7 +567,10 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void modifyPhone(String number) {
-        modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
+        number = number.replaceAll("[^0-9]", "");
+        if (validatePhoneNumber(number)) {
+            modifyIdentifier(mPhoneIdentifier, number, Identifier.Type.PHONE);
+        }
     }
 
     private void modifyEmail(String email) {
@@ -818,7 +877,8 @@ public class SettingsFragment extends BaseFragment {
 
         //profile info
         ImageLoaderUtil
-                .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getUrl(), mProfileImage);
+                .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
+                        mProfileImage);
         mNameField.setText(mUserAccount.getFullName());
         mShortBioField.setText(mUserAccount.getBio());
         mWebsiteField.setText(mUserAccount.getUrl());
@@ -829,9 +889,7 @@ public class SettingsFragment extends BaseFragment {
         //grab primary identifier for user's email
         mPrimaryEmailIdentifier = mUserAccount.getPrimaryEmailIdentifier();
 
-        mPhoneIdentifier = mUserAccount.getPhoneIdentifier();
-        String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
-        mPhoneNumberField.setText(mPhoneNumber);
+        updatePhoneNumberUI();
 
         if (mUserAccount.isFacebookConnected()) {
             mFacebookField.setText(R.string.settings_facebook_connected);
@@ -860,5 +918,11 @@ public class SettingsFragment extends BaseFragment {
         //TODO no fields for email notifications yet for API, implement when ready
     }
 
+    private void updatePhoneNumberUI() {
+        mPhoneIdentifier = mUserAccount.getPhoneIdentifier();
+        String mPhoneNumber = mPhoneIdentifier == null ? null : mPhoneIdentifier.getString();
+        mPhoneNumberField.setText(mPhoneNumber);
+        PhoneNumberUtils.formatNumber(mPhoneNumberField.getText(), PhoneNumberUtils.FORMAT_NANP);
+    }
 
 }

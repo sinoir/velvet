@@ -1,7 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.PurchaseOffer;
-import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.model.api.wineprofiles.WineProfilesSourceResponse;
 
 import org.json.JSONException;
@@ -28,7 +28,7 @@ public class WineSourceTest extends BaseInstrumentationTestCase {
         PurchaseOffer actualPurchaseOffer = actualSource.getPurchaseOffer();
         assertEquals("5384fc9a753490ae0d00013b", actualPurchaseOffer.getId());
         assertEquals("2009", actualPurchaseOffer.getVintage());
-        assertEquals("1401408000", actualPurchaseOffer.getExpiration());
+        assertEquals(1.401408E9f, actualPurchaseOffer.getExpiration());
         assertEquals(1, actualPurchaseOffer.getMinQuant());
         assertEquals(12, actualPurchaseOffer.getMaxQuant());
         assertEquals(1, actualPurchaseOffer.getDefaultQuant());
@@ -46,9 +46,8 @@ public class WineSourceTest extends BaseInstrumentationTestCase {
         assertEquals("Order 12 bottles to get 1 cent shipping!",
                 actualPurchaseOffer.getMarketingMessage());
 
-        WineProfile actualWine = actualSource.getWineProfile();
+        WineProfileMinimal actualWine = actualSource.getWineProfile();
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
-        assertNull(actualWine.getRatingsSummary());
         assertEquals("2009", actualWine.getVintage());
         assertEquals("Napa Ridge", actualWine.getProducerName());
         assertEquals("Napa Valley Pinot Noir", actualWine.getName());

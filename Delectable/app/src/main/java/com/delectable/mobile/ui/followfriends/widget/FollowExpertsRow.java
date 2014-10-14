@@ -35,7 +35,7 @@ public class FollowExpertsRow extends BaseFollowAccountRow {
 
     public void updateData(AccountMinimal account) {
         mAccount = account;
-        updateData(account.getPhoto().getUrl(),
+        updateData(account.getPhoto().getBestThumb(),
                 account.getFullName(),
                 account.getInfluencerTitlesString(),
                 account.getCurrentUserRelationship());
