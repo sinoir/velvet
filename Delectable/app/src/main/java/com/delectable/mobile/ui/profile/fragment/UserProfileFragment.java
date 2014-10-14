@@ -54,6 +54,8 @@ public class UserProfileFragment extends BaseFragment implements
 
     private SlidingPagerAdapter mTabsAdapter;
 
+    private RecentCapturesTabFragment mRecentCapturesTabFragment;
+
     private AccountProfile mUserAccount;
 
     private String mUserId;
@@ -147,7 +149,7 @@ public class UserProfileFragment extends BaseFragment implements
 
         // "RECENT" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
+                mRecentCapturesTabFragment = RecentCapturesTabFragment.newInstance(mUserId),
                 R.color.d_dark_navy,
                 R.color.d_light_green,
                 R.color.tab_text_white_grey,
@@ -288,6 +290,16 @@ public class UserProfileFragment extends BaseFragment implements
 
     private void updateUIWithData() {
         mProfileHeaderView.setDataToView(mUserAccount);
+
+        if (mUserAccount == null) {
+            return;
+        }
+        boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
+        String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
+        String emptyText = isSelf
+                ? getResources().getString(R.string.empty_own_profile)
+                : String.format(getResources().getString(R.string.empty_user_profile), user);
+        mRecentCapturesTabFragment.setEmptyStateText(emptyText);
     }
 
     @Override

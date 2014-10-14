@@ -89,6 +89,8 @@
     <string name="empty_search_people">No people with that name.</string>
     <string name="empty_tag_people">@string/empty_facebook</string>
     <string name="empty_wine_profile">No tasting notes yet.</string>
+    <string name="empty_own_profile">@string/empty_recent_captures</string>
+    <string name="empty_user_profile">%1$s has not scanned any wines yet.</string>
 
     <!-- Home -->
     <string name="home_tab_following">FOLLOWING</string>

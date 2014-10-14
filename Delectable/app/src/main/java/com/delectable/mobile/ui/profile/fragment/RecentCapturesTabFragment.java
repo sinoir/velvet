@@ -70,6 +70,8 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
 
     private boolean mFetching;
 
+    private String mEmptyStateText;
+
     public RecentCapturesTabFragment() {
         // Required empty public constructor
     }
@@ -103,6 +105,8 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_view_layout, container, false);
         ButterKnife.inject(this, view);
+
+        mNoCapturesTextView.setText(mEmptyStateText);
 
         mListView.setAdapter(mAdapter);
         mListView.setEmptyView(mEmptyStateLayout);
@@ -236,6 +240,12 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         mAdapter.notifyDataSetChanged();
     }
 
+    public void setEmptyStateText(String emptyText) {
+        mEmptyStateText = emptyText;
+        if (mNoCapturesTextView != null) {
+            mNoCapturesTextView.setText(emptyText);
+        }
+    }
 
     public interface Callback {
 
