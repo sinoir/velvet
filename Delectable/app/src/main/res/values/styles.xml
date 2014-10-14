@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Light theme -->
-    <style name="DelectableTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="DelectableTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/DelectableActionBar</item>
         <item name="android:editTextStyle">@style/Delectable.EditText</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -76,14 +76,6 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:textColor">@color/nav_text_item_color</item>
         <item name="fontName">whitney_medium</item>
-    </style>
-
-    <style name="NavigationUserProfileCountTexts">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/d_medium_gray</item>
-        <item name="android:textSize">@dimen/navigation_header_detail_text_size</item>
-        <item name="fontName">whitney_book</item>
     </style>
 
     <!-- User Profile Styles -->
@@ -190,7 +182,7 @@
     <style name="SettingsEditText" parent="SettingsBaseTextStyle">
         <item name="fontName">whitney_book</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/settings_row_height</item>
         <item name="android:gravity">center_horizontal|bottom</item>
         <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
         <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>

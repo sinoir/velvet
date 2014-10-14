@@ -16,6 +16,9 @@
     <color name="d_dutch_white">#f8dfc2</color>
     <color name="d_antique_white">#f9ebdf</color>
 
+    <!--Pull to refresh loading indicator-->
+    <color name="d_edward_25op">#40a3a7a6</color>
+    <color name="d_soft_amber_25op">#40dbc5b0</color>
 
     <!-- Primary -->
     <!-- d_blue and d_blue_pressed are used for text links -->
