@@ -1,5 +1,8 @@
 package com.delectable.mobile.jobs.accounts;
 
+import com.delectable.mobile.App;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
@@ -34,6 +37,13 @@ public class UpdateProfileJob extends BaseJob {
                 mFname, mLname, mUrl, mBio);
         BaseResponse response = getNetworkClient().post(endpoint, request,
                 BaseResponse.class);
+
+        Account currentUser = UserInfo.getAccountPrivate(App.getInstance());
+        currentUser.setFname(mFname);
+        currentUser.setLname(mLname);
+        currentUser.setUrl(mUrl);
+        currentUser.setBio(mBio);
+        UserInfo.setAccountPrivate(currentUser);
         getEventBus().post(new UpdatedProfileEvent(mFname, mLname, mUrl, mBio));
     }
 
