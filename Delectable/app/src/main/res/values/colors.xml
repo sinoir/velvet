@@ -21,9 +21,6 @@
     <color name="d_soft_amber_25op">#40dbc5b0</color>
 
     <!-- Primary -->
-    <!-- d_blue and d_blue_pressed are used for text links -->
-    <color name="d_blue">#0699cc</color>
-    <color name="d_blue_pressed">#0066BB</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>
