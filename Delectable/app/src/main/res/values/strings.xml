@@ -87,6 +87,7 @@
     <string name="connect_twitter_button">connect to twitter</string>
     <string name="empty_search_wines">No wines with that name.</string>
     <string name="empty_search_people">No people with that name.</string>
+    <string name="empty_tag_people">@string/empty_facebook</string>
 
     <!-- Home -->
     <string name="home_tab_following">FOLLOWING</string>

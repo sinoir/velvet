@@ -40,4 +40,29 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_next" />
     </RelativeLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/empty_view_tag_people"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:padding="@dimen/spacing_large"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            style="@style/TextEmptyState"
+            android:text="@string/empty_tag_people"
+            android:paddingBottom="@dimen/spacing_large" />
+
+        <com.delectable.mobile.ui.common.widget.Delectabutton
+            android:id="@+id/connect_facebook_button"
+            style="@style/delectabutton_large"
+            app:type="large"
+            app:icon="@drawable/ic_fb"
+            android:text="@string/connect_facebook_button" />
+
+    </LinearLayout>
 </RelativeLayout>

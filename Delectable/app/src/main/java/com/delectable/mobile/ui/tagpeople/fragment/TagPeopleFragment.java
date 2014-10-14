@@ -5,8 +5,10 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.controllers.AccountController;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.events.accounts.FetchedDelectafriendsEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.tagpeople.widget.TagPeopleAdapter;
 
 import android.app.Activity;
@@ -120,6 +122,17 @@ public class TagPeopleFragment extends BaseFragment {
                 updateWithFriendsCount();
             }
         });
+
+        View emptyView = mView.findViewById(R.id.empty_view_tag_people);
+        View connectButton = emptyView.findViewById(R.id.connect_facebook_button);
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO connect to facebook
+                mEventBus.post(new NavigationEvent(NavHeader.NAV_SETTINGS));
+            }
+        });
+        mListView.setEmptyView(emptyView);
 
         return mView;
     }
