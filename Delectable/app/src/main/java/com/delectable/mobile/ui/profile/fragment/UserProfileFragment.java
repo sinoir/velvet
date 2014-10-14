@@ -151,17 +151,17 @@ public class UserProfileFragment extends BaseFragment implements
         // "RECENT" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
                 RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
+                R.color.d_off_white,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.profile_tab_recent)));
 
         // "TOP RATED" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
                 RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
+                R.color.d_off_white,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.profile_tab_top_rated)));
 
         mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);

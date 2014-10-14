@@ -36,7 +36,7 @@
 
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
-    <string name="login_sign_up">sign up</string>
+    <string name="landing_join_delectable">join delectable</string>
     <string name="login_already_have_account">Already have an account?&#160;</string>
     <string name="login_login">Sign in</string>
 
@@ -78,8 +78,8 @@
     <string name="navigation_recent_activity_header">RECENT ACTIVITY</string>
 
     <!-- Home -->
-    <string name="home_tab_following">FOLLOWING</string>
-    <string name="home_tab_you">YOU</string>
+    <string name="home_tab_following">following</string>
+    <string name="home_tab_you">you</string>
     <string name="action_facebook_login">Facebook Login</string>
 
     <!-- Profile UI -->
@@ -104,8 +104,8 @@
         <item quantity="other">with %d friends</item>
     </plurals>
 
-    <string name="profile_tab_recent">RECENT</string>
-    <string name="profile_tab_top_rated">TOP RATED</string>
+    <string name="profile_tab_recent">recent</string>
+    <string name="profile_tab_top_rated">top rated</string>
 
     <!-- Followers -->
     <string name="followers_no_followers">Looks like there are no followers.</string>

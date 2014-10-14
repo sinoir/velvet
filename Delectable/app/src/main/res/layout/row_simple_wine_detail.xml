@@ -72,7 +72,7 @@
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:layout_marginTop="10dp"
         android:text="Rate, comment and share this wine"
-        android:textColor="@color/d_chestnut"
+        android:textColor="@color/chestnut_to_chestnut_pressed"
         android:textSize="16sp"
         android:visibility="gone"
         app:fontName="whitney_book" />

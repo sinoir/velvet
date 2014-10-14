@@ -24,9 +24,9 @@
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>
+    <color name="d_suva_gray_pressed">#7B7A76</color>
     <color name="d_light_green">#7bcc2f</color>
     <color name="d_purple">#be3fde</color>
-    <color name="d_dark_navy">#213240</color>
 
     <!-- Greys -->
     <color name="d_white">#FFFFFF</color>
@@ -49,7 +49,7 @@
     <color name="d_blue_pressed_done_button">#0080B3</color>
 
     <!-- Follow Friends Tabs-->
-    <color name="d_navy_experts_tab">@color/d_dark_navy</color>
+    <color name="d_red_experts_tab">@color/d_chestnut</color>
     <color name="d_yellow_contacts_tab">#F5A628</color>
     <color name="d_blue_facebook_tab">#3B5998</color>
     <color name="d_blue_twitter_tab">#55ACEE</color>
