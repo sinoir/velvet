@@ -2,10 +2,7 @@ package com.delectable.mobile.events.accounts;
 
 import com.delectable.mobile.events.BaseEvent;
 
-/**
- * Created by wayne on 8/22/14.
- */
-public class FollowAccountEvent extends BaseEvent{
+public class FollowAccountEvent extends BaseEvent {
 
     private String mAccountId;
 
