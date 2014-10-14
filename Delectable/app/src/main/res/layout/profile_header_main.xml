@@ -23,7 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/profile_vertical_spacing"
+        android:ellipsize="end"
         android:gravity="center"
+        android:maxLines="2"
         android:textColor="@color/d_white"
         android:textSize="@dimen/profile_username_text_size"
         app:fontName="whitney_medium" />
