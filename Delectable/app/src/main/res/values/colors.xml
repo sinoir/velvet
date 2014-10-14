@@ -48,8 +48,6 @@
     <color name="d_dark_green">#6ab325</color>
 
     <color name="d_gray_disabled_done_button">#D2D2D2</color>
-    <color name="d_blue_default_done_button">#0099CC</color>
-    <color name="d_blue_pressed_done_button">#0080B3</color>
 
     <!-- Follow Friends Tabs-->
     <color name="d_red_experts_tab">@color/d_chestnut</color>
