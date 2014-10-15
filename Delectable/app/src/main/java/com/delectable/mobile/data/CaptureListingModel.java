@@ -84,7 +84,7 @@ public class CaptureListingModel {
 
     private void saveListing(String key, BaseListingResponse<CaptureDetails> listing) {
 
-        CacheListing cacheListing = new CacheListing(listing);
+        CacheListing<CaptureDetails> cacheListing = new CacheListing<CaptureDetails>(listing);
         mCache.put(key, cacheListing);
         // Save all captures separately
         for (CaptureDetails capture : listing.getUpdates()) {
@@ -93,9 +93,9 @@ public class CaptureListingModel {
     }
 
     private BaseListingResponse<CaptureDetails> getCachedCaptures(String key) {
-        Type classType = new TypeToken<CacheListing>() {
+        Type classType = new TypeToken<CacheListing<CaptureDetails>>() {
         }.getType();
-        CacheListing cachelisting = (CacheListing) mCache.get(key, CacheListing.class, classType);
+        CacheListing<CaptureDetails> cachelisting = (CacheListing<CaptureDetails>) mCache.get(key, null, classType);
         if (cachelisting == null) {
             //nothing in cache
             return null;

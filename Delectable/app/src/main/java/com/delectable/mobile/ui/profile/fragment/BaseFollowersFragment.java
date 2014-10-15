@@ -4,13 +4,10 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.events.accounts.BaseFetchedFollowersEvent;
-import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
+import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -29,25 +26,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * The base class for Following and Follower fragments. Leaves the implementation of the fetch up to the subclass,
- * as well as the event implemenation.
+ * The base class for Following and Follower fragments. Leaves the implementation of the fetch up to
+ * the subclass, as well as the event implementation.
  */
 public abstract class BaseFollowersFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, InfiniteScrollAdapter.ActionsHandler,
         FollowersRow.ActionsHandler {
 
-    private static final String TAG = BaseFollowersFragment.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
 
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
-
 
     @InjectView(R.id.list_view)
     protected ListView mListView;
@@ -81,7 +75,8 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     protected abstract BaseListingResponse<AccountMinimal> getCachedListing(String accountId);
 
-    protected abstract void fetchAccounts(String accountId, BaseListingResponse<AccountMinimal> accountListing);
+    protected abstract void fetchAccounts(String accountId,
+            BaseListingResponse<AccountMinimal> accountListing, boolean isPullToRefresh);
 
 
     protected void setArguments(String accountId) {
@@ -93,6 +88,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         App.injectMembers(this);
         Bundle args = getArguments();
         if (args == null) {
@@ -106,6 +102,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_listview_w_loading, container, false);
         ButterKnife.inject(this, view);
 
@@ -117,9 +114,11 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume");
         super.onResume();
 
         if (mAdapter.getItems().isEmpty()) {
+            Log.d(TAG, "onResume:loadLocalData");
             loadLocalData();
         }
     }
@@ -141,13 +140,15 @@ public abstract class BaseFollowersFragment extends BaseFragment
                     mAdapter.notifyDataSetChanged();
                 }
 
+                mFetching = true;
                 if (mAdapter.getItems().isEmpty()) {
                     //only if there were no cache items do we make the call to fetch entries
-                    mFetching = true;
                     //start first fetch for followers
-                    fetchAccounts(mAccountId, null);
+                    fetchAccounts(mAccountId, null, false);
+                } else {
+                    //simulate a pull to refresh if there are items
+                    fetchAccounts(mAccountId, mFollowerListing, true);
                 }
-
 
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -169,13 +170,25 @@ public abstract class BaseFollowersFragment extends BaseFragment
             return;
         }
 
-        mFollowerListing = event.getListing();
-        if (mFollowerListing != null) {
+        if (event.getListing() != null) {
+            mFollowerListing = event.getListing();
             mAdapter.setItems(mFollowerListing.getUpdates());
+            mAdapter.notifyDataSetChanged();
         }
         //if cacheListing is null, means there are no updates
+        //we don't let mFollowerListing get assigned null
 
-        mAdapter.notifyDataSetChanged();
+    }
+
+    public void onEventMainThread(FollowAccountEvent event) {
+        if (!mAccountId.equals(event.getAccountId())) {
+            return;
+        }
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+            return;
+        }
+
     }
 
 
@@ -183,7 +196,8 @@ public abstract class BaseFollowersFragment extends BaseFragment
     public void toggleFollow(AccountMinimal account, boolean isFollowing) {
         int relationship = isFollowing ? AccountMinimal.RELATION_TYPE_FOLLOWING
                 : AccountMinimal.RELATION_TYPE_NONE;
-        //TODO implement follow
+        account.setCurrentUserRelationship(relationship);
+        mAccountController.followAccount(account.getId(), isFollowing);
     }
 
     @Override
@@ -205,13 +219,15 @@ public abstract class BaseFollowersFragment extends BaseFragment
         }
 
         if (mFollowerListing == null) {
-            return; //reached end of list/there are no items, we do nothing.
+            //reached end of list/there are no items, we do nothing.
+            //though, this should never be null bc the fragment doesn't it allow it to be.
+            return;
         }
 
         if (mFollowerListing.getMore()) {
-            fetchAccounts(mAccountId, mFollowerListing);
             mFetching = true;
             mNoFollowersText.setVisibility(View.GONE);
+            fetchAccounts(mAccountId, mFollowerListing, false);
         }
     }
 

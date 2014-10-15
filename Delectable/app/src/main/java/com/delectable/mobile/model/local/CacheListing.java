@@ -3,6 +3,7 @@ package com.delectable.mobile.model.local;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.BaseListingResponse.Boundaries;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.IDable;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Stores a list of ids for list items, as well as the information necessary to paginate/update the
  * list.
  */
-public class CacheListing {
+public class CacheListing<T extends IDable> {
 
     private String e_tag;
 
@@ -20,11 +21,11 @@ public class CacheListing {
 
     private ArrayList<String> item_ids;
 
-    public CacheListing(BaseListingResponse<CaptureDetails> captureDetails) {
-        e_tag = captureDetails.getETag();
-        more = captureDetails.getMore();
-        boundaries = captureDetails.getBoundaries();
-        item_ids = captureDetails.getUpdatesIds();
+    public CacheListing(BaseListingResponse<T> listing) {
+        e_tag = listing.getETag();
+        more = listing.getMore();
+        boundaries = listing.getBoundaries();
+        item_ids = listing.getUpdatesIds();
     }
 
     public String getETag() {

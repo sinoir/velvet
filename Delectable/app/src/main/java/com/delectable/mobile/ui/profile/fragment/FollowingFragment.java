@@ -31,8 +31,8 @@ public class FollowingFragment extends BaseFollowersFragment {
 
     @Override
     protected void fetchAccounts(String accountId,
-            BaseListingResponse<AccountMinimal> accountListing) {
-        mAccountController.fetchFollowings(FOLLOWING_REQ, accountId, accountListing, false);
+            BaseListingResponse<AccountMinimal> accountListing, boolean isPullToRefresh) {
+        mAccountController.fetchFollowings(FOLLOWING_REQ, accountId, accountListing, isPullToRefresh);
     }
 
     @Override
