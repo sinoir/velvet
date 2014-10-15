@@ -1,4 +1,4 @@
-package com.delectable.mobile.jobs.accounts;
+package com.delectable.mobile.jobs.captures;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -13,27 +13,27 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails> {
+public class FetchTrendingCapturesJob extends BaseFetchListingJob<CaptureDetails> {
 
-    private static final String TAG = FetchAccountCapturesJob.class.getSimpleName();
+    private static final String TAG = FetchTrendingCapturesJob.class.getSimpleName();
 
     @Inject
     protected CaptureListingModel mListingModel;
 
     @Override
     public String getEndpoint() {
-        return "/accounts/captures";
+        return "/captures/trending";
     }
 
     @Override
     public BaseListingResponse<CaptureDetails> getCachedListing(String accountId) {
-        return mListingModel.getUserCaptures(mAccountId);
+        return mListingModel.getTrendingFeed();
     }
 
     @Override
     public void saveListingToCache(String accountId,
             BaseListingResponse<CaptureDetails> apiListing) {
-        mListingModel.saveUserCaptures(mAccountId, apiListing);
+        mListingModel.saveTrendingFeed(apiListing);
     }
 
     @Override
@@ -44,14 +44,14 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
     }
 
     /**
-     * @param accountId       Account that you want to fetch captures for.
      * @param captureListing  The previous ListingResponse if paginating. Pass in {@code null} if
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public FetchAccountCapturesJob(String requestId, CapturesContext context, String accountId,
+    //only details context seems to be working with this endpoint currently
+    public FetchTrendingCapturesJob(String requestId, CapturesContext context,
             BaseListingResponse<CaptureDetails> captureListing,
             Boolean isPullToRefresh) {
-        super(requestId, context.toString(), accountId, captureListing, isPullToRefresh);
+        super(requestId, context.toString(), null, captureListing, isPullToRefresh);
     }
 }

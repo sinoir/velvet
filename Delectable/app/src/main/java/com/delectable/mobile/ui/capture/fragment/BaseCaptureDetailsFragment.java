@@ -37,7 +37,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     private static final int REQUEST_COMMENT_CAPTURE = 300;
 
     @Inject
-    CaptureController mCaptureController;
+    protected CaptureController mCaptureController;
 
     /**
      * Capture ready to be deleted or other things, for when the user either clicks OK.

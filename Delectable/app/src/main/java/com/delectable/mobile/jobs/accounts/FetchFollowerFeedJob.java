@@ -13,27 +13,27 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails> {
+public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
 
-    private static final String TAG = FetchAccountCapturesJob.class.getSimpleName();
+    private static final String TAG = FetchFollowerFeedJob.class.getSimpleName();
 
     @Inject
     protected CaptureListingModel mListingModel;
 
     @Override
     public String getEndpoint() {
-        return "/accounts/captures";
+        return "/accounts/follower_feed";
     }
 
     @Override
     public BaseListingResponse<CaptureDetails> getCachedListing(String accountId) {
-        return mListingModel.getUserCaptures(mAccountId);
+        return mListingModel.getFollowerFeed();
     }
 
     @Override
     public void saveListingToCache(String accountId,
             BaseListingResponse<CaptureDetails> apiListing) {
-        mListingModel.saveUserCaptures(mAccountId, apiListing);
+        mListingModel.saveFollowerFeed(apiListing);
     }
 
     @Override
@@ -44,14 +44,13 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
     }
 
     /**
-     * @param accountId       Account that you want to fetch captures for.
      * @param captureListing  The previous ListingResponse if paginating. Pass in {@code null} if
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public FetchAccountCapturesJob(String requestId, CapturesContext context, String accountId,
+    public FetchFollowerFeedJob(String requestId, CapturesContext context,
             BaseListingResponse<CaptureDetails> captureListing,
             Boolean isPullToRefresh) {
-        super(requestId, context.toString(), accountId, captureListing, isPullToRefresh);
+        super(requestId, context.toString(), null, captureListing, isPullToRefresh);
     }
 }
