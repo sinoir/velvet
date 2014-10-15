@@ -59,8 +59,7 @@
 
         <com.delectable.mobile.ui.common.widget.Delectabutton
             android:id="@+id/connect_facebook_button"
-            style="@style/delectabutton_large"
-            app:icon="@drawable/ic_fb"
+            style="@style/delectabutton_facebook"
             android:text="@string/connect_facebook_button" />
 
     </LinearLayout>

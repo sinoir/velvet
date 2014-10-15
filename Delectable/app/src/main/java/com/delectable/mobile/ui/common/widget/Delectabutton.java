@@ -71,6 +71,8 @@ public class Delectabutton extends RelativeLayout {
         mTextView = (TextView) findViewById(R.id.delectabutton_text);
         mTextView.setTypeface(Typeface
                 .createFromAsset(getContext().getAssets(), "fonts/" + font.getFileName()));
+        mTextView.setTextColor(a.getColor(R.styleable.Delectabutton_android_textColor,
+                getResources().getColor(R.color.d_dark_gray)));
 
         setIconDrawable(a.getDrawable(
                 R.styleable.Delectabutton_icon));

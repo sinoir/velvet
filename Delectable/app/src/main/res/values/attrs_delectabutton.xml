@@ -4,9 +4,8 @@
             <enum name="large" value="0" />
         </attr>
         <attr name="icon" format="reference" />
-        <attr name="android:textSize" />
         <attr name="android:text" />
-        <attr name="android:enabled" />
-        <attr name="android:layout_width" />
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
     </declare-styleable>
 </resources>
