@@ -385,6 +385,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     public void onEventMainThread(NavigationEvent event) {
+        mNavHeader.setCurrentSelectedNavItem(event.itemPosition);
         navItemSelected(event.itemPosition);
     }
 
