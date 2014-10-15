@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 public abstract class InfiniteScrollAdapter<T> extends BaseAdapter {
 
+    //begin fetch of next items when 5th to last item is visible
+    private static final int LOAD_NEXT_PAGE_OFFSET = 5;
+
     protected ArrayList<T> mItems = new ArrayList<T>();
 
     protected ActionsHandler mActionsHandler;
@@ -37,10 +40,18 @@ public abstract class InfiniteScrollAdapter<T> extends BaseAdapter {
      */
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        if (position == mItems.size() - 1 && mActionsHandler != null) {
+        if (nearListEnd(position) && mActionsHandler != null) {
             mActionsHandler.shouldLoadNextPage();
         }
         return view;
+    }
+
+
+    private boolean nearListEnd(int position) {
+        if (position >= mItems.size() - LOAD_NEXT_PAGE_OFFSET) {
+            return true;
+        }
+        return false;
     }
 
     public void setActionsHandler(ActionsHandler actionsHandler) {
