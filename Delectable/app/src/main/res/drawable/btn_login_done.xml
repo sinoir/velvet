@@ -4,19 +4,19 @@
     <item android:state_selected="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
             <corners android:radius="@dimen/signup_in_done_button_corner_radius" />
-            <solid android:color="@color/d_blue_pressed_done_button" />
+            <solid android:color="@color/d_chestnut_pressed" />
         </shape>
     </item>
     <item android:state_pressed="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
             <corners android:radius="@dimen/signup_in_done_button_corner_radius" />
-            <solid android:color="@color/d_blue_pressed_done_button" />
+            <solid android:color="@color/d_chestnut_pressed" />
         </shape>
     </item>
     <item android:state_focused="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
             <corners android:radius="@dimen/signup_in_done_button_corner_radius" />
-            <solid android:color="@color/d_blue_pressed_done_button" />
+            <solid android:color="@color/d_chestnut_pressed" />
         </shape>
     </item>
     <item android:state_enabled="false">
@@ -28,7 +28,7 @@
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
             <corners android:radius="@dimen/signup_in_done_button_corner_radius" />
-            <solid android:color="@color/d_blue_default_done_button" />
+            <solid android:color="@color/d_chestnut" />
         </shape>
     </item>
 </selector>

@@ -13,7 +13,6 @@ import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
-import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -30,6 +29,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
+import retrofit.http.HEAD;
 
 public class UserProfileFragment extends BaseFragment implements
         ProfileHeaderView.ProfileHeaderActionListener, ObservableScrollView.Callbacks,
@@ -146,23 +147,25 @@ public class UserProfileFragment extends BaseFragment implements
         ArrayList<SlidingPagerAdapter.SlidingPagerItem> tabItems
                 = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
 
-        // TODO: Split Recent / TopRated Tabs
-
         // "RECENT" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
                 RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
+                R.color.d_off_white,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.profile_tab_recent)));
 
         // "TOP RATED" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
-                getString(R.string.profile_tab_top_rated)));
+        // TODO: Replace with TOP Rated or whatever other tabs
+//        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
+//                RecentCapturesTabFragment.newInstance(mUserId),
+//                R.color.d_off_white,
+//                R.color.d_chestnut,
+//                R.color.dark_gray_to_chestnut,
+//                getString(R.string.profile_tab_top_rated)));
+
+        // TODO: Unhide Indicator when we implement another tab
+        mTabStrip.setVisibility(View.GONE);
 
         mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
 
@@ -180,7 +183,8 @@ public class UserProfileFragment extends BaseFragment implements
         // Must reassign the helper listview callbacks because of inner fragments get reinitialized
         // from a saved state.
         getRecentCapturesTabFragment().setCallback(this);
-        getTopRatedTabFragment().setCallback(this);
+        // TODO: Replace this once we add another Tab
+//        getTopRatedTabFragment().setCallback(this);
 
         // Update User Private account info as well
         // TODO: Need to store this as 1 object, storing duplciate account info is causing weird issues.

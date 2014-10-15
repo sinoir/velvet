@@ -10,6 +10,7 @@ import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
+import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
@@ -272,6 +273,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
     }
 
+    //region EventBus events
     public void onEventMainThread(UpdatedProfilePhotoEvent event) {
         if (event.isSuccessful()) {
             PhotoHash photoHash = event.getPhoto();
@@ -305,15 +307,27 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     public void onEventMainThread(UpdatedProfileEvent event) {
         if (event.isSuccessful()) {
-            mUserAccount.setFname(event.getFname());
-            mUserAccount.setLname(event.getLname());
-            mUserAccount.setBio(event.getBio());
+            // Reload Data
+            mUserAccount = UserInfo.getAccountPrivate(getActivity());
             updateUIWithData();
         }
     }
 
-    private void loadActivityFeed() {
-        mAccountController.fetchActivityFeed(null, null);
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(FollowAccountEvent event) {
+        if (!event.isSuccessful() || mUserAccount == null || getActivity() == null) {
+            return;
+        }
+        // Update User Account when following someone new
+        mUserAccount = UserInfo.getAccountPrivate(getActivity());
+        updateUIWithData();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(NavigationDrawerCloseEvent event) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
     }
 
     public void onEventMainThread(FetchedActivityFeedEvent event) {
@@ -328,12 +342,17 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mActivityFeedAdapter.notifyDataSetChanged();
     }
 
+    //endregion
+
+    private void loadActivityFeed() {
+        mAccountController.fetchActivityFeed(null, null);
+    }
+
     private void updateUIWithData() {
         if (mUserAccount == null) {
             return;
         }
-        mNavHeader.setFollowerCount(mUserAccount.getFollowerCount());
-        mNavHeader.setFollowingCount(mUserAccount.getFollowingCount());
+        mNavHeader.setWineCount(mUserAccount.getCaptureCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
         mNavHeader.setUserBio(mUserAccount.getBio());
         ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
@@ -389,16 +408,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
             showToastError(ex.getLocalizedMessage());
         }
     }
-
-    //region EventBus events
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(NavigationDrawerCloseEvent event) {
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
-    }
-
-    //endregion
 
     /**
      * Callbacks interface that all activities using this fragment must implement.

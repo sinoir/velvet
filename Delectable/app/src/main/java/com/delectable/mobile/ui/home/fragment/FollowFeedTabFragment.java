@@ -93,6 +93,9 @@ public class FollowFeedTabFragment extends BaseCaptureDetailsFragment implements
                 .inflate(R.layout.fragment_home_follow_feed_tab, container,
                         false);
         mRefreshContainer = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container);
+        mRefreshContainer
+                .setColorScheme(R.color.d_soft_amber_25op, R.color.d_edward_25op, R.color.d_soft_amber_25op,
+                        R.color.d_edward_25op);
 
         mListView = (ListView) mView.findViewById(R.id.list_view);
 

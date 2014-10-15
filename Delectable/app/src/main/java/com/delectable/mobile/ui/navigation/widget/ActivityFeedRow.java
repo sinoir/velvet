@@ -56,14 +56,13 @@ public class ActivityFeedRow extends RelativeLayout {
 
         // Setup Left and Right Images
         if (data.getLeftImageLink() != null && data.getLeftImageLink().getPhoto() != null) {
-            mLeftImage.setVisibility(View.VISIBLE);
             ImageLoaderUtil
                     .loadImageIntoView(getContext(), data.getLeftImageLink().getPhoto().getUrl(),
                             mLeftImage);
         } else {
-            // TODO: Figure out if we should fill in the empty left image space with the text, but then how do the dividers look, etc?
-            mLeftImage.setVisibility(View.INVISIBLE);
-            mLeftImage.setImageDrawable(null);
+            //show delectable avatar if left image doesn't exist
+            ImageLoaderUtil
+                    .loadImageIntoView(getContext(), R.drawable.delectable_avatar, mLeftImage);
         }
 
         if (data.getRightImageLink() != null && data.getRightImageLink().getPhoto() != null) {

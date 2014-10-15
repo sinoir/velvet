@@ -6,6 +6,7 @@ import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
+import com.delectable.mobile.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseResponse;
@@ -51,6 +52,11 @@ public class FollowAccountJob extends BaseJob {
             followingUserAccount.setCurrentUserRelationship(relationship);
             mAccountModel.saveAccount(followingUserAccount);
         }
+
+        // Update Signed In User Account Counts
+        int countChange = mIsFollowing ? 1 : -1;
+        currentUser.setFollowingCount(currentUser.getFollowingCount() + countChange);
+        UserInfo.setAccountPrivate(currentUser);
 
         mEventBus.post(new FollowAccountEvent(mAccountId, response.isSuccess()));
 

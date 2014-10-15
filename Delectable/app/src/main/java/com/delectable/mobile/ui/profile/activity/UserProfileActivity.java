@@ -43,8 +43,9 @@ public class UserProfileActivity extends BaseActivity {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, UserProfileFragment.newInstance(mUserId)).commit();
         }
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

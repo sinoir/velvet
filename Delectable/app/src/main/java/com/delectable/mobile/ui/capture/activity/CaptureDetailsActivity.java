@@ -33,7 +33,9 @@ public class CaptureDetailsActivity extends BaseActivity {
                     .commit();
         }
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
