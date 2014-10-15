@@ -58,10 +58,10 @@ public abstract class BaseNetworkClient {
     }
 
     /**
-     * @param response http response to be validated for errors.
-     * @param requestName used for logging purposes.
+     * @param response      http response to be validated for errors.
+     * @param requestName   used for logging purposes.
      * @param responseClass pass in Class if not using generics.
-     * @param responseType pass in Type if using generics.
+     * @param responseType  pass in Type if using generics.
      */
     public <T extends BaseResponse> T handleResponse(Response response, String requestName,
             Class<T> responseClass, Type responseType) throws IOException, DelException {

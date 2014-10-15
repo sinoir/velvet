@@ -45,7 +45,7 @@
             android:paddingTop="3dp"
             android:layout_toRightOf="@id/join_textview"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_chestnut_arrow"/>
+            android:src="@drawable/ic_chestnut_arrow" />
     </RelativeLayout>
 
 

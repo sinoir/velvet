@@ -114,6 +114,9 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.all_years_textview)
     protected TextView mAllYearsTextView;
 
+    @InjectView(R.id.empty_view_wine_profile)
+    protected View mEmptyView;
+
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this);
 
     private WineProfileMinimal mWineProfile;
@@ -269,6 +272,10 @@ public class WineProfileFragment extends BaseFragment implements
                 launchCaptureDetails(mAdapter.getItem(position));
             }
         });
+
+        // empty state
+        mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
         return view;
     }
 
@@ -488,6 +495,9 @@ public class WineProfileFragment extends BaseFragment implements
         }
         mAdapter.setCaptureNotes(mCaptureNoteListing.getUpdates());
         mAdapter.notifyDataSetChanged();
+        // empty state
+        mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
     }
 
     @Override

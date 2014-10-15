@@ -52,7 +52,8 @@ public enum ErrorUtil {
     OAUTH_GRANT_EXPIRED(11410),
     UNDOCUMENTED_ERROR_CODE(-1),
     // Local App Codes
-    NO_NETWORK_ERROR(50000);
+    NO_NETWORK_ERROR(50000,
+            "Internet connection is required for this action, please try again later");
 
     private static final HashMap<Integer, ErrorUtil> ERRORS_BY_CODE
             = new HashMap<Integer, ErrorUtil>();
@@ -65,8 +66,15 @@ public enum ErrorUtil {
 
     private int mCode;
 
-    private ErrorUtil(int code) {
+    private String mUserFriendlyMessage;
+
+    private ErrorUtil(int code, String userFriendlyMessage) {
         mCode = code;
+        mUserFriendlyMessage = userFriendlyMessage;
+    }
+
+    private ErrorUtil(int code) {
+        this(code, "");
     }
 
     public static ErrorUtil valueOfCode(int code) {
@@ -81,4 +89,7 @@ public enum ErrorUtil {
         return mCode;
     }
 
+    public String getUserFriendlyMessage() {
+        return mUserFriendlyMessage;
+    }
 }

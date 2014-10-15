@@ -77,6 +77,11 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     }
 
     @Override
+    public void reloadLocalData() {
+        loadLocalData();
+    }
+
+    @Override
     public void dataSetChanged() {
         mCaptureDetailsView.updateData(mCaptureDetails);
     }

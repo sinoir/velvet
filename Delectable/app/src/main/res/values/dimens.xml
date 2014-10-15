@@ -18,6 +18,14 @@
     <dimen name="circle_pager_indicator_radius">4dp</dimen>
     <dimen name="custom_ab_title_text_size">22sp</dimen>
     <dimen name="custom_ab_action_text_size">16sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+
+    <!-- Delectabutton -->
+    <dimen name="delectabutton_height_large">70dp</dimen>
 
     <!-- General Dialog -->
     <dimen name="dialog_horizontal_spacing">20dp</dimen>

@@ -1,5 +1,6 @@
 package com.delectable.mobile.events.captures;
 
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.events.BaseEvent;
 
 public class LikedCaptureEvent extends BaseEvent {
@@ -11,8 +12,8 @@ public class LikedCaptureEvent extends BaseEvent {
         mCaptureId = captureId;
     }
 
-    public LikedCaptureEvent(String errorMessage, String captureId) {
-        super(errorMessage);
+    public LikedCaptureEvent(String errorMessage, String captureId, ErrorUtil errorCode) {
+        super(errorMessage, errorCode);
         mCaptureId = captureId;
     }
 

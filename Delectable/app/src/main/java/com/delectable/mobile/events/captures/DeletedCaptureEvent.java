@@ -1,5 +1,6 @@
 package com.delectable.mobile.events.captures;
 
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.events.BaseEvent;
 
 public class DeletedCaptureEvent extends BaseEvent {
@@ -11,8 +12,8 @@ public class DeletedCaptureEvent extends BaseEvent {
         mCaptureId = captureId;
     }
 
-    public DeletedCaptureEvent(String errorMessage, String captureId) {
-        super(errorMessage);
+    public DeletedCaptureEvent(String errorMessage, String captureId, ErrorUtil errorCode) {
+        super(errorMessage, errorCode);
         mCaptureId = captureId;
     }
 

@@ -1,7 +1,9 @@
 package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.ui.followfriends.widget.ContactsAdapter;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,11 +30,24 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        ListView listview = (ListView) inflater
+        ViewGroup view = (ViewGroup) inflater
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
         mAdapter.setTopHeaderTitleResId(R.string.follow_friends_facebook);
-        listview.setAdapter(mAdapter);
-        return listview;
+        listView.setAdapter(mAdapter);
+
+        View emptyView = view.findViewById(R.id.empty_view_facebook);
+        View followButton = emptyView.findViewById(R.id.connect_facebook_button);
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO connect to facebook
+                mEventBus.post(new NavigationEvent(NavHeader.NAV_SETTINGS));
+            }
+        });
+        listView.setEmptyView(emptyView);
+
+        return view;
     }
 
     @Override

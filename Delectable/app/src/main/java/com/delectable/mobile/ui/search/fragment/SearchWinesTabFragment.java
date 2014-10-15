@@ -1,8 +1,10 @@
 package com.delectable.mobile.ui.search.fragment;
 
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.SearchHit;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.BaseWineController;
 import com.delectable.mobile.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -10,7 +12,6 @@ import com.delectable.mobile.ui.search.widget.WineSearchAdapter;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -19,17 +20,18 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class SearchWinesTabFragment extends BaseSearchTabFragment implements InfiniteScrollAdapter.ActionsHandler{
+public class SearchWinesTabFragment extends BaseSearchTabFragment
+        implements InfiniteScrollAdapter.ActionsHandler {
 
     private static final String TAG = SearchWinesTabFragment.class.getSimpleName();
 
-    private WineSearchAdapter mAdapter = new WineSearchAdapter(this);
+    //number of items we fetch at a time
+    private final int LIMIT = 20; //TODO 20 items per fetch/more?
 
     @Inject
     protected BaseWineController mBaseWinesController;
 
-    //number of items we fetch at a time
-    private final int LIMIT = 20; //TODO 20 items per fetch/more?
+    private WineSearchAdapter mAdapter = new WineSearchAdapter(this);
 
     private String mCurrentQuery;
 
@@ -74,7 +76,9 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment implements Inf
 
             mAdapter.getItems().addAll(hits);
             mAdapter.notifyDataSetChanged();
-            mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
+            mEmptyStateTextView.setText(getResources().getString(R.string.empty_search_wines));
+        } else if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else {
             showToastError(event.getErrorMessage());
             mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet

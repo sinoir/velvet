@@ -2,7 +2,6 @@
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,16 +26,14 @@
         android:indeterminateOnly="true"
         android:visibility="gone" />
 
-    <!--TODO placeholder textview, no designs for empty state -->
     <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/empty_state_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:gravity="center"
-        android:text="Start a new search"
-        android:textColor="@color/d_black"
-        android:textSize="16sp"
+        style="@style/TextEmptyState"
+        android:id="@+id/empty_view_search"
         android:visibility="gone"
-        app:fontName="whitney_medium" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:padding="@dimen/spacing_large"
+        android:gravity="center" />
+
 </RelativeLayout>

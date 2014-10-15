@@ -9,6 +9,7 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.NavigationDrawerCloseEvent;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
@@ -381,6 +382,11 @@ public class NavigationDrawerFragment extends BaseFragment implements
         intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
         intent.setClass(getActivity(), UserProfileActivity.class);
         startActivity(intent);
+    }
+
+    public void onEventMainThread(NavigationEvent event) {
+        mNavHeader.setCurrentSelectedNavItem(event.itemPosition);
+        navItemSelected(event.itemPosition);
     }
 
     @Override

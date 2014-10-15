@@ -4,7 +4,6 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.events.accounts.UpdatedFollowingsEvent;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -7,7 +7,6 @@ import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
 import com.delectable.mobile.model.api.BaseResponse;
@@ -31,7 +30,7 @@ public class FollowAccountJob extends BaseJob {
     private int mOriginalUserRelationship;
 
     public FollowAccountJob(String id, boolean follow) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mAccountId = id;
         mIsFollowing = follow;
     }
@@ -48,6 +47,11 @@ public class FollowAccountJob extends BaseJob {
                 new AccountFollowRequest.AccountFollowPayload(mAccountId, mIsFollowing));
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
 
+        // Update Signed In User Account Counts
+        int countChange = mIsFollowing ? 1 : -1;
+        currentUser.setFollowingCount(currentUser.getFollowingCount() + countChange);
+        UserInfo.setAccountPrivate(currentUser);
+
         //TODO AccountModel will be populated when called from UserProfile, but won't be populated when coming from search or follow friends, might need to accept Account objects as job parameters in order to properly execute this and Kahuna calls
         //write new relationship to account and cache
         if (mAccountModel != null && followingUserAccount != null) {
@@ -57,16 +61,14 @@ public class FollowAccountJob extends BaseJob {
 
             //save back into cache with correct type
             if (followingUserAccount instanceof AccountProfile) {
-                mAccountModel.saveAccount((AccountProfile)followingUserAccount);
+                //update follower counts
+                AccountProfile account = (AccountProfile) followingUserAccount;
+                account.setFollowerCount(account.getFollowerCount() + countChange);
+                mAccountModel.saveAccount(account);
             } else {
                 mAccountModel.saveAccountMinimal(followingUserAccount);
             }
         }
-
-        // Update Signed In User Account Counts
-        int countChange = mIsFollowing ? 1 : -1;
-        currentUser.setFollowingCount(currentUser.getFollowingCount() + countChange);
-        UserInfo.setAccountPrivate(currentUser);
 
         mEventBus.post(new FollowAccountEvent(mAccountId, response.isSuccess()));
 
@@ -78,6 +80,7 @@ public class FollowAccountJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FollowAccountEvent(mAccountId, TAG + " " + getErrorMessage()));
+        getEventBus().post(new FollowAccountEvent(mAccountId, TAG + " " + getErrorMessage(),
+                getErrorCode()));
     }
 }

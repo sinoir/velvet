@@ -23,7 +23,7 @@ public class SearchAccountsJob extends BaseJob {
      * @param limit  How many items to retrieve at once.
      */
     public SearchAccountsJob(String q, int offset, int limit) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mQ = q;
         mOffset = offset;
         mLimit = limit;
@@ -42,6 +42,6 @@ public class SearchAccountsJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new SearchAccountsEvent(TAG + " " + getErrorMessage()));
+        getEventBus().post(new SearchAccountsEvent(TAG + " " + getErrorMessage(), getErrorCode()));
     }
 }

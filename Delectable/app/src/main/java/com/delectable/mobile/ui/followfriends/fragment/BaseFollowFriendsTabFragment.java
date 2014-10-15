@@ -96,6 +96,8 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         }
         if (event.isSuccessful()) {
             account.setCurrentUserRelationship(relationship);
+        } else if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else {
             showToastError(event.getErrorMessage());
         }

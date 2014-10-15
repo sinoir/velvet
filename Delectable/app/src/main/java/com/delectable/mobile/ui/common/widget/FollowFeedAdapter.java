@@ -64,11 +64,9 @@ public class FollowFeedAdapter extends BaseAdapter {
         this(context, data, actionsHandler, captureActionsHandler, "");
     }
 
-
     @Override
     public int getCount() {
-        // Show Empty Row when there's no data to enable Scrolling of the ListView
-        return mData.size() == 0 ? 1 : mData.size();
+        return mData.size();
     }
 
     @Override

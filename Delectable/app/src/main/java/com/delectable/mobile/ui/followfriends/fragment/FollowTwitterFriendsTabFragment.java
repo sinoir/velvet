@@ -1,17 +1,15 @@
 package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.followfriends.widget.InfluencerAccountsAdapter;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.ui.followfriends.widget.TwitterAccountsAdapter;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragment {
 
@@ -32,12 +30,25 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        ListView listview = (ListView) inflater
+
+        ViewGroup view = (ViewGroup) inflater
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
         mAdapter.setTopHeaderTitleResId(R.string.follow_friends_twitter);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(this);
-        return listview;
+        listView.setAdapter(mAdapter);
+
+        View emptyView = view.findViewById(R.id.empty_view_twitter);
+        View followButton = emptyView.findViewById(R.id.connect_twitter_button);
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO connect to twitter
+                mEventBus.post(new NavigationEvent(NavHeader.NAV_SETTINGS));
+            }
+        });
+        listView.setEmptyView(emptyView);
+
+        return view;
     }
 
     @Override
