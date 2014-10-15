@@ -78,6 +78,17 @@
         </activity>
 
         <activity
+            android:name="com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme">
+            <intent-filter android:label="">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity"
             android:label=""
             android:screenOrientation="portrait"
