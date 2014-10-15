@@ -50,7 +50,6 @@ import com.delectable.mobile.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.jobs.captures.FetchCaptureNotesJob;
-import com.delectable.mobile.jobs.captures.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.captures.FetchTrendingCapturesJob;
 import com.delectable.mobile.jobs.captures.FetchUserCaptureFeedJob;
 import com.delectable.mobile.jobs.captures.LikeCaptureJob;
@@ -80,6 +79,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 import com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment;
+import com.delectable.mobile.ui.home.fragment.FollowerFeedTabFragment;
 import com.delectable.mobile.ui.home.fragment.TrendingTabFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
@@ -118,7 +118,8 @@ import de.greenrobot.event.EventBus;
                 BaseCaptureDetailsFragment.class,
                 CaptureDetailsFragment.class,
                 RecentCapturesTabFragment.class,
-                FollowFeedTabFragment.class,
+                FollowFeedTabFragment.class,//TODO remove
+                FollowerFeedTabFragment.class,
                 TrendingTabFragment.class,
                 SettingsFragment.class,
                 FollowExpertsTabFragment.class,
@@ -147,7 +148,8 @@ import de.greenrobot.event.EventBus;
                 FetchMotdJob.class,
                 FetchVersionPropsJob.class,
                 FetchActivityFeedJob.class,
-                FetchFollowerFeedJob.class,
+                com.delectable.mobile.jobs.captures.FetchFollowerFeedJob.class, //TODO remove
+                com.delectable.mobile.jobs.accounts.FetchFollowerFeedJob.class,
                 FetchTrendingCapturesJob.class,
                 FetchUserCaptureFeedJob.class,
                 LoginJob.class,

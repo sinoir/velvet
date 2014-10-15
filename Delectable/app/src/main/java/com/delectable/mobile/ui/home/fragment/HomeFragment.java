@@ -53,7 +53,7 @@ public class HomeFragment extends BaseFragment {
 
         // "FOLLOWING" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                FollowFeedTabFragment.newInstance(),
+                FollowerFeedTabFragment.newInstance(currentUserId),
                 R.color.d_off_white,
                 R.color.d_chestnut,
                 R.color.dark_gray_to_chestnut,
