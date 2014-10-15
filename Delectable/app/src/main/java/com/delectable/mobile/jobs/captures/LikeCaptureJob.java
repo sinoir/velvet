@@ -26,7 +26,7 @@ public class LikeCaptureJob extends BaseJob {
     private boolean mIsLiked;
 
     public LikeCaptureJob(String captureId, String userId, boolean isLiked) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mCaptureId = captureId;
         mUserId = userId;
         mIsLiked = isLiked;
@@ -62,7 +62,8 @@ public class LikeCaptureJob extends BaseJob {
     protected void onCancel() {
         super.onCancel();
         if (getErrorMessage() != null) {
-            getEventBus().post(new LikedCaptureEvent(getErrorMessage(), mCaptureId));
+            getEventBus()
+                    .post(new LikedCaptureEvent(getErrorMessage(), mCaptureId, getErrorCode()));
         } else {
             getEventBus().post(new LikedCaptureEvent(false, mCaptureId));
         }

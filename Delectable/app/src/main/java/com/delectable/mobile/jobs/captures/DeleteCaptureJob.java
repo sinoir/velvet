@@ -20,7 +20,7 @@ public class DeleteCaptureJob extends BaseJob {
     private String mCaptureId;
 
     public DeleteCaptureJob(String captureId) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mCaptureId = captureId;
     }
 
@@ -48,7 +48,8 @@ public class DeleteCaptureJob extends BaseJob {
     protected void onCancel() {
         super.onCancel();
         if (getErrorMessage() != null) {
-            getEventBus().post(new DeletedCaptureEvent(getErrorMessage(), mCaptureId));
+            getEventBus()
+                    .post(new DeletedCaptureEvent(getErrorMessage(), mCaptureId, getErrorCode()));
         } else {
             getEventBus().post(new DeletedCaptureEvent(false, mCaptureId));
         }

@@ -214,6 +214,11 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     }
 
     @Override
+    public void reloadLocalData() {
+        loadLocalData();
+    }
+
+    @Override
     public void dataSetChanged() {
         mAdapter.notifyDataSetChanged();
     }
