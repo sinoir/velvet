@@ -162,7 +162,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         ButterKnife.inject(this, mView);
 
         setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();

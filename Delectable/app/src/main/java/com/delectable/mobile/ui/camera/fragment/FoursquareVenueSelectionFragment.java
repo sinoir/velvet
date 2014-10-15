@@ -71,7 +71,7 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
         mListView.setAdapter(mAdapter);
 
         setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getTargetFragment() != null) {
