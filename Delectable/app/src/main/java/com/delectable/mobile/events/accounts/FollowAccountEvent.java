@@ -1,5 +1,6 @@
 package com.delectable.mobile.events.accounts;
 
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.events.BaseEvent;
 
 public class FollowAccountEvent extends BaseEvent {
@@ -11,8 +12,8 @@ public class FollowAccountEvent extends BaseEvent {
         mAccountId = id;
     }
 
-    public FollowAccountEvent(String id, String errorMessage) {
-        super(errorMessage);
+    public FollowAccountEvent(String id, String errorMessage, ErrorUtil errorCode) {
+        super(errorMessage, errorCode);
         mAccountId = id;
     }
 
