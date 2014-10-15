@@ -79,6 +79,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabF
 import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 import com.delectable.mobile.ui.home.fragment.FollowerFeedTabFragment;
 import com.delectable.mobile.ui.home.fragment.TrendingTabFragment;
+import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowingFragment;
@@ -105,6 +106,7 @@ import de.greenrobot.event.EventBus;
 @Module(
         injects = {
                 MainActivity.class,
+                NavActivity.class,
                 // Fragments
                 BaseFragment.class,
                 SignUpFragment.class,

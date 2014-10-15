@@ -5,22 +5,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import java.util.ArrayList;
 

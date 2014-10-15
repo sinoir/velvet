@@ -3,20 +3,12 @@ package com.delectable.mobile.ui.profile.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
-import com.delectable.mobile.util.SafeAsyncTask;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import javax.inject.Inject;
 
 public class FollowersFragment extends BaseFollowersFragment {
 

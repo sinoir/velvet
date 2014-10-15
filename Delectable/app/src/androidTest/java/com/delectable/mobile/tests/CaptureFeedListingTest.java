@@ -31,10 +31,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
     public void testParseAccountFollowerFeedMinCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_min_ctx);
 
-
         Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
         }.getType();
-        BaseListingWrapperResponse<CaptureDetails>  feedResponseObject = mGson.fromJson(
+        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
                 json.toString(), type);
         BaseListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
@@ -127,7 +126,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
         }.getType();
-        BaseListingWrapperResponse<CaptureDetails>  feedResponseObject = mGson.fromJson(
+        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
                 json.toString(), type);
         BaseListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
@@ -251,17 +250,15 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
         }.getType();
-        BaseListingWrapperResponse<CaptureDetails>  feedResponseObject = mGson.fromJson(
+        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
                 json.toString(), type);
         BaseListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
-
 
         // Load "Second Request" response, as if getting a request with etag / before / after
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_befaft_r2);
 
         feedResponseObject = mGson.fromJson(json.toString(), type);
         BaseListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
-
 
         //TODO fix
 //        newListing.combineWithPreviousListing(captureListing);

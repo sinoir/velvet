@@ -1,6 +1,8 @@
 package com.delectable.mobile.ui.navigation.activity;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.events.NavigationEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
@@ -17,15 +19,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
+
 public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String TAG = NavActivity.class.getSimpleName();
 
+    @Inject
+    protected EventBus mEventBus;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    private int mCurrentSelectedNavItem = NavHeader.NAV_HOME;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -35,6 +46,7 @@ public class NavActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
 
         setContentView(R.layout.activity_nav);
 
@@ -66,6 +78,7 @@ public class NavActivity extends BaseActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        mCurrentSelectedNavItem = position;
         FragmentManager fragmentManager = getFragmentManager();
         BaseFragment fragment = null;
         switch (position) {
@@ -81,6 +94,8 @@ public class NavActivity extends BaseActivity
             case NavHeader.NAV_SETTINGS:
                 fragment = new SettingsFragment();
                 break;
+            default:
+                mCurrentSelectedNavItem = NavHeader.NAV_HOME;
         }
         if (fragment != null) {
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -92,5 +107,15 @@ public class NavActivity extends BaseActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (NavHeader.NAV_HOME == mCurrentSelectedNavItem) {
+            super.onBackPressed();
+        } else {
+            // navigate to home fragment
+            mEventBus.post(new NavigationEvent(NavHeader.NAV_HOME));
+        }
     }
 }

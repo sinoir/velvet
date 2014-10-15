@@ -4,13 +4,9 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.events.accounts.BaseFetchedFollowersEvent;
-import com.delectable.mobile.events.accounts.UpdatedFollowersEvent;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -22,14 +18,11 @@ import com.delectable.mobile.util.SafeAsyncTask;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -37,8 +30,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * The base class for Following and Follower fragments. Leaves the implementation of the fetch up to the subclass,
- * as well as the event implemenation.
+ * The base class for Following and Follower fragments. Leaves the implementation of the fetch up to
+ * the subclass, as well as the event implemenation.
  */
 public abstract class BaseFollowersFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, InfiniteScrollAdapter.ActionsHandler,
@@ -81,7 +74,8 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     protected abstract BaseListingResponse<AccountMinimal> getCachedListing(String accountId);
 
-    protected abstract void fetchAccounts(String accountId, BaseListingResponse<AccountMinimal> accountListing);
+    protected abstract void fetchAccounts(String accountId,
+            BaseListingResponse<AccountMinimal> accountListing);
 
 
     protected void setArguments(String accountId) {

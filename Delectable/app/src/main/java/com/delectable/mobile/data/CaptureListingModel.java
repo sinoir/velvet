@@ -29,8 +29,6 @@ public class CaptureListingModel {
     private static final String TYPE_FOLLOW_FEED = KEY_PREFIX + "followfeed_" + VERSION;
 
 
-
-
     @Inject
     protected CaptureDetailsModel mCaptureDetailsModel;
 

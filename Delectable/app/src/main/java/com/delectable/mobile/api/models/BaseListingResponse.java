@@ -156,8 +156,8 @@ public class BaseListingResponse<T extends IDable> {
 
 
     /**
-     * Clears the before, after, updates, and deletes lists. Used when saving a ListingResponse
-     * to cache, so that we can then in turn set our entire current list as our updates list.
+     * Clears the before, after, updates, and deletes lists. Used when saving a ListingResponse to
+     * cache, so that we can then in turn set our entire current list as our updates list.
      */
     public void clearLists() {
         before.clear();

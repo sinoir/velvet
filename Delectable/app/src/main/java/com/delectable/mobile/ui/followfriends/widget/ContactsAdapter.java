@@ -102,7 +102,11 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
     @Override
     public int getCount() {
         // # headers + size of Accounts and Contacts
-        return getNumHeaders() + mAccounts.size() + mContacts.size();
+        if (mAccounts.isEmpty() && mContacts.isEmpty()) {
+            return 0;
+        } else {
+            return getNumHeaders() + mAccounts.size() + mContacts.size();
+        }
     }
 
     @Override

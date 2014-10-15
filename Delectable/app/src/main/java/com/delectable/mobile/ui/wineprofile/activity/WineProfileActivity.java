@@ -4,7 +4,6 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
@@ -101,10 +100,10 @@ public class WineProfileActivity extends BaseActivity {
             if (mWineProfile != null) {
                 //spawned from a Feed Fragment
                 fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
-            } else if (mBaseWine!=null) {
+            } else if (mBaseWine != null) {
                 //spawned from WineCaptureSubmit
                 fragment = WineProfileFragment.newInstance(mBaseWine);
-            }else if (mBaseWineMinimal != null) {
+            } else if (mBaseWineMinimal != null) {
                 //spawned from search fragment
                 fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
             } else if (mBaseWineId != null) {
