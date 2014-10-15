@@ -55,7 +55,7 @@
     <!-- Signup/Login-->
     <dimen name="login_button_height">70dp</dimen>
     <dimen name="login_button_corner_radius">6dp</dimen>
-    <dimen name="login_signup_button_text_height">20dp</dimen>
+    <dimen name="login_signup_button_text_height">22dp</dimen>
     <dimen name="login_already_have_account_text_height">16sp</dimen>
 
 

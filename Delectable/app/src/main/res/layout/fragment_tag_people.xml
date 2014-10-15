@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/tag_row_height"
         android:layout_alignParentBottom="true"
-        android:background="@color/d_blue_default_done_button"
+        android:background="@color/d_chestnut"
         android:visibility="gone">
 
         <com.delectable.mobile.ui.common.widget.FontTextView

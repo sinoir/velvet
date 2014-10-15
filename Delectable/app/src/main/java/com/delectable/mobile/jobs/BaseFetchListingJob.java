@@ -13,8 +13,8 @@ import java.util.ArrayList;
 /**
  * This is an abstraction for all context listing jobs. Implementations that subclass from this Job
  * class just need to implement the abstract methods for a successful job. At the end of the Job, an
- * {@link UpdatedListingEvent} will be broadcast with the type {@code T} generic that provided to
- * this Job.
+ * {@link UpdatedListingEvent} will be broadcast with the type {@code T} generic that was provided
+ * to this Job.
  */
 public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 

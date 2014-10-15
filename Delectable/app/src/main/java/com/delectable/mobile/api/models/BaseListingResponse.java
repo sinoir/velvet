@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.model.local.CacheListing;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +25,20 @@ public class BaseListingResponse<T extends IDable> {
     protected String e_tag;
 
     protected String context;
+
+    public BaseListingResponse() {
+
+    }
+
+    /**
+     * Used to construct a ListingResponse from a CacheListing, for when retrieving from cache.
+     */
+    public BaseListingResponse(CacheListing cacheListing, ArrayList<T> updates) {
+        boundaries = cacheListing.getBoundaries();
+        more = cacheListing.getMore();
+        e_tag = cacheListing.getETag();
+        this.updates = updates;
+    }
 
     public String getBoundariesFromBefore() {
         if (boundaries != null && boundaries.from != null) {
@@ -94,6 +110,14 @@ public class BaseListingResponse<T extends IDable> {
         return updates;
     }
 
+    public ArrayList<String> getUpdatesIds() {
+        ArrayList<String> ids = new ArrayList<String>();
+        for (T update : updates) {
+            ids.add(update.getId());
+        }
+        return ids;
+    }
+
     public void setUpdates(ArrayList<T> updates) {
         this.updates = updates;
     }
@@ -132,8 +156,8 @@ public class BaseListingResponse<T extends IDable> {
 
 
     /**
-     * Clears the before, after, updates, and deletes lists. Used when saving a ListingResponse
-     * to cache, so that we can then in turn set our entire current list as our updates list.
+     * Clears the before, after, updates, and deletes lists. Used when saving a ListingResponse to
+     * cache, so that we can then in turn set our entire current list as our updates list.
      */
     public void clearLists() {
         before.clear();

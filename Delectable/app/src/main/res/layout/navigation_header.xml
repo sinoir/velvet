@@ -32,24 +32,21 @@
             app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/followers_count"
-            style="@style/NavigationUserProfileCountTexts"
+            android:id="@+id/wine_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="@dimen/navigation_header_detail_text_size"
+            app:fontName="whitney_book"
             android:layout_below="@id/nav_user_name"
             android:layout_marginBottom="10dp"
             android:layout_toRightOf="@+id/profile_image1" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/following_count"
-            style="@style/NavigationUserProfileCountTexts"
-            android:layout_below="@id/nav_user_name"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/followers_count" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/user_bio_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/followers_count"
+            android:layout_below="@id/wine_count"
             android:layout_marginBottom="@dimen/navigation_bio_margins"
             android:layout_marginLeft="@dimen/navigation_bio_margins"
             android:layout_marginRight="@dimen/navigation_bio_margins"

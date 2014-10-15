@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_dark_navy"
+    android:background="@color/d_white"
     tools:context="com.delectable.mobile.ui.profile.fragment.UserProfileFragment">
 
     <com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip
         android:id="@+id/tabstrip"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tab_height"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

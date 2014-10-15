@@ -36,7 +36,7 @@
 
     <!-- Login -->
     <string name="title_activity_login">Sign in</string>
-    <string name="login_sign_up">sign up</string>
+    <string name="landing_join_delectable">join delectable</string>
     <string name="login_already_have_account">Already have an account?&#160;</string>
     <string name="login_login">Sign in</string>
 
@@ -80,7 +80,7 @@
     <!-- Empty states -->
     <string name="empty_following_feed">See what friends and experts are drinking by following their updates.</string>
     <string name="empty_following_feed_button">follow friends &amp; experts</string>
-    <string name="empty_recent_captures">You have not scanned any wines yet. Tap the camera button to get started.</string>
+    <string name="empty_trending_feed">An internet connection is required to see trending wines.</string>
     <string name="empty_facebook">Connect your account to Facebook. We never spam anyone.</string>
     <string name="connect_facebook_button">connect to facebook</string>
     <string name="empty_twitter">Connect your account to Twitter. We never spam anyone.</string>
@@ -89,12 +89,12 @@
     <string name="empty_search_people">No people with that name.</string>
     <string name="empty_tag_people">@string/empty_facebook</string>
     <string name="empty_wine_profile">No tasting notes yet.</string>
-    <string name="empty_own_profile">@string/empty_recent_captures</string>
+    <string name="empty_own_profile">You have not scanned any wines yet. Tap the camera button to get started.</string>
     <string name="empty_user_profile">%1$s has not scanned any wines yet.</string>
 
     <!-- Home -->
-    <string name="home_tab_following">FOLLOWING</string>
-    <string name="home_tab_you">YOU</string>
+    <string name="home_tab_following">following</string>
+    <string name="home_tab_trending">trending</string>
     <string name="action_facebook_login">Facebook Login</string>
 
     <!-- Profile UI -->
@@ -102,7 +102,7 @@
     <string name="profile_following">following</string>
     <string name="profile_find_people">Find People</string>
     <string name="profile_follow">Follow</string>
-    <string name="profile_unfollow">Unfollow</string>
+    <string name="profile_following_cap">Following</string>
     <string name="with">with</string>
 
     <string name="following_count">%d following</string>
@@ -119,8 +119,8 @@
         <item quantity="other">with %d friends</item>
     </plurals>
 
-    <string name="profile_tab_recent">RECENT</string>
-    <string name="profile_tab_top_rated">TOP RATED</string>
+    <string name="profile_tab_recent">recent</string>
+    <string name="profile_tab_top_rated">top rated</string>
 
     <!-- Followers -->
     <string name="followers_title">Followers</string>

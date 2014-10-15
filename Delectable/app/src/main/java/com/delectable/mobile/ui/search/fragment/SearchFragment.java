@@ -5,22 +5,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
-import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
-import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import java.util.ArrayList;
 
@@ -49,14 +39,14 @@ public class SearchFragment extends BaseFragment {
         SlidingPagerAdapter.SlidingPagerItem wines = new SlidingPagerAdapter.SlidingPagerItem(
                 new SearchWinesTabFragment(),
                 R.color.d_off_white,
-                R.color.d_light_green,
-                R.color.medium_gray_to_dark_gray,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.search_wines));
         SlidingPagerAdapter.SlidingPagerItem people = new SlidingPagerAdapter.SlidingPagerItem(
                 new SearchPeopleTabFragment(),
                 R.color.d_off_white,
-                R.color.d_light_green,
-                R.color.medium_gray_to_dark_gray,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.search_people));
 
         ArrayList<SlidingPagerAdapter.SlidingPagerItem>
