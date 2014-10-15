@@ -19,7 +19,7 @@ public class SearchWinesJob extends BaseJob {
     private int mLimit;
 
     public SearchWinesJob(String q, int offset, int limit) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mQ = q;
         mOffset = offset;
         mLimit = limit;
@@ -38,6 +38,6 @@ public class SearchWinesJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new SearchWinesEvent(TAG + " " + getErrorMessage()));
+        getEventBus().post(new SearchWinesEvent(TAG + " " + getErrorMessage(), getErrorCode()));
     }
 }
