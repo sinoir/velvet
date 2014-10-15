@@ -53,19 +53,19 @@ public class HomeFragment extends BaseFragment {
 
         // "FOLLOWING" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                FollowFeedTabFragment.newInstance(),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
+                FollowerFeedTabFragment.newInstance(currentUserId),
+                R.color.d_off_white,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.home_tab_following)));
 
         // "YOU" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                FollowFeedTabFragment.newInstance(currentUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
-                getString(R.string.home_tab_you)));
+                TrendingTabFragment.newInstance(currentUserId),
+                R.color.d_off_white,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
+                getString(R.string.home_tab_trending)));
 
         mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
 

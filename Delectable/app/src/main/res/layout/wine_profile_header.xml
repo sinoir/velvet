@@ -148,7 +148,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center_vertical|right"
             android:text="@string/wine_profile_all_years"
-            android:textColor="@color/btn_text_blue"
+            android:textColor="@color/chestnut_to_chestnut_pressed"
             android:textSize="@dimen/wine_profile_all_years_text_size" />
 
     </RelativeLayout>

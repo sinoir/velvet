@@ -116,7 +116,9 @@ public class WineProfileActivity extends BaseActivity {
                     .add(R.id.container, fragment)
                     .commit();
         }
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

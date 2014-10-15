@@ -162,7 +162,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         ButterKnife.inject(this, mView);
 
         setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.ab_back, new View.OnClickListener() {
+        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
@@ -254,9 +254,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         customView.addView(mPostButton, params);
 
         mPostButton.setText(R.string.capture_submit_post);
-        // TODO: TouchStates for button
         mPostButton.setTextColor(Color.WHITE);
-        mPostButton.setBackgroundColor(getResources().getColor(R.color.d_blue));
+        mPostButton.setBackgroundResource(R.drawable.bg_chestnut_to_pressed);
     }
 
     private void setupButtonListeners() {

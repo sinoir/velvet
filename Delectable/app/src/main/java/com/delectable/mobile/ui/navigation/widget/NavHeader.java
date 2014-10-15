@@ -36,11 +36,8 @@ public class NavHeader extends RelativeLayout {
     @InjectView(R.id.nav_user_name)
     TextView mUserNameTextView;
 
-    @InjectView(R.id.followers_count)
-    TextView mFollowerCountTextView;
-
-    @InjectView(R.id.following_count)
-    TextView mFollowingCountTextView;
+    @InjectView(R.id.wine_count)
+    TextView mWineCountTextView;
 
     @InjectView(R.id.user_bio_text)
     TextView mUserBioTextView;
@@ -127,16 +124,10 @@ public class NavHeader extends RelativeLayout {
         mUserBioTextView.setText(bio);
     }
 
-    public void setFollowerCount(int followerCount) {
-        String followerCountText = getResources().getQuantityString(R.plurals.followers_count,
-                followerCount, followerCount);
-        mFollowerCountTextView.setText(followerCountText);
-    }
-
-    public void setFollowingCount(int followingCount) {
-        String followingCountText = getResources()
-                .getString(R.string.following_count, followingCount);
-        mFollowingCountTextView.setText(followingCountText);
+    public void setWineCount(int wineCount) {
+        String followerCountText = getResources().getQuantityString(R.plurals.wine_count,
+                wineCount, wineCount);
+        mWineCountTextView.setText(followerCountText);
     }
 
     public void setCurrentSelectedNavItem(int navItem) {

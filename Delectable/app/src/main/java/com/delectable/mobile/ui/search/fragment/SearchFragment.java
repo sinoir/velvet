@@ -49,14 +49,14 @@ public class SearchFragment extends BaseFragment {
         SlidingPagerAdapter.SlidingPagerItem wines = new SlidingPagerAdapter.SlidingPagerItem(
                 new SearchWinesTabFragment(),
                 R.color.d_off_white,
-                R.color.d_light_green,
-                R.color.medium_gray_to_dark_gray,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.search_wines));
         SlidingPagerAdapter.SlidingPagerItem people = new SlidingPagerAdapter.SlidingPagerItem(
                 new SearchPeopleTabFragment(),
                 R.color.d_off_white,
-                R.color.d_light_green,
-                R.color.medium_gray_to_dark_gray,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.search_people));
 
         ArrayList<SlidingPagerAdapter.SlidingPagerItem>

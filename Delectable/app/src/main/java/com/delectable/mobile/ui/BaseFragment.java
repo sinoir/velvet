@@ -123,7 +123,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         super.onDestroy();
         state = State.destroyed;
         lifecycleListeners.clear();
-        if (mHasCustomActionBarTitle) {
+        if (mHasCustomActionBarTitle && getActivity().getActionBar() != null) {
             getActivity().getActionBar().setTitle(null);
         }
     }
