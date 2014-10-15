@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.profile.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountProfile;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
@@ -274,6 +275,7 @@ public class UserProfileFragment extends BaseFragment implements
 
     }
 
+    //region EventBus Events
     public void onEventMainThread(UpdatedAccountProfileEvent event) {
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
@@ -287,38 +289,46 @@ public class UserProfileFragment extends BaseFragment implements
         showToastError(event.getErrorMessage());
     }
 
-
-    private void updateUIWithData() {
-        mProfileHeaderView.setDataToView(mUserAccount);
-
-        if (mUserAccount == null) {
-            return;
-        }
-        boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
-        String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
-        String emptyText = isSelf
-                ? getResources().getString(R.string.empty_own_profile)
-                : String.format(getResources().getString(R.string.empty_user_profile), user);
-        mRecentCapturesTabFragment.setEmptyStateText(emptyText);
-    }
-
-    @Override
-    public void toggleFollowUserClicked(final boolean isFollowingSelected) {
-        mAccountController.followAccount(mUserId, isFollowingSelected);
-    }
-
     public void onEventMainThread(FollowAccountEvent event) {
         //follow account job wasn't fired from this fragment
         if (!mUserId.equalsIgnoreCase(event.getAccountId())) {
             return;
         }
 
-        if (!event.isSuccessful()) {
+        // Reload Data
+        loadData();
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
+        } else if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
-            updateUIWithData(); //will reset button back to original state
         }
-        //we don't want to update the UI on success because if the user toggles the button very quickly, it'll look very sluggish when the request finally returns
-        //it's ok bc the API doesn't return error/false if updating to a status that it already is
+    }
+    //endregion
+
+    @Override
+    public void toggleFollowUserClicked(boolean isFollowingSelected) {
+        // Update Count
+        int followerCountDiff = isFollowingSelected ? 1 : -1;
+        mUserAccount.setFollowerCount(mUserAccount.getFollowerCount() + followerCountDiff);
+        int relationship = isFollowingSelected ? AccountProfile.RELATION_TYPE_FOLLOWING
+                : AccountProfile.RELATION_TYPE_NONE;
+        mUserAccount.setCurrentUserRelationship(relationship);
+        updateUIWithData();
+        mAccountController.followAccount(mUserId, isFollowingSelected);
+    }
+
+    private void updateUIWithData() {
+        mProfileHeaderView.setDataToView(mUserAccount);
+        
+        if (mUserAccount == null) {
+            return;
+        }
+        boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
+        String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
+        String emptyText = isSelf
+                        ? getResources().getString(R.string.empty_own_profile)
+                        : String.format(getResources().getString(R.string.empty_user_profile), user);
+        mRecentCapturesTabFragment.setEmptyStateText(emptyText);
     }
 
     @Override
