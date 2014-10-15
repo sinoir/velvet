@@ -3,8 +3,10 @@ package com.delectable.mobile.ui.capture.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.CaptureController;
 import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.events.BaseEvent;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.events.captures.DeletedCaptureEvent;
 import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
@@ -50,6 +52,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    public abstract void reloadLocalData();
 
     public abstract void dataSetChanged();
 
@@ -168,6 +172,14 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Attach EventBus to handle events / fixes weird issues
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+            // no-op
+        }
+
         if (requestCode == REQUEST_DELETE_CONFIRMATION) {
             if (resultCode == Activity.RESULT_OK) {
                 deleteCapture(mTempCaptureForAction);
@@ -208,23 +220,36 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     //region EventBus Events
     public void onEventMainThread(AddCaptureCommentEvent event) {
-        dataSetChanged();
+        handleActionEvent(event);
     }
 
     public void onEventMainThread(EditedCaptureCommentEvent event) {
-        dataSetChanged();
+        handleActionEvent(event);
     }
 
     public void onEventMainThread(LikedCaptureEvent event) {
-        dataSetChanged();
+        handleActionEvent(event);
     }
 
     public void onEventMainThread(RatedCaptureEvent event) {
-        dataSetChanged();
+        handleActionEvent(event);
     }
 
     public void onEventMainThread(DeletedCaptureEvent event) {
-        dataSetChanged();
+        handleActionEvent(event);
     }
     //endregion
+
+    private void handleActionEvent(BaseEvent event) {
+        if (event.isSuccessful()) {
+            dataSetChanged();
+        } else {
+            reloadLocalData();
+        }
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
+        } else if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
+    }
 }

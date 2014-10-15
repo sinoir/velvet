@@ -4,10 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.controllers.CaptureController;
-import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -23,17 +20,15 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment implements
         InfiniteScrollAdapter.ActionsHandler {
 
-    private final String TAG = this.getClass().getSimpleName();
-
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
+
+    private final String TAG = this.getClass().getSimpleName();
 
     @InjectView(R.id.swipe_container)
     protected SwipeRefreshLayout mRefreshContainer;
@@ -150,7 +145,8 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
     protected abstract BaseListingResponse<CaptureDetails> getCachedFeed();
 
-    protected abstract void fetchCaptures(BaseListingResponse<CaptureDetails> listing, boolean isPullToRefresh);
+    protected abstract void fetchCaptures(BaseListingResponse<CaptureDetails> listing,
+            boolean isPullToRefresh);
 
     private void refreshData() {
         Log.d(TAG, "refreshData");
@@ -164,10 +160,10 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     }
 
     public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
-        Log.d(TAG, "UpdatedListingEvent:reqMatch:" +event.getRequestId());
-        if (event.getListing()!=null) {
-            Log.d(TAG, "UpdatedListingEvent:etag:" +event.getListing().getETag());
-            Log.d(TAG, "UpdatedListingEvent:size:" +event.getListing().getUpdates().size());
+        Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());
+        if (event.getListing() != null) {
+            Log.d(TAG, "UpdatedListingEvent:etag:" + event.getListing().getETag());
+            Log.d(TAG, "UpdatedListingEvent:size:" + event.getListing().getUpdates().size());
         }
         mFetching = false;
 
@@ -188,7 +184,6 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
             return;
         }
         Log.d(TAG, "UpdatedListingEvent:eventSuccess");
-
 
         //listing can be null if we've reached the end of the listing
         //or if we pull to refresh and there been no updates
@@ -219,23 +214,25 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }
         Log.d(TAG, "shouldLoadNextPage:notFetching");
 
-
         if (mCapturesListing == null) {
             return; //reached end of list/there are no items, we do nothing.
             //in theory, this should never be null because the getMore check below should stop it from loading
         }
         Log.d(TAG, "shouldLoadNextPage:captureListingExists");
 
-
         if (!mCapturesListing.getMore()) {
             return; //listing says there are no more items, do nothiing
         }
         Log.d(TAG, "shouldLoadNextPage:moreTrue");
 
-
         mFetching = true;
         //mRefreshContainer.setRefreshing(true);
         fetchCaptures(mCapturesListing, false);
+    }
+
+    @Override
+    public void reloadLocalData() {
+        loadLocalData();
     }
 
     @Override

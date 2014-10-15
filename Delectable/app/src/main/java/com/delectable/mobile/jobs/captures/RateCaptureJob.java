@@ -27,7 +27,7 @@ public class RateCaptureJob extends BaseJob {
     private int mCaptureRating;
 
     public RateCaptureJob(String captureId, String userId, int captureRating) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mCaptureId = captureId;
         mCaptureRating = captureRating;
         mUserId = userId;
@@ -67,7 +67,8 @@ public class RateCaptureJob extends BaseJob {
     protected void onCancel() {
         super.onCancel();
         if (getErrorMessage() != null) {
-            getEventBus().post(new RatedCaptureEvent(getErrorMessage(), mCaptureId));
+            getEventBus()
+                    .post(new RatedCaptureEvent(getErrorMessage(), mCaptureId, getErrorCode()));
         } else {
             getEventBus().post(new RatedCaptureEvent(false, mCaptureId));
         }

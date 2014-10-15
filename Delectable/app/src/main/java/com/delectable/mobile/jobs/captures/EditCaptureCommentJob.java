@@ -26,7 +26,7 @@ public class EditCaptureCommentJob extends BaseJob {
     private String mCaptureComment;
 
     public EditCaptureCommentJob(String captureId, String commentId, String captureComment) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mCaptureId = captureId;
         mCommentId = commentId;
         mCaptureComment = captureComment;
@@ -67,7 +67,8 @@ public class EditCaptureCommentJob extends BaseJob {
     protected void onCancel() {
         super.onCancel();
         if (getErrorMessage() != null) {
-            getEventBus().post(new EditedCaptureCommentEvent(getErrorMessage(), mCaptureId));
+            getEventBus().post(new EditedCaptureCommentEvent(getErrorMessage(), mCaptureId,
+                    getErrorCode()));
         } else {
             getEventBus().post(new EditedCaptureCommentEvent(false, mCaptureId));
         }
