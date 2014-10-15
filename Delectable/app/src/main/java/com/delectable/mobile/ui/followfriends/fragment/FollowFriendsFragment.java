@@ -39,7 +39,7 @@ public class FollowFriendsFragment extends BaseFragment {
         SlidingPagerItem experts = new SlidingPagerItem(
                 new FollowExpertsTabFragment(),
                 R.color.d_off_white,
-                R.color.d_navy_experts_tab,
+                R.color.d_red_experts_tab,
                 R.drawable.tab_follow_friends_experts_icon);
         SlidingPagerItem contacts = new SlidingPagerItem(
                 new FollowContactsTabFragment(),

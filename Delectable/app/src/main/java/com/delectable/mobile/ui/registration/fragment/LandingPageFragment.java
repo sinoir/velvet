@@ -58,7 +58,7 @@ public class LandingPageFragment extends BaseFragment {
         mServerEnvSpinner.setSelection(env.ordinal());
     }
 
-    @OnClick(R.id.signup_button)
+    @OnClick(R.id.join_button)
     protected void goToSignup() {
         launchNextFragment(new SignUpFragment());
     }

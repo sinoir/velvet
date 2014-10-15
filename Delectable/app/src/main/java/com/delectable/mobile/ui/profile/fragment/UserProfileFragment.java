@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import retrofit.http.HEAD;
+
 public class UserProfileFragment extends BaseFragment implements
         ProfileHeaderView.ProfileHeaderActionListener, ObservableScrollView.Callbacks,
         RecentCapturesTabFragment.Callback {
@@ -148,18 +150,18 @@ public class UserProfileFragment extends BaseFragment implements
         // "RECENT" tab
         tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
                 RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_dark_navy,
-                R.color.d_light_green,
-                R.color.tab_text_white_grey,
+                R.color.d_off_white,
+                R.color.d_chestnut,
+                R.color.dark_gray_to_chestnut,
                 getString(R.string.profile_tab_recent)));
 
         // "TOP RATED" tab
         // TODO: Replace with TOP Rated or whatever other tabs
 //        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
 //                RecentCapturesTabFragment.newInstance(mUserId),
-//                R.color.d_dark_navy,
-//                R.color.d_light_green,
-//                R.color.tab_text_white_grey,
+//                R.color.d_off_white,
+//                R.color.d_chestnut,
+//                R.color.dark_gray_to_chestnut,
 //                getString(R.string.profile_tab_top_rated)));
 
         // TODO: Unhide Indicator when we implement another tab

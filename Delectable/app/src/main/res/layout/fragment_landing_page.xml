@@ -5,29 +5,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@color/d_white"
     android:paddingLeft="@dimen/general_row_horizontal_spacing"
     android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="100dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/landing_screen_logo" />
 
     <Spinner
         android:id="@+id/debug_spinner"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_height="48dp"/>
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true" />
 
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/signup_button"
+    <RelativeLayout
+        android:id="@+id/join_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
         android:layout_above="@+id/login_text_container"
-        android:background="@drawable/btn_signup"
-        android:clickable="true"
-        android:gravity="center"
-        android:text="@string/login_sign_up"
-        android:textColor="@color/d_black"
-        android:textSize="@dimen/login_signup_button_text_height"
-        android:textAllCaps="true"
-        app:fontName="whitney_medium_sc" />
+        android:gravity="center">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/join_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/landing_join_delectable"
+            android:textColor="@color/chestnut_to_chestnut_pressed"
+            android:textSize="@dimen/login_signup_button_text_height"
+            app:fontName="whitney_medium_sc" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="3dp"
+            android:layout_toRightOf="@id/join_textview"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_chestnut_arrow"/>
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/login_text_container"
@@ -42,7 +62,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical|right"
             android:text="@string/login_already_have_account"
-            android:textColor="@color/btn_text_white_to_grey"
+            android:textColor="@color/suva_gray_to_pressed"
             android:textSize="@dimen/login_already_have_account_text_height"
             app:fontName="whitney_book" />
 
@@ -53,7 +73,7 @@
             android:layout_toRightOf="@+id/already_have_account_text"
             android:gravity="center_vertical|left"
             android:text="@string/login_login"
-            android:textColor="@color/btn_text_white_to_grey"
+            android:textColor="@color/suva_gray_to_pressed"
             android:textSize="@dimen/login_already_have_account_text_height"
             app:fontName="whitney_semibold" />
 

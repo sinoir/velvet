@@ -37,7 +37,7 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     private String mFollowText;
 
-    private String mUnfollowText;
+    private String mFollowingText;
 
     private ViewPager mViewPager;
 
@@ -76,7 +76,7 @@ public class ProfileHeaderView extends RelativeLayout implements
         mIndicator.setVisibility(View.INVISIBLE);
 
         mFollowText = context.getString(R.string.profile_follow);
-        mUnfollowText = context.getString(R.string.profile_unfollow);
+        mFollowingText = context.getString(R.string.profile_following_cap);
 
         mFollowButton = (TextView) findViewById(R.id.follow_button);
 
@@ -192,7 +192,7 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     private void updateButtonToUnfollow() {
-        mFollowButton.setText(mUnfollowText);
+        mFollowButton.setText(mFollowingText);
         mFollowButton.setSelected(true);
     }
 
