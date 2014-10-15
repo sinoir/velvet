@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.search.fragment;
 
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.SearchHit;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.events.accounts.SearchAccountsEvent;
@@ -26,18 +27,13 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
 
     private static final String TAG = SearchPeopleTabFragment.class.getSimpleName();
 
-    private AccountSearchAdapter mAdapter = new AccountSearchAdapter(this, this);
+    //number of items we fetch at a time
+    private final int LIMIT = 20; //TODO 20 items per fetch/more?
 
     @Inject
     protected AccountController mAccountController;
 
-    @Override
-    protected BaseAdapter getAdapter() {
-        return mAdapter;
-    }
-
-    //number of items we fetch at a time
-    private final int LIMIT = 20; //TODO 20 items per fetch/more?
+    private AccountSearchAdapter mAdapter = new AccountSearchAdapter(this, this);
 
     private String mCurrentQuery;
 
@@ -49,7 +45,6 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
      */
     private boolean mEndOfList = false;
 
-
     /**
      * these maps are used to retain references to Account objects expecting updates to their
      * relationship status. This way, when the FollowAccountEvent returns, we don't have to iterate
@@ -60,6 +55,11 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
 
     private HashMap<String, Integer> mAccountExpectedRelationship
             = new HashMap<String, Integer>();
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return mAdapter;
+    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -91,6 +91,8 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
             mAdapter.getItems().addAll(hits);
             mAdapter.notifyDataSetChanged();
             mEmptyStateTextView.setText("No Results"); //TODO no empty state designs yet
+        } else if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else {
             showToastError(event.getErrorMessage());
             mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet
