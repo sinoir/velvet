@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.profile.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountProfile;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
@@ -295,7 +296,9 @@ public class UserProfileFragment extends BaseFragment implements
 
         // Reload Data
         loadData();
-        if (!event.isSuccessful()) {
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
+        } else if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
         }
     }

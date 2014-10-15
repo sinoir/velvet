@@ -29,7 +29,7 @@ public class FollowAccountJob extends BaseJob {
     private int mOriginalUserRelationship;
 
     public FollowAccountJob(String id, boolean follow) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mAccountId = id;
         mIsFollowing = follow;
     }
@@ -69,6 +69,7 @@ public class FollowAccountJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new FollowAccountEvent(mAccountId, TAG + " " + getErrorMessage()));
+        getEventBus().post(new FollowAccountEvent(mAccountId, TAG + " " + getErrorMessage(),
+                getErrorCode()));
     }
 }
