@@ -16,6 +16,7 @@ import com.delectable.mobile.jobs.accounts.FetchAccountsFromContactsJob;
 import com.delectable.mobile.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.jobs.accounts.FetchFacebookSuggestionsJob;
+import com.delectable.mobile.jobs.accounts.FetchFollowerFeedJob;
 import com.delectable.mobile.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.jobs.accounts.FetchFollowingsJob;
 import com.delectable.mobile.jobs.accounts.FetchInfluencerSuggestionsJob;
@@ -159,5 +160,18 @@ public class AccountController {
                 new AssociateTwitterJob(twitterId, token, tokenSecret, screenName));
     }
     //endregion
+
+    /**
+     * @param requestId       Unique identifier for Event callback.
+     * @param context         Context type for capture
+     * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
+     *                        making a fresh request.
+     * @param isPullToRefresh true if user invoke this call via a pull to refresh.
+     */
+    public void fetchFollowerFeed(String requestId, CapturesContext context,
+            BaseListingResponse<CaptureDetails> listing, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchFollowerFeedJob(requestId, context, listing, isPullToRefresh));
+    }
 
 }

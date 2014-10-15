@@ -65,11 +65,11 @@ public class CaptureListingModel {
         return getCachedCaptures(TYPE_TRENDING);
     }
 
-    public void saveFollowFeed(BaseListingResponse<CaptureDetails> listing) {
+    public void saveFollowerFeed(BaseListingResponse<CaptureDetails> listing) {
         saveListing(TYPE_FOLLOW_FEED, listing);
     }
 
-    public BaseListingResponse<CaptureDetails> getFollowFeed() {
+    public BaseListingResponse<CaptureDetails> getFollowerFeed() {
         return getCachedCaptures(TYPE_FOLLOW_FEED);
     }
 
