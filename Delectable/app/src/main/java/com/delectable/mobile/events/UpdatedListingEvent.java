@@ -2,6 +2,7 @@ package com.delectable.mobile.events;
 
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.IDable;
+import com.delectable.mobile.api.util.ErrorUtil;
 
 /**
  * Designed to inform when the ListingResponse has been retrieve and combined into the current list
@@ -32,8 +33,9 @@ public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
         mListing = listing;
     }
 
-    public UpdatedListingEvent(String requestId, String accountId, String errorMessage) {
-        super(errorMessage);
+    public UpdatedListingEvent(String requestId, String accountId, String errorMessage,
+            ErrorUtil errorCode) {
+        super(errorMessage, errorCode);
         mRequestId = requestId;
         mAccountId = accountId;
     }
