@@ -22,7 +22,7 @@ public class LoginJob extends BaseJob {
 
 
     public LoginJob(String email, String password) {
-        super(new Params(Priority.UX).requireNetwork());
+        super(new Params(Priority.UX));
         mEmail = email;
         mPassword = password;
     }

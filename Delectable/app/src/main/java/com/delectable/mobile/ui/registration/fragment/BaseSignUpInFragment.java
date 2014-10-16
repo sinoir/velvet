@@ -133,6 +133,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         }
     };
 
+    protected LoadingCircleDialog mLoadingDialog;
+
     @Inject
     RegistrationController mRegistrationController;
 
@@ -146,8 +148,6 @@ public abstract class BaseSignUpInFragment extends BaseFragment
      * in {@link com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog}
      */
     private String mPhoneEmail;
-
-    protected LoadingCircleDialog mLoadingDialog;
 
     //region Lifecycle
     @Override
@@ -334,6 +334,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
 
         if (ErrorUtil.INVALID_CREDENTIALS == registerEvent.getErrorCode()) {
             showToastError(R.string.error_invalid_username_password);
+        } else if (ErrorUtil.NO_NETWORK_ERROR == registerEvent.getErrorCode()) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else {
             showToastError(registerEvent.getErrorMessage());
         }
