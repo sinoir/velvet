@@ -13,8 +13,10 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ObservableScrollView;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -338,12 +340,20 @@ public class UserProfileFragment extends BaseFragment implements
 
     @Override
     public void followerCountClicked() {
-        launchNextFragment(FollowersFragment.newInstance(mUserId));
+        Intent intent = FollowersFollowingActivity
+                .newIntent(getActivity(), FollowersFollowingActivity.Type.FOLLOWERS, mUserId);
+        startActivity(intent);
+        //TODO convert back to fragments when viewpager fragment lifecycles is deciphered. when popping
+        //the fragment back stack and going back to a screen with a viewpager, the view pager fragments disappear
+        //launchNextFragment(FollowersFragment.newInstance(mUserId));
     }
 
     @Override
     public void followingCountClicked() {
-        launchNextFragment(FollowingFragment.newInstance(mUserId));
+        Intent intent = FollowersFollowingActivity
+                .newIntent(getActivity(), FollowersFollowingActivity.Type.FOLLOWING, mUserId);
+        startActivity(intent);
+        //launchNextFragment(FollowingFragment.newInstance(mUserId));
 
     }
 

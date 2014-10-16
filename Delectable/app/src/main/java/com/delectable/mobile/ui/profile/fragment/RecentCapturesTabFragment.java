@@ -145,14 +145,16 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
                     mAdapter.notifyDataSetChanged();
                 }
 
+                mFetching = true;
                 if (mAdapter.getItems().isEmpty()) {
                     //only if there were no cache items do we make the call to fetch entries
-                    mFetching = true;
                     mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
                             mAccountId, null, false);
+                } else {
+                    //simulate a pull to refresh if there are items
+                    mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
+                            mAccountId, mCapturesListing, true);
                 }
-
-
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -176,14 +178,13 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
             return;
         }
 
-        mCapturesListing = event.getListing();
-
-        if (mCapturesListing != null) {
+        if (event.getListing() != null) {
+            mCapturesListing = event.getListing();
             mAdapter.setItems(mCapturesListing.getUpdates());
+            mAdapter.notifyDataSetChanged();
         }
         //if cacheListing is null, means there are no updates
-
-        mAdapter.notifyDataSetChanged();
+        //we don't let mFollowerListing get assigned null
     }
 
     @Override
@@ -193,13 +194,17 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }
 
         if (mCapturesListing == null) {
-            return; //reached end of list/there are no items, we do nothing.
+            //reached end of list/there are no items, we do nothing.
+            //though, this should never be null bc the fragment doesn't it allow it to be.
+            return;
         }
 
-        mFetching = true;
-        mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
-                mAccountId, mCapturesListing, false);
-        //mNoFollowersText.setVisibility(View.GONE);
+        if (mCapturesListing.getMore()) {
+            mFetching = true;
+            //mNoFollowersText.setVisibility(View.GONE);
+            mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
+                    mAccountId, mCapturesListing, false);
+        }
     }
 
     @Override

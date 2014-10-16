@@ -2,6 +2,7 @@ package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
@@ -36,7 +37,10 @@ public class FollowAccountJob extends BaseJob {
 
     @Override
     public void onRun() throws Throwable {
-        AccountProfile followingUserAccount = mAccountModel.getAccount(mAccountId);
+        AccountMinimal followingUserAccount = mAccountModel.getAccount(mAccountId);
+        if (followingUserAccount == null) {
+            followingUserAccount = mAccountModel.getAccountMinimal(mAccountId);
+        }
         Account currentUser = UserInfo.getAccountPrivate(App.getInstance());
         String endpoint = "/accounts/follow";
         AccountFollowRequest request = new AccountFollowRequest(
@@ -54,9 +58,16 @@ public class FollowAccountJob extends BaseJob {
             int relationship = mIsFollowing ? AccountProfile.RELATION_TYPE_FOLLOWING
                     : AccountProfile.RELATION_TYPE_NONE;
             followingUserAccount.setCurrentUserRelationship(relationship);
-            followingUserAccount.setFollowerCount(
-                    followingUserAccount.getFollowerCount() + countChange);
-            mAccountModel.saveAccount(followingUserAccount);
+
+            //save back into cache with correct type
+            if (followingUserAccount instanceof AccountProfile) {
+                //update follower counts
+                AccountProfile account = (AccountProfile) followingUserAccount;
+                account.setFollowerCount(account.getFollowerCount() + countChange);
+                mAccountModel.saveAccount(account);
+            } else {
+                mAccountModel.saveAccountMinimal(followingUserAccount);
+            }
         }
 
         mEventBus.post(new FollowAccountEvent(mAccountId, response.isSuccess()));

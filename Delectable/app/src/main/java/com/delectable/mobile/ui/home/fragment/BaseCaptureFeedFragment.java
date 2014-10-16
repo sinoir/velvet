@@ -113,6 +113,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
     private void loadLocalData() {
         mRefreshContainer.setRefreshing(true);
+        mFetching = true;
         new SafeAsyncTask<BaseListingResponse<CaptureDetails>>(this) {
             @Override
             protected BaseListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
@@ -133,11 +134,11 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
                 if (mAdapter.getItems().isEmpty()) {
                     //only if there were no cache items do we make the call to fetch entries
-                    mFetching = true;
                     fetchCaptures(null, false);
                 } else {
                     Log.d(TAG, "loadLocalData:success");
-                    mRefreshContainer.setRefreshing(false);
+                    //simulate a pull to refresh if there are items
+                    fetchCaptures(mCapturesListing, true);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -159,6 +160,11 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         fetchCaptures(mCapturesListing, true);
     }
 
+    /**
+     * The subclass will need to intercept the event and verify that the event was spawned from a
+     * request the subclass.
+     * @param event
+     */
     public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
         Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());
         if (event.getListing() != null) {
@@ -167,12 +173,9 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }
         mFetching = false;
 
-        boolean wasRefreshing = false;
         if (mRefreshContainer.isRefreshing()) {
             mRefreshContainer.setRefreshing(false);
-            wasRefreshing = true;
             Log.d(TAG, "UpdatedListingEvent:wasRefreshing");
-
         }
 
         if (mAdapter.getItems().isEmpty()) {
@@ -185,25 +188,15 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }
         Log.d(TAG, "UpdatedListingEvent:eventSuccess");
 
-        //listing can be null if we've reached the end of the listing
-        //or if we pull to refresh and there been no updates
-        if (event.getListing() == null && wasRefreshing) {
-            //do nothing
-            //bc if it was a null return from a refresh, there might still be items to paginate
-            //if we null out captureListing, we won't be able to use it's fields to perform the next pagination
-        } else {
+        if (event.getListing() != null) {
             mCapturesListing = event.getListing();
-            Log.d(TAG, "UpdatedListingEvent:capturesUpdated");
-        }
-
-        if (mCapturesListing != null) {
             mAdapter.setItems(mCapturesListing.getUpdates());
+            mAdapter.notifyDataSetChanged();
             Log.d(TAG, "UpdatedListingEvent:capturesExist");
-
         }
         //if cacheListing is null, means there are no updates
+        //we don't let mFollowerListing get assigned null
 
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -215,19 +208,18 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         Log.d(TAG, "shouldLoadNextPage:notFetching");
 
         if (mCapturesListing == null) {
-            return; //reached end of list/there are no items, we do nothing.
+            //reached end of list/there are no items, we do nothing.
             //in theory, this should never be null because the getMore check below should stop it from loading
+            return;
         }
         Log.d(TAG, "shouldLoadNextPage:captureListingExists");
 
-        if (!mCapturesListing.getMore()) {
-            return; //listing says there are no more items, do nothiing
+        if (mCapturesListing.getMore()) {
+            mFetching = true;
+            //mNoFollowersText.setVisibility(View.GONE);
+            fetchCaptures(mCapturesListing, false);
+            Log.d(TAG, "shouldLoadNextPage:moreTrue");
         }
-        Log.d(TAG, "shouldLoadNextPage:moreTrue");
-
-        mFetching = true;
-        //mRefreshContainer.setRefreshing(true);
-        fetchCaptures(mCapturesListing, false);
     }
 
     @Override
