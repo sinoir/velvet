@@ -66,9 +66,11 @@ public abstract class BaseSignUpInFragment extends BaseFragment
             Log.d(TAG + ".Facebook", "Session State: " + session.getState());
             Log.d(TAG + ".Facebook", "Session:" + session);
             Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
             if (state.isOpened()) {
                 facebookLogin();
+            } else {
+                // TODO: Handle more errors and other conditions.
+                showToastError("Failed to connect to Facebook");
             }
         }
     };
