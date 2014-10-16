@@ -11,12 +11,14 @@ import com.facebook.Session;
 import com.iainconnor.objectcache.CacheManager;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -35,6 +37,8 @@ import javax.inject.Inject;
 import de.greenrobot.event.EventBus;
 
 public class BaseFragment extends Fragment implements LifecycleProvider {
+
+    private final String TAG = this.getClass().getSimpleName();
 
     @Inject
     public EventBus mEventBus;
@@ -64,6 +68,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CrashlyticsUtil.log(TAG+".onCreate");
         state = State.created;
         mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
@@ -79,8 +84,22 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        CrashlyticsUtil.log(TAG+".onAttach");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        CrashlyticsUtil.log(TAG+".onCreateView");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
+        CrashlyticsUtil.log(TAG+".onStart");
         state = State.started;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStart();
@@ -92,22 +111,25 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        state = State.paused;
-        hideKeyboard();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        CrashlyticsUtil.log(TAG+".onResume");
         state = State.resumed;
         toggleCustomActionBar();
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        CrashlyticsUtil.log(TAG+".onPause");
+        state = State.paused;
+        hideKeyboard();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
+        CrashlyticsUtil.log(TAG+".onStop");
         state = State.stopped;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStop();
@@ -119,13 +141,26 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        CrashlyticsUtil.log(TAG+".onDestroyView");
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        CrashlyticsUtil.log(TAG+".onDestroy");
         state = State.destroyed;
         lifecycleListeners.clear();
         if (mHasCustomActionBarTitle && getActivity().getActionBar() != null) {
             getActivity().getActionBar().setTitle(null);
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        CrashlyticsUtil.log(TAG+".onDetach");
     }
 
     @Override

@@ -20,4 +20,12 @@ public class CrashlyticsUtil {
         Crashlytics.setString(SESSION_KEY, null);
     }
 
+    public static void log(int priority, String tag, String message) {
+        Crashlytics.log(priority, tag, message);
+    }
+
+    public static void log(String message) {
+        Crashlytics.log(message);
+    }
+
 }

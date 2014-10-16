@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationServices;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.delectable.mobile.util.CrashlyticsUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 
 import android.app.Activity;
@@ -27,7 +28,7 @@ import java.util.List;
 public abstract class BaseActivity extends Activity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = BaseActivity.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
 
     private boolean mIsFromDeepLink;
 
@@ -72,12 +73,14 @@ public abstract class BaseActivity extends Activity
     protected void onStart() {
         super.onStart();
 
+        CrashlyticsUtil.log(TAG+".onStart");
         mGoogleApiClient.connect();
         KahunaAnalytics.start();
     }
 
     @Override
     protected void onStop() {
+        CrashlyticsUtil.log(TAG+".onStop");
         mGoogleApiClient.disconnect();
         KahunaAnalytics.stop();
         super.onStop();
