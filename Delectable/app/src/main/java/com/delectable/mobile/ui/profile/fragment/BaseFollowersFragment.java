@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.events.UpdatedListingEvent;
@@ -39,9 +40,9 @@ public abstract class BaseFollowersFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, InfiniteScrollAdapter.ActionsHandler,
         FollowersRow.ActionsHandler {
 
-    private final String TAG = this.getClass().getSimpleName();
-
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
+
+    private final String TAG = this.getClass().getSimpleName();
 
     @InjectView(R.id.list_view)
     protected ListView mListView;
@@ -77,7 +78,6 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     protected abstract void fetchAccounts(String accountId,
             BaseListingResponse<AccountMinimal> accountListing, boolean isPullToRefresh);
-
 
     protected void setArguments(String accountId) {
         Bundle args = new Bundle();
@@ -149,7 +149,6 @@ public abstract class BaseFollowersFragment extends BaseFragment
                     //simulate a pull to refresh if there are items
                     fetchAccounts(mAccountId, mFollowerListing, true);
                 }
-
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -161,13 +160,15 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
         mFetching = false;
 
-        if (mAdapter.getItems().isEmpty()) {
+        if (mAdapter.getItems().isEmpty() || !event.isSuccessful()) {
+            // TODO: No network Error state?
             mNoFollowersText.setVisibility(View.VISIBLE);
         }
 
-        if (!event.isSuccessful()) {
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
+        } else if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
-            return;
         }
 
         if (event.getListing() != null) {
@@ -175,9 +176,8 @@ public abstract class BaseFollowersFragment extends BaseFragment
             mAdapter.setItems(mFollowerListing.getUpdates());
             mAdapter.notifyDataSetChanged();
         }
-        //if cacheListing is null, means there are no updates
+        //if cacheListing is null, means there are no updates or an error happened
         //we don't let mFollowerListing get assigned null
-
     }
 
     public void onEventMainThread(FollowAccountEvent event) {
@@ -188,7 +188,6 @@ public abstract class BaseFollowersFragment extends BaseFragment
             showToastError(event.getErrorMessage());
             return;
         }
-
     }
 
 
@@ -230,6 +229,4 @@ public abstract class BaseFollowersFragment extends BaseFragment
             fetchAccounts(mAccountId, mFollowerListing, false);
         }
     }
-
-
 }

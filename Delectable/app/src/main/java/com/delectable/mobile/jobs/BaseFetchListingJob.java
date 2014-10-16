@@ -20,8 +20,6 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
     private static final String TAG = BaseFetchListingJob.class.getSimpleName();
 
-    private String mRequestId;
-
     protected String mContext;
 
     protected String mAccountId;
@@ -34,6 +32,8 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
     protected Boolean mIsPullToRefresh;
 
+    private String mRequestId;
+
     /**
      * @param accountId       Account that you want to fetch a listing for.
      * @param listingResponse The previous ListingResponse if paginating. Pass in {@code null} if
@@ -42,7 +42,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
      */
     public BaseFetchListingJob(String requestId, String context, String accountId,
             BaseListingResponse<T> listingResponse, Boolean isPullToRefresh) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC));
         mRequestId = requestId;
         mContext = context;
         mAccountId = accountId;
@@ -141,7 +141,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         super.onCancel();
         String jobName = this.getClass().getSimpleName();
         mEventBus.post(new UpdatedListingEvent<T>(mRequestId, mAccountId,
-                jobName + " " + getErrorMessage()));
+                jobName + " " + getErrorMessage(), getErrorCode()));
 
     }
 }
