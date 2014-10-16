@@ -15,7 +15,7 @@ public class ResetPasswordJob extends BaseJob {
     private String mEmail;
 
     public ResetPasswordJob(String email) {
-        super(new Params(Priority.UX).requireNetwork());
+        super(new Params(Priority.UX));
         mEmail = email;
     }
 
@@ -34,7 +34,7 @@ public class ResetPasswordJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new ResetPasswordEvent(mEmail, false));
+        mEventBus.post(new ResetPasswordEvent(mEmail, getErrorMessage(), getErrorCode()));
     }
 
 }

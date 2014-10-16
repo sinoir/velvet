@@ -27,7 +27,7 @@ public class RegisterJob extends BaseJob {
     private String mLname;
 
     public RegisterJob(String email, String password, String fname, String lname) {
-        super(new Params(Priority.UX).requireNetwork());
+        super(new Params(Priority.UX));
         mEmail = email;
         mPassword = password;
         mFname = fname;

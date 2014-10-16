@@ -1,8 +1,9 @@
 package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.events.registrations.ResetPasswordEvent;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.util.HelperUtil;
 
@@ -13,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import butterknife.OnClick;
 
@@ -21,8 +21,6 @@ import butterknife.OnClick;
 public class SignInFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignInFragment.class.getSimpleName();
-
-    private ResetPasswordDialog mResetPasswordDialog;
 
     /**
      * Sets whether the done button is enabled or not depending on whether the fields are all filled
@@ -50,6 +48,8 @@ public class SignInFragment extends BaseSignUpInFragment {
     };
 
     private static final int RESET_PASSWORD_DIALOG = 0;
+
+    private ResetPasswordDialog mResetPasswordDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,19 +115,22 @@ public class SignInFragment extends BaseSignUpInFragment {
     }
 
     public void onEventMainThread(ResetPasswordEvent event) {
-        String msg;
+        String errorMessage = "";
 
         if (event.isSuccessful()) {
-            msg = String
+            errorMessage = String
                     .format(getResources().getString(R.string.reset_password_dialog_msg_success),
-                            event.mEmail);
+                            event.getEmail());
             mResetPasswordDialog.dismiss();
+        } else if (ErrorUtil.NO_NETWORK_ERROR == event.getErrorCode()) {
+            showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else {
-            msg = String.format(getResources().getString(R.string.reset_password_dialog_msg_failed),
-                    event.mEmail);
+            errorMessage = String
+                    .format(getResources().getString(R.string.reset_password_dialog_msg_failed),
+                            event.getEmail());
         }
 
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+        showToastError(errorMessage);
     }
 
 }
