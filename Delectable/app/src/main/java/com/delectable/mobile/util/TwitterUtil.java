@@ -65,7 +65,6 @@ public class TwitterUtil {
         if (Twitter.getSessionManager().getActiveSession() == null) {
             return false;
         }
-        debug();
         return true;
     }
 
