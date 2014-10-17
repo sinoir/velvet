@@ -30,3 +30,6 @@ Delectable/app/src/main/assets/twitter_credentials.properties
 ```
 
 Please obtain these files if you need to build production releases on your machine.
+
+[guide]:https://source.android.com/source/code-style.html
+[source]:https://android.googlesource.com/platform/development/+/master/ide/intellij/codestyles/
