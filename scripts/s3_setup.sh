@@ -37,7 +37,7 @@ sed -i "" "s@LAST_UPDATED@last updated ${BUILD_ID}@g" "${DOWNLOAD_LANDING_HTML_R
 
 #if we are on develop branch, then we make an alpha build
 DEVELOP="develop"
-if [ "${GIT_BRANCH_NO_PATH,,}" = "${DEVELOP,,}" ]; then 
+if [ "${GIT_BRANCH_NO_PATH}" = "${DEVELOP}" ]; then 
 	#copy apk
 	cp "${WORKSPACE}/Delectable/app/build/outputs/apk/app-alpha.apk" "${ENTERPRISE_PRODUCT_DIRECTORY}/${GIT_BRANCH_NO_PATH}-alpha.apk"
 
