@@ -1,13 +1,12 @@
 package com.delectable.mobile.data;
 
-import com.google.gson.Gson;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Motd;
-
-import android.content.Context;
-import android.content.SharedPreferences;
+import com.google.gson.Gson;
 
 public class UserInfo {
 
@@ -19,6 +18,8 @@ public class UserInfo {
 
     private static final String PROPERTY_USER_ID = "userId";
 
+    private static final String PROPERTY_USER_NAME = "userName";
+
     private static final String PROPERTY_USER_EMAIL = "userEmail";
 
     private static final String PROPERTY_MOTD = "motd";
@@ -28,16 +29,17 @@ public class UserInfo {
     private static final String PROPERTY_ACCOUNT_PRIVATE_TEMP = "accountPrivateTemp";
 
 
-    public static void onSignIn(String userId, String sessionKey, String sessionToken,
-            String email) {
+    public static void onSignIn(String userId, String fullName, String email, String sessionKey, String sessionToken) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_USER_ID, userId);
+        editor.putString(PROPERTY_USER_NAME, fullName);
+        editor.putString(PROPERTY_USER_EMAIL, email);
         editor.putString(PROPERTY_SESSION_KEY, sessionKey);
         editor.putString(PROPERTY_SESSION_TOKEN, sessionToken);
-        editor.putString(PROPERTY_USER_EMAIL, email);
+
         editor.commit();
     }
 
@@ -45,10 +47,11 @@ public class UserInfo {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(PROPERTY_USER_ID);
+        editor.remove(PROPERTY_USER_NAME);
+        editor.remove(PROPERTY_USER_EMAIL);
         editor.remove(PROPERTY_SESSION_KEY);
         editor.remove(PROPERTY_SESSION_TOKEN);
-        editor.remove(PROPERTY_USER_ID);
-        editor.remove(PROPERTY_USER_EMAIL);
         editor.remove(PROPERTY_MOTD);
         editor.remove(PROPERTY_ACCOUNT_PRIVATE);
         editor.commit();
@@ -91,6 +94,26 @@ public class UserInfo {
     public static String getUserId(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(PROPERTY_USER_ID, null);
+    }
+
+    public static String getUserName(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        String name = prefs.getString(PROPERTY_USER_NAME, null);
+        //this check is necessary this method was created after 1.0 release, their user name might not have been
+        //saved upon signin.
+        if (name == null) {
+            Account account = getAccountPrivate(context);
+            if (account != null) {
+                name = account.getFullName();
+
+                //write back into shared prefs
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(PROPERTY_USER_NAME, name);
+                editor.commit();
+            }
+
+        }
+        return name;
     }
 
     public static String getUserEmail(Context context) {

@@ -43,7 +43,7 @@ public class LoginFacebookJob extends BaseJob {
         boolean newUser = response.payload.new_user;
         Account account = response.payload.account;
 
-        UserInfo.onSignIn(account.getId(), sessionKey, sessionToken, account.getEmail());
+        UserInfo.onSignIn(account.getId(), account.getFullName(), account.getEmail(), sessionKey, sessionToken);
         UserInfo.setAccountPrivate(account);
         CrashlyticsUtil
                 .onSignIn(account.getFullName(), account.getEmail(), account.getId(), sessionKey);
