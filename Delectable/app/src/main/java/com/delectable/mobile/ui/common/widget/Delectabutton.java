@@ -1,17 +1,14 @@
 package com.delectable.mobile.ui.common.widget;
 
-import com.delectable.mobile.R;
-import com.delectable.mobile.util.FontEnum;
-
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import com.delectable.mobile.R;
 
 /**
  * Delectabutton. The button that comes in different styles and with cool features.
@@ -22,7 +19,7 @@ public class Delectabutton extends RelativeLayout {
         LARGE;
     }
 
-    private TextView mTextView;
+    private FontTextView mTextView;
 
     private ImageView mIcon;
 
@@ -55,22 +52,17 @@ public class Delectabutton extends RelativeLayout {
 
         mType = Type.values()[a.getInt(R.styleable.Delectabutton_type, 0)];
 
-        FontEnum font;
 
         if (Type.LARGE == mType) {
             View.inflate(context, R.layout.widget_delectabutton_large, this);
-            font = FontEnum.WHITNEY_BOOK_SC;
         } else {
             // default
             View.inflate(context, R.layout.widget_delectabutton_large, this);
-            font = FontEnum.WHITNEY_BOOK_SC;
         }
 
         mIcon = (ImageView) findViewById(R.id.delectabutton_icon);
 
-        mTextView = (TextView) findViewById(R.id.delectabutton_text);
-        mTextView.setTypeface(Typeface
-                .createFromAsset(getContext().getAssets(), "fonts/" + font.getFileName()));
+        mTextView = (FontTextView) findViewById(R.id.delectabutton_text);
         mTextView.setTextColor(a.getColor(R.styleable.Delectabutton_android_textColor,
                 getResources().getColor(R.color.d_dark_gray)));
 
