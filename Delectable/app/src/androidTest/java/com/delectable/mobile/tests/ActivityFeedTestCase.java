@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.ActivityRecipient;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.model.api.accounts.AccountsActivityFeedResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsActivityFeedResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

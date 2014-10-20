@@ -6,8 +6,8 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.models.SearchResult;
 import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.model.api.basewines.BaseWinesSearchResponse;
-import com.delectable.mobile.model.api.basewines.BaseWineResponse;
+import com.delectable.mobile.api.endpointmodels.basewines.BaseWinesSearchResponse;
+import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

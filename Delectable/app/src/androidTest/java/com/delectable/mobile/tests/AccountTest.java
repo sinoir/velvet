@@ -5,9 +5,9 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
-import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
-import com.delectable.mobile.model.api.accounts.AccountsSearchResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsSearchResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

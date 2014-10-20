@@ -1,6 +1,6 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 
 import android.content.Context;
 import android.content.SharedPreferences;

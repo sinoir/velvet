@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.google.gson.Gson;
 
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.tests.utils.Helpers;
 
 import org.json.JSONArray;

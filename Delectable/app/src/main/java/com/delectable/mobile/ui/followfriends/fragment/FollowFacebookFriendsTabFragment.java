@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.events.NavigationEvent;
+import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.followfriends.widget.ContactsAdapter;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 

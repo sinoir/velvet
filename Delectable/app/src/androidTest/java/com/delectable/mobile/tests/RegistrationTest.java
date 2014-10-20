@@ -4,7 +4,7 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.LocalNotifications;
-import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
+import com.delectable.mobile.api.endpointmodels.registrations.RegistrationLoginResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

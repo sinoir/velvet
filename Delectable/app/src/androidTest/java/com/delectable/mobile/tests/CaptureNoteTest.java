@@ -3,7 +3,7 @@ package com.delectable.mobile.tests;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.model.api.captures.CaptureNotesResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureNotesResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

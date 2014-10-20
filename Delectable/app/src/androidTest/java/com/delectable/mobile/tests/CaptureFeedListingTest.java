@@ -5,8 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.model.api.BaseListingWrapperResponse;
-import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
+import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureFeedResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
