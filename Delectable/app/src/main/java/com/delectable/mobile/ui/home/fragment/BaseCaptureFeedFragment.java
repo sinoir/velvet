@@ -4,7 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;

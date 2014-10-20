@@ -1,6 +1,6 @@
 package com.delectable.mobile.api.models;
 
-import com.delectable.mobile.model.local.CacheListing;
+import com.delectable.mobile.api.cache.localmodels.CacheListing;
 
 import java.util.ArrayList;
 import java.util.HashMap;

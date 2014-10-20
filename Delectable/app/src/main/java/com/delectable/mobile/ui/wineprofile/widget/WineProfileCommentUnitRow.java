@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.wineprofile.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
 import com.delectable.mobile.util.ImageLoaderUtil;

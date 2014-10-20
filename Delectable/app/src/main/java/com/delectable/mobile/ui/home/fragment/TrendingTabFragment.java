@@ -3,8 +3,8 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.data.CaptureListingModel;
-import com.delectable.mobile.events.UpdatedListingEvent;
+import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 

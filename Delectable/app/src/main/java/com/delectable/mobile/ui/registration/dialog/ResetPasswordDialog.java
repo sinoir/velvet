@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.registration.dialog;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.controllers.RegistrationController;
+import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.ui.common.widget.FontEditText;
 import com.delectable.mobile.util.HelperUtil;
 

@@ -3,7 +3,7 @@ package com.delectable.mobile.tests;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 
 public class UserInfoTest extends BaseAndroidTestCase {
 

@@ -2,8 +2,8 @@ package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.events.accounts.FetchedAccountsFromContactsEvent;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.accounts.FetchedAccountsFromContactsEvent;
 import com.delectable.mobile.ui.followfriends.widget.BaseAccountsMinimalAdapter;
 import com.delectable.mobile.ui.followfriends.widget.ContactsAdapter;
 

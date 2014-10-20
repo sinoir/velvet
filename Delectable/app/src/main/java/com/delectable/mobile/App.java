@@ -1,7 +1,7 @@
 package com.delectable.mobile;
 
 import com.crashlytics.android.Crashlytics;
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.di.AppModule;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.TwitterUtil;

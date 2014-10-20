@@ -3,8 +3,8 @@ package com.delectable.mobile.ui.wineprofile.dialog;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.data.BaseWineModel;
-import com.delectable.mobile.events.wines.UpdatedBaseWineEvent;
+import com.delectable.mobile.api.cache.BaseWineModel;
+import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
 import android.app.Activity;

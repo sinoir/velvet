@@ -67,11 +67,11 @@
 
 #may need to uncomment these classes if proguarded build fails, these are just the classes that have provides methods in AppModule
 #-keep class de.greenrobot.event.EventBus
-#-keep class com.delectable.mobile.jobs.MyJobManager
-#-keep class com.delectable.mobile.net.NetworkClient
+#-keep class MyJobManager
+#-keep class NetworkClient
 #-keep class com.iainconnor.objectcache.CacheManager
-#-keep class com.delectable.mobile.net.FoursquareNetworkClient
-#-keep class com.delectable.mobile.net.S3ImageUploadNetworkClient
+#-keep class FoursquareNetworkClient
+#-keep class S3ImageUploadNetworkClient
 
 
 #facebook
@@ -93,8 +93,8 @@
 #-keep class com.google.gson.stream.** { *; }
 
 # Application classes that will be serialized/deserialized over Gson
--keep class com.delectable.mobile.api.** { *; }
--keep class com.delectable.mobile.model.api.** { *; }
+-keep class com.delectable.mobile.api.models.** { *; }
+-keep class com.delectable.mobile.api.endpointmodels.** { *; }
 
 
 ##---------------End: proguard configuration for Gson  ----------

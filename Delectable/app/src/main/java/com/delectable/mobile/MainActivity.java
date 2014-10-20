@@ -7,9 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.delectable.mobile.controllers.VersionPropsFileController;
-import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.builddatecheck.BuildDateCheckedEvent;
+import com.delectable.mobile.api.controllers.VersionPropsFileController;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.events.builddatecheck.BuildDateCheckedEvent;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.ui.versionupgrade.dialog.VersionUpgradeDialog;

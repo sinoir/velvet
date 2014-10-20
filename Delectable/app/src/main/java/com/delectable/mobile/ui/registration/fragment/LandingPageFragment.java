@@ -2,8 +2,8 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.R;
-import com.delectable.mobile.data.ServerInfo;
-import com.delectable.mobile.data.ServerInfo.Environment;
+import com.delectable.mobile.api.cache.ServerInfo;
+import com.delectable.mobile.api.cache.ServerInfo.Environment;
 import com.delectable.mobile.ui.BaseFragment;
 
 import android.os.Bundle;

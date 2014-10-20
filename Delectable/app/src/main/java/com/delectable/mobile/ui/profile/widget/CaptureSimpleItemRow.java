@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.profile.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
 import com.delectable.mobile.util.DateHelperUtil;
