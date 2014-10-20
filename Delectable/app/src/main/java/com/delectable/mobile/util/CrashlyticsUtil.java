@@ -1,7 +1,6 @@
 package com.delectable.mobile.util;
 
 import com.crashlytics.android.Crashlytics;
-import com.delectable.mobile.BuildConfig;
 
 public class CrashlyticsUtil {
 
@@ -30,7 +29,7 @@ public class CrashlyticsUtil {
     }
 
     public static void log(String message) {
-        if (BuildConfig.REPORT_CRASHES) {
+        if (Crashlytics.getInstance() != null) {
             Crashlytics.log(message);
         }
     }
