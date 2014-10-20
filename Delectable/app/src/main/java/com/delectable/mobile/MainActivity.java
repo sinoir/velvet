@@ -7,14 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.delectable.mobile.controllers.VersionPropsFileController;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.builddatecheck.BuildDateCheckedEvent;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.ui.versionupgrade.dialog.VersionUpgradeDialog;
-import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 
 import java.io.IOException;
@@ -72,16 +70,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.REPORT_CRASHES) {
-            Crashlytics.start(this);
-            if (UserInfo.isSignedIn(this)) {
-                String name = UserInfo.getUserName(this);
-                String userEmail = UserInfo.getUserEmail(this);
-                String id = UserInfo.getUserId(this);
-                String sessionKey = UserInfo.getSessionKey(this);
-                CrashlyticsUtil.onSignIn(name, userEmail, id, sessionKey);
-            }
-        }
         KahunaUtil.trackStart();
         App.injectMembers(this);
         setContentView(R.layout.activity_fragment_container);
