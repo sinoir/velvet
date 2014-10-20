@@ -4,8 +4,8 @@ import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountsIdentifiersListingResponse;
-import com.delectable.mobile.model.api.accounts.AccountsUpdateIdentifierRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsUpdateIdentifierRequest;
 import com.path.android.jobqueue.Params;
 
 public class UpdateIdentifierJob extends BaseJob {

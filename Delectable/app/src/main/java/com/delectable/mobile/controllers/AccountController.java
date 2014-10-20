@@ -28,7 +28,7 @@ import com.delectable.mobile.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.jobs.accounts.UpdateSettingJob;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;

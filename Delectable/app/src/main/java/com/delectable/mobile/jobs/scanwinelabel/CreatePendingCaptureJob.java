@@ -2,8 +2,8 @@ package com.delectable.mobile.jobs.scanwinelabel;
 
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
-import com.delectable.mobile.model.api.scanwinelabels.CreatePendingCaptureRequest;
-import com.delectable.mobile.model.api.scanwinelabels.CreatePendingCaptureResponse;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureRequest;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureResponse;
 
 import android.util.Log;
 

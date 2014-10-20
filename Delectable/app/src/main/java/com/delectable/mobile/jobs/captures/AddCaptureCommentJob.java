@@ -5,8 +5,8 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
-import com.delectable.mobile.model.api.captures.CommentCaptureRequest;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CommentCaptureRequest;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 

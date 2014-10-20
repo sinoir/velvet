@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.events.accounts.SearchAccountsEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.SearchRequest;
-import com.delectable.mobile.model.api.accounts.AccountsSearchResponse;
+import com.delectable.mobile.api.endpointmodels.SearchRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsSearchResponse;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 

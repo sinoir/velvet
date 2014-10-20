@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.registrations;
 import com.delectable.mobile.events.registrations.ResetPasswordEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.model.api.registrations.ResetPasswordRequest;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.registrations.ResetPasswordRequest;
 import com.path.android.jobqueue.Params;
 
 

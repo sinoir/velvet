@@ -7,7 +7,7 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.data.FollowersFollowingModel;
 import com.delectable.mobile.jobs.BaseFetchListingJob;
-import com.delectable.mobile.model.api.BaseListingWrapperResponse;
+import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
 
 import java.lang.reflect.Type;
 

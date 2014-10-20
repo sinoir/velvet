@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.events.accounts.FetchedActivityFeedEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountsActivityFeedRequest;
-import com.delectable.mobile.model.api.accounts.AccountsActivityFeedResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsActivityFeedRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsActivityFeedResponse;
 import com.path.android.jobqueue.Params;
 
 public class FetchActivityFeedJob extends BaseJob {

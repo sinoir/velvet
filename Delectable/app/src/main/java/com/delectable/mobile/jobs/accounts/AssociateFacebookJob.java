@@ -1,18 +1,14 @@
 package com.delectable.mobile.jobs.accounts;
 
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.data.AccountModel;
 import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
-import com.delectable.mobile.model.api.registrations.AuthorizeFacebookRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
+import com.delectable.mobile.api.endpointmodels.registrations.AuthorizeFacebookRequest;
 import com.path.android.jobqueue.Params;
-
-import javax.inject.Inject;
 
 public class AssociateFacebookJob extends BaseJob {
 

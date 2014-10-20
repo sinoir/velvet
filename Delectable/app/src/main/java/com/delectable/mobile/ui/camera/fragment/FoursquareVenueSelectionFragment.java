@@ -4,7 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.controllers.FoursquareController;
 import com.delectable.mobile.events.foursquare.SearchedFoursquareVenuesEvent;
-import com.delectable.mobile.model.api.foursquare.FoursquareVenueItem;
+import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.widget.FoursquareVenuesAdapter;

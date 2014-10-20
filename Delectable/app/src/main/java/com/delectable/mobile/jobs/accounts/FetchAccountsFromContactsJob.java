@@ -6,8 +6,8 @@ import com.delectable.mobile.data.DeviceContactsModel;
 import com.delectable.mobile.events.accounts.FetchedAccountsFromContactsEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountContactListSuggestionsRequest;
-import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountContactListSuggestionsRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 import java.util.ArrayList;

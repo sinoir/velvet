@@ -4,8 +4,8 @@ import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.model.api.scanwinelabels.LabelScanResponse;
-import com.delectable.mobile.model.api.scanwinelabels.PhotoUploadRequest;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.LabelScanResponse;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
 import com.delectable.mobile.util.KahunaUtil;
 
 import android.util.Log;

@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.scanwinelabel;
 import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
-import com.delectable.mobile.model.api.scanwinelabels.AddCaptureFromPendingCaptureRequest;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 

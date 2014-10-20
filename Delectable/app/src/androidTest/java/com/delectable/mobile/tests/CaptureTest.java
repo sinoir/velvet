@@ -1,17 +1,14 @@
 package com.delectable.mobile.tests;
 
-import com.google.gson.reflect.TypeToken;
-
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.model.api.captures.CaptureDetailsResponse;
-import com.delectable.mobile.model.api.captures.CaptureFeedResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureFeedResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;

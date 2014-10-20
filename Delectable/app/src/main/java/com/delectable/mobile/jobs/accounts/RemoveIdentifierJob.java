@@ -8,8 +8,8 @@ import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountsIdentifiersListingResponse;
-import com.delectable.mobile.model.api.accounts.AccountsRemoveIdentifierRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsRemoveIdentifierRequest;
 import com.path.android.jobqueue.Params;
 
 import android.util.Log;

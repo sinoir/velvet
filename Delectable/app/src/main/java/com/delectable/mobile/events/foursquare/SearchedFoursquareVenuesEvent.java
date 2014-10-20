@@ -1,7 +1,7 @@
 package com.delectable.mobile.events.foursquare;
 
 import com.delectable.mobile.events.BaseEvent;
-import com.delectable.mobile.model.api.foursquare.FoursquareVenueItem;
+import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
 
 import java.util.List;
 

@@ -13,7 +13,7 @@ import com.delectable.mobile.events.BaseEvent;
 import com.delectable.mobile.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.model.api.scanwinelabels.AddCaptureFromPendingCaptureRequest;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;

@@ -4,8 +4,8 @@ import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.model.api.accounts.AccountsUpdateSettingRequest;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsUpdateSettingRequest;
 import com.path.android.jobqueue.Params;
 
 public class UpdateSettingJob extends BaseJob {

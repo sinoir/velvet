@@ -6,8 +6,8 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.model.api.accounts.AccountsUpdateProfileRequest;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsUpdateProfileRequest;
 import com.path.android.jobqueue.Params;
 
 public class UpdateProfileJob extends BaseJob {

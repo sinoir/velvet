@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.jobs.scanwinelabel.BasePhotoUploadJob;
-import com.delectable.mobile.model.api.accounts.PhotoHashResponse;
-import com.delectable.mobile.model.api.scanwinelabels.PhotoUploadRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.PhotoHashResponse;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
 
 public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
 

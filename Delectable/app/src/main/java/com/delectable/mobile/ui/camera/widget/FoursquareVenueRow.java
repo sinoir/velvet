@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.camera.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.model.api.foursquare.FoursquareVenueItem;
+import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
 
 import android.content.Context;
 import android.util.AttributeSet;

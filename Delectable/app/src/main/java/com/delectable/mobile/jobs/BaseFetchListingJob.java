@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.IDable;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.model.api.BaseListingRequest;
-import com.delectable.mobile.model.api.BaseListingWrapperResponse;
+import com.delectable.mobile.api.endpointmodels.BaseListingRequest;
+import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
 import com.path.android.jobqueue.Params;
 
 import java.lang.reflect.Type;

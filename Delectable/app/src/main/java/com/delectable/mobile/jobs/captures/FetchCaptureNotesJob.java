@@ -1,11 +1,10 @@
 package com.delectable.mobile.jobs.captures;
 
-import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.events.captures.FetchedCaptureNotesEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.captures.CaptureNotesResponse;
-import com.delectable.mobile.model.api.captures.CapturesNotesRequest;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureNotesResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesNotesRequest;
 import com.path.android.jobqueue.Params;
 
 public class FetchCaptureNotesJob extends BaseJob {

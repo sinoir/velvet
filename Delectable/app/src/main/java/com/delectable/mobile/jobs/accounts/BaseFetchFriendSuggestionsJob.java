@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseRequest;
-import com.delectable.mobile.model.api.accounts.AccountMinimalListResponse;
+import com.delectable.mobile.api.endpointmodels.BaseRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 /**

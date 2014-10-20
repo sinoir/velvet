@@ -5,8 +5,8 @@ import com.delectable.mobile.data.BaseWineModel;
 import com.delectable.mobile.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.ActionRequest;
-import com.delectable.mobile.model.api.basewines.BaseWineResponse;
+import com.delectable.mobile.api.endpointmodels.ActionRequest;
+import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;

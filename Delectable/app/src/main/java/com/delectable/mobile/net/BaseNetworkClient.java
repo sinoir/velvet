@@ -3,7 +3,7 @@ package com.delectable.mobile.net;
 import com.google.gson.Gson;
 
 import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.util.DelException;
 import com.delectable.mobile.util.HelperUtil;
 import com.squareup.okhttp.OkHttpClient;

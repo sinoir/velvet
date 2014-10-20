@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.accounts;
 import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseRequest;
-import com.delectable.mobile.model.api.accounts.PhotoHashResponse;
+import com.delectable.mobile.api.endpointmodels.BaseRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.PhotoHashResponse;
 import com.path.android.jobqueue.Params;
 
 public class FacebookifyProfilePhotoJob extends BaseJob {

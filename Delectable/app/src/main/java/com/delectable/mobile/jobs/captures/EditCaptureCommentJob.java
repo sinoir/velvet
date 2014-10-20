@@ -6,8 +6,8 @@ import com.delectable.mobile.data.CaptureDetailsModel;
 import com.delectable.mobile.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.model.api.captures.EditCommentRequest;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.captures.EditCommentRequest;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;

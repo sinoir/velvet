@@ -9,8 +9,8 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.BaseResponse;
-import com.delectable.mobile.model.api.accounts.AccountFollowRequest;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountFollowRequest;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 

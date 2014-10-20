@@ -6,8 +6,8 @@ import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.jobs.BaseFetchListingJob;
-import com.delectable.mobile.model.api.BaseListingWrapperResponse;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
 
 import java.lang.reflect.Type;
 

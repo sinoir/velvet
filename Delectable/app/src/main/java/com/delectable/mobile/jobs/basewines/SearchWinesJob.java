@@ -3,8 +3,8 @@ package com.delectable.mobile.jobs.basewines;
 import com.delectable.mobile.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.SearchRequest;
-import com.delectable.mobile.model.api.basewines.BaseWinesSearchResponse;
+import com.delectable.mobile.api.endpointmodels.SearchRequest;
+import com.delectable.mobile.api.endpointmodels.basewines.BaseWinesSearchResponse;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 

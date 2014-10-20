@@ -6,7 +6,7 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.motd.FetchedMotdEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.MotdResponse;
+import com.delectable.mobile.api.endpointmodels.MotdResponse;
 import com.delectable.mobile.net.MotdNetworkClient;
 import com.path.android.jobqueue.Params;
 

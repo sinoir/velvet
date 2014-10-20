@@ -5,8 +5,8 @@ import com.delectable.mobile.data.UserInfo;
 import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.accounts.AccountContextRequest;
-import com.delectable.mobile.model.api.accounts.AccountPrivateResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountContextRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
 import com.path.android.jobqueue.Params;
 
 public class FetchAccountPrivateJob extends BaseJob {

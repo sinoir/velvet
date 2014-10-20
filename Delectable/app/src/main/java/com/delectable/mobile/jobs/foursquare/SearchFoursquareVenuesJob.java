@@ -4,8 +4,8 @@ import com.delectable.mobile.Config;
 import com.delectable.mobile.events.foursquare.SearchedFoursquareVenuesEvent;
 import com.delectable.mobile.jobs.BaseJob;
 import com.delectable.mobile.jobs.Priority;
-import com.delectable.mobile.model.api.foursquare.FoursquareVenueItem;
-import com.delectable.mobile.model.api.foursquare.FoursquareVenuesSearchResponse;
+import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
+import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenuesSearchResponse;
 import com.delectable.mobile.net.FoursquareNetworkClient;
 import com.path.android.jobqueue.Params;
 

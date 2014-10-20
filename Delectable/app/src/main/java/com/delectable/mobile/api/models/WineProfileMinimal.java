@@ -1,6 +1,6 @@
 package com.delectable.mobile.api.models;
 
-import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 
 import android.os.Parcel;
 import android.os.Parcelable;

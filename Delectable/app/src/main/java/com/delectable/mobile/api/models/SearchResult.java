@@ -1,7 +1,7 @@
 package com.delectable.mobile.api.models;
 
 import java.util.ArrayList;
-import com.delectable.mobile.model.api.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 
 
 public class SearchResult<T> extends BaseResponse {

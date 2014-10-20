@@ -7,7 +7,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.controllers.AccountController;
 import com.delectable.mobile.data.CaptureListingModel;
 import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.model.api.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
