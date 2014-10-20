@@ -123,6 +123,18 @@
 #crashlytics
 -keepattributes SourceFile,LineNumberTable
 
+#JobQueue classes need to be kept in order to use the proguard-optimize rules for removing logs
+-keep class com.path.android.** { *; }
+
+#Remove Logs
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
 
 #Twitter SDK proguard rules in separate file, referenced by build script
 
