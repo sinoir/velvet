@@ -87,26 +87,16 @@ public class SettingsFragment extends BaseFragment {
         @Override
         public void success(Result<TwitterSession> twitterSessionResult) {
 
-            long twitterId = twitterSessionResult.data.getUserId();
-            String screenName = twitterSessionResult.data.getUserName();
-
-            //TODO improve when Twitter SDK is better documented
-            //This is ghetto bc there were no docs when I made this, didn't know how to use the data.getAuthToken().getAuthHeaders() method
-            //looks like this:
-            //authtoken: token=[TOKEN_VALUE],secret=[SECRET_VALUE]
-            String authCreds = twitterSessionResult.data.getAuthToken().toString();
-            String[] splitAuthCreds = authCreds.split(",");
-            String token = splitAuthCreds[0].split("token=")[1];
-            String tokenSecret = splitAuthCreds[1].split("secret=")[1];
+            TwitterUtil.TwitterInfo twitterInfo = TwitterUtil.getTwitterInfo(twitterSessionResult);
 
             //refreshing view before we make the call for immediate UI feed back
-            mUserAccount.setTwId(twitterId);
-            mUserAccount.setTwScreenName(screenName);
-            mUserAccount.setTwToken(token);
-            mUserAccount.setTwTokenSecret(tokenSecret);
+            mUserAccount.setTwId(twitterInfo.twitterId);
+            mUserAccount.setTwScreenName(twitterInfo.screenName);
+            mUserAccount.setTwToken(twitterInfo.token);
+            mUserAccount.setTwTokenSecret(twitterInfo.tokenSecret);
             updateUI();
 
-            mAccountController.associateTwitter(twitterId, token, tokenSecret, screenName);
+            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token, twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override
@@ -751,6 +741,7 @@ public class SettingsFragment extends BaseFragment {
             mUserAccount = event.getAcount();
         } else {
             showToastError(event.getErrorMessage());
+            TwitterUtil.clearSession();
         }
         updateUI(); //ui reverts back to original state if error
     }

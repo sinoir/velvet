@@ -17,19 +17,20 @@ public class ContactsAdapter extends BaseAccountsMinimalAdapter {
 
     private static final int TYPE_CONTACT = 2;
 
+
+
     private List<TaggeeContact> mContacts = new ArrayList<TaggeeContact>();
 
     public ContactsAdapter(FollowActionsHandler actionsHandler) {
         super(actionsHandler);
     }
 
-    @Override
-    public void setAccounts(ArrayList<AccountMinimal> accounts) {
-        super.setAccounts(accounts);
-    }
-
     public void setContacts(List<TaggeeContact> contacts) {
         mContacts = contacts;
+    }
+
+    public List<TaggeeContact> getContacts() {
+        return mContacts;
     }
 
     private boolean isTypeContact(int position) {

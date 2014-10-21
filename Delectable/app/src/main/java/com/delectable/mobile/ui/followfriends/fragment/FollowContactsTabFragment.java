@@ -3,7 +3,10 @@ package com.delectable.mobile.ui.followfriends.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.endpointmodels.BaseRequest;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.events.accounts.FetchedAccountsFromContactsEvent;
+import com.delectable.mobile.api.models.IDable;
 import com.delectable.mobile.ui.followfriends.widget.BaseAccountsMinimalAdapter;
 import com.delectable.mobile.ui.followfriends.widget.ContactsAdapter;
 
@@ -12,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -35,6 +40,12 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
     }
 
     @Override
+    protected void fetchAccounts() {
+
+    }
+
+    @Override
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
@@ -42,14 +53,10 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-
-        ViewGroup view = (ViewGroup) inflater
-                .inflate(R.layout.fragment_listview_no_divider, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+                             Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         mAdapter.setTopHeaderTitleResId(R.string.follow_friends_contacts);
-        listView.setAdapter(mAdapter);
-
+        mConnectButton.setVisibility(View.GONE);
         return view;
     }
 
@@ -57,11 +64,13 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
     public void onResume() {
         super.onResume();
         mAccountController.fetchAccountsFromContacts();
+        mEmptyTextButtonView.setVisibility(View.INVISIBLE);
     }
 
     public void onEventMainThread(FetchedAccountsFromContactsEvent event) {
+
+        mEmptyTextButtonView.setVisibility(View.VISIBLE);
         if (event.isSuccessful()) {
-            mAccounts = event.getAccounts();
             mAdapter.setAccounts(event.getAccounts());
             mAdapter.setContacts(event.getContacts());
             mAdapter.notifyDataSetChanged();
