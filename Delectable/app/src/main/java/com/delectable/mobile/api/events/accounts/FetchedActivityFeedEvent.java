@@ -1,14 +1,14 @@
 package com.delectable.mobile.api.events.accounts;
 
-import com.delectable.mobile.api.models.ActivityRecipient;
-import com.delectable.mobile.api.models.ListingResponse;
+import com.delectable.mobile.api.models.ActivityFeedItem;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.events.BaseEvent;
 
 public class FetchedActivityFeedEvent extends BaseEvent {
 
-    private ListingResponse<ActivityRecipient> mListingResponse;
+    private Listing<ActivityFeedItem> mListingResponse;
 
-    public FetchedActivityFeedEvent(ListingResponse<ActivityRecipient> listingResponse) {
+    public FetchedActivityFeedEvent(Listing<ActivityFeedItem> listingResponse) {
         super(true);
         mListingResponse = listingResponse;
     }
@@ -17,7 +17,7 @@ public class FetchedActivityFeedEvent extends BaseEvent {
         super(errorMessage);
     }
 
-    public ListingResponse<ActivityRecipient> getListingResponse() {
+    public Listing<ActivityFeedItem> getListingResponse() {
         return mListingResponse;
     }
 }

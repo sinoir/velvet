@@ -1,14 +1,14 @@
 package com.delectable.mobile.api.events.captures;
 
 import com.delectable.mobile.api.events.BaseEvent;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.models.ListingResponse;
 
 public class FetchedCaptureNotesEvent extends BaseEvent {
 
-    private ListingResponse<CaptureNote> mListingResponse;
+    private Listing<CaptureNote> mListingResponse;
 
-    public FetchedCaptureNotesEvent(ListingResponse<CaptureNote> listingResponse) {
+    public FetchedCaptureNotesEvent(Listing<CaptureNote> listingResponse) {
         super(true);
         mListingResponse = listingResponse;
     }
@@ -17,7 +17,7 @@ public class FetchedCaptureNotesEvent extends BaseEvent {
         super(errorMessage);
     }
 
-    public ListingResponse<CaptureNote> getListingResponse() {
+    public Listing<CaptureNote> getListingResponse() {
         return mListingResponse;
     }
 }

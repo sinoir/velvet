@@ -2,12 +2,12 @@ package com.delectable.mobile.api.jobs.accounts;
 
 
 import com.delectable.mobile.api.cache.FollowersFollowingModel;
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.jobs.BaseFetchListingJob;
 import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
+import com.delectable.mobile.api.models.Listing;
 
 import java.lang.reflect.Type;
 
@@ -29,7 +29,7 @@ public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal> {
      *                        return recent updates and not paginate the list for past items.
      */
     public FetchFollowingsJob(String requestId, String accountId,
-            BaseListingResponse<AccountMinimal> listing,
+            Listing<AccountMinimal> listing,
             Boolean isPullToRefresh) {
         //context is not passed in bc this endpoint only returns account minimal contexts
         super(requestId, null, accountId, listing, isPullToRefresh);
@@ -41,20 +41,20 @@ public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal> {
     }
 
     @Override
-    protected BaseListingResponse<AccountMinimal> getCachedListing(String accountId) {
+    protected Listing<AccountMinimal> getCachedListing(String accountId) {
         return mListingModel.getFollowingListing(accountId);
     }
 
     @Override
     protected void saveListingToCache(String accountId,
-            BaseListingResponse<AccountMinimal> listing) {
+            Listing<AccountMinimal> listing) {
         mListingModel.saveCurrentFollowingListing(accountId, listing);
 
     }
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<BaseListingWrapperResponse<AccountMinimal>>() {
+        Type type = new TypeToken<ListingResponse<AccountMinimal>>() {
         }.getType();
         return type;
     }

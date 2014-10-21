@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
@@ -53,12 +53,12 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected BaseListingResponse<CaptureDetails> getCachedFeed() {
+    protected Listing<CaptureDetails> getCachedFeed() {
         return mCaptureListingModel.getTrendingFeed();
     }
 
     @Override
-    protected void fetchCaptures(BaseListingResponse<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails> listing,
             boolean isPullToRefresh) {
         mCaptureController
                 .fetchTrendingCaptures(CAPTURES_REQ, CapturesContext.DETAILS, listing,

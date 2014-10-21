@@ -1,7 +1,7 @@
 package com.delectable.mobile.api.events.accounts;
 
 import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 
 /**
  * Sometimes the followerListing may be null with a successful request. This could mean: <br>maybe
@@ -10,7 +10,7 @@ import com.delectable.mobile.api.models.BaseListingResponse;
  */
 public class UpdatedFollowersEvent extends BaseFetchedFollowersEvent {
 
-    public UpdatedFollowersEvent(String accountId, BaseListingResponse<AccountMinimal> listing,
+    public UpdatedFollowersEvent(String accountId, Listing<AccountMinimal> listing,
             boolean invalidate) {
         super(accountId, listing, invalidate);
     }

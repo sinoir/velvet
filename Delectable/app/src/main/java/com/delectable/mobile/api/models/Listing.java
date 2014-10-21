@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BaseListingResponse<T extends IDable> {
+public class Listing<T extends IDable> {
 
-    private static final String TAG = BaseListingResponse.class.getSimpleName();
+    private static final String TAG = Listing.class.getSimpleName();
 
     protected Boundaries boundaries;
 
@@ -26,14 +26,14 @@ public class BaseListingResponse<T extends IDable> {
 
     protected String context;
 
-    public BaseListingResponse() {
+    public Listing() {
 
     }
 
     /**
      * Used to construct a ListingResponse from a CacheListing, for when retrieving from cache.
      */
-    public BaseListingResponse(CacheListing cacheListing, ArrayList<T> updates) {
+    public Listing(CacheListing cacheListing, ArrayList<T> updates) {
         boundaries = cacheListing.getBoundaries();
         more = cacheListing.getMore();
         e_tag = cacheListing.getETag();

@@ -1,14 +1,14 @@
 package com.delectable.mobile.api.endpointmodels.captures;
 
-import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.models.ListingResponse;
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.CaptureNote;
 
 public class CaptureNotesResponse extends BaseResponse {
 
-    private ListingResponse<CaptureNote> payload;
+    private Listing<CaptureNote> payload;
 
-    public ListingResponse<CaptureNote> getPayload() {
+    public Listing<CaptureNote> getPayload() {
         return payload;
     }
 }

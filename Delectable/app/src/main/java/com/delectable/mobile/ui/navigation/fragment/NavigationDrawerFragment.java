@@ -1,27 +1,5 @@
 package com.delectable.mobile.ui.navigation.fragment;
 
-import com.delectable.mobile.App;
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.ActivityRecipient;
-import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
-import com.delectable.mobile.ui.events.NavigationEvent;
-import com.delectable.mobile.api.events.accounts.FetchedActivityFeedEvent;
-import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
-import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
-import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
-import com.delectable.mobile.util.ImageLoaderUtil;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -41,6 +19,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.accounts.FetchedActivityFeedEvent;
+import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.ActivityFeedItem;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.PhotoHash;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
+import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
+import com.delectable.mobile.ui.events.NavigationEvent;
+import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import javax.inject.Inject;
 
@@ -110,7 +110,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
@@ -259,7 +259,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         position--; //offset bc of header
-        ActivityRecipient feedItem = mActivityFeedAdapter.getItem(position);
+        ActivityFeedItem feedItem = mActivityFeedAdapter.getItem(position);
 
         //let click on row be absorbed by rightImageLink first. if that's null, then let the leftImageLink handle it.
         if (feedItem.getRightImageLink() != null && feedItem.getRightImageLink().getUrl() != null) {
@@ -338,7 +338,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        ListingResponse<ActivityRecipient> mActivityRecipientListing = event.getListingResponse();
+        Listing<ActivityFeedItem> mActivityRecipientListing = event.getListingResponse();
         mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
         mActivityFeedAdapter.notifyDataSetChanged();
     }

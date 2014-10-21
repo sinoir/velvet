@@ -1,12 +1,9 @@
 package com.delectable.mobile.tests;
 
-import com.google.gson.reflect.TypeToken;
-
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
-import com.delectable.mobile.api.endpointmodels.captures.CaptureFeedResponse;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,14 +25,16 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         super.tearDown();
     }
 
+    //for gson deserialization
+    private static final Type TYPE = new TypeToken<ListingResponse<CaptureDetails>>() {
+    }.getType();
+
     public void testParseAccountFollowerFeedMinCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_min_ctx);
 
-        Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
-        }.getType();
-        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
-                json.toString(), type);
-        BaseListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
+                json.toString(), TYPE);
+        Listing<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());
@@ -124,11 +123,9 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
     public void testParseAccountFollowerFeedDetailsCtxWithInvalidate() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
-        Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
-        }.getType();
-        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
-                json.toString(), type);
-        BaseListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
+                json.toString(), TYPE);
+        Listing<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
         assertEquals(5, actualListing.getUpdates().size());
         CaptureDetails actualCapture = actualListing.getUpdates().get(2);
@@ -248,136 +245,136 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
 
-        Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
-        }.getType();
-        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
-                json.toString(), type);
-        BaseListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> response1 = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listingResponse1 = response1.getPayload();
+        //simulating initial empty array
+        ArrayList<CaptureDetails> originalCaptures = new ArrayList<CaptureDetails>();
+        listingResponse1.combineInto(originalCaptures, response1.isInvalidate());
+
 
         // Load "Second Request" response, as if getting a request with etag / before / after
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_befaft_r2);
 
-        feedResponseObject = mGson.fromJson(json.toString(), type);
-        BaseListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> response2 = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listingResponse2 = response2.getPayload();
+        listingResponse2.combineInto(originalCaptures, response2.isInvalidate());
 
-        //TODO fix
-//        newListing.combineWithPreviousListing(captureListing);
-//
-//        ArrayList<CaptureDetails> expectedCombinedData = new ArrayList<CaptureDetails>();
-//        expectedCombinedData.addAll(newListing.getAfter());
-//        expectedCombinedData.add(captureListing.getUpdates().get(0));
-//        expectedCombinedData.add(captureListing.getUpdates().get(1));
-//        expectedCombinedData.add(newListing.getUpdates().get(0));
-//        expectedCombinedData.add(newListing.getUpdates().get(1));
-//        expectedCombinedData.addAll(newListing.getBefore());
-//
-//        ArrayList<CaptureDetails> actualCombinedData = newListing.getSortedCombinedData();
-//
-//        assertEquals(10, actualCombinedData.size());
-//        assertEquals(expectedCombinedData, actualCombinedData);
+        int last = originalCaptures.size() - 1;
+        assertEquals("53993eb5753490f5b3000989", originalCaptures.get(0).getId()); //ensure top of list is accurate
+        assertEquals("539535d4753490713f000067", originalCaptures.get(last).getId()); //ensure bottom of list is accurate
+        assertEquals(10, originalCaptures.size());
     }
 
     public void testGetAllCombinedDetailsWithDeletions() throws JSONException {
-        // Load "First Request" response - As if first resopnse without etag
+        // Load "First Request" response - As if first response without etag
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
+
+        ListingResponse<CaptureDetails> feedResponse1 = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> captureListingPage1 = feedResponse1.getPayload();
+        ArrayList<CaptureDetails> originalCaptures = new ArrayList<CaptureDetails>();
+        captureListingPage1.combineInto(originalCaptures, feedResponse1.isInvalidate());
 
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
-        feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> feedResponse2 = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> captureListingPage2 = feedResponse2.getPayload();
 
-        newListing.combineWithPreviousListing(captureListing);
 
-        ArrayList<CaptureDetails> expectedCombinedData = new ArrayList<CaptureDetails>();
-        expectedCombinedData.addAll(newListing.getAfter());
-        expectedCombinedData.add(captureListing.getUpdates().get(0));
-        expectedCombinedData.add(captureListing.getUpdates().get(1));
-        expectedCombinedData.add(newListing.getUpdates().get(0));
-        expectedCombinedData.addAll(newListing.getBefore());
+        final String DELETE_ID = captureListingPage2.getDeletes().get(0);
 
-        ArrayList<CaptureDetails> actualCombinedData = newListing.getSortedCombinedData();
+        CaptureDetails captureToDelete = null;
+        for (CaptureDetails capture : originalCaptures) {
+            if (capture.getId().equals(DELETE_ID)) {
+                captureToDelete = capture;
+                break;
+            }
+        }
+        assertNotNull(captureToDelete);
 
-        assertEquals(9, actualCombinedData.size());
-        assertEquals(expectedCombinedData, actualCombinedData);
+        captureListingPage2.combineInto(originalCaptures, feedResponse2.isInvalidate());
+
+
+        assertEquals("53993eb5753490f5b3000989", originalCaptures.get(0).getId()); //ensure top of list is accurate
+        assertEquals("539535d4753490713f000067", originalCaptures.get(8).getId()); //ensure bottom of list is accurate
+        assertEquals(9, originalCaptures.size());
+        CaptureDetails deletedCapture = null;
+        for (CaptureDetails capture : originalCaptures) {
+            if (capture.getId().equals(DELETE_ID)) {
+                deletedCapture = capture;
+                break;
+            }
+        }
+        assertEquals(null, deletedCapture);
     }
 
-    public void testFollowerFeedRequestWithPreivousCapture() throws JSONException {
-        JSONObject json = loadJsonObjectFromResource(
-                R.raw.test_accounts_follower_feed_details_befaft_r1);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
-
-        String expectedEtag = captureListing.getETag();
-        String expectedContext = captureListing.getContext();
-        String expectedBefore = captureListing.getBoundariesToBefore();
-        String expectedAfter = captureListing.getBoundariesToAfter();
-
-        //TODO implement BaseListingRequest test
-//        BaseListingRequest request = new BaseListingRequest();
-//        request.setCurrentListing(captureListing);
-//        assertEquals(expectedEtag, request.getETag());
-//        assertEquals(expectedContext, request.getContext());
-//        assertEquals(expectedBefore, request.getBefore());
-//        assertEquals(expectedAfter, request.getAfter());
-//        assertNull(request.getSuppressBefore());
-    }
 
     public void testFollowerFeedWithNullPayload() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_null_payload);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
-        assertNull(actualListing);
+        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing = response.getPayload();
+        assertNull(listing);
     }
 
 
     public void testGetSortedCombinedData() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing = response.getPayload();
 
-        ArrayList<CaptureDetails> expectedCombinedData = captureListing.getUpdates();
-        ArrayList<CaptureDetails> actualCombinedData = captureListing.getSortedCombinedData();
-        assertEquals(expectedCombinedData, actualCombinedData);
+        ArrayList<CaptureDetails> expectedCaptures = listing.getUpdates();
+
+        //simulating initial empty array
+        ArrayList<CaptureDetails> actualCaptures = new ArrayList<CaptureDetails>();
+        listing.combineInto(actualCaptures, response.isInvalidate());
+
+        assertEquals(expectedCaptures, actualCaptures);
     }
 
-    public void testGetAllCaptireIds() throws JSONException {
+    public void testCombinedCapturesOrder() throws JSONException {
         // Load "First Request" response - As if first resopnse without etag
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
+
+        ListingResponse<CaptureDetails> response1 = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing1 = response1.getPayload();
+
+        //simulating initial empty array
+        ArrayList<CaptureDetails> originalCaptures = new ArrayList<CaptureDetails>();
+        listing1.combineInto(originalCaptures, response1.isInvalidate());
 
         // Load "Second Request" response, as if getting a request with etag / before / after with deleted data
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
-        feedResponseObject = mGson.fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> newListing = feedResponseObject.getPayload();
+        ListingResponse<CaptureDetails> response2 = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing2 = response2.getPayload();
 
-        newListing.combineWithPreviousListing(captureListing);
+        listing2.combineInto(originalCaptures, response2.isInvalidate());
 
-        ArrayList<String> actualAllCaptureIds = new ArrayList<String>();
+        ArrayList<String> actualCaptureIds = new ArrayList<String>();
 
-        actualAllCaptureIds.add("5396951b753490a7cd000888");
-        actualAllCaptureIds.add("5396917e753490bbed0002ff");
-        actualAllCaptureIds.add("539911291d2b1100d30001e4");
-        actualAllCaptureIds.add("539535d4753490713f000067");
-        actualAllCaptureIds.add("5397912a753490bc6500002b");
-        actualAllCaptureIds.add("53968f597534901ccf001253");
-        actualAllCaptureIds.add("53993eb5753490f5b3000989");
-        actualAllCaptureIds.add("539910ef753490b02e00002a");
-        actualAllCaptureIds.add("53993dbd753490bab00000a4");
+        for (CaptureDetails capture : originalCaptures) {
+            actualCaptureIds.add(capture.getId());
+        }
+        ArrayList<String> expectedCaptureIds = new ArrayList<String>();
+        //after that came in through second listing
+        expectedCaptureIds.add("53993eb5753490f5b3000989");
 
-        assertEquals(actualAllCaptureIds, newListing.getAllIds());
+        //original list that came in updates array
+        expectedCaptureIds.add("53993dbd753490bab00000a4");
+        expectedCaptureIds.add("539911291d2b1100d30001e4");
+        expectedCaptureIds.add("539910ef753490b02e00002a");
+
+        //befores that came in through second listing
+        expectedCaptureIds.add("5397912a753490bc6500002b");
+        expectedCaptureIds.add("5396951b753490a7cd000888");
+        expectedCaptureIds.add("5396917e753490bbed0002ff");
+        expectedCaptureIds.add("53968f597534901ccf001253");
+        expectedCaptureIds.add("539535d4753490713f000067");
+
+        assertEquals(expectedCaptureIds, actualCaptureIds);
     }
 }

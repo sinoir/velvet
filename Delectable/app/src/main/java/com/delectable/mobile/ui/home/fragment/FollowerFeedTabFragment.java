@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.CaptureListingModel;
@@ -66,12 +66,12 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected BaseListingResponse<CaptureDetails> getCachedFeed() {
+    protected Listing<CaptureDetails> getCachedFeed() {
         return mCaptureListingModel.getFollowerFeed();
     }
 
     @Override
-    protected void fetchCaptures(BaseListingResponse<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails> listing,
             boolean isPullToRefresh) {
         mAccountController
                 .fetchFollowerFeed(CAPTURES_REQ, CapturesContext.DETAILS, listing,

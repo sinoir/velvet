@@ -13,9 +13,6 @@ public class BaseResponse implements Parcelable {
 
     private boolean success;
 
-    //shows up in the listing responses, tells use whether or not to dump the current list
-    private boolean invalidate;
-
     private Error error;
 
     public String getETag() {
@@ -38,9 +35,7 @@ public class BaseResponse implements Parcelable {
         return error;
     }
 
-    public boolean isInvalidate() {
-        return invalidate;
-    }
+
 
     @Override
     public String toString() {
@@ -49,7 +44,6 @@ public class BaseResponse implements Parcelable {
                 ", e_tag='" + e_tag + '\'' +
                 ", context='" + context + '\'' +
                 ", success=" + success +
-                ", invalidate=" + invalidate +
                 ", error=" + error +
                 '}';
     }
@@ -65,7 +59,6 @@ public class BaseResponse implements Parcelable {
         dest.writeString(this.e_tag);
         dest.writeString(this.context);
         dest.writeByte(success ? (byte) 1 : (byte) 0);
-        dest.writeByte(invalidate ? (byte) 1 : (byte) 0);
         dest.writeParcelable(this.error, 0);
     }
 
@@ -77,7 +70,6 @@ public class BaseResponse implements Parcelable {
         this.e_tag = in.readString();
         this.context = in.readString();
         this.success = in.readByte() != 0;
-        this.invalidate = in.readByte() != 0;
         this.error = in.readParcelable(Error.class.getClassLoader());
     }
 

@@ -1,14 +1,16 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
-import com.delectable.mobile.api.endpointmodels.captures.CaptureFeedResponse;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -25,6 +27,10 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
     }
+
+    //for gson deserialization
+    private static final Type TYPE = new TypeToken<ListingResponse<CaptureDetails>>() {
+    }.getType();
 
     public void testParseCaptureDetailsCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_details_ctx);
@@ -358,11 +364,11 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testGetLikesCount() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
-        CaptureDetails capture = captureListing.getUpdates().get(3);
+        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing = response.getPayload();
+
+        CaptureDetails capture = listing.getUpdates().get(3);
         assertEquals(3, capture.getLikesCount());
     }
 
@@ -376,11 +382,11 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testDoesUserLikeCaptureWithLikingParticipants() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
-        CaptureDetails capture = captureListing.getUpdates().get(3);
+        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing = response.getPayload();
+
+        CaptureDetails capture = listing.getUpdates().get(3);
         String userAccountId = "abc";
         assertFalse(capture.doesUserLikeCapture(userAccountId));
 
@@ -390,11 +396,11 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
     public void testToggleUserLikesCapture() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(json.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
 
-        CaptureDetails capture = captureListing.getUpdates().get(3);
+        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing = response.getPayload();
+
+        CaptureDetails capture = listing.getUpdates().get(3);
         // Tests if user doesn't like capture, and toggling makes user like the capture
         String userAccountId = "abc";
         assertFalse(capture.doesUserLikeCapture(userAccountId));
@@ -451,14 +457,12 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         capture.setPrivate(true);
 
         // Get "Updated" capture
-        JSONObject jsonFeed = loadJsonObjectFromResource(
-                R.raw.test_accounts_follower_feed_details_ctx);
-        CaptureFeedResponse feedResponseObject = mGson
-                .fromJson(jsonFeed.toString(), CaptureFeedResponse.class);
-        ListingResponse<CaptureDetails> captureListing = feedResponseObject.getPayload();
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
+        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails> listing = response.getPayload();
 
         // this is just a test, ideally the updated capture will have the same ID
-        CaptureDetails updatedCapture = captureListing.getUpdates().get(3);
+        CaptureDetails updatedCapture = listing.getUpdates().get(3);
         updatedCapture.setId(capture.getId());
 
         capture.updateWithNewCapture(updatedCapture);

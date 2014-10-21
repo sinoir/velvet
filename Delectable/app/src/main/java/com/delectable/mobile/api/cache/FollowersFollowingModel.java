@@ -4,7 +4,7 @@ import com.delectable.mobile.api.cache.localmodels.CacheListing;
 import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.iainconnor.objectcache.CacheManager;
 
 import android.util.Log;
@@ -29,37 +29,37 @@ public class FollowersFollowingModel {
     protected AccountModel mAccountModel;
 
     public void saveCurrentFollowersListing(String accountId,
-            BaseListingResponse<AccountMinimal> listing) {
+            Listing<AccountMinimal> listing) {
         String key = TYPE_FOLLOWERS + accountId;
         saveListing(key, listing);
     }
 
     public void saveCurrentFollowingListing(String accountId,
-            BaseListingResponse<AccountMinimal> listing) {
+            Listing<AccountMinimal> listing) {
         String key = TYPE_FOLLOWING + accountId;
         saveListing(key, listing);
     }
 
-    public BaseListingResponse<AccountMinimal> getFollowersListing(String accountId) {
+    public Listing<AccountMinimal> getFollowersListing(String accountId) {
         String key = TYPE_FOLLOWERS + accountId;
         return getCachedAccounts(key);
     }
 
-    public BaseListingResponse<AccountMinimal> getFollowingListing(String accountId) {
+    public Listing<AccountMinimal> getFollowingListing(String accountId) {
         String key = TYPE_FOLLOWING + accountId;
         return getCachedAccounts(key);
     }
 
-    private BaseListingResponse<AccountMinimal> getListing(String key) {
-        Type classType = new TypeToken<BaseListingResponse<AccountMinimal>>() {
+    private Listing<AccountMinimal> getListing(String key) {
+        Type classType = new TypeToken<Listing<AccountMinimal>>() {
         }.getType();
-        BaseListingResponse<AccountMinimal> cachelisting
-                = (BaseListingResponse<AccountMinimal>) mCache
+        Listing<AccountMinimal> cachelisting
+                = (Listing<AccountMinimal>) mCache
                 .get(key, null, classType);
         return cachelisting;
     }
 
-    private void saveListing(String key, BaseListingResponse<AccountMinimal> listing) {
+    private void saveListing(String key, Listing<AccountMinimal> listing) {
 
         CacheListing<AccountMinimal> cacheListing = new CacheListing<AccountMinimal>(listing);
         mCache.put(key, cacheListing);
@@ -69,7 +69,7 @@ public class FollowersFollowingModel {
         }
     }
 
-    private BaseListingResponse<AccountMinimal> getCachedAccounts(String key) {
+    private Listing<AccountMinimal> getCachedAccounts(String key) {
         Type classType = new TypeToken<CacheListing<AccountMinimal>>() {
         }.getType();
         CacheListing<AccountMinimal> cachelisting = (CacheListing<AccountMinimal>) mCache.get(key, null, classType);
@@ -88,7 +88,7 @@ public class FollowersFollowingModel {
                 Log.e(TAG, "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
             }
         }
-        BaseListingResponse<AccountMinimal> listing = new BaseListingResponse<AccountMinimal>(
+        Listing<AccountMinimal> listing = new Listing<AccountMinimal>(
                 cachelisting, accounts);
 
         return listing;
