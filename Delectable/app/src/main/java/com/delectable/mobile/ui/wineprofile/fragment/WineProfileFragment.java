@@ -1,5 +1,33 @@
 package com.delectable.mobile.ui.wineprofile.fragment;
 
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.BaseWineModel;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.BaseWineController;
+import com.delectable.mobile.api.controllers.CaptureController;
+import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
+import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
+import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
+import com.delectable.mobile.api.models.CaptureNote;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.PhotoHash;
+import com.delectable.mobile.api.models.VarietalsHash;
+import com.delectable.mobile.api.models.WineProfileMinimal;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.common.widget.WineBannerView;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
+import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.util.KahunaUtil;
+
+import org.apache.commons.lang3.StringUtils;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -14,34 +42,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.delectable.mobile.App;
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.BaseWineModel;
-import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.api.controllers.BaseWineController;
-import com.delectable.mobile.api.controllers.CaptureController;
-import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
-import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
-import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.api.models.BaseWineMinimal;
-import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.models.VarietalsHash;
-import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.models.WineProfileMinimal;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
-import com.delectable.mobile.ui.common.widget.WineBannerView;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
-import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
-import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
-import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
-import com.delectable.mobile.util.KahunaUtil;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -155,14 +155,14 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * Returns fragment that uses the provided {@link PhotoHash} as it's wine image. Uses {@code
      * wineProfile} to populate some basic wine metadata and inits request for {@link CaptureNote
-     * CaptureNotes} using the {@code baseWineId} in {@link WineProfile}.
+     * CaptureNotes} using the {@code baseWineId} in {@link WineProfileMinimal}.
      *
      * @param capturePhotoHash {@link com.delectable.mobile.api.models.CaptureDetails
      *                         CaptureDetails}' PhotoHash. Pass in null to use WineProfile's image.
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
-                                                  PhotoHash capturePhotoHash) {
+            PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(WINE_PROFILE, wineProfile);
@@ -198,7 +198,7 @@ public class WineProfileFragment extends BaseFragment implements
      * {@link WineProfileFragment} accessed by deep links will use this method to start up the
      * fragment. It can contain either just {@code baseWineId}, or both {@code baseWineId} and
      * {@code vintageId} (wine profile id). If the latter, then we must show {@link CaptureNote
-     * CaptureNotes} for that {@link WineProfile}.
+     * CaptureNotes} for that {@link WineProfileMinimal}.
      *
      * @param baseWineId required
      * @param vintageId  optional
@@ -249,7 +249,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
         ListView listview = (ListView) view.findViewById(R.id.list_view);
@@ -328,8 +328,8 @@ public class WineProfileFragment extends BaseFragment implements
                     loadCaptureNotesData(IdType.BASE_WINE, baseWine.getId());
                 }
                 //when a vintage year is selected from the dialog
-                if (wine instanceof WineProfile) {
-                    WineProfile wineProfile = (WineProfile) wine;
+                if (wine instanceof WineProfileSubProfile) {
+                    WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
                     loadCaptureNotesData(IdType.WINE_PROFILE, wineProfile.getId());
                 }
         }

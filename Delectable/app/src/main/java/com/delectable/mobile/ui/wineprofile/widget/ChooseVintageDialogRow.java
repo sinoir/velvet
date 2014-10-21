@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 import android.content.Context;
 import android.text.SpannableString;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 /**
- * A representation of the {@link WineProfile} model, this is the row for the listview that appears
+ * A representation of the {@link WineProfileSubProfile} model, this is the row for the listview that appears
  * in the Choose Vintage dialog.
  */
 public class ChooseVintageDialogRow extends RelativeLayout {
@@ -70,7 +70,7 @@ public class ChooseVintageDialogRow extends RelativeLayout {
      * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
      * data for a normal row.
      */
-    public void updateData(WineProfile wineProfile) {
+    public void updateData(WineProfileSubProfile wineProfile) {
         String year = wineProfile.getVintage();
         int reviewCount = wineProfile.getRatingsSummary().getAllCount();
         double rating = wineProfile.getRatingsSummary().getAllAvgOfTen();

@@ -5,9 +5,9 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.models.SearchResult;
-import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.endpointmodels.basewines.BaseWinesSearchResponse;
 import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -124,7 +124,7 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         assertEquals("tmC2M7VCWpKZ4g", actualBaseWine.getETag());
 
         assertEquals(1, actualBaseWine.getWineProfiles().size());
-        WineProfile firstWineProfile = actualBaseWine.getWineProfiles().get(0);
+        WineProfileSubProfile firstWineProfile = actualBaseWine.getWineProfiles().get(0);
         assertEquals("50e86605a6d027d09d00025a", firstWineProfile.getId());
         assertEquals(1, firstWineProfile.getRatingsSummary().getAllCount());
         assertEquals(30.0, firstWineProfile.getRatingsSummary().getAllAvg());
@@ -241,7 +241,7 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         assertEquals("tmC2M7VCWpKZ4g", actualBaseWine.getETag());
 
         assertEquals(1, actualBaseWine.getWineProfiles().size());
-        WineProfile firstWineProfile = actualBaseWine.getWineProfiles().get(0);
+        WineProfileSubProfile firstWineProfile = actualBaseWine.getWineProfiles().get(0);
         assertEquals("50e86605a6d027d09d00025a", firstWineProfile.getId());
         assertEquals(1, firstWineProfile.getRatingsSummary().getAllCount());
         assertEquals(30.0, firstWineProfile.getRatingsSummary().getAllAvg());

@@ -22,7 +22,7 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
 
     private ArrayList<VarietalsHash> varietal_composition = new ArrayList<VarietalsHash>();
 
-    private ArrayList<WineProfile> wine_profiles = new ArrayList<WineProfile>();
+    private ArrayList<WineProfileSubProfile> wine_profiles = new ArrayList<WineProfileSubProfile>();
 
     private String default_wine_profile_id;
 
@@ -34,7 +34,7 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
 
     private String color;
 
-    private String forward_id;
+    private String forwarded_id;
 
     private String producer_id;
 
@@ -111,11 +111,11 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
         this.varietal_composition = varietal_composition;
     }
 
-    public ArrayList<WineProfile> getWineProfiles() {
+    public ArrayList<WineProfileSubProfile> getWineProfiles() {
         return wine_profiles;
     }
 
-    public void setWineProfiles(ArrayList<WineProfile> wine_profiles) {
+    public void setWineProfiles(ArrayList<WineProfileSubProfile> wine_profiles) {
         this.wine_profiles = wine_profiles;
     }
 
@@ -160,11 +160,11 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
     }
 
     public String getForwardId() {
-        return forward_id;
+        return forwarded_id;
     }
 
     public void setForwardId(String forward_id) {
-        this.forward_id = forward_id;
+        this.forwarded_id = forward_id;
     }
 
     public String getProducerId() {
@@ -194,7 +194,7 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
                 ", carbonation=" + carbonation +
                 ", sweetness='" + sweetness + '\'' +
                 ", color='" + color + '\'' +
-                ", forward_id='" + forward_id + '\'' +
+                ", forwarded_id='" + forwarded_id + '\'' +
                 ", producer_id='" + producer_id + '\'' +
                 '}';
     }
@@ -217,7 +217,7 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
         dest.writeByte(carbonation ? (byte) 1 : (byte) 0);
         dest.writeString(this.sweetness);
         dest.writeString(this.color);
-        dest.writeString(this.forward_id);
+        dest.writeString(this.forwarded_id);
         dest.writeString(this.producer_id);
     }
 
@@ -227,13 +227,13 @@ public class BaseWine extends BaseWineMinimal implements Parcelable {
         this.region_id = in.readString();
         in.readTypedList(this.region_path, RegionPath.CREATOR);
         in.readTypedList(this.varietal_composition, VarietalsHash.CREATOR);
-        in.readTypedList(this.wine_profiles, WineProfile.CREATOR);
+        in.readTypedList(this.wine_profiles, WineProfileSubProfile.CREATOR);
         this.default_wine_profile_id = in.readString();
         this.description = in.readString();
         this.carbonation = in.readByte() != 0;
         this.sweetness = in.readString();
         this.color = in.readString();
-        this.forward_id = in.readString();
+        this.forwarded_id = in.readString();
         this.producer_id = in.readString();
     }
 
