@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.navigation.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.ActivityRecipient;
+import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -48,7 +48,7 @@ public class ActivityFeedRow extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    public void updateData(ActivityRecipient data) {
+    public void updateData(ActivityFeedItem data) {
         String activityTime = DateHelperUtil.getPrettyTimePastOnly(data.getCreatedAtDate());
 
         mText.setText(data.getText());

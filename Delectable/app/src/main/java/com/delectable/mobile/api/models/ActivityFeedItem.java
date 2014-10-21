@@ -2,7 +2,7 @@ package com.delectable.mobile.api.models;
 
 import java.util.ArrayList;
 
-public class ActivityRecipient extends BaseListingElement {
+public class ActivityFeedItem extends BaseListingElement {
 
     private String text;
 

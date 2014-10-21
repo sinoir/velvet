@@ -1,14 +1,14 @@
 package com.delectable.mobile.api.endpointmodels.accounts;
 
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
-import com.delectable.mobile.api.models.ActivityRecipient;
+import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.BaseListingResponse;
 
 public class AccountsActivityFeedResponse extends BaseResponse {
 
-    private BaseListingResponse<ActivityRecipient> payload;
+    private BaseListingResponse<ActivityFeedItem> payload;
 
-    public BaseListingResponse<ActivityRecipient> getPayload() {
+    public BaseListingResponse<ActivityFeedItem> getPayload() {
         return payload;
     }
 }

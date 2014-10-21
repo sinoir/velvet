@@ -30,7 +30,7 @@ import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.ActivityRecipient;
+import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.BaseListingResponse;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
@@ -259,7 +259,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         position--; //offset bc of header
-        ActivityRecipient feedItem = mActivityFeedAdapter.getItem(position);
+        ActivityFeedItem feedItem = mActivityFeedAdapter.getItem(position);
 
         //let click on row be absorbed by rightImageLink first. if that's null, then let the leftImageLink handle it.
         if (feedItem.getRightImageLink() != null && feedItem.getRightImageLink().getUrl() != null) {
@@ -338,7 +338,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        BaseListingResponse<ActivityRecipient> mActivityRecipientListing = event.getListingResponse();
+        BaseListingResponse<ActivityFeedItem> mActivityRecipientListing = event.getListingResponse();
         mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
         mActivityFeedAdapter.notifyDataSetChanged();
     }
