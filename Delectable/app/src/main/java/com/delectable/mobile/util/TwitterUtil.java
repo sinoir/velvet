@@ -6,6 +6,7 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
 
@@ -56,6 +57,39 @@ public class TwitterUtil {
         twitterCreds[API_KEY] = apiKey;
         twitterCreds[API_SECRET] = apiSecret;
         return twitterCreds;
+    }
+
+    public static TwitterInfo getTwitterInfo(Result<TwitterSession> result) {
+        long twitterId = result.data.getUserId();
+        String screenName = result.data.getUserName();
+
+        //TODO improve when Twitter SDK is better documented
+        //This is ghetto bc there were no docs when I made this, didn't know how to use the data.getAuthToken().getAuthHeaders() method
+        //looks like this:
+        //authtoken: token=[TOKEN_VALUE],secret=[SECRET_VALUE]
+        String authCreds = result.data.getAuthToken().toString();
+        String[] splitAuthCreds = authCreds.split(",");
+        String token = splitAuthCreds[0].split("token=")[1];
+        String tokenSecret = splitAuthCreds[1].split("secret=")[1];
+
+        return new TwitterInfo(twitterId, screenName, token, tokenSecret);
+    }
+
+    /**
+     * Simple class to wrap some TwitterInfo up needed to make the associate twitter call.
+     */
+    public static class TwitterInfo {
+        public long twitterId;
+        public String screenName;
+        public String token;
+        public String tokenSecret;
+
+        private TwitterInfo(long twitterId, String screenName, String token, String tokenSecret) {
+            this.twitterId = twitterId;
+            this.screenName = screenName;
+            this.token = token;
+            this.tokenSecret = tokenSecret;
+        }
     }
 
     /**
