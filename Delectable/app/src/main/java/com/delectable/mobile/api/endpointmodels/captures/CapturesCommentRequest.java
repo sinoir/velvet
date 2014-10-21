@@ -3,7 +3,10 @@ package com.delectable.mobile.api.endpointmodels.captures;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.delectable.mobile.api.models.CaptureDetails;
 
-public class CommentCaptureRequest extends BaseRequest {
+/**
+ * Adds a comment to this Capture
+ */
+public class CapturesCommentRequest extends BaseRequest {
 
     private Payload payload;
 
@@ -13,7 +16,7 @@ public class CommentCaptureRequest extends BaseRequest {
      * @param captureId   The capture to be commented on
      * @param userComment The comment
      */
-    public CommentCaptureRequest(String captureId, String userComment) {
+    public CapturesCommentRequest(String captureId, String userComment) {
         this(CapturesContext.DETAILS, captureId, userComment);
     }
 
@@ -22,7 +25,7 @@ public class CommentCaptureRequest extends BaseRequest {
      * @param captureId   The capture to be commented on
      * @param userComment The comment
      */
-    public CommentCaptureRequest(CapturesContext context, String captureId, String userComment) {
+    public CapturesCommentRequest(CapturesContext context, String captureId, String userComment) {
         super(context.toString());
         payload = new Payload(captureId, userComment);
     }

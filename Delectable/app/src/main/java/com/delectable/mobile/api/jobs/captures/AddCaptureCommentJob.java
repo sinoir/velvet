@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesCommentRequest;
 import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
-import com.delectable.mobile.api.endpointmodels.captures.CommentCaptureRequest;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
@@ -39,7 +39,7 @@ public class AddCaptureCommentJob extends BaseJob {
         super.onRun();
         String endpoint = "/captures/comment";
 
-        CommentCaptureRequest request = new CommentCaptureRequest(mCaptureId, mCaptureComment);
+        CapturesCommentRequest request = new CapturesCommentRequest(mCaptureId, mCaptureComment);
 
         CaptureDetailsResponse response = getNetworkClient().post(endpoint, request,
                 CaptureDetailsResponse.class);

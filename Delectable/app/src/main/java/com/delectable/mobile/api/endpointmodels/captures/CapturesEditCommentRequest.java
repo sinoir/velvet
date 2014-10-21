@@ -7,11 +7,11 @@ import com.delectable.mobile.api.endpointmodels.BaseRequest;
  * Edits the given comment on the given capture. The current account must be the account that made
  * the comment, or an UNAUTHORIZED error will be returned.
  */
-public class EditCommentRequest extends BaseRequest {
+public class CapturesEditCommentRequest extends BaseRequest {
 
     private Payload payload;
 
-    public EditCommentRequest(String captureId, String commentId, String comment) {
+    public CapturesEditCommentRequest(String captureId, String commentId, String comment) {
         payload = new Payload(captureId, commentId, comment);
     }
 
