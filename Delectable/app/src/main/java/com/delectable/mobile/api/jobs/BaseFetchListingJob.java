@@ -4,7 +4,7 @@ import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.IDable;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.endpointmodels.BaseListingRequest;
-import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.path.android.jobqueue.Params;
 
 import java.lang.reflect.Type;
@@ -107,7 +107,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
         Type type = getResponseType();
 
-        BaseListingWrapperResponse<T> response = getNetworkClient().post(endpoint, request, type);
+        ListingResponse<T> response = getNetworkClient().post(endpoint, request, type);
 
         Listing<T> apiListing = response.getPayload();
         // note: Sometimes payload may be null

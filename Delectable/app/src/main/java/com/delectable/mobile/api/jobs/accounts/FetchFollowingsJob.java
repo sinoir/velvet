@@ -2,12 +2,12 @@ package com.delectable.mobile.api.jobs.accounts;
 
 
 import com.delectable.mobile.api.cache.FollowersFollowingModel;
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.jobs.BaseFetchListingJob;
 import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
 
 import java.lang.reflect.Type;
 
@@ -54,7 +54,7 @@ public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal> {
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<BaseListingWrapperResponse<AccountMinimal>>() {
+        Type type = new TypeToken<ListingResponse<AccountMinimal>>() {
         }.getType();
         return type;
     }
