@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.CaptureListingModel;
@@ -62,7 +62,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
 
     private CaptureDetailsAdapter mAdapter;
 
-    private BaseListingResponse<CaptureDetails> mCapturesListing;
+    private Listing<CaptureDetails> mCapturesListing;
 
     private String mAccountId;
 
@@ -129,14 +129,14 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<BaseListingResponse<CaptureDetails>>(this) {
+        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
             @Override
-            protected BaseListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
                 return mCaptureListingModel.getUserCaptures(mAccountId);
             }
 
             @Override
-            protected void safeOnPostExecute(BaseListingResponse<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
 
                 if (listing != null) {
                     mCapturesListing = listing;

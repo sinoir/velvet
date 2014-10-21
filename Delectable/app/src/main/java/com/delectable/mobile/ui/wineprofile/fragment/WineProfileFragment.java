@@ -24,7 +24,7 @@ import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
 import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
@@ -135,7 +135,7 @@ public class WineProfileFragment extends BaseFragment implements
     private BaseWineMinimal mBaseWineMinimal;
 
 
-    private BaseListingResponse<CaptureNote> mCaptureNoteListing;
+    private Listing<CaptureNote> mCaptureNoteListing;
 
     /**
      * these maps are used to retain references to {@link CaptureNote} objects expecting updates to

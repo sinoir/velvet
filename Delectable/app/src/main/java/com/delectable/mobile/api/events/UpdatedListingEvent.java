@@ -1,6 +1,6 @@
 package com.delectable.mobile.api.events;
 
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.IDable;
 import com.delectable.mobile.api.util.ErrorUtil;
 
@@ -23,10 +23,10 @@ public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
 
     private String mAccountId;
 
-    private BaseListingResponse<T> mListing;
+    private Listing<T> mListing;
 
     public UpdatedListingEvent(String requestId, String accountId,
-            BaseListingResponse<T> listing) {
+            Listing<T> listing) {
         super(true);
         mRequestId = requestId;
         mAccountId = accountId;
@@ -48,7 +48,7 @@ public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
         return mAccountId;
     }
 
-    public BaseListingResponse<T> getListing() {
+    public Listing<T> getListing() {
         return mListing;
     }
 }

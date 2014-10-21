@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.endpointmodels.accounts.AccountsActivityFeedResponse;
 import com.delectable.mobile.api.models.ActivityFeedItem;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ public class ActivityFeedTestCase extends BaseInstrumentationTestCase {
 
         AccountsActivityFeedResponse response = mGson
                 .fromJson(json.toString(), AccountsActivityFeedResponse.class);
-        BaseListingResponse<ActivityFeedItem> actualListing = response.getPayload();
+        Listing<ActivityFeedItem> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());

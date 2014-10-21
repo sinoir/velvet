@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.google.gson.reflect.TypeToken;
@@ -366,7 +366,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
         BaseListingWrapperResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing = response.getPayload();
+        Listing<CaptureDetails> listing = response.getPayload();
 
         CaptureDetails capture = listing.getUpdates().get(3);
         assertEquals(3, capture.getLikesCount());
@@ -384,7 +384,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
         BaseListingWrapperResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing = response.getPayload();
+        Listing<CaptureDetails> listing = response.getPayload();
 
         CaptureDetails capture = listing.getUpdates().get(3);
         String userAccountId = "abc";
@@ -398,7 +398,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
         BaseListingWrapperResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing = response.getPayload();
+        Listing<CaptureDetails> listing = response.getPayload();
 
         CaptureDetails capture = listing.getUpdates().get(3);
         // Tests if user doesn't like capture, and toggling makes user like the capture
@@ -459,7 +459,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
         // Get "Updated" capture
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
         BaseListingWrapperResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing = response.getPayload();
+        Listing<CaptureDetails> listing = response.getPayload();
 
         // this is just a test, ideally the updated capture will have the same ID
         CaptureDetails updatedCapture = listing.getUpdates().get(3);

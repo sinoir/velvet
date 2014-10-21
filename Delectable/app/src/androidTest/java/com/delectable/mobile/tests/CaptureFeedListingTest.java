@@ -1,7 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.endpointmodels.BaseListingWrapperResponse;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.google.gson.reflect.TypeToken;
 
@@ -34,7 +34,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
                 json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
+        Listing<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());
@@ -125,7 +125,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
 
         BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson.fromJson(
                 json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> actualListing = feedResponseObject.getPayload();
+        Listing<CaptureDetails> actualListing = feedResponseObject.getPayload();
 
         assertEquals(5, actualListing.getUpdates().size());
         CaptureDetails actualCapture = actualListing.getUpdates().get(2);
@@ -246,7 +246,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
 
         BaseListingWrapperResponse<CaptureDetails> response1 = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listingResponse1 = response1.getPayload();
+        Listing<CaptureDetails> listingResponse1 = response1.getPayload();
         //simulating initial empty array
         ArrayList<CaptureDetails> originalCaptures = new ArrayList<CaptureDetails>();
         listingResponse1.combineInto(originalCaptures, response1.isInvalidate());
@@ -256,7 +256,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_befaft_r2);
 
         BaseListingWrapperResponse<CaptureDetails> response2 = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listingResponse2 = response2.getPayload();
+        Listing<CaptureDetails> listingResponse2 = response2.getPayload();
         listingResponse2.combineInto(originalCaptures, response2.isInvalidate());
 
         int last = originalCaptures.size() - 1;
@@ -271,7 +271,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
 
         BaseListingWrapperResponse<CaptureDetails> feedResponse1 = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> captureListingPage1 = feedResponse1.getPayload();
+        Listing<CaptureDetails> captureListingPage1 = feedResponse1.getPayload();
         ArrayList<CaptureDetails> originalCaptures = new ArrayList<CaptureDetails>();
         captureListingPage1.combineInto(originalCaptures, feedResponse1.isInvalidate());
 
@@ -279,7 +279,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
         BaseListingWrapperResponse<CaptureDetails> feedResponse2 = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> captureListingPage2 = feedResponse2.getPayload();
+        Listing<CaptureDetails> captureListingPage2 = feedResponse2.getPayload();
 
 
         final String DELETE_ID = captureListingPage2.getDeletes().get(0);
@@ -314,7 +314,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_null_payload);
         BaseListingWrapperResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing = response.getPayload();
+        Listing<CaptureDetails> listing = response.getPayload();
         assertNull(listing);
     }
 
@@ -323,7 +323,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
         BaseListingWrapperResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing = response.getPayload();
+        Listing<CaptureDetails> listing = response.getPayload();
 
         ArrayList<CaptureDetails> expectedCaptures = listing.getUpdates();
 
@@ -340,7 +340,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
                 R.raw.test_accounts_follower_feed_details_befaft_r1);
 
         BaseListingWrapperResponse<CaptureDetails> response1 = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing1 = response1.getPayload();
+        Listing<CaptureDetails> listing1 = response1.getPayload();
 
         //simulating initial empty array
         ArrayList<CaptureDetails> originalCaptures = new ArrayList<CaptureDetails>();
@@ -350,7 +350,7 @@ public class CaptureFeedListingTest extends BaseInstrumentationTestCase {
         json = loadJsonObjectFromResource(
                 R.raw.test_accounts_follower_feed_details_befaft_deletions_r2);
         BaseListingWrapperResponse<CaptureDetails> response2 = mGson.fromJson(json.toString(), TYPE);
-        BaseListingResponse<CaptureDetails> listing2 = response2.getPayload();
+        Listing<CaptureDetails> listing2 = response2.getPayload();
 
         listing2.combineInto(originalCaptures, response2.isInvalidate());
 

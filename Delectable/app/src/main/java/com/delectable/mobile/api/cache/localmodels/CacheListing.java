@@ -1,7 +1,7 @@
 package com.delectable.mobile.api.cache.localmodels;
 
-import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.api.models.BaseListingResponse.Boundaries;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.Listing.Boundaries;
 import com.delectable.mobile.api.models.IDable;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class CacheListing<T extends IDable> {
 
     private ArrayList<String> item_ids;
 
-    public CacheListing(BaseListingResponse<T> listing) {
+    public CacheListing(Listing<T> listing) {
         e_tag = listing.getETag();
         more = listing.getMore();
         boundaries = listing.getBoundaries();

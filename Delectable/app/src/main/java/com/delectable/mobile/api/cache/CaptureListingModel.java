@@ -3,7 +3,7 @@ package com.delectable.mobile.api.cache;
 import com.delectable.mobile.api.cache.localmodels.CacheListing;
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.iainconnor.objectcache.CacheManager;
 
@@ -41,46 +41,46 @@ public class CaptureListingModel {
      *                  current list, and that list have been saved as the updates array to this
      *                  object.
      */
-    public void saveUserCaptures(String accountId, BaseListingResponse<CaptureDetails> listing) {
+    public void saveUserCaptures(String accountId, Listing<CaptureDetails> listing) {
         String key = TYPE_USER_CAPTURES + accountId;
         saveListing(key, listing);
     }
 
-    public BaseListingResponse<CaptureDetails> getUserCaptures(String accountId) {
+    public Listing<CaptureDetails> getUserCaptures(String accountId) {
         String key = TYPE_USER_CAPTURES + accountId;
         return getCachedCaptures(key);
     }
 
-    public void saveTrendingFeed(BaseListingResponse<CaptureDetails> listing) {
+    public void saveTrendingFeed(Listing<CaptureDetails> listing) {
         //uncomment if not saving capturedetails individually
         //mCache.put(TYPE_TRENDING, listing);
         saveListing(TYPE_TRENDING, listing);
     }
 
-    public BaseListingResponse<CaptureDetails> getTrendingFeed() {
+    public Listing<CaptureDetails> getTrendingFeed() {
         //uncomment if not saving capturedetails individually
         //return getListing(TYPE_TRENDING);
         return getCachedCaptures(TYPE_TRENDING);
     }
 
-    public void saveFollowerFeed(BaseListingResponse<CaptureDetails> listing) {
+    public void saveFollowerFeed(Listing<CaptureDetails> listing) {
         saveListing(TYPE_FOLLOW_FEED, listing);
     }
 
-    public BaseListingResponse<CaptureDetails> getFollowerFeed() {
+    public Listing<CaptureDetails> getFollowerFeed() {
         return getCachedCaptures(TYPE_FOLLOW_FEED);
     }
 
-    private BaseListingResponse<CaptureDetails> getListing(String key) {
-        Type classType = new TypeToken<BaseListingResponse<CaptureDetails>>() {
+    private Listing<CaptureDetails> getListing(String key) {
+        Type classType = new TypeToken<Listing<CaptureDetails>>() {
         }.getType();
-        BaseListingResponse<CaptureDetails> cachelisting
-                = (BaseListingResponse<CaptureDetails>) mCache
+        Listing<CaptureDetails> cachelisting
+                = (Listing<CaptureDetails>) mCache
                 .get(key, null, classType);
         return cachelisting;
     }
 
-    private void saveListing(String key, BaseListingResponse<CaptureDetails> listing) {
+    private void saveListing(String key, Listing<CaptureDetails> listing) {
 
         CacheListing<CaptureDetails> cacheListing = new CacheListing<CaptureDetails>(listing);
         mCache.put(key, cacheListing);
@@ -90,7 +90,7 @@ public class CaptureListingModel {
         }
     }
 
-    private BaseListingResponse<CaptureDetails> getCachedCaptures(String key) {
+    private Listing<CaptureDetails> getCachedCaptures(String key) {
         Type classType = new TypeToken<CacheListing<CaptureDetails>>() {
         }.getType();
         CacheListing<CaptureDetails> cachelisting = (CacheListing<CaptureDetails>) mCache.get(key, null, classType);
@@ -110,7 +110,7 @@ public class CaptureListingModel {
                         "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
             }
         }
-        BaseListingResponse<CaptureDetails> listing = new BaseListingResponse<CaptureDetails>(
+        Listing<CaptureDetails> listing = new Listing<CaptureDetails>(
                 cachelisting, captures);
 
         return listing;

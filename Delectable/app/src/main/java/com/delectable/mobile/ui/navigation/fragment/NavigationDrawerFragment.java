@@ -31,7 +31,7 @@ import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityFeedItem;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
@@ -338,7 +338,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        BaseListingResponse<ActivityFeedItem> mActivityRecipientListing = event.getListingResponse();
+        Listing<ActivityFeedItem> mActivityRecipientListing = event.getListingResponse();
         mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
         mActivityFeedAdapter.notifyDataSetChanged();
     }

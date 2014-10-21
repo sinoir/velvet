@@ -6,7 +6,7 @@ import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
@@ -65,7 +65,7 @@ public class CaptureController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchTrendingCaptures(String requestId, CapturesContext context,
-            BaseListingResponse<CaptureDetails> listing, Boolean isPullToRefresh) {
+            Listing<CaptureDetails> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchTrendingCapturesJob(requestId, context, listing, isPullToRefresh));
     }

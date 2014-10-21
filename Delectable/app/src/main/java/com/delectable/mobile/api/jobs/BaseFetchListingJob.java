@@ -1,6 +1,6 @@
 package com.delectable.mobile.api.jobs;
 
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.IDable;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.endpointmodels.BaseListingRequest;
@@ -41,7 +41,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public BaseFetchListingJob(String requestId, String context, String accountId,
-            BaseListingResponse<T> listingResponse, Boolean isPullToRefresh) {
+            Listing<T> listingResponse, Boolean isPullToRefresh) {
         super(new Params(Priority.SYNC));
         mRequestId = requestId;
         mContext = context;
@@ -75,14 +75,14 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
     /**
      * Lets the subclass handle the retrieval of it's cached listing.
      */
-    protected abstract BaseListingResponse<T> getCachedListing(String accountId);
+    protected abstract Listing<T> getCachedListing(String accountId);
 
     /**
      * Lets the subclass handle saving the listing to cache. The ListingResponse provided here will
      * be pass onwards to the success event. If there are any changes made to the object during the
      * save to cache, they will be reflected in the event.
      */
-    protected abstract void saveListingToCache(String accountId, BaseListingResponse<T> listing);
+    protected abstract void saveListingToCache(String accountId, Listing<T> listing);
 
     /**
      * The concrete generic type needs to be provided in the subclass. Just use the code below with
@@ -109,7 +109,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
         BaseListingWrapperResponse<T> response = getNetworkClient().post(endpoint, request, type);
 
-        BaseListingResponse<T> apiListing = response.getPayload();
+        Listing<T> apiListing = response.getPayload();
         // note: Sometimes payload may be null
         // maybe there are no captures
         // maybe list is completely up to date and e_tag_match is true
@@ -118,7 +118,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         if (apiListing != null) {
 
             //grab cached listing if it exist
-            BaseListingResponse<T> cachedListing = getCachedListing(mAccountId);
+            Listing<T> cachedListing = getCachedListing(mAccountId);
             ArrayList<T> cachedItems = new ArrayList<T>();
             if (cachedListing != null) {
                 cachedItems = cachedListing.getUpdates();
