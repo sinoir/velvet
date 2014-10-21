@@ -1,33 +1,5 @@
 package com.delectable.mobile.ui.wineprofile.fragment;
 
-import com.delectable.mobile.App;
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.api.models.BaseWineMinimal;
-import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.models.ListingResponse;
-import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.models.VarietalsHash;
-import com.delectable.mobile.api.models.WineProfile;
-import com.delectable.mobile.api.models.WineProfileMinimal;
-import com.delectable.mobile.api.controllers.BaseWineController;
-import com.delectable.mobile.api.controllers.CaptureController;
-import com.delectable.mobile.api.cache.BaseWineModel;
-import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
-import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
-import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
-import com.delectable.mobile.ui.common.widget.WineBannerView;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
-import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
-import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
-import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
-import com.delectable.mobile.util.KahunaUtil;
-
-import org.apache.commons.lang3.StringUtils;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -42,6 +14,34 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.BaseWineModel;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.BaseWineController;
+import com.delectable.mobile.api.controllers.CaptureController;
+import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
+import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
+import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
+import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
+import com.delectable.mobile.api.models.CaptureNote;
+import com.delectable.mobile.api.models.PhotoHash;
+import com.delectable.mobile.api.models.VarietalsHash;
+import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.common.widget.WineBannerView;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
+import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.util.KahunaUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -135,7 +135,7 @@ public class WineProfileFragment extends BaseFragment implements
     private BaseWineMinimal mBaseWineMinimal;
 
 
-    private ListingResponse<CaptureNote> mCaptureNoteListing;
+    private BaseListingResponse<CaptureNote> mCaptureNoteListing;
 
     /**
      * these maps are used to retain references to {@link CaptureNote} objects expecting updates to
@@ -162,7 +162,7 @@ public class WineProfileFragment extends BaseFragment implements
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
-            PhotoHash capturePhotoHash) {
+                                                  PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(WINE_PROFILE, wineProfile);
@@ -249,7 +249,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
         ListView listview = (ListView) view.findViewById(R.id.list_view);
