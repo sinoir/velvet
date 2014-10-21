@@ -44,7 +44,7 @@ public class AddCaptureCommentJob extends BaseJob {
         CaptureDetailsResponse response = getNetworkClient().post(endpoint, request,
                 CaptureDetailsResponse.class);
 
-        CaptureDetails capture = response.getCapturePayload();
+        CaptureDetails capture = response.getCapture();
 
         mCapturesModel.saveCaptureDetails(capture);
         getEventBus().post(new AddCaptureCommentEvent(true, mCaptureId));

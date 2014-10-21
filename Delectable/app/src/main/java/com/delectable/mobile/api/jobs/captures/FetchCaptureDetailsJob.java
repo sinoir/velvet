@@ -45,7 +45,7 @@ public class FetchCaptureDetailsJob extends BaseJob {
         CaptureDetailsResponse response = getNetworkClient()
                 .post(endpoint, request, CaptureDetailsResponse.class);
 
-        CaptureDetails capture = response.getCapturePayload();
+        CaptureDetails capture = response.getCapture();
 
         mCapturesModel.saveCaptureDetails(capture);
         getEventBus().post(new UpdatedCaptureDetailsEvent(true, mCaptureId));

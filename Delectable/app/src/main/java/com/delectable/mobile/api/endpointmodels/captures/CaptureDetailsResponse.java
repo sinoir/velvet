@@ -5,13 +5,13 @@ import com.delectable.mobile.api.models.CaptureDetails;
 
 public class CaptureDetailsResponse extends BaseResponse {
 
-    private CaptureDetailsPayload payload;
+    private Payload payload;
 
-    public CaptureDetails getCapturePayload() {
+    public CaptureDetails getCapture() {
         return payload.capture;
     }
 
-    public static class CaptureDetailsPayload {
+    public static class Payload {
 
         private CaptureDetails capture;
     }
