@@ -1,23 +1,5 @@
 package com.delectable.mobile.ui.registration.fragment;
 
-import com.delectable.mobile.App;
-import com.delectable.mobile.R;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.MotdController;
-import com.delectable.mobile.api.controllers.RegistrationController;
-import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.Delectabutton;
-import com.delectable.mobile.ui.common.widget.FontTextView;
-import com.delectable.mobile.ui.navigation.activity.NavActivity;
-import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
-import com.delectable.mobile.util.DateHelperUtil;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.LoginButton;
-
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -39,6 +21,24 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.delectable.mobile.App;
+import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.MotdController;
+import com.delectable.mobile.api.controllers.RegistrationController;
+import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
+import com.delectable.mobile.api.util.ErrorUtil;
+import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.Delectabutton;
+import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
+import com.delectable.mobile.util.DateHelperUtil;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.LoginButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +67,18 @@ public abstract class BaseSignUpInFragment extends BaseFragment
             Log.d(TAG + ".Facebook", "Session State: " + session.getState());
             Log.d(TAG + ".Facebook", "Session:" + session);
             Log.d(TAG + ".Facebook", "Exception:" + exception);
+
+            if (session.getState().equals(SessionState.OPENING)) {
+                return;
+            }
+
             if (state.isOpened()) {
                 facebookLogin();
-            } else {
-                // TODO: Handle more errors and other conditions.
-                showToastError("Failed to connect to Facebook");
+                return;
             }
+
+            // TODO: Handle more errors and other conditions.
+            showToastError("Failed to connect to Facebook");
         }
     };
 
@@ -162,7 +168,7 @@ public abstract class BaseSignUpInFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_sign_in_sign_up_form, container, false);
         ButterKnife.inject(this, rootView);
@@ -192,7 +198,12 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         super.onPause();
         mFacebookUiHelper.onPause();
     }
-    //endregion
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mFacebookUiHelper.onStop();
+    }
 
     @Override
     public void onDestroy() {
@@ -205,6 +216,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         super.onSaveInstanceState(outState);
         mFacebookUiHelper.onSaveInstanceState(outState);
     }
+    //endregion
+
 
     //region Email Prepopulation
     @Override
