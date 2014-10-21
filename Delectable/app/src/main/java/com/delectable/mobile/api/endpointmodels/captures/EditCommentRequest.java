@@ -3,18 +3,19 @@ package com.delectable.mobile.api.endpointmodels.captures;
 
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 
+/**
+ * Edits the given comment on the given capture. The current account must be the account that made
+ * the comment, or an UNAUTHORIZED error will be returned.
+ */
 public class EditCommentRequest extends BaseRequest {
 
-    private EditCommentPayload payload;
+    private Payload payload;
 
     public EditCommentRequest(String captureId, String commentId, String comment) {
-        payload = new EditCommentPayload();
-        payload.id = captureId;
-        payload.comment_id = commentId;
-        payload.comment = comment;
+        payload = new Payload(captureId, commentId, comment);
     }
 
-    public static class EditCommentPayload {
+    public static class Payload {
 
         // Capture ID
         private String id;
@@ -22,5 +23,11 @@ public class EditCommentRequest extends BaseRequest {
         private String comment_id;
 
         private String comment;
+
+        public Payload(String id, String comment_id, String comment) {
+            this.id = id;
+            this.comment_id = comment_id;
+            this.comment = comment;
+        }
     }
 }
