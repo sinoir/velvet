@@ -5,36 +5,24 @@ import com.delectable.mobile.api.models.CaptureDetails;
 
 public class CommentCaptureRequest extends BaseRequest {
 
-    public enum Context {
-        MINIMAL("minimal"),
-        DETAILS("details");
-
-        private String mLabel;
-
-        private Context(String label) {
-
-            mLabel = label;
-        }
-
-        @Override
-        public String toString() {
-            return mLabel;
-        }
-    }
-
     private Payload payload;
-
 
     /**
      * Creates a request object for a {@link CaptureDetails} response.
-     * @param captureId
-     * @param userComment
+     *
+     * @param captureId   The capture to be commented on
+     * @param userComment The comment
      */
     public CommentCaptureRequest(String captureId, String userComment) {
-        this(Context.DETAILS, captureId, userComment);
+        this(CapturesContext.DETAILS, captureId, userComment);
     }
 
-    public CommentCaptureRequest(Context context, String captureId, String userComment) {
+    /**
+     * @param context     The capture context that you want back as the return object
+     * @param captureId   The capture to be commented on
+     * @param userComment The comment
+     */
+    public CommentCaptureRequest(CapturesContext context, String captureId, String userComment) {
         super(context.toString());
         payload = new Payload(captureId, userComment);
     }

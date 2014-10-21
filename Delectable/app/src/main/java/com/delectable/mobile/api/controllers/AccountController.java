@@ -28,7 +28,7 @@ import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
-import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;

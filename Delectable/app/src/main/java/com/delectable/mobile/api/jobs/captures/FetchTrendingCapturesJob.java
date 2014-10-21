@@ -7,7 +7,7 @@ import com.delectable.mobile.api.models.Listing;
 import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 
 import java.lang.reflect.Type;
 
