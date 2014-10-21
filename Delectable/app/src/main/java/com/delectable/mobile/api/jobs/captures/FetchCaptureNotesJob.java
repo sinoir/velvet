@@ -5,7 +5,6 @@ import com.delectable.mobile.api.endpointmodels.captures.CapturesNotesRequest;
 import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.google.gson.reflect.TypeToken;
 import com.path.android.jobqueue.Params;
@@ -42,7 +41,7 @@ public class FetchCaptureNotesJob extends BaseJob {
         String endpoint = "/captures/notes";
         CapturesNotesRequest request = new CapturesNotesRequest(mBaseWineId, mWineProfileId,
                 mBefore, mAfter, mIncludeCaptureNote);
-        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<CaptureNote>>() {
         }.getType();
         ListingResponse<CaptureNote> response = getNetworkClient()
                 .post(endpoint, request, type);
