@@ -4,6 +4,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.followfriends.widget.TwitterAccountsAdapter;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.util.TwitterUtil;
+import com.twitter.sdk.android.Twitter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,34 +30,25 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-
-        ViewGroup view = (ViewGroup) inflater
-                .inflate(R.layout.fragment_listview_no_divider, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
-        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_twitter);
-        listView.setAdapter(mAdapter);
-
-        View emptyView = view.findViewById(R.id.empty_view_twitter);
-        View followButton = emptyView.findViewById(R.id.connect_twitter_button);
-        followButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO connect to twitter
-                mEventBus.post(new NavigationEvent(NavHeader.NAV_SETTINGS));
-            }
-        });
-        listView.setEmptyView(emptyView);
-
-        return view;
+    protected void fetchAccounts() {
+        if (TwitterUtil.isLoggedIn()) {
+            mAccountController.fetchTwitterSuggestions(getEventId());
+            mEmptyTextButtonView.setVisibility(View.INVISIBLE);
+        } else {
+            mEmptyTextButtonView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mAccounts == null) {
-            mAccountController.fetchTwitterSuggestions(getEventId());
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_twitter);
+
+        mEmptyTextView.setText(R.string.empty_twitter);
+
+        mConnectButton.setText(R.string.connect_twitter_button);
+        mConnectButton.setIconDrawable(getResources().getDrawable(R.drawable.ic_find_twitter_pressed));
+        return view;
     }
 }

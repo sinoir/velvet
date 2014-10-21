@@ -35,7 +35,12 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
         mAccounts = accounts;
     }
 
+    public ArrayList<AccountMinimal> getAccounts() {
+        return mAccounts;
+    }
+
     @Override
+
     public int getItemViewType(int position) {
         if (position == 0 && mTopHeaderTitleResId != null) {
             return TYPE_HEADER;

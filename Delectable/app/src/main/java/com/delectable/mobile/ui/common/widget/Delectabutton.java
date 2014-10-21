@@ -100,7 +100,6 @@ public class Delectabutton extends RelativeLayout {
     }
 
     public void setText(CharSequence text) {
-        mText = text.toString();
         mTextView.setText(text);
         if (mIconDrawable == null) {
             // remove left pedding for text when there is no icon
@@ -114,4 +113,7 @@ public class Delectabutton extends RelativeLayout {
         mTextView.setText(mText);
     }
 
+    public void setTextColor(int color) {
+        mTextView.setTextColor(color);
+    }
 }

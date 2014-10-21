@@ -9,8 +9,12 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.Delectabutton;
+import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.followfriends.widget.BaseAccountsMinimalAdapter;
 import com.delectable.mobile.ui.followfriends.widget.FollowActionsHandler;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.ActivityNotFoundException;
@@ -18,13 +22,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * All the follow friends fragments are essentially composed of the same data, and array of
@@ -36,7 +46,24 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
 
     private static final String TAG = BaseFollowFriendsTabFragment.class.getSimpleName();
 
-    protected ArrayList<AccountMinimal> mAccounts;
+    @InjectView(R.id.list_view)
+    protected  ListView mListView;
+
+    @InjectView(R.id.empty_state_layout)
+    protected View mEmptyView;
+
+    /**
+     * This View overlaps the progress circle. Set it to visible in order to hide the progress circle
+     * when done fetching for data.
+     */
+    @InjectView(R.id.text_and_button_empty_view)
+    protected View mEmptyTextButtonView;
+
+    @InjectView(R.id.empty_text_view)
+    protected FontTextView mEmptyTextView;
+
+    @InjectView(R.id.connect_button)
+    protected Delectabutton mConnectButton;
 
     @Inject
     protected AccountController mAccountController;
@@ -59,18 +86,49 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
      */
     protected abstract String getEventId();
 
+    protected abstract void fetchAccounts();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        ViewGroup view = (ViewGroup) inflater
+                .inflate(R.layout.fragment_listview_no_divider, container, false);
+        ButterKnife.inject(this, view);
+        mListView.setAdapter(getAdapter());
+        mListView.setEmptyView(mEmptyView);
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getAdapter().getAccounts().isEmpty()) {
+            mEmptyTextButtonView.setVisibility(View.INVISIBLE);
+            fetchAccounts();
+        }
+    }
+
+    @OnClick(R.id.connect_button)
+    protected void onConnectClick() {
+        // TODO connect to facebook/twitter
+        mEventBus.post(new NavigationEvent(NavHeader.NAV_SETTINGS));
+    }
+
     public void onEventMainThread(FetchFriendSuggestionsEvent event) {
         if (!event.getId().equals(getEventId())) {
             return; //id's don't match, this event wasn't from our request
         }
+
+        mEmptyTextButtonView.setVisibility(View.VISIBLE);
+
         if (event.isSuccessful()) {
-            mAccounts = event.getAccounts();
             getAdapter().setAccounts(event.getAccounts());
             getAdapter().notifyDataSetChanged();
             return;

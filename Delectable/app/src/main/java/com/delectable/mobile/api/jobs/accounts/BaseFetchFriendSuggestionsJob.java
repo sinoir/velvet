@@ -21,7 +21,7 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
      * @param id The id that will be passed onto the Event upon completion of the job.
      */
     protected BaseFetchFriendSuggestionsJob(String id) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC).requireNetwork());
         mId = id;
     }
 
