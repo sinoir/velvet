@@ -2,7 +2,7 @@ package com.delectable.mobile.api.jobs.basewines;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.endpointmodels.BaseSearchResponse;
+import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.endpointmodels.SearchRequest;
 import com.delectable.mobile.api.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
@@ -40,9 +40,9 @@ public class SearchWinesJob extends BaseJob {
     public void onRun() throws Throwable {
         String endpoint = "/base_wines/search";
         SearchRequest request = new SearchRequest(mQ, mOffset, mLimit);
-        Type type = new TypeToken<BaseSearchResponse<BaseWineMinimal>>() {
+        Type type = new TypeToken<SearchResponse<BaseWineMinimal>>() {
         }.getType();
-        BaseSearchResponse<BaseWineMinimal> response = getNetworkClient()
+        SearchResponse<BaseWineMinimal> response = getNetworkClient()
                 .post(endpoint, request, type);
         getEventBus().post(new SearchWinesEvent(response.getPayload()));
         KahunaUtil.trackSearch();

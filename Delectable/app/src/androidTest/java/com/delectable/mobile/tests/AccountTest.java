@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.endpointmodels.BaseSearchResponse;
+import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
 import com.delectable.mobile.api.models.Account;
@@ -32,9 +32,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountSearchCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_account_search);
-        Type type = new TypeToken<BaseSearchResponse<AccountSearch>>() {
+        Type type = new TypeToken<SearchResponse<AccountSearch>>() {
         }.getType();
-        BaseSearchResponse<AccountSearch> response = mGson.fromJson(json.toString(), type);
+        SearchResponse<AccountSearch> response = mGson.fromJson(json.toString(), type);
         AccountSearch actualAccount = response.getPayload().getHits().get(0).getObject();
 
         assertEquals("search", actualAccount.getContext());
@@ -58,9 +58,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
     public void testAccountSearchParcelable() throws JSONException {
 
         JSONObject json = loadJsonObjectFromResource(R.raw.test_account_search);
-        Type type = new TypeToken<BaseSearchResponse<AccountSearch>>() {
+        Type type = new TypeToken<SearchResponse<AccountSearch>>() {
         }.getType();
-        BaseSearchResponse<AccountSearch> response = mGson.fromJson(json.toString(), type);
+        SearchResponse<AccountSearch> response = mGson.fromJson(json.toString(), type);
         AccountSearch expectedAccount = response.getPayload().getHits().get(0).getObject();
 
         Parcel testParcel = Parcel.obtain();

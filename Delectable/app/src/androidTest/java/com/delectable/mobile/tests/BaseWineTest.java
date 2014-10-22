@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.endpointmodels.BaseSearchResponse;
+import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
@@ -32,9 +32,9 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
     public void testParseBaseWineSearchResults() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_search_min_ctx);
-        Type type = new TypeToken<BaseSearchResponse<BaseWineMinimal>>() {
+        Type type = new TypeToken<SearchResponse<BaseWineMinimal>>() {
         }.getType();
-        BaseSearchResponse<BaseWineMinimal> response = mGson.fromJson(json.toString(), type);
+        SearchResponse<BaseWineMinimal> response = mGson.fromJson(json.toString(), type);
         SearchResult<BaseWineMinimal> payload = response.getPayload();
 
         assertEquals("Napa Valley", payload.getQ());
