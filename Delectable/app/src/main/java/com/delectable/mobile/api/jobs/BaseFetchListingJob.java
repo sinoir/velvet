@@ -11,10 +11,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * This is an abstraction for all context listing jobs. Implementations that subclass from this Job
- * class just need to implement the abstract methods for a successful job. At the end of the Job, an
- * {@link UpdatedListingEvent} will be broadcast with the type {@code T} generic that was provided
- * to this Job.
+ * This is an abstraction for all context listing jobs. Implementations of this class just need to
+ * implement the abstract methods for a successful job. <br> The job will handle the combining of
+ * lists, and will always return a {@link Listing} with just the {@link Listing#getUpdates()} array
+ * populated through the {@link UpdatedListingEvent} at the end of the Job. The {@link
+ * UpdatedListingEvent} will be broadcast with the type {@code T} generic that was provided to this
+ * Job. <br>
  */
 public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 

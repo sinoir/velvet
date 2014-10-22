@@ -1,16 +1,13 @@
 package com.delectable.mobile.api.cache;
 
 import com.delectable.mobile.api.cache.localmodels.CacheListing;
-import com.google.gson.reflect.TypeToken;
-
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.Listing;
-import com.iainconnor.objectcache.CacheManager;
 
 import android.util.Log;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -22,8 +19,8 @@ public class FollowersFollowingModel {
 
     private static final String TYPE_FOLLOWING = TAG + "_following_";
 
-    @Inject
-    protected CacheManager mCache;
+    private static final HashMap<String, CacheListing<AccountMinimal>> mMap
+            = new HashMap<String, CacheListing<AccountMinimal>>();
 
     @Inject
     protected AccountModel mAccountModel;
@@ -50,19 +47,10 @@ public class FollowersFollowingModel {
         return getCachedAccounts(key);
     }
 
-    private Listing<AccountMinimal> getListing(String key) {
-        Type classType = new TypeToken<Listing<AccountMinimal>>() {
-        }.getType();
-        Listing<AccountMinimal> cachelisting
-                = (Listing<AccountMinimal>) mCache
-                .get(key, null, classType);
-        return cachelisting;
-    }
-
     private void saveListing(String key, Listing<AccountMinimal> listing) {
 
         CacheListing<AccountMinimal> cacheListing = new CacheListing<AccountMinimal>(listing);
-        mCache.put(key, cacheListing);
+        mMap.put(key, cacheListing);
         // Save all captures separately
         for (AccountMinimal account : listing.getUpdates()) {
             mAccountModel.saveAccountMinimal(account);
@@ -70,9 +58,7 @@ public class FollowersFollowingModel {
     }
 
     private Listing<AccountMinimal> getCachedAccounts(String key) {
-        Type classType = new TypeToken<CacheListing<AccountMinimal>>() {
-        }.getType();
-        CacheListing<AccountMinimal> cachelisting = (CacheListing<AccountMinimal>) mCache.get(key, null, classType);
+        CacheListing<AccountMinimal> cachelisting = mMap.get(key);
         if (cachelisting == null) {
             //nothing in cache
             return null;
@@ -85,11 +71,11 @@ public class FollowersFollowingModel {
             if (account != null) {
                 accounts.add(account);
             } else {
-                Log.e(TAG, "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
+                Log.e(TAG,
+                        "Listing from cache inconsistency, account id from cachelisting object not found in cache");
             }
         }
-        Listing<AccountMinimal> listing = new Listing<AccountMinimal>(
-                cachelisting, accounts);
+        Listing<AccountMinimal> listing = new Listing<AccountMinimal>(cachelisting, accounts);
 
         return listing;
     }
