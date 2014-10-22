@@ -1,9 +1,9 @@
 package com.delectable.mobile.api.endpointmodels.wineprofiles;
 
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
-import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileMinimal;
 
-public class WineProfilesModifyWishlistResponse extends BaseResponse {
+public class WineProfileMinimalResponse extends BaseResponse {
 
     private Payload payload;
 
@@ -13,9 +13,9 @@ public class WineProfilesModifyWishlistResponse extends BaseResponse {
 
     public static class Payload {
 
-        private WineProfile wineProfile;
+        private WineProfileMinimal wineProfile;
 
-        public WineProfile getWineProfile() {
+        public WineProfileMinimal getWineProfile() {
             return wineProfile;
         }
     }

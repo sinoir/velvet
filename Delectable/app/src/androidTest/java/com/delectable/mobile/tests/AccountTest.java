@@ -1,18 +1,22 @@
 package com.delectable.mobile.tests;
 
+import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.endpointmodels.SearchResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureSummary;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsSearchResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
+
+import java.lang.reflect.Type;
 
 public class AccountTest extends BaseInstrumentationTestCase {
 
@@ -28,8 +32,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
 
     public void testParseAccountSearchCtx() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_account_search);
-        AccountsSearchResponse response = mGson
-                .fromJson(json.toString(), AccountsSearchResponse.class);
+        Type type = new TypeToken<SearchResponse<AccountSearch>>() {
+        }.getType();
+        SearchResponse<AccountSearch> response = mGson.fromJson(json.toString(), type);
         AccountSearch actualAccount = response.getPayload().getHits().get(0).getObject();
 
         assertEquals("search", actualAccount.getContext());
@@ -53,8 +58,9 @@ public class AccountTest extends BaseInstrumentationTestCase {
     public void testAccountSearchParcelable() throws JSONException {
 
         JSONObject json = loadJsonObjectFromResource(R.raw.test_account_search);
-        AccountsSearchResponse response = mGson
-                .fromJson(json.toString(), AccountsSearchResponse.class);
+        Type type = new TypeToken<SearchResponse<AccountSearch>>() {
+        }.getType();
+        SearchResponse<AccountSearch> response = mGson.fromJson(json.toString(), type);
         AccountSearch expectedAccount = response.getPayload().getHits().get(0).getObject();
 
         Parcel testParcel = Parcel.obtain();

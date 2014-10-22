@@ -7,7 +7,7 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
-import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 

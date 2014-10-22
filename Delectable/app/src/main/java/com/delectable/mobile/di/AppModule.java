@@ -201,6 +201,25 @@ import de.greenrobot.event.EventBus;
 )
 public class AppModule {
 
+    //TODO move/delete these three model providers. needed to drop it in here bc cache was switched to hashmap.
+    @Provides
+    @Singleton
+    AccountModel provideAccountModel() {
+        return new AccountModel();
+    }
+
+    @Provides
+    @Singleton
+    CaptureDetailsModel provideCaptureDetailsModel() {
+        return new CaptureDetailsModel();
+    }
+
+    @Provides
+    @Singleton
+    BaseWineModel provideBaseWineModel() {
+        return new BaseWineModel();
+    }
+
     @Provides
     @Singleton
     EventBus provideEventBus() {

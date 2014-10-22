@@ -1,16 +1,19 @@
 package com.delectable.mobile.api.jobs.registrations;
 
+import com.delectable.mobile.App;
+import com.delectable.mobile.api.endpointmodels.registrations.RegistrationsLoginRequest;
+import com.delectable.mobile.api.endpointmodels.registrations.RegisterLoginResponse;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.registrations.RegistrationLoginRequest;
-import com.delectable.mobile.api.endpointmodels.registrations.RegistrationLoginResponse;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
+
+import android.provider.Settings;
 
 public class LoginJob extends BaseJob {
 
@@ -31,10 +34,11 @@ public class LoginJob extends BaseJob {
     public void onRun() throws Throwable {
 
         String endpoint = "/registrations/login";
-        RegistrationLoginRequest request = new RegistrationLoginRequest(
-                new RegistrationLoginRequest.RegistrationLoginPayload(mEmail, mPassword));
-        RegistrationLoginResponse response = mNetworkClient
-                .post(endpoint, request, RegistrationLoginResponse.class, false);
+        //get device udid
+        String deviceId = Settings.Secure.getString(App.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
+        RegistrationsLoginRequest request = new RegistrationsLoginRequest(deviceId, mEmail, mPassword);
+        RegisterLoginResponse response = mNetworkClient
+                .post(endpoint, request, RegisterLoginResponse.class, false);
 
         String sessionKey = response.payload.session_key;
         String sessionToken = response.payload.session_token;

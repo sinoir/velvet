@@ -1,14 +1,9 @@
 package com.delectable.mobile.api.cache;
 
-import com.google.gson.reflect.TypeToken;
-
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.AccountProfile;
-import com.iainconnor.objectcache.CacheManager;
 
-import java.lang.reflect.Type;
-
-import javax.inject.Inject;
+import java.util.HashMap;
 
 public class AccountModel {
 
@@ -20,27 +15,30 @@ public class AccountModel {
 
     private static final String PROFILE = KEY_PREFIX + "profile_" + VERSION;
 
-    @Inject
-    protected CacheManager mCache;
+    private static final HashMap<String, AccountProfile> mAccountProfileMap
+            = new HashMap<String, AccountProfile>();
+
+    private static final HashMap<String, AccountMinimal> mAccountMinimalMap
+            = new HashMap<String, AccountMinimal>();
 
     public AccountProfile getAccount(String id) {
-        Type type = new TypeToken<AccountProfile>() {
-        }.getType();
-        return (AccountProfile) mCache.get(PROFILE + id, AccountProfile.class, type);
+        String key = PROFILE + id;
+        return mAccountProfileMap.get(key);
     }
 
     public void saveAccount(AccountProfile account) {
-        mCache.put(PROFILE + account.getId(), account);
+        String key = PROFILE + account.getId();
+        mAccountProfileMap.put(key, account);
     }
 
     public AccountMinimal getAccountMinimal(String id) {
-        Type type = new TypeToken<AccountMinimal>() {
-        }.getType();
-        return (AccountMinimal) mCache.get(MINIMAL + id, AccountMinimal.class, type);
+        String key = MINIMAL + id;
+        return mAccountMinimalMap.get(key);
     }
 
     public void saveAccountMinimal(AccountMinimal account) {
-        mCache.put(MINIMAL + account.getId(), account);
+        String key = MINIMAL + account.getId();
+        mAccountMinimalMap.put(key, account);
     }
 
 }

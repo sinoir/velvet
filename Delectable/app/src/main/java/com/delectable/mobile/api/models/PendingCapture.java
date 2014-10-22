@@ -18,7 +18,7 @@ public class PendingCapture {
 
     private BaseWine base_wine;
 
-    private WineProfile wine_profile;
+    private WineProfileMinimal wine_profile;
 
     private String transcription_error_message;
 
@@ -80,11 +80,11 @@ public class PendingCapture {
         this.base_wine = base_wine;
     }
 
-    public WineProfile getWineProfile() {
+    public WineProfileMinimal getWineProfile() {
         return wine_profile;
     }
 
-    public void setWineProfile(WineProfile wine_profile) {
+    public void setWineProfile(WineProfileMinimal wine_profile) {
         this.wine_profile = wine_profile;
     }
 

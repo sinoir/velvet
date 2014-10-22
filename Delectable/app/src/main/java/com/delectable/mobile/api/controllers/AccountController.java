@@ -28,7 +28,7 @@ import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
-import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -47,8 +47,8 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
     }
 
-    public void fetchActivityFeed(String before, String after) {
-        mJobManager.addJobInBackground(new FetchActivityFeedJob(before, after));
+    public void fetchActivityFeed(String requestId, String before, String after, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(new FetchActivityFeedJob(requestId, before, after, isPullToRefresh));
     }
 
     /**

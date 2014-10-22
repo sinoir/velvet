@@ -7,8 +7,9 @@ public class RegistrationsRegisterRequest extends BaseRequest {
 
     private Payload payload;
 
-    public RegistrationsRegisterRequest(Payload payload) {
-        this.payload = payload;
+    public RegistrationsRegisterRequest(String device_id, String email,
+            String password, String fname, String lname) {
+        payload = new Payload(device_id, email, password, fname, lname);
     }
 
     public static class Payload {
@@ -25,9 +26,8 @@ public class RegistrationsRegisterRequest extends BaseRequest {
 
         private String lname;
 
-        public Payload(String email, String password, String fname, String lname) {
-            //TODO abstract device_id and pass appropriately
-            this(Config.DEFAULT_SESSION_TYPE, null, email, password, fname, lname);
+        public Payload(String device_id, String email, String password, String fname, String lname) {
+            this(Config.DEFAULT_SESSION_TYPE, device_id, email, password, fname, lname);
         }
 
         public Payload(String session_type, String device_id, String email,

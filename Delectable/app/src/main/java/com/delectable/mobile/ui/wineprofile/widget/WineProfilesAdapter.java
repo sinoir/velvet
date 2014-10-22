@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Used for the rows in the dialog to filter a base wine by it's vintage. The first row shows all
  * years, and is backed by a {@link BaseWine} object. The rest of the rows show the vintages, which
- * are backed by {@link WineProfile} objects.
+ * are backed by {@link WineProfileSubProfile} objects.
  */
 public class WineProfilesAdapter extends BaseAdapter {
 
@@ -25,7 +25,7 @@ public class WineProfilesAdapter extends BaseAdapter {
 
     private BaseWine mBaseWine;
 
-    private ArrayList<WineProfile> mWineProfiles = new ArrayList<WineProfile>();
+    private ArrayList<WineProfileSubProfile> mWineProfiles = new ArrayList<WineProfileSubProfile>();
 
     public WineProfilesAdapter() {
 
@@ -43,7 +43,7 @@ public class WineProfilesAdapter extends BaseAdapter {
 
     /**
      * @return Can return a {@link BaseWine} (if the first item was clicked) or a {@link
-     * WineProfile}.
+     * WineProfileSubProfile}.
      */
     @Override
     public Parcelable getItem(int position) {

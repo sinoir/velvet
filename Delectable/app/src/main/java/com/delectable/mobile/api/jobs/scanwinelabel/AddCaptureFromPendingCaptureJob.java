@@ -38,10 +38,10 @@ public class AddCaptureFromPendingCaptureJob extends BaseJob {
         CaptureDetailsResponse response = getNetworkClient().post(endpoint, mRequest,
                 CaptureDetailsResponse.class);
 
-        Log.d(TAG, "Added new Capture: " + response.getCapturePayload());
-        getEventBus().post(new AddedCaptureFromPendingCaptureEvent(response.getCapturePayload()));
+        Log.d(TAG, "Added new Capture: " + response.getCapture());
+        getEventBus().post(new AddedCaptureFromPendingCaptureEvent(response.getCapture()));
         KahunaUtil.trackCreateCapture(Calendar.getInstance().getTime(),
-                response.getCapturePayload().getId());
+                response.getCapture().getId());
     }
 
     @Override

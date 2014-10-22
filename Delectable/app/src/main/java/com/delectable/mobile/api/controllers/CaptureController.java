@@ -12,7 +12,7 @@ import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
-import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;

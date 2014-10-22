@@ -1,16 +1,19 @@
 package com.delectable.mobile.api.jobs.registrations;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.endpointmodels.registrations.RegistrationsFacebookResponse;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.registrations.AuthorizeFacebookRequest;
-import com.delectable.mobile.api.endpointmodels.registrations.RegistrationFacebookResponse;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
+
+import android.provider.Settings;
 
 import java.util.Calendar;
 
@@ -32,11 +35,12 @@ public class LoginFacebookJob extends BaseJob {
     public void onRun() throws Throwable {
 
         String endpoint = "/registrations/facebook";
-        String deviceId = null; //TODO grab deviceid and pass in
+        //get device udid
+        String deviceId = Settings.Secure.getString(App.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
         AuthorizeFacebookRequest request = new AuthorizeFacebookRequest(deviceId, mFacebookToken,
                 mFacebookTokenExpiration);
-        RegistrationFacebookResponse response = mNetworkClient
-                .post(endpoint, request, RegistrationFacebookResponse.class, false);
+        RegistrationsFacebookResponse response = mNetworkClient
+                .post(endpoint, request, RegistrationsFacebookResponse.class, false);
 
         String sessionKey = response.payload.session_key;
         String sessionToken = response.payload.session_token;

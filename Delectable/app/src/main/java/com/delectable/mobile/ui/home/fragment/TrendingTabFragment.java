@@ -5,7 +5,7 @@ import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
-import com.delectable.mobile.api.endpointmodels.accounts.CapturesContext;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 
 import android.os.Bundle;

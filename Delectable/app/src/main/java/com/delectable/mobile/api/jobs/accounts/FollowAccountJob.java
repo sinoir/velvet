@@ -3,6 +3,7 @@ package com.delectable.mobile.api.jobs.accounts;
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsFollowRequest;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.Account;
@@ -10,7 +11,6 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountFollowRequest;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
@@ -43,8 +43,7 @@ public class FollowAccountJob extends BaseJob {
         }
         Account currentUser = UserInfo.getAccountPrivate(App.getInstance());
         String endpoint = "/accounts/follow";
-        AccountFollowRequest request = new AccountFollowRequest(
-                new AccountFollowRequest.AccountFollowPayload(mAccountId, mIsFollowing));
+        AccountsFollowRequest request = new AccountsFollowRequest(mAccountId, mIsFollowing);
         BaseResponse response = mNetworkClient.post(endpoint, request, BaseResponse.class);
 
         // Update Signed In User Account Counts

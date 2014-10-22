@@ -1,4 +1,4 @@
-package com.delectable.mobile.api.endpointmodels.accounts;
+package com.delectable.mobile.api.endpointmodels.captures;
 
 public enum CapturesContext {
     MINIMAL("minimal"),

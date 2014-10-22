@@ -1,13 +1,8 @@
 package com.delectable.mobile.api.cache;
 
-import com.google.gson.reflect.TypeToken;
-
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.iainconnor.objectcache.CacheManager;
 
-import java.lang.reflect.Type;
-
-import javax.inject.Inject;
+import java.util.HashMap;
 
 public class CaptureDetailsModel {
 
@@ -15,21 +10,21 @@ public class CaptureDetailsModel {
 
     private static final String KEY_PREFIX = "capture_details_";
 
-    @Inject
-    CacheManager mCache;
-
-    private Type mCaptureType = new TypeToken<CaptureDetails>() {
-    }.getType();
+    /**
+     * static final Map used as a singleton for caching.
+     */
+    private static final HashMap<String, CaptureDetails> mMap = new HashMap<String, CaptureDetails>();
 
     public CaptureDetails getCapture(String id) {
-        return (CaptureDetails) mCache.get(KEY_PREFIX + id, CaptureDetails.class, mCaptureType);
+        return mMap.get(KEY_PREFIX + id);
     }
 
     public void saveCaptureDetails(CaptureDetails captureDetails) {
-        mCache.put(KEY_PREFIX + captureDetails.getId(), captureDetails);
+        String key = KEY_PREFIX + captureDetails.getId();
+        mMap.put(key, captureDetails);
     }
 
     public void deleteCaptureDetails(String captureId) {
-        mCache.unset(KEY_PREFIX + captureId);
+        mMap.remove(KEY_PREFIX + captureId);
     }
 }

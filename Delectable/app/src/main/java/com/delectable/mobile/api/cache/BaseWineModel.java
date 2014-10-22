@@ -1,31 +1,22 @@
 package com.delectable.mobile.api.cache;
 
-import com.google.gson.reflect.TypeToken;
-
 import com.delectable.mobile.api.models.BaseWine;
-import com.iainconnor.objectcache.CacheManager;
 
-import java.lang.reflect.Type;
-
-import javax.inject.Inject;
+import java.util.HashMap;
 
 public class BaseWineModel {
 
     private static final String TAG = BaseWineModel.class.getSimpleName();
 
-    private static final String KEY_PREFIX = "base_wines_";
 
-    @Inject
-    CacheManager mCache;
+    public static final HashMap<String, BaseWine> mMap = new HashMap<String, BaseWine>();
 
-    private Type mWineType = new TypeToken<BaseWine>() {
-    }.getType();
 
     public BaseWine getBaseWine(String id) {
-        return (BaseWine) mCache.get(KEY_PREFIX + id, BaseWine.class, mWineType);
+        return mMap.get(id);
     }
 
     public void saveBaseWine(BaseWine baseWine) {
-        mCache.put(KEY_PREFIX + baseWine.getId(), baseWine);
+        mMap.put(baseWine.getId(), baseWine);
     }
 }
