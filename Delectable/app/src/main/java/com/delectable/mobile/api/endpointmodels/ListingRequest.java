@@ -1,10 +1,10 @@
 package com.delectable.mobile.api.endpointmodels;
 
-public class BaseListingRequest extends BaseRequest {
+public class ListingRequest extends BaseRequest {
 
     private Payload payload;
 
-    public BaseListingRequest(String context, String e_tag, String id, String before, String after,
+    public ListingRequest(String context, String e_tag, String id, String before, String after,
             Boolean supress_before) {
         super(context, e_tag);
         payload = new Payload(id, before, after, supress_before);

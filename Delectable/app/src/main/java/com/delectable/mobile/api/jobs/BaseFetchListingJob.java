@@ -1,9 +1,9 @@
 package com.delectable.mobile.api.jobs;
 
+import com.delectable.mobile.api.endpointmodels.ListingRequest;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.IDable;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
-import com.delectable.mobile.api.endpointmodels.BaseListingRequest;
 import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.path.android.jobqueue.Params;
 
@@ -102,7 +102,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         super.onRun();
         String endpoint = getEndpoint();
 
-        BaseListingRequest request = new BaseListingRequest(mContext, mETag, mAccountId,
+        ListingRequest request = new ListingRequest(mContext, mETag, mAccountId,
                 mBefore, mAfter, mIsPullToRefresh);
 
         Type type = getResponseType();
