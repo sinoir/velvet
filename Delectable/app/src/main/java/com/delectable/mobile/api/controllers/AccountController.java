@@ -47,8 +47,8 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
     }
 
-    public void fetchActivityFeed(String before, String after) {
-        mJobManager.addJobInBackground(new FetchActivityFeedJob(before, after));
+    public void fetchActivityFeed(String requestId, String before, String after, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(new FetchActivityFeedJob(requestId, before, after, isPullToRefresh));
     }
 
     /**

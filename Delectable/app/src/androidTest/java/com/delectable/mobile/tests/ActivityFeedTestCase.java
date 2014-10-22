@@ -1,11 +1,15 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsActivityFeedResponse;
+import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.Listing;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 
 public class ActivityFeedTestCase extends BaseInstrumentationTestCase {
 
@@ -24,8 +28,9 @@ public class ActivityFeedTestCase extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_activity_feed_list);
         String expectedContext = "feed_element";
 
-        AccountsActivityFeedResponse response = mGson
-                .fromJson(json.toString(), AccountsActivityFeedResponse.class);
+        Type type = new TypeToken<ListingResponse<ActivityFeedItem>>() {
+        }.getType();
+        ListingResponse<ActivityFeedItem> response = mGson.fromJson(json.toString(), type);
         Listing<ActivityFeedItem> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
