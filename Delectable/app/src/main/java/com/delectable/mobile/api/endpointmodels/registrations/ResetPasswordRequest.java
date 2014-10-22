@@ -4,15 +4,15 @@ import com.delectable.mobile.api.endpointmodels.BaseRequest;
 
 public class ResetPasswordRequest extends BaseRequest {
 
-    Payload payload;
+    private Payload payload;
 
-    public ResetPasswordRequest(Payload payload) {
-        this.payload = payload;
+    public ResetPasswordRequest(String email) {
+        payload = new Payload(email);
     }
 
     public static class Payload {
 
-        String email;
+        private String email;
 
         public Payload(String email) {
             this.email = email;

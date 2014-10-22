@@ -3,11 +3,11 @@ package com.delectable.mobile.api.endpointmodels.registrations;
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.models.Account;
 
-public class RegistrationFacebookResponse extends BaseResponse {
+public class RegistrationsFacebookResponse extends BaseResponse {
 
-    public RegistrationFacebookResponsePayload payload;
+    public Payload payload;
 
-    public static class RegistrationFacebookResponsePayload {
+    public static class Payload {
 
         public String session_key;
 
