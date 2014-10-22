@@ -1,5 +1,6 @@
 package com.delectable.mobile.api.jobs.registrations;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.jobs.Priority;
@@ -11,6 +12,8 @@ import com.delectable.mobile.api.endpointmodels.registrations.RegistrationFacebo
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
+
+import android.provider.Settings;
 
 import java.util.Calendar;
 
@@ -32,7 +35,8 @@ public class LoginFacebookJob extends BaseJob {
     public void onRun() throws Throwable {
 
         String endpoint = "/registrations/facebook";
-        String deviceId = null; //TODO grab deviceid and pass in
+        //get device udid
+        String deviceId = Settings.Secure.getString(App.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
         AuthorizeFacebookRequest request = new AuthorizeFacebookRequest(deviceId, mFacebookToken,
                 mFacebookTokenExpiration);
         RegistrationFacebookResponse response = mNetworkClient

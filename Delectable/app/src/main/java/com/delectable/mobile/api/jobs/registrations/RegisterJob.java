@@ -1,5 +1,6 @@
 package com.delectable.mobile.api.jobs.registrations;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
@@ -11,6 +12,8 @@ import com.delectable.mobile.api.endpointmodels.registrations.RegistrationsRegis
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
+
+import android.provider.Settings;
 
 import java.util.Calendar;
 
@@ -38,9 +41,9 @@ public class RegisterJob extends BaseJob {
     public void onRun() throws Throwable {
 
         String endpoint = "/registrations/register";
-        RegistrationsRegisterRequest.Payload payload = new RegistrationsRegisterRequest.Payload(
-                mEmail, mPassword, mFname, mLname);
-        RegistrationsRegisterRequest request = new RegistrationsRegisterRequest(payload);
+        //get device udid
+        String deviceId = Settings.Secure.getString(App.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
+        RegistrationsRegisterRequest request = new RegistrationsRegisterRequest(deviceId, mEmail, mPassword, mFname, mLname);
         RegistrationLoginResponse response = mNetworkClient
                 .post(endpoint, request, RegistrationLoginResponse.class, false);
 
