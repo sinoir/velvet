@@ -1,6 +1,5 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 

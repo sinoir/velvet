@@ -1,12 +1,17 @@
 package com.delectable.mobile.api.jobs.basewines;
 
+import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.endpointmodels.BaseSearchResponse;
 import com.delectable.mobile.api.endpointmodels.SearchRequest;
-import com.delectable.mobile.api.endpointmodels.basewines.BaseWinesSearchResponse;
 import com.delectable.mobile.api.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
+
+import java.lang.reflect.Type;
 
 /**
  * We don't take a context parameter here, so the API will default to context minimal. If in the
@@ -35,8 +40,10 @@ public class SearchWinesJob extends BaseJob {
     public void onRun() throws Throwable {
         String endpoint = "/base_wines/search";
         SearchRequest request = new SearchRequest(mQ, mOffset, mLimit);
-        BaseWinesSearchResponse response = getNetworkClient().post(endpoint, request,
-                BaseWinesSearchResponse.class);
+        Type type = new TypeToken<BaseSearchResponse<BaseWineMinimal>>() {
+        }.getType();
+        BaseSearchResponse<BaseWineMinimal> response = getNetworkClient()
+                .post(endpoint, request, type);
         getEventBus().post(new SearchWinesEvent(response.getPayload()));
         KahunaUtil.trackSearch();
     }

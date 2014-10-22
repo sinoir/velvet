@@ -1,12 +1,17 @@
 package com.delectable.mobile.api.jobs.accounts;
 
+import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.endpointmodels.BaseSearchResponse;
+import com.delectable.mobile.api.endpointmodels.SearchRequest;
 import com.delectable.mobile.api.events.accounts.SearchAccountsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.SearchRequest;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsSearchResponse;
+import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
+
+import java.lang.reflect.Type;
 
 public class SearchAccountsJob extends BaseJob {
 
@@ -34,8 +39,10 @@ public class SearchAccountsJob extends BaseJob {
     public void onRun() throws Throwable {
         String endpoint = "/accounts/search";
         SearchRequest request = new SearchRequest(mQ, mOffset, mLimit);
-        AccountsSearchResponse response = getNetworkClient().post(endpoint, request,
-                AccountsSearchResponse.class);
+        Type type = new TypeToken<BaseSearchResponse<AccountSearch>>() {
+        }.getType();
+        BaseSearchResponse<AccountSearch> response = getNetworkClient()
+                .post(endpoint, request, type);
         getEventBus().post(new SearchAccountsEvent(response.getPayload()));
         KahunaUtil.trackSearch();
     }

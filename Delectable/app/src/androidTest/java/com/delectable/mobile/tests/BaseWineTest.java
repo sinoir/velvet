@@ -1,18 +1,22 @@
 package com.delectable.mobile.tests;
 
+import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.endpointmodels.BaseSearchResponse;
+import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.models.SearchResult;
-import com.delectable.mobile.api.endpointmodels.basewines.BaseWinesSearchResponse;
-import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
+
+import java.lang.reflect.Type;
 
 public class BaseWineTest extends BaseInstrumentationTestCase {
 
@@ -28,8 +32,9 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
 
     public void testParseBaseWineSearchResults() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_search_min_ctx);
-        BaseWinesSearchResponse response = mGson
-                .fromJson(json.toString(), BaseWinesSearchResponse.class);
+        Type type = new TypeToken<BaseSearchResponse<BaseWineMinimal>>() {
+        }.getType();
+        BaseSearchResponse<BaseWineMinimal> response = mGson.fromJson(json.toString(), type);
         SearchResult<BaseWineMinimal> payload = response.getPayload();
 
         assertEquals("Napa Valley", payload.getQ());
