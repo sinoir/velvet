@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.accounts;
 
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsContactListSuggestionsRequest;
 import com.delectable.mobile.api.events.accounts.FetchedAccountsFromContactsEvent;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.cache.DeviceContactsModel;
 import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountContactListSuggestionsRequest;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
@@ -38,7 +38,7 @@ public class FetchAccountsFromContactsJob extends BaseJob {
         mDeviceContactsModel = new DeviceContactsModel();
         List<TaggeeContact> contacts = mDeviceContactsModel.loadDeviceContactsAsTageeContacts();
 
-        AccountContactListSuggestionsRequest request = new AccountContactListSuggestionsRequest(
+        AccountsContactListSuggestionsRequest request = new AccountsContactListSuggestionsRequest(
                 contacts, null);
         AccountMinimalListResponse response = getNetworkClient()
                 .post(endpoint, request, AccountMinimalListResponse.class);

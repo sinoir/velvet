@@ -2,12 +2,11 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountContext;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsContextRequest;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountContextRequest;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountProfileResponse;
 import com.delectable.mobile.api.net.NetworkClient;
 import com.path.android.jobqueue.Params;
@@ -46,7 +45,7 @@ public class FetchAccountProfileJob extends BaseJob {
         }
 
         String endpoint = "/accounts/context";
-        AccountContextRequest request = new AccountContextRequest(AccountContext.PROFILE, eTag, mAccountId);
+        AccountsContextRequest request = new AccountsContextRequest(AccountContext.PROFILE, eTag, mAccountId);
         AccountProfileResponse response = mNetworkClient
                 .post(endpoint, request, AccountProfileResponse.class);
 
