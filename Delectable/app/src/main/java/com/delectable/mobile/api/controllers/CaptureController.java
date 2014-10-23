@@ -47,10 +47,11 @@ public class CaptureController {
         mJobManager.addJobInBackground(new DeleteCaptureJob(captureId));
     }
 
-    public void fetchCaptureNotes(String baseWineId, String wineProfileId, String before,
-            String after, String includeCaptureNote) {
-        mJobManager.addJobInBackground(new FetchCaptureNotesJob(baseWineId, wineProfileId, before,
-                after, includeCaptureNote));
+    public void fetchCaptureNotes(String requestId, String baseWineId, String wineProfileId,
+            Listing<CaptureNote> listing, String includeCaptureNote, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchCaptureNotesJob(requestId, baseWineId, wineProfileId, listing,
+                        includeCaptureNote, isPullToRefresh));
     }
 
     public void markCaptureHelpful(CaptureNote captureNote, boolean helpful) {

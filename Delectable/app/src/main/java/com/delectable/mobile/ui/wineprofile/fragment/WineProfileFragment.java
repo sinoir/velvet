@@ -6,7 +6,7 @@ import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
-import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
@@ -362,26 +362,34 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
+    private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
+    private static final String WINE_PROFILE_NOTES_REQ = "wine_profile_notes_req";
+
     /**
      * @param idType Whether to load captures notes for a base wine or a wine profile.
      */
     private void loadCaptureNotesData(IdType idType, String id) {
-        //retrieve captureNotes
+        //retrieve captureNotes fresh fetch
         if (idType == IdType.BASE_WINE) {
-            mCaptureController.fetchCaptureNotes(id, null, null, null, null);
+            mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, null, null, null);
         }
         if (idType == IdType.WINE_PROFILE) {
-            mCaptureController.fetchCaptureNotes(null, id, null, null, null);
+            mCaptureController.fetchCaptureNotes(WINE_PROFILE_NOTES_REQ, null, id, null, null, null);
         }
     }
 
-    public void onEventMainThread(FetchedCaptureNotesEvent event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureNote> event) {
+        if (!event.getRequestId().equals(WINE_PROFILE_NOTES_REQ)) {
+            if (!event.getRequestId().equals(BASE_WINE_NOTES_REQ)) {
+                return;
+            }
+        }
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
             return;
         }
 
-        mCaptureNoteListing = event.getListingResponse();
+        mCaptureNoteListing = event.getListing();
         updateCaptureNotesData();
     }
 
