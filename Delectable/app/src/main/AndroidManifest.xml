@@ -67,10 +67,12 @@
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "delectable://captures” -->
                 <data
                     android:host="captures"
                     android:scheme="delectable" />
+                <!-- Accepts URIs that begin with "delectable://account” -->
                 <data
                     android:host="account"
                     android:scheme="delectable" />
@@ -96,7 +98,8 @@
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "delectable://capture” -->
                 <data
                     android:host="capture"
                     android:scheme="delectable" />
@@ -118,6 +121,8 @@
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "delectable://base_wine” -->
                 <data
                     android:host="base_wine"
                     android:scheme="delectable" />

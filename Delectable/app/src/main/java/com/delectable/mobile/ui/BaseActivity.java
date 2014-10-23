@@ -30,8 +30,6 @@ public abstract class BaseActivity extends Activity
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private boolean mIsFromDeepLink;
-
     private Uri mDeepLinkUriData;
 
     private GoogleApiClient mGoogleApiClient;
@@ -55,12 +53,6 @@ public abstract class BaseActivity extends Activity
         // Action not used yet, not sure if we'll need it.  Right now the action only VIEW.
         String action = intent.getAction();
         mDeepLinkUriData = intent.getData();
-
-        if (mDeepLinkUriData != null) {
-            mIsFromDeepLink = true;
-        } else {
-            mIsFromDeepLink = false;
-        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -148,14 +140,14 @@ public abstract class BaseActivity extends Activity
 
     public String getDeepLinkParam(String key) {
         String param = null;
-        if (isFromDeepLink() && getDeepLinkUriData() != null) {
+        if (isFromDeepLink()) {
             param = mDeepLinkUriData.getQueryParameter(key);
         }
         return param;
     }
 
     public boolean isFromDeepLink() {
-        return mIsFromDeepLink;
+        return mDeepLinkUriData != null ;
     }
 
     public Uri getDeepLinkUriData() {
