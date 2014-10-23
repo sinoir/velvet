@@ -47,6 +47,10 @@ public class FollowersFollowingModel {
         return getCachedAccounts(key);
     }
 
+    public static void clear() {
+        mMap.clear();
+    }
+
     private void saveListing(String key, Listing<AccountMinimal> listing) {
 
         CacheListing<AccountMinimal> cacheListing = new CacheListing<AccountMinimal>(listing);

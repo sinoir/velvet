@@ -163,7 +163,6 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     /**
      * The subclass will need to intercept the event and verify that the event was spawned from a
      * request the subclass.
-     * @param event
      */
     public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
         Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());

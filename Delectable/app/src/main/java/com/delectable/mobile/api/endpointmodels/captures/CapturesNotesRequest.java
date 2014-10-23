@@ -18,8 +18,9 @@ public class CapturesNotesRequest extends BaseRequest {
      *                             anywhere in the full list.
      * @param suppress_before      true if user pulled to refresh / only refresh for recent items.
      */
-    public CapturesNotesRequest(String base_wine_id, String wine_profile_id, String before,
+    public CapturesNotesRequest(String e_tag, String base_wine_id, String wine_profile_id, String before,
             String after, String include_capture_note, Boolean suppress_before) {
+        super(null, e_tag);
         this.payload = new Payload(base_wine_id, wine_profile_id, before, after,
                 include_capture_note, suppress_before);
     }

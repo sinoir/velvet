@@ -17,4 +17,8 @@ public class CaptureNoteModel {
     public static void saveCaptureNote(CaptureNote baseWine) {
         mMap.put(baseWine.getId(), baseWine);
     }
+
+    public static void clear() {
+        mMap.clear();
+    }
 }

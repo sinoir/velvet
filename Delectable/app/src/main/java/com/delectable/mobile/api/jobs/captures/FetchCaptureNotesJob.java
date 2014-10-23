@@ -47,7 +47,7 @@ public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote> {
 
     @Override
     protected BaseRequest getRequestObject() {
-        return new CapturesNotesRequest(mBaseWineId, mWineProfileId,
+        return new CapturesNotesRequest(mETag, mBaseWineId, mWineProfileId,
                 mBefore, mAfter, mIncludeCaptureNote, mIsPullToRefresh);
     }
 

@@ -27,4 +27,8 @@ public class CaptureDetailsModel {
     public void deleteCaptureDetails(String captureId) {
         mMap.remove(KEY_PREFIX + captureId);
     }
+
+    public static void clear() {
+        mMap.clear();
+    }
 }
