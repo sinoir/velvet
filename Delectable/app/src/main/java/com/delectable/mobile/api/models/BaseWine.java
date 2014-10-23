@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class BaseWine extends BaseWineMinimal implements Parcelable {
+public class BaseWine extends BaseWineMinimal implements Parcelable, Ratingsable {
 
     private static final int MAX_REGION_PATHS = 4;
 

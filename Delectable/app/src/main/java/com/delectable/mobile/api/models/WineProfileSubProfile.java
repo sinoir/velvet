@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class WineProfileSubProfile implements Parcelable {
+public class  WineProfileSubProfile implements Parcelable, Ratingsable {
 
     private String id;
 

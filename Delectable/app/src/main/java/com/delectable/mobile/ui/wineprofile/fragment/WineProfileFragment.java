@@ -15,6 +15,7 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PhotoHash;
+import com.delectable.mobile.api.models.Ratingsable;
 import com.delectable.mobile.api.models.VarietalsHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
@@ -283,9 +284,7 @@ public class WineProfileFragment extends BaseFragment implements
         ButterKnife.inject(this, header);
 
         updateBannerData();
-        if (mBaseWine != null) {
-            updateBaseWineData();
-        }
+        updateVarietyRegionRatingView(mBaseWine);
 
         listview.addHeaderView(header, null, false);
         listview.setAdapter(mAdapter);
@@ -303,6 +302,10 @@ public class WineProfileFragment extends BaseFragment implements
         return view;
     }
 
+    /**
+     * The WineBannerView can be set with different types of data depending from where this fragment
+     * was spawned.
+     */
     private void updateBannerData() {
         if (mWineProfile != null) {
             //spawned from Feed Fragment
@@ -331,7 +334,7 @@ public class WineProfileFragment extends BaseFragment implements
 
         //not spawned from WineCaptureSubmit, need to fetch BaseWine
         if (mBaseWine == null) {
-            loadBaseWineData(); //load from model to show something first
+            loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
         }
 
@@ -386,12 +389,14 @@ public class WineProfileFragment extends BaseFragment implements
                 if (wine instanceof BaseWine) {
                     mType = Type.BASE_WINE;
                     BaseWine baseWine = (BaseWine) wine;
+                    updateRatingsView(baseWine);
                     mFetchingId = baseWine.getId();
                 }
                 //when a vintage year is selected from the dialog
                 if (wine instanceof WineProfileSubProfile) {
                     mType = Type.WINE_PROFILE;
                     WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
+                    updateRatingsView(wineProfile);
                     mFetchingId = wineProfile.getId();
                 }
 
@@ -406,7 +411,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    private void loadBaseWineData() {
+    private void loadLocalBaseWineData() {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
         if (mBaseWine == null) {
@@ -418,7 +423,7 @@ public class WineProfileFragment extends BaseFragment implements
             mCapturePhotoHash = mBaseWine.getPhoto();
         }
         updateBannerData();
-        updateBaseWineData();
+        updateVarietyRegionRatingView(mBaseWine);
     }
 
     public void onEventMainThread(UpdatedBaseWineEvent event) {
@@ -427,7 +432,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         if (event.isSuccessful()) {
-            loadBaseWineData();
+            loadLocalBaseWineData();
         } else {
             showToastError(event.getErrorMessage());
         }
@@ -510,20 +515,22 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
 
-    private void updateBaseWineData() {
-
-        //varietal info
-        if (mBaseWine.getVarietalComposition().size() == 0) {
+    private void updateVarietyRegionRatingView(BaseWine baseWine) {
+        if (baseWine == null) {
+            return;
+        }
+            //varietal info
+        if (baseWine.getVarietalComposition().size() == 0) {
             //beers don't have varietal composition
             mVarietalContainer.setVisibility(View.GONE);
         } else {
             GradientDrawable varietalDrawable = (GradientDrawable) mVarietalImageView.getDrawable();
-            String hexColor = mBaseWine.getVarietalComposition().get(0).getColor();
+            String hexColor = baseWine.getVarietalComposition().get(0).getColor();
             varietalDrawable.setColor(Color.parseColor(hexColor));
 
             //combine varietal names if there's more than one
             ArrayList<String> varietalNames = new ArrayList<String>();
-            for (VarietalsHash varietal : mBaseWine.getVarietalComposition()) {
+            for (VarietalsHash varietal : baseWine.getVarietalComposition()) {
                 varietalNames.add(varietal.getName());
             }
             TextUtils.join(", ", varietalNames);
@@ -532,12 +539,21 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         //regional info
-        String regionPath = mBaseWine.getRegionPathDisplayText(getActivity());
+        String regionPath = baseWine.getRegionPathDisplayText(getActivity());
         mRegionPathTextView.setText(regionPath);
 
+        updateRatingsView(baseWine);
+
+        if (!mViewWineTracked) {
+            KahunaUtil.trackViewWine(baseWine.getId(), baseWine.getName());
+            mViewWineTracked = true;
+        }
+    }
+
+    private void updateRatingsView(Ratingsable ratingsable) {
         //rating avg
-        double allAvg = mBaseWine.getRatingsSummary().getAllAvgOfTen();
-        double proAvg = mBaseWine.getRatingsSummary().getProAvgOfTen();
+        double allAvg = ratingsable.getRatingsSummary().getAllAvgOfTen();
+        double proAvg = ratingsable.getRatingsSummary().getProAvgOfTen();
         DecimalFormat format = new DecimalFormat("0.0");
         if (allAvg == NO_AVG_RATING) { //handling a no rating case, show a dash
             mAllRatingsAverageTextView.setText("-");
@@ -555,19 +571,14 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         //ratings count
-        int allCount = mBaseWine.getRatingsSummary().getAllCount();
-        int proCount = mBaseWine.getRatingsSummary().getProCount();
+        int allCount = ratingsable.getRatingsSummary().getAllCount();
+        int proCount = ratingsable.getRatingsSummary().getProCount();
         String allRatingsCount = getResources().getQuantityString(
                 R.plurals.wine_profile_ratings_count, allCount, allCount);
         String proRatingsCount = getResources()
                 .getQuantityString(R.plurals.wine_profile_pro_ratings_count, proCount, proCount);
         mAllRatingsCountTextView.setText(allRatingsCount);
         mProRatingsCountTextView.setText(proRatingsCount);
-
-        if (!mViewWineTracked) {
-            KahunaUtil.trackViewWine(mBaseWineId, mBaseWine.getName());
-            mViewWineTracked = true;
-        }
     }
 
     /**
