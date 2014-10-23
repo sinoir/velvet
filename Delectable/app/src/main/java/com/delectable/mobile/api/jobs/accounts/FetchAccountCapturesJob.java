@@ -1,13 +1,13 @@
 package com.delectable.mobile.api.jobs.accounts;
 
-import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.api.jobs.BaseFetchListingJob;
-import com.delectable.mobile.api.models.Listing;
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.jobs.BaseFetchListingJob;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
 
 import java.lang.reflect.Type;
 
@@ -26,14 +26,13 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
     }
 
     @Override
-    public Listing<CaptureDetails> getCachedListing(String accountId) {
-        return mListingModel.getUserCaptures(mAccountId);
+    public Listing<CaptureDetails> getCachedListing(String dataItemId) {
+        return mListingModel.getUserCaptures(dataItemId);
     }
 
     @Override
-    public void saveListingToCache(String accountId,
-            Listing<CaptureDetails> apiListing) {
-        mListingModel.saveUserCaptures(mAccountId, apiListing);
+    public void saveListingToCache(String dataItemId, Listing<CaptureDetails> apiListing) {
+        mListingModel.saveUserCaptures(dataItemId, apiListing);
     }
 
     @Override

@@ -1,17 +1,18 @@
 package com.delectable.mobile.api.jobs.captures;
 
+import com.google.gson.reflect.TypeToken;
+
+import com.delectable.mobile.api.cache.CaptureNoteListingModel;
+import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesNotesRequest;
-import com.delectable.mobile.api.events.captures.FetchedCaptureNotesEvent;
-import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.jobs.BaseFetchListingJob;
 import com.delectable.mobile.api.models.CaptureNote;
-import com.google.gson.reflect.TypeToken;
-import com.path.android.jobqueue.Params;
+import com.delectable.mobile.api.models.Listing;
 
 import java.lang.reflect.Type;
 
-public class FetchCaptureNotesJob extends BaseJob {
+public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote> {
 
     private static final String TAG = FetchCaptureNotesJob.class.getSimpleName();
 
@@ -19,38 +20,56 @@ public class FetchCaptureNotesJob extends BaseJob {
 
     private String mWineProfileId;
 
-    private String mBefore;
+    private String mIncludeCaptureNote; //not being used
 
-    private String mAfter;
 
-    private String mIncludeCaptureNote;
-
-    public FetchCaptureNotesJob(String baseWineId, String wineProfileId, String before, String after,
-                                String includeCaptureNote) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
-
-        mBaseWineId = baseWineId;
-        mWineProfileId = wineProfileId;
-        mBefore = before;
-        mAfter = after;
-        mIncludeCaptureNote = includeCaptureNote;
+    @Override
+    public String getEndpoint() {
+        return "/captures/notes";
     }
 
     @Override
-    public void onRun() throws Throwable {
-        String endpoint = "/captures/notes";
-        CapturesNotesRequest request = new CapturesNotesRequest(mBaseWineId, mWineProfileId,
-                mBefore, mAfter, mIncludeCaptureNote);
+    public Listing<CaptureNote> getCachedListing(String id) {
+        return CaptureNoteListingModel.getUserCaptures(id);
+    }
+
+    @Override
+    public void saveListingToCache(String id, Listing<CaptureNote> apiListing) {
+        CaptureNoteListingModel.saveListing(id, apiListing);
+    }
+
+    @Override
+    public Type getResponseType() {
         Type type = new TypeToken<ListingResponse<CaptureNote>>() {
         }.getType();
-        ListingResponse<CaptureNote> response = getNetworkClient()
-                .post(endpoint, request, type);
-        getEventBus().post(new FetchedCaptureNotesEvent(response.getPayload()));
+        return type;
     }
 
     @Override
-    protected void onCancel() {
-        getEventBus().post(new FetchedCaptureNotesEvent(TAG + " " + getErrorMessage()));
+    protected BaseRequest getRequestObject() {
+        return new CapturesNotesRequest(mBaseWineId, mWineProfileId,
+                mBefore, mAfter, mIncludeCaptureNote, mIsPullToRefresh);
+    }
+
+    /**
+     * @param listing         The previous listing if paginating. Pass in {@code null} if making a
+     *                        fresh request.
+     * @param isPullToRefresh true if user invoked this call via a pull to refresh.
+     */
+    public FetchCaptureNotesJob(String requestId, String baseWineId, String wineProfileId,
+            Listing<CaptureNote> listing, String includeCaptureNote, Boolean isPullToRefresh) {
+        //provide either wineProfileId or baseWineId as the dataItemId
+        super(requestId, baseWineId == null ? wineProfileId : baseWineId);
+        mBaseWineId = baseWineId;
+        mWineProfileId = wineProfileId;
+        if (listing != null) {
+            mBefore = listing.getBoundariesToBefore();
+            mAfter = listing.getBoundariesToAfter();
+            mETag = listing.getETag();
+        }
+        mIncludeCaptureNote = includeCaptureNote;
+        mIsPullToRefresh = isPullToRefresh;
+
     }
 
 
