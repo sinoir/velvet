@@ -66,6 +66,9 @@ public class CaptureListingModel {
         return getCachedCaptures(TYPE_FOLLOW_FEED);
     }
 
+    public static void clear() {
+        mMap.clear();
+    }
 
     private void saveListing(String key, Listing<CaptureDetails> listing) {
 

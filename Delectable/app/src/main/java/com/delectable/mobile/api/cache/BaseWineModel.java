@@ -19,4 +19,8 @@ public class BaseWineModel {
     public void saveBaseWine(BaseWine baseWine) {
         mMap.put(baseWine.getId(), baseWine);
     }
+
+    public static void clear() {
+        mMap.clear();
+    }
 }

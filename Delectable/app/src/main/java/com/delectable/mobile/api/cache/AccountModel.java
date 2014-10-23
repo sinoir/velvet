@@ -41,4 +41,9 @@ public class AccountModel {
         mAccountMinimalMap.put(key, account);
     }
 
+    public static void clear() {
+        mAccountProfileMap.clear();
+        mAccountMinimalMap.clear();
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.delectable.mobile.api.cache;
 
 import com.delectable.mobile.api.cache.localmodels.CacheListing;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.Listing;
 
@@ -38,6 +37,10 @@ public class CaptureNoteListingModel {
         return getCachedListing(key);
     }
 
+    public static void clear() {
+        mMap.clear();
+    }
+
     private static Listing<CaptureNote> getCachedListing(String key) {
         CacheListing<CaptureNote> cacheListing = mMap.get(key);
         if (cacheListing == null) {
@@ -60,6 +63,4 @@ public class CaptureNoteListingModel {
 
         return listing;
     }
-
-
 }
