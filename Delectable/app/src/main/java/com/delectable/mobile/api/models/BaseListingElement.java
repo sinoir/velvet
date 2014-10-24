@@ -83,7 +83,7 @@ public abstract class BaseListingElement implements IDable{
                 ", created_at=" + created_at +
                 ", context='" + context + '\'' +
                 ", e_tag='" + e_tag + '\'' +
-                ", listing_params=" + list_params +
+                ", list_params=" + list_params +
                 '}';
     }
 }
