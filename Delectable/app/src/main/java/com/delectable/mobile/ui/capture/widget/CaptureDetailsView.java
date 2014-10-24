@@ -13,6 +13,8 @@ import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -66,9 +68,6 @@ public class CaptureDetailsView extends RelativeLayout {
 
     @InjectView(R.id.user_comment)
     protected TextView mUserComment;
-
-    @InjectView(R.id.capture_time_location)
-    protected TextView mCaptureTimeLocation;
 
     @InjectView(R.id.capturer_rating_bar)
     protected RatingsBarView mUserCaptureRatingBar;
@@ -244,14 +243,31 @@ public class CaptureDetailsView extends RelativeLayout {
 
         capturePercent = mCaptureData.getRatingPercentForId(userAccountId);
 
-        captureTimeLocation = DateHelperUtil.getPrettyTimePastOnly(mCaptureData.getCreatedAtDate());
+        String time = DateHelperUtil.getPrettyTimePastOnly(mCaptureData.getCreatedAtDate());
 
-        String location = "";
-        if (mCaptureData.getLocationName() != null) {
-            location = " " + getResources()
-                    .getString(R.string.cap_feed_at_location, mCaptureData.getLocationName());
+        if (!userComment.isEmpty()) {
+            captureTimeLocation =
+                    (mCaptureData.getLocationName() != null && !mCaptureData.getLocationName()
+                            .isEmpty())
+                            ? getResources().getString(R.string.cap_feed_at_location_time,
+                            mCaptureData.getLocationName(), time)
+                            : getResources().getString(R.string.cap_feed_at_time, time);
+        } else {
+            captureTimeLocation =
+                    (mCaptureData.getLocationName() != null && !mCaptureData.getLocationName()
+                            .isEmpty())
+                            ? getResources()
+                            .getString(R.string.cap_feed_no_comment, mCaptureData.getLocationName(),
+                                    time)
+                            : getResources()
+                                    .getString(R.string.cap_feed_no_comment_no_location, time);
         }
-        captureTimeLocation += location;
+        SpannableString spannableString = SpannableString
+                .valueOf(userComment + " " + captureTimeLocation);
+        spannableString
+                .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
+                        userComment.length(), spannableString.length(), 0);
+        mUserComment.setText(spannableString, TextView.BufferType.SPANNABLE);
 
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, mProfileImage2);
 
@@ -283,14 +299,6 @@ public class CaptureDetailsView extends RelativeLayout {
             mInfluencerTitle.setVisibility(View.GONE);
         }
 
-        mUserName.setText(userName);
-        if (!userComment.isEmpty()) {
-            mUserComment.setText(userComment);
-            mUserComment.setVisibility(View.VISIBLE);
-        } else {
-            mUserComment.setText("");
-            mUserComment.setVisibility(View.GONE);
-        }
         if (Float.compare(capturePercent, -1.0f) > 0) {
             mUserCaptureRatingBar.setVisibility(View.VISIBLE);
             mUserCaptureRatingBar.setPercent(capturePercent);
@@ -298,7 +306,6 @@ public class CaptureDetailsView extends RelativeLayout {
             mUserCaptureRatingBar.setVisibility(View.GONE);
         }
 
-        mCaptureTimeLocation.setText(captureTimeLocation);
     }
 
     // Shows the rest of the comments/ratings below the first user comment

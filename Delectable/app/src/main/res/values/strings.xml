@@ -139,6 +139,10 @@
     <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
     <string name="cap_feed_at_location">at %s</string>
+    <string name="cap_feed_at_location_time">— at %1$s %2$s</string>
+    <string name="cap_feed_at_time">— added %s</string>
+    <string name="cap_feed_no_comment">At %1$s %2$s</string>
+    <string name="cap_feed_no_comment_no_location">Added %s</string>
     <string name="capture_remove">Do you want to remove this wine from your history?</string>
 
     <!-- Capture Comment/Rating Dialog -->

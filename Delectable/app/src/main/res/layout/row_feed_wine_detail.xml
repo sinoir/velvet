@@ -165,28 +165,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_image2"
             android:layout_marginTop="@dimen/spacing_8"
-            android:layout_marginBottom="@dimen/spacing_4"
+            android:layout_marginBottom="@dimen/spacing_8"
             android:text="COMMENT"
             android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/cap_feed_comment_text_size"
-            app:fontName="whitney_book" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/capture_time_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/user_comment"
-            android:layout_marginBottom="@dimen/spacing_12"
-            android:text="TIME LOCATION"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="14sp"
             app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.RatingsBarView
             android:id="@+id/capturer_rating_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/rating_bar_height"
-            android:layout_below="@id/capture_time_location"
+            android:layout_below="@id/user_comment"
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing" />
 
         <LinearLayout
