@@ -1,10 +1,10 @@
 package com.delectable.mobile.ui.capture.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
@@ -15,6 +15,7 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,11 +49,20 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.capturer_comments_container)
     protected RelativeLayout mCapturerCommentsContainer;
 
+    @InjectView(R.id.capturer_container)
+    protected View mCapturerContainer;
+
     @InjectView(R.id.profile_image2)
     protected CircleImageView mProfileImage2;
 
     @InjectView(R.id.user_name)
     protected TextView mUserName;
+
+    @InjectView(R.id.influencer_badge)
+    protected ImageView mInfluencerBadge;
+
+    @InjectView(R.id.influencer_title)
+    protected TextView mInfluencerTitle;
 
     @InjectView(R.id.user_comment)
     protected TextView mUserComment;
@@ -246,24 +256,42 @@ public class CaptureDetailsView extends RelativeLayout {
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, mProfileImage2);
 
         final String finalUserAccountId = userAccountId;
-        mProfileImage2.setOnClickListener(
+        OnClickListener clickListener =
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mActionsHandler.launchUserProfile(finalUserAccountId);
                     }
-                }
-        );
+                };
+        mCapturerContainer.setOnClickListener(clickListener);
+        mProfileImage2.setOnClickListener(clickListener);
 
         mUserName.setText(userName);
-        if (userComment != "") {
+
+        if (mCaptureData.getCapturerParticipant().isInfluencer()) {
+            mInfluencerBadge.setVisibility(View.VISIBLE);
+            String influencerTitle = mCaptureData.getCapturerParticipant()
+                    .getInfluencerTitlesString();
+            if (!influencerTitle.trim().isEmpty()) {
+                mInfluencerTitle.setText(influencerTitle);
+                mInfluencerTitle.setVisibility(View.VISIBLE);
+            } else {
+                mInfluencerTitle.setVisibility(View.GONE);
+            }
+        } else {
+            mInfluencerBadge.setVisibility(View.GONE);
+            mInfluencerTitle.setVisibility(View.GONE);
+        }
+
+        mUserName.setText(userName);
+        if (!userComment.isEmpty()) {
             mUserComment.setText(userComment);
             mUserComment.setVisibility(View.VISIBLE);
         } else {
             mUserComment.setText("");
             mUserComment.setVisibility(View.GONE);
         }
-        if (capturePercent > -1.0f) {
+        if (Float.compare(capturePercent, -1.0f) > 0) {
             mUserCaptureRatingBar.setVisibility(View.VISIBLE);
             mUserCaptureRatingBar.setPercent(capturePercent);
         } else {
@@ -303,7 +331,7 @@ public class CaptureDetailsView extends RelativeLayout {
                 String firstCommentText = comments.size() > firstIndex ? comments.get(firstIndex)
                         .getComment() : "";
                 // TODO : Figure out how to layout multiple comments with ratings?
-                if (firstCommentText != "" || rating > 0.0f) {
+                if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
                     commentRow.setPadding(0, verticalSpacing, 0, verticalSpacing);
                     commentRow.setNameCommentWithRating(participant.getFullName(), firstCommentText,

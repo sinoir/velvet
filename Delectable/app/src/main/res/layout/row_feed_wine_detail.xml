@@ -102,35 +102,71 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tagged_participants_container"
-        android:paddingBottom="@dimen/cap_list_row_vertical_spacing"
-        android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-        android:visibility="gone">
+        android:paddingBottom="@dimen/spacing_20"
+        android:paddingLeft="@dimen/spacing_16"
+        android:paddingRight="@dimen/spacing_16"
+        android:visibility="visible">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image2"
             android:layout_width="@dimen/small_profile_image_size"
             android:layout_height="@dimen/small_profile_image_size"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+            android:layout_marginRight="@dimen/spacing_12"
             android:src="@drawable/ab_profile_normal" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/profile_image2"
+        <RelativeLayout
+            android:id="@+id/capturer_container"
+            android:clickable="true"
             android:layout_toRightOf="@id/profile_image2"
-            android:textSize="@dimen/cap_feed_comment_text_size"
-            app:fontName="whitney_medium" />
+            android:layout_alignTop="@id/profile_image2"
+            android:layout_alignBottom="@id/profile_image2"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/small_profile_image_size">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="6dp"
+                android:text="User Name"
+                android:textColor="@color/d_black"
+                android:textSize="@dimen/cap_feed_comment_text_size"
+                app:fontName="whitney_medium" />
+
+            <ImageView
+                android:id="@+id/influencer_badge"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_toRightOf="@+id/user_name"
+                android:layout_alignTop="@id/user_name"
+                android:layout_alignBottom="@id/user_name"
+                android:src="@drawable/ic_find_expert_pressed"
+                android:visibility="gone" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/influencer_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_name"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="User Title"
+                android:textColor="@color/d_dark_gray"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                app:fontName="whitney_book" />
+
+        </RelativeLayout>
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/user_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_name"
-            android:layout_toRightOf="@id/profile_image2"
+            android:layout_below="@+id/profile_image2"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:layout_marginBottom="@dimen/spacing_4"
+            android:text="COMMENT"
             android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/cap_feed_comment_text_size"
             app:fontName="whitney_book" />
@@ -140,10 +176,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_comment"
-            android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
-            android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
-            android:layout_toRightOf="@id/profile_image2"
-            android:textColor="@color/d_dark_gray"
+            android:layout_marginBottom="@dimen/spacing_12"
+            android:text="TIME LOCATION"
+            android:textColor="@color/d_medium_gray"
             android:textSize="14sp"
             app:fontName="whitney_book" />
 
@@ -151,7 +186,6 @@
             android:id="@+id/capturer_rating_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/rating_bar_height"
-            android:layout_alignLeft="@id/user_name"
             android:layout_below="@id/capture_time_location"
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing" />
 
@@ -159,7 +193,6 @@
             android:id="@+id/participants_comments_ratings_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/user_name"
             android:layout_below="@id/capturer_rating_bar"
             android:orientation="vertical" />
 
@@ -167,10 +200,9 @@
             android:id="@+id/rate_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/user_name"
             android:layout_below="@id/participants_comments_ratings_container"
             android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
-            android:text="@string/cap_feed_add_rating"
+            android:text="@string/cap_feed_add_your_rating"
             android:textColor="@color/chestnut_to_chestnut_pressed"
             android:textSize="@dimen/cap_feed_comment_text_size"
             app:fontName="whitney_book" />
@@ -179,7 +211,6 @@
             android:id="@+id/vertical_divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignLeft="@id/user_name"
             android:layout_below="@id/rate_button"
             android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
             android:layout_marginTop="@dimen/cap_feed_row_small_vertical_spacing"
@@ -189,7 +220,6 @@
             android:id="@+id/action_buttons_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/user_name"
             android:layout_below="@id/vertical_divider2">
 
             <ImageButton
