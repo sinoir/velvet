@@ -13,95 +13,10 @@
         app:showTriangleMask="true" />
 
     <RelativeLayout
-        android:id="@+id/tagged_participants_container"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/wine_banner"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
-        android:background="@android:color/white"
-        android:paddingLeft="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingRight="@dimen/cap_list_row_horizontal_spacing"
-        android:visibility="gone">
-
-        <com.delectable.mobile.ui.common.widget.CircleImageView
-            android:id="@+id/profile_image1"
-            android:layout_width="@dimen/small_profile_image_size"
-            android:layout_height="@dimen/small_profile_image_size"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ab_profile_normal" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/with_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
-            android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
-            android:layout_toRightOf="@id/profile_image1"
-            android:text="@string/with"
-            android:textColor="@color/d_medium_gray"
-            app:fontName="whitney_book" />
-
-        <com.delectable.mobile.ui.common.widget.CircleImageView
-            android:id="@+id/tagged_user_image1"
-            android:layout_width="@dimen/small_profile_image_size"
-            android:layout_height="@dimen/small_profile_image_size"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/with_text"
-            android:src="@drawable/ab_profile_normal"
-            android:visibility="gone" />
-
-        <com.delectable.mobile.ui.common.widget.CircleImageView
-            android:id="@+id/tagged_user_image2"
-            android:layout_width="@dimen/small_profile_image_size"
-            android:layout_height="@dimen/small_profile_image_size"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
-            android:layout_toRightOf="@id/tagged_user_image1"
-            android:src="@drawable/ab_profile_normal"
-            android:visibility="gone" />
-
-        <com.delectable.mobile.ui.common.widget.CircleImageView
-            android:id="@+id/tagged_user_image3"
-            android:layout_width="@dimen/small_profile_image_size"
-            android:layout_height="@dimen/small_profile_image_size"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
-            android:layout_toRightOf="@id/tagged_user_image2"
-            android:src="@drawable/ab_profile_normal"
-            android:visibility="gone" />
-
-        <!-- TODO: Plus Image Button Icon -->
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/more_tagged_user_button"
-            android:layout_width="@dimen/small_profile_image_size"
-            android:layout_height="@dimen/small_profile_image_size"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/cap_feed_row_tag_user_image_spacing"
-            android:layout_toRightOf="@id/tagged_user_image3"
-            android:background="@drawable/btn_gray_circle"
-            android:gravity="center"
-            android:textColor="@color/d_dark_gray"
-            android:visibility="gone"
-            app:fontName="whitney_medium" />
-
-        <View
-            android:id="@+id/vertical_divider1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignLeft="@id/with_text"
-            android:layout_alignParentBottom="true"
-            android:background="@color/d_light_gray"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/capturer_comments_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tagged_participants_container"
+        android:layout_below="@id/wine_banner"
         android:paddingBottom="@dimen/spacing_20"
         android:paddingLeft="@dimen/spacing_16"
         android:paddingRight="@dimen/spacing_16"
@@ -113,6 +28,16 @@
             android:layout_height="@dimen/small_profile_image_size"
             android:layout_marginRight="@dimen/spacing_12"
             android:src="@drawable/ab_profile_normal" />
+
+        <com.delectable.mobile.ui.common.widget.RatingsBarView
+            android:id="@+id/capturer_rating_bar"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_alignTop="@id/profile_image2"
+            android:layout_alignBottom="@id/profile_image2" />
 
         <RelativeLayout
             android:id="@+id/capturer_container"
@@ -171,18 +96,71 @@
             android:textSize="@dimen/cap_feed_comment_text_size"
             app:fontName="whitney_book" />
 
-        <com.delectable.mobile.ui.common.widget.RatingsBarView
-            android:id="@+id/capturer_rating_bar"
+        <LinearLayout
+            android:id="@+id/tagged_participants_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/rating_bar_height"
+            android:layout_height="48dp"
             android:layout_below="@id/user_comment"
-            android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing" />
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/cap_feed_row_small_vertical_spacing"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:visibility="visible">
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/tagged_user_image1"
+                android:layout_width="@dimen/tiny_profile_image_size"
+                android:layout_height="@dimen/tiny_profile_image_size"
+                android:src="@drawable/ab_profile_normal"
+                android:visibility="visible" />
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/tagged_user_image2"
+                android:layout_width="@dimen/tiny_profile_image_size"
+                android:layout_height="@dimen/tiny_profile_image_size"
+                android:layout_marginLeft="@dimen/spacing_8"
+                android:src="@drawable/ab_profile_normal"
+                android:visibility="visible" />
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/tagged_user_image3"
+                android:layout_width="@dimen/tiny_profile_image_size"
+                android:layout_height="@dimen/tiny_profile_image_size"
+                android:layout_marginLeft="@dimen/spacing_8"
+                android:src="@drawable/ab_profile_normal"
+                android:visibility="visible" />
+
+            <!-- TODO: Plus Image Button Icon -->
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/tagged_participants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_8"
+                android:lines="1"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:text="with User and n others"
+                android:textSize="@dimen/cap_feed_comment_text_size"
+                android:textColor="@color/d_medium_gray"
+                android:visibility="visible"
+                app:fontName="whitney_book" />
+
+            <View
+                android:id="@+id/vertical_divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@id/with_text"
+                android:layout_alignParentBottom="true"
+                android:background="@color/d_light_gray"
+                android:visibility="gone" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/participants_comments_ratings_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/capturer_rating_bar"
+            android:layout_below="@id/tagged_participants_container"
             android:orientation="vertical" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView

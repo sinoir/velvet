@@ -39,14 +39,8 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.tagged_participants_container)
     protected View mTaggedParticipantsContainer;
 
-    @InjectView(R.id.profile_image1)
-    protected CircleImageView mProfileImage1;
-
     @InjectViews({R.id.tagged_user_image1, R.id.tagged_user_image2, R.id.tagged_user_image3})
     protected List<CircleImageView> mTaggedParticipantImages;
-
-    @InjectView(R.id.more_tagged_user_button)
-    protected TextView mMoreTaggedParticipantsButton;
 
     @InjectView(R.id.capturer_comments_container)
     protected RelativeLayout mCapturerCommentsContainer;
@@ -71,6 +65,9 @@ public class CaptureDetailsView extends RelativeLayout {
 
     @InjectView(R.id.capturer_rating_bar)
     protected RatingsBarView mUserCaptureRatingBar;
+
+    @InjectView(R.id.tagged_participants)
+    protected TextView mTaggedParticipants;
 
     @InjectView(R.id.participants_comments_ratings_container)
     protected LinearLayout mParticipantsCommentsRatingsContainer;
@@ -116,8 +113,8 @@ public class CaptureDetailsView extends RelativeLayout {
     public void updateData(CaptureDetails captureData) {
         mCaptureData = captureData;
         setupTopWineDetails();
-        setupTaggedParticipants();
         setupUserCommentsRating();
+        setupTaggedParticipants();
         setupParticipantsRatingsAndComments();
         setupActionButtonStates();
         mCapturerCommentsContainer.setVisibility(View.VISIBLE);
@@ -157,20 +154,6 @@ public class CaptureDetailsView extends RelativeLayout {
 
         boolean hasCaptureParticipants = taggedParticipants.size() > 0;
 
-        ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, mProfileImage1);
-        mProfileImage1.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mCaptureData.getCapturerParticipant() != null) {
-                            mActionsHandler
-                                    .launchUserProfile(
-                                            mCaptureData.getCapturerParticipant().getId());
-                        }
-                    }
-                }
-        );
-
         if (hasCaptureParticipants) {
             mTaggedParticipantsContainer.setVisibility(View.VISIBLE);
         } else {
@@ -194,18 +177,28 @@ public class CaptureDetailsView extends RelativeLayout {
                         }
                 );
             } else {
-                mTaggedParticipantImages.get(i).setVisibility(View.INVISIBLE);
+                mTaggedParticipantImages.get(i).setVisibility(View.GONE);
             }
         }
 
         // TODO: Figure out why taggedParticipants doesn't have more than 3 items, when the response has more than 3...
         // this doesn't work yet
-        if (taggedParticipants.size() > 3) {
+        if (hasCaptureParticipants) {
             // TODO: Add Touchstate to Open more tagged profile listing
-            mMoreTaggedParticipantsButton.setVisibility(View.VISIBLE);
+            mTaggedParticipants.setVisibility(View.VISIBLE);
             // Show + remainder # of tagged participants
-            mMoreTaggedParticipantsButton.setText("+" + (taggedParticipants.size() - 3));
-            mMoreTaggedParticipantsButton.setOnClickListener(
+
+            String firstParticipant = taggedParticipants.get(0).getFname();
+            String withText = taggedParticipants.size() == 2
+                    ? mContext.getResources()
+                    .getString(R.string.cap_feed_with_two, firstParticipant)
+                    : mContext.getResources()
+                            .getQuantityString(R.plurals.cap_feed_with, taggedParticipants.size(),
+                                    firstParticipant,
+                                    taggedParticipants.size() - 1);
+
+            mTaggedParticipants.setText(withText);
+            mTaggedParticipantsContainer.setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -214,8 +207,6 @@ public class CaptureDetailsView extends RelativeLayout {
                         }
                     }
             );
-        } else {
-            mMoreTaggedParticipantsButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -415,7 +406,6 @@ public class CaptureDetailsView extends RelativeLayout {
         }
         return "";
     }
-
 
     public static interface CaptureActionsHandler {
 
