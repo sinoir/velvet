@@ -135,6 +135,11 @@
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>
     </plurals>
+    <string name="cap_feed_divider">•</string>
+    <plurals name="cap_feed_comments_count">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
     <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
@@ -149,6 +154,9 @@
     </plurals>
     <string name="cap_feed_with_two">with %1$s and 1 other</string>
     <string name="capture_remove">Do you want to remove this wine from your history?</string>
+    <string name="cap_feed_like_text_one">%s likes this</string>
+    <string name="cap_feed_like_text_two">%1$s and %2$s like this</string>
+    <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more like this</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>

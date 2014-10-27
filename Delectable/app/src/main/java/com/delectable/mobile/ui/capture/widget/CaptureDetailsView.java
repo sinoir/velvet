@@ -5,6 +5,7 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingsBarView;
@@ -13,6 +14,7 @@ import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -48,7 +50,7 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.capturer_container)
     protected View mCapturerContainer;
 
-    @InjectView(R.id.profile_image2)
+    @InjectView(R.id.profile_image)
     protected CircleImageView mProfileImage2;
 
     @InjectView(R.id.user_name)
@@ -69,8 +71,35 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.tagged_participants)
     protected TextView mTaggedParticipants;
 
+    @InjectView(R.id.expanded_comments_container)
+    protected View mExpandedCommentsContainer;
+
+    @InjectView(R.id.participants_likes_divider)
+    protected View mParticipantsLikesDivider;
+
+    @InjectView(R.id.likes_text)
+    protected TextView mLikesText;
+
+    @InjectView(R.id.likes_comments_divider)
+    protected View mLikesCommentsDivider;
+
     @InjectView(R.id.participants_comments_ratings_container)
     protected LinearLayout mParticipantsCommentsRatingsContainer;
+
+    @InjectView(R.id.collapsed_comments_container)
+    protected View mCollapsedCommentsContainer;
+
+    @InjectView(R.id.likes_count)
+    protected TextView mLikesCount;
+
+    @InjectView(R.id.vertical_divider_likes)
+    protected View mLikesDivider;
+
+    @InjectView(R.id.comments_count)
+    protected TextView mCommentsCount;
+
+    @InjectView(R.id.vertical_divider_comments)
+    protected View mCommentsDivider;
 
     @InjectView(R.id.rate_button)
     protected View mRateButton;
@@ -81,13 +110,12 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.like_button)
     protected View mLikeButton;
 
-    @InjectView(R.id.likes_count)
-    protected TextView mLikesCount;
-
     @InjectView(R.id.menu_button)
     protected View mMenuButton;
 
     private Context mContext;
+
+    private boolean mIsShowingComments = false;
 
     private CaptureDetails mCaptureData;
 
@@ -110,12 +138,21 @@ public class CaptureDetailsView extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
+    public void updateData(CaptureDetails captureData, boolean showComments) {
+        mIsShowingComments = showComments;
+        updateData(captureData);
+    }
+
     public void updateData(CaptureDetails captureData) {
         mCaptureData = captureData;
         setupTopWineDetails();
         setupUserCommentsRating();
         setupTaggedParticipants();
-        setupParticipantsRatingsAndComments();
+        if (mIsShowingComments) {
+            setupExpandedComments();
+        } else {
+            setupCollapsedComments();
+        }
         setupActionButtonStates();
         mCapturerCommentsContainer.setVisibility(View.VISIBLE);
     }
@@ -299,14 +336,129 @@ public class CaptureDetailsView extends RelativeLayout {
 
     }
 
-    // Shows the rest of the comments/ratings below the first user comment
-    private void setupParticipantsRatingsAndComments() {
+    // Shows the likes and comments summary which expands to the full comments once clicked
+    private void setupCollapsedComments() {
+        mExpandedCommentsContainer.setVisibility(View.GONE);
+        mCollapsedCommentsContainer.setVisibility(View.VISIBLE);
+
+        OnClickListener expandLikesAndCommentsClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO go to expanded view with comments
+                Intent intent = new Intent();
+                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                        mCaptureData.getId());
+                // TODO captureData ID == captureNote ID???
+                //captureNote.getId());
+                intent.setClass(mContext, CaptureDetailsActivity.class);
+                mContext.startActivity(intent);
+            }
+        };
+
+        // Likes
+        int numLikes = mCaptureData.getLikesCount();
+        if (numLikes > 0) {
+            mLikesCount.setVisibility(View.VISIBLE);
+            String likesCountText = mContext.getResources()
+                    .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
+            mLikesCount.setText(likesCountText);
+            mLikesCount.setOnClickListener(expandLikesAndCommentsClickListener);
+        } else {
+            mLikesCount.setVisibility(View.GONE);
+        }
+
+        // Comments
+        int numComments = mCaptureData.getCommentsCount();
+        if (numComments > 0) {
+            mCommentsCount.setVisibility(View.VISIBLE);
+            String commentsCountText = mContext.getResources()
+                    .getQuantityString(R.plurals.cap_feed_comments_count, numComments, numComments);
+            mCommentsCount.setText(commentsCountText);
+            mCommentsCount.setOnClickListener(expandLikesAndCommentsClickListener);
+        } else {
+            mCommentsCount.setVisibility(View.GONE);
+        }
+
+        // Rating button
+        String currentUserId = UserInfo.getUserId(mContext);
+        boolean isCurrentUserCapture = mCaptureData.getCapturerParticipant().getId()
+                .equalsIgnoreCase(currentUserId);
+        boolean isCurrentUserTaggedInCapture = mCaptureData.isUserTagged(currentUserId);
+        boolean userHasRatedCapture = mCaptureData.getRatingForId(currentUserId) > -1;
+
+        // Only show Tap for rating if user hasn't rated already, and is tagged in capture
+        if ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture) {
+            mRateButton.setVisibility(View.VISIBLE);
+        } else {
+            mRateButton.setVisibility(View.GONE);
+        }
+
+        // Vertical dividers
+        mLikesDivider.setVisibility(
+                (mLikesCount.getVisibility() == View.VISIBLE
+                        && mCommentsCount.getVisibility() == View.VISIBLE)
+                        ? View.VISIBLE
+                        : View.GONE
+        );
+        mCommentsDivider.setVisibility(
+                (mCommentsCount.getVisibility() == View.VISIBLE
+                        && mRateButton.getVisibility() == View.VISIBLE)
+                        ? View.VISIBLE
+                        : View.GONE
+        );
+
+    }
+
+    private void setupExpandedComments() {
+        // hide collapsed likes and comments container
+        mCollapsedCommentsContainer.setVisibility(View.GONE);
+        mExpandedCommentsContainer.setVisibility(View.VISIBLE);
+
+        // Likes
+        mParticipantsLikesDivider.setVisibility(View.VISIBLE);
+        mLikesCommentsDivider.setVisibility(View.VISIBLE);
+        String likeText = "";
+        int numLikes = mCaptureData.getLikesCount();
+        if (numLikes == 0) {
+            mLikesText.setVisibility(View.GONE);
+            mParticipantsLikesDivider.setVisibility(View.GONE);
+        } else if (numLikes == 1) {
+            likeText = getResources().getString(R.string.cap_feed_like_text_one,
+                    mCaptureData.getLikingParticipants().get(0).getFname());
+        } else if (numLikes == 2) {
+            likeText = getResources().getString(R.string.cap_feed_like_text_two,
+                    mCaptureData.getLikingParticipants().get(0).getFname(),
+                    mCaptureData.getLikingParticipants().get(1).getFname());
+        } else if (numLikes >= 3) {
+            likeText = getResources().getString(R.string.cap_feed_like_text_more,
+                    mCaptureData.getLikingParticipants().get(0).getFname(),
+                    mCaptureData.getLikingParticipants().get(1).getFname(),
+                    numLikes - 2);
+        }
+
+        SpannableString spannableString = SpannableString.valueOf(likeText);
+        // span
+        int positionAnd = likeText.lastIndexOf("and");
+        if (positionAnd >= 0) {
+            spannableString.setSpan(
+                    new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
+                    positionAnd, positionAnd + 3, 0);
+        }
+        int positionLiked = likeText.lastIndexOf("like");
+        if (positionLiked >= 0) {
+            spannableString.setSpan(
+                    new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
+                    positionLiked, likeText.length(), 0);
+        }
+        mLikesText.setText(spannableString, TextView.BufferType.SPANNABLE);
+
+        // Comments
         mParticipantsCommentsRatingsContainer.removeAllViewsInLayout();
         CommentRatingRowView.LayoutParams layoutParams = new CommentRatingRowView.LayoutParams(
                 CommentRatingRowView.LayoutParams.MATCH_PARENT,
                 CommentRatingRowView.LayoutParams.WRAP_CONTENT);
         int verticalSpacing = mContext.getResources()
-                .getDimensionPixelSize(R.dimen.cap_feed_row_small_vertical_spacing);
+                .getDimensionPixelSize(R.dimen.spacing_8);
 
         // TODO: Finalize Test out with feed with participants.
         // TODO: Show multiple comments for user
@@ -331,7 +483,7 @@ public class CaptureDetailsView extends RelativeLayout {
                 // TODO : Figure out how to layout multiple comments with ratings?
                 if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
-                    commentRow.setPadding(0, verticalSpacing, 0, verticalSpacing);
+                    commentRow.setPadding(0, 0, 0, verticalSpacing);
                     commentRow.setNameCommentWithRating(participant.getFullName(), firstCommentText,
                             rating);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
@@ -351,27 +503,13 @@ public class CaptureDetailsView extends RelativeLayout {
         }
         if (numDisplayedComments == 0) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.GONE);
+            mLikesCommentsDivider.setVisibility(View.GONE);
         }
     }
 
     private void setupActionButtonStates() {
-        int numLikes = mCaptureData.getLikesCount();
-        String likesCountText = mContext.getResources()
-                .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
-        mLikesCount.setText(likesCountText);
         String currentUserId = UserInfo.getUserId(mContext);
         boolean userLikesCapture = mCaptureData.doesUserLikeCapture(currentUserId);
-        boolean isCurrentUserCapture = mCaptureData.getCapturerParticipant().getId()
-                .equalsIgnoreCase(currentUserId);
-        boolean isCurrentUserTaggedInCapture = mCaptureData.isUserTagged(currentUserId);
-        boolean userHasRatedCapture = mCaptureData.getRatingForId(currentUserId) > -1;
-
-        // Only show Tap for rating if user hasn't rated already, and is tagged in capture
-        if ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture) {
-            mRateButton.setVisibility(View.VISIBLE);
-        } else {
-            mRateButton.setVisibility(View.GONE);
-        }
 
         mLikeButton.setSelected(userLikesCapture);
 

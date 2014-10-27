@@ -2,9 +2,9 @@ package com.delectable.mobile.ui.capture.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.util.SafeAsyncTask;
 
@@ -82,7 +82,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
     @Override
     public void dataSetChanged() {
-        mCaptureDetailsView.updateData(mCaptureDetails);
+        mCaptureDetailsView.updateData(mCaptureDetails, true);
     }
 
     private void loadLocalData() {
@@ -97,7 +97,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
                 mCaptureDetails = capture;
                 Log.d(TAG, "Loaded Capture: " + mCaptureDetails);
                 if (mCaptureDetails != null) {
-                    mCaptureDetailsView.updateData(mCaptureDetails);
+                    mCaptureDetailsView.updateData(mCaptureDetails, true);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
