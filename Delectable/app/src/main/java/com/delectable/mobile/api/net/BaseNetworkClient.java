@@ -1,10 +1,13 @@
 package com.delectable.mobile.api.net;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.models.BaseListingElement;
+import com.delectable.mobile.api.models.BaseListingElementDeserializer;
 import com.delectable.mobile.api.util.DelException;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.util.HelperUtil;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -19,7 +22,14 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BaseNetworkClient {
 
-    protected Gson mGson = new Gson();
+    protected Gson mGson;
+
+    {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        //custom deserializer for captures_and_pending_captures endpoint because a mixed array returns
+        gsonBuilder.registerTypeAdapter(BaseListingElement.class, new BaseListingElementDeserializer());
+        mGson = gsonBuilder.create();
+    }
 
     protected OkHttpClient mClient = new OkHttpClient();
 
