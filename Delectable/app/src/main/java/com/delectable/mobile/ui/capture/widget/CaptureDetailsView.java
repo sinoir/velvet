@@ -8,7 +8,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
-import com.delectable.mobile.ui.common.widget.RatingsBarView;
+import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -65,8 +65,8 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.user_comment)
     protected TextView mUserComment;
 
-    @InjectView(R.id.capturer_rating_bar)
-    protected RatingsBarView mUserCaptureRatingBar;
+    @InjectView(R.id.capturer_rating)
+    protected RatingTextView mCapturerRating;
 
     @InjectView(R.id.tagged_participants)
     protected TextView mTaggedParticipants;
@@ -254,7 +254,6 @@ public class CaptureDetailsView extends RelativeLayout {
         String userComment = "";
         String captureTimeLocation = "";
         String userAccountId = "";
-        float capturePercent = 0.0f;
 
         // Signed in User comments
         if (mCaptureData.getCapturerParticipant() != null) {
@@ -268,8 +267,6 @@ public class CaptureDetailsView extends RelativeLayout {
         if (userCaptureComments.size() > 0) {
             userComment = userCaptureComments.get(0).getComment();
         }
-
-        capturePercent = mCaptureData.getRatingPercentForId(userAccountId);
 
         String time = DateHelperUtil.getPrettyTimePastOnly(mCaptureData.getCreatedAtDate());
 
@@ -327,11 +324,12 @@ public class CaptureDetailsView extends RelativeLayout {
             mInfluencerTitle.setVisibility(View.GONE);
         }
 
-        if (Float.compare(capturePercent, -1.0f) > 0) {
-            mUserCaptureRatingBar.setVisibility(View.VISIBLE);
-            mUserCaptureRatingBar.setPercent(capturePercent);
+        int rating = mCaptureData.getRatingForId(userAccountId);
+        if (rating > -1) {
+            mCapturerRating.setVisibility(View.VISIBLE);
+            mCapturerRating.setRatingOf40(rating);
         } else {
-            mUserCaptureRatingBar.setVisibility(View.GONE);
+            mCapturerRating.setVisibility(View.GONE);
         }
 
     }
@@ -471,12 +469,12 @@ public class CaptureDetailsView extends RelativeLayout {
                 ArrayList<CaptureComment> comments = mCaptureData.getCommentsForUserId(
                         participant.getId());
                 int firstIndex = 0;
-                float rating = mCaptureData.getRatingPercentForId(participant.getId());
+                int rating = mCaptureData.getRatingForId(participant.getId());
                 // Skip first user comment by the user who captured, otherwise it will show as duplicate
                 if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
                     firstIndex = 1;
                     // Don't duplicate ratings
-                    rating = -1.0f;
+                    rating = -1;
                 }
                 String firstCommentText = comments.size() > firstIndex ? comments.get(firstIndex)
                         .getComment() : "";

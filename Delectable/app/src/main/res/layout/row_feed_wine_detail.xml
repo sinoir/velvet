@@ -29,15 +29,11 @@
             android:layout_marginRight="@dimen/spacing_12"
             android:src="@drawable/ab_profile_normal" />
 
-        <com.delectable.mobile.ui.common.widget.RatingsBarView
-            android:id="@+id/capturer_rating_bar"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/profile_image"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/profile_image"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="6dp" />
+        <com.delectable.mobile.ui.common.widget.RatingTextView
+            android:id="@+id/capturer_rating"
+            style="@style/RatingTextView"
+            android:layout_marginTop="6dp"
+            android:layout_alignParentRight="true" />
 
         <RelativeLayout
             android:id="@+id/capturer_container"
