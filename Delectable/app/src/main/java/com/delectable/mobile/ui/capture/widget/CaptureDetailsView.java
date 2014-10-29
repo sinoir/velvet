@@ -282,7 +282,9 @@ public class CaptureDetailsView extends RelativeLayout {
                                     .getString(R.string.cap_feed_no_comment_no_location, time);
         }
         SpannableString spannableString = SpannableString
-                .valueOf(userComment + " " + captureTimeLocation);
+                .valueOf((!userComment.isEmpty())
+                        ? (userComment + " " + captureTimeLocation)
+                        : captureTimeLocation);
         spannableString
                 .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
                         userComment.length(), spannableString.length(), 0);
