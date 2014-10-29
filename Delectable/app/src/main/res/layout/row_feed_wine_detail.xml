@@ -27,6 +27,7 @@
             android:layout_width="@dimen/small_profile_image_size"
             android:layout_height="@dimen/small_profile_image_size"
             android:layout_marginRight="@dimen/spacing_12"
+            android:layout_marginBottom="@dimen/spacing_8"
             android:src="@drawable/ab_profile_normal" />
 
         <com.delectable.mobile.ui.common.widget.RatingTextView
@@ -85,8 +86,8 @@
             android:id="@+id/user_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_16"
             android:layout_below="@+id/profile_image"
-            android:layout_marginTop="@dimen/spacing_8"
             android:text="COMMENT"
             android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/text_size_medium"
@@ -95,9 +96,9 @@
         <LinearLayout
             android:id="@+id/tagged_participants_container"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_16"
             android:layout_below="@id/user_comment"
-            android:background="@android:color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="visible">
@@ -145,16 +146,17 @@
         <RelativeLayout
             android:id="@+id/collapsed_comments_container"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_16"
             android:layout_below="@id/tagged_participants_container"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/likes_count"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="15 likes"
                 android:textColor="@color/medium_gray_to_dark_gray"
@@ -164,7 +166,7 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/vertical_divider_likes"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/likes_count"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/spacing_8"
@@ -177,7 +179,7 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/comments_count"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/vertical_divider_likes"
                 android:gravity="center_vertical"
                 android:text="14 comments"
@@ -188,7 +190,7 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/vertical_divider_comments"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/comments_count"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/spacing_8"
@@ -201,7 +203,7 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/rate_button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:layout_toRightOf="@id/vertical_divider_comments"
                 android:text="@string/cap_feed_add_your_rating"
@@ -223,14 +225,15 @@
                 android:id="@+id/participants_likes_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/spacing_8"
                 android:visibility="visible"
                 android:background="@color/d_light_gray" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/likes_text"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/spacing_12"
+                android:paddingBottom="@dimen/spacing_12"
                 android:gravity="center_vertical"
                 android:text="Alex, Bjorn and 13 more liked this"
                 android:textColor="@color/d_black"
@@ -241,7 +244,7 @@
                 android:id="@+id/likes_comments_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/spacing_12"
+                android:layout_marginBottom="@dimen/spacing_16"
                 android:visibility="visible"
                 android:background="@color/d_light_gray" />
 
@@ -249,11 +252,9 @@
                 android:id="@+id/participants_comments_ratings_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_8"
+                android:layout_marginBottom="@dimen/spacing_16"
                 android:orientation="vertical"
-                android:visibility="gone">
-
-            </LinearLayout>
+                android:visibility="gone" />
 
         </LinearLayout>
 
