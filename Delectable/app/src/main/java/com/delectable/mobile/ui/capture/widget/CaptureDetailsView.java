@@ -6,8 +6,6 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
-import com.delectable.mobile.ui.capture.activity.LikingPeopleActivity;
-import com.delectable.mobile.ui.capture.fragment.LikingPeopleFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -17,7 +15,6 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -183,9 +180,6 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupTaggedParticipants() {
-        String profileImageUrl = getThumbnailParticipantPhotoFromAccount(
-                mCaptureData.getCapturerParticipant());
-
         // TODO: Combine data from other participants objects
         final ArrayList<AccountMinimal> taggedParticipants =
                 mCaptureData.getRegisteredParticipants() != null
@@ -224,9 +218,7 @@ public class CaptureDetailsView extends RelativeLayout {
         // TODO: Figure out why taggedParticipants doesn't have more than 3 items, when the response has more than 3...
         // this doesn't work yet
         if (hasCaptureParticipants) {
-            // TODO: Add Touchstate to Open more tagged profile listing
             mTaggedParticipants.setVisibility(View.VISIBLE);
-            // Show + remainder # of tagged participants
 
             String firstParticipant = taggedParticipants.get(0).getFname();
             String withText = taggedParticipants.size() == 2
@@ -242,8 +234,7 @@ public class CaptureDetailsView extends RelativeLayout {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO: Ideally pass up list of tagged users, not the full mCaptureData object
-                            mActionsHandler.launchTaggedUserListing(mCaptureData);
+                            mActionsHandler.launchTaggedUsersListing(mCaptureData.getId());
                         }
                     }
             );
@@ -455,16 +446,7 @@ public class CaptureDetailsView extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 // launch activity with liking people
-                mCaptureData.getLikingParticipants();
-                LikingPeopleFragment fragment = LikingPeopleFragment
-                        .newInstance(mCaptureData.getLikingParticipants());
-
-                Intent intent = new Intent(mContext, LikingPeopleActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(LikingPeopleFragment.PARAMS_LIKING_PEOPLE,
-                        mCaptureData.getLikingParticipants());
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                mActionsHandler.launchLikingUsersListing(mCaptureData);
             }
         });
 
@@ -573,7 +555,9 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void launchUserProfile(String userAccountId);
 
-        public void launchTaggedUserListing(CaptureDetails capture);
+        public void launchTaggedUsersListing(String captureId);
+
+        public void launchLikingUsersListing(CaptureDetails capture);
 
         public void discardCaptureClicked(CaptureDetails capture);
 

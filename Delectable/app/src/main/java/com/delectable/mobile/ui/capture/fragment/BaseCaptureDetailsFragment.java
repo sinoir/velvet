@@ -1,19 +1,21 @@
 package com.delectable.mobile.ui.capture.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.CaptureComment;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.DeletedCaptureEvent;
 import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
+import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity;
+import com.delectable.mobile.ui.capture.activity.LikingPeopleActivity;
+import com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
@@ -138,9 +140,22 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void launchTaggedUserListing(CaptureDetails capture) {
-        // TODO: Tagged User Listing if design exists
-        Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
+    public void launchTaggedUsersListing(String captureId) {
+        Intent intent = new Intent(getActivity(), TaggedPeopleActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(TaggedPeopleFragment.PARAMS_CAPTURE_ID, captureId);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void launchLikingUsersListing(CaptureDetails capture) {
+        Intent intent = new Intent(getActivity(), LikingPeopleActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(LikingPeopleFragment.PARAMS_LIKING_PEOPLE,
+                capture.getLikingParticipants());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

@@ -1,20 +1,17 @@
 package com.delectable.mobile.ui.capture.activity;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.ui.BaseActivity;
-import com.delectable.mobile.ui.capture.fragment.LikingPeopleFragment;
+import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+public class TaggedPeopleActivity extends BaseActivity {
 
-public class LikingPeopleActivity extends BaseActivity {
+    private static final String TAG = TaggedPeopleActivity.class.getSimpleName();
 
-    private static final String TAG = LikingPeopleActivity.class.getSimpleName();
-
-    private ArrayList<AccountMinimal> mLikingPeople;
+    private String mCaptureId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +19,12 @@ public class LikingPeopleActivity extends BaseActivity {
         setContentView(R.layout.activity_fragment_container);
         Bundle args = getIntent().getExtras();
         if (args != null) {
-            mLikingPeople = args.getParcelableArrayList(LikingPeopleFragment.PARAMS_LIKING_PEOPLE);
+            mCaptureId = args.getString(TaggedPeopleFragment.PARAMS_CAPTURE_ID);
         }
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, LikingPeopleFragment.newInstance(mLikingPeople))
+                    .add(R.id.container, TaggedPeopleFragment.newInstance(mCaptureId))
                     .commit();
         }
     }

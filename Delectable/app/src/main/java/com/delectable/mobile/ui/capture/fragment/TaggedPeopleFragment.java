@@ -1,54 +1,67 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.capture.widget.LikingPeopleAdapter;
+import com.delectable.mobile.ui.capture.widget.TaggedPeopleAdapter;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class LikingPeopleFragment extends BaseFragment {
+public class TaggedPeopleFragment extends BaseFragment {
 
-    private static final String TAG = LikingPeopleFragment.class.getSimpleName();
+    private static final String TAG = TaggedPeopleFragment.class.getSimpleName();
 
-    public static final String PARAMS_LIKING_PEOPLE = "PARAMS_LIKING_PEOPLE";
+    public static final String PARAMS_CAPTURE_ID = "PARAMS_CAPTURE_ID";
 
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
-    List<AccountMinimal> mLikingPeople;
+    @Inject
+    CaptureDetailsModel mCaptureDetailsModel;
 
-    private LikingPeopleAdapter mAdapter;
+    private String mCaptureId;
 
-    public static LikingPeopleFragment newInstance(ArrayList<AccountMinimal> likingPeople) {
-        LikingPeopleFragment fragment = new LikingPeopleFragment();
+    private CaptureDetails mCaptureDetails;
+
+    private TaggedPeopleAdapter mAdapter;
+
+    public static TaggedPeopleFragment newInstance(String captureId) {
+        TaggedPeopleFragment fragment = new TaggedPeopleFragment();
+        App.injectMembers(fragment);
         Bundle args = new Bundle();
-        if (likingPeople != null) {
-            args.putParcelableArrayList(PARAMS_LIKING_PEOPLE, likingPeople);
-        }
+        args.putString(PARAMS_CAPTURE_ID, captureId);
         fragment.setArguments(args);
-        fragment.mLikingPeople = likingPeople;
+        fragment.mCaptureId = captureId;
+        fragment.mCaptureDetails = fragment.mCaptureDetailsModel.getCapture(captureId);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         if (savedInstanceState != null) {
-            mLikingPeople = savedInstanceState.getParcelableArrayList(PARAMS_LIKING_PEOPLE);
+            mCaptureId = savedInstanceState.getString(PARAMS_CAPTURE_ID);
+            mCaptureDetails = mCaptureDetailsModel.getCapture(mCaptureId);
+            if (mCaptureDetails == null) {
+                Log.e(TAG, "could not get capture details from cache");
+            }
         }
     }
 
@@ -66,13 +79,15 @@ public class LikingPeopleFragment extends BaseFragment {
                 getActivity().onBackPressed();
             }
         });
+        int numberOfTaggedPeople = mCaptureDetails.getRegisteredParticipants() != null
+                ? mCaptureDetails.getRegisteredParticipants().size()
+                : 0;
         String title = getResources()
-                .getQuantityString(R.plurals.cap_feed_likes_count, mLikingPeople.size(),
-                        mLikingPeople.size());
+                .getString(R.string.cap_feed_tagged_count, numberOfTaggedPeople);
         // FIXME action bar title is broken due to custom back button
         //getActivity().getActionBar().setTitle(title);
 
-        mAdapter = new LikingPeopleAdapter(mLikingPeople);
+        mAdapter = new TaggedPeopleAdapter(mCaptureDetails);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
