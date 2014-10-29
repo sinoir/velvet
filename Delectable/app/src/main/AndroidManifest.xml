@@ -108,6 +108,12 @@
         </activity>
 
         <activity
+            android:name="com.delectable.mobile.ui.capture.activity.LikingPeopleActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme"></activity>
+
+        <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity"
             android:label=""
             android:screenOrientation="portrait"

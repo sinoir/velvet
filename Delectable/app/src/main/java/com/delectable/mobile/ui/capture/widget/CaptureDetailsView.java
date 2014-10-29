@@ -6,6 +6,8 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.capture.activity.LikingPeopleActivity;
+import com.delectable.mobile.ui.capture.fragment.LikingPeopleFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -15,6 +17,7 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -435,7 +438,6 @@ public class CaptureDetailsView extends RelativeLayout {
         }
 
         SpannableString spannableString = SpannableString.valueOf(likeText);
-        // span
         int positionAnd = likeText.lastIndexOf("and");
         if (positionAnd >= 0) {
             spannableString.setSpan(
@@ -449,6 +451,22 @@ public class CaptureDetailsView extends RelativeLayout {
                     positionLiked, likeText.length(), 0);
         }
         mLikesText.setText(spannableString, TextView.BufferType.SPANNABLE);
+        mLikesText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // launch activity with liking people
+                mCaptureData.getLikingParticipants();
+                LikingPeopleFragment fragment = LikingPeopleFragment
+                        .newInstance(mCaptureData.getLikingParticipants());
+
+                Intent intent = new Intent(mContext, LikingPeopleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(LikingPeopleFragment.PARAMS_LIKING_PEOPLE,
+                        mCaptureData.getLikingParticipants());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        });
 
         // Comments
         mParticipantsCommentsRatingsContainer.removeAllViewsInLayout();
