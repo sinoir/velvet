@@ -51,6 +51,7 @@ import com.delectable.mobile.api.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
+import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
 import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
@@ -166,6 +167,7 @@ import de.greenrobot.event.EventBus;
                 LikeCaptureJob.class,
                 RateCaptureJob.class,
                 DeleteCaptureJob.class,
+                FlagCaptureJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 FetchFacebookSuggestionsJob.class,
                 FetchTwitterSuggestionsJob.class,

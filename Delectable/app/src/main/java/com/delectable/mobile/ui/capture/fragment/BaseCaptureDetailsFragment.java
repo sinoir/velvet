@@ -213,7 +213,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
         if (requestCode == REQUEST_FLAG_CONFIRMATION) {
             if (resultCode == Activity.RESULT_OK) {
-                //mCaptureController.flagCapture(captureId);
+                mCaptureController.flagCapture(mTempCaptureForAction.getId());
             }
             mTempCaptureForAction = null;
         }

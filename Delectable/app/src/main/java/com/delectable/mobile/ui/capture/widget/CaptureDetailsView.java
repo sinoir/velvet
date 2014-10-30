@@ -156,13 +156,13 @@ public class CaptureDetailsView extends RelativeLayout {
                         // TODO
                         return true;
                     case R.id.capture_action_edit:
-                        // TODO
+                        mActionsHandler.editCapture(mCaptureData);
                         return true;
                     case R.id.capture_action_flag:
-                        // TODO call mActionsHandler.flagCapture()
+                        mActionsHandler.flagCapture(mCaptureData);
                         return true;
                     case R.id.capture_action_remove:
-                        // TODO call mActionsHandler.discardCapture()
+                        mActionsHandler.discardCaptureClicked(mCaptureData);
                         return true;
                 }
                 return false;
