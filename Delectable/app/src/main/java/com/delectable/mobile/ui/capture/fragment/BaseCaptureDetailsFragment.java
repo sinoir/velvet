@@ -1,17 +1,17 @@
 package com.delectable.mobile.ui.capture.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.CaptureComment;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.DeletedCaptureEvent;
 import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
+import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
@@ -37,6 +37,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     private static final int REQUEST_RATE_COMMENT_CAPTURE = 200;
 
     private static final int REQUEST_COMMENT_CAPTURE = 300;
+
+    private static final int REQUEST_FLAG_CONFIRMATION = 400;
 
     @Inject
     protected CaptureController mCaptureController;
@@ -160,6 +162,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         rateAndCommentForCapture(capture);
     }
 
+    @Override
+    public void flagCapture(CaptureDetails capture) {
+        mTempCaptureForAction = capture;
+        showConfirmationNoTitle(getString(R.string.capture_report), getString(R.string.report),
+                null, REQUEST_FLAG_CONFIRMATION);
+    }
+
     private void sendRating(final CaptureDetails capture, final int rating) {
         String userId = UserInfo.getUserId(getActivity());
         // Instant UI update
@@ -183,6 +192,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         if (requestCode == REQUEST_DELETE_CONFIRMATION) {
             if (resultCode == Activity.RESULT_OK) {
                 deleteCapture(mTempCaptureForAction);
+            }
+            mTempCaptureForAction = null;
+        }
+
+        if (requestCode == REQUEST_FLAG_CONFIRMATION) {
+            if (resultCode == Activity.RESULT_OK) {
+                //mCaptureController.flagCapture(captureId);
             }
             mTempCaptureForAction = null;
         }

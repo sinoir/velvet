@@ -16,6 +16,7 @@
     <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
+    <string name="report">Report</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
@@ -140,6 +141,7 @@
     <string name="cap_feed_add_your_rating">Add your rating</string>
     <string name="cap_feed_at_location">at %s</string>
     <string name="capture_remove">Do you want to remove this wine from your history?</string>
+    <string name="capture_report">Do you want to report this wine as incorrect?</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>
