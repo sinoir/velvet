@@ -42,7 +42,7 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
     @Override
 
     public int getItemViewType(int position) {
-        if (position == 0 && mTopHeaderTitleResId != null) {
+        if (position == 0) {
             return TYPE_HEADER;
         }
         return TYPE_ACCOUNT;
@@ -50,18 +50,13 @@ public abstract class BaseAccountsMinimalAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        if (mTopHeaderTitleResId == null) {
-            return 1;
-        } else {
-            return 2;
-        }
+         return 2;
+
     }
 
     @Override
     public int getCount() {
-        if (mTopHeaderTitleResId == null) {
-            return mAccounts.size();
-        } else if (mAccounts.isEmpty()) {
+        if (mAccounts.isEmpty()) {
             return 0;
         } else {
             return mAccounts.size() + 1;

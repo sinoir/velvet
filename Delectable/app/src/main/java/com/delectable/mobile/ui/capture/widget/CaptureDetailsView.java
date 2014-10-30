@@ -602,5 +602,7 @@ public class CaptureDetailsView extends RelativeLayout {
         public void discardCaptureClicked(CaptureDetails capture);
 
         public void editCapture(CaptureDetails capture);
+
+        public void flagCapture(CaptureDetails capture);
     }
 }
