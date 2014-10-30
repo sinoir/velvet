@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.common.widget;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ListView;
 
 public class NestedSwipeRefreshLayout extends SwipeRefreshLayout {
@@ -21,7 +22,10 @@ public class NestedSwipeRefreshLayout extends SwipeRefreshLayout {
     public boolean canChildScrollUp() {
         if (mListView == null) {
             return false;
+        } else if (mListView.getVisibility() != View.VISIBLE) {
+            return false;
         }
+
         return mListView.getFirstVisiblePosition() > 0
                 || mListView.getChildAt(0) == null
                 || mListView.getChildAt(0).getTop() < 0;
