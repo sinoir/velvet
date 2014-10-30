@@ -141,35 +141,6 @@ public class CaptureDetailsView extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    private void setupPopUpMenu() {
-        mPopupMenu = new PopupMenu(mContext, mMenuButton);
-        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
-                .equals(UserInfo.getUserId(mContext));
-        mPopupMenu.inflate(isOwnCapture
-                ? R.menu.capture_actions_own
-                : R.menu.capture_actions);
-        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.capture_action_share:
-                        // TODO
-                        return true;
-                    case R.id.capture_action_edit:
-                        mActionsHandler.editCapture(mCaptureData);
-                        return true;
-                    case R.id.capture_action_flag:
-                        mActionsHandler.flagCapture(mCaptureData);
-                        return true;
-                    case R.id.capture_action_remove:
-                        mActionsHandler.discardCaptureClicked(mCaptureData);
-                        return true;
-                }
-                return false;
-            }
-        });
-    }
-
     public void updateData(CaptureDetails captureData, boolean showComments) {
         mIsShowingComments = showComments;
         updateData(captureData);
@@ -192,6 +163,35 @@ public class CaptureDetailsView extends RelativeLayout {
 
     public void setActionsHandler(CaptureActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
+    }
+
+    private void setupPopUpMenu() {
+        mPopupMenu = new PopupMenu(mContext, mMenuButton);
+        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
+                .equals(UserInfo.getUserId(mContext));
+        mPopupMenu.inflate(isOwnCapture
+                ? R.menu.capture_actions_own
+                : R.menu.capture_actions);
+        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.capture_action_share:
+                        mActionsHandler.shareCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_edit:
+                        mActionsHandler.editCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_flag:
+                        mActionsHandler.flagCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_remove:
+                        mActionsHandler.discardCaptureClicked(mCaptureData);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void setupTopWineDetails() {
@@ -604,5 +604,7 @@ public class CaptureDetailsView extends RelativeLayout {
         public void editCapture(CaptureDetails capture);
 
         public void flagCapture(CaptureDetails capture);
+
+        public void shareCapture(CaptureDetails capture);
     }
 }

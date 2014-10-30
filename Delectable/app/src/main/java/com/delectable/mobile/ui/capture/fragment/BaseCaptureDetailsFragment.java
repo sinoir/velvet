@@ -184,6 +184,20 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                 null, REQUEST_FLAG_CONFIRMATION);
     }
 
+    @Override
+    public void shareCapture(CaptureDetails capture) {
+        String vintage = capture.getWineProfile().getVintage();
+        String shareText = getResources().getString(R.string.cap_action_share_text,
+                capture.getDisplayTitle() + " " + (vintage.equals("NV") ? "" : (vintage + " "))
+                        + capture.getDisplayDescription(),
+                capture.getShortShareUrl());
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        shareIntent.setType("text/plain");
+        startActivity(shareIntent);
+    }
+
     private void sendRating(final CaptureDetails capture, final int rating) {
         String userId = UserInfo.getUserId(getActivity());
         // Instant UI update
