@@ -18,9 +18,11 @@ import android.content.Intent;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -121,6 +123,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private CaptureActionsHandler mActionsHandler;
 
+    private PopupMenu mPopupMenu;
+
     public CaptureDetailsView(Context context) {
         this(context, null);
     }
@@ -134,8 +138,36 @@ public class CaptureDetailsView extends RelativeLayout {
         mContext = context;
 
         View.inflate(context, R.layout.row_feed_wine_detail, this);
-
         ButterKnife.inject(this);
+    }
+
+    private void setupPopUpMenu() {
+        mPopupMenu = new PopupMenu(mContext, mMenuButton);
+        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
+                .equals(UserInfo.getUserId(mContext));
+        mPopupMenu.inflate(isOwnCapture
+                ? R.menu.capture_actions_own
+                : R.menu.capture_actions);
+        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.capture_action_share:
+                        // TODO
+                        return true;
+                    case R.id.capture_action_edit:
+                        // TODO
+                        return true;
+                    case R.id.capture_action_flag:
+                        // TODO call mActionsHandler.flagCapture()
+                        return true;
+                    case R.id.capture_action_remove:
+                        // TODO call mActionsHandler.discardCapture()
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void updateData(CaptureDetails captureData, boolean showComments) {
@@ -154,6 +186,7 @@ public class CaptureDetailsView extends RelativeLayout {
             setupCollapsedComments();
         }
         setupActionButtonStates();
+        setupPopUpMenu();
         mCapturerCommentsContainer.setVisibility(View.VISIBLE);
     }
 
@@ -534,7 +567,12 @@ public class CaptureDetailsView extends RelativeLayout {
             }
         });
 
-        // TODO : Menu Overlfow Does what?
+        mMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupMenu.show();
+            }
+        });
     }
 
     private String getThumbnailParticipantPhotoFromAccount(AccountMinimal account) {

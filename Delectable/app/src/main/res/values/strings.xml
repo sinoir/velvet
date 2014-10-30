@@ -159,6 +159,12 @@
     <string name="cap_feed_like_text_two">%1$s and %2$s like this</string>
     <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more like this</string>
 
+    <!-- Capture Overflow Menu -->
+    <string name="cap_action_share">Share</string>
+    <string name="cap_action_edit">Edit rating</string>
+    <string name="cap_action_flag">Report incorrect wine</string>
+    <string name="cap_action_remove">Remove</string>
+
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>
     <string name="dialog_comment_title">Comment</string>
