@@ -4,8 +4,9 @@ import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
 import com.delectable.mobile.api.cache.ServerInfo;
 import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
+import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
@@ -70,7 +71,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CrashlyticsUtil.log(TAG+".onCreate");
+        CrashlyticsUtil.log(TAG + ".onCreate");
         state = State.created;
         mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
@@ -88,20 +89,20 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        CrashlyticsUtil.log(TAG+".onAttach");
+        CrashlyticsUtil.log(TAG + ".onAttach");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        CrashlyticsUtil.log(TAG+".onCreateView");
+        CrashlyticsUtil.log(TAG + ".onCreateView");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        CrashlyticsUtil.log(TAG+".onStart");
+        CrashlyticsUtil.log(TAG + ".onStart");
         state = State.started;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStart();
@@ -115,7 +116,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onResume() {
         super.onResume();
-        CrashlyticsUtil.log(TAG+".onResume");
+        CrashlyticsUtil.log(TAG + ".onResume");
         state = State.resumed;
         toggleCustomActionBar();
     }
@@ -123,7 +124,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onPause() {
         super.onPause();
-        CrashlyticsUtil.log(TAG+".onPause");
+        CrashlyticsUtil.log(TAG + ".onPause");
         state = State.paused;
         hideKeyboard();
     }
@@ -131,7 +132,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onStop() {
         super.onStop();
-        CrashlyticsUtil.log(TAG+".onStop");
+        CrashlyticsUtil.log(TAG + ".onStop");
         state = State.stopped;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStop();
@@ -145,13 +146,13 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        CrashlyticsUtil.log(TAG+".onDestroyView");
+        CrashlyticsUtil.log(TAG + ".onDestroyView");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CrashlyticsUtil.log(TAG+".onDestroy");
+        CrashlyticsUtil.log(TAG + ".onDestroy");
         state = State.destroyed;
         lifecycleListeners.clear();
         if (mHasCustomActionBarTitle && getActivity().getActionBar() != null) {
@@ -162,7 +163,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onDetach() {
         super.onDetach();
-        CrashlyticsUtil.log(TAG+".onDetach");
+        CrashlyticsUtil.log(TAG + ".onDetach");
     }
 
     @Override
@@ -300,6 +301,11 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
             mActionBar.setDisplayShowCustomEnabled(false);
             mActionBar.setDisplayShowHomeEnabled(true);
         }
+    }
+
+    public void launchWineCapture() {
+        Intent launchIntent = new Intent(getActivity(), WineCaptureActivity.class);
+        startActivity(launchIntent);
     }
 
     private static enum State {

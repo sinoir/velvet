@@ -285,14 +285,15 @@
         <item name="android:background">@color/d_light_gray</item>
     </style>
 
-    <style name="FloatyCameraButtonStyle">
+    <style name="FloatingCameraButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginBottom">@dimen/activity_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_gravity">bottom|right</item>
+        <item name="android:layout_margin">16dp</item>
         <item name="android:src">@drawable/btn_floating_shutter</item>
+        <item name="fab_colorNormal">@color/d_chestnut</item>
+        <item name="fab_colorPressed">@color/d_chestnut_pressed</item>
+        <item name="fab_colorRipple">@color/d_chestnut</item>
     </style>
 
     <style name="TextEmptyState">

@@ -1,4 +1,4 @@
-<android.support.v4.widget.SwipeRefreshLayout
+<com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout
     android:id="@+id/swipe_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,6 +20,10 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:listSelector="@android:color/white" />
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/camera_button"
+            style="@style/FloatingCameraButton" />
 
         <LinearLayout
             android:id="@+id/empty_view_following"
@@ -62,4 +66,4 @@
 
     </FrameLayout>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout>
