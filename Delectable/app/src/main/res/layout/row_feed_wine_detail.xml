@@ -89,6 +89,7 @@
             android:layout_marginBottom="@dimen/spacing_16"
             android:layout_below="@+id/profile_image"
             android:text="COMMENT"
+            android:lineSpacingMultiplier="1.2"
             android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/text_size_medium"
             app:fontName="whitney_book" />

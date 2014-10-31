@@ -425,6 +425,12 @@ public class CaptureDetailsView extends RelativeLayout {
                         : View.GONE
         );
 
+        // Hide container if nothing is in there
+        if (mLikesCount.getVisibility() == View.GONE && mCommentsCount.getVisibility() == View.GONE
+                && mRateButton.getVisibility() == View.GONE) {
+            mCollapsedCommentsContainer.setVisibility(View.GONE);
+        }
+
     }
 
     private void setupExpandedComments() {
