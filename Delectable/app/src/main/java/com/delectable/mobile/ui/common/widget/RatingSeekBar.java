@@ -40,7 +40,7 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
     private void init() {
         int barHeight = getContext().getResources()
                 .getDimensionPixelSize(R.dimen.rating_bar_seek_height);
-        mRatingsBar = new RatingsBar(barHeight);
+        mRatingsBar = new RatingsBar(getContext(), barHeight);
         setProgressDrawable(mRatingsBar);
         Drawable thumb = getResources().getDrawable(R.drawable.btn_rating_bar_slider_normal);
         setThumb(thumb);
