@@ -7,14 +7,11 @@
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/d_big_stone"
+        android:layout_height="wrap_content"
         tools:context="com.delectable.mobile.ui.profile.fragment.UserProfileFragment">
 
         <com.delectable.mobile.ui.profile.widget.ProfileHeaderView
             android:id="@+id/profile_header_view"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
