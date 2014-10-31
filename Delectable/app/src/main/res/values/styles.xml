@@ -290,7 +290,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">bottom|right</item>
         <item name="android:layout_margin">16dp</item>
-        <item name="android:src">@drawable/btn_floating_shutter</item>
+        <item name="android:src">@drawable/ic_camera</item>
         <item name="fab_colorNormal">@color/d_chestnut</item>
         <item name="fab_colorPressed">@color/d_chestnut_pressed</item>
         <item name="fab_colorRipple">@color/d_chestnut</item>
