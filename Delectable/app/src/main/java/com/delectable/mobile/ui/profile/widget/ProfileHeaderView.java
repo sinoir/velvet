@@ -10,6 +10,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,7 +56,8 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public ProfileHeaderView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        View.inflate(context, R.layout.profile_header, this);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.profile_header, this, true);
 
         mViewPager = (ViewPager) findViewById(R.id.profile_header_viewpager);
         mIndicator = (CirclePageIndicator) findViewById(R.id.pager_indicator);
@@ -223,8 +225,6 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     public static interface ProfileHeaderActionListener {
-
-        public void wineCountClicked();
 
         public void toggleFollowUserClicked(boolean isFollowing);
 

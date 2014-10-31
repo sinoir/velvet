@@ -13,7 +13,7 @@
         android:gravity="center"
         android:paddingLeft="@dimen/profile_horizontal_text_spacing"
         android:paddingRight="@dimen/profile_horizontal_text_spacing"
-        android:textColor="@color/d_white"
+        android:textColor="@color/d_big_stone"
         android:textSize="@dimen/profile_bio_text_size"
         app:fontName="whitney_book" />
 
