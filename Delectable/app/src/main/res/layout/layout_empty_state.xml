@@ -9,7 +9,7 @@
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/general_row_height"
-        android:layout_marginTop="@dimen/spacing_medium" />
+        android:layout_marginTop="@dimen/spacing_16" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         style="@style/TextEmptyState"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/d_white"
-        android:padding="@dimen/spacing_large"
+        android:padding="@dimen/spacing_32"
         android:gravity="center" />
 
 </RelativeLayout>

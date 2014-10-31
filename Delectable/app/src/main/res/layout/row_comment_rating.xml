@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/comment_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:text="COMMENT"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/text_size_medium"
+        app:fontName="whitney_book" />
+
+    <com.delectable.mobile.ui.common.widget.RatingTextView
+        android:id="@+id/comment_rating"
+        style="@style/RatingTextView"
+        android:layout_marginBottom="@dimen/spacing_4"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

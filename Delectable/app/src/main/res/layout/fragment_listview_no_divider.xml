@@ -22,7 +22,7 @@
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/general_row_height"
-            android:layout_marginTop="@dimen/spacing_medium" />
+            android:layout_marginTop="@dimen/spacing_16" />
 
         <LinearLayout
             android:id="@+id/text_and_button_empty_view"
@@ -31,13 +31,13 @@
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_large"
+            android:padding="@dimen/spacing_32"
             android:visibility="visible">
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/empty_text_view"
                 style="@style/TextEmptyState"
-                android:paddingBottom="@dimen/spacing_large"
+                android:paddingBottom="@dimen/spacing_32"
                 android:text="@string/empty_experts" />
 
             <com.delectable.mobile.ui.common.widget.Delectabutton
