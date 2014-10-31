@@ -47,8 +47,6 @@ public class TaggedPeopleFragment extends BaseFragment {
         Bundle args = new Bundle();
         args.putString(PARAMS_CAPTURE_ID, captureId);
         fragment.setArguments(args);
-        fragment.mCaptureId = captureId;
-        fragment.mCaptureDetails = fragment.mCaptureDetailsModel.getCapture(captureId);
         return fragment;
     }
 
@@ -56,12 +54,10 @@ public class TaggedPeopleFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        if (savedInstanceState != null) {
-            mCaptureId = savedInstanceState.getString(PARAMS_CAPTURE_ID);
-            mCaptureDetails = mCaptureDetailsModel.getCapture(mCaptureId);
-            if (mCaptureDetails == null) {
-                Log.e(TAG, "could not get capture details from cache");
-            }
+        mCaptureId = getArguments().getString(PARAMS_CAPTURE_ID);
+        mCaptureDetails = mCaptureDetailsModel.getCapture(mCaptureId);
+        if (mCaptureDetails == null) {
+            Log.e(TAG, "could not get capture details from cache");
         }
     }
 
