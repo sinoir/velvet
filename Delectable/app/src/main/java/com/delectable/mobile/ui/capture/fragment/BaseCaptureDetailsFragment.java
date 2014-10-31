@@ -1,20 +1,22 @@
 package com.delectable.mobile.ui.capture.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.CaptureComment;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.DeletedCaptureEvent;
 import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
+import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.capture.activity.LikingPeopleActivity;
+import com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
@@ -38,6 +40,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     private static final int REQUEST_RATE_COMMENT_CAPTURE = 200;
 
     private static final int REQUEST_COMMENT_CAPTURE = 300;
+
+    private static final int REQUEST_FLAG_CONFIRMATION = 400;
 
     @Inject
     protected CaptureController mCaptureController;
@@ -148,9 +152,22 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void launchTaggedUserListing(CaptureDetails capture) {
-        // TODO: Tagged User Listing if design exists
-        Log.d(TAG, "Launch Extra Tagged User Listing Screen.");
+    public void launchTaggedUsersListing(String captureId) {
+        Intent intent = new Intent(getActivity(), TaggedPeopleActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(TaggedPeopleFragment.PARAMS_CAPTURE_ID, captureId);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void launchLikingUsersListing(CaptureDetails capture) {
+        Intent intent = new Intent(getActivity(), LikingPeopleActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(LikingPeopleFragment.PARAMS_LIKING_PEOPLE,
+                capture.getLikingParticipants());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
@@ -168,6 +185,27 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public void editCapture(CaptureDetails capture) {
         // Not sure if this is what the edit icon does?
         rateAndCommentForCapture(capture);
+    }
+
+    @Override
+    public void flagCapture(CaptureDetails capture) {
+        mTempCaptureForAction = capture;
+        showConfirmationNoTitle(getString(R.string.capture_report), getString(R.string.report),
+                null, REQUEST_FLAG_CONFIRMATION);
+    }
+
+    @Override
+    public void shareCapture(CaptureDetails capture) {
+        String vintage = capture.getWineProfile().getVintage();
+        String shareText = getResources().getString(R.string.cap_action_recommend_text,
+                capture.getDisplayTitle() + " " + (vintage.equals("NV") ? "" : (vintage + " "))
+                        + capture.getDisplayDescription(),
+                capture.getShortShareUrl());
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        shareIntent.setType("text/plain");
+        startActivity(shareIntent);
     }
 
     private void sendRating(final CaptureDetails capture, final int rating) {
@@ -193,6 +231,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         if (requestCode == REQUEST_DELETE_CONFIRMATION) {
             if (resultCode == Activity.RESULT_OK) {
                 deleteCapture(mTempCaptureForAction);
+            }
+            mTempCaptureForAction = null;
+        }
+
+        if (requestCode == REQUEST_FLAG_CONFIRMATION) {
+            if (resultCode == Activity.RESULT_OK) {
+                mCaptureController.flagCapture(mTempCaptureForAction.getId());
             }
             mTempCaptureForAction = null;
         }

@@ -18,6 +18,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:src="@drawable/no_photo" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -25,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/profile_image1"
-            android:layout_marginBottom="@dimen/navigation_username_margins"
             android:layout_marginTop="@dimen/navigation_username_margins"
             android:layout_toRightOf="@id/profile_image1"
             android:textSize="@dimen/navigation_user_name_text_size"
@@ -39,19 +39,17 @@
             android:textSize="@dimen/navigation_header_detail_text_size"
             app:fontName="whitney_book"
             android:layout_below="@id/nav_user_name"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="16dp"
             android:layout_toRightOf="@+id/profile_image1" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/user_bio_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/wine_count"
+            android:layout_below="@id/profile_image1"
             android:layout_marginBottom="@dimen/navigation_bio_margins"
             android:layout_marginLeft="@dimen/navigation_bio_margins"
             android:layout_marginRight="@dimen/navigation_bio_margins"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
             android:textSize="@dimen/navigation_header_detail_text_size"
             app:fontName="whitney_book" />
 

@@ -37,9 +37,9 @@ public class TagPeopleAdapter extends BaseAdapter {
         TagPeopleRow row = (TagPeopleRow) convertView;
         if (row == null) {
             row = new TagPeopleRow(parent.getContext());
-            TaggeeContact taggee = getItem(position);
-            row.updateData(taggee.getFullName());
         }
+        TaggeeContact taggee = getItem(position);
+        row.updateData(taggee.getFullName());
         return row;
     }
 }

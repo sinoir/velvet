@@ -27,14 +27,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/d_white"
-            android:padding="@dimen/spacing_large"
+            android:padding="@dimen/spacing_32"
             android:gravity="center"
             android:orientation="vertical">
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 style="@style/TextEmptyState"
                 android:text="@string/empty_following_feed"
-                android:paddingBottom="@dimen/spacing_large" />
+                android:paddingBottom="@dimen/spacing_32" />
 
             <com.delectable.mobile.ui.common.widget.Delectabutton
                 android:id="@+id/search_friends_button"
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/d_white"
-            android:padding="@dimen/spacing_large"
+            android:padding="@dimen/spacing_32"
             android:gravity="center"
             android:orientation="vertical">
 

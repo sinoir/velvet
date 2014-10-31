@@ -2,6 +2,13 @@ package com.delectable.mobile.di;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.MainActivity;
+import com.delectable.mobile.api.cache.AccountModel;
+import com.delectable.mobile.api.cache.BaseWineModel;
+import com.delectable.mobile.api.cache.Cache;
+import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.cache.DeviceContactsModel;
+import com.delectable.mobile.api.cache.FollowersFollowingModel;
 import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
@@ -11,13 +18,6 @@ import com.delectable.mobile.api.controllers.MotdController;
 import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.api.controllers.VersionPropsFileController;
 import com.delectable.mobile.api.controllers.WineScanController;
-import com.delectable.mobile.api.cache.AccountModel;
-import com.delectable.mobile.api.cache.BaseWineModel;
-import com.delectable.mobile.api.cache.Cache;
-import com.delectable.mobile.api.cache.CaptureDetailsModel;
-import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.api.cache.DeviceContactsModel;
-import com.delectable.mobile.api.cache.FollowersFollowingModel;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.MyJobManager;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
@@ -52,6 +52,7 @@ import com.delectable.mobile.api.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
+import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
 import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
@@ -74,6 +75,7 @@ import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment
 import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
+import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
@@ -132,6 +134,7 @@ import de.greenrobot.event.EventBus;
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
+                TaggedPeopleFragment.class,
                 // Dialogs
                 ChooseVintageDialog.class,
                 ResetPasswordDialog.class,
@@ -165,6 +168,7 @@ import de.greenrobot.event.EventBus;
                 LikeCaptureJob.class,
                 RateCaptureJob.class,
                 DeleteCaptureJob.class,
+                FlagCaptureJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 FetchFacebookSuggestionsJob.class,
                 FetchTwitterSuggestionsJob.class,
@@ -202,7 +206,6 @@ import de.greenrobot.event.EventBus;
 )
 public class AppModule {
 
-    //TODO move/delete these three model providers. needed to drop it in here bc cache was switched to hashmap.
     @Provides
     @Singleton
     AccountModel provideAccountModel() {

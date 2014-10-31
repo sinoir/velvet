@@ -233,6 +233,16 @@ public class CaptureDetails extends CaptureMinimal {
         this.comments = comments;
     }
 
+    public int getCommentsCount() {
+        if (comments == null || comments.isEmpty()) {
+            return 0;
+        }
+        // if first comment is from capturer it is not considered a regular comment
+        return (comments.get(0).getAccountId().equals(capturer_participant.getId()))
+                ? comments.size() - 1
+                : comments.size();
+    }
+
     @Override
     public String toString() {
         return "CaptureDetails{" +
