@@ -174,7 +174,7 @@ public class CaptureDetailsView extends RelativeLayout {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.capture_action_share:
+                    case R.id.capture_action_recommend:
                         mActionsHandler.shareCapture(mCaptureData);
                         return true;
                     case R.id.capture_action_edit:

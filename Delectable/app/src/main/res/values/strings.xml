@@ -164,8 +164,8 @@
     <string name="cap_feed_like_text_anchor_and">and</string>
 
     <!-- Capture Overflow Menu -->
-    <string name="cap_action_share">Share</string>
-    <string name="cap_action_share_text">Check out this wine! %1$s (%2$s).\nCaptured and identified using Delectable for Android (https://www.delectable.com), the best way to save, share, and discover wine.</string>
+    <string name="cap_action_recommend">Recommend</string>
+    <string name="cap_action_recommend_text">You might like this wine! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
     <string name="cap_action_edit">Edit rating</string>
     <string name="cap_action_flag">Report incorrect wine</string>
     <string name="cap_action_remove">Remove</string>

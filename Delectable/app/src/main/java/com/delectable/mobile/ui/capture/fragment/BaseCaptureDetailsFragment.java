@@ -196,7 +196,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     @Override
     public void shareCapture(CaptureDetails capture) {
         String vintage = capture.getWineProfile().getVintage();
-        String shareText = getResources().getString(R.string.cap_action_share_text,
+        String shareText = getResources().getString(R.string.cap_action_recommend_text,
                 capture.getDisplayTitle() + " " + (vintage.equals("NV") ? "" : (vintage + " "))
                         + capture.getDisplayDescription(),
                 capture.getShortShareUrl());
