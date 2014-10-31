@@ -2,12 +2,12 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
@@ -16,6 +16,7 @@ import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.OverScrollByListView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -51,6 +52,9 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
 
     @InjectView(R.id.empty_state_layout)
     protected View mEmptyStateLayout;
+
+    @InjectView(R.id.camera_button)
+    protected FloatingActionButton mCameraButton;
 
     /**
      * In the layout, this covers the loading circle complete when it's set to visible, so there's
@@ -99,7 +103,6 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         mAdapter = new CaptureDetailsAdapter(this, this, mAccountId);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -111,6 +114,14 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         mListView.setAdapter(mAdapter);
         mListView.setEmptyView(mEmptyStateLayout);
         mListView.setCallback(this);
+
+        mCameraButton.attachToListView(mListView);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
         return view;
     }
 

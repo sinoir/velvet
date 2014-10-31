@@ -20,12 +20,9 @@ public class NestedSwipeRefreshLayout extends SwipeRefreshLayout {
 
     @Override
     public boolean canChildScrollUp() {
-        if (mListView == null) {
-            return false;
-        } else if (mListView.getVisibility() != View.VISIBLE) {
+        if (mListView == null || mListView.getVisibility() != View.VISIBLE) {
             return false;
         }
-
         return mListView.getFirstVisiblePosition() > 0
                 || mListView.getChildAt(0) == null
                 || mListView.getChildAt(0).getTop() < 0;

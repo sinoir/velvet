@@ -35,7 +35,7 @@ def build_date_var = getDate()
 def propFile = new File("app/version.properties");
 propFile.createNewFile();
 def versionProps = new Properties()
-versionProps['BUILD_DATE']=build_date_var
+versionProps['BUILD_DATE'] = build_date_var
 versionProps.store(propFile.newWriter(), null);
 
 
@@ -114,7 +114,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
-    compile 'com.android.support:support-v13:19.1'
+    compile 'com.android.support:support-v13:21+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.apache.commons:commons-lang3:3.1@jar'
     compile 'com.squareup.picasso:picasso:2.3.3'
@@ -136,6 +136,7 @@ dependencies {
     compile files('libs/kahuna_489.jar')
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
+    compile 'com.melnykov:floatingactionbutton:1.0.6'
 
     // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
