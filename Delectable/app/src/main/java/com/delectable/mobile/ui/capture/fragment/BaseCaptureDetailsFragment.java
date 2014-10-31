@@ -14,6 +14,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.activity.LikingPeopleActivity;
 import com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
@@ -129,6 +130,14 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                     capture.getPhoto());
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void launchExpandedCaptureDetails(String captureId) {
+        Intent intent = new Intent();
+        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID, captureId);
+        intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        startActivity(intent);
     }
 
     @Override

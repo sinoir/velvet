@@ -155,9 +155,12 @@
     </plurals>
     <string name="cap_feed_with_two">with %1$s and 1 other</string>
     <string name="capture_remove">Do you want to remove this wine from your history?</string>
-    <string name="cap_feed_like_text_one">%s likes this</string>
-    <string name="cap_feed_like_text_two">%1$s and %2$s like this</string>
-    <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more like this</string>
+    <string name="cap_feed_like_text_one">%s liked this</string>
+    <string name="cap_feed_like_text_two">%1$s and %2$s liked this</string>
+    <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more liked this</string>
+    <!-- anchors are used to find spanning bounds -->
+    <string name="cap_feed_like_text_anchor_like">like</string>
+    <string name="cap_feed_like_text_anchor_and">and</string>
 
     <!-- Capture Overflow Menu -->
     <string name="cap_action_share">Share</string>

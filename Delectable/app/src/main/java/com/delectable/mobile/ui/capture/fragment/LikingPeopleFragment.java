@@ -40,16 +40,13 @@ public class LikingPeopleFragment extends BaseFragment {
             args.putParcelableArrayList(PARAMS_LIKING_PEOPLE, likingPeople);
         }
         fragment.setArguments(args);
-        fragment.mLikingPeople = likingPeople;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            mLikingPeople = savedInstanceState.getParcelableArrayList(PARAMS_LIKING_PEOPLE);
-        }
+        mLikingPeople = getArguments().getParcelableArrayList(PARAMS_LIKING_PEOPLE);
     }
 
     @Override
