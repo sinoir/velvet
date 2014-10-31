@@ -1,7 +1,10 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
+import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.cache.ServerInfo;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
@@ -220,6 +223,10 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         CrashlyticsUtil.onSignOut();
 
         //Clear listings
+        CapturesPendingCapturesListingModel.clear();
+        PendingCapturesModel.clear();
+        CaptureDetailsModel.clear();
+
         CaptureNoteListingModel.clear();
         CaptureListingModel.clear();
 
