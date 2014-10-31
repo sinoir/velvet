@@ -2,6 +2,7 @@ package com.delectable.mobile.di;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.MainActivity;
+import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
@@ -206,6 +207,12 @@ public class AppModule {
     @Singleton
     AccountModel provideAccountModel() {
         return new AccountModel();
+    }
+
+    @Provides
+    @Singleton
+    PendingCapturesModel providePendingCapturesModel() {
+        return new PendingCapturesModel();
     }
 
     @Provides
