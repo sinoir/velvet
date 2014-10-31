@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<com.delectable.mobile.ui.common.widget.CircleImageView
+        android:id="@+id/row_image"
+        android:layout_width="@dimen/small_profile_image_size"
+        android:layout_height="@dimen/small_profile_image_size"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/spacing_16"
+        android:layout_marginRight="@dimen/spacing_16"
+        android:src="@drawable/no_photo" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/row_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/row_image"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="56dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Katherine Cooper"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/text_size_medium"
+        app:fontName="whitney_medium" />
+
+    <com.delectable.mobile.ui.common.widget.RatingTextView
+        android:id="@+id/row_rating"
+        style="@style/RatingTextView"
+        android:visibility="visible"
+        android:layout_marginRight="@dimen/spacing_16"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true" />
+
+</merge>

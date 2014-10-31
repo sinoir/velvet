@@ -16,6 +16,7 @@
     <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
+    <string name="report">Report</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
@@ -131,15 +132,44 @@
 
 
     <!-- Capture Feed -->
+    <string name="cap_feed_tagged_count">%d people shared this wine</string>
     <plurals name="cap_feed_likes_count">
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>
+    </plurals>
+    <string name="cap_feed_divider">•</string>
+    <plurals name="cap_feed_comments_count">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
     </plurals>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
     <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
     <string name="cap_feed_at_location">at %s</string>
+    <string name="cap_feed_at_location_time">— at %1$s %2$s</string>
+    <string name="cap_feed_at_time">— added %s</string>
+    <string name="cap_feed_no_comment">At %1$s %2$s</string>
+    <string name="cap_feed_no_comment_no_location">Added %s</string>
+    <plurals name="cap_feed_with">
+        <item quantity="one">with %s</item>
+        <item quantity="other">with %1$s and %2$d others</item>
+    </plurals>
+    <string name="cap_feed_with_two">with %1$s and 1 other</string>
     <string name="capture_remove">Do you want to remove this wine from your history?</string>
+    <string name="cap_feed_like_text_one">%s liked this</string>
+    <string name="cap_feed_like_text_two">%1$s and %2$s liked this</string>
+    <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more liked this</string>
+    <!-- anchors are used to find spanning bounds -->
+    <string name="cap_feed_like_text_anchor_like">like</string>
+    <string name="cap_feed_like_text_anchor_and">and</string>
+
+    <!-- Capture Overflow Menu -->
+    <string name="cap_action_recommend">Recommend</string>
+    <string name="cap_action_recommend_text">You might like this wine! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
+    <string name="cap_action_edit">Edit rating</string>
+    <string name="cap_action_flag">Report incorrect wine</string>
+    <string name="cap_action_remove">Remove</string>
+    <string name="capture_report">Do you want to report this wine as incorrect?</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>
