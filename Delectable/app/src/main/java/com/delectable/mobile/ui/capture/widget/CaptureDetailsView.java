@@ -5,7 +5,6 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -14,7 +13,6 @@ import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -319,7 +317,7 @@ public class CaptureDetailsView extends RelativeLayout {
                         ? (userComment + " " + captureTimeLocation)
                         : captureTimeLocation);
         spannableString
-                .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
+                .setSpan(new ForegroundColorSpan(R.color.d_medium_gray),
                         userComment.length(), spannableString.length(), 0);
         mUserComment.setText(spannableString, TextView.BufferType.SPANNABLE);
 
@@ -371,14 +369,7 @@ public class CaptureDetailsView extends RelativeLayout {
         OnClickListener expandLikesAndCommentsClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO go to expanded view with comments
-                Intent intent = new Intent();
-                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
-                        mCaptureData.getId());
-                // TODO captureData ID == captureNote ID???
-                //captureNote.getId());
-                intent.setClass(mContext, CaptureDetailsActivity.class);
-                mContext.startActivity(intent);
+                mActionsHandler.launchExpandedCaptureDetails(mCaptureData.getId());
             }
         };
 
@@ -463,18 +454,17 @@ public class CaptureDetailsView extends RelativeLayout {
                     numLikes - 2);
         }
 
+        ForegroundColorSpan spanGray = new ForegroundColorSpan(R.color.d_medium_gray);
         SpannableString spannableString = SpannableString.valueOf(likeText);
-        int positionAnd = likeText.lastIndexOf("and");
+        int positionAnd = likeText
+                .lastIndexOf(getResources().getString(R.string.cap_feed_like_text_anchor_and));
         if (positionAnd >= 0) {
-            spannableString.setSpan(
-                    new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
-                    positionAnd, positionAnd + 3, 0);
+            spannableString.setSpan(spanGray, positionAnd, positionAnd + 3, 0);
         }
-        int positionLiked = likeText.lastIndexOf("like");
+        int positionLiked = likeText
+                .lastIndexOf(getResources().getString(R.string.cap_feed_like_text_anchor_like));
         if (positionLiked >= 0) {
-            spannableString.setSpan(
-                    new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
-                    positionLiked, likeText.length(), 0);
+            spannableString.setSpan(spanGray, positionLiked, likeText.length(), 0);
         }
         mLikesText.setText(spannableString, TextView.BufferType.SPANNABLE);
         mLikesText.setOnClickListener(new OnClickListener() {
@@ -592,6 +582,8 @@ public class CaptureDetailsView extends RelativeLayout {
         public void toggleLikeForCapture(CaptureDetails capture);
 
         public void launchWineProfile(CaptureDetails capture);
+
+        public void launchExpandedCaptureDetails(String captureId);
 
         public void launchUserProfile(String userAccountId);
 

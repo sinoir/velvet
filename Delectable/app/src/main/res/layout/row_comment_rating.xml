@@ -17,6 +17,7 @@
     <com.delectable.mobile.ui.common.widget.RatingTextView
         android:id="@+id/comment_rating"
         style="@style/RatingTextView"
+        android:layout_marginBottom="@dimen/spacing_4"
         android:layout_alignParentRight="true" />
 
 </RelativeLayout>
