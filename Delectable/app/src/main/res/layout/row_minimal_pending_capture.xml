@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/wine_details_container"
+        layout="@layout/layout_minimal_capture_wine_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <include
+        android:id="@+id/add_rating_remove_text_container"
+        layout="@layout/layout_minimal_capture_add_rating_remove_texts"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@id/wine_details_container" />
+</merge>

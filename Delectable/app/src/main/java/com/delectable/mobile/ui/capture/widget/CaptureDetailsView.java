@@ -392,6 +392,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void launchWineProfile(CaptureDetails capture);
 
+        public void launchCaptureDetails(CaptureDetails captures);
+
         public void launchUserProfile(String userAccountId);
 
         public void launchTaggedUserListing(CaptureDetails capture);

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:padding="@dimen/cap_list_row_horizontal_spacing"
+    android:layout_height="300dp">
+
+    <include
+        android:id="@+id/wine_details_container"
+        layout="@layout/layout_minimal_capture_wine_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/capture_comment_tagged_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wine_details_container"
+        android:text="One of the worst wines at the Arlequin wine tasting right now. Bought 2 bottles for the park and now I regret. — with 3 friends at Arlequin 2 hours ago"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
+        android:visibility="visible"
+        app:fontName="whitney_book" />
+
+    <RelativeLayout
+        android:id="@+id/like_comment_count_container"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:layout_below="@+id/capture_comment_tagged_text"
+        android:visibility="visible">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/likes_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="15 likes"
+            android:textColor="@color/medium_gray_to_dark_gray"
+            android:textSize="@dimen/text_size_small"
+            app:fontName="whitney_book" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/vertical_divider_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/likes_count"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="•"
+            android:textColor="@color/d_light_gray"
+            android:textSize="@dimen/text_size_small"
+            app:fontName="whitney_book" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/comments_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/vertical_divider_likes"
+            android:gravity="center_vertical"
+            android:text="14 comments"
+            android:textColor="@color/medium_gray_to_dark_gray"
+            android:textSize="@dimen/text_size_small"
+            app:fontName="whitney_book" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/like_comment_buttons_container"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@id/like_comment_count_container"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/like_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/btn_like"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/comment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/like_button"
+            android:src="@drawable/btn_comment"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/add_rating_remove_text_container"
+        layout="@layout/layout_minimal_capture_add_rating_remove_texts"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@id/like_comment_buttons_container" />
+
+    <ImageView
+        android:id="@+id/overflow_button"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/btn_ab_overflow"
+        android:visibility="visible" />
+</merge>
