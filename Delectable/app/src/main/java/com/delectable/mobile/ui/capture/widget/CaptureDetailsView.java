@@ -123,6 +123,10 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private PopupMenu mPopupMenu;
 
+    private PopupMenu mPopupMenuOwn;
+
+    private PopupMenu mPopupMenuOther;
+
     public CaptureDetailsView(Context context) {
         this(context, null);
     }
@@ -137,6 +141,34 @@ public class CaptureDetailsView extends RelativeLayout {
 
         View.inflate(context, R.layout.row_feed_wine_detail, this);
         ButterKnife.inject(this);
+
+        PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.capture_action_recommend:
+                        mActionsHandler.shareCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_edit:
+                        mActionsHandler.editCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_flag:
+                        mActionsHandler.flagCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_remove:
+                        mActionsHandler.discardCaptureClicked(mCaptureData);
+                        return true;
+                }
+                return false;
+            }
+        };
+
+        mPopupMenuOwn = new PopupMenu(mContext, mMenuButton);
+        mPopupMenuOwn.inflate(R.menu.capture_actions_own);
+        mPopupMenuOwn.setOnMenuItemClickListener(popUpListener);
+        mPopupMenuOther = new PopupMenu(mContext, mMenuButton);
+        mPopupMenuOther.inflate(R.menu.capture_actions);
+        mPopupMenuOther.setOnMenuItemClickListener(popUpListener);
     }
 
     public void updateData(CaptureDetails captureData, boolean showComments) {
@@ -164,32 +196,9 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupPopUpMenu() {
-        mPopupMenu = new PopupMenu(mContext, mMenuButton);
         boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(mContext));
-        mPopupMenu.inflate(isOwnCapture
-                ? R.menu.capture_actions_own
-                : R.menu.capture_actions);
-        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.capture_action_recommend:
-                        mActionsHandler.shareCapture(mCaptureData);
-                        return true;
-                    case R.id.capture_action_edit:
-                        mActionsHandler.editCapture(mCaptureData);
-                        return true;
-                    case R.id.capture_action_flag:
-                        mActionsHandler.flagCapture(mCaptureData);
-                        return true;
-                    case R.id.capture_action_remove:
-                        mActionsHandler.discardCaptureClicked(mCaptureData);
-                        return true;
-                }
-                return false;
-            }
-        });
+        mPopupMenu = isOwnCapture ? mPopupMenuOwn : mPopupMenuOther;
     }
 
     private void setupTopWineDetails() {
