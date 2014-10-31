@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -69,6 +70,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
      */
     @InjectView(R.id.nothing_to_display_textview)
     protected FontTextView mNoCapturesTextView;
+
+    @InjectView(R.id.camera_button)
+    protected FloatingActionButton mCameraButton;
 
     @Inject
     protected AccountController mAccountController;
@@ -133,6 +137,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mListView.addHeaderView(mProfileHeaderView);
         // Does not work with list header
         mListView.setEmptyView(mEmptyStateLayout);
+
+        // Setup Floating Camera Button
+        mCameraButton.attachToListView(mListView);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
 
         return view;
     }

@@ -45,7 +45,10 @@
             android:background="@color/d_white"
             android:padding="@dimen/spacing_32"
             android:gravity="center" />
-
     </RelativeLayout>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/camera_button"
+        style="@style/FloatingCameraButton" />
 
 </FrameLayout>

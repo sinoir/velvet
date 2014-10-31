@@ -21,10 +21,6 @@
             android:background="@android:color/white"
             android:listSelector="@android:color/white" />
 
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/camera_button"
-            style="@style/FloatingCameraButton" />
-
         <LinearLayout
             android:id="@+id/empty_view_following"
             android:visibility="gone"
@@ -63,6 +59,10 @@
                 android:text="@string/empty_trending_feed" />
 
         </LinearLayout>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/camera_button"
+            style="@style/FloatingCameraButton" />
 
     </FrameLayout>
 
