@@ -1,25 +1,5 @@
 package com.delectable.mobile.ui.navigation.fragment;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
@@ -39,8 +19,27 @@ import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import javax.inject.Inject;
 
@@ -382,11 +381,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void navHeaderUserImageClicked() {
-        // TODO: Figure out whether we open in Activity or in Fragment with Nav
-        Intent intent = new Intent();
-        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
-        intent.setClass(getActivity(), UserProfileActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent();
+//        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
+//        intent.setClass(getActivity(), UserProfileActivity.class);
+//        startActivity(intent);
+        navItemSelected(NavHeader.NAV_PROFILE);
+        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
     }
 
     public void onEventMainThread(NavigationEvent event) {
