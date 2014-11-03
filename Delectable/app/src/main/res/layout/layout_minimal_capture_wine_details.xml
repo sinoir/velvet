@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:id="@+id/wine_details_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible">
+
+    <ImageView
+        android:id="@+id/wine_image"
+        android:layout_width="@dimen/cap_list_row_image_size"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_height="@dimen/cap_list_row_image_size"
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentLeft="true"/>
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/producer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/wine_image"
+        android:layout_toLeftOf="@+id/rating_textview"
+        android:layout_toRightOf="@+id/wine_image"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="LA RAME"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="@dimen/cap_list_row_top_text_font_size"
+        app:fontName="whitney_medium_sc" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/wine_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/producer_name"
+        android:layout_alignLeft="@+id/producer_name"
+        android:layout_toLeftOf="@+id/rating_textview"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Sauvignon Blanc Secret Sauce 2012 and a very long long title"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/cap_list_row_bottom_text_font_size"
+        app:fontName="whitney_book" />
+
+    <com.delectable.mobile.ui.common.widget.RatingTextView
+        android:id="@+id/rating_textview"
+        style="@style/RatingTextView"
+        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/wine_image"
+        android:background="@drawable/bg_numeric_rating" />
+</RelativeLayout>

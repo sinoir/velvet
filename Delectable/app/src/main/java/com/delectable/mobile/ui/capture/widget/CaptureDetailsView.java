@@ -378,7 +378,7 @@ public class CaptureDetailsView extends RelativeLayout {
         OnClickListener expandLikesAndCommentsClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActionsHandler.launchExpandedCaptureDetails(mCaptureData.getId());
+                mActionsHandler.launchCaptureDetails(mCaptureData);
             }
         };
 
@@ -598,7 +598,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void launchWineProfile(CaptureDetails capture);
 
-        public void launchExpandedCaptureDetails(String captureId);
+        public void launchCaptureDetails(CaptureDetails captures);
 
         public void launchUserProfile(String userAccountId);
 

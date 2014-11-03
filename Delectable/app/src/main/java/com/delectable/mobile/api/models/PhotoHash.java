@@ -89,35 +89,44 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     }
 
     public String getSmallest() {
-        String imageUrl = this.child_resolutions.getSmallest();
-        if (imageUrl != null) {
-            return imageUrl;
+        if (child_resolutions != null) {
+            String smallest = child_resolutions.getSmallest();
+            if (smallest != null && !smallest.isEmpty()) {
+                return smallest;
+            }
         }
         return this.url;
     }
 
     public String getLargest() {
-        return this.child_resolutions.getLargest();
-    }
-
-    public String getBestThumb() {
-        String imageUrl = this.child_resolutions != null ? this.child_resolutions.getBestThumb()
-                : null;
-        if (this.child_resolutions != null && imageUrl != null) {
-            return imageUrl;
+        if (child_resolutions != null) {
+            String largest = child_resolutions.getLargest();
+            if (largest != null && !largest.isEmpty()) {
+                return largest;
+            }
         }
         return this.url;
     }
+
+    public String getBestThumb() {
+        if (child_resolutions != null) {
+            String thumb = child_resolutions.getBestThumb();
+            if (thumb != null && !thumb.isEmpty()) {
+                return thumb;
+            }
+        }
+        return this.url;
+    }
+
 
     /**
      * see {@link ChildResolution#get450Plus()}
      */
     public String get450Plus() {
-        String imageUrl = this.child_resolutions.get450Plus();
-        if (imageUrl != null) {
-            return imageUrl;
+        if (child_resolutions == null) {
+            return this.url;
         }
-        return this.url;
+        return child_resolutions.get450Plus();
     }
 
     @Override

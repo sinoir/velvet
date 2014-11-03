@@ -2,24 +2,29 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
+import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
-import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.OverScrollByListView;
+import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
+import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +37,8 @@ import butterknife.InjectView;
 
 // TODO / Note: Abstract something from FollowFeedTabFragment, these are almost identical.
 public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implements
-        OverScrollByListView.ScrollByCallback, InfiniteScrollAdapter.ActionsHandler {
+        OverScrollByListView.ScrollByCallback, InfiniteScrollAdapter.ActionsHandler,
+        MinimalPendingCaptureRow.ActionsHandler {
 
     private static final String TAG = RecentCapturesTabFragment.class.getSimpleName();
 
@@ -41,10 +47,10 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
 
     @Inject
-    AccountController mAccountController;
+    CapturesPendingCapturesListingModel mListingModel;
 
     @Inject
-    protected CaptureListingModel mCaptureListingModel;
+    AccountController mAccountController;
 
     @InjectView(android.R.id.list)
     protected OverScrollByListView mListView;
@@ -60,9 +66,9 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     protected FontTextView mNoCapturesTextView;
 
 
-    private CaptureDetailsAdapter mAdapter;
+    private CapturesPendingCapturesAdapter mAdapter;
 
-    private Listing<CaptureDetails> mCapturesListing;
+    private Listing<BaseListingElement> mCapturesListing;
 
     private String mAccountId;
 
@@ -96,7 +102,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }
 
         mAccountId = args.getString(ACCOUNT_ID);
-        mAdapter = new CaptureDetailsAdapter(this, this, mAccountId);
+        mAdapter = new CapturesPendingCapturesAdapter(this, this, this, mAccountId);
     }
 
 
@@ -129,14 +135,14 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
+        new SafeAsyncTask<Listing<BaseListingElement>>(this) {
             @Override
-            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
-                return mCaptureListingModel.getUserCaptures(mAccountId);
+            protected Listing<BaseListingElement> safeDoInBackground(Void[] params) {
+                return mListingModel.getUserCaptures(mAccountId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<BaseListingElement> listing) {
 
                 if (listing != null) {
                     mCapturesListing = listing;
@@ -159,7 +165,7 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<BaseListingElement> event) {
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }
@@ -256,6 +262,23 @@ public class RecentCapturesTabFragment extends BaseCaptureDetailsFragment implem
             mNoCapturesTextView.setText(emptyText);
         }
     }
+
+    //region PendingCapture callbacks from MinimalPendingCaptureRow
+    @Override
+    public void launchWineProfile(PendingCapture capture) {
+
+    }
+
+    @Override
+    public void addRatingAndComment(PendingCapture capture) {
+
+    }
+
+    @Override
+    public void discardCapture(PendingCapture capture) {
+
+    }
+    //endregion
 
     public interface Callback {
 

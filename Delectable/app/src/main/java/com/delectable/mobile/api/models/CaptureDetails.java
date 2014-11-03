@@ -275,6 +275,30 @@ public class CaptureDetails extends CaptureMinimal {
 
         ArrayList<TaggeeContact> contact;
 
+        public ArrayList<AccountMinimal> getRegistered() {
+            return registered;
+        }
+
+        public ArrayList<TaggeeContact> getFacebook() {
+            return facebook;
+        }
+
+        public ArrayList<TaggeeContact> getContact() {
+            return contact;
+        }
+
+        /**
+         * @return Returns {@code null} if userId wasn't found.
+         */
+        public AccountMinimal checkForRegisteredUser(String userId) {
+            for (AccountMinimal account : registered) {
+                if (account.getId().equals(userId)) {
+                    return account;
+                }
+            }
+            return null;
+        }
+
         @Override
         public String toString() {
             return "TaggeeParticipants{" +
