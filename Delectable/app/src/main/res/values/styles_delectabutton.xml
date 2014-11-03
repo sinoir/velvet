@@ -13,7 +13,7 @@
         <item name="android:layout_height">70dp</item>
         <item name="android:background">@drawable/btn_facebook</item>
         <item name="android:textColor">@color/com_facebook_blue</item>
-        <item name="icon">@drawable/ic_fb</item>
+        <item name="android:icon">@drawable/ic_fb</item>
         <item name="type">large</item>
     </style>
 
