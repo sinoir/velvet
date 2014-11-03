@@ -76,7 +76,7 @@
             android:id="@+id/make_private"
             style="@style/WineCaptureFlow_switch"
             android:layout_below="@id/drinking_where"
-            android:checked="true"
+            android:checked="false"
             android:text="@string/make_private" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
