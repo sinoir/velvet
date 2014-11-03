@@ -26,7 +26,7 @@ public class CapturesPendingCapturesListingModel {
     private static final String TYPE_USER_CAPTURES = TAG + "users_";
 
 
-    private static final HashMap<String, CacheListing<BaseListingElement>> mMap
+    private final HashMap<String, CacheListing<BaseListingElement>> mMap
             = new HashMap<String, CacheListing<BaseListingElement>>();
 
     public Listing<BaseListingElement> getUserCaptures(String accountId) {
@@ -39,7 +39,7 @@ public class CapturesPendingCapturesListingModel {
         saveListing(key, listing);
     }
 
-    public static void clear() {
+    public void clear() {
         mMap.clear();
     }
 

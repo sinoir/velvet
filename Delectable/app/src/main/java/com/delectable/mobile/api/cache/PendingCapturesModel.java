@@ -13,7 +13,7 @@ public class PendingCapturesModel {
     /**
      * static final Map used as a singleton for caching.
      */
-    private static final HashMap<String, PendingCapture> mMap
+    private final HashMap<String, PendingCapture> mMap
             = new HashMap<String, PendingCapture>();
 
     public PendingCapture getCapture(String id) {
@@ -31,7 +31,7 @@ public class PendingCapturesModel {
         mMap.remove(key);
     }
 
-    public static void clear() {
+    public void clear() {
         mMap.clear();
     }
 }

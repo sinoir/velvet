@@ -46,10 +46,20 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     private final String TAG = this.getClass().getSimpleName();
 
     @Inject
-    public EventBus mEventBus;
+    protected CapturesPendingCapturesListingModel mCapturesPendingCapturesListingModel;
 
     @Inject
-    CacheManager mCache;
+    protected PendingCapturesModel mPendingCapturesModel;
+
+    @Inject
+    protected CaptureDetailsModel mCaptureDetailsModel;
+
+
+    @Inject
+    protected EventBus mEventBus;
+
+    @Inject
+    protected CacheManager mCache;
 
     private State state;
 
@@ -223,9 +233,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         CrashlyticsUtil.onSignOut();
 
         //Clear listings
-        CapturesPendingCapturesListingModel.clear();
-        PendingCapturesModel.clear();
-        CaptureDetailsModel.clear();
+        mCapturesPendingCapturesListingModel.clear();
+        mPendingCapturesModel.clear();
+        mCaptureDetailsModel.clear();
 
         CaptureNoteListingModel.clear();
         CaptureListingModel.clear();
