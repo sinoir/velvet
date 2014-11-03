@@ -3,11 +3,11 @@ package com.delectable.mobile.ui.common.widget;
 import com.delectable.mobile.R;
 
 public enum Rating {
-    EXQUISITE(30.0f, 9.0f, 0.75f, R.color.d_rating_exquisite),
-    GOOD(20.0f, 8.0f, 0.5f, R.color.d_rating_good),
-    OK(10.0f, 7.0f, 0.25f, R.color.d_rating_ok),
-    BAD(0.0f, 6.0f, 0f, R.color.d_rating_bad),
-    NO_RATING(-1.0f, -1.0f, -1.0f, R.color.d_light_gray);
+    EXQUISITE(30.0f, 9.0f, 0.75f, R.color.d_rating_exquisite, R.drawable.ic_ratingbar_best),
+    GOOD(20.0f, 8.0f, 0.5f, R.color.d_rating_good, R.drawable.ic_ratingbar_good),
+    OK(10.0f, 7.0f, 0.25f, R.color.d_rating_ok, R.drawable.ic_ratingbar_mediocre),
+    BAD(0.0f, 6.0f, 0f, R.color.d_rating_bad, R.drawable.ic_ratingbar_terrible),
+    NO_RATING(-1.0f, -1.0f, -1.0f, R.color.d_light_gray, R.color.transparent);
 
     private float mStartValueOfFourty;
 
@@ -17,11 +17,16 @@ public enum Rating {
 
     private int mColorRes;
 
-    private Rating(float startValue40, float startValue10, float startPercent, int colorRes) {
+
+
+    private int mHappyFaceRes;
+
+    private Rating(float startValue40, float startValue10, float startPercent, int colorRes, int happyFaceRes) {
         mStartValueOfFourty = startValue40;
         mStartValueOfTen = startValue10;
         mStartPercent = startPercent;
         mColorRes = colorRes;
+        mHappyFaceRes = happyFaceRes;
     }
 
     public float getStartValueOfFourty() {
@@ -38,6 +43,10 @@ public enum Rating {
 
     public int getColorRes() {
         return mColorRes;
+    }
+
+    public int getHappyFaceRes() {
+        return mHappyFaceRes;
     }
 
     public static Rating valueForPercentage(float rating) {
