@@ -79,7 +79,7 @@
         <ImageView
             android:id="@+id/like_button"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:src="@drawable/btn_like"
             android:visibility="visible" />
@@ -87,7 +87,7 @@
         <ImageView
             android:id="@+id/comment_button"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/like_button"
             android:src="@drawable/btn_comment"
@@ -104,9 +104,9 @@
     <ImageView
         android:id="@+id/overflow_button"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/btn_ab_overflow"
+        android:src="@drawable/btn_options_pressed"
         android:visibility="visible" />
 </merge>
