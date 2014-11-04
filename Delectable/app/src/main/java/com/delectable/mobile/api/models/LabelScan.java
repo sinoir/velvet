@@ -7,7 +7,7 @@ public class LabelScan {
 
     private String id;
 
-    private ArrayList<MatchObject> matches;
+    private ArrayList<Match> matches;
 
     public String getId() {
         return id;
@@ -18,8 +18,8 @@ public class LabelScan {
             return null;
         }
         ArrayList<BaseWine> wineMatches = new ArrayList<BaseWine>();
-        for (MatchObject match : matches) {
-            wineMatches.add(match.base_wine);
+        for (Match match : matches) {
+            wineMatches.add(match.getBaseWine());
         }
         return wineMatches;
     }
@@ -30,12 +30,5 @@ public class LabelScan {
                 "id='" + id + '\'' +
                 ", matches=" + matches +
                 '}';
-    }
-
-    public static class MatchObject {
-
-        private double score;
-
-        private BaseWine base_wine;
     }
 }

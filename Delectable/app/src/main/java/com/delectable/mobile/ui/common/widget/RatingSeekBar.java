@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.CaptureMinimal;
 import com.delectable.mobile.ui.common.drawable.RatingsBar;
 
 import android.content.Context;
@@ -11,6 +12,8 @@ import android.util.AttributeSet;
 import android.widget.SeekBar;
 
 public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener {
+
+    public static final int INCREMENTS = CaptureMinimal.MAX_RATING_VALUE;
 
     private RatingsBar mRatingsBar;
 
@@ -38,9 +41,10 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
     }
 
     private void init() {
-        int barHeight = getContext().getResources()
-                .getDimensionPixelSize(R.dimen.rating_bar_seek_height);
-        mRatingsBar = new RatingsBar(barHeight);
+        setMax(INCREMENTS);
+
+        int barHeight = getResources().getDimensionPixelSize(R.dimen.rating_bar_seek_height);
+        mRatingsBar = new RatingsBar(getContext(), barHeight);
         setProgressDrawable(mRatingsBar);
         Drawable thumb = getResources().getDrawable(R.drawable.btn_rating_bar_slider_normal);
         setThumb(thumb);
@@ -61,10 +65,16 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        if (mRatingChangeListener != null) {
+            mRatingChangeListener.onStartTrackingTouch(seekBar);
+        }
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        if (mRatingChangeListener != null) {
+            mRatingChangeListener.onStopTrackingTouch(seekBar);
+        }
     }
 
     private void updateRatingBarColors() {
@@ -108,6 +118,10 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
     public interface OnRatingsChangeListener {
 
         void onRatingsChanged(int rating);
+
+        void onStartTrackingTouch(SeekBar seekBar);
+
+        void onStopTrackingTouch(SeekBar seekBar);
     }
 
     static class RatingsSavedState extends BaseSavedState {

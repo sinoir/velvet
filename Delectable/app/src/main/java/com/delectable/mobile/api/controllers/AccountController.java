@@ -32,6 +32,7 @@ import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseAddress;
+import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.Listing;
@@ -95,7 +96,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchAccountCaptures(String requestId, CapturesContext context, String accountId,
-            Listing<CaptureDetails> listing, Boolean isPullToRefresh) {
+            Listing<BaseListingElement> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchAccountCapturesJob(requestId, context, accountId, listing,
                         isPullToRefresh));

@@ -135,9 +135,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void launchExpandedCaptureDetails(String captureId) {
+    public void launchCaptureDetails(CaptureDetails capture) {
         Intent intent = new Intent();
-        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID, captureId);
+        intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                capture.getId());
         intent.setClass(getActivity(), CaptureDetailsActivity.class);
         startActivity(intent);
     }

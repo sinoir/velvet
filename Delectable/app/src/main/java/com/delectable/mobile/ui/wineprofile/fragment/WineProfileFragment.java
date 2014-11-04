@@ -29,6 +29,7 @@ import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -126,6 +127,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
+
+    protected FloatingActionButton mCameraButton;
 
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this, this);
 
@@ -277,7 +280,7 @@ public class WineProfileFragment extends BaseFragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
-        ListView listview = (ListView) view.findViewById(R.id.list_view);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
 
         //prepare header view
         View header = inflater.inflate(R.layout.wine_profile_header, null, false);
@@ -286,9 +289,9 @@ public class WineProfileFragment extends BaseFragment implements
         updateBannerData();
         updateVarietyRegionRatingView(mBaseWine);
 
-        listview.addHeaderView(header, null, false);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.addHeaderView(header, null, false);
+        listView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 position--; //headerview offsets position of listitems by 1
@@ -298,6 +301,16 @@ public class WineProfileFragment extends BaseFragment implements
 
         // empty state
         mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
+        // Setup Floating Camera Button
+        mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
+        mCameraButton.attachToListView(listView);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
 
         return view;
     }

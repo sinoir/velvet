@@ -20,6 +20,8 @@ import butterknife.OnClick;
 public class NavHeader extends RelativeLayout {
 
     // These must reflec the order of the mNavigationItems and onNavigationItemClicked id orders
+    public static final int NAV_PROFILE = -1;
+
     public static final int NAV_HOME = 0;
 
     public static final int NAV_SEARCH = 1;
@@ -131,7 +133,9 @@ public class NavHeader extends RelativeLayout {
     }
 
     public void setCurrentSelectedNavItem(int navItem) {
-        if (navItem < mNavigationItems.size()) {
+        if (navItem < 0) {
+            mCurrentSelectedNav.setActivated(false);
+        } else if (navItem < mNavigationItems.size()) {
             toggleViewSelection(mNavigationItems.get(navItem));
         }
     }
