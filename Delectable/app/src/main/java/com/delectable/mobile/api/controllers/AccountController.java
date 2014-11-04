@@ -25,6 +25,7 @@ import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryPaymentMethodJob;
 import com.delectable.mobile.api.jobs.accounts.SetPrimaryShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
@@ -213,5 +214,9 @@ public class AccountController {
 
     public void addPaymentMethod(PaymentMethod paymentMethod, boolean isPrimary) {
         mJobManager.addJobInBackground(new AddPaymentMethodJob(paymentMethod, isPrimary));
+    }
+
+    public void setPrimaryPaymentMethod(String paymentMethodId) {
+        mJobManager.addJobInBackground(new SetPrimaryPaymentMethodJob(paymentMethodId));
     }
 }

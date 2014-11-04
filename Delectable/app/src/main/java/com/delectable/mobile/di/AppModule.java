@@ -46,6 +46,7 @@ import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryPaymentMethodJob;
 import com.delectable.mobile.api.jobs.accounts.SetPrimaryShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
@@ -210,6 +211,7 @@ import de.greenrobot.event.EventBus;
                 SetPrimaryShippingAddressJob.class,
                 FetchPaymentMethodJob.class,
                 AddPaymentMethodJob.class,
+                SetPrimaryPaymentMethodJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
