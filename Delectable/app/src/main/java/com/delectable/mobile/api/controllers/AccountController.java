@@ -23,6 +23,7 @@ import com.delectable.mobile.api.jobs.accounts.FetchShippingAddressesJob;
 import com.delectable.mobile.api.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.RemovePaymentMethodJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
 import com.delectable.mobile.api.jobs.accounts.SetPrimaryPaymentMethodJob;
@@ -218,5 +219,9 @@ public class AccountController {
 
     public void setPrimaryPaymentMethod(String paymentMethodId) {
         mJobManager.addJobInBackground(new SetPrimaryPaymentMethodJob(paymentMethodId));
+    }
+
+    public void removePaymentMethod(String paymentMethodId) {
+        mJobManager.addJobInBackground(new RemovePaymentMethodJob(paymentMethodId));
     }
 }
