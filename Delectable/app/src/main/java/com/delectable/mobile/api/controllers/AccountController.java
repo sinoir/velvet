@@ -2,6 +2,7 @@ package com.delectable.mobile.api.controllers;
 
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.AddPaymentMethodJob;
 import com.delectable.mobile.api.jobs.accounts.AddShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateTwitterJob;
@@ -36,6 +37,7 @@ import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.PaymentMethod;
 import com.delectable.mobile.api.models.ShippingAddress;
 import com.path.android.jobqueue.JobManager;
 
@@ -202,5 +204,9 @@ public class AccountController {
 
     public void setPrimaryShippingAddress(String addressId) {
         mJobManager.addJobInBackground(new SetPrimaryShippingAddressJob(addressId));
+    }
+
+    public void addPaymentMethod(PaymentMethod paymentMethod, boolean isPrimary) {
+        mJobManager.addJobInBackground(new AddPaymentMethodJob(paymentMethod, isPrimary));
     }
 }
