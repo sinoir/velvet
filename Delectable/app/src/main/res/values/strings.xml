@@ -124,6 +124,52 @@
     <string name="profile_tab_recent">recent</string>
     <string name="profile_tab_top_rated">top rated</string>
 
+    <!--user captures -->
+    <string name="user_captures_id_in_progress">identification in progress</string>
+    <string name="user_captures_check_back">Check back in a few minutes</string>
+    <plurals name="likes_count">
+        <item quantity="one">1 like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="comments_count">
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
+    <!--used when signed in user is part of context-->
+    <string name="you">you</string>
+
+    <!--you without location / other user with comment-->
+    <plurals name="with_xx_friends_zz_time_ago">
+        <!--"zero" quantity would just be the time stamp-->
+        <item quantity="one">with %1$d friend %2$s</item>
+        <item quantity="other">with %1$d friends %2$s</item>
+    </plurals>
+
+    <!--you with location / other user with comment-->
+    <!--this is the "zero" quantity of the plural below, bc english grammar doesn't differentiate zero quantities-->
+    <string name="at_yy_place_zz_time_ago">at %1$s %2$s</string>
+    <plurals name="with_xx_friends_at_yy_place_zz_time_ago">
+        <item quantity="one">with %1$d friend at %2$s %3$s</item>
+        <item quantity="other">with %1$d friends at %2$s %3$s</item>
+    </plurals>
+
+    <!--other user without location-->=
+    <!--"zero" quantity-->
+    <string name="capturer_tagged_user_zz_time_ago">%1$s tagged %2$s %3$s</string>
+    <plurals name="capturer_tagged_user_and_xx_friends_zz_time_ago">
+        <item quantity="one">%1$s tagged %2$s and %3$d friend %4$s</item>
+        <item quantity="other">%1$s tagged %2$s and %3$d friends %4$s</item>
+    </plurals>
+
+    <!--other user with location-->
+    <!--"zero" quantity-->
+    <string name="capturer_tagged_user_at_yy_place_zz_time_ago">%1$s tagged %2$s at %3$s %4$s</string>
+    <plurals name="capturer_tagged_user_and_xx_friends_at_yy_place_zz_time_ago">
+        <item quantity="one">%1$s tagged %2$s and %3$d friend at %4$s %5$s</item>
+        <item quantity="other">%1$s tagged %2$s and %3$d friends at %4$s %5$s</item>
+    </plurals>
+
+
     <!-- Followers -->
     <string name="followers_title">Followers</string>
     <string name="followers_no_followers">Looks like there are no followers.</string>
