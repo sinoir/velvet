@@ -21,11 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:layout_toLeftOf="@+id/right_image"
         android:layout_toRightOf="@+id/left_iamge"
         android:textColor="@color/d_black"
-        android:textSize="@dimen/cap_list_row_top_text_font_size"
-        app:fontName="whitney_medium" />
+        android:textSize="@dimen/text_size_small"
+        app:fontName="whitney_book" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/time_ago"
@@ -43,7 +44,6 @@
         android:layout_height="@dimen/recent_activity_right_image_size"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/text"
-        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:src="@drawable/no_photo" />
 

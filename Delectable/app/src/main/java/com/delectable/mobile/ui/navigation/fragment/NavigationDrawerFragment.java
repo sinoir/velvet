@@ -19,7 +19,6 @@ import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
@@ -227,7 +226,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.drawable.ab_activity,           /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
