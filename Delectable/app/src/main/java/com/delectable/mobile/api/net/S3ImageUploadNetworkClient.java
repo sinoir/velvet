@@ -44,10 +44,42 @@ public class S3ImageUploadNetworkClient {
         Log.i(requestName, "request:" + request);
         Log.i(requestName, "request headers:" + request.headers());
 
-        // TODO: Parse The response XML for Errors...
-        Response responseObj = mClient.newCall(request).execute();
-        String responseBody = responseObj.body().string();
+        Response response = mClient.newCall(request).execute();
+
+        //4 possible ways s3 can error out
+
+        //response not successful, obviously
+        if (!response.isSuccessful()) {
+            String errorMessage = "S3 HTTP Request Error " + response.code() + ": " + response.toString();
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
+        }
+
+        //if the response code isn't 200
+        if (response.code() != 200) {
+            String errorMessage = "S3 HTTP Response not 200. Error " + response.code() + ": " + response.toString();
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
+        }
+
+        //if there's no etag in the header
+        String etag = response.header("ETag");
+        if (etag == null) {
+            String errorMessage = "S3 HTTP Response had no ETag. Error " + response.code() + ": " + response.toString();
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
+        }
+
+        String responseBody = response.body().string();
         Log.i(requestName, "response: " + responseBody);
-        return responseObj;
+
+        //if the response body has text, means that it's an error
+        if (!responseBody.isEmpty()) {
+            String errorMessage = "S3 HTTP Response body was not empty. Error " + response.code() + ": " + response.toString();
+            Log.i(requestName, "error: " + errorMessage);
+            throw new IOException(errorMessage);
+        }
+
+        return response;
     }
 }

@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.capture.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.RatingSeekBar;
+import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -62,11 +62,8 @@ public class CaptureCommentRateFragment extends BaseFragment {
     @InjectView(R.id.comment_edit_text)
     protected EditText mCommentEditText;
 
-    @InjectView(R.id.rating_container)
-    protected View mRatingsContainer;
-
-    @InjectView(R.id.rate_seek_bar)
-    protected RatingSeekBar mRatingSeekBar;
+    @InjectView(R.id.numeric_rate_seek_bar)
+    protected NumericRatingSeekBar mNumericRatingSeekBar;
 
     private View mView;
 
@@ -112,32 +109,33 @@ public class CaptureCommentRateFragment extends BaseFragment {
     }
 
     private void updateRatingUI() {
-        mRatingSeekBar.setMax(CaptureDetails.MAX_RATING_VALUE);
         // Toggle display of rating if we're rating
         if (mIsRating) {
-            mRatingsContainer.setVisibility(View.VISIBLE);
+            mNumericRatingSeekBar.setVisibility(View.VISIBLE);
             mTitle.setText(getActivity().getString(R.string.dialog_comment_rating_title));
         } else {
-            mRatingsContainer.setVisibility(View.GONE);
+            mNumericRatingSeekBar.setVisibility(View.GONE);
             mTitle.setText(getActivity().getString(R.string.dialog_comment_title));
         }
         // Set Default Rating
         if (mRating == -1) {
-            mRatingSeekBar.setProgress(CaptureDetails.MAX_RATING_VALUE / 2);
+            mNumericRatingSeekBar.getRatingSeekBar().setProgress(
+                    CaptureDetails.MAX_RATING_VALUE / 2);
         } else {
-            mRatingSeekBar.setShowColors(true);
-            mRatingSeekBar.setProgress(mRating);
+            mNumericRatingSeekBar.getRatingSeekBar().setShowColors(true);
+            mNumericRatingSeekBar.getRatingSeekBar().setProgress(mRating);
         }
 
-        mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
-            @Override
-            public void onRatingsChanged(int rating) {
-                if (rating > -1) {
-                    mRating = rating;
-                    mPostButton.setEnabled(true);
-                }
-            }
-        });
+        mNumericRatingSeekBar
+                .setOnRatingChangeListener(new NumericRatingSeekBar.OnRatingChangeListener() {
+                    @Override
+                    public void onRatingsChanged(int rating) {
+                        if (rating > -1) {
+                            mRating = rating;
+                            mPostButton.setEnabled(true);
+                        }
+                    }
+                });
 
     }
 
@@ -177,7 +175,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
         if (mCommentEditText.getText().toString().trim().equals("")) {
             return true;
         }
-        if (mRatingSeekBar.getProgress() == -1) {
+        if (mNumericRatingSeekBar.getRatingSeekBar().getProgress() == -1) {
             return true;
         }
         return false;

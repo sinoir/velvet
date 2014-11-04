@@ -73,41 +73,11 @@
         android:textSize="@dimen/capture_submit_comment_text_size"
         app:fontName="whitney_medium" />
 
-    <RelativeLayout
-        android:id="@+id/rating_container"
+    <com.delectable.mobile.ui.common.widget.NumericRatingSeekBar
+        android:id="@+id/numeric_rate_seek_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="76dp"
         android:layout_below="@+id/comment_edit_text"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:visibility="visible">
+        android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/not_for_me"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/rate_seek_bar"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/capture_submit_margins"
-            android:text="@string/dialog_rating_notforme"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="@dimen/dialog_rating_end_text_size"
-            app:fontName="whitney_medium_sc" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/rate_seek_bar"
-            android:layout_marginRight="@dimen/capture_submit_margins"
-            android:text="@string/dialog_rating_loveit"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="@dimen/dialog_rating_end_text_size"
-            app:fontName="whitney_medium_sc" />
-
-        <com.delectable.mobile.ui.common.widget.RatingSeekBar
-            android:id="@+id/rate_seek_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/not_for_me" />
-    </RelativeLayout>
 </RelativeLayout>

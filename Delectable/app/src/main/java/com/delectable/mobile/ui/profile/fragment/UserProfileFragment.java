@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.profile.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.AccountModel;
-import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
@@ -11,15 +11,18 @@ import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.api.models.AccountProfile;
+import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
-import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
+import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
+import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -44,7 +47,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class UserProfileFragment extends BaseCaptureDetailsFragment implements
-        ProfileHeaderView.ProfileHeaderActionListener, InfiniteScrollAdapter.ActionsHandler {
+        ProfileHeaderView.ProfileHeaderActionListener, InfiniteScrollAdapter.ActionsHandler,
+        MinimalPendingCaptureRow.ActionsHandler {
 
     private static final String TAG = UserProfileFragment.class.getSimpleName();
 
@@ -53,7 +57,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private static final String CAPTURES_REQ = TAG + "_captures_req";
 
     @Inject
-    protected CaptureListingModel mCaptureListingModel;
+    protected CapturesPendingCapturesListingModel mListingModel;
 
     @InjectView(R.id.list_view)
     protected ListView mListView;
@@ -80,9 +84,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Inject
     protected AccountModel mAccountModel;
 
-    private CaptureDetailsAdapter mAdapter;
+    private CapturesPendingCapturesAdapter mAdapter;
 
-    private Listing<CaptureDetails> mCapturesListing;
+    private Listing<BaseListingElement> mCapturesListing;
 
     private boolean mFetching;
 
@@ -112,7 +116,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(USER_ID);
-            mAdapter = new CaptureDetailsAdapter(this, this, mUserId);
+            mAdapter = new CapturesPendingCapturesAdapter(this, this, this, mUserId);
         }
     }
 
@@ -254,7 +258,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<BaseListingElement> event) {
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }
@@ -304,8 +308,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
         String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
         String emptyText = isSelf
-                        ? getResources().getString(R.string.empty_own_profile)
-                        : String.format(getResources().getString(R.string.empty_user_profile), user);
+                ? getResources().getString(R.string.empty_own_profile)
+                : String.format(getResources().getString(R.string.empty_user_profile), user);
         setEmptyStateText(emptyText);
     }
 
@@ -328,14 +332,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
+
+        new SafeAsyncTask<Listing<BaseListingElement>>(this) {
             @Override
-            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
-                return mCaptureListingModel.getUserCaptures(mUserId);
+            protected Listing<BaseListingElement> safeDoInBackground(Void[] params) {
+                return mListingModel.getUserCaptures(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<BaseListingElement> listing) {
 
                 if (listing != null) {
                     mCapturesListing = listing;
@@ -349,6 +354,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
                     //only if there were no cache items do we make the call to fetch entries
                     mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
                             mUserId, null, false);
+
                 } else {
                     //simulate a pull to refresh if there are items
                     mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
@@ -422,4 +428,18 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         startActivity(intent);
     }
 
+    @Override
+    public void launchWineProfile(PendingCapture capture) {
+
+    }
+
+    @Override
+    public void addRatingAndComment(PendingCapture capture) {
+
+    }
+
+    @Override
+    public void discardCapture(PendingCapture capture) {
+
+    }
 }

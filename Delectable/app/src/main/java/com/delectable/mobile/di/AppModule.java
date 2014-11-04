@@ -7,8 +7,10 @@ import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.cache.Cache;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.DeviceContactsModel;
 import com.delectable.mobile.api.cache.FollowersFollowingModel;
+import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
@@ -203,12 +205,25 @@ import de.greenrobot.event.EventBus;
 )
 public class AppModule {
 
-    //TODO move/delete these three model providers. needed to drop it in here bc cache was switched to hashmap.
     @Provides
     @Singleton
     AccountModel provideAccountModel() {
         return new AccountModel();
     }
+
+    @Provides
+    @Singleton
+    CapturesPendingCapturesListingModel provideCapturesPendingCapturesListingModel(
+            PendingCapturesModel pendingCapturesModel, CaptureDetailsModel capturesModel) {
+        return new CapturesPendingCapturesListingModel(pendingCapturesModel, capturesModel);
+    }
+
+    @Provides
+    @Singleton
+    PendingCapturesModel providePendingCapturesModel() {
+        return new PendingCapturesModel();
+    }
+
 
     @Provides
     @Singleton

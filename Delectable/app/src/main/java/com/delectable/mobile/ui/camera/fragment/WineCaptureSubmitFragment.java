@@ -2,19 +2,19 @@ package com.delectable.mobile.ui.camera.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.LabelScan;
-import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.WineScanController;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.LabelScan;
+import com.delectable.mobile.api.models.TaggeeContact;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
@@ -78,8 +78,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @InjectView(R.id.comment_edit_text)
     protected EditText mCommentEditText;
 
-    @InjectView(R.id.rate_seek_bar)
-    protected RatingSeekBar mRatingSeekBar;
+    @InjectView(R.id.score_rate_seek_bar)
+    protected NumericRatingSeekBar mNumericRatingSeekBar;
 
     @InjectView(R.id.drinking_with_who)
     protected TextView mDrinkingWithWhoButton;
@@ -270,15 +270,16 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     }
 
     private void setupRatingSeekBar() {
-        mRatingSeekBar.setMax(CaptureDetails.MAX_RATING_VALUE);
+        //sets seek bar thumb to start in the middle of the
+        mNumericRatingSeekBar.getRatingSeekBar().setProgress(RatingSeekBar.INCREMENTS / 2);
+        mNumericRatingSeekBar
+                .setOnRatingChangeListener(new NumericRatingSeekBar.OnRatingChangeListener() {
+                    @Override
+                    public void onRatingsChanged(int rating) {
+                        mCurrentRating = rating;
+                    }
 
-        mRatingSeekBar.setProgress(CaptureDetails.MAX_RATING_VALUE / 2);
-        mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
-            @Override
-            public void onRatingsChanged(int rating) {
-                mCurrentRating = rating;
-            }
-        });
+                });
     }
 
     private void updateCaptureRequestWithFormData() {
