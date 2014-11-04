@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.events.NavigationEvent;
@@ -9,6 +10,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 
@@ -82,6 +84,11 @@ public class NavActivity extends BaseActivity
         FragmentManager fragmentManager = getFragmentManager();
         BaseFragment fragment = null;
         switch (position) {
+            case NavHeader.NAV_PROFILE:
+                fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
+                mTitle = "";
+                mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
+                break;
             case NavHeader.NAV_HOME:
                 fragment = new HomeFragment();
                 mTitle = getResources().getString(R.string.app_name);

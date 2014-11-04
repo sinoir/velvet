@@ -7,6 +7,7 @@ import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.cache.Cache;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.DeviceContactsModel;
 import com.delectable.mobile.api.cache.FollowersFollowingModel;
 import com.delectable.mobile.api.cache.PendingCapturesModel;
@@ -86,7 +87,6 @@ import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowingFragment;
-import com.delectable.mobile.ui.profile.fragment.RecentCapturesTabFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
@@ -120,7 +120,6 @@ import de.greenrobot.event.EventBus;
                 FollowingFragment.class,
                 BaseCaptureDetailsFragment.class,
                 CaptureDetailsFragment.class,
-                RecentCapturesTabFragment.class,
                 FollowerFeedTabFragment.class,
                 TrendingTabFragment.class,
                 SettingsFragment.class,
@@ -214,9 +213,17 @@ public class AppModule {
 
     @Provides
     @Singleton
+    CapturesPendingCapturesListingModel provideCapturesPendingCapturesListingModel(
+            PendingCapturesModel pendingCapturesModel, CaptureDetailsModel capturesModel) {
+        return new CapturesPendingCapturesListingModel(pendingCapturesModel, capturesModel);
+    }
+
+    @Provides
+    @Singleton
     PendingCapturesModel providePendingCapturesModel() {
         return new PendingCapturesModel();
     }
+
 
     @Provides
     @Singleton

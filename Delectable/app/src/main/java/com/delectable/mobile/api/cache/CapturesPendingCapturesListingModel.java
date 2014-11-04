@@ -11,27 +11,29 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.inject.Inject;
-
 public class CapturesPendingCapturesListingModel {
 
-    @Inject
     protected CaptureDetailsModel mCaptureDetailsModel;
 
-    @Inject
     protected PendingCapturesModel mPendingCapturesModel;
 
     private static final String TAG = CapturesPendingCapturesListingModel.class.getSimpleName();
 
     private static final String TYPE_USER_CAPTURES = TAG + "users_";
 
-
     private final HashMap<String, CacheListing<BaseListingElement>> mMap
             = new HashMap<String, CacheListing<BaseListingElement>>();
+
+    public CapturesPendingCapturesListingModel(PendingCapturesModel pendingCapturesModel,
+            CaptureDetailsModel capturesModel) {
+        mPendingCapturesModel = pendingCapturesModel;
+        mCaptureDetailsModel = capturesModel;
+    }
 
     public Listing<BaseListingElement> getUserCaptures(String accountId) {
         String key = TYPE_USER_CAPTURES + accountId;
         return getCachedCaptures(key);
+
     }
 
     public void saveUserCaptures(String accountId, Listing<BaseListingElement> listing) {
