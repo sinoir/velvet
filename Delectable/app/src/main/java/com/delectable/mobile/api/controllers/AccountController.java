@@ -1,6 +1,8 @@
 package com.delectable.mobile.api.controllers;
 
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.api.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.FetchAccountCapturesJob;
@@ -11,7 +13,10 @@ import com.delectable.mobile.api.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.api.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowerFeedJob;
+import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
+import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.api.jobs.accounts.FetchShippingAddressesJob;
 import com.delectable.mobile.api.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
@@ -22,13 +27,9 @@ import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
-import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
-import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
-import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.models.Listing;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -47,8 +48,10 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
     }
 
-    public void fetchActivityFeed(String requestId, String before, String after, Boolean isPullToRefresh) {
-        mJobManager.addJobInBackground(new FetchActivityFeedJob(requestId, before, after, isPullToRefresh));
+    public void fetchActivityFeed(String requestId, String before, String after,
+            Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchActivityFeedJob(requestId, before, after, isPullToRefresh));
     }
 
     /**
@@ -172,6 +175,10 @@ public class AccountController {
             Listing<CaptureDetails> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowerFeedJob(requestId, context, listing, isPullToRefresh));
+    }
+
+    public void fetchShippingAddresses() {
+        mJobManager.addJobInBackground(new FetchShippingAddressesJob());
     }
 
 }
