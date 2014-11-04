@@ -94,8 +94,6 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public void toggleLikeForCapture(final CaptureDetails capture) {
         final String userId = UserInfo.getUserId(getActivity());
         boolean userLikesCapture = !capture.doesUserLikeCapture(userId);
-        capture.toggleUserLikesCapture(userId);
-        dataSetChanged();
         mCaptureController.toggleLikeCapture(capture.getId(), userId, userLikesCapture);
     }
 
