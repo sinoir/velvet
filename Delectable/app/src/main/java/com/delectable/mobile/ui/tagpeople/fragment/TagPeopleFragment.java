@@ -2,20 +2,21 @@ package com.delectable.mobile.ui.tagpeople.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.accounts.FetchedDelectafriendsEvent;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.ui.events.NavigationEvent;
-import com.delectable.mobile.api.events.accounts.FetchedDelectafriendsEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.tagpeople.widget.TagPeopleAdapter;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -94,18 +95,7 @@ public class TagPeopleFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.fragment_tag_people, container, false);
         ButterKnife.inject(this, mView);
 
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getTargetFragment() != null) {
-                    getTargetFragment()
-                            .onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,
-                                    null);
-                }
-                getActivity().onBackPressed();
-            }
-        });
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mAdapter = new TagPeopleAdapter(mDelectaFriends);
         mListView.setAdapter(mAdapter);
@@ -135,6 +125,20 @@ public class TagPeopleFragment extends BaseFragment {
         mListView.setEmptyView(emptyView);
 
         return mView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (getTargetFragment() != null) {
+                    getTargetFragment().onActivityResult(getTargetRequestCode(),
+                            Activity.RESULT_CANCELED, null);
+                }
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class LikingPeopleActivity extends BaseActivity {
         }
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, LikingPeopleFragment.newInstance(mLikingPeople))
                     .commit();
         }

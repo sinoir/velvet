@@ -35,7 +35,7 @@ def build_date_var = getDate()
 def propFile = new File("app/version.properties");
 propFile.createNewFile();
 def versionProps = new Properties()
-versionProps['BUILD_DATE']=build_date_var
+versionProps['BUILD_DATE'] = build_date_var
 versionProps.store(propFile.newWriter(), null);
 
 
@@ -114,6 +114,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
+    compile 'com.android.support:support-v4:21.+'
     compile 'com.android.support:support-v13:21.+'
     compile "com.android.support:appcompat-v7:21.0.+"
     compile 'com.google.code.gson:gson:2.2.4'

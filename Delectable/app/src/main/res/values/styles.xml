@@ -1,54 +1,38 @@
 <resources>
 
     <!-- Light theme -->
-    <style name="DelectableTheme" parent="android:Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/DelectableActionBar</item>
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
+    <style name="DelectableTheme" parent="@style/Theme.AppCompat.Light">
+        <!--<item name="android:actionBarStyle">@style/DelectableActionBar</item>-->
+        <!--<item name="android:editTextStyle">@style/Delectable.EditText</item>-->
         <item name="android:windowContentOverlay">@null</item>
+        <!-- Set AppCompat’s color theming attrs -->
+        <item name="colorPrimary">@color/d_off_white</item>
+        <item name="colorPrimaryDark">@color/d_chestnut</item>
+        <item name="colorAccent">@color/d_chestnut</item>
     </style>
 
-    <style name="DelectableActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/d_off_white</item>
-        <item name="android:titleTextStyle">@style/DelectableActionBarTitleText</item>
-    </style>
+    <!--<style name="DelectableActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">-->
+    <!--<item name="android:background">@color/d_off_white</item>-->
+    <!--<item name="android:titleTextStyle">@style/DelectableActionBarTitleText</item>-->
+    <!--</style>-->
 
-    <!-- ActionBar title text -->
-    <style name="DelectableActionBarTitleText" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/d_black</item>
-    </style>
+    <!--&lt;!&ndash; ActionBar title text &ndash;&gt;-->
+    <!--<style name="DelectableActionBarTitleText" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">-->
+    <!--<item name="android:textColor">@color/d_black</item>-->
+    <!--</style>-->
     <!-- Light Theme End -->
 
-
-    <!-- Dark Theme -->
-    <style name="DelectableTheme.Dark" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/DelectableActionBar.Dark</item>
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="DelectableTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <!--<item name="android:editTextStyle">@style/Delectable.EditText</item>-->
     </style>
 
-    <style name="DelectableActionBar.Dark" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/d_big_stone</item>
-        <item name="android:titleTextStyle">@style/DelectableActionBarTitleText.Dark</item>
+    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <!--<item name="android:editTextStyle">@style/Delectable.EditText</item>-->
     </style>
 
-    <!-- ActionBar title text -->
-    <style name="DelectableActionBarTitleText.Dark" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/d_white</item>
-    </style>
-    <!-- Dark Theme End -->
-
-
-    <style name="DelectableTheme.NoActionBar" parent="android:Theme.Holo.Light.NoActionBar">
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
-    </style>
-
-    <style name="DelectableTheme.Dialog" parent="android:Theme.Holo.Light.Dialog">
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
-    </style>
-
-    <style name="Delectable.EditText" parent="android:Widget.Holo.Light.EditText">
-        <item name="android:background">@drawable/bg_edit_text</item>
-    </style>
+    <!--<style name="Delectable.EditText" parent="android:Widget.Holo.Light.EditText">-->
+    <!--<item name="android:background">@drawable/bg_edit_text</item>-->
+    <!--</style>-->
 
     <style name="DelectableTheme.Dialog.LoadingCircle">
         <item name="android:windowIsFloating">false</item>

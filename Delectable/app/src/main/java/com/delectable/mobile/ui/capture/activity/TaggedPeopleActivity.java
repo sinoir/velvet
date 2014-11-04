@@ -23,7 +23,7 @@ public class TaggedPeopleActivity extends BaseActivity {
         }
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, TaggedPeopleFragment.newInstance(mCaptureId))
                     .commit();
         }

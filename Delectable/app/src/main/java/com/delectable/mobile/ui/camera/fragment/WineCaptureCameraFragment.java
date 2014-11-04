@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -79,7 +80,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().getActionBar().hide();
+        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @OnClick(R.id.close_button)

@@ -33,7 +33,7 @@ public class CaptureCommentRateActivity extends BaseActivity {
         }
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, CaptureCommentRateFragment.newInstance(comment, rating,
                             isRating))
                     .commit();
