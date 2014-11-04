@@ -26,12 +26,14 @@ import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
+import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.ShippingAddress;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -185,5 +187,9 @@ public class AccountController {
 
     public void addShippingAddress(BaseAddress address, boolean isPrimary) {
         mJobManager.addJobInBackground(new AddShippingAddressJob(address, isPrimary));
+    }
+
+    public void updateShippingAddress(ShippingAddress address, boolean isPrimary) {
+        mJobManager.addJobInBackground(new UpdateShippingAddressJob(address, isPrimary));
     }
 }

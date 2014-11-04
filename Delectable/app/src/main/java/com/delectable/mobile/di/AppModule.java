@@ -45,6 +45,7 @@ import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
+import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.jobs.basewines.FetchBaseWineJob;
 import com.delectable.mobile.api.jobs.basewines.FetchWineSourceJob;
 import com.delectable.mobile.api.jobs.basewines.SearchWinesJob;
@@ -200,6 +201,7 @@ import de.greenrobot.event.EventBus;
                 FetchWineSourceJob.class,
                 FetchShippingAddressesJob.class,
                 AddShippingAddressJob.class,
+                UpdateShippingAddressJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
