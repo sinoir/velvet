@@ -115,7 +115,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
@@ -382,11 +382,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void navHeaderUserImageClicked() {
-        // TODO: Figure out whether we open in Activity or in Fragment with Nav
-        Intent intent = new Intent();
-        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
-        intent.setClass(getActivity(), UserProfileActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent();
+//        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
+//        intent.setClass(getActivity(), UserProfileActivity.class);
+//        startActivity(intent);
+        navItemSelected(NavHeader.NAV_PROFILE);
+        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
     }
 
     public void onEventMainThread(NavigationEvent event) {

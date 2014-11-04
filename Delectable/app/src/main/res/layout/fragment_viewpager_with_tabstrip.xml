@@ -26,8 +26,4 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/camera_button"
-        style="@style/FloatyCameraButtonStyle"
-        android:visibility="gone" />
 </RelativeLayout>

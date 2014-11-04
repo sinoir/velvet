@@ -39,7 +39,6 @@ versionProps['BUILD_DATE'] = build_date_var
 versionProps.store(propFile.newWriter(), null);
 
 
-
 android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
@@ -107,7 +106,6 @@ android {
 
 repositories {
     mavenCentral()
-    maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
     maven { url 'https://maven.fabric.io/repo' }
 }
 
@@ -130,14 +128,13 @@ dependencies {
     //need to keep dagger at 1.1.0 (at least until dagger 2.0 comes out, bc proguard doesn't work with 1.2.2)
     compile 'com.squareup.dagger:dagger:1.1.0'
     compile 'com.squareup.dagger:dagger-compiler:1.1.0'
-    compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT@aar'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
     compile 'com.google.android.gms:play-services:6.1.+'
     compile files('libs/kahuna_489.jar')
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
+    compile 'com.melnykov:floatingactionbutton:1.0.6'
 
     // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
@@ -146,11 +143,6 @@ dependencies {
 
     // Twitter Kit
     compile('com.twitter.sdk.android:twitter:1.0.0@aar') {
-        transitive = true
-    }
-
-    // MoPub Kit
-    compile('com.mopub.sdk.android:mopub:3.1.0@aar') {
         transitive = true
     }
 }

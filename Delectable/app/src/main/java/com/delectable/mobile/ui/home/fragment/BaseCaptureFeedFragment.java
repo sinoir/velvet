@@ -2,13 +2,15 @@ package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.melnykov.fab.FloatingActionButton;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ListView;
 
 import butterknife.ButterKnife;
@@ -31,10 +32,13 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     private final String TAG = this.getClass().getSimpleName();
 
     @InjectView(R.id.swipe_container)
-    protected SwipeRefreshLayout mRefreshContainer;
+    protected NestedSwipeRefreshLayout mRefreshContainer;
 
     @InjectView(R.id.list_view)
     protected ListView mListView;
+
+    @InjectView(R.id.camera_button)
+    protected FloatingActionButton mCameraButton;
 
     private CaptureDetailsAdapter mAdapter;
 
@@ -73,6 +77,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
                 .inflate(R.layout.fragment_home_follow_feed_tab, container, false);
         ButterKnife.inject(this, view);
 
+        mRefreshContainer.setListView(mListView);
         mRefreshContainer
                 .setColorScheme(R.color.d_soft_amber_25op, R.color.d_edward_25op,
                         R.color.d_soft_amber_25op, R.color.d_edward_25op);
@@ -80,26 +85,22 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         mListView.setAdapter(mAdapter);
 
         //pull to refresh setup
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                    int totalItemCount) {
-                int topRowVerticalPosition = (mListView == null || mListView.getChildCount() == 0)
-                        ?
-                        0 : mListView.getChildAt(0).getTop();
-                mRefreshContainer.setEnabled(topRowVerticalPosition >= 0);
-            }
-        });
         mRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
         });
+
+        // Setup Floating Camera Button
+        mCameraButton.attachToListView(mListView);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
+
         return view;
     }
 
@@ -175,10 +176,6 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         if (mRefreshContainer.isRefreshing()) {
             mRefreshContainer.setRefreshing(false);
             Log.d(TAG, "UpdatedListingEvent:wasRefreshing");
-        }
-
-        if (mAdapter.getItems().isEmpty()) {
-            //TODO mNoCapturesTextView.setVisibility(View.VISIBLE);
         }
 
         if (!event.isSuccessful()) {
