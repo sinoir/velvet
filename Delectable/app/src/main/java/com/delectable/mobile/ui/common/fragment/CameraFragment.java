@@ -51,7 +51,7 @@ public class CameraFragment extends BaseFragment {
     }
 
     private void safeCameraOpen() {
-        if (CameraUtil.checkSystemHasFrontCameraHardware(getActivity())) {
+        if (CameraUtil.checkSystemHasCameraHardware(getActivity())) {
             // Open camera on another thread for UI performance
             final Handler handler = new Handler();
             final Runnable postCameraOpenAction = new Runnable() {
@@ -171,7 +171,7 @@ public class CameraFragment extends BaseFragment {
             BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
             // Gives us a Bitmap size that's small enough to handle quickly, 1024 is a rough max width/height to give us the appropriate sample size.  The resulting image won't be exact, and maybe a little larger.
-            options.inSampleSize = PhotoUtil.calculateInSampleSize(options, 1024, 1024);
+            options.inSampleSize = PhotoUtil.calculateInSampleSize(options, PhotoUtil.MAX_SIZE, PhotoUtil.MAX_SIZE);
 
             // Make sure we reset the inJustDecodeBounds so we can create a bitmap
             options.inJustDecodeBounds = false;
