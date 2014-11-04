@@ -18,6 +18,7 @@ import com.delectable.mobile.api.jobs.accounts.FetchFollowerFeedJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.api.jobs.accounts.FetchPaymentMethodJob;
 import com.delectable.mobile.api.jobs.accounts.FetchShippingAddressesJob;
 import com.delectable.mobile.api.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
@@ -204,6 +205,10 @@ public class AccountController {
 
     public void setPrimaryShippingAddress(String addressId) {
         mJobManager.addJobInBackground(new SetPrimaryShippingAddressJob(addressId));
+    }
+
+    public void fetchPaymentMethods() {
+        mJobManager.addJobInBackground(new FetchPaymentMethodJob());
     }
 
     public void addPaymentMethod(PaymentMethod paymentMethod, boolean isPrimary) {
