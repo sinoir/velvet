@@ -21,6 +21,7 @@ import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.MyJobManager;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.AddShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.api.jobs.accounts.FacebookifyProfilePhotoJob;
@@ -198,6 +199,7 @@ import de.greenrobot.event.EventBus;
                 MarkCaptureHelpfulJob.class,
                 FetchWineSourceJob.class,
                 FetchShippingAddressesJob.class,
+                AddShippingAddressJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,

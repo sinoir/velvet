@@ -2,6 +2,7 @@ package com.delectable.mobile.api.controllers;
 
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.AddShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.api.jobs.accounts.FacebookifyProfilePhotoJob;
@@ -27,6 +28,7 @@ import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.Listing;
@@ -181,4 +183,7 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchShippingAddressesJob());
     }
 
+    public void addShippingAddress(BaseAddress address, boolean isPrimary) {
+        mJobManager.addJobInBackground(new AddShippingAddressJob(address, isPrimary));
+    }
 }
