@@ -1,7 +1,7 @@
 package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.RatingsSummaryHash;
-import com.delectable.mobile.api.models.WineProfile;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ public class RatingsSummaryTestCase extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
         JSONObject payload = json.optJSONObject("payload");
         JSONObject wineProfile = payload.optJSONObject("wine_profile");
-        WineProfile wine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
+        WineProfileSubProfile wine = mGson.fromJson(wineProfile.toString(), WineProfileSubProfile.class);
         RatingsSummaryHash expectedRatings = wine.getRatingsSummary();
 
         Parcel testParcel = Parcel.obtain();

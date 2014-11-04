@@ -1,11 +1,9 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
@@ -102,7 +100,7 @@ public class WineBannerView extends RelativeLayout {
     /**
      * @param capturePhotoHash include the {@link com.delectable.mobile.api.models.CaptureDetails
      *                         CaptureDetails}' {@link PhotoHash} if you want the view to show the
-     *                         capture photo. Passing in {@code null} will use {@link WineProfile}'s
+     *                         capture photo. Passing in {@code null} will use {@link WineProfileMinimal}'s
      *                         photo.
      * @param includeVintage   {@code true} to show the vintage year.
      */

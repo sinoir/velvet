@@ -2,7 +2,7 @@ package com.delectable.mobile.tests;
 
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.LabelScan;
-import com.delectable.mobile.model.api.scanwinelabels.LabelScanResponse;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.LabelScanResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

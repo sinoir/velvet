@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.events.NavigationEvent;
+import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;

@@ -1,7 +1,7 @@
 package com.delectable.mobile.tests;
 
-import com.delectable.mobile.api.models.WineProfile;
 import com.delectable.mobile.api.models.WineProfileMinimal;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
         JSONObject payload = json.optJSONObject("payload");
         JSONObject wineProfile = payload.optJSONObject("wine_profile");
-        WineProfile actualWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
+        WineProfileSubProfile actualWine = mGson.fromJson(wineProfile.toString(), WineProfileSubProfile.class);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
         assertEquals(1, actualWine.getRatingsSummary().getAllCount());
@@ -83,7 +83,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_subprofile_ctx);
         JSONObject payload = json.optJSONObject("payload");
         JSONObject wineProfile = payload.optJSONObject("wine_profile");
-        WineProfile expectedWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
+        WineProfileSubProfile expectedWine = mGson.fromJson(wineProfile.toString(), WineProfileSubProfile.class);
 
         Parcel testParcel = Parcel.obtain();
 
@@ -93,7 +93,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         // Must reset Data position!!
         testParcel.setDataPosition(originalPos);
 
-        WineProfile actualWine = WineProfile.CREATOR.createFromParcel(testParcel);
+        WineProfileSubProfile actualWine = WineProfileSubProfile.CREATOR.createFromParcel(testParcel);
 
         assertEquals("50e86605a6d027d09d00025a", actualWine.getId());
         assertEquals(1, actualWine.getRatingsSummary().getAllCount());
@@ -114,7 +114,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_wine_profiles_minimal_ctx);
         JSONObject payload = json.optJSONObject("payload");
         JSONObject wineProfile = payload.optJSONObject("wine_profile");
-        WineProfile expectedWine = mGson.fromJson(wineProfile.toString(), WineProfile.class);
+        WineProfileMinimal expectedWine = mGson.fromJson(wineProfile.toString(), WineProfileMinimal.class);
 
         Parcel testParcel = Parcel.obtain();
 
@@ -124,7 +124,7 @@ public class WineProfileTest extends BaseInstrumentationTestCase {
         // Must reset Data position!!
         testParcel.setDataPosition(originalPos);
 
-        WineProfile actualWine = WineProfile.CREATOR.createFromParcel(testParcel);
+        WineProfileMinimal actualWine = WineProfileMinimal.CREATOR.createFromParcel(testParcel);
 
         assertEquals(
                 "https://s3.amazonaws.com/delectableCapturedPhotos/tim-park-1357406485-f70bd657b34f.jpg",

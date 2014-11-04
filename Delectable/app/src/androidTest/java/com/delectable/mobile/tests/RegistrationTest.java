@@ -1,10 +1,10 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.endpointmodels.registrations.RegisterLoginResponse;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.LocalNotifications;
-import com.delectable.mobile.model.api.registrations.RegistrationLoginResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,8 +24,8 @@ public class RegistrationTest extends BaseInstrumentationTestCase {
     public void testParsePayloadForAction() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_registration_success_response);
 
-        RegistrationLoginResponse actualRegistration = mGson.fromJson(json.toString(),
-                RegistrationLoginResponse.class);
+        RegisterLoginResponse actualRegistration = mGson.fromJson(json.toString(),
+                RegisterLoginResponse.class);
         Account actualAccount = actualRegistration.payload.account;
 
         assertEquals("537e2f09753490201d00084f", actualRegistration.payload.session_key);

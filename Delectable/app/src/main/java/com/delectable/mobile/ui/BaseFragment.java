@@ -1,8 +1,10 @@
 package com.delectable.mobile.ui;
 
-import com.delectable.mobile.data.ServerInfo;
-import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.NavigationDrawerCloseEvent;
+import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.cache.CaptureNoteListingModel;
+import com.delectable.mobile.api.cache.ServerInfo;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
@@ -216,6 +218,10 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         UserInfo.onSignOut(getActivity());
         ServerInfo.onSignOut(getActivity());
         CrashlyticsUtil.onSignOut();
+
+        //Clear listings
+        CaptureNoteListingModel.clear();
+        CaptureListingModel.clear();
 
         try {
             // TODO: run this on background thread?  Also, might be handy to be selective on what gets deleted.

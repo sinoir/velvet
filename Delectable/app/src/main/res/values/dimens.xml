@@ -238,7 +238,7 @@
     <dimen name="navigation_user_name_text_size">20sp</dimen>
     <dimen name="navigation_header_detail_text_size">14sp</dimen>
     <dimen name="navigation_username_margins">10dp</dimen>
-    <dimen name="navigation_bio_margins">15dp</dimen>
+    <dimen name="navigation_bio_margins">16dp</dimen>
 
     <!-- Recent Activity Feed -->
     <dimen name="recent_activity_time_ago_text_size">12sp</dimen>

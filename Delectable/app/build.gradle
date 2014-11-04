@@ -1,14 +1,17 @@
 buildscript {
     repositories {
-        maven { url 'http://download.crashlytics.com/maven' }
+        maven { url 'https://maven.fabric.io/repo' }
     }
 
     dependencies {
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        // The Fabric Gradle plugin uses an open ended version to react
+        // quickly to Android tooling updates
+        classpath 'io.fabric.tools:gradle:1.+'
+        //
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
+apply plugin: 'io.fabric'
 
 //keystore stuff
 //keystore_credentials.properties gitignored for security
@@ -43,12 +46,14 @@ android {
     defaultConfig {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
-        versionCode 2
-        versionName '1.01'
+        versionCode 3
+        versionName '1.02'
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
         buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
+        buildConfigField 'String', 'TWITTER_KEY', '"fSGhGQRt4QCl0lQMLKEr4g"'
+        buildConfigField 'String', 'TWITTER_SECRET', '"EVTtbtBOZFY9YMlV6GlkbUbiZwi7n62cfJSEfb5x9hI"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
     }
 
@@ -84,13 +89,13 @@ android {
             versionNameSuffix "-alpha-" + build_date_var
             debuggable false
             runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
         release {
             runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
@@ -105,13 +110,7 @@ android {
 repositories {
     mavenCentral()
     maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
-    maven {
-        url 'https://android-sdk.crashlytics.com/twittersdk/repo'
-        credentials {
-            username = 'sdk-user'
-            password = '5Y|3-ViTSt*8Hxu7Jj*97zzaC6+RUK9MPw_4kqbPMfWe4Iwc^$'
-        }
-    }
+    maven { url 'https://maven.fabric.io/repo' }
 }
 
 dependencies {
@@ -141,22 +140,17 @@ dependencies {
     compile files('libs/xmpcore.jar')
 
     // Crashlytics Kit
-    compile('com.twitter.sdk.android:crashlytics:1.2.+@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
         transitive = true
     }
 
     // Twitter Kit
-    compile('com.twitter.sdk.android:core:0.2.+@aar') {
-        transitive = true
-    }
-
-    // Tweet UI Kit
-    compile('com.twitter.sdk.android:tweetui:0.2.+@aar') {
+    compile('com.twitter.sdk.android:twitter:1.0.0@aar') {
         transitive = true
     }
 
     // MoPub Kit
-    compile('com.twitter.sdk.android:mopub:2.3.+@aar') {
+    compile('com.mopub.sdk.android:mopub:3.1.0@aar') {
         transitive = true
     }
 }

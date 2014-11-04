@@ -7,15 +7,15 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.data.UserInfo;
-import com.delectable.mobile.events.accounts.AssociateFacebookEvent;
-import com.delectable.mobile.events.accounts.AssociateTwitterEvent;
-import com.delectable.mobile.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.events.accounts.UpdatedIdentifiersListingEvent;
-import com.delectable.mobile.events.accounts.UpdatedProfileEvent;
-import com.delectable.mobile.events.accounts.UpdatedProfilePhotoEvent;
-import com.delectable.mobile.events.accounts.UpdatedSettingEvent;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.events.accounts.AssociateFacebookEvent;
+import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
@@ -76,10 +76,18 @@ public class SettingsFragment extends BaseFragment {
             Log.d(TAG + ".Facebook", "Session State: " + session.getState());
             Log.d(TAG + ".Facebook", "Session:" + session);
             Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
+
+            if (session.getState().equals(SessionState.OPENING)) {
+                return;
+            }
+
             if (state.isOpened()) {
                 facebookConnect();
+                return;
             }
+
+            // TODO: Handle more errors and other conditions.
+            showToastError(getString(R.string.error_facebook_connect_failed));
         }
     };
 
@@ -87,26 +95,16 @@ public class SettingsFragment extends BaseFragment {
         @Override
         public void success(Result<TwitterSession> twitterSessionResult) {
 
-            long twitterId = twitterSessionResult.data.getUserId();
-            String screenName = twitterSessionResult.data.getUserName();
-
-            //TODO improve when Twitter SDK is better documented
-            //This is ghetto bc there were no docs when I made this, didn't know how to use the data.getAuthToken().getAuthHeaders() method
-            //looks like this:
-            //authtoken: token=[TOKEN_VALUE],secret=[SECRET_VALUE]
-            String authCreds = twitterSessionResult.data.getAuthToken().toString();
-            String[] splitAuthCreds = authCreds.split(",");
-            String token = splitAuthCreds[0].split("token=")[1];
-            String tokenSecret = splitAuthCreds[1].split("secret=")[1];
+            TwitterUtil.TwitterInfo twitterInfo = TwitterUtil.getTwitterInfo(twitterSessionResult);
 
             //refreshing view before we make the call for immediate UI feed back
-            mUserAccount.setTwId(twitterId);
-            mUserAccount.setTwScreenName(screenName);
-            mUserAccount.setTwToken(token);
-            mUserAccount.setTwTokenSecret(tokenSecret);
+            mUserAccount.setTwId(twitterInfo.twitterId);
+            mUserAccount.setTwScreenName(twitterInfo.screenName);
+            mUserAccount.setTwToken(twitterInfo.token);
+            mUserAccount.setTwTokenSecret(twitterInfo.tokenSecret);
             updateUI();
 
-            mAccountController.associateTwitter(twitterId, token, tokenSecret, screenName);
+            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token, twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override
@@ -751,6 +749,7 @@ public class SettingsFragment extends BaseFragment {
             mUserAccount = event.getAcount();
         } else {
             showToastError(event.getErrorMessage());
+            TwitterUtil.clearSession();
         }
         updateUI(); //ui reverts back to original state if error
     }

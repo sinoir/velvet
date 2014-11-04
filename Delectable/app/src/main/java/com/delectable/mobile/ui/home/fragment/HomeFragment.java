@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;

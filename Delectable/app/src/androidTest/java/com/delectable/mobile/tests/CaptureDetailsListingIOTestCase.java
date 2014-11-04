@@ -1,11 +1,11 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.model.api.BaseListingWrapperResponse;
-import com.delectable.mobile.model.local.CacheListing;
+import com.delectable.mobile.api.cache.localmodels.CacheListing;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,16 +14,16 @@ import java.lang.reflect.Type;
 
 public class CaptureDetailsListingIOTestCase extends BaseInstrumentationTestCase {
 
-    private BaseListingResponse<CaptureDetails> mFollowFeedListing;
+    private Listing<CaptureDetails> mFollowFeedListing;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        Type type = new TypeToken<BaseListingWrapperResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
         }.getType();
-        BaseListingWrapperResponse<CaptureDetails> feedResponseObject = mGson
+        ListingResponse<CaptureDetails> feedResponseObject = mGson
                 .fromJson(json.toString(), type);
         mFollowFeedListing = feedResponseObject.getPayload();
     }

@@ -3,9 +3,8 @@ package com.delectable.mobile.ui.capture.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.controllers.CaptureController;
-import com.delectable.mobile.data.CaptureDetailsModel;
-import com.delectable.mobile.events.captures.UpdatedCaptureDetailsEvent;
+import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.util.SafeAsyncTask;
 

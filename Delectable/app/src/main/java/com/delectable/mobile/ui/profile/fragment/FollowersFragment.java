@@ -2,8 +2,8 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.BaseListingResponse;
-import com.delectable.mobile.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,13 +23,13 @@ public class FollowersFragment extends BaseFollowersFragment {
     }
 
     @Override
-    protected BaseListingResponse<AccountMinimal> getCachedListing(String accountId) {
+    protected Listing<AccountMinimal> getCachedListing(String accountId) {
         return mListingModel.getFollowersListing(accountId);
     }
 
     @Override
     protected void fetchAccounts(String accountId,
-            BaseListingResponse<AccountMinimal> accountListing, boolean isPullToRefresh) {
+            Listing<AccountMinimal> accountListing, boolean isPullToRefresh) {
         mAccountController.fetchFollowers(FOLLOWERS_REQ, accountId, accountListing, isPullToRefresh);
     }
 

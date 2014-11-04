@@ -3,12 +3,12 @@ package com.delectable.mobile.ui.profile.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.controllers.AccountController;
-import com.delectable.mobile.data.FollowersFollowingModel;
-import com.delectable.mobile.events.UpdatedListingEvent;
-import com.delectable.mobile.events.accounts.FollowAccountEvent;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.cache.FollowersFollowingModel;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -67,17 +67,17 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     private String mAccountId;
 
-    private BaseListingResponse<AccountMinimal> mFollowerListing;
+    private Listing<AccountMinimal> mFollowerListing;
 
     /**
      * Flag to know when we are already fetching
      */
     private boolean mFetching;
 
-    protected abstract BaseListingResponse<AccountMinimal> getCachedListing(String accountId);
+    protected abstract Listing<AccountMinimal> getCachedListing(String accountId);
 
     protected abstract void fetchAccounts(String accountId,
-            BaseListingResponse<AccountMinimal> accountListing, boolean isPullToRefresh);
+            Listing<AccountMinimal> accountListing, boolean isPullToRefresh);
 
     protected void setArguments(String accountId) {
         Bundle args = new Bundle();
@@ -124,14 +124,14 @@ public abstract class BaseFollowersFragment extends BaseFragment
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<BaseListingResponse<AccountMinimal>>(this) {
+        new SafeAsyncTask<Listing<AccountMinimal>>(this) {
             @Override
-            protected BaseListingResponse<AccountMinimal> safeDoInBackground(Void[] params) {
+            protected Listing<AccountMinimal> safeDoInBackground(Void[] params) {
                 return getCachedListing(mAccountId);
             }
 
             @Override
-            protected void safeOnPostExecute(BaseListingResponse<AccountMinimal> listing) {
+            protected void safeOnPostExecute(Listing<AccountMinimal> listing) {
 
                 if (listing != null) {
                     mFollowerListing = listing;

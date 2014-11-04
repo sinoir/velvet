@@ -1,11 +1,12 @@
 package com.delectable.mobile;
 
 import com.crashlytics.android.Crashlytics;
-import com.delectable.mobile.data.UserInfo;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.di.AppModule;
+import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.kahuna.sdk.KahunaAnalytics;
-import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import android.app.Application;
@@ -16,7 +17,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class App extends Application {
 
-    private static final String TAG = App.class.getSimpleName();
+    static final String TAG = App.class.getSimpleName();
 
     private static App sInstance;
 
@@ -49,9 +50,21 @@ public class App extends Application {
 
         mObjectGraph = ObjectGraph.create(new AppModule());
 
-        TwitterAuthConfig authConfig = TwitterUtil.getAuthConfig(this);
-        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
+        TwitterAuthConfig authConfig = TwitterUtil.getAuthConfig();
+        if (BuildConfig.REPORT_CRASHES) {
+            Fabric.with(this, new Twitter(authConfig), new Crashlytics());
+            if (UserInfo.isSignedIn(this)) {
+                String name = UserInfo.getUserName(this);
+                String userEmail = UserInfo.getUserEmail(this);
+                String id = UserInfo.getUserId(this);
+                String sessionKey = UserInfo.getSessionKey(this);
+                CrashlyticsUtil.onSignIn(name, userEmail, id, sessionKey);
+            }
+        } else {
+            Fabric.with(this, new Twitter(authConfig));
+        }
     }
+
 
     public void updateKahunaAttributes() {
         if (UserInfo.isSignedIn(this)) {

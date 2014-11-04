@@ -2,9 +2,9 @@ package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseListingResponse;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -38,7 +38,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
     private CaptureDetailsAdapter mAdapter;
 
-    private BaseListingResponse<CaptureDetails> mCapturesListing;
+    private Listing<CaptureDetails> mCapturesListing;
 
     private boolean mFetching;
 
@@ -114,15 +114,15 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     private void loadLocalData() {
         mRefreshContainer.setRefreshing(true);
         mFetching = true;
-        new SafeAsyncTask<BaseListingResponse<CaptureDetails>>(this) {
+        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
             @Override
-            protected BaseListingResponse<CaptureDetails> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
                 Log.d(TAG, "loadLocalData:doInBg");
                 return getCachedFeed();
             }
 
             @Override
-            protected void safeOnPostExecute(BaseListingResponse<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
                 Log.d(TAG, "loadLocalData:returnedFromCache");
                 if (listing != null) {
                     Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
@@ -144,9 +144,9 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected abstract BaseListingResponse<CaptureDetails> getCachedFeed();
+    protected abstract Listing<CaptureDetails> getCachedFeed();
 
-    protected abstract void fetchCaptures(BaseListingResponse<CaptureDetails> listing,
+    protected abstract void fetchCaptures(Listing<CaptureDetails> listing,
             boolean isPullToRefresh);
 
     private void refreshData() {
@@ -163,7 +163,6 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     /**
      * The subclass will need to intercept the event and verify that the event was spawned from a
      * request the subclass.
-     * @param event
      */
     public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
         Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());

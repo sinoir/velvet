@@ -26,22 +26,18 @@ public class FollowExpertsTabFragment extends BaseFollowFriendsTabFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater
-                .inflate(R.layout.fragment_listview_no_divider, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
-        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_wine_experts);
-        listView.setAdapter(mAdapter);
-        return view;
+    protected void fetchAccounts() {
+            mAccountController.fetchInfluencerSuggestions(getEventId());
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mAccounts == null) {
-            mAccountController.fetchInfluencerSuggestions(getEventId());
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        mAdapter.setTopHeaderTitleResId(R.string.follow_friends_wine_experts);
+        mConnectButton.setVisibility(View.GONE);
+        return view;
     }
 
 }

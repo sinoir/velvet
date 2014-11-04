@@ -96,6 +96,7 @@ public class CaptureDetails extends CaptureMinimal {
         return likesCapture;
     }
 
+    //TODO this method should take the isLiked value as well bc wierd syncing issues may occur
     public void toggleUserLikesCapture(String accountId) {
         boolean userLikedCapture = false;
         if (liking_participants != null) {

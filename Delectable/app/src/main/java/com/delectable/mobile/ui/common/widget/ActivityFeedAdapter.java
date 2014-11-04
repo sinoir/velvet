@@ -1,7 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.ActivityRecipient;
+import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ public class ActivityFeedAdapter extends BaseAdapter {
 
     private static final String TAG = ActivityFeedAdapter.class.getSimpleName();
 
-    private ArrayList<ActivityRecipient> mActivityFeedData = new ArrayList<ActivityRecipient>();
+    private ArrayList<ActivityFeedItem> mActivityFeedData = new ArrayList<ActivityFeedItem>();
 
     private ActivityFeedRow.ActivityActionsHandler mActionsHandler;
 
@@ -29,7 +29,7 @@ public class ActivityFeedAdapter extends BaseAdapter {
     }
 
     @Override
-    public ActivityRecipient getItem(int position) {
+    public ActivityFeedItem getItem(int position) {
         return mActivityFeedData.get(position);
     }
 
@@ -41,7 +41,7 @@ public class ActivityFeedAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ActivityFeedRow rowView = (ActivityFeedRow) convertView;
-        ActivityRecipient data = getItem(position);
+        ActivityFeedItem data = getItem(position);
         if (rowView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             rowView = (ActivityFeedRow) inflater.inflate(R.layout.row_activity_feed_impl, parent,
@@ -56,7 +56,7 @@ public class ActivityFeedAdapter extends BaseAdapter {
         mActionsHandler = actionsHandler;
     }
 
-    public void setItems(ArrayList<ActivityRecipient> items) {
+    public void setItems(ArrayList<ActivityFeedItem> items) {
         mActivityFeedData = items;
     }
 }

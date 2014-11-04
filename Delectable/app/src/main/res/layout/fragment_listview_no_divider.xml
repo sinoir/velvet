@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,52 +12,41 @@
         android:divider="@null"
         android:listSelector="@color/transparent" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/empty_view_facebook"
-        android:visibility="gone"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/empty_state_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:padding="@dimen/spacing_large"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:visibility="visible">
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            style="@style/TextEmptyState"
-            android:text="@string/empty_facebook"
-            android:paddingBottom="@dimen/spacing_large" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_row_height"
+            android:layout_marginTop="@dimen/spacing_medium" />
 
-        <com.delectable.mobile.ui.common.widget.Delectabutton
-            android:id="@+id/connect_facebook_button"
-            style="@style/delectabutton_facebook"
-            android:text="@string/connect_facebook_button" />
+        <LinearLayout
+            android:id="@+id/text_and_button_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large"
+            android:visibility="visible">
 
-    </LinearLayout>
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/empty_text_view"
+                style="@style/TextEmptyState"
+                android:paddingBottom="@dimen/spacing_large"
+                android:text="@string/empty_experts" />
 
-    <LinearLayout
-        android:id="@+id/empty_view_twitter"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_large"
-        android:visibility="gone">
+            <com.delectable.mobile.ui.common.widget.Delectabutton
+                android:id="@+id/connect_button"
+                style="@style/delectabutton_large"
+                app:icon="@drawable/ic_find_twitter_pressed" />
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            style="@style/TextEmptyState"
-            android:paddingBottom="@dimen/spacing_large"
-            android:text="@string/empty_twitter" />
+        </LinearLayout>
 
-        <com.delectable.mobile.ui.common.widget.Delectabutton
-            android:id="@+id/connect_twitter_button"
-            style="@style/delectabutton_large"
-            android:text="@string/connect_twitter_button"
-            app:icon="@drawable/ic_find_twitter_pressed" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>
