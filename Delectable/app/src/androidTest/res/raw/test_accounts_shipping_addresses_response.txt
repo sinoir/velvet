@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "payload": {
+    "shipping_addresses": [
+      {
+        "id": "52dfa7d04543712f3800002c",
+        "title": "lol title",
+        "fname": "dfsf",
+        "lname": "Vartanian",
+        "phone": "423432423423",
+        "addr1": "300 goat street",
+        "addr2": "address2",
+        "city": "brooklyn",
+        "state": "MD",
+        "email": "dim1014@gmail.com",
+        "zip": "11215",
+        "primary": true
+      },
+      {
+        "id": "52f82b3485cc6502b8000002",
+        "title": null,
+        "fname": "dfsf",
+        "lname": "Vartanian",
+        "phone": "312312312313",
+        "addr1": "goat street",
+        "addr2": "323",
+        "city": "brooklyn",
+        "state": "MD",
+        "email": "dim1014@gmail.com",
+        "zip": "11111",
+        "primary": false
+      }
+    ]
+  }
+}
