@@ -2,11 +2,11 @@ package com.delectable.mobile.api.endpointmodels.accounts;
 
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 
-public class RemoveShippingAddressRequest extends BaseRequest {
+public class ModifyShippingAddressRequest extends BaseRequest {
 
     private Payload payload;
 
-    public RemoveShippingAddressRequest(String address_id) {
+    public ModifyShippingAddressRequest(String address_id) {
         this.payload = new Payload(address_id);
     }
 

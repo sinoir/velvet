@@ -23,6 +23,7 @@ import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
@@ -196,5 +197,9 @@ public class AccountController {
 
     public void removeShippingAddress(String addressId) {
         mJobManager.addJobInBackground(new RemoveShippingAddressJob(addressId));
+    }
+
+    public void setPrimaryShippingAddress(String addressId) {
+        mJobManager.addJobInBackground(new SetPrimaryShippingAddressJob(addressId));
     }
 }

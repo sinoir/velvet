@@ -42,6 +42,7 @@ import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
@@ -204,6 +205,7 @@ import de.greenrobot.event.EventBus;
                 AddShippingAddressJob.class,
                 UpdateShippingAddressJob.class,
                 RemoveShippingAddressJob.class,
+                SetPrimaryShippingAddressJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
