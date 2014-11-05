@@ -4,7 +4,6 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.MainActivity;
 import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.BaseWineModel;
-import com.delectable.mobile.api.cache.Cache;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
@@ -97,7 +96,6 @@ import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
-import com.iainconnor.objectcache.CacheManager;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Singleton;
@@ -247,13 +245,6 @@ public class AppModule {
     @Singleton
     JobManager provideJobManager() {
         return new MyJobManager(App.getInstance());
-    }
-
-    @Provides
-    @Singleton
-    CacheManager provideCacheManager() {
-        Cache.init(App.getInstance());
-        return Cache.getCacheManager();
     }
 
     @Provides

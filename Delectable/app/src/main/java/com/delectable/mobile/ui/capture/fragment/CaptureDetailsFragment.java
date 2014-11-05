@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ScrollView;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
     @Inject
     CaptureDetailsModel mCaptureDetailsModel;
+
+    private View mScrollView;
 
     private CaptureDetailsView mCaptureDetailsView;
 
@@ -57,12 +61,31 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_capture_details, container, false);
         mCaptureDetailsView = (CaptureDetailsView) view.findViewById(R.id.capture_details_view);
         mCaptureDetailsView.setActionsHandler(this);
+
+        mScrollView = (ScrollView) mView.findViewById(R.id.capture_details_scroll_view);
+        mScrollView.getViewTreeObserver().addOnScrollChangedListener(
+            new ViewTreeObserver.OnScrollChangedListener() {
+
+                View wineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
+                View wineImageView = wineBanner.findViewById(R.id.wine_image);
+
+                @Override
+                public void onScrollChanged() {
+                    int scrollY = mScrollView.getScrollY();
+                    float height = wineBanner.getHeight();
+                    // check if header is still visible
+                    if (scrollY > height) {
+                        return;
+                    }
+                    wineImageView.setTranslationY(scrollY / 2f);
+                }
+        });
 
         return view;
     }

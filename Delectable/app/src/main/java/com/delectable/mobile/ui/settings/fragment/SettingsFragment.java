@@ -76,10 +76,18 @@ public class SettingsFragment extends BaseFragment {
             Log.d(TAG + ".Facebook", "Session State: " + session.getState());
             Log.d(TAG + ".Facebook", "Session:" + session);
             Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
+
+            if (session.getState().equals(SessionState.OPENING)) {
+                return;
+            }
+
             if (state.isOpened()) {
                 facebookConnect();
+                return;
             }
+
+            // TODO: Handle more errors and other conditions.
+            showToastError(getString(R.string.error_facebook_connect_failed));
         }
     };
 

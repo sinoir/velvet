@@ -50,7 +50,7 @@ public class App extends Application {
 
         mObjectGraph = ObjectGraph.create(new AppModule());
 
-        TwitterAuthConfig authConfig = TwitterUtil.getAuthConfig(this);
+        TwitterAuthConfig authConfig = TwitterUtil.getAuthConfig();
         if (BuildConfig.REPORT_CRASHES) {
             Fabric.with(this, new Twitter(authConfig), new Crashlytics());
             if (UserInfo.isSignedIn(this)) {

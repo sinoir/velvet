@@ -1,11 +1,10 @@
 package com.delectable.mobile.ui.common.widget;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v13.app.FragmentCompat;
-import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class SlidingPagerAdapter extends FragmentStatePagerAdapter {
                         while (fragmentsList.size() <= index) {
                             fragmentsList.add(null);
                         }
-                        FragmentCompat.setMenuVisibility(f, false);
+                        f.setMenuVisibility(false);
                         fragmentsList.set(index, f);
                     } else {
                         Log.w(TAG, "Bad fragment at key " + key);

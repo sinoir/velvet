@@ -6,10 +6,10 @@ import com.delectable.mobile.util.FontEnum;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
-import android.widget.Switch;
 
-public class FontSwitch extends Switch {
+public class FontSwitch extends SwitchCompat {
 
     public FontSwitch(Context context) {
         super(context);

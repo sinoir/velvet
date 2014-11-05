@@ -2,12 +2,12 @@ package com.delectable.mobile.ui.followfriends.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.AccountMinimal;
-import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
+import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.TaggeeContact;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.FontTextView;
@@ -47,14 +47,14 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
     private static final String TAG = BaseFollowFriendsTabFragment.class.getSimpleName();
 
     @InjectView(R.id.list_view)
-    protected  ListView mListView;
+    protected ListView mListView;
 
     @InjectView(R.id.empty_state_layout)
     protected View mEmptyView;
 
     /**
-     * This View overlaps the progress circle. Set it to visible in order to hide the progress circle
-     * when done fetching for data.
+     * A child of the empty view container. This View overlaps the progress circle. Set it to
+     * visible in order to hide the progress circle when done fetching for data.
      */
     @InjectView(R.id.text_and_button_empty_view)
     protected View mEmptyTextButtonView;
@@ -96,7 +96,7 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
         ButterKnife.inject(this, view);
@@ -128,7 +128,13 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
 
         mEmptyTextButtonView.setVisibility(View.VISIBLE);
 
+        //ui shouldn't allow user to make a fetchFriends call if they don't have the credentials to do it
+        //so this event will only be called if they already have twitter/fb connected
+        mEmptyTextView.setText(R.string.follow_friends_no_friends_connected);
+        mConnectButton.setVisibility(View.GONE);
+
         if (event.isSuccessful()) {
+
             getAdapter().setAccounts(event.getAccounts());
             getAdapter().notifyDataSetChanged();
             return;
@@ -142,7 +148,8 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
             return;
         }
         //event error
-        showToastError(event.getErrorMessage());
+        mEmptyTextView.setText(R.string.follow_friends_error_retrieving_friends);
+        Log.e(TAG, event.getErrorMessage());
     }
 
     public void onEventMainThread(FollowAccountEvent event) {
