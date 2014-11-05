@@ -67,6 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/navigation_profile"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginBottom="@dimen/spacing_8"
         android:orientation="vertical">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -104,12 +106,11 @@
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/header_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/vertical_divider"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/spacing_16"
+        android:gravity="center_vertical"
         android:text="@string/navigation_recent_activity_header"
         android:textColor="@color/d_medium_gray"
         app:fontName="whitney_medium_sc" />
