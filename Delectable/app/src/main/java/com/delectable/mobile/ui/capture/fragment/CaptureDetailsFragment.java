@@ -68,24 +68,25 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         mCaptureDetailsView = (CaptureDetailsView) view.findViewById(R.id.capture_details_view);
         mCaptureDetailsView.setActionsHandler(this);
 
-        mScrollView = (ScrollView) mView.findViewById(R.id.capture_details_scroll_view);
+        mScrollView = (ScrollView) view.findViewById(R.id.capture_details_scroll_view);
         mScrollView.getViewTreeObserver().addOnScrollChangedListener(
-            new ViewTreeObserver.OnScrollChangedListener() {
+                new ViewTreeObserver.OnScrollChangedListener() {
 
-                View wineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
-                View wineImageView = wineBanner.findViewById(R.id.wine_image);
+                    View wineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
 
-                @Override
-                public void onScrollChanged() {
-                    int scrollY = mScrollView.getScrollY();
-                    float height = wineBanner.getHeight();
-                    // check if header is still visible
-                    if (scrollY > height) {
-                        return;
+                    View wineImageView = wineBanner.findViewById(R.id.wine_image);
+
+                    @Override
+                    public void onScrollChanged() {
+                        int scrollY = mScrollView.getScrollY();
+                        float height = wineBanner.getHeight();
+                        // check if header is still visible
+                        if (scrollY > height) {
+                            return;
+                        }
+                        wineImageView.setTranslationY(scrollY / 2f);
                     }
-                    wineImageView.setTranslationY(scrollY / 2f);
-                }
-        });
+                });
 
         return view;
     }
