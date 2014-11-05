@@ -59,6 +59,10 @@ public class CacheListing<T extends IDable> {
         this.item_ids = itemIds;
     }
 
+    public void removeItemId(String itemId) {
+        item_ids.remove(itemId);
+    }
+
     @Override
     public String toString() {
         return "CacheListing{" +

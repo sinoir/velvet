@@ -19,8 +19,6 @@ public class CapturesPendingCapturesListingModel {
 
     private static final String TAG = CapturesPendingCapturesListingModel.class.getSimpleName();
 
-    private static final String TYPE_USER_CAPTURES = TAG + "users_";
-
     private final HashMap<String, CacheListing<BaseListingElement>> mMap
             = new HashMap<String, CacheListing<BaseListingElement>>();
 
@@ -31,14 +29,27 @@ public class CapturesPendingCapturesListingModel {
     }
 
     public Listing<BaseListingElement> getUserCaptures(String accountId) {
-        String key = TYPE_USER_CAPTURES + accountId;
-        return getCachedCaptures(key);
-
+        return getCachedCaptures(accountId);
     }
 
     public void saveUserCaptures(String accountId, Listing<BaseListingElement> listing) {
-        String key = TYPE_USER_CAPTURES + accountId;
-        saveListing(key, listing);
+        saveListing(accountId, listing);
+    }
+
+    public void discardCaptureFromList(String accountId, String captureId) {
+
+        //first remove string id from cacheListing
+        CacheListing<BaseListingElement> cacheListing = mMap.get(accountId);
+        if (cacheListing == null) {
+            //nothing in cache
+            return;
+        }
+        cacheListing.removeItemId(captureId);
+
+        //then remove object from model
+        mPendingCapturesModel.deleteCapture(captureId);
+
+        //no need to delete item from CaptureDetailsModel bc
     }
 
     public void clear() {
