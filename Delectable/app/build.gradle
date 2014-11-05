@@ -85,15 +85,9 @@ android {
             signingConfig signingConfigs.debug
             buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
         }
-        alpha {
-            versionNameSuffix "-alpha-" + build_date_var
-            debuggable false
-            runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
-            signingConfig signingConfigs.release
-            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-        }
+
         release {
+            debuggable false
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
