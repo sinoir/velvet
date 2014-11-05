@@ -66,6 +66,7 @@
             android:theme="@style/DelectableTheme.NoActionBar">
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "delectable://captures” -->
@@ -97,6 +98,7 @@
             android:theme="@style/DelectableTheme.NoActionBar">
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "delectable://capture” -->
@@ -106,6 +108,18 @@
 
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.delectable.mobile.ui.capture.activity.LikingPeopleActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme" />
+
+        <activity
+            android:name="com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme" />
 
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity"
@@ -120,6 +134,7 @@
             android:theme="@style/DelectableTheme.NoActionBar">
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "delectable://base_wine” -->

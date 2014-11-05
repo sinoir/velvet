@@ -234,6 +234,16 @@ public class CaptureDetails extends CaptureMinimal {
         this.comments = comments;
     }
 
+    public int getCommentsCount() {
+        if (comments == null || comments.isEmpty()) {
+            return 0;
+        }
+        // if first comment is from capturer it is not considered a regular comment
+        return (comments.get(0).getAccountId().equals(capturer_participant.getId()))
+                ? comments.size() - 1
+                : comments.size();
+    }
+
     @Override
     public String toString() {
         return "CaptureDetails{" +
@@ -265,6 +275,30 @@ public class CaptureDetails extends CaptureMinimal {
         ArrayList<TaggeeContact> facebook;
 
         ArrayList<TaggeeContact> contact;
+
+        public ArrayList<AccountMinimal> getRegistered() {
+            return registered;
+        }
+
+        public ArrayList<TaggeeContact> getFacebook() {
+            return facebook;
+        }
+
+        public ArrayList<TaggeeContact> getContact() {
+            return contact;
+        }
+
+        /**
+         * @return Returns {@code null} if userId wasn't found.
+         */
+        public AccountMinimal checkForRegisteredUser(String userId) {
+            for (AccountMinimal account : registered) {
+                if (account.getId().equals(userId)) {
+                    return account;
+                }
+            }
+            return null;
+        }
 
         @Override
         public String toString() {

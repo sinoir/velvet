@@ -16,6 +16,7 @@
     <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
+    <string name="report">Report</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
@@ -124,6 +125,52 @@
     <string name="profile_tab_recent">recent</string>
     <string name="profile_tab_top_rated">top rated</string>
 
+    <!--user captures -->
+    <string name="user_captures_id_in_progress">identification in progress</string>
+    <string name="user_captures_check_back">Check back in a few minutes</string>
+    <plurals name="likes_count">
+        <item quantity="one">1 like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="comments_count">
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
+    <!--used when signed in user is part of context-->
+    <string name="you">you</string>
+
+    <!--you without location / other user with comment-->
+    <plurals name="with_xx_friends_zz_time_ago">
+        <!--"zero" quantity would just be the time stamp-->
+        <item quantity="one">with %1$d friend %2$s</item>
+        <item quantity="other">with %1$d friends %2$s</item>
+    </plurals>
+
+    <!--you with location / other user with comment-->
+    <!--this is the "zero" quantity of the plural below, bc english grammar doesn't differentiate zero quantities-->
+    <string name="at_yy_place_zz_time_ago">at %1$s %2$s</string>
+    <plurals name="with_xx_friends_at_yy_place_zz_time_ago">
+        <item quantity="one">with %1$d friend at %2$s %3$s</item>
+        <item quantity="other">with %1$d friends at %2$s %3$s</item>
+    </plurals>
+
+    <!--other user without location-->=
+    <!--"zero" quantity-->
+    <string name="capturer_tagged_user_zz_time_ago">%1$s tagged %2$s %3$s</string>
+    <plurals name="capturer_tagged_user_and_xx_friends_zz_time_ago">
+        <item quantity="one">%1$s tagged %2$s and %3$d friend %4$s</item>
+        <item quantity="other">%1$s tagged %2$s and %3$d friends %4$s</item>
+    </plurals>
+
+    <!--other user with location-->
+    <!--"zero" quantity-->
+    <string name="capturer_tagged_user_at_yy_place_zz_time_ago">%1$s tagged %2$s at %3$s %4$s</string>
+    <plurals name="capturer_tagged_user_and_xx_friends_at_yy_place_zz_time_ago">
+        <item quantity="one">%1$s tagged %2$s and %3$d friend at %4$s %5$s</item>
+        <item quantity="other">%1$s tagged %2$s and %3$d friends at %4$s %5$s</item>
+    </plurals>
+
+
     <!-- Followers -->
     <string name="followers_title">Followers</string>
     <string name="followers_no_followers">Looks like there are no followers.</string>
@@ -132,15 +179,44 @@
 
 
     <!-- Capture Feed -->
+    <string name="cap_feed_tagged_count">%d people shared this wine</string>
     <plurals name="cap_feed_likes_count">
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>
+    </plurals>
+    <string name="cap_feed_divider">•</string>
+    <plurals name="cap_feed_comments_count">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
     </plurals>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
     <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
     <string name="cap_feed_at_location">at %s</string>
+    <string name="cap_feed_at_location_time">— at %1$s %2$s</string>
+    <string name="cap_feed_at_time">— added %s</string>
+    <string name="cap_feed_no_comment">At %1$s %2$s</string>
+    <string name="cap_feed_no_comment_no_location">Added %s</string>
+    <plurals name="cap_feed_with">
+        <item quantity="one">with %s</item>
+        <item quantity="other">with %1$s and %2$d others</item>
+    </plurals>
+    <string name="cap_feed_with_two">with %1$s and 1 other</string>
     <string name="capture_remove">Do you want to remove this wine from your history?</string>
+    <string name="cap_feed_like_text_one">%s liked this</string>
+    <string name="cap_feed_like_text_two">%1$s and %2$s liked this</string>
+    <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more liked this</string>
+    <!-- anchors are used to find spanning bounds -->
+    <string name="cap_feed_like_text_anchor_like">like</string>
+    <string name="cap_feed_like_text_anchor_and">and</string>
+
+    <!-- Capture Overflow Menu -->
+    <string name="cap_action_recommend">Recommend</string>
+    <string name="cap_action_recommend_text">You might like this wine! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
+    <string name="cap_action_edit">Edit rating</string>
+    <string name="cap_action_flag">Report incorrect wine</string>
+    <string name="cap_action_remove">Remove</string>
+    <string name="capture_report">Do you want to report this wine as incorrect?</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>

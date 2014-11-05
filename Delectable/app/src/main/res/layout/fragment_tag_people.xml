@@ -45,21 +45,21 @@
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:visibility="visible">
 
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/general_row_height"
-            android:layout_marginTop="@dimen/spacing_medium" />
+            android:layout_marginTop="@dimen/spacing_16" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/empty_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:background="@android:color/white"
-            android:padding="@dimen/spacing_large"
+            android:padding="@dimen/spacing_32"
             android:text="@string/tag_friends_empty_state_text"
             android:textColor="@color/d_medium_gray"
             android:textSize="@dimen/text_size_medium"
@@ -68,6 +68,4 @@
 
 
     </RelativeLayout>
-
-
 </RelativeLayout>

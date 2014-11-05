@@ -30,6 +30,8 @@ public abstract class BaseListingElement implements IDable{
 
     private String e_tag;
 
+    private ListParams list_params;
+
     public Date getCreatedAtDate() {
         return DateHelperUtil.dateFromDouble(created_at);
     }
@@ -66,6 +68,14 @@ public abstract class BaseListingElement implements IDable{
         this.e_tag = e_tag;
     }
 
+    public ListParams getListParams() {
+        return list_params;
+    }
+
+    public void setListParams(ListParams list_params) {
+        this.list_params = list_params;
+    }
+
     @Override
     public String toString() {
         return "BaseListingElement{" +
@@ -73,6 +83,7 @@ public abstract class BaseListingElement implements IDable{
                 ", created_at=" + created_at +
                 ", context='" + context + '\'' +
                 ", e_tag='" + e_tag + '\'' +
+                ", list_params=" + list_params +
                 '}';
     }
 }

@@ -160,7 +160,7 @@
         android:id="@+id/empty_view_wine_profile"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:padding="@dimen/spacing_large"
+        android:padding="@dimen/spacing_32"
         android:text="@string/empty_wine_profile"
         android:visibility="gone" />
 
