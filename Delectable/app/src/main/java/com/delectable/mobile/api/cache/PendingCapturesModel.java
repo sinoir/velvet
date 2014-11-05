@@ -11,26 +11,19 @@ public class PendingCapturesModel {
 
     private static final String TAG = PendingCapturesModel.class.getSimpleName();
 
-    private static final String KEY_PREFIX = "pending_captures_";
-
-    /**
-     * static final Map used as a singleton for caching.
-     */
     private final HashMap<String, PendingCapture> mMap
             = new HashMap<String, PendingCapture>();
 
     public PendingCapture getCapture(String id) {
-        String key = KEY_PREFIX + id;
-        return mMap.get(key);
+        return mMap.get(id);
     }
 
     public void saveCapture(PendingCapture capture) {
-        String key = KEY_PREFIX + capture.getId();
-        mMap.put(key, capture);
+        mMap.put(capture.getId(), capture);
     }
 
     public void setCaptureTransitionState(String id, TransitionState state) {
-        PendingCapture capture =  getCapture(id);
+        PendingCapture capture = getCapture(id);
         if (capture == null) {
             Log.wtf(TAG, "capture to be transacted upon doesn't exist in cache");
             return;
@@ -45,8 +38,7 @@ public class PendingCapturesModel {
     }
 
     public void deleteCapture(String id) {
-        String key = KEY_PREFIX + id;
-        mMap.remove(key);
+        mMap.remove(id);
     }
 
     public void clear() {
