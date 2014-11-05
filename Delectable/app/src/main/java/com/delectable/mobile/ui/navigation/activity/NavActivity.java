@@ -14,10 +14,10 @@ import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 
-import android.app.ActionBar;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -53,7 +53,7 @@ public class NavActivity extends BaseActivity
         setContentView(R.layout.activity_nav);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -81,7 +81,7 @@ public class NavActivity extends BaseActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         mCurrentSelectedNavItem = position;
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         BaseFragment fragment = null;
         switch (position) {
             case NavHeader.NAV_PROFILE:
@@ -115,7 +115,7 @@ public class NavActivity extends BaseActivity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);

@@ -2,15 +2,15 @@ package com.delectable.mobile.ui.wineprofile.dialog;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
+import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

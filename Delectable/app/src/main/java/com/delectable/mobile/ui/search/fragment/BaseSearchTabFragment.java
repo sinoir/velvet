@@ -6,6 +6,8 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,11 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,21 +54,12 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Custom Back Arrow...
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.search_menu, menu);
 
-        mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
         mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setOnQueryTextListener(this);
-
-        //programmatically change search close icon, unable to change searchView attributes via xml styles
-        int closeButtonId = mSearchView.getContext().getResources()
-                .getIdentifier("android:id/search_close_btn", null, null);
-        ImageView closeButton = (ImageView) mSearchView.findViewById(closeButtonId);
-        closeButton.setImageResource(R.drawable.btn_ab_close_search);
-        //TODO platform bug with setIconifiedByDefault, makes searchview look wierd
-        //searchView.setIconifiedByDefault(false);
 
         if (!getAdapter().isEmpty()) {
             mSearchView.clearFocus();

@@ -14,27 +14,22 @@ import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.facebook.Session;
-import com.iainconnor.objectcache.CacheManager;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -55,38 +50,21 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Inject
     protected CaptureDetailsModel mCaptureDetailsModel;
 
-
     @Inject
     protected EventBus mEventBus;
 
-    @Inject
-    protected CacheManager mCache;
-
-    private State state;
-
     private Set<LifecycleListener> lifecycleListeners;
 
-    private ActionBar mActionBar;
-
-    private ImageView mCustomHomeImageView;
-
-    private RelativeLayout mCustomActionBarView;
-
-    private boolean mIsUsingCustomActionbarView = false;
-
-    private boolean mHasCustomActionBarTitle;
+    protected ActionBar mActionBar;
 
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
-        state = State.constructed;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CrashlyticsUtil.log(TAG + ".onCreate");
-        state = State.created;
-        mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
     }
 
@@ -103,6 +81,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         CrashlyticsUtil.log(TAG + ".onAttach");
+        if (activity instanceof ActionBarActivity) {
+            mActionBar = ((ActionBarActivity) activity).getSupportActionBar();
+        }
     }
 
     @Override
@@ -116,7 +97,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onStart() {
         super.onStart();
         CrashlyticsUtil.log(TAG + ".onStart");
-        state = State.started;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStart();
         }
@@ -130,15 +110,12 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onResume() {
         super.onResume();
         CrashlyticsUtil.log(TAG + ".onResume");
-        state = State.resumed;
-        toggleCustomActionBar();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         CrashlyticsUtil.log(TAG + ".onPause");
-        state = State.paused;
         hideKeyboard();
     }
 
@@ -146,7 +123,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onStop() {
         super.onStop();
         CrashlyticsUtil.log(TAG + ".onStop");
-        state = State.stopped;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStop();
         }
@@ -166,10 +142,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onDestroy() {
         super.onDestroy();
         CrashlyticsUtil.log(TAG + ".onDestroy");
-        state = State.destroyed;
         lifecycleListeners.clear();
-        if (mHasCustomActionBarTitle && getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(null);
+        if (mActionBar != null) {
+            mActionBar.setTitle(null);
         }
     }
 
@@ -215,9 +190,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     }
 
     protected void setActionBarTitle(String title) {
-        mHasCustomActionBarTitle = true;
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(title);
+        if (mActionBar != null) {
+            mActionBar.setTitle(title);
         }
     }
 
@@ -241,13 +215,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         CaptureNoteListingModel.clear();
         CaptureListingModel.clear();
 
-        try {
-            // TODO: run this on background thread?  Also, might be handy to be selective on what gets deleted.
-            mCache.clear();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // Launch Sign Up / Log In screen
         Intent launchIntent = new Intent();
         launchIntent.setClass(getActivity(), LoginActivity.class);
@@ -270,69 +237,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         mEventBus.post(new NavigationDrawerCloseEvent());
     }
 
-    /**
-     * * Override home icon with custom view with click listener <p/> Note: Having a title will push
-     * this view to the right of the title.
-     *
-     * @param resId    - Drawable resource
-     * @param listener (Optional) - OnClick for the custom view
-     */
-    public void overrideHomeIcon(int resId, View.OnClickListener listener) {
-        // TODO: Find if there's a better alternative: having a title will push this custom view to the right
-        ActionBar.LayoutParams customViewpParams = new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        RelativeLayout.LayoutParams imageViewpParams = new RelativeLayout.LayoutParams(
-                ActionBar.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-
-        mCustomActionBarView = new RelativeLayout(getActivity());
-
-        // Custom Image View
-        mCustomHomeImageView = new ImageView(getActivity());
-        int horizontalPadding = (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-        mCustomHomeImageView.setPadding(horizontalPadding, 0, horizontalPadding, 0);
-        mCustomHomeImageView.setImageResource(resId);
-
-        if (listener != null) {
-            mCustomHomeImageView.setOnClickListener(listener);
-        }
-
-        mCustomActionBarView.addView(mCustomHomeImageView, imageViewpParams);
-
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setCustomView(mCustomActionBarView, customViewpParams);
-        mIsUsingCustomActionbarView = true;
-    }
-
-    private void toggleCustomActionBar() {
-        if (mActionBar == null) {
-            return;
-        }
-        if (mIsUsingCustomActionbarView && mCustomActionBarView != null) {
-            mActionBar.setDisplayShowCustomEnabled(true);
-            mActionBar.setDisplayShowHomeEnabled(false);
-            mActionBar.setCustomView(mCustomActionBarView);
-        } else if (mActionBar.getCustomView() != null) {
-            mActionBar.setDisplayShowCustomEnabled(false);
-            mActionBar.setDisplayShowHomeEnabled(true);
-        }
-    }
-
     public void launchWineCapture() {
         Intent launchIntent = new Intent(getActivity(), WineCaptureActivity.class);
         startActivity(launchIntent);
-    }
-
-    private static enum State {
-        constructed,
-        created,
-        started,
-        resumed,
-        paused,
-        stopped,
-        destroyed
     }
 
 }
