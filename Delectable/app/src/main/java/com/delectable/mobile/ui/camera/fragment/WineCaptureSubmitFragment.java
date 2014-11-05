@@ -24,6 +24,7 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.PhotoUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -152,7 +153,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, byteArrayOutputStream);
             mRawImageData = byteArrayOutputStream.toByteArray();
         }
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
