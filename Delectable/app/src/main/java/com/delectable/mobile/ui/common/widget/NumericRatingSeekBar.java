@@ -6,7 +6,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -82,8 +81,7 @@ public class NumericRatingSeekBar extends RelativeLayout {
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mHappyFaceScoreContainer.animate()
                         .alpha(1)
-                        .setDuration(200)
-                        .setInterpolator(new DecelerateInterpolator())
+                        .setDuration(100)
                         .start();
             }
 
