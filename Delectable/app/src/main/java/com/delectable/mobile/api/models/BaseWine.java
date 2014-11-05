@@ -38,6 +38,33 @@ public class BaseWine extends BaseWineMinimal implements Parcelable, Ratingsable
 
     private String producer_id;
 
+    /**
+     * Load up Default WineProfile
+     * @return
+     */
+    public WineProfileSubProfile getDefaultWineProfile() {
+        return getWineProfileByWineId(default_wine_profile_id);
+    }
+
+    /**
+     * Load up a Wine Profile within the BaseWine by ID
+     * @param wineId
+     * @return
+     */
+    public WineProfileSubProfile getWineProfileByWineId(String wineId) {
+        if (wine_profiles == null) {
+            return null;
+        }
+        if (wineId == null) {
+            return null;
+        }
+        for (WineProfileSubProfile wineProfile : wine_profiles) {
+            if (wineId.equalsIgnoreCase(wineProfile.getId())) {
+                return wineProfile;
+            }
+        }
+        return null;
+    }
 
     public RatingsSummaryHash getRatingsSummary() {
         return ratings_summary;
