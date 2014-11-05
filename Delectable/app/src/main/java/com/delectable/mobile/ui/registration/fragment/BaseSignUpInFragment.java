@@ -78,7 +78,7 @@ public abstract class BaseSignUpInFragment extends BaseFragment
             }
 
             // TODO: Handle more errors and other conditions.
-            showToastError("Failed to connect to Facebook");
+            showToastError(getString(R.string.error_facebook_connect_failed));
         }
     };
 

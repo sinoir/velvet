@@ -2,23 +2,21 @@ package com.delectable.mobile.ui.tagpeople.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.accounts.FetchedDelectafriendsEvent;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.ui.events.NavigationEvent;
-import com.delectable.mobile.api.events.accounts.FetchedDelectafriendsEvent;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.tagpeople.widget.TagPeopleAdapter;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +27,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class TagPeopleFragment extends BaseFragment {
 
@@ -47,14 +46,18 @@ public class TagPeopleFragment extends BaseFragment {
     @InjectView(R.id.with_text)
     protected TextView mWithTextView;
 
+    /**
+     * This view is a child of the empty view container, and covers the progress bar when it's set to visible.
+     */
+    @InjectView(R.id.empty_text_view)
+    protected TextView mEmptyTextView;
+
     @Inject
-    AccountController mAccountController;
+    protected AccountController mAccountController;
 
-    ArrayList<TaggeeContact> mDelectaFriends;
+    private ArrayList<TaggeeContact> mDelectaFriends = new ArrayList<TaggeeContact>();
 
-    ArrayList<TaggeeContact> mSelectedItems;
-
-    private View mView;
+    private ArrayList<TaggeeContact> mSelectedItems;
 
     private TagPeopleAdapter mAdapter;
 
@@ -75,7 +78,7 @@ public class TagPeopleFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
 
-        mDelectaFriends = new ArrayList<TaggeeContact>();
+        mAdapter = new TagPeopleAdapter(mDelectaFriends);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -91,8 +94,8 @@ public class TagPeopleFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_tag_people, container, false);
-        ButterKnife.inject(this, mView);
+        View view = inflater.inflate(R.layout.fragment_tag_people, container, false);
+        ButterKnife.inject(this, view);
 
         setHasOptionsMenu(true);
         overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
@@ -107,40 +110,31 @@ public class TagPeopleFragment extends BaseFragment {
             }
         });
 
-        mAdapter = new TagPeopleAdapter(mDelectaFriends);
         mListView.setAdapter(mAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TaggeeContact obj = mAdapter.getItem(position);
-                if (mSelectedItems.contains(obj)) {
-                    mSelectedItems.remove(obj);
-                } else {
-                    mSelectedItems.add(obj);
-                }
-                updateWithFriendsCount();
-            }
-        });
-
-        View emptyView = mView.findViewById(R.id.empty_view_tag_people);
-        View connectButton = emptyView.findViewById(R.id.connect_facebook_button);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO connect to facebook
-                mEventBus.post(new NavigationEvent(NavHeader.NAV_SETTINGS));
-            }
-        });
+        View emptyView = view.findViewById(R.id.empty_view);
         mListView.setEmptyView(emptyView);
 
-        return mView;
+        return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        //hide emptyTextView in order to show progress dialog
+        mEmptyTextView.setVisibility(View.GONE);
         mAccountController.fetchDelectafriends();
+    }
+
+    @OnItemClick(R.id.list_view)
+    protected void onItemClick(int position) {
+        TaggeeContact obj = mAdapter.getItem(position);
+        if (mSelectedItems.contains(obj)) {
+            mSelectedItems.remove(obj);
+        } else {
+            mSelectedItems.add(obj);
+        }
+        updateWithFriendsCount();
     }
 
     @OnClick(R.id.with_container)
@@ -183,15 +177,21 @@ public class TagPeopleFragment extends BaseFragment {
     }
 
     public void onEventMainThread(FetchedDelectafriendsEvent event) {
-        if (event.isSuccessful()) {
-            mDelectaFriends.clear();
-            for (AccountMinimal account : event.getAccounts()) {
-                mDelectaFriends.add(new TaggeeContact(account));
-            }
-            mAdapter.notifyDataSetChanged();
-            updateSelectedFriends();
-        } else if (event.getErrorMessage() != null) {
-            showToastError(event.getErrorMessage());
+        mEmptyTextView.setVisibility(View.VISIBLE);
+        if (!event.isSuccessful()) {
+            mEmptyTextView.setText(R.string.tag_friends_error);
+            Log.d(TAG, event.getErrorMessage());
+            return;
+            //TODO if there already data, and the subsequent request is made and fails, how do we let the user know that it failed?
         }
+
+        //event successful!
+        mDelectaFriends.clear();
+        mEmptyTextView.setText(R.string.tag_friends_empty_state_text);
+        for (AccountMinimal account : event.getAccounts()) {
+            mDelectaFriends.add(new TaggeeContact(account));
+        }
+        mAdapter.notifyDataSetChanged();
+        updateSelectedFriends();
     }
 }

@@ -41,26 +41,31 @@
             android:src="@drawable/ic_next" />
     </RelativeLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/empty_view_tag_people"
-        android:visibility="gone"
+    <RelativeLayout
+        android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        android:padding="@dimen/spacing_32"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_row_height"
+            android:layout_marginTop="@dimen/spacing_16" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            style="@style/TextEmptyState"
-            android:text="@string/empty_tag_people"
-            android:paddingBottom="@dimen/spacing_32" />
+            android:id="@+id/empty_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/spacing_32"
+            android:text="@string/tag_friends_empty_state_text"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="@dimen/text_size_medium"
+            android:visibility="gone"
+            app:fontName="whitney_book" />
 
-        <com.delectable.mobile.ui.common.widget.Delectabutton
-            android:id="@+id/connect_facebook_button"
-            style="@style/delectabutton_facebook"
-            android:text="@string/connect_facebook_button" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
