@@ -45,12 +45,14 @@ android {
     defaultConfig {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
-        versionCode 2
-        versionName '1.01'
+        versionCode 3
+        versionName '1.02'
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
         buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
+        buildConfigField 'String', 'TWITTER_KEY', '"fSGhGQRt4QCl0lQMLKEr4g"'
+        buildConfigField 'String', 'TWITTER_SECRET', '"EVTtbtBOZFY9YMlV6GlkbUbiZwi7n62cfJSEfb5x9hI"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
     }
 
@@ -82,15 +84,9 @@ android {
             signingConfig signingConfigs.debug
             buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
         }
-        alpha {
-            versionNameSuffix "-alpha-" + build_date_var
-            debuggable false
-            runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
-            signingConfig signingConfigs.release
-            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-        }
+
         release {
+            debuggable false
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release

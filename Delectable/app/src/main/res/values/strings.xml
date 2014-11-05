@@ -20,6 +20,7 @@
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
+    <string name="error_facebook_connect_failed">Failed to connect to Facebook</string>
     <string name="error_no_instagram">In order to post to instagram, you must have it installed on your device</string>
     <string name="error_connect_facebook">In order to post to facebook, you must connect it to Delectable</string>
     <string name="error_connect_twitter">In order to post to twitter, you must connect it to Delectable</string>
@@ -261,6 +262,11 @@
     <string name="capture_submit_post">Post</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
 
+    <!--Capture Flow: Tag Friends -->
+    <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>
+    <string name="tag_friends_error">Error retrieving your friends list, please try again later.</string>
+
+
     <!--Follow Friends -->
     <string name="follow_friends_title">Follow Friends</string>
     <string name="follow_friends_wine_experts">wine experts</string>
@@ -269,6 +275,9 @@
     <string name="follow_friends_facebook">facebook</string>
     <string name="follow_friends_twitter">twitter</string>
     <string name="follow_friends_invite">Invite</string>
+    <string name="follow_friends_no_friends_connected">None of your friends have their accounts connected to Delectable!</string>
+    <string name="follow_friends_error_retrieving_friends">Sorry, we had trouble retrieving your friend list, please try again later!</string>
+
 
     <!-- Search -->
     <string name="search_title">Search</string>
