@@ -305,4 +305,33 @@
         <item name="fontName">whitney_book</item>
     </style>
 
+    <style name="ButtonDChestNutBG">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_login_done</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textColor">@color/d_white</item>
+        <item name="android:textSize">@dimen/signup_in_done_button_text_height</item>
+        <item name="fontName">whitney_medium_sc</item>
+    </style>
+
+    <style name="PurchaseWineCheckPrice">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/d_chestnut</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="PurchaseWineSoldOut">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
