@@ -1,6 +1,10 @@
 package com.delectable.mobile.api.controllers;
 
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.AddPaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.AddShippingAddressJob;
+import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.api.jobs.accounts.FacebookifyProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.FetchAccountCapturesJob;
@@ -11,25 +15,33 @@ import com.delectable.mobile.api.jobs.accounts.FetchActivityFeedJob;
 import com.delectable.mobile.api.jobs.accounts.FetchDelectafriendsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFacebookSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowerFeedJob;
+import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
+import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.api.jobs.accounts.FetchPaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.FetchShippingAddressesJob;
 import com.delectable.mobile.api.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.RemovePaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryPaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
+import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.BaseListingElement;
-import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
-import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
-import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
-import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.PaymentMethod;
+import com.delectable.mobile.api.models.ShippingAddress;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -48,8 +60,10 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
     }
 
-    public void fetchActivityFeed(String requestId, String before, String after, Boolean isPullToRefresh) {
-        mJobManager.addJobInBackground(new FetchActivityFeedJob(requestId, before, after, isPullToRefresh));
+    public void fetchActivityFeed(String requestId, String before, String after,
+            Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchActivityFeedJob(requestId, before, after, isPullToRefresh));
     }
 
     /**
@@ -175,4 +189,39 @@ public class AccountController {
                 new FetchFollowerFeedJob(requestId, context, listing, isPullToRefresh));
     }
 
+    public void fetchShippingAddresses() {
+        mJobManager.addJobInBackground(new FetchShippingAddressesJob());
+    }
+
+    public void addShippingAddress(BaseAddress address, boolean isPrimary) {
+        mJobManager.addJobInBackground(new AddShippingAddressJob(address, isPrimary));
+    }
+
+    public void updateShippingAddress(ShippingAddress address, boolean isPrimary) {
+        mJobManager.addJobInBackground(new UpdateShippingAddressJob(address, isPrimary));
+    }
+
+    public void removeShippingAddress(String addressId) {
+        mJobManager.addJobInBackground(new RemoveShippingAddressJob(addressId));
+    }
+
+    public void setPrimaryShippingAddress(String addressId) {
+        mJobManager.addJobInBackground(new SetPrimaryShippingAddressJob(addressId));
+    }
+
+    public void fetchPaymentMethods() {
+        mJobManager.addJobInBackground(new FetchPaymentMethodJob());
+    }
+
+    public void addPaymentMethod(PaymentMethod paymentMethod, boolean isPrimary) {
+        mJobManager.addJobInBackground(new AddPaymentMethodJob(paymentMethod, isPrimary));
+    }
+
+    public void setPrimaryPaymentMethod(String paymentMethodId) {
+        mJobManager.addJobInBackground(new SetPrimaryPaymentMethodJob(paymentMethodId));
+    }
+
+    public void removePaymentMethod(String paymentMethodId) {
+        mJobManager.addJobInBackground(new RemovePaymentMethodJob(paymentMethodId));
+    }
 }

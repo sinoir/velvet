@@ -10,6 +10,7 @@ import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.DeviceContactsModel;
 import com.delectable.mobile.api.cache.FollowersFollowingModel;
 import com.delectable.mobile.api.cache.PendingCapturesModel;
+import com.delectable.mobile.api.cache.WineSourceModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
@@ -21,6 +22,8 @@ import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.MyJobManager;
 import com.delectable.mobile.api.jobs.accounts.AddIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.AddPaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.AddShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateFacebookJob;
 import com.delectable.mobile.api.jobs.accounts.AssociateTwitterJob;
 import com.delectable.mobile.api.jobs.accounts.FacebookifyProfilePhotoJob;
@@ -35,15 +38,23 @@ import com.delectable.mobile.api.jobs.accounts.FetchFollowerFeedJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowersJob;
 import com.delectable.mobile.api.jobs.accounts.FetchFollowingsJob;
 import com.delectable.mobile.api.jobs.accounts.FetchInfluencerSuggestionsJob;
+import com.delectable.mobile.api.jobs.accounts.FetchPaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.FetchShippingAddressesJob;
 import com.delectable.mobile.api.jobs.accounts.FetchTwitterSuggestionsJob;
 import com.delectable.mobile.api.jobs.accounts.FollowAccountJob;
 import com.delectable.mobile.api.jobs.accounts.RemoveIdentifierJob;
+import com.delectable.mobile.api.jobs.accounts.RemovePaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.RemoveShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.SearchAccountsJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryPaymentMethodJob;
+import com.delectable.mobile.api.jobs.accounts.SetPrimaryShippingAddressJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateIdentifierJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfileJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateProfilePhotoJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
+import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.jobs.basewines.FetchBaseWineJob;
+import com.delectable.mobile.api.jobs.basewines.FetchWineSourceJob;
 import com.delectable.mobile.api.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.api.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
@@ -142,6 +153,7 @@ import de.greenrobot.event.EventBus;
                 FollowersFollowingModel.class,
                 DeviceContactsModel.class,
                 BaseWineModel.class,
+                WineSourceModel.class,
                 // Jobs
                 BaseJob.class,
                 FetchMotdJob.class,
@@ -190,6 +202,16 @@ import de.greenrobot.event.EventBus;
                 FetchBaseWineJob.class,
                 FetchCaptureNotesJob.class,
                 MarkCaptureHelpfulJob.class,
+                FetchWineSourceJob.class,
+                FetchShippingAddressesJob.class,
+                AddShippingAddressJob.class,
+                UpdateShippingAddressJob.class,
+                RemoveShippingAddressJob.class,
+                SetPrimaryShippingAddressJob.class,
+                FetchPaymentMethodJob.class,
+                AddPaymentMethodJob.class,
+                SetPrimaryPaymentMethodJob.class,
+                RemovePaymentMethodJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,

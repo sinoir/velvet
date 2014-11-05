@@ -21,6 +21,24 @@ public class PaymentMethod {
 
     private String cvc;
 
+    public PaymentMethod() {
+    }
+
+    /**
+     * Build Payment method for Creating Payment Method
+     *
+     * @param number    - Creditcard Number
+     * @param exp_month - Expiration Month
+     * @param exp_year  - Expiration year
+     * @param cvc       - CVC Secret
+     */
+    public PaymentMethod(String number, String exp_month, String exp_year, String cvc) {
+        this.number = number;
+        this.exp_month = exp_month;
+        this.exp_year = exp_year;
+        this.cvc = cvc;
+    }
+
     public String getId() {
         return id;
     }
@@ -91,5 +109,20 @@ public class PaymentMethod {
 
     public void setCvc(String cvc) {
         this.cvc = cvc;
+    }
+
+    @Override
+    public String toString() {
+        return "PaymentMethod{" +
+                "id='" + id + '\'' +
+                ", primary=" + primary +
+                ", last_four='" + last_four + '\'' +
+                ", type='" + type + '\'' +
+                ", expiration='" + expiration + '\'' +
+                ", number='" + number + '\'' +
+                ", exp_month='" + exp_month + '\'' +
+                ", exp_year='" + exp_year + '\'' +
+                ", cvc='" + cvc + '\'' +
+                '}';
     }
 }
