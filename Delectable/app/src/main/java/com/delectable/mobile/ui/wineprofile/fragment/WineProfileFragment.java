@@ -45,6 +45,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -283,7 +284,7 @@ public class WineProfileFragment extends BaseFragment implements
         ListView listView = (ListView) view.findViewById(R.id.list_view);
 
         //prepare header view
-        View header = inflater.inflate(R.layout.wine_profile_header, null, false);
+        final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
 
         updateBannerData();
@@ -304,7 +305,25 @@ public class WineProfileFragment extends BaseFragment implements
 
         // Setup Floating Camera Button
         mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
-        mCameraButton.attachToListView(listView);
+        FloatingActionButton.FabOnScrollListener fabOnScrollListener = new FloatingActionButton.FabOnScrollListener() {
+
+            final View wineImageView = header.findViewById(R.id.wine_image);
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+
+                final float top = -header.getTop();
+                float height = header.getHeight();
+                // check if header is still visible
+                if (top > height) {
+                    return;
+                }
+                wineImageView.setTranslationY(top / 2f);
+            }
+        };
+        mCameraButton.attachToListView(listView, fabOnScrollListener);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
