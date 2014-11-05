@@ -3,12 +3,8 @@ package com.delectable.mobile.ui.settings.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.AccountConfig;
-import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.models.PhotoHash;
-import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
@@ -16,6 +12,10 @@ import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedSettingEvent;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.AccountConfig;
+import com.delectable.mobile.api.models.Identifier;
+import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
@@ -784,7 +784,7 @@ public class SettingsFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.contact,
+    @OnClick({R.id.send_feedback,
             R.id.terms_of_use,
             R.id.privacy_policy,
             R.id.sign_out})
@@ -795,7 +795,7 @@ public class SettingsFragment extends BaseFragment {
         String text = tv.getText().toString();
 
         switch (v.getId()) {
-            case R.id.contact:
+            case R.id.send_feedback:
                 launchEmailFeedback();
                 break;
             case R.id.terms_of_use:
