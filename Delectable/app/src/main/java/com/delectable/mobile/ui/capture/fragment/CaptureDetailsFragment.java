@@ -68,7 +68,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         mCaptureDetailsView = (CaptureDetailsView) view.findViewById(R.id.capture_details_view);
         mCaptureDetailsView.setActionsHandler(this);
 
-        mScrollView = (ScrollView) mView.findViewById(R.id.capture_details_scroll_view);
+        mScrollView = (ScrollView) view.findViewById(R.id.capture_details_scroll_view);
         mScrollView.getViewTreeObserver().addOnScrollChangedListener(
             new ViewTreeObserver.OnScrollChangedListener() {
 
