@@ -94,6 +94,7 @@ android {
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
         release {
+            debuggable false
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release

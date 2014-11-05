@@ -126,6 +126,9 @@
 #JobQueue classes need to be kept in order to use the proguard-optimize rules for removing logs
 -keep class com.path.android.** { *; }
 
+#Floating Action Button
+-dontwarn com.melnykov.**
+
 #Remove Logs
 -assumenosideeffects class android.util.Log {
     public static boolean isLoggable(java.lang.String, int);
