@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.capture.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
@@ -25,8 +26,6 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
     @Inject
     CaptureDetailsModel mCaptureDetailsModel;
-
-    private View mView;
 
     private CaptureDetailsView mCaptureDetailsView;
 
@@ -61,11 +60,11 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_capture_details, container, false);
-        mCaptureDetailsView = (CaptureDetailsView) mView.findViewById(R.id.capture_details_view);
+        View view = inflater.inflate(R.layout.fragment_capture_details, container, false);
+        mCaptureDetailsView = (CaptureDetailsView) view.findViewById(R.id.capture_details_view);
         mCaptureDetailsView.setActionsHandler(this);
 
-        return mView;
+        return view;
     }
 
     @Override
@@ -111,6 +110,12 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
             loadLocalData();
         } else if (event.getErrorMessage() != null) {
             showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(AddCaptureCommentEvent event) {
+        if (event.isSuccessful() && mCaptureId.equals(event.getCaptureId())) {
+            loadLocalData();
         }
     }
 }
