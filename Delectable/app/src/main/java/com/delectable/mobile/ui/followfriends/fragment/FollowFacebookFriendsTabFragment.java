@@ -119,15 +119,23 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
             Log.d(TAG + ".Facebook", "Session State: " + session.getState());
             Log.d(TAG + ".Facebook", "Session:" + session);
             Log.d(TAG + ".Facebook", "Exception:" + exception);
-            // TODO: Handle errors and other conditions.
-            if (state.isOpened()) {
-                mEmptyTextButtonView.setVisibility(View.INVISIBLE); //show spinner
-                facebookConnect();
+
+            if (session.getState().equals(SessionState.OPENING)) {
+                return;
             }
+
+            if (state.isOpened()) {
+                facebookConnect();
+                return;
+            }
+
+            // TODO: Handle more errors and other conditions.
+            showToastError(getString(R.string.error_facebook_connect_failed));
         }
     };
 
     public void facebookConnect() {
+        mEmptyTextButtonView.setVisibility(View.INVISIBLE); //show spinner
         Session session = Session.getActiveSession();
         mAccountController.associateFacebook(session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
