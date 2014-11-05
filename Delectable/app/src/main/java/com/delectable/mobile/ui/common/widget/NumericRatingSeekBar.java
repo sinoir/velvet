@@ -5,8 +5,8 @@ import com.delectable.mobile.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -60,9 +60,6 @@ public class NumericRatingSeekBar extends RelativeLayout {
         View.inflate(context, R.layout.numeric_rating_bar, this);
         ButterKnife.inject(this);
 
-        final Animation animationFadeOut = AnimationUtils.loadAnimation(getContext(),
-                R.anim.fade_out);
-
         mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {
@@ -83,15 +80,22 @@ public class NumericRatingSeekBar extends RelativeLayout {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                mHappyFaceScoreContainer.clearAnimation();
-                mHappyFaceScoreContainer.setVisibility(View.VISIBLE);
+                mHappyFaceScoreContainer.animate()
+                        .alpha(1)
+                        .setDuration(200)
+                        .setInterpolator(new DecelerateInterpolator())
+                        .start();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                mHappyFaceScoreContainer.startAnimation(animationFadeOut);
-                mHappyFaceScoreContainer.setVisibility(View.INVISIBLE);
+                mHappyFaceScoreContainer.animate()
+                        .alpha(0)
+                        .setStartDelay(400)
+                        .setDuration(400)
+                        .setInterpolator(new AccelerateInterpolator())
+                        .start();
             }
         });
     }
