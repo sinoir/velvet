@@ -170,6 +170,9 @@
         <item quantity="other">%1$s tagged %2$s and %3$d friends at %4$s %5$s</item>
     </plurals>
 
+    <string name="remove_this_wine_from_your_list">Remove this wine from your list?</string>
+
+
 
     <!-- Followers -->
     <string name="followers_title">Followers</string>

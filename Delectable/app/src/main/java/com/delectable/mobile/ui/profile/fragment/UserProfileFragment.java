@@ -6,10 +6,12 @@ import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.controllers.PendingCapturesController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
+import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEvent;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
@@ -28,6 +30,7 @@ import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,6 +59,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private static final String CAPTURES_REQ = TAG + "_captures_req";
 
+    private static final String DELETE_PENDING_CAPTURE_REQ = TAG + "_delete_pending_capture_req";
+
+    private static final int DELETE_PENDING_CAPTURE_DIALOG = 1;
+
     @Inject
     protected CapturesPendingCapturesListingModel mListingModel;
 
@@ -82,6 +89,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     protected AccountController mAccountController;
 
     @Inject
+    protected PendingCapturesController mPendingCapturesController;
+
+
+    @Inject
     protected AccountModel mAccountModel;
 
     private CapturesPendingCapturesAdapter mAdapter;
@@ -97,6 +108,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private AccountProfile mUserAccount;
 
     private String mUserId;
+
+    private PendingCapture mCaptureToDelete;
+
 
     public UserProfileFragment() {
     }
@@ -446,6 +460,57 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void discardCapture(PendingCapture capture) {
+        mCaptureToDelete = capture;
+        String message = getString(R.string.remove_this_wine_from_your_list);
+        String remove = getString(R.string.remove);
+        String cancel = getString(R.string.cancel);
+        showConfirmationNoTitle(message, remove, cancel, DELETE_PENDING_CAPTURE_DIALOG);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DELETE_PENDING_CAPTURE_DIALOG) {
+            if (resultCode == Activity.RESULT_OK) {
+                mPendingCapturesController
+                        .deleteCapture(DELETE_PENDING_CAPTURE_REQ, mUserId,
+                                mCaptureToDelete.getId());
+            } else {
+                //user dismissed delete dialog, do nothing
+            }
+            mCaptureToDelete = null;
+        }
+    }
+
+
+    public void onEventMainThread(DeletedPendingCaptureEvent event) {
+        if (!DELETE_PENDING_CAPTURE_REQ.equals(event.getRequestId())) {
+            return;
+        }
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+
+            //revert back to original array to show all items
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.ALL);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        if (event.getState() == DeletedPendingCaptureEvent.State.DELETING) {
+            //have the adapter hide the items that are in the "deleting" state
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.WITHOUT_DELETING);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        if (event.getState() == DeletedPendingCaptureEvent.State.DELETED) {
+            mAdapter.removeItem(event.getCaptureId());
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.ALL);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
 
     }
+
 }
