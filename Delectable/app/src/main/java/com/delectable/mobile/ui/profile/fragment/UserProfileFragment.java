@@ -314,6 +314,12 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     @Override
+    public void wineCountClicked() {
+        // scroll down to wine list
+        mListView.smoothScrollToPositionFromTop(1, 0, 400);
+    }
+
+    @Override
     public void followerCountClicked() {
         Intent intent = FollowersFollowingActivity
                 .newIntent(getActivity(), FollowersFollowingActivity.Type.FOLLOWERS, mUserId);
