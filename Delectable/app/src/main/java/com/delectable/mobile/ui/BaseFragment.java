@@ -4,8 +4,10 @@ import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
 import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
+import com.delectable.mobile.api.cache.PaymentMethodModel;
 import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.cache.ServerInfo;
+import com.delectable.mobile.api.cache.ShippingAddressModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
@@ -55,6 +57,11 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Inject
     protected CaptureDetailsModel mCaptureDetailsModel;
 
+    @Inject
+    protected ShippingAddressModel mShippingAddressModel;
+
+    @Inject
+    protected PaymentMethodModel mPaymentMethodModel;
 
     @Inject
     protected EventBus mEventBus;
@@ -237,6 +244,10 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         mCapturesPendingCapturesListingModel.clear();
         mPendingCapturesModel.clear();
         mCaptureDetailsModel.clear();
+
+        // Clear some caches
+        mShippingAddressModel.clear();
+        mPaymentMethodModel.clear();
 
         CaptureNoteListingModel.clear();
         CaptureListingModel.clear();
