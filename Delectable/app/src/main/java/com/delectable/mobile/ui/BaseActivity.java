@@ -11,21 +11,21 @@ import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseActivity extends Activity
+public abstract class BaseActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final String TAG = this.getClass().getSimpleName();
@@ -51,8 +51,10 @@ public abstract class BaseActivity extends Activity
         // Deep Link stuff
         Intent intent = getIntent();
         // Action not used yet, not sure if we'll need it.  Right now the action only VIEW.
-        String action = intent.getAction();
-        mDeepLinkUriData = intent.getData();
+        if (intent != null) {
+            String action = intent.getAction();
+            mDeepLinkUriData = intent.getData();
+        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -122,12 +124,12 @@ public abstract class BaseActivity extends Activity
     }
 
     public void replaceWithFragment(BaseFragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         // TODO: Should we animate?
-        transaction.setCustomAnimations(
-                android.R.animator.fade_in, android.R.animator.fade_out,
-                android.R.animator.fade_in, android.R.animator.fade_out);
+//        transaction.setCustomAnimations(
+//                android.R.animator.fade_in, android.R.animator.fade_out,
+//                android.R.animator.fade_in, android.R.animator.fade_out);
 
         //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
         //the fragment from the backstack in onActivityResult

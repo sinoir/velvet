@@ -5,6 +5,7 @@ import com.delectable.mobile.ui.BaseFragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class WineCaptureConfirmFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().getActionBar().hide();
+        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
     }
 
     private void displayCapturedImage() {

@@ -211,6 +211,13 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     @Override
+    public void wineCountClicked() {
+        if (mActionListener != null) {
+            mActionListener.wineCountClicked();
+        }
+    }
+
+    @Override
     public void followerCountClicked() {
         if (mActionListener != null) {
             mActionListener.followerCountClicked();
@@ -224,12 +231,9 @@ public class ProfileHeaderView extends RelativeLayout implements
         }
     }
 
-    public static interface ProfileHeaderActionListener {
+    public static interface ProfileHeaderActionListener extends ProfileHeaderMainView.ActionListener {
 
         public void toggleFollowUserClicked(boolean isFollowing);
 
-        public void followerCountClicked();
-
-        public void followingCountClicked();
     }
 }

@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.capture.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ScrollView;
 
 import javax.inject.Inject;
 
@@ -26,7 +29,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     @Inject
     CaptureDetailsModel mCaptureDetailsModel;
 
-    private View mView;
+    private View mScrollView;
 
     private CaptureDetailsView mCaptureDetailsView;
 
@@ -58,14 +61,34 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_capture_details, container, false);
-        mCaptureDetailsView = (CaptureDetailsView) mView.findViewById(R.id.capture_details_view);
+        View view = inflater.inflate(R.layout.fragment_capture_details, container, false);
+        mCaptureDetailsView = (CaptureDetailsView) view.findViewById(R.id.capture_details_view);
         mCaptureDetailsView.setActionsHandler(this);
 
-        return mView;
+        mScrollView = (ScrollView) view.findViewById(R.id.capture_details_scroll_view);
+        mScrollView.getViewTreeObserver().addOnScrollChangedListener(
+                new ViewTreeObserver.OnScrollChangedListener() {
+
+                    View wineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
+
+                    View wineImageView = wineBanner.findViewById(R.id.wine_image);
+
+                    @Override
+                    public void onScrollChanged() {
+                        int scrollY = mScrollView.getScrollY();
+                        float height = wineBanner.getHeight();
+                        // check if header is still visible
+                        if (scrollY > height) {
+                            return;
+                        }
+                        wineImageView.setTranslationY(scrollY / 2f);
+                    }
+                });
+
+        return view;
     }
 
     @Override
@@ -111,6 +134,12 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
             loadLocalData();
         } else if (event.getErrorMessage() != null) {
             showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(AddCaptureCommentEvent event) {
+        if (event.isSuccessful() && mCaptureId.equals(event.getCaptureId())) {
+            loadLocalData();
         }
     }
 }

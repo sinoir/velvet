@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -68,20 +69,13 @@ public class TaggedPeopleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_people, container, false);
         ButterKnife.inject(this, view);
 
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         int numberOfTaggedPeople = mCaptureDetails.getRegisteredParticipants() != null
                 ? mCaptureDetails.getRegisteredParticipants().size()
                 : 0;
         String title = getResources()
                 .getString(R.string.cap_feed_tagged_count, numberOfTaggedPeople);
-        // FIXME action bar title is broken due to custom back button
-        //getActivity().getActionBar().setTitle(title);
+        setActionBarTitle(title);
 
         mAdapter = new TaggedPeopleAdapter(mCaptureDetails);
         mListView.setAdapter(mAdapter);
@@ -98,6 +92,16 @@ public class TaggedPeopleFragment extends BaseFragment {
         });
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

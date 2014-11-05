@@ -10,6 +10,11 @@ import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCap
 import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.LabelScan;
+import com.delectable.mobile.api.models.TaggeeContact;
+import com.delectable.mobile.api.util.ErrorUtil;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -19,6 +24,7 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.PhotoUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -28,17 +34,17 @@ import com.twitter.sdk.android.core.models.Tweet;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
@@ -88,16 +94,16 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     protected TextView mDrinkingWhereButton;
 
     @InjectView(R.id.share_facebook)
-    protected Switch mShareFacebookButton;
+    protected SwitchCompat mShareFacebookButton;
 
     @InjectView(R.id.share_twitter)
-    protected Switch mShareTwitterButton;
+    protected SwitchCompat mShareTwitterButton;
 
     @InjectView(R.id.share_instagram)
-    protected Switch mShareInstagramButton;
+    protected SwitchCompat mShareInstagramButton;
 
     @InjectView(R.id.make_private)
-    protected Switch mMakePrivateButton;
+    protected SwitchCompat mMakePrivateButton;
 
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
@@ -112,8 +118,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     private byte[] mRawImageData;
 
     private View mView;
-
-    private Button mPostButton;
 
     private int mCurrentRating = -1;
 
@@ -144,11 +148,12 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+        setHasOptionsMenu(true);
         Bundle args = getArguments();
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, byteArrayOutputStream);
             mRawImageData = byteArrayOutputStream.toByteArray();
         }
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
@@ -161,16 +166,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
         ButterKnife.inject(this, mView);
 
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-        setupPostButtonToActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        setupButtonListeners();
         setupRatingSeekBar();
 
         // OnCreate gets called after onActivityResult, so we should update the UI accordingly
@@ -178,6 +175,28 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         updateWithFriendsUI();
 
         return mView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // TODO customize the post button
+        inflater.inflate(R.menu.capture_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            case R.id.post:
+                mCommentEditText.clearFocus();
+                hideKeyboard();
+                postCapture();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -195,7 +214,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().getActionBar().show();
+        mActionBar.show();
     }
 
     @Override
@@ -244,31 +263,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         }
     }
 
-    private void setupPostButtonToActionBar() {
-        RelativeLayout customView = (RelativeLayout) getActivity().getActionBar().getCustomView();
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        mPostButton = new Button(getActivity());
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        customView.addView(mPostButton, params);
-
-        mPostButton.setText(R.string.capture_submit_post);
-        mPostButton.setTextColor(Color.WHITE);
-        mPostButton.setBackgroundResource(R.drawable.bg_chestnut_to_pressed);
-    }
-
-    private void setupButtonListeners() {
-        mPostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCommentEditText.clearFocus();
-                hideKeyboard();
-                postCapture();
-            }
-        });
-    }
-
     private void setupRatingSeekBar() {
         //sets seek bar thumb to start in the middle of the
         mNumericRatingSeekBar.getRatingSeekBar().setProgress(RatingSeekBar.INCREMENTS / 2);
@@ -294,7 +288,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         }
 
         if (!mMakePrivateButton.isChecked()) {
-            mCaptureRequest.setPrivate(true);
+            mCaptureRequest.setPrivate(false);
         } else {
             mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
             mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
@@ -415,7 +409,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             return;
         }
         if (isChecked) {
-            mMakePrivateButton.setChecked(true);
+            mMakePrivateButton.setChecked(false);
         }
     }
 
@@ -428,7 +422,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             return;
         }
         if (isChecked) {
-            mMakePrivateButton.setChecked(true);
+            mMakePrivateButton.setChecked(false);
         }
     }
 
@@ -440,7 +434,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             return;
         }
         if (isChecked) {
-            mMakePrivateButton.setChecked(true);
+            mMakePrivateButton.setChecked(false);
         }
     }
 

@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import java.util.List;
+
 public class CameraUtil {
 
     public static final String TAG = "CameraUtil";
@@ -21,23 +23,48 @@ public class CameraUtil {
         Camera camera = null;
         try {
             camera = Camera.open(cameraId);
+            setCameraParameters(camera);
         } catch (Exception e) {
             Log.e(TAG, "Failed to open Camera", e);
         }
         return camera;
     }
 
-    public static boolean checkSystemHasFrontCameraHardware(Context context) {
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
+    public static void setCameraParameters(Camera camera) {
+        Camera.Parameters parameters = camera.getParameters();
+
+        // Continous Auto Focus
+        List<String> focusModes = parameters.getSupportedFocusModes();
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        }
+
+        // White Balance
+        List<String> whiteBalance = parameters.getSupportedWhiteBalance();
+        if (whiteBalance.contains(Camera.Parameters.WHITE_BALANCE_AUTO)) {
+            parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
+        }
+
+        // Anti Banding
+        List<String> antiBanding = parameters.getSupportedAntibanding();
+        if (antiBanding.contains(Camera.Parameters.ANTIBANDING_AUTO)) {
+            parameters.setAntibanding(Camera.Parameters.ANTIBANDING_AUTO);
+        }
+
+        camera.setParameters(parameters);
+    }
+
+    public static boolean checkSystemHasCameraHardware(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
     public static boolean checkSystemHasFlash(Context context) {
-        return checkSystemHasFrontCameraHardware(context) &&
+        return checkSystemHasCameraHardware(context) &&
                 context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
     public static boolean checkSystemHasFocus(Context context) {
-        return checkSystemHasFrontCameraHardware(context) &&
+        return checkSystemHasCameraHardware(context) &&
                 context.getPackageManager()
                         .hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
     }
