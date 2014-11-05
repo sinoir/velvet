@@ -3,19 +3,20 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.FoursquareController;
-import com.delectable.mobile.api.events.foursquare.SearchedFoursquareVenuesEvent;
 import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
+import com.delectable.mobile.api.events.foursquare.SearchedFoursquareVenuesEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.widget.FoursquareVenuesAdapter;
 import com.delectable.mobile.util.HelperUtil;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -70,17 +71,7 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
         mAdapter = new FoursquareVenuesAdapter(mVenues);
         mListView.setAdapter(mAdapter);
 
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getTargetFragment() != null) {
-                    getTargetFragment().onActivityResult(getTargetRequestCode(),
-                            Activity.RESULT_CANCELED, null);
-                }
-                getActivity().onBackPressed();
-            }
-        });
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -101,6 +92,20 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
         });
 
         return mView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (getTargetFragment() != null) {
+                    getTargetFragment().onActivityResult(getTargetRequestCode(),
+                            Activity.RESULT_CANCELED, null);
+                }
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

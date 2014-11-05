@@ -9,6 +9,7 @@ import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -56,18 +57,12 @@ public class LikingPeopleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_people, container, false);
         ButterKnife.inject(this, view);
 
-        setHasOptionsMenu(true);
-        overrideHomeIcon(R.drawable.btn_ab_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+
         String title = getResources()
                 .getQuantityString(R.plurals.cap_feed_likes_count, mLikingPeople.size(),
                         mLikingPeople.size());
-        // FIXME action bar title is broken due to custom back button
-        //getActivity().getActionBar().setTitle(title);
+        setActionBarTitle(title);
 
         mAdapter = new LikingPeopleAdapter(mLikingPeople);
         mListView.setAdapter(mAdapter);
@@ -86,4 +81,13 @@ public class LikingPeopleFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

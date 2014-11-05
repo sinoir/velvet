@@ -1,5 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
+import com.delectable.mobile.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -7,8 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import com.delectable.mobile.R;
 
 /**
  * Delectabutton. The button that comes in different styles and with cool features.
@@ -67,7 +67,7 @@ public class Delectabutton extends RelativeLayout {
                 getResources().getColor(R.color.d_dark_gray)));
 
         setIconDrawable(a.getDrawable(
-                R.styleable.Delectabutton_icon));
+                R.styleable.Delectabutton_android_icon));
 
         setText(a.getString(
                 R.styleable.Delectabutton_android_text));

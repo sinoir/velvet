@@ -34,7 +34,6 @@ import com.facebook.model.GraphUser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,6 +42,7 @@ import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -145,7 +145,7 @@ public class LoginButton extends Button {
                         getResources().getDimensionPixelSize(
                                 R.dimen.com_facebook_loginview_compound_drawable_padding));
                 this.setPadding(getResources()
-                        .getDimensionPixelSize(R.dimen.com_facebook_loginview_padding_left),
+                                .getDimensionPixelSize(R.dimen.com_facebook_loginview_padding_left),
                         getResources()
                                 .getDimensionPixelSize(R.dimen.com_facebook_loginview_padding_top),
                         getResources().getDimensionPixelSize(
@@ -837,7 +837,7 @@ public class LoginButton extends Button {
                     String message;
                     if (user != null && user.getName() != null) {
                         message = String.format(getResources()
-                                .getString(R.string.com_facebook_loginview_logged_in_as),
+                                        .getString(R.string.com_facebook_loginview_logged_in_as),
                                 user.getName());
                     } else {
                         message = getResources().getString(

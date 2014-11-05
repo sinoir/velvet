@@ -58,25 +58,29 @@
             android:id="@+id/make_private"
             style="@style/WineCaptureFlow_switch"
             android:layout_below="@id/drinking_where"
-            android:checked="true"
+            android:checked="false"
+            app:showText="false"
             android:text="@string/make_private" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_facebook"
             style="@style/WineCaptureFlow_switch"
             android:layout_below="@id/make_private"
+            app:showText="false"
             android:text="@string/facebook_text" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_twitter"
             style="@style/WineCaptureFlow_switch"
             android:layout_below="@id/share_facebook"
+            app:showText="false"
             android:text="@string/twitter_text" />
 
         <com.delectable.mobile.ui.common.widget.FontSwitch
             android:id="@+id/share_instagram"
             style="@style/WineCaptureFlow_switch"
             android:layout_below="@id/share_twitter"
+            app:showText="false"
             android:text="@string/instagram_text" />
 
         <FrameLayout

@@ -9,7 +9,7 @@
     <string name="facebook_text">Facebook</string>
     <string name="twitter_text">Twitter</string>
     <string name="instagram_text">Instagram</string>
-    <string name="make_private">Post to Delectable</string>
+    <string name="make_private">Make private</string>
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
     <string name="cancel">cancel</string>
@@ -308,7 +308,7 @@
     <string name="settings_comment_on_your_wine">Comment on your wine</string>
     <string name="settings_tagged_on_a_wine">Tagged on a wine</string>
     <string name="settings_about">about</string>
-    <string name="settings_contact">Contact</string>
+    <string name="settings_feedback">Send us feedback</string>
     <string name="settings_terms_of_use">Terms of use</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_sign_out">Sign out</string>
