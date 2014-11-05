@@ -190,9 +190,9 @@
             android:text="@string/settings_about" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/contact"
+            android:id="@+id/send_feedback"
             style="@style/SettingsAboutCategoryRow"
-            android:text="@string/settings_contact" />
+            android:text="@string/settings_feedback" />
 
         <View style="@style/SettingsAboutCategoryDivider" />
 

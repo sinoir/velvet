@@ -95,6 +95,13 @@ public class ProfileHeaderMainView extends LinearLayout {
         mActionListener = actionListener;
     }
 
+    @OnClick(R.id.capture_wine_count)
+    protected void onWineCountTextClick() {
+        if (mActionListener != null) {
+            mActionListener.wineCountClicked();
+        }
+    }
+
     @OnClick(R.id.followers_count)
     protected void onFollowersCountTextClick() {
         if (mActionListener != null) {
@@ -110,6 +117,8 @@ public class ProfileHeaderMainView extends LinearLayout {
     }
 
     public static interface ActionListener {
+
+        public void wineCountClicked();
 
         public void followerCountClicked();
 

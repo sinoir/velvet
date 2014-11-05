@@ -175,7 +175,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
+                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, PhotoUtil.MAX_SIZE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);

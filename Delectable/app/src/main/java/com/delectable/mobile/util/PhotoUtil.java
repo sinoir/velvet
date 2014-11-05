@@ -17,6 +17,10 @@ import java.io.InputStream;
 
 public class PhotoUtil {
 
+    public static final int MAX_SIZE = 1024;
+
+    public static final int JPEG_QUALITY = 80;
+
     private static final String TAG = PhotoUtil.class.getSimpleName();
 
     public static Bitmap loadBitmapFromUri(Uri imageUri, int maxSize)
