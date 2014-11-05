@@ -1,17 +1,22 @@
 package com.delectable.mobile.api.jobs.accounts;
 
-import com.delectable.mobile.api.jobs.scanwinelabel.BasePhotoUploadJob;
-import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.endpointmodels.accounts.PhotoHashResponse;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
+import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.api.jobs.scanwinelabel.BasePhotoUploadJob;
+import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.util.PhotoUtil;
+
+import android.graphics.Bitmap;
+
+import java.io.ByteArrayOutputStream;
 
 public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
 
     private static final String TAG = UpdateProfilePhotoJob.class.getSimpleName();
 
-    public UpdateProfilePhotoJob(byte[] imageData) {
-        super(imageData);
+    public UpdateProfilePhotoJob(Bitmap bitmap) {
+        super(bitmap);
     }
 
     @Override
@@ -36,7 +41,9 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
     }
 
     @Override
-    public byte[] getResizedImage() {
-        return getImageData();
+    public byte[] compressImage(Bitmap bitmap) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, os);
+        return os.toByteArray();
     }
 }

@@ -1,15 +1,19 @@
 package com.delectable.mobile.api.jobs.scanwinelabel;
 
-import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.LabelScanResponse;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
+import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.util.KahunaUtil;
+import com.delectable.mobile.util.PhotoUtil;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -21,13 +25,8 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     @Inject
     BaseWineModel mBaseWineModel;
 
-    public IdentifyLabelJob(byte[] imageData) {
-        super(imageData);
-    }
-
-    @Override
-    public void onAdded() {
-        super.onAdded();
+    public IdentifyLabelJob(Bitmap bitmap) {
+        super(bitmap);
     }
 
     @Override
@@ -62,14 +61,25 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     }
 
     @Override
-    protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return super.shouldReRunOnThrowable(throwable);
-    }
+    public byte[] compressImage(Bitmap bitmap) {
 
-    @Override
-    public byte[] getResizedImage() {
-        // TODO: Resize Photo to 300x300 for Instant and 1280x1280 for Pending Capture
-        return getImageData();
+        // to lossless byte array
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        byte[] data = os.toByteArray();
+
+        // downsample
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = PhotoUtil.calculateInSampleSize(bitmap.getWidth(),
+                bitmap.getHeight(),
+                PhotoUtil.MAX_SIZE_INSTANT, PhotoUtil.MAX_SIZE_INSTANT);
+        Bitmap downscaledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+        // compress
+        os = new ByteArrayOutputStream();
+        downscaledBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY_INSTANT, os);
+        return os.toByteArray();
     }
 
     @Override

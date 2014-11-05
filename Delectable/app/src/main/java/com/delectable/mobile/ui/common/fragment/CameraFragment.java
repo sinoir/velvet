@@ -171,7 +171,8 @@ public class CameraFragment extends BaseFragment {
             BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
             // Gives us a Bitmap size that's small enough to handle quickly, 1024 is a rough max width/height to give us the appropriate sample size.  The resulting image won't be exact, and maybe a little larger.
-            options.inSampleSize = PhotoUtil.calculateInSampleSize(options, PhotoUtil.MAX_SIZE, PhotoUtil.MAX_SIZE);
+            // FIXME downsample here? maybe use better method with interpolation
+            options.inSampleSize = PhotoUtil.calculateInSampleSize(options.outWidth, options.outHeight, PhotoUtil.MAX_SIZE, PhotoUtil.MAX_SIZE);
 
             // Make sure we reset the inJustDecodeBounds so we can create a bitmap
             options.inJustDecodeBounds = false;

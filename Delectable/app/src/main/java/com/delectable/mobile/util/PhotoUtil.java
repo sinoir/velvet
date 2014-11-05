@@ -19,7 +19,11 @@ public class PhotoUtil {
 
     public static final int MAX_SIZE = 1024;
 
+    public static final int MAX_SIZE_INSTANT = 256;
+
     public static final int JPEG_QUALITY = 80;
+
+    public static final int JPEG_QUALITY_INSTANT = 75;
 
     private static final String TAG = PhotoUtil.class.getSimpleName();
 
@@ -31,7 +35,7 @@ public class PhotoUtil {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(App.getInstance().getContentResolver().openInputStream(imageUri),
                 null, options);
-        options.inSampleSize = PhotoUtil.calculateInSampleSize(options, maxSize, maxSize);
+        options.inSampleSize = PhotoUtil.calculateInSampleSize(options.outWidth, options.outHeight, maxSize, maxSize);
         options.inJustDecodeBounds = false;
 
         // Matrix to Rotate Bitmap based on Exif data
@@ -96,11 +100,7 @@ public class PhotoUtil {
      * Helper to calculate sample size based on the max width / height From:
      * http://developer.android.com/training/displaying-bitmaps/load-bitmap.html#load-bitmap
      */
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth,
-            int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
+    public static int calculateInSampleSize(int width, int height, int reqWidth, int reqHeight) {
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {

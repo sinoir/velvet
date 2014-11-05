@@ -55,7 +55,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -492,10 +491,7 @@ public class SettingsFragment extends BaseFragment {
      */
     private void updateProfilePicture(Bitmap photo) {
         mPhoto = photo;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mPhoto.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-        byte[] rawImageData = byteArrayOutputStream.toByteArray();
-        mAccountController.updateProfilePhoto(rawImageData);
+        mAccountController.updateProfilePhoto(photo);
     }
 
     /**

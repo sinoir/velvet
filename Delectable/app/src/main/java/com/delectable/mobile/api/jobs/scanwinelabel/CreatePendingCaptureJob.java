@@ -1,11 +1,15 @@
 package com.delectable.mobile.api.jobs.scanwinelabel;
 
-import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureRequest;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureResponse;
+import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
+import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.util.PhotoUtil;
 
+import android.graphics.Bitmap;
 import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
 
 public class CreatePendingCaptureJob extends BasePhotoUploadJob {
 
@@ -13,8 +17,8 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
 
     private String mLabelScanId;
 
-    public CreatePendingCaptureJob(byte[] imageData, String labelScanId) {
-        super(imageData);
+    public CreatePendingCaptureJob(Bitmap bitmap, String labelScanId) {
+        super(bitmap);
 
         mLabelScanId = labelScanId;
     }
@@ -51,9 +55,10 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
     }
 
     @Override
-    public byte[] getResizedImage() {
-        // TODO: Resize Photo to 300x300 for Instant and 1280x1280 for Pending Capture
-        return getImageData();
+    public byte[] compressImage(Bitmap bitmap) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, os);
+        return os.toByteArray();
     }
 
     @Override
