@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 public class ChooseVintageDialog extends DialogFragment {
@@ -35,6 +37,15 @@ public class ChooseVintageDialog extends DialogFragment {
 
     @Inject
     protected BaseWineModel mBaseWineModel;
+
+    @InjectView(R.id.producer_name)
+    protected TextView mProducerName;
+
+    @InjectView(R.id.wine_name)
+    protected TextView mWineName;
+
+    @InjectView(R.id.list_view)
+    protected ListView mListView;
 
     private WineProfilesAdapter mAdapter = new WineProfilesAdapter();
 
@@ -63,12 +74,13 @@ public class ChooseVintageDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_listview, container, false);
-        TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(R.string.choose_vintage_dialog_title);
-        ListView listview = (ListView) view.findViewById(R.id.list_view);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
+        ButterKnife.inject(this, view);
+
+        mListView.setAdapter(mAdapter);
+
+        // TODO: Replace with Click Listeners within the Rows
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //call back to implementing class
@@ -108,9 +120,17 @@ public class ChooseVintageDialog extends DialogFragment {
     private void loadBaseWineData() {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
+
+        updateUI();
+    }
+
+    private void updateUI() {
         if (mBaseWine == null) {
             return;
         }
+        mProducerName.setText(mBaseWine.getProducerName());
+        mWineName.setText(mBaseWine.getName());
+
         mAdapter.setBaseWine(mBaseWine);
         mAdapter.notifyDataSetChanged();
     }
