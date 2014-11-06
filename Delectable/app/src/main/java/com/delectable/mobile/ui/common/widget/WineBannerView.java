@@ -44,6 +44,9 @@ public class WineBannerView extends RelativeLayout {
     @InjectView(R.id.wine_name)
     protected TextView mWineName;
 
+    @InjectView(R.id.wine_vintage)
+    protected TextView mWineVintage;
+
     boolean mShowTriangleMask;
 
     private int mTriangleCenterPosition;
@@ -119,7 +122,9 @@ public class WineBannerView extends RelativeLayout {
         String wineName = wineProfile.getName();
 
         if (includeVintage) {
-            wineName += " " + wineProfile.getVintage();
+            updateVintage(wineProfile.getVintage());
+        } else {
+            mWineVintage.setVisibility(View.INVISIBLE);
         }
 
         updateViewWithData(wineImageUrl, producerName, wineName);
@@ -138,6 +143,11 @@ public class WineBannerView extends RelativeLayout {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
         mProducerName.setText(producerName);
         mWineName.setText(wineName);
+    }
+
+    public void updateVintage(String vintage) {
+        mWineVintage.setVisibility(View.VISIBLE);
+        mWineVintage.setText(vintage);
     }
 
     @Override

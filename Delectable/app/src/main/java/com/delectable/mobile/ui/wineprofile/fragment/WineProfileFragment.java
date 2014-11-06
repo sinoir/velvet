@@ -406,7 +406,8 @@ public class WineProfileFragment extends BaseFragment implements
                     //first query cache to see if we have something on hand already
                     loadLocalData(mType, mFetchingId);
                 }
-
+                // Update the BannerView with new vintage
+                updateBannerData();
         }
     }
 
@@ -663,7 +664,7 @@ public class WineProfileFragment extends BaseFragment implements
     private void updateBannerData() {
         if (mWineProfile != null) {
             //spawned from Feed Fragment
-            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+            mBanner.updateData(mWineProfile, mCapturePhotoHash, true);
         } else if (mBaseWineMinimal != null) {
             //spawned from Search Wines
             mBanner.updateData(mBaseWineMinimal);
@@ -671,6 +672,11 @@ public class WineProfileFragment extends BaseFragment implements
             //spawned from WineCaptureSubmit
             //also called after BaseWine is successfully fetched
             mBanner.updateData(mBaseWine);
+        }
+
+        if (mSelectedWineVintage != null) {
+            // When we select a new Vintage
+            mBanner.updateVintage(mSelectedWineVintage.getVintage());
         }
     }
 
