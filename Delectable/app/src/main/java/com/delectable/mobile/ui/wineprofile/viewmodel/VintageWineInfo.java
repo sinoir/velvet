@@ -49,6 +49,9 @@ public class VintageWineInfo {
     }
 
     public double getRating() {
+        if (mWineProfileMinimal == null || mWineProfileMinimal.getRatingsSummary() == null) {
+            return -1;
+        }
         return mWineProfileMinimal.getRatingsSummary().getAllAvgOfTen();
     }
 

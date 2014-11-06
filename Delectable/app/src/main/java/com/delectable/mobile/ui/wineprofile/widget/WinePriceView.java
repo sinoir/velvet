@@ -29,6 +29,8 @@ public class WinePriceView extends RelativeLayout {
 
     private WinePriceViewActionsCallback mActionsCallback;
 
+    private VintageWineInfo mWineInfo;
+
     public WinePriceView(Context context) {
         this(context, null);
     }
@@ -55,8 +57,12 @@ public class WinePriceView extends RelativeLayout {
     public void updateWithPriceInfo(VintageWineInfo vintageWineInfo) {
         resetUI();
 
+        mWineInfo = vintageWineInfo;
+
         // Ordering of how we check the Price States matter
-        if (vintageWineInfo.isSoldOut()) {
+        if (vintageWineInfo.isLoading()) {
+            showLoading();
+        } else if (vintageWineInfo.isSoldOut()) {
             mSoldOutView.setVisibility(View.VISIBLE);
         } else if (vintageWineInfo.hasPrice()) {
             mPriceText.setVisibility(View.VISIBLE);
@@ -78,30 +84,30 @@ public class WinePriceView extends RelativeLayout {
     @OnClick(R.id.check_price_button)
     protected void checkPriceClicked() {
         if (mActionsCallback != null) {
-            mActionsCallback.onPriceCheckClicked();
+            mActionsCallback.onPriceCheckClicked(mWineInfo);
         }
     }
 
     @OnClick(R.id.price_button)
     protected void priceClicked() {
         if (mActionsCallback != null) {
-            mActionsCallback.onPriceClicked();
+            mActionsCallback.onPriceClicked(mWineInfo);
         }
     }
 
     @OnClick(R.id.sold_out)
     protected void soldOutClicked() {
         if (mActionsCallback != null) {
-            mActionsCallback.onSoldOutClicked();
+            mActionsCallback.onSoldOutClicked(mWineInfo);
         }
     }
 
     public static interface WinePriceViewActionsCallback {
 
-        public void onPriceCheckClicked();
+        public void onPriceCheckClicked(VintageWineInfo wineInfo);
 
-        public void onPriceClicked();
+        public void onPriceClicked(VintageWineInfo wineInfo);
 
-        public void onSoldOutClicked();
+        public void onSoldOutClicked(VintageWineInfo wineInfo);
     }
 }

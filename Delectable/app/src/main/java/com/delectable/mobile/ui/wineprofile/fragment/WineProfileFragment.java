@@ -342,18 +342,18 @@ public class WineProfileFragment extends BaseFragment implements
 
         mWinePriceView.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
             @Override
-            public void onPriceCheckClicked() {
-                fetchPurchaseOffer();
+            public void onPriceCheckClicked(VintageWineInfo wineInfo) {
+                fetchWineSource();
                 mWinePriceView.showLoading();
             }
 
             @Override
-            public void onPriceClicked() {
+            public void onPriceClicked(VintageWineInfo wineInfo) {
                 showVintageDialog();
             }
 
             @Override
-            public void onSoldOutClicked() {
+            public void onSoldOutClicked(VintageWineInfo wineInfo) {
                 showVintageDialog();
             }
         });
@@ -562,7 +562,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     //region Fetch Remote Data
 
-    private void fetchPurchaseOffer() {
+    private void fetchWineSource() {
         mBaseWineController.fetchWineSource(mSelectedWineVintage.getId());
     }
 
