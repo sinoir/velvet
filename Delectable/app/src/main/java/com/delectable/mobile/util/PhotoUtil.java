@@ -17,9 +17,9 @@ import java.io.InputStream;
 
 public class PhotoUtil {
 
-    public static final int MAX_SIZE = 1024;
+    public static final int MAX_SIZE = 1280;
 
-    public static final int MAX_SIZE_INSTANT = 256;
+    public static final int MAX_SIZE_INSTANT = 300;
 
     public static final int JPEG_QUALITY = 80;
 

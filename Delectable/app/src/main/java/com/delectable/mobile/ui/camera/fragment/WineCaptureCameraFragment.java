@@ -128,20 +128,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     @Override
-    public Bitmap cropRotatedCapturedBitmap(Bitmap bitmap) {
-        int frameWidth = mCameraContainer.getWidth();
-        int frameHeight = mCameraContainer.getHeight();
-        int imageHeight = bitmap.getHeight();
-        int imageWidth = bitmap.getWidth();
-
-        // Scale the view height to match the image dpi
-        float previewScale = (float) imageWidth / (float) frameWidth;
-        int croppedHeight = Math.min((int) (frameHeight * previewScale), imageHeight);
-
-        return Bitmap.createBitmap(bitmap, 0, 0, imageWidth, croppedHeight);
-    }
-
-    @Override
     public boolean toggleFlash() {
         boolean isFlashOn = super.toggleFlash();
         mFlashButton.setSelected(isFlashOn);

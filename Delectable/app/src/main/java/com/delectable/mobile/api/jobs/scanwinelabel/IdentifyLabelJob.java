@@ -10,7 +10,7 @@ import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.PhotoUtil;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -63,22 +63,23 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     @Override
     public byte[] compressImage(Bitmap bitmap) {
 
-        // to lossless byte array
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-        byte[] data = os.toByteArray();
+        // scale
+        Matrix matrix = new Matrix();
+        float scaleFactor = PhotoUtil.MAX_SIZE_INSTANT / (float) bitmap.getHeight();
+        matrix.setScale(scaleFactor, scaleFactor);
 
-        // downsample
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = PhotoUtil.calculateInSampleSize(bitmap.getWidth(),
+        Bitmap finalBitmap = Bitmap.createBitmap(
+                bitmap,
+                0,
+                0,
                 bitmap.getHeight(),
-                PhotoUtil.MAX_SIZE_INSTANT, PhotoUtil.MAX_SIZE_INSTANT);
-        Bitmap downscaledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                bitmap.getHeight(),
+                matrix,
+                true);
 
         // compress
-        os = new ByteArrayOutputStream();
-        downscaledBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY_INSTANT, os);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        finalBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY_INSTANT, os);
         return os.toByteArray();
     }
 

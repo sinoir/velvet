@@ -92,26 +92,25 @@ public class CameraUtil {
         camera.setDisplayOrientation(rotationDegrees);
     }
 
-    public static Bitmap getRotatedBitmapTakenFromCamera(
-            Context context,
-            byte[] imageData,
-            int cameraId, BitmapFactory.Options options) {
+    public static Bitmap rotateScaleAndCropImage(Context context, byte[] imageData, int cameraId) {
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
         int rotationDegrees = getCameraRotationFixInDegrees(context, cameraId);
         Matrix matrix = new Matrix();
-        matrix.postRotate(rotationDegrees);
+        matrix.setRotate(rotationDegrees);
+        float scaleFactor = PhotoUtil.MAX_SIZE / (float) bitmap.getHeight();
+        matrix.postScale(scaleFactor, scaleFactor);
 
-        Bitmap rotatedBitmap = Bitmap.createBitmap(
+        Bitmap finalBitmap = Bitmap.createBitmap(
                 bitmap,
                 0,
                 0,
-                bitmap.getWidth(),
+                bitmap.getHeight(),
                 bitmap.getHeight(),
                 matrix,
-                false);
+                true);
 
-        return rotatedBitmap;
+        return finalBitmap;
     }
 
     public static int getCameraRotationFixInDegrees(Context context, int cameraId) {
@@ -133,6 +132,7 @@ public class CameraUtil {
                 degrees = 270;
                 break;
         }
+        Log.d(TAG, "rotation: " + degrees);
 
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
@@ -178,45 +178,44 @@ public class CameraUtil {
         return new Camera.Area(focusArea, focusAreaSize);
     }
 
-    public static Camera.Size getOptimalPreviewSize(int displayOrientation, int width, int height, Camera.Parameters parameters) {
-        double targetRatio = (double)width / height;
+    public static Camera.Size getOptimalPreviewSize(int displayOrientation, int width, int height,
+            Camera.Parameters parameters) {
+        double targetRatio = (double) width / height;
         List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
         Camera.Size optimalSize = null;
-        double minDiff=Double.MAX_VALUE;
-        int targetHeight=height;
+        double minDiff = Double.MAX_VALUE;
+        int targetHeight = height;
 
         if (displayOrientation == 90 || displayOrientation == 270) {
-            targetRatio=(double)height / width;
+            targetRatio = (double) height / width;
         }
 
         // Try to find an size match aspect ratio and size
-
         for (Camera.Size size : sizes) {
-            double ratio=(double)size.width / size.height;
+            double ratio = (double) size.width / size.height;
 
             if (Math.abs(ratio - targetRatio) <= 0.1) {
                 if (Math.abs(size.height - targetHeight) < minDiff) {
-                    optimalSize=size;
-                    minDiff=Math.abs(size.height - targetHeight);
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
                 }
             }
         }
 
         // Cannot find the one match the aspect ratio, ignore
         // the requirement
-
         if (optimalSize == null) {
-            minDiff=Double.MAX_VALUE;
+            minDiff = Double.MAX_VALUE;
 
             for (Camera.Size size : sizes) {
                 if (Math.abs(size.height - targetHeight) < minDiff) {
-                    optimalSize=size;
-                    minDiff=Math.abs(size.height - targetHeight);
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
                 }
             }
         }
 
-        return(optimalSize);
+        return (optimalSize);
     }
 
 }
