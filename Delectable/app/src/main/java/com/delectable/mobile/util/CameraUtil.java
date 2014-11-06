@@ -270,6 +270,13 @@ public class CameraUtil {
 
     public static int getExifRotationInDegrees(Uri imageUri)
             throws Exception {
+
+        // Make sure this is a JPEG
+        String mimeType = App.getInstance().getContentResolver().getType(imageUri);
+        if (!mimeType.equalsIgnoreCase("image/jpeg")) {
+            return 0;
+        }
+
         int exifRotation = 0;
 
         InputStream imageIs = null;
