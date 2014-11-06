@@ -94,6 +94,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+
+        setHasOptionsMenu(true);
         mUserId = UserInfo.getUserId(getActivity());
 
         if (savedInstanceState != null) {
@@ -108,8 +110,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
+
+        if (getActivity() instanceof ActionBarActivity) {
+            mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeButtonEnabled(true);
+        }
     }
 
     @Override
@@ -156,9 +162,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
-        if (activity instanceof ActionBarActivity) {
-            mActionBar = ((ActionBarActivity) activity).getSupportActionBar();
         }
     }
 
@@ -217,9 +220,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
