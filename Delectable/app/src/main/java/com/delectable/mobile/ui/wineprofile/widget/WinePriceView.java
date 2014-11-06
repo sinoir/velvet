@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class WinePriceView extends RelativeLayout {
 
@@ -25,6 +27,8 @@ public class WinePriceView extends RelativeLayout {
     @InjectView(R.id.price_button)
     protected TextView mPriceText;
 
+    private WinePriceViewActionsCallback mActionsCallback;
+
     public WinePriceView(Context context) {
         this(context, null);
     }
@@ -39,5 +43,65 @@ public class WinePriceView extends RelativeLayout {
         View.inflate(context, R.layout.widget_wine_price, this);
 
         ButterKnife.inject(this);
+    }
+
+    public void resetUI() {
+        mLoadingView.setVisibility(View.GONE);
+        mSoldOutView.setVisibility(View.GONE);
+        mCheckPrice.setVisibility(View.GONE);
+        mPriceText.setVisibility(View.GONE);
+    }
+
+    public void updateWithPriceInfo(VintageWineInfo vintageWineInfo) {
+        resetUI();
+
+        // Ordering of how we check the Price States matter
+        if (vintageWineInfo.isSoldOut()) {
+            mSoldOutView.setVisibility(View.VISIBLE);
+        } else if (vintageWineInfo.hasPrice()) {
+            mPriceText.setVisibility(View.VISIBLE);
+            mPriceText.setText(vintageWineInfo.getPriceText());
+        } else {
+            mCheckPrice.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showLoading() {
+        resetUI();
+        mLoadingView.setVisibility(View.VISIBLE);
+    }
+
+    public void setActionsCallback(WinePriceViewActionsCallback actionsCallback) {
+        mActionsCallback = actionsCallback;
+    }
+
+    @OnClick(R.id.check_price_button)
+    protected void checkPriceClicked() {
+        if (mActionsCallback != null) {
+            mActionsCallback.onPriceCheckClicked();
+        }
+    }
+
+    @OnClick(R.id.price_button)
+    protected void priceClicked() {
+        if (mActionsCallback != null) {
+            mActionsCallback.onPriceClicked();
+        }
+    }
+
+    @OnClick(R.id.sold_out)
+    protected void soldOutClicked() {
+        if (mActionsCallback != null) {
+            mActionsCallback.onSoldOutClicked();
+        }
+    }
+
+    public static interface WinePriceViewActionsCallback {
+
+        public void onPriceCheckClicked();
+
+        public void onPriceClicked();
+
+        public void onSoldOutClicked();
     }
 }
