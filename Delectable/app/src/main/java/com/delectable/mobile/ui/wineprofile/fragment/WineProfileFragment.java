@@ -5,10 +5,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.cache.WineSourceModel;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
+import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
@@ -25,7 +27,9 @@ import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
+import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -59,7 +63,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 //TODO paginate capturenotes listview? go to another screen?
 public class WineProfileFragment extends BaseFragment implements
@@ -96,8 +99,14 @@ public class WineProfileFragment extends BaseFragment implements
     @Inject
     protected BaseWineModel mBaseWineModel;
 
+    @Inject
+    protected WineSourceModel mWineSourceModel;
+
     @InjectView(R.id.wine_banner_view)
     protected WineBannerView mBanner;
+
+    @InjectView(R.id.price_view)
+    protected WinePriceView mWinePriceView;
 
     @InjectView(R.id.varietal_container)
     protected View mVarietalContainer;
@@ -123,9 +132,6 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.pro_ratings_count)
     protected TextView mProRatingsCountTextView;
 
-    @InjectView(R.id.all_years_textview)
-    protected TextView mAllYearsTextView;
-
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
 
@@ -134,6 +140,8 @@ public class WineProfileFragment extends BaseFragment implements
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this, this);
 
     private WineProfileMinimal mWineProfile;
+
+    private WineProfileSubProfile mSelectedWineVintage;
 
     private PhotoHash mCapturePhotoHash;
 
@@ -332,6 +340,24 @@ public class WineProfileFragment extends BaseFragment implements
             }
         });
 
+        mWinePriceView.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
+            @Override
+            public void onPriceCheckClicked() {
+                fetchPurchaseOffer();
+                mWinePriceView.showLoading();
+            }
+
+            @Override
+            public void onPriceClicked() {
+                showVintageDialog();
+            }
+
+            @Override
+            public void onSoldOutClicked() {
+                showVintageDialog();
+            }
+        });
+
         return view;
     }
 
@@ -367,9 +393,10 @@ public class WineProfileFragment extends BaseFragment implements
                 //when a vintage year is selected from the dialog
                 if (wine instanceof WineProfileSubProfile) {
                     mType = Type.WINE_PROFILE;
-                    WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
-                    updateRatingsView(wineProfile);
-                    mFetchingId = wineProfile.getId();
+                    mSelectedWineVintage = (WineProfileSubProfile) wine;
+                    updateRatingsView(mSelectedWineVintage);
+                    mFetchingId = mSelectedWineVintage.getId();
+                    loadPricingData();
                 }
 
                 //only clear list if fetching id has changed
@@ -431,10 +458,26 @@ public class WineProfileFragment extends BaseFragment implements
         if (mCapturePhotoHash == null) {
             mCapturePhotoHash = mBaseWine.getPhoto();
         }
-        updateBannerData();
+
+        if (mSelectedWineVintage == null) {
+            mSelectedWineVintage = mBaseWine.getDefaultWineProfile();
+        }
+        loadPricingData();
         updateVarietyRegionRatingView(mBaseWine);
     }
 
+    private void loadPricingData() {
+        if (mSelectedWineVintage == null) {
+            return;
+        }
+        WineProfileSubProfile wineWithPrice = mWineSourceModel
+                .getMinWineWithPrice(mSelectedWineVintage.getId());
+        if (wineWithPrice != null) {
+            mSelectedWineVintage = wineWithPrice;
+        }
+
+        updatePriceView();
+    }
     //endregion
 
     //region EventBus Events
@@ -445,6 +488,19 @@ public class WineProfileFragment extends BaseFragment implements
 
         if (event.isSuccessful()) {
             loadLocalBaseWineData();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(FetchedWineSourceEvent event) {
+        if (mSelectedWineVintage == null || !mSelectedWineVintage.getId()
+                .equals(event.getWineId())) {
+            return;
+        }
+
+        if (event.isSuccessful()) {
+            loadPricingData();
         } else {
             showToastError(event.getErrorMessage());
         }
@@ -505,6 +561,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     //region Fetch Remote Data
 
+    private void fetchPurchaseOffer() {
+        mBaseWineController.fetchWineSource(mSelectedWineVintage.getId());
+    }
+
     /**
      * @param idType Whether to load captures notes for a base wine or a wine profile.
      */
@@ -556,6 +616,13 @@ public class WineProfileFragment extends BaseFragment implements
             KahunaUtil.trackViewWine(baseWine.getId(), baseWine.getName());
             mViewWineTracked = true;
         }
+    }
+
+    private void updatePriceView() {
+        if (mSelectedWineVintage == null) {
+            return;
+        }
+        mWinePriceView.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
     }
 
     private void updateRatingsView(Ratingsable ratingsable) {
@@ -629,8 +696,7 @@ public class WineProfileFragment extends BaseFragment implements
         markCaptureAsHelpful(captureNote, markHelpful);
     }
 
-    @OnClick(R.id.all_years_textview)
-    protected void onAllYearsTextClick() {
+    private void showVintageDialog() {
         ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
         dialog.setTargetFragment(WineProfileFragment.this,
                 CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
