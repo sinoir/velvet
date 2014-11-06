@@ -4,10 +4,13 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.cache.WineSourceModel;
+import com.delectable.mobile.api.controllers.BaseWineController;
+import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
+import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
 import android.app.Activity;
@@ -20,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,13 +33,17 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
-public class ChooseVintageDialog extends DialogFragment {
+public class ChooseVintageDialog extends DialogFragment
+        implements WinePriceView.WinePriceViewActionsCallback {
 
     public static final String WINE = "WINE";
 
     private static final String BASE_WINE_ID = "BASE_WINE_ID";
 
     private static final String TAG = ChooseVintageDialog.class.getSimpleName();
+
+    @Inject
+    protected BaseWineController mBaseWineController;
 
     @Inject
     protected EventBus mEventBus;
@@ -55,7 +63,7 @@ public class ChooseVintageDialog extends DialogFragment {
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
-    private WineProfilesAdapter mAdapter = new WineProfilesAdapter();
+    private WineProfilesAdapter mAdapter;
 
     private BaseWine mBaseWine;
 
@@ -86,6 +94,8 @@ public class ChooseVintageDialog extends DialogFragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
         ButterKnife.inject(this, view);
+
+        mAdapter = new WineProfilesAdapter(this);
 
         mListView.setAdapter(mAdapter);
 
@@ -130,6 +140,7 @@ public class ChooseVintageDialog extends DialogFragment {
         }
     }
 
+    //region LoadLocal Data
     private void loadData() {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
@@ -157,6 +168,9 @@ public class ChooseVintageDialog extends DialogFragment {
             }
         }
     }
+    //endregion
+
+    //region Update UI methods
 
     /**
      * Update Vintage ViewModel data with new pricing info
@@ -168,6 +182,9 @@ public class ChooseVintageDialog extends DialogFragment {
                     wineInfo.getWineProfileMinimal().getId());
             if (wineWithPrice != null) {
                 wineInfo.setWineProfileMinimal(wineWithPrice);
+                if (wineInfo.isLoading()) {
+                    wineInfo.setLoading(false);
+                }
             }
         }
     }
@@ -181,7 +198,9 @@ public class ChooseVintageDialog extends DialogFragment {
 
         mAdapter.notifyDataSetChanged();
     }
+    //endregion
 
+    //region EventBus methods
     public void onEventMainThread(UpdatedBaseWineEvent event) {
         if (!mBaseWineId.equals(event.getBaseWineId())) {
             return;
@@ -191,4 +210,40 @@ public class ChooseVintageDialog extends DialogFragment {
             loadData();
         }
     }
+
+    public void onEventMainThread(FetchedWineSourceEvent event) {
+        if (event.isSuccessful()) {
+            loadData();
+        } else {
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    //endregion
+
+    //region Fetch Remote data
+    private void fetchPriceForWine(String wineId) {
+        mBaseWineController.fetchWineSource(wineId);
+    }
+    //endregion
+
+    //region WinePriceViewActionsCallback methods
+    @Override
+    public void onPriceCheckClicked(VintageWineInfo wineInfo) {
+        wineInfo.setLoading(true);
+        fetchPriceForWine(wineInfo.getWineProfileMinimal().getId());
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPriceClicked(VintageWineInfo wineInfo) {
+        // TODO: Checkout Process
+    }
+
+    @Override
+    public void onSoldOutClicked(VintageWineInfo wineInfo) {
+        // no-op
+    }
+    //endregion
 }

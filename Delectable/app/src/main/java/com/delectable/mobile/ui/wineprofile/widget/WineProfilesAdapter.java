@@ -22,7 +22,11 @@ public class WineProfilesAdapter extends BaseAdapter {
 
     private ArrayList<VintageWineInfo> mVintageWineInfos = new ArrayList<VintageWineInfo>();
 
-    public WineProfilesAdapter() {
+    private WinePriceView.WinePriceViewActionsCallback mWinePriceViewActionsCallback;
+
+    public WineProfilesAdapter(
+            WinePriceView.WinePriceViewActionsCallback winePriceViewActionsCallback) {
+        mWinePriceViewActionsCallback = winePriceViewActionsCallback;
     }
 
     public void setData(ArrayList<VintageWineInfo> vintageWineInfos) {
@@ -56,6 +60,7 @@ public class WineProfilesAdapter extends BaseAdapter {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             row = (ChooseVintageDialogRow) inflater
                     .inflate(R.layout.row_dialog_choose_vintage_with_sizing, parent, false);
+            row.setWinePriceActionCallback(mWinePriceViewActionsCallback);
         }
         if (mVintageWineInfos.size() > 0) {
             row.updateData(mVintageWineInfos.get(position));

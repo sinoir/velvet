@@ -73,4 +73,8 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         updateData(year, rating);
         mWinePriceView.updateWithPriceInfo(wineInfo);
     }
+
+    public void setWinePriceActionCallback(WinePriceView.WinePriceViewActionsCallback callback) {
+        mWinePriceView.setActionsCallback(callback);
+    }
 }
