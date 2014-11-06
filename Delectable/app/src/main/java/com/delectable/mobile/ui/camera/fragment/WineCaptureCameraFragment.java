@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
-import com.delectable.mobile.util.PhotoUtil;
+import com.delectable.mobile.util.CameraUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -174,7 +174,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, PhotoUtil.MAX_SIZE);
+                    selectedImage = CameraUtil.loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PENDING);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);

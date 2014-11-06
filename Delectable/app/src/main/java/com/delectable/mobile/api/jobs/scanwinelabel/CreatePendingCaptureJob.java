@@ -4,7 +4,7 @@ import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCapt
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureResponse;
 import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.util.PhotoUtil;
+import com.delectable.mobile.util.CameraUtil;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -57,7 +57,7 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
     @Override
     public byte[] compressImage(Bitmap bitmap) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, os);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY, os);
         return os.toByteArray();
     }
 

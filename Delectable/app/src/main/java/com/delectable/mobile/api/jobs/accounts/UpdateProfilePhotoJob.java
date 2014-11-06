@@ -5,7 +5,7 @@ import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadReques
 import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.jobs.scanwinelabel.BasePhotoUploadJob;
 import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.util.PhotoUtil;
+import com.delectable.mobile.util.CameraUtil;
 
 import android.graphics.Bitmap;
 
@@ -43,7 +43,7 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
     @Override
     public byte[] compressImage(Bitmap bitmap) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, os);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY, os);
         return os.toByteArray();
     }
 }

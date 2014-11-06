@@ -6,8 +6,8 @@ import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadReques
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.KahunaUtil;
-import com.delectable.mobile.util.PhotoUtil;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -65,7 +65,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
 
         // scale
         Matrix matrix = new Matrix();
-        float scaleFactor = PhotoUtil.MAX_SIZE_INSTANT / (float) bitmap.getHeight();
+        float scaleFactor = CameraUtil.MAX_SIZE_INSTANT / (float) bitmap.getHeight();
         matrix.setScale(scaleFactor, scaleFactor);
 
         Bitmap finalBitmap = Bitmap.createBitmap(
@@ -79,7 +79,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
 
         // compress
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        finalBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY_INSTANT, os);
+        finalBitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY_INSTANT, os);
         return os.toByteArray();
     }
 

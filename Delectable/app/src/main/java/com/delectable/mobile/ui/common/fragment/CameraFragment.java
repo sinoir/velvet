@@ -156,7 +156,7 @@ public class CameraFragment extends BaseFragment {
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            return CameraUtil.rotateScaleAndCropImage(getActivity(), data, mCameraId);
+            return CameraUtil.rotateScaleAndCropImage(data, mCameraId);
         }
 
         @Override
