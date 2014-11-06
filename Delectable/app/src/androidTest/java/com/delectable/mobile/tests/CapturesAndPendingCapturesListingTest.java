@@ -7,6 +7,7 @@ import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.BaseListingElementDeserializer;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PendingCapture;
 
@@ -31,7 +32,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
     }
 
     //for gson deserialization
-    private static final Type TYPE = new TypeToken<ListingResponse<BaseListingElement, String>>() {
+    private static final Type TYPE = new TypeToken<ListingResponse<BaseListingElement, DeleteHash>>() {
     }.getType();
 
     {
@@ -43,7 +44,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
 
     public void testParseCapturesAndPendingCapturesListing() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
-                R.raw.test_accounts_captures_and_pending_captures_details_ctx);
+                R.raw.test_accounts_captures_and_pending_captures_details_ctx_stage_1_raw_fetch);
 
         ListingResponse<BaseListingElement, String> response = mGson.fromJson(json.toString(), TYPE);
         Listing<BaseListingElement, String> actualListing = response.getPayload();
@@ -65,7 +66,59 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
         assertEquals(8, captureDetailsCount);
 
         assertEquals(10, actualListing.getUpdates().size());
+    }
 
+    public void testCapturesAndPendingCapturesListingWithAfterAndDelete() throws JSONException {
+        JSONObject json1 = loadJsonObjectFromResource(
+                R.raw.test_accounts_captures_and_pending_captures_details_ctx_stage_1_raw_fetch);
+        JSONObject json2WithAfter = loadJsonObjectFromResource(
+                R.raw.test_accounts_captures_and_pending_captures_details_ctx_stage_2_with_after);
+        JSONObject json3WithDelete = loadJsonObjectFromResource(
+                R.raw.test_accounts_captures_and_pending_captures_details_ctx_stage_3_with_delete);
+
+        ListingResponse<BaseListingElement, DeleteHash> response1, response2WithAfter, response3WithDelete;
+        response1 = mGson.fromJson(json1.toString(), TYPE);
+        response2WithAfter = mGson.fromJson(json2WithAfter.toString(), TYPE);
+        response3WithDelete = mGson.fromJson(json3WithDelete.toString(), TYPE);
+
+        Listing<BaseListingElement, DeleteHash> listing1, listing2WithAfter, listing3WithDelete;
+
+        listing1 = response1.getPayload();
+        listing2WithAfter = response2WithAfter.getPayload();
+        listing3WithDelete = response3WithDelete.getPayload();
+
+        ArrayList<BaseListingElement> displayData = listing1.getUpdates();
+
+        assertEquals(displayData, 2, 8, 10);
+
+        listing2WithAfter.combineInto(displayData, response2WithAfter.isInvalidate());
+
+        assertEquals(displayData, 3, 8, 11);
+
+        listing3WithDelete.combineInto(displayData, response3WithDelete.isInvalidate());
+
+        assertEquals(displayData, 2, 8, 10);
+
+    }
+
+    private static void assertEquals(ArrayList<BaseListingElement> displayData, int expectedPendingCount, int expectedCaptureCount,
+            int expectedTotal) {
+        int actualPendingCapturesCount = 0;
+        int actualCaptureDetailsCount = 0;
+
+        for (BaseListingElement item : displayData) {
+            if (item instanceof PendingCapture) {
+                actualPendingCapturesCount++;
+            }
+
+            if (item instanceof CaptureDetails) {
+                actualCaptureDetailsCount++;
+            }
+        }
+
+        assertEquals(expectedPendingCount, actualPendingCapturesCount);
+        assertEquals(expectedCaptureCount, actualCaptureDetailsCount);
+        assertEquals(expectedTotal, displayData.size());
     }
 
     //TODO test all combining with updates/deletes/before/after
