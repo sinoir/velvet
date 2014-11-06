@@ -3,8 +3,11 @@ package com.delectable.mobile.ui.wineprofile.dialog;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.BaseWineModel;
+import com.delectable.mobile.api.cache.WineSourceModel;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
+import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
 import android.app.Activity;
@@ -17,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -38,6 +43,9 @@ public class ChooseVintageDialog extends DialogFragment {
     @Inject
     protected BaseWineModel mBaseWineModel;
 
+    @Inject
+    protected WineSourceModel mWineSourceModel;
+
     @InjectView(R.id.producer_name)
     protected TextView mProducerName;
 
@@ -52,6 +60,8 @@ public class ChooseVintageDialog extends DialogFragment {
     private BaseWine mBaseWine;
 
     private String mBaseWineId;
+
+    private ArrayList<VintageWineInfo> mVintageWineInfos;
 
     public static ChooseVintageDialog newInstance(String baseWineId) {
         ChooseVintageDialog f = new ChooseVintageDialog();
@@ -93,7 +103,10 @@ public class ChooseVintageDialog extends DialogFragment {
             }
         });
 
-        loadBaseWineData();
+        mVintageWineInfos = new ArrayList<VintageWineInfo>();
+        mAdapter.setData(mVintageWineInfos);
+
+        loadData();
 
         return view;
     }
@@ -117,11 +130,46 @@ public class ChooseVintageDialog extends DialogFragment {
         }
     }
 
-    private void loadBaseWineData() {
+    private void loadData() {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
 
+        if (mVintageWineInfos.size() == 0) {
+            loadPricingData();
+        } else {
+            updatePricingData();
+        }
+
         updateUI();
+    }
+
+    /**
+     * Initial loading of pricing data
+     */
+    private void loadPricingData() {
+        for (WineProfileSubProfile wineProfile : mBaseWine.getWineProfiles()) {
+            WineProfileSubProfile wineWithPrice = mWineSourceModel
+                    .getMinWineWithPrice(wineProfile.getId());
+            if (wineWithPrice != null) {
+                mVintageWineInfos.add(new VintageWineInfo(wineWithPrice));
+            } else {
+                mVintageWineInfos.add(new VintageWineInfo(wineProfile));
+            }
+        }
+    }
+
+    /**
+     * Update Vintage ViewModel data with new pricing info
+     */
+    private void updatePricingData() {
+        // Reloads the data via reference from the cache
+        for (VintageWineInfo wineInfo : mVintageWineInfos) {
+            WineProfileSubProfile wineWithPrice = mWineSourceModel.getMinWineWithPrice(
+                    wineInfo.getWineProfileMinimal().getId());
+            if (wineWithPrice != null) {
+                wineInfo.setWineProfileMinimal(wineWithPrice);
+            }
+        }
     }
 
     private void updateUI() {
@@ -131,7 +179,6 @@ public class ChooseVintageDialog extends DialogFragment {
         mProducerName.setText(mBaseWine.getProducerName());
         mWineName.setText(mBaseWine.getName());
 
-        mAdapter.setBaseWine(mBaseWine);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -141,7 +188,7 @@ public class ChooseVintageDialog extends DialogFragment {
         }
 
         if (event.isSuccessful()) {
-            loadBaseWineData();
+            loadData();
         }
     }
 }

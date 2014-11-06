@@ -25,11 +25,8 @@ public class WineProfilesAdapter extends BaseAdapter {
     public WineProfilesAdapter() {
     }
 
-    public void setBaseWine(BaseWine baseWine) {
-        mVintageWineInfos.clear();
-        for (WineProfileSubProfile wineProfile : baseWine.getWineProfiles()) {
-            mVintageWineInfos.add(new VintageWineInfo(wineProfile));
-        }
+    public void setData(ArrayList<VintageWineInfo> vintageWineInfos) {
+        mVintageWineInfos = vintageWineInfos;
     }
 
     @Override
