@@ -1,7 +1,6 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 
 import android.content.Context;
@@ -75,19 +74,6 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         // TODO: Remove Rating count
         int reviewCount = wineInfo.getRatingCount();
         double rating = wineInfo.getRating();
-
-        updateData(year, reviewCount, rating);
-    }
-
-    /**
-     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
-     * data for the all years row.
-     */
-    public void updateData(BaseWine baseWine) {
-        // TODO:  Remove All years
-        String year = getResources().getString(R.string.choose_vintage_dialog_all_years);
-        int reviewCount = baseWine.getRatingsSummary().getAllCount();
-        double rating = baseWine.getRatingsSummary().getAllAvgOfTen();
 
         updateData(year, reviewCount, rating);
     }

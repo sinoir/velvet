@@ -20,20 +20,12 @@ import java.util.ArrayList;
  */
 public class WineProfilesAdapter extends BaseAdapter {
 
-    private static final int FIRST_ROW = 0;
-
-    private static final int FIRST_ROW_OFFSET = 1;
-
-    private BaseWine mBaseWine;
-
     private ArrayList<VintageWineInfo> mVintageWineInfos = new ArrayList<VintageWineInfo>();
 
     public WineProfilesAdapter() {
-
     }
 
     public void setBaseWine(BaseWine baseWine) {
-        mBaseWine = baseWine;
         mVintageWineInfos.clear();
         for (WineProfileSubProfile wineProfile : baseWine.getWineProfiles()) {
             mVintageWineInfos.add(new VintageWineInfo(wineProfile));
@@ -42,7 +34,7 @@ public class WineProfilesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mVintageWineInfos.size() + FIRST_ROW_OFFSET; //+1 for the all years row
+        return mVintageWineInfos.size();
     }
 
     /**
@@ -51,16 +43,11 @@ public class WineProfilesAdapter extends BaseAdapter {
      */
     @Override
     public Parcelable getItem(int position) {
-        if (position == FIRST_ROW) {
-            return mBaseWine;
-        }
-        position -= FIRST_ROW_OFFSET;
         return mVintageWineInfos.get(position).getWineProfileMinimal();
     }
 
     @Override
     public long getItemId(int position) {
-        position -= FIRST_ROW_OFFSET;
         return position;
     }
 
@@ -73,15 +60,9 @@ public class WineProfilesAdapter extends BaseAdapter {
             row = (ChooseVintageDialogRow) inflater
                     .inflate(R.layout.row_dialog_choose_vintage_with_sizing, parent, false);
         }
-
-        // TODO: Remove First Row..
-        if (position == FIRST_ROW && mBaseWine != null) {
-            row.updateData(mBaseWine);
-        } else if (mVintageWineInfos.size() > 0) {
-            position -= FIRST_ROW_OFFSET; //adjust position so show the correct wine profile data
+        if (mVintageWineInfos.size() > 0) {
             row.updateData(mVintageWineInfos.get(position));
         }
         return row;
     }
-
 }
