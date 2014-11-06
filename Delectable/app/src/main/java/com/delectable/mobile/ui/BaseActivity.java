@@ -126,10 +126,9 @@ public abstract class BaseActivity extends ActionBarActivity
     public void replaceWithFragment(BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        // TODO: Should we animate?
-//        transaction.setCustomAnimations(
-//                android.R.animator.fade_in, android.R.animator.fade_out,
-//                android.R.animator.fade_in, android.R.animator.fade_out);
+        transaction.setCustomAnimations(
+                R.anim.fade_in, R.anim.fade_out,
+                R.anim.fade_in, R.anim.fade_out);
 
         //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
         //the fragment from the backstack in onActivityResult
