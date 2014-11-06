@@ -28,11 +28,11 @@ public class CapturesPendingCapturesListingModel {
         mCaptureDetailsModel = capturesModel;
     }
 
-    public Listing<BaseListingElement> getUserCaptures(String accountId) {
+    public Listing<BaseListingElement, String> getUserCaptures(String accountId) {
         return getCachedCaptures(accountId);
     }
 
-    public void saveUserCaptures(String accountId, Listing<BaseListingElement> listing) {
+    public void saveUserCaptures(String accountId, Listing<BaseListingElement, String> listing) {
         saveListing(accountId, listing);
     }
 
@@ -56,7 +56,7 @@ public class CapturesPendingCapturesListingModel {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<BaseListingElement> listing) {
+    private void saveListing(String key, Listing<BaseListingElement, String> listing) {
 
         CacheListing<BaseListingElement> cacheListing = new CacheListing<BaseListingElement>(
                 listing);
@@ -76,7 +76,7 @@ public class CapturesPendingCapturesListingModel {
         }
     }
 
-    private Listing<BaseListingElement> getCachedCaptures(String key) {
+    private Listing<BaseListingElement, String> getCachedCaptures(String key) {
         CacheListing<BaseListingElement> cacheListing = mMap.get(key);
         if (cacheListing == null) {
             //nothing in cache
@@ -104,7 +104,7 @@ public class CapturesPendingCapturesListingModel {
             Log.e(TAG,
                     "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
         }
-        Listing<BaseListingElement> listing = new Listing<BaseListingElement>(cacheListing,
+        Listing<BaseListingElement, String> listing = new Listing<BaseListingElement, String>(cacheListing,
                 captures);
 
         return listing;

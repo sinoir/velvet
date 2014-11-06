@@ -23,10 +23,10 @@ public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
 
     private String mAccountId;
 
-    private Listing<T> mListing;
+    private Listing<T, String> mListing;
 
     public UpdatedListingEvent(String requestId, String accountId,
-            Listing<T> listing) {
+            Listing<T, String> listing) {
         super(true);
         mRequestId = requestId;
         mAccountId = accountId;
@@ -48,7 +48,7 @@ public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
         return mAccountId;
     }
 
-    public Listing<T> getListing() {
+    public Listing<T, String> getListing() {
         return mListing;
     }
 }

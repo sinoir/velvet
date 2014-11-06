@@ -26,13 +26,13 @@ public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
     }
 
     @Override
-    public Listing<CaptureDetails> getCachedListing(String accountId) {
+    public Listing<CaptureDetails, String> getCachedListing(String accountId) {
         return mListingModel.getFollowerFeed();
     }
 
     @Override
     public void saveListingToCache(String accountId,
-            Listing<CaptureDetails> apiListing) {
+            Listing<CaptureDetails, String> apiListing) {
         mListingModel.saveFollowerFeed(apiListing);
     }
 
@@ -49,7 +49,7 @@ public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public FetchFollowerFeedJob(String requestId, CapturesContext context,
-            Listing<CaptureDetails> captureListing,
+            Listing<CaptureDetails, String> captureListing,
             Boolean isPullToRefresh) {
         super(requestId, context.toString(), null, captureListing, isPullToRefresh);
     }

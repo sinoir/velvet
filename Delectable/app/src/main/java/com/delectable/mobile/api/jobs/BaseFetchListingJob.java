@@ -48,7 +48,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public BaseFetchListingJob(String requestId, String context, String dataItemId,
-            Listing<T> listing, Boolean isPullToRefresh) {
+            Listing<T, String> listing, Boolean isPullToRefresh) {
         super(new Params(Priority.SYNC));
         mRequestId = requestId;
         mContext = context;
@@ -94,14 +94,14 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
     /**
      * Lets the subclass handle the retrieval of it's cached listing.
      */
-    protected abstract Listing<T> getCachedListing(String dataItemId);
+    protected abstract Listing<T, String> getCachedListing(String dataItemId);
 
     /**
      * Lets the subclass handle saving the listing to cache. The ListingResponse provided here will
      * be pass onwards to the success event. If there are any changes made to the object during the
      * save to cache, they will be reflected in the event.
      */
-    protected abstract void saveListingToCache(String dataItemId, Listing<T> listing);
+    protected abstract void saveListingToCache(String dataItemId, Listing<T, String> listing);
 
     /**
      * The concrete generic type needs to be provided in the subclass. Just use the code below with
@@ -140,7 +140,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
         ListingResponse<T> response = getNetworkClient().post(endpoint, request, type);
 
-        Listing<T> apiListing = response.getPayload();
+        Listing<T, String> apiListing = response.getPayload();
         // note: Sometimes payload may be null
         // maybe there are no captures
         // maybe list is completely up to date and e_tag_match is true
@@ -149,7 +149,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         if (apiListing != null) {
 
             //grab cached listing if it exist
-            Listing<T> cachedListing = getCachedListing(mDataItemId);
+            Listing<T, String> cachedListing = getCachedListing(mDataItemId);
             ArrayList<T> cachedItems = new ArrayList<T>();
             if (cachedListing != null) {
                 cachedItems = cachedListing.getUpdates();

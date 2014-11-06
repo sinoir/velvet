@@ -53,12 +53,12 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected Listing<CaptureDetails> getCachedFeed() {
+    protected Listing<CaptureDetails, String> getCachedFeed() {
         return mCaptureListingModel.getTrendingFeed();
     }
 
     @Override
-    protected void fetchCaptures(Listing<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh) {
         mCaptureController
                 .fetchTrendingCaptures(CAPTURES_REQ, CapturesContext.DETAILS, listing,

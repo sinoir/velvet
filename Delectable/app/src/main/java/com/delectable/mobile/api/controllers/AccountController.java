@@ -74,7 +74,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchFollowers(String requestId, String accountId,
-            Listing<AccountMinimal> listing, Boolean isPullToRefresh) {
+            Listing<AccountMinimal, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowersJob(requestId, accountId, listing, isPullToRefresh));
     }
@@ -87,7 +87,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchFollowings(String requestId, String accountId,
-            Listing<AccountMinimal> listing, Boolean isPullToRefresh) {
+            Listing<AccountMinimal, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowingsJob(requestId, accountId, listing, isPullToRefresh));
     }
@@ -101,7 +101,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchAccountCaptures(String requestId, CapturesContext context, String accountId,
-            Listing<BaseListingElement> listing, Boolean isPullToRefresh) {
+            Listing<BaseListingElement, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchAccountCapturesJob(requestId, context, accountId, listing,
                         isPullToRefresh));
@@ -184,7 +184,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchFollowerFeed(String requestId, CapturesContext context,
-            Listing<CaptureDetails> listing, Boolean isPullToRefresh) {
+            Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowerFeedJob(requestId, context, listing, isPullToRefresh));
     }

@@ -42,7 +42,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
     private CaptureDetailsAdapter mAdapter;
 
-    private Listing<CaptureDetails> mCapturesListing;
+    private Listing<CaptureDetails, String> mCapturesListing;
 
     private boolean mFetching;
 
@@ -115,15 +115,15 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     private void loadLocalData() {
         mRefreshContainer.setRefreshing(true);
         mFetching = true;
-        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
+        new SafeAsyncTask<Listing<CaptureDetails, String>>(this) {
             @Override
-            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureDetails, String> safeDoInBackground(Void[] params) {
                 Log.d(TAG, "loadLocalData:doInBg");
                 return getCachedFeed();
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<CaptureDetails, String> listing) {
                 Log.d(TAG, "loadLocalData:returnedFromCache");
                 if (listing != null) {
                     Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
@@ -145,9 +145,9 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected abstract Listing<CaptureDetails> getCachedFeed();
+    protected abstract Listing<CaptureDetails, String> getCachedFeed();
 
-    protected abstract void fetchCaptures(Listing<CaptureDetails> listing,
+    protected abstract void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh);
 
     private void refreshData() {

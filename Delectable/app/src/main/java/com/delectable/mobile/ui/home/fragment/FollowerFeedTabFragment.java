@@ -66,12 +66,12 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected Listing<CaptureDetails> getCachedFeed() {
+    protected Listing<CaptureDetails, String> getCachedFeed() {
         return mCaptureListingModel.getFollowerFeed();
     }
 
     @Override
-    protected void fetchCaptures(Listing<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh) {
         mAccountController
                 .fetchFollowerFeed(CAPTURES_REQ, CapturesContext.DETAILS, listing,

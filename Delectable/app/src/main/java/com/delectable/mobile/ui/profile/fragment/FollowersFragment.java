@@ -23,13 +23,13 @@ public class FollowersFragment extends BaseFollowersFragment {
     }
 
     @Override
-    protected Listing<AccountMinimal> getCachedListing(String accountId) {
+    protected Listing<AccountMinimal, String> getCachedListing(String accountId) {
         return mListingModel.getFollowersListing(accountId);
     }
 
     @Override
     protected void fetchAccounts(String accountId,
-            Listing<AccountMinimal> accountListing, boolean isPullToRefresh) {
+            Listing<AccountMinimal, String> accountListing, boolean isPullToRefresh) {
         mAccountController.fetchFollowers(FOLLOWERS_REQ, accountId, accountListing, isPullToRefresh);
     }
 

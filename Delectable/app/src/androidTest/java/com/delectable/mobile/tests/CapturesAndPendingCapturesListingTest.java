@@ -46,7 +46,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
                 R.raw.test_accounts_captures_and_pending_captures_details_ctx);
 
         ListingResponse<BaseListingElement> response = mGson.fromJson(json.toString(), TYPE);
-        Listing<BaseListingElement> actualListing = response.getPayload();
+        Listing<BaseListingElement, String> actualListing = response.getPayload();
 
         int pendingCapturesCount = 0;
         int captureDetailsCount = 0;
@@ -88,7 +88,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_captures_and_pending_captures_details_ctx);
         ListingResponse<BaseListingElement> response = mGson.fromJson(json.toString(), TYPE);
-        Listing<BaseListingElement> listing = response.getPayload();
+        Listing<BaseListingElement, String> listing = response.getPayload();
 
         ArrayList<BaseListingElement> expectedCaptures = listing.getUpdates();
 

@@ -31,7 +31,7 @@ public class ActivityFeedTestCase extends BaseInstrumentationTestCase {
         Type type = new TypeToken<ListingResponse<ActivityFeedItem>>() {
         }.getType();
         ListingResponse<ActivityFeedItem> response = mGson.fromJson(json.toString(), type);
-        Listing<ActivityFeedItem> actualListing = response.getPayload();
+        Listing<ActivityFeedItem, String> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());

@@ -67,17 +67,17 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     private String mAccountId;
 
-    private Listing<AccountMinimal> mFollowerListing;
+    private Listing<AccountMinimal, String> mFollowerListing;
 
     /**
      * Flag to know when we are already fetching
      */
     private boolean mFetching;
 
-    protected abstract Listing<AccountMinimal> getCachedListing(String accountId);
+    protected abstract Listing<AccountMinimal, String> getCachedListing(String accountId);
 
     protected abstract void fetchAccounts(String accountId,
-            Listing<AccountMinimal> accountListing, boolean isPullToRefresh);
+            Listing<AccountMinimal, String> accountListing, boolean isPullToRefresh);
 
     protected void setArguments(String accountId) {
         Bundle args = new Bundle();
@@ -124,14 +124,14 @@ public abstract class BaseFollowersFragment extends BaseFragment
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<Listing<AccountMinimal>>(this) {
+        new SafeAsyncTask<Listing<AccountMinimal, String>>(this) {
             @Override
-            protected Listing<AccountMinimal> safeDoInBackground(Void[] params) {
+            protected Listing<AccountMinimal, String> safeDoInBackground(Void[] params) {
                 return getCachedListing(mAccountId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<AccountMinimal> listing) {
+            protected void safeOnPostExecute(Listing<AccountMinimal, String> listing) {
 
                 if (listing != null) {
                     mFollowerListing = listing;

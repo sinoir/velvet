@@ -5,12 +5,12 @@ import com.delectable.mobile.api.models.IDable;
 
 public class ListingResponse<T extends IDable> extends BaseResponse {
 
-    private Listing<T> payload;
+    private Listing<T, String> payload;
 
     //tells use whether or not to dump the current list
     private boolean invalidate;
 
-    public Listing<T> getPayload() {
+    public Listing<T, String> getPayload() {
         return payload;
     }
 

@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 
 public class CaptureDetailsListingIOTestCase extends BaseInstrumentationTestCase {
 
-    private Listing<CaptureDetails> mFollowFeedListing;
+    private Listing<CaptureDetails, String> mFollowFeedListing;
 
     @Override
     protected void setUp() throws Exception {

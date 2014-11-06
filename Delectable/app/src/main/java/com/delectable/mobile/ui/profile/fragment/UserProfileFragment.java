@@ -97,7 +97,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private CapturesPendingCapturesAdapter mAdapter;
 
-    private Listing<BaseListingElement> mCapturesListing;
+    private Listing<BaseListingElement, String> mCapturesListing;
 
     private boolean mFetching;
 
@@ -353,14 +353,14 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private void loadLocalData() {
 
-        new SafeAsyncTask<Listing<BaseListingElement>>(this) {
+        new SafeAsyncTask<Listing<BaseListingElement, String>>(this) {
             @Override
-            protected Listing<BaseListingElement> safeDoInBackground(Void[] params) {
+            protected Listing<BaseListingElement, String> safeDoInBackground(Void[] params) {
                 return mListingModel.getUserCaptures(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<BaseListingElement> listing) {
+            protected void safeOnPostExecute(Listing<BaseListingElement, String> listing) {
 
                 if (listing != null) {
                     mCapturesListing = listing;

@@ -29,7 +29,7 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
         Type type = new TypeToken<ListingResponse<CaptureNote>>() {
         }.getType();
         ListingResponse<CaptureNote> response = mGson.fromJson(json.toString(), type);
-        Listing<CaptureNote> actualListing = response.getPayload();
+        Listing<CaptureNote, String> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());

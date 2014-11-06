@@ -29,12 +29,12 @@ public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote> {
     }
 
     @Override
-    public Listing<CaptureNote> getCachedListing(String id) {
+    public Listing<CaptureNote, String> getCachedListing(String id) {
         return CaptureNoteListingModel.getUserCaptures(id);
     }
 
     @Override
-    public void saveListingToCache(String id, Listing<CaptureNote> apiListing) {
+    public void saveListingToCache(String id, Listing<CaptureNote, String> apiListing) {
         CaptureNoteListingModel.saveListing(id, apiListing);
     }
 
@@ -57,7 +57,7 @@ public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote> {
      * @param isPullToRefresh true if user invoked this call via a pull to refresh.
      */
     public FetchCaptureNotesJob(String requestId, String baseWineId, String wineProfileId,
-            Listing<CaptureNote> listing, String includeCaptureNote, Boolean isPullToRefresh) {
+            Listing<CaptureNote, String> listing, String includeCaptureNote, Boolean isPullToRefresh) {
         //provide either wineProfileId or baseWineId as the dataItemId
         super(requestId, baseWineId == null ? wineProfileId : baseWineId);
         mBaseWineId = baseWineId;

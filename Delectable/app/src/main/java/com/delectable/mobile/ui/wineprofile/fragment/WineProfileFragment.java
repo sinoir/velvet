@@ -159,7 +159,7 @@ public class WineProfileFragment extends BaseFragment implements
     private BaseWineMinimal mBaseWineMinimal;
 
 
-    private Listing<CaptureNote> mCaptureNoteListing;
+    private Listing<CaptureNote, String> mCaptureNoteListing;
 
     /**
      * these maps are used to retain references to {@link CaptureNote} objects expecting updates to
@@ -380,15 +380,15 @@ public class WineProfileFragment extends BaseFragment implements
      */
     private void loadLocalData(final Type type, final String wineId) {
         mFetching = true;
-        new SafeAsyncTask<Listing<CaptureNote>>(this) {
+        new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
             @Override
-            protected Listing<CaptureNote> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureNote, String> safeDoInBackground(Void[] params) {
                 Log.d(TAG, "loadLocalData:doInBg");
                 return CaptureNoteListingModel.getUserCaptures(wineId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureNote> listing) {
+            protected void safeOnPostExecute(Listing<CaptureNote, String> listing) {
                 Log.d(TAG, "loadLocalData:returnedFromCache");
                 if (listing != null) {
                     Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
@@ -473,7 +473,7 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param idType Whether to load captures notes for a base wine or a wine profile.
      */
-    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote> listing,
+    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote, String> listing,
             Boolean isPullToRefresh) {
         mFetching = true;
         if (idType == Type.BASE_WINE) {

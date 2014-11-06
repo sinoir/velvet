@@ -27,12 +27,12 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<BaseListingElem
     }
 
     @Override
-    public Listing<BaseListingElement> getCachedListing(String dataItemId) {
+    public Listing<BaseListingElement, String> getCachedListing(String dataItemId) {
         return mListingModel.getUserCaptures(dataItemId);
     }
 
     @Override
-    public void saveListingToCache(String dataItemId, Listing<BaseListingElement> apiListing) {
+    public void saveListingToCache(String dataItemId, Listing<BaseListingElement, String> apiListing) {
         mListingModel.saveUserCaptures(dataItemId, apiListing);
     }
 
@@ -50,7 +50,7 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<BaseListingElem
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public FetchAccountCapturesJob(String requestId, CapturesContext context, String accountId,
-            Listing<BaseListingElement> captureListing,
+            Listing<BaseListingElement, String> captureListing,
             Boolean isPullToRefresh) {
         super(requestId, context.toString(), accountId, captureListing, isPullToRefresh);
     }

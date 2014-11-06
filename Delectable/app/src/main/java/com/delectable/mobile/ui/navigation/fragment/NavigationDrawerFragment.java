@@ -347,7 +347,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        Listing<ActivityFeedItem> mActivityRecipientListing = event.getListing();
+        Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
         mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
         mActivityFeedAdapter.notifyDataSetChanged();
     }
