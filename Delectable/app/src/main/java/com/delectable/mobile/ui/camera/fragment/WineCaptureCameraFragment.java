@@ -5,8 +5,10 @@ import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.PhotoUtil;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
@@ -14,11 +16,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,6 +67,14 @@ public class WineCaptureCameraFragment extends CameraFragment {
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_camera, container, false);
         ButterKnife.inject(this, mView);
+
+        // set camera container height to match screen width
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point screenSize = new Point();
+        display.getSize(screenSize);
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
+        mCameraContainer.setLayoutParams(parms);
 
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
