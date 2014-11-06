@@ -44,6 +44,18 @@ public class VintageWineInfo {
         return "";
     }
 
+    public String getYear() {
+        return mWineProfileMinimal.getVintage();
+    }
+
+    public int getRatingCount() {
+        return mWineProfileMinimal.getRatingsSummary().getAllCount();
+    }
+
+    public double getRating() {
+        return mWineProfileMinimal.getRatingsSummary().getAllAvgOfTen();
+    }
+
     private boolean hasPurchaseOfferPrice() {
         return mPurchaseOffer != null && mPurchaseOffer.getPricing() != null
                 && mPurchaseOffer.getPricing().size() > 0;
@@ -51,5 +63,13 @@ public class VintageWineInfo {
 
     private boolean hasWineProfilePrice() {
         return mWineProfileMinimal != null && mWineProfileMinimal.getPriceText() != null;
+    }
+
+    public WineProfileSubProfile getWineProfileMinimal() {
+        return mWineProfileMinimal;
+    }
+
+    public void setWineProfileMinimal(WineProfileSubProfile wineProfileMinimal) {
+        mWineProfileMinimal = wineProfileMinimal;
     }
 }
