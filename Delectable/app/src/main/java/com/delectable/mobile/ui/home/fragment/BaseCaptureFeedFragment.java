@@ -78,9 +78,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         ButterKnife.inject(this, view);
 
         mRefreshContainer.setListView(mListView);
-        mRefreshContainer
-                .setColorScheme(R.color.d_soft_amber_25op, R.color.d_edward_25op,
-                        R.color.d_soft_amber_25op, R.color.d_edward_25op);
+        mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
 
         mListView.setAdapter(mAdapter);
 
