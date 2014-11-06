@@ -48,7 +48,7 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public BaseFetchListingJob(String requestId, String context, String dataItemId,
-            Listing<T, String> listing, Boolean isPullToRefresh) {
+            Listing<T, D> listing, Boolean isPullToRefresh) {
         super(new Params(Priority.SYNC));
         mRequestId = requestId;
         mContext = context;
@@ -171,7 +171,7 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
     protected void onCancel() {
         super.onCancel();
         String jobName = this.getClass().getSimpleName();
-        mEventBus.post(new UpdatedListingEvent<T, String>(mRequestId, mDataItemId,
+        mEventBus.post(new UpdatedListingEvent<T, D>(mRequestId, mDataItemId,
                 jobName + " " + getErrorMessage(), getErrorCode()));
 
     }

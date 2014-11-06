@@ -3,6 +3,7 @@ package com.delectable.mobile.api.cache;
 import com.delectable.mobile.api.cache.localmodels.CacheListing;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PendingCapture;
 
@@ -28,11 +29,11 @@ public class CapturesPendingCapturesListingModel {
         mCaptureDetailsModel = capturesModel;
     }
 
-    public Listing<BaseListingElement, String> getUserCaptures(String accountId) {
+    public Listing<BaseListingElement, DeleteHash> getUserCaptures(String accountId) {
         return getCachedCaptures(accountId);
     }
 
-    public void saveUserCaptures(String accountId, Listing<BaseListingElement, String> listing) {
+    public void saveUserCaptures(String accountId, Listing<BaseListingElement, DeleteHash> listing) {
         saveListing(accountId, listing);
     }
 
@@ -56,7 +57,7 @@ public class CapturesPendingCapturesListingModel {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<BaseListingElement, String> listing) {
+    private void saveListing(String key, Listing<BaseListingElement, DeleteHash> listing) {
 
         CacheListing<BaseListingElement> cacheListing = new CacheListing<BaseListingElement>(
                 listing);
@@ -76,7 +77,7 @@ public class CapturesPendingCapturesListingModel {
         }
     }
 
-    private Listing<BaseListingElement, String> getCachedCaptures(String key) {
+    private Listing<BaseListingElement, DeleteHash> getCachedCaptures(String key) {
         CacheListing<BaseListingElement> cacheListing = mMap.get(key);
         if (cacheListing == null) {
             //nothing in cache
@@ -104,7 +105,7 @@ public class CapturesPendingCapturesListingModel {
             Log.e(TAG,
                     "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
         }
-        Listing<BaseListingElement, String> listing = new Listing<BaseListingElement, String>(cacheListing,
+        Listing<BaseListingElement, DeleteHash> listing = new Listing<BaseListingElement, DeleteHash>(cacheListing,
                 captures);
 
         return listing;

@@ -15,6 +15,7 @@ import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEve
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -97,7 +98,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private CapturesPendingCapturesAdapter mAdapter;
 
-    private Listing<BaseListingElement, String> mCapturesListing;
+    private Listing<BaseListingElement, DeleteHash> mCapturesListing;
 
     private boolean mFetching;
 
@@ -272,7 +273,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<BaseListingElement, String> event) {
+    public void onEventMainThread(UpdatedListingEvent<BaseListingElement, DeleteHash> event) {
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }
@@ -353,14 +354,14 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private void loadLocalData() {
 
-        new SafeAsyncTask<Listing<BaseListingElement, String>>(this) {
+        new SafeAsyncTask<Listing<BaseListingElement, DeleteHash>>(this) {
             @Override
-            protected Listing<BaseListingElement, String> safeDoInBackground(Void[] params) {
+            protected Listing<BaseListingElement, DeleteHash> safeDoInBackground(Void[] params) {
                 return mListingModel.getUserCaptures(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<BaseListingElement, String> listing) {
+            protected void safeOnPostExecute(Listing<BaseListingElement, DeleteHash> listing) {
 
                 if (listing != null) {
                     mCapturesListing = listing;

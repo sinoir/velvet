@@ -13,4 +13,13 @@ public class DeleteHash {
     public String getId() {
         return id;
     }
+
+    /**
+     * Don't Modify this. The BaseFetchListingJob depends on this toString() to return the delete
+     * id.
+     */
+    @Override
+    public String toString() {
+        return id;
+    }
 }

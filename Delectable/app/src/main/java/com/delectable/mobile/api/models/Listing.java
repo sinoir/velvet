@@ -8,12 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Base class for Listings. This was created because the captures_and_pending_captures endpoint
- * returns delete hashes as it's {@link #deletes} array. All other listings return an array of
- * String ids.
- *
  * @param <T> The type that the Listing is for.
- * @param <D> The type for the {@link #deletes} array.
+ * @param <D> The type for the {@link #deletes} array. {@code D}'s toString() must return the id in
+ *            order for this to work properly, or {@link #getId} can be overridden.
  */
 public class Listing<T extends IDable, D> {
 

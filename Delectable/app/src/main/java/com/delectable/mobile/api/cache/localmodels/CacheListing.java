@@ -20,7 +20,7 @@ public class CacheListing<T extends IDable> {
 
     private ArrayList<String> item_ids;
 
-    public CacheListing(Listing<T, String> listing) {
+    public CacheListing(Listing<T, ?> listing) {
         e_tag = listing.getETag();
         more = listing.getMore();
         boundaries = listing.getBoundaries();

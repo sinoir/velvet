@@ -38,6 +38,7 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PaymentMethod;
@@ -101,7 +102,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchAccountCaptures(String requestId, CapturesContext context, String accountId,
-            Listing<BaseListingElement, String> listing, Boolean isPullToRefresh) {
+            Listing<BaseListingElement, DeleteHash> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchAccountCapturesJob(requestId, context, accountId, listing,
                         isPullToRefresh));
