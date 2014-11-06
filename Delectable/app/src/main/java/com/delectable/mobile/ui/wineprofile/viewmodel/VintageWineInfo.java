@@ -13,6 +13,8 @@ public class VintageWineInfo {
 
     private WineProfileSubProfile mWineProfileMinimal;
 
+    private boolean mIsLoading;
+
     public VintageWineInfo(WineProfileSubProfile wineProfileMinimal) {
         this(wineProfileMinimal, null);
     }
@@ -70,5 +72,13 @@ public class VintageWineInfo {
 
     public void setWineProfileMinimal(WineProfileSubProfile wineProfileMinimal) {
         mWineProfileMinimal = wineProfileMinimal;
+    }
+
+    public boolean isLoading() {
+        return mIsLoading;
+    }
+
+    public void setLoading(boolean isLoading) {
+        mIsLoading = isLoading;
     }
 }
