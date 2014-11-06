@@ -305,7 +305,8 @@ public class WineProfileFragment extends BaseFragment implements
 
         // Setup Floating Camera Button
         mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
-        FloatingActionButton.FabOnScrollListener fabOnScrollListener = new FloatingActionButton.FabOnScrollListener() {
+        FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
 
             final View wineImageView = header.findViewById(R.id.wine_image);
 
@@ -334,32 +335,6 @@ public class WineProfileFragment extends BaseFragment implements
         return view;
     }
 
-    /**
-     * The WineBannerView can be set with different types of data depending from where this fragment
-     * was spawned.
-     */
-    private void updateBannerData() {
-        if (mWineProfile != null) {
-            //spawned from Feed Fragment
-            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
-        } else if (mBaseWineMinimal != null) {
-            //spawned from Search Wines
-            mBanner.updateData(mBaseWineMinimal);
-        } else if (mBaseWine != null) {
-            //spawned from WineCaptureSubmit
-            //also called after BaseWine is successfully fetched
-            mBanner.updateData(mBaseWine);
-        }
-    }
-
-    @OnClick(R.id.all_years_textview)
-    protected void onAllYearsTextClick() {
-        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
-        dialog.setTargetFragment(WineProfileFragment.this,
-                CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
-        dialog.show(getFragmentManager(), "dialog");
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -374,6 +349,41 @@ public class WineProfileFragment extends BaseFragment implements
             loadLocalData(Type.BASE_WINE, mBaseWineId);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case CHOOSE_VINTAGE_DIALOG:
+                Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
+                String mOldFetchingId = mFetchingId;
+                //when All Years is selected from dialog
+                if (wine instanceof BaseWine) {
+                    mType = Type.BASE_WINE;
+                    BaseWine baseWine = (BaseWine) wine;
+                    updateRatingsView(baseWine);
+                    mFetchingId = baseWine.getId();
+                }
+                //when a vintage year is selected from the dialog
+                if (wine instanceof WineProfileSubProfile) {
+                    mType = Type.WINE_PROFILE;
+                    WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
+                    updateRatingsView(wineProfile);
+                    mFetchingId = wineProfile.getId();
+                }
+
+                //only clear list if fetching id has changed
+                if (!mOldFetchingId.equals(mFetchingId)) {
+                    mAdapter.getItems().clear();
+
+                    //first query cache to see if we have something on hand already
+                    loadLocalData(mType, mFetchingId);
+                }
+
+        }
+    }
+
+    //region Load Local Data
 
     /**
      * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
@@ -410,39 +420,6 @@ public class WineProfileFragment extends BaseFragment implements
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        switch (requestCode) {
-            case CHOOSE_VINTAGE_DIALOG:
-                Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
-                String mOldFetchingId = mFetchingId;
-                //when All Years is selected from dialog
-                if (wine instanceof BaseWine) {
-                    mType = Type.BASE_WINE;
-                    BaseWine baseWine = (BaseWine) wine;
-                    updateRatingsView(baseWine);
-                    mFetchingId = baseWine.getId();
-                }
-                //when a vintage year is selected from the dialog
-                if (wine instanceof WineProfileSubProfile) {
-                    mType = Type.WINE_PROFILE;
-                    WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
-                    updateRatingsView(wineProfile);
-                    mFetchingId = wineProfile.getId();
-                }
-
-                //only clear list if fetching id has changed
-                if (!mOldFetchingId.equals(mFetchingId)) {
-                    mAdapter.getItems().clear();
-
-                    //first query cache to see if we have something on hand already
-                    loadLocalData(mType, mFetchingId);
-                }
-
-        }
-    }
-
     private void loadLocalBaseWineData() {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
@@ -458,6 +435,9 @@ public class WineProfileFragment extends BaseFragment implements
         updateVarietyRegionRatingView(mBaseWine);
     }
 
+    //endregion
+
+    //region EventBus Events
     public void onEventMainThread(UpdatedBaseWineEvent event) {
         if (!mBaseWineId.equals(event.getBaseWineId())) {
             return;
@@ -467,23 +447,6 @@ public class WineProfileFragment extends BaseFragment implements
             loadLocalBaseWineData();
         } else {
             showToastError(event.getErrorMessage());
-        }
-    }
-
-    /**
-     * @param idType Whether to load captures notes for a base wine or a wine profile.
-     */
-    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote> listing,
-            Boolean isPullToRefresh) {
-        mFetching = true;
-        if (idType == Type.BASE_WINE) {
-            mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, listing, null,
-                    isPullToRefresh);
-        }
-        if (idType == Type.WINE_PROFILE) {
-            mCaptureController
-                    .fetchCaptureNotes(WINE_PROFILE_NOTES_REQ, null, id, listing, null,
-                            isPullToRefresh);
         }
     }
 
@@ -514,13 +477,6 @@ public class WineProfileFragment extends BaseFragment implements
 
     }
 
-    private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
-        mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
-        mCaptureNoteExpectedHelpfulStatus.put(captureNote.getId(), markHelpful);
-
-        mCaptureController.markCaptureHelpful(captureNote, markHelpful);
-    }
-
     public void onEventMainThread(MarkedCaptureHelpfulEvent event) {
         String captureId = event.getCaptureId();
         CaptureNote captureNote = mCaptureNotesExpectingUpdate.remove(captureId);
@@ -545,13 +501,33 @@ public class WineProfileFragment extends BaseFragment implements
         //will reset following toggle button back to original setting if error
         mAdapter.notifyDataSetChanged();
     }
+    //endregion
 
+    //region Fetch Remote Data
+
+    /**
+     * @param idType Whether to load captures notes for a base wine or a wine profile.
+     */
+    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote> listing,
+            Boolean isPullToRefresh) {
+        mFetching = true;
+        if (idType == Type.BASE_WINE) {
+            mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, listing, null,
+                    isPullToRefresh);
+        }
+        if (idType == Type.WINE_PROFILE) {
+            mCaptureController
+                    .fetchCaptureNotes(WINE_PROFILE_NOTES_REQ, null, id, listing, null,
+                            isPullToRefresh);
+        }
+    }
+    //endregion
 
     private void updateVarietyRegionRatingView(BaseWine baseWine) {
         if (baseWine == null) {
             return;
         }
-            //varietal info
+        //varietal info
         if (baseWine.getVarietalComposition().size() == 0) {
             //beers don't have varietal composition
             mVarietalContainer.setVisibility(View.GONE);
@@ -614,6 +590,31 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     /**
+     * The WineBannerView can be set with different types of data depending from where this fragment
+     * was spawned.
+     */
+    private void updateBannerData() {
+        if (mWineProfile != null) {
+            //spawned from Feed Fragment
+            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+        } else if (mBaseWineMinimal != null) {
+            //spawned from Search Wines
+            mBanner.updateData(mBaseWineMinimal);
+        } else if (mBaseWine != null) {
+            //spawned from WineCaptureSubmit
+            //also called after BaseWine is successfully fetched
+            mBanner.updateData(mBaseWine);
+        }
+    }
+
+    private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
+        mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
+        mCaptureNoteExpectedHelpfulStatus.put(captureNote.getId(), markHelpful);
+
+        mCaptureController.markCaptureHelpful(captureNote, markHelpful);
+    }
+
+    /**
      * Makes the rating display text where the rating is a bit bigger than the 10.
      */
     private CharSequence makeRatingDisplayText(String rating) {
@@ -623,10 +624,17 @@ public class WineProfileFragment extends BaseFragment implements
         return displayText;
     }
 
-
     @Override
     public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {
         markCaptureAsHelpful(captureNote, markHelpful);
+    }
+
+    @OnClick(R.id.all_years_textview)
+    protected void onAllYearsTextClick() {
+        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
+        dialog.setTargetFragment(WineProfileFragment.this,
+                CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), "dialog");
     }
 
     public void launchCaptureDetails(CaptureNote captureNote) {
