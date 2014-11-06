@@ -212,13 +212,18 @@ public class ChooseVintageDialog extends DialogFragment
     }
 
     public void onEventMainThread(FetchedWineSourceEvent event) {
-        if (event.isSuccessful()) {
-            loadData();
-        } else {
-            if (getActivity() != null) {
-                Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
+        if (!event.isSuccessful() && getActivity() != null) {
+            Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
+            // Stop Loading failed WineInfo
+            for (VintageWineInfo info : mVintageWineInfos) {
+                if (event.getWineId().equalsIgnoreCase(info.getWineProfileMinimal().getId())) {
+                    info.setLoading(false);
+                    break;
+                }
             }
         }
+        // Reload data to update UI States
+        loadData();
     }
     //endregion
 

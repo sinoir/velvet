@@ -298,7 +298,8 @@
 
     <style name="PurchaseWineCheckPrice">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/d_chestnut</item>
         <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_medium</item>
@@ -306,7 +307,8 @@
 
     <style name="PurchaseWineSoldOut">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/d_medium_gray</item>
         <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_medium</item>

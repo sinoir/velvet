@@ -500,11 +500,11 @@ public class WineProfileFragment extends BaseFragment implements
             return;
         }
 
-        if (event.isSuccessful()) {
-            loadPricingData();
-        } else {
+        if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
         }
+
+        loadPricingData();
     }
 
     public void onEventMainThread(UpdatedListingEvent<CaptureNote> event) {
