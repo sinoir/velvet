@@ -4,15 +4,15 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * A representation of the {@link VintageWineInfo} View Model, this is the row for the listview that
@@ -22,11 +22,14 @@ public class ChooseVintageDialogRow extends RelativeLayout {
 
     private static final int NO_AVG_RATING = -1;
 
-    private final TextView mYear;
+    @InjectView(R.id.year)
+    protected TextView mYear;
 
-    private final TextView mRatingsCount;
+    @InjectView(R.id.rating)
+    protected TextView mRating;
 
-    private final TextView mRating;
+    @InjectView(R.id.price_view)
+    protected WinePriceView mWinePriceView;
 
     public ChooseVintageDialogRow(Context context) {
         this(context, null);
@@ -41,17 +44,11 @@ public class ChooseVintageDialogRow extends RelativeLayout {
 
         View.inflate(context, R.layout.row_dialog_choose_vintage, this);
 
-        mYear = (TextView) findViewById(R.id.year);
-        mRatingsCount = (TextView) findViewById(R.id.ratings_count);
-        mRating = (TextView) findViewById(R.id.rating);
+        ButterKnife.inject(this);
     }
 
-    public void updateData(String year, int ratingsCount, double rating) {
+    private void updateData(String year, double rating) {
         mYear.setText(year);
-        String ratingCount = getResources()
-                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
-                        ratingsCount);
-        mRatingsCount.setText(ratingCount);
 
         //rating
         if (rating == NO_AVG_RATING) { //handling a no rating case, show a dash
@@ -60,33 +57,20 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         } else {
             DecimalFormat format = new DecimalFormat("0.0");
             String allAvgStr = format.format(rating);
-            mRating.setText(makeRatingDisplayText(allAvgStr));
+            mRating.setText(allAvgStr);
             mRating.setTextColor(getResources().getColor(R.color.d_light_green));
         }
     }
 
     /**
-     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
-     * data for a normal row.
+     * Convenience method that calls {@link #updateData(String, double)}, used to update the data
+     * for a normal row.
      */
     public void updateData(VintageWineInfo wineInfo) {
         String year = wineInfo.getYear();
-        // TODO: Remove Rating count
-        int reviewCount = wineInfo.getRatingCount();
         double rating = wineInfo.getRating();
 
-        updateData(year, reviewCount, rating);
-    }
-
-    //TODO should abstract this, copied directly from WineProfileFragment. Make textview subclass perhaps with a setter for the ratings
-
-    /**
-     * Makes the rating display text where the rating is a bit bigger than the 10.
-     */
-    private CharSequence makeRatingDisplayText(String rating) {
-        SpannableString ss = new SpannableString(rating);
-        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
-        CharSequence displayText = TextUtils.concat(ss, "/10");
-        return displayText;
+        updateData(year, rating);
+        mWinePriceView.updateWithPriceInfo(wineInfo);
     }
 }

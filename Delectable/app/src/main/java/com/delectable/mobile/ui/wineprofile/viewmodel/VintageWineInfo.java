@@ -48,10 +48,6 @@ public class VintageWineInfo {
         return mWineProfileMinimal.getVintage();
     }
 
-    public int getRatingCount() {
-        return mWineProfileMinimal.getRatingsSummary().getAllCount();
-    }
-
     public double getRating() {
         return mWineProfileMinimal.getRatingsSummary().getAllAvgOfTen();
     }
