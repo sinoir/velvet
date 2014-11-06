@@ -41,43 +41,43 @@ public class Listing<T extends IDable> {
     }
 
     public String getBoundariesFromBefore() {
-        if (boundaries != null && boundaries.from != null) {
-            return boundaries.from.before;
+        if (boundaries != null && boundaries.getFrom() != null) {
+            return boundaries.getFrom().getBefore();
         }
         return null;
     }
 
     public String getBoundariesFromAfter() {
-        if (boundaries != null && boundaries.from != null) {
-            return boundaries.from.after;
+        if (boundaries != null && boundaries.getFrom() != null) {
+            return boundaries.getFrom().getAfter();
         }
         return null;
     }
 
     public String getBoundariesFromSince() {
-        if (boundaries != null && boundaries.from != null) {
-            return boundaries.from.since;
+        if (boundaries != null && boundaries.getFrom() != null) {
+            return boundaries.getFrom().getSince();
         }
         return null;
     }
 
     public String getBoundariesToBefore() {
-        if (boundaries != null && boundaries.to != null) {
-            return boundaries.to.before;
+        if (boundaries != null && boundaries.getTo() != null) {
+            return boundaries.getTo().getBefore();
         }
         return null;
     }
 
     public String getBoundariesToAfter() {
-        if (boundaries != null && boundaries.to != null) {
-            return boundaries.to.after;
+        if (boundaries != null && boundaries.getTo() != null) {
+            return boundaries.getTo().getAfter();
         }
         return null;
     }
 
     public String getBoundariesToSince() {
-        if (boundaries != null && boundaries.to != null) {
-            return boundaries.to.since;
+        if (boundaries != null && boundaries.getTo() != null) {
+            return boundaries.getTo().getSince();
         }
         return null;
     }
@@ -237,7 +237,6 @@ public class Listing<T extends IDable> {
         list.subList(pTo, len).clear();
     }
 
-
     @Override
     public String toString() {
         return "BaseListingResponse{" +
@@ -250,49 +249,5 @@ public class Listing<T extends IDable> {
                 ", e_tag='" + e_tag + '\'' +
                 ", context='" + context + '\'' +
                 '}';
-    }
-
-    public static class Boundaries {
-
-        private Boundary from;
-
-        private Boundary to;
-
-        public Boundaries(Boundary from, Boundary to) {
-            this.from = from;
-            this.to = to;
-        }
-
-        @Override
-        public String toString() {
-            return "Boundaries{" +
-                    "from=" + from +
-                    ", to=" + to +
-                    '}';
-        }
-    }
-
-    public static class Boundary {
-
-        private String before;
-
-        private String after;
-
-        private String since;
-
-        public Boundary(String before, String after, String since) {
-            this.before = before;
-            this.after = after;
-            this.since = since;
-        }
-
-        @Override
-        public String toString() {
-            return "Boundary{" +
-                    "before='" + before + '\'' +
-                    ", after='" + after + '\'' +
-                    ", since=" + since +
-                    '}';
-        }
     }
 }

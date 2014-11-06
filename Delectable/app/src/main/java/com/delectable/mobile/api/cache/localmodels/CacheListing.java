@@ -1,7 +1,7 @@
 package com.delectable.mobile.api.cache.localmodels;
 
+import com.delectable.mobile.api.models.Boundaries;
 import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.Listing.Boundaries;
 import com.delectable.mobile.api.models.IDable;
 
 import java.util.ArrayList;
