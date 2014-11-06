@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
+public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails, String> {
 
     private static final String TAG = FetchFollowerFeedJob.class.getSimpleName();
 
@@ -38,7 +38,7 @@ public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<CaptureDetails, String>>() {
         }.getType();
         return type;
     }

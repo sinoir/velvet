@@ -21,9 +21,9 @@ public class CaptureDetailsListingIOTestCase extends BaseInstrumentationTestCase
         super.setUp();
 
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<CaptureDetails, String>>() {
         }.getType();
-        ListingResponse<CaptureDetails> feedResponseObject = mGson
+        ListingResponse<CaptureDetails, String> feedResponseObject = mGson
                 .fromJson(json.toString(), type);
         mFollowFeedListing = feedResponseObject.getPayload();
     }

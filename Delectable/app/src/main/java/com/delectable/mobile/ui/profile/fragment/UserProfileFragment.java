@@ -272,7 +272,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<BaseListingElement> event) {
+    public void onEventMainThread(UpdatedListingEvent<BaseListingElement, String> event) {
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }

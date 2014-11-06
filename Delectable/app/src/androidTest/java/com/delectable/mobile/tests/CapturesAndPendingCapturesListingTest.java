@@ -31,7 +31,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
     }
 
     //for gson deserialization
-    private static final Type TYPE = new TypeToken<ListingResponse<BaseListingElement>>() {
+    private static final Type TYPE = new TypeToken<ListingResponse<BaseListingElement, String>>() {
     }.getType();
 
     {
@@ -45,7 +45,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_captures_and_pending_captures_details_ctx);
 
-        ListingResponse<BaseListingElement> response = mGson.fromJson(json.toString(), TYPE);
+        ListingResponse<BaseListingElement, String> response = mGson.fromJson(json.toString(), TYPE);
         Listing<BaseListingElement, String> actualListing = response.getPayload();
 
         int pendingCapturesCount = 0;
@@ -87,7 +87,7 @@ public class CapturesAndPendingCapturesListingTest extends BaseInstrumentationTe
     public void testGetFromScratchListing() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(
                 R.raw.test_accounts_captures_and_pending_captures_details_ctx);
-        ListingResponse<BaseListingElement> response = mGson.fromJson(json.toString(), TYPE);
+        ListingResponse<BaseListingElement, String> response = mGson.fromJson(json.toString(), TYPE);
         Listing<BaseListingElement, String> listing = response.getPayload();
 
         ArrayList<BaseListingElement> expectedCaptures = listing.getUpdates();

@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchAccountCapturesJob extends BaseFetchListingJob<BaseListingElement> {
+public class FetchAccountCapturesJob extends BaseFetchListingJob<BaseListingElement, String> {
 
     private static final String TAG = FetchAccountCapturesJob.class.getSimpleName();
 
@@ -38,7 +38,7 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<BaseListingElem
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<BaseListingElement>>() {
+        Type type = new TypeToken<ListingResponse<BaseListingElement, String>>() {
         }.getType();
         return type;
     }

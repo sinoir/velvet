@@ -17,16 +17,16 @@ import com.delectable.mobile.api.util.ErrorUtil;
  * <br>maybe list is completely up to date and e_tag_match is true (in the response wrapper for the
  * listing payload).
  */
-public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
+public class UpdatedListingEvent<T extends IDable, D> extends BaseEvent {
 
     private String mRequestId;
 
     private String mAccountId;
 
-    private Listing<T, String> mListing;
+    private Listing<T, D> mListing;
 
     public UpdatedListingEvent(String requestId, String accountId,
-            Listing<T, String> listing) {
+            Listing<T, D> listing) {
         super(true);
         mRequestId = requestId;
         mAccountId = accountId;
@@ -48,7 +48,7 @@ public class UpdatedListingEvent<T extends IDable> extends BaseEvent {
         return mAccountId;
     }
 
-    public Listing<T, String> getListing() {
+    public Listing<T, D> getListing() {
         return mListing;
     }
 }

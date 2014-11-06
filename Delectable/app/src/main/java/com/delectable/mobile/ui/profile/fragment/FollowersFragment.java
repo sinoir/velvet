@@ -42,7 +42,7 @@ public class FollowersFragment extends BaseFollowersFragment {
         return view;
     }
 
-    public void onEventMainThread(UpdatedListingEvent<AccountMinimal> event) {
+    public void onEventMainThread(UpdatedListingEvent<AccountMinimal, String> event) {
         if (!FOLLOWERS_REQ.equals(event.getRequestId())) {
             return;
         }

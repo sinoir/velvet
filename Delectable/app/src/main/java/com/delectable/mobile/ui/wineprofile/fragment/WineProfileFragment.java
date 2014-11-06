@@ -487,7 +487,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<CaptureNote> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureNote, String> event) {
         if (!event.getRequestId().equals(WINE_PROFILE_NOTES_REQ)) {
             if (!event.getRequestId().equals(BASE_WINE_NOTES_REQ)) {
                 return;

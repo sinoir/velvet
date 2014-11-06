@@ -12,7 +12,7 @@ import com.delectable.mobile.api.models.Listing;
 
 import java.lang.reflect.Type;
 
-public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote> {
+public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote, String> {
 
     private static final String TAG = FetchCaptureNotesJob.class.getSimpleName();
 
@@ -40,7 +40,7 @@ public class FetchCaptureNotesJob extends BaseFetchListingJob<CaptureNote> {
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<CaptureNote>>() {
+        Type type = new TypeToken<ListingResponse<CaptureNote, String>>() {
         }.getType();
         return type;
     }

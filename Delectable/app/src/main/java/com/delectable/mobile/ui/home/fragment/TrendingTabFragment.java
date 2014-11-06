@@ -66,7 +66,7 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         Log.d(TAG, "UpdatedListingEvent");
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;

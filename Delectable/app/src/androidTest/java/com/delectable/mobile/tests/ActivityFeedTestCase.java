@@ -28,9 +28,9 @@ public class ActivityFeedTestCase extends BaseInstrumentationTestCase {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_activity_feed_list);
         String expectedContext = "feed_element";
 
-        Type type = new TypeToken<ListingResponse<ActivityFeedItem>>() {
+        Type type = new TypeToken<ListingResponse<ActivityFeedItem, String>>() {
         }.getType();
-        ListingResponse<ActivityFeedItem> response = mGson.fromJson(json.toString(), type);
+        ListingResponse<ActivityFeedItem, String> response = mGson.fromJson(json.toString(), type);
         Listing<ActivityFeedItem, String> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());

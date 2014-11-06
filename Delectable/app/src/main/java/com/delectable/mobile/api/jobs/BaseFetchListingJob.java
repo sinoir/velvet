@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * UpdatedListingEvent} will be broadcast with the type {@code T} generic that was provided to this
  * Job. <br>
  */
-public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
+public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
 
     private static final String TAG = BaseFetchListingJob.class.getSimpleName();
 
@@ -94,14 +94,14 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
     /**
      * Lets the subclass handle the retrieval of it's cached listing.
      */
-    protected abstract Listing<T, String> getCachedListing(String dataItemId);
+    protected abstract Listing<T, D> getCachedListing(String dataItemId);
 
     /**
      * Lets the subclass handle saving the listing to cache. The ListingResponse provided here will
      * be pass onwards to the success event. If there are any changes made to the object during the
      * save to cache, they will be reflected in the event.
      */
-    protected abstract void saveListingToCache(String dataItemId, Listing<T, String> listing);
+    protected abstract void saveListingToCache(String dataItemId, Listing<T, D> listing);
 
     /**
      * The concrete generic type needs to be provided in the subclass. Just use the code below with
@@ -138,9 +138,9 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
 
         Type type = getResponseType();
 
-        ListingResponse<T> response = getNetworkClient().post(endpoint, request, type);
+        ListingResponse<T, D> response = getNetworkClient().post(endpoint, request, type);
 
-        Listing<T, String> apiListing = response.getPayload();
+        Listing<T, D> apiListing = response.getPayload();
         // note: Sometimes payload may be null
         // maybe there are no captures
         // maybe list is completely up to date and e_tag_match is true
@@ -149,7 +149,7 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         if (apiListing != null) {
 
             //grab cached listing if it exist
-            Listing<T, String> cachedListing = getCachedListing(mDataItemId);
+            Listing<T, D> cachedListing = getCachedListing(mDataItemId);
             ArrayList<T> cachedItems = new ArrayList<T>();
             if (cachedListing != null) {
                 cachedItems = cachedListing.getUpdates();
@@ -164,14 +164,14 @@ public abstract class BaseFetchListingJob<T extends IDable> extends BaseJob {
         }
 
         //if apiListing returns null to the event, means list is up to date!
-        mEventBus.post(new UpdatedListingEvent<T>(mRequestId, mDataItemId, apiListing));
+        mEventBus.post(new UpdatedListingEvent<T, D>(mRequestId, mDataItemId, apiListing));
     }
 
     @Override
     protected void onCancel() {
         super.onCancel();
         String jobName = this.getClass().getSimpleName();
-        mEventBus.post(new UpdatedListingEvent<T>(mRequestId, mDataItemId,
+        mEventBus.post(new UpdatedListingEvent<T, String>(mRequestId, mDataItemId,
                 jobName + " " + getErrorMessage(), getErrorCode()));
 
     }

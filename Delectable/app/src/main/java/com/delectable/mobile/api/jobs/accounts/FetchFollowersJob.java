@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchFollowersJob extends BaseFetchListingJob<AccountMinimal> {
+public class FetchFollowersJob extends BaseFetchListingJob<AccountMinimal, String> {
 
     private static final String TAG = FetchFollowersJob.class.getSimpleName();
 
@@ -54,7 +54,7 @@ public class FetchFollowersJob extends BaseFetchListingJob<AccountMinimal> {
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<AccountMinimal>>() {
+        Type type = new TypeToken<ListingResponse<AccountMinimal, String>>() {
         }.getType();
         return type;
     }

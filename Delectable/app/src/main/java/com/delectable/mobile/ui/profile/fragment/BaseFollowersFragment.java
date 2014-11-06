@@ -153,7 +153,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected void handleFetchFollowersEvent(UpdatedListingEvent<AccountMinimal> event) {
+    protected void handleFetchFollowersEvent(UpdatedListingEvent<AccountMinimal, String> event) {
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }
