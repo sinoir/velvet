@@ -111,10 +111,27 @@ public class WineCheckoutFragment extends BaseFragment {
         return view;
     }
 
+    //region Update UI methods
+    private void updateWineDetails() {
+        if (mWineProfile == null) {
+            return;
+        }
+
+        mProducerName.setText(mWineProfile.getProducerName());
+        mWineName.setText(mWineProfile.getName());
+        String pricePerBottleText = getString(R.string.winecheckout_per_bottle,
+                mWineProfile.getPriceText());
+        mPerBottlePriceText.setText(pricePerBottleText);
+    }
+
+    //endregion
+
     //region Load Local Data
-    private void loadPricingData() {
+    private void loadWineAndPricingData() {
         mWineProfile = mWineSourceModel.getMinWineWithPrice(mVintageId);
         mPurchaseOffer = mWineSourceModel.getPurchaseOffer(mVintageId);
+
+        updateWineDetails();
     }
     //endregion
 
@@ -134,7 +151,7 @@ public class WineCheckoutFragment extends BaseFragment {
             showToastError(event.getErrorMessage());
         }
 
-        loadPricingData();
+        loadWineAndPricingData();
     }
     //endregion
 
