@@ -80,6 +80,14 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private PurchaseOffer mPurchaseOffer;
 
+    // TODO: Keep track of pricing offset.
+
+    private int mNumBottles = 1;
+
+    private int mMinNumBottles = 1;
+
+    private int mMaxNumBotles = 1;
+
     public static WineCheckoutFragment newInstance(String vintageId) {
         WineCheckoutFragment fragment = new WineCheckoutFragment();
         Bundle args = new Bundle();
@@ -108,6 +116,8 @@ public class WineCheckoutFragment extends BaseFragment {
         // Always Fetch Latest Wine Source
         fetchWineSource();
 
+        updateNumBottles();
+
         return view;
     }
 
@@ -124,14 +134,26 @@ public class WineCheckoutFragment extends BaseFragment {
         mPerBottlePriceText.setText(pricePerBottleText);
     }
 
+    private void updateNumBottles() {
+        String numBottlesText = getResources()
+                .getQuantityString(R.plurals.winecheckout_num_bottles, mNumBottles, mNumBottles);
+        mQuantityAmountText.setText(numBottlesText);
+    }
+
     //endregion
 
     //region Load Local Data
     private void loadWineAndPricingData() {
+        mPurchaseOffer = mWineSourceModel.getPurchaseOffer(mVintageId);
         mWineProfile = mWineSourceModel.getMinWineWithPrice(mVintageId);
         mPurchaseOffer = mWineSourceModel.getPurchaseOffer(mVintageId);
 
+        mMinNumBottles = mPurchaseOffer.getMinQuant();
+        mMaxNumBotles = mPurchaseOffer.getMaxQuant();
+        mNumBottles = mPurchaseOffer.getDefaultQuant();
+
         updateWineDetails();
+        updateNumBottles();
     }
     //endregion
 
@@ -169,12 +191,20 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @OnClick(R.id.plus_quantity)
     public void onAddBottleClicked() {
-        // TODO: Implement Adding Bottle
+        if (mNumBottles == mMaxNumBotles) {
+            return;
+        }
+        mNumBottles++;
+        updateNumBottles();
     }
 
     @OnClick(R.id.minus_quantity)
     public void onSubtractBottleClicked() {
-        // TODO: Implement Removing Bottle
+        if (mNumBottles == mMinNumBottles) {
+            return;
+        }
+        mNumBottles--;
+        updateNumBottles();
     }
 
     @OnClick(R.id.add_promo_code)
