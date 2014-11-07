@@ -81,6 +81,18 @@ public class VintageWineInfo {
         mWineProfileMinimal = wineProfileMinimal;
     }
 
+    /**
+     * Update Existing WineProfile with Wine that contains latest price.
+     *
+     * Note: have to do this, because we get wine with price as a sub profile, and some fields are
+     * removed,such as ratings
+     */
+    public void updateWineWithPrice(WineProfileSubProfile wineProfileSubProfile) {
+        mWineProfileMinimal.setPrice(wineProfileSubProfile.getPrice());
+        mWineProfileMinimal.setPriceStatus(wineProfileSubProfile.getPriceStatus());
+        mWineProfileMinimal.setPriceText(wineProfileSubProfile.getPriceText());
+    }
+
     public boolean isLoading() {
         return mIsLoading;
     }

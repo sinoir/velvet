@@ -181,7 +181,7 @@ public class ChooseVintageDialog extends DialogFragment
             WineProfileSubProfile wineWithPrice = mWineSourceModel.getMinWineWithPrice(
                     wineInfo.getWineProfileMinimal().getId());
             if (wineWithPrice != null) {
-                wineInfo.setWineProfileMinimal(wineWithPrice);
+                wineInfo.updateWineWithPrice(wineWithPrice);
                 if (wineInfo.isLoading()) {
                     wineInfo.setLoading(false);
                 }
