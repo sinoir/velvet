@@ -378,37 +378,33 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        switch (requestCode) {
-            case CHOOSE_VINTAGE_DIALOG:
-                Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
-                String mOldFetchingId = mFetchingId;
-                //when All Years is selected from dialog
-                if (wine instanceof BaseWine) {
-                    mType = Type.BASE_WINE;
-                    BaseWine baseWine = (BaseWine) wine;
-                    updateRatingsView(baseWine);
-                    mFetchingId = baseWine.getId();
-                }
-                //when a vintage year is selected from the dialog
-                if (wine instanceof WineProfileSubProfile) {
-                    mType = Type.WINE_PROFILE;
-                    mSelectedWineVintage = (WineProfileSubProfile) wine;
-                    updateRatingsView(mSelectedWineVintage);
-                    mFetchingId = mSelectedWineVintage.getId();
-                    loadPricingData();
-                }
-
-                //only clear list if fetching id has changed
-                if (!mOldFetchingId.equals(mFetchingId)) {
-                    mAdapter.getItems().clear();
-
-                    //first query cache to see if we have something on hand already
-                    loadLocalData(mType, mFetchingId);
-                }
-                // Update the BannerView with new vintage
-                updateBannerData();
+        if (requestCode == CHOOSE_VINTAGE_DIALOG) {
+            String wineId = data.getStringExtra(ChooseVintageDialog.EXTRAS_RESULT_WINE_ID);
+            if (resultCode == ChooseVintageDialog.RESULT_SWITCH_VINTAGE) {
+                changeVintage(wineId);
+            }
         }
+    }
+
+    private void changeVintage(String wineId) {
+        String mOldFetchingId = mFetchingId;
+        
+        mSelectedWineVintage = mBaseWine.getWineProfileByWineId(wineId);
+
+        mType = Type.WINE_PROFILE;
+        updateRatingsView(mSelectedWineVintage);
+        mFetchingId = mSelectedWineVintage.getId();
+        loadPricingData();
+
+        //only clear list if fetching id has changed
+        if (!mOldFetchingId.equals(mFetchingId)) {
+            mAdapter.getItems().clear();
+
+            //first query cache to see if we have something on hand already
+            loadLocalData(mType, mFetchingId);
+        }
+        // Update the BannerView with new vintage
+        updateBannerData();
     }
 
     //region Load Local Data

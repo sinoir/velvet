@@ -5,7 +5,6 @@ import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +37,9 @@ public class WineProfilesAdapter extends BaseAdapter {
         return mVintageWineInfos.size();
     }
 
-    /**
-     * @return Can return a {@link BaseWine} (if the first item was clicked) or a {@link
-     * WineProfileSubProfile}.
-     */
     @Override
-    public Parcelable getItem(int position) {
-        return mVintageWineInfos.get(position).getWineProfileMinimal();
+    public VintageWineInfo getItem(int position) {
+        return mVintageWineInfos.get(position);
     }
 
     @Override

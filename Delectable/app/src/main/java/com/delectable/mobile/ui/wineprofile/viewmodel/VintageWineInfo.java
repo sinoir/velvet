@@ -81,6 +81,10 @@ public class VintageWineInfo {
         mWineProfileMinimal = wineProfileMinimal;
     }
 
+    public String getWineId() {
+        return mWineProfileMinimal.getId();
+    }
+
     /**
      * Update Existing WineProfile with Wine that contains latest price.
      *

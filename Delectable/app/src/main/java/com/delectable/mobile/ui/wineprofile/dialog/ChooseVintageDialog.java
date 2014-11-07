@@ -36,7 +36,9 @@ import de.greenrobot.event.EventBus;
 public class ChooseVintageDialog extends DialogFragment
         implements WinePriceView.WinePriceViewActionsCallback {
 
-    public static final String WINE = "WINE";
+    public static final String EXTRAS_RESULT_WINE_ID = "EXTRAS_RESULT_WINE_ID";
+
+    public static final int RESULT_SWITCH_VINTAGE = 1000;
 
     private static final String BASE_WINE_ID = "BASE_WINE_ID";
 
@@ -104,11 +106,13 @@ public class ChooseVintageDialog extends DialogFragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //call back to implementing class
+                String wineId = mAdapter.getItem(position).getWineId();
                 Intent intent = new Intent();
-                intent.putExtra(WINE,
-                        mAdapter.getItem(position)); //can be a BaseWine or WineProfile
-                getTargetFragment()
-                        .onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                intent.putExtra(EXTRAS_RESULT_WINE_ID, wineId);
+                getTargetFragment().onActivityResult(
+                        getTargetRequestCode(),
+                        RESULT_SWITCH_VINTAGE,
+                        intent);
                 dismiss();
             }
         });
