@@ -27,6 +27,7 @@ import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.dialog.Over21Dialog;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
@@ -84,7 +85,9 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String VINTAGE_ID = "vintageId";
 
-    private static final int CHOOSE_VINTAGE_DIALOG = 1;
+    private static final int REQUEST_CHOOSE_VINTAGE_DIALOG = 1;
+
+    private static final int REQUEST_AGE_DIALOG = 2;
 
     private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
 
@@ -378,17 +381,28 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CHOOSE_VINTAGE_DIALOG) {
+        if (requestCode == REQUEST_CHOOSE_VINTAGE_DIALOG) {
             String wineId = data.getStringExtra(ChooseVintageDialog.EXTRAS_RESULT_WINE_ID);
             if (resultCode == ChooseVintageDialog.RESULT_SWITCH_VINTAGE) {
                 changeVintage(wineId);
+            } else if (resultCode == ChooseVintageDialog.RESULT_PURCHASE_WINE) {
+                startWinePurchaseFlow(wineId);
             }
+        }
+    }
+
+    private void startWinePurchaseFlow(String wineId) {
+        changeVintage(wineId);
+        if (!UserInfo.isOver21()) {
+            showOver21Dialog();
+        } else if (UserInfo.isOver21()) {
+            launchWineCheckout(wineId);
         }
     }
 
     private void changeVintage(String wineId) {
         String mOldFetchingId = mFetchingId;
-        
+
         mSelectedWineVintage = mBaseWine.getWineProfileByWineId(wineId);
 
         mType = Type.WINE_PROFILE;
@@ -701,7 +715,17 @@ public class WineProfileFragment extends BaseFragment implements
     private void showVintageDialog() {
         ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
         dialog.setTargetFragment(WineProfileFragment.this,
-                CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+                REQUEST_CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    private void launchWineCheckout(String wineId) {
+        // TODO: Checkout Flow
+    }
+
+    private void showOver21Dialog() {
+        Over21Dialog dialog = Over21Dialog.newInstance();
+        dialog.setTargetFragment(WineProfileFragment.this, REQUEST_AGE_DIALOG);
         dialog.show(getFragmentManager(), "dialog");
     }
 

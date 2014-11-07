@@ -13,7 +13,6 @@ import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -39,6 +38,8 @@ public class ChooseVintageDialog extends DialogFragment
     public static final String EXTRAS_RESULT_WINE_ID = "EXTRAS_RESULT_WINE_ID";
 
     public static final int RESULT_SWITCH_VINTAGE = 1000;
+
+    public static final int RESULT_PURCHASE_WINE = 2000;
 
     private static final String BASE_WINE_ID = "BASE_WINE_ID";
 
@@ -247,7 +248,12 @@ public class ChooseVintageDialog extends DialogFragment
 
     @Override
     public void onPriceClicked(VintageWineInfo wineInfo) {
-        // TODO: Checkout Process
+        //call back to implementing class
+        Intent intent = new Intent();
+        intent.putExtra(EXTRAS_RESULT_WINE_ID,
+                wineInfo.getWineProfileMinimal().getId()); //can be a BaseWine or WineProfile
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_PURCHASE_WINE, intent);
+        dismiss();
     }
 
     @Override
