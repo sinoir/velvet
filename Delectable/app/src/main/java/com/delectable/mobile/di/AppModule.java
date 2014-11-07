@@ -107,6 +107,7 @@ import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
+import com.delectable.mobile.ui.winepurchase.fragment.WineCheckoutFragment;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Singleton;
@@ -143,6 +144,7 @@ import de.greenrobot.event.EventBus;
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
                 TaggedPeopleFragment.class,
+                WineCheckoutFragment.class,
                 // Dialogs
                 ChooseVintageDialog.class,
                 ResetPasswordDialog.class,

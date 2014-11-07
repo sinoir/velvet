@@ -6,9 +6,9 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:theme="@style/DelectableTheme">
         <meta-data
@@ -23,9 +23,7 @@
             <data
                 android:host="region"
                 android:scheme="delectable" />
-            <data
-                android:host="purchase"
-                android:scheme="delectable" />
+
             <data
                 android:host="recommendations"
                 android:scheme="delectable" />
@@ -141,6 +139,22 @@
                 <!-- Accepts URIs that begin with "delectable://base_wine” -->
                 <data
                     android:host="base_wine"
+                    android:scheme="delectable" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.winepurchase.activity.WineCheckoutActivity"
+            android:label="@string/winecheckout_title"
+            android:screenOrientation="portrait">
+            <intent-filter android:label="">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "delectable://purchase?vintage_id=$VINTAGE_ID” -->
+                <data
+                    android:host="purchase"
                     android:scheme="delectable" />
             </intent-filter>
         </activity>

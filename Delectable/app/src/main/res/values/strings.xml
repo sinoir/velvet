@@ -341,4 +341,7 @@
     <string name="over21dialog_over21">I am 21 years or older</string>
     <string name="over21dialog_under21">I am younger than 21</string>
 
+    <!-- Wine Purchase Flow / Checkout -->
+    <string name="winecheckout_title">Checkout</string>
+
 </resources>

@@ -32,6 +32,7 @@ import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -720,7 +721,8 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void launchWineCheckout(String wineId) {
-        // TODO: Checkout Flow
+        Intent intent = WineCheckoutActivity.newIntent(getActivity(), wineId);
+        startActivity(intent);
     }
 
     private void showOver21Dialog() {
