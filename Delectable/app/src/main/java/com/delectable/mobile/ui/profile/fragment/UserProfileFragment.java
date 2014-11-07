@@ -15,6 +15,7 @@ import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEve
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PendingCapture;
@@ -49,6 +50,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         ProfileHeaderView.ProfileHeaderActionListener, InfiniteScrollAdapter.ActionsHandler,
@@ -245,7 +247,21 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
     }
 
+    @OnItemClick(R.id.list_view)
+    protected void onItemClick(int position) {
+        position--; //offset for header
+        BaseListingElement item = mAdapter.getItem(position);
+        if (item instanceof CaptureDetails) {
+            launchWineProfile((CaptureDetails) item);
+            return;
+        }
+        if (item instanceof PendingCapture) {
+            launchWineProfile((PendingCapture) item);
+        }
+    }
+
     public void onEventMainThread(UpdatedAccountProfileEvent event) {
+
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
@@ -451,7 +467,20 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void launchWineProfile(PendingCapture capture) {
-
+        //TODO captureDetails/PendingCapture should implement parceable, then all this logic can be abstracted into WineProfileFragment
+        Intent intent = null;
+        CaptureState state = CaptureState.getState(capture);
+        if (state == CaptureState.IDENTIFIED) {
+            intent = WineProfileActivity.newIntent(getActivity(), capture.getWineProfile(),
+                    capture.getPhoto());
+        }else if (state == CaptureState.UNVERIFIED) {
+            intent = WineProfileActivity.newIntent(getActivity(), capture.getBaseWine(),
+                    capture.getPhoto());
+        }
+        //if the capture state is impossibled or unidentified, not enough data to launch into launch into wineprofile screen
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -476,8 +505,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
                 mPendingCapturesController
                         .deleteCapture(DELETE_PENDING_CAPTURE_REQ, mUserId,
                                 mCaptureToDelete.getId());
-            } else {
-                //user dismissed delete dialog, do nothing
             }
             mCaptureToDelete = null;
         }

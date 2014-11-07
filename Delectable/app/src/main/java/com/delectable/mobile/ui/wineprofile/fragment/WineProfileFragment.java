@@ -62,6 +62,11 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 //TODO paginate capturenotes listview? go to another screen?
+
+/**
+ * Inits request for full {@link BaseWine} information and {@link CaptureNote CaptureNotes} for that
+ * {@code baseWine} using the {@code baseWineId} provided.
+ */
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
@@ -72,8 +77,6 @@ public class WineProfileFragment extends BaseFragment implements
     private static final String WINE_PROFILE = "wineProfile";
 
     private static final String PHOTO_HASH = "photoHash";
-
-    private static final String BASE_WINE = "baseWine";
 
     private static final String BASE_WINE_MINIMAL = "baseWineMinimal";
 
@@ -179,12 +182,10 @@ public class WineProfileFragment extends BaseFragment implements
 
 
     /**
-     * Returns fragment that uses the provided {@link PhotoHash} as it's wine image. Uses {@code
-     * wineProfile} to populate some basic wine metadata and inits request for {@link CaptureNote
-     * CaptureNotes} using the {@code baseWineId} in {@link WineProfileMinimal}.
-     *
-     * @param capturePhotoHash {@link com.delectable.mobile.api.models.CaptureDetails
-     *                         CaptureDetails}' PhotoHash. Pass in null to use WineProfile's image.
+     * @param wineProfile      used to populate the producer and wine name.
+     * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
+     *                         photo wants to be used instead of the {@code wineProfile}'s photo. Pass in
+     *                         {@code null} to use {@code wineProfile}'s photo.
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
@@ -198,23 +199,18 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     /**
-     * Launching from WineCaptureSubmitFragment.
+     * @param baseWine         used to populate the producer and wine name.
+     * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
+     *                         photo wants to be used instead of the {@code baseWine}'s. Pass in {@code null}
+     *                         to use {@code baseWine}'s photo.
      */
-    public static WineProfileFragment newInstance(BaseWine baseWine) {
-        WineProfileFragment fragment = new WineProfileFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(BASE_WINE, baseWine);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * Search Wines uses this method to make make it's {@link WineProfileFragment}.
-     */
-    public static WineProfileFragment newInstance(BaseWineMinimal baseWine) {
+    //used for Search Wines and User Profiles
+    public static WineProfileFragment newInstance(BaseWineMinimal baseWine,
+            PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(BASE_WINE_MINIMAL, baseWine);
+        args.putParcelable(PHOTO_HASH, capturePhotoHash);
         fragment.setArguments(args);
         return fragment;
     }
@@ -248,11 +244,8 @@ public class WineProfileFragment extends BaseFragment implements
             mWineProfile = args.getParcelable(WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PHOTO_HASH);
 
-            //spawned from Search
+            //spawned from Search or User Captures
             mBaseWineMinimal = args.getParcelable(BASE_WINE_MINIMAL);
-
-            //spawned from WineCaptureSubmit
-            mBaseWine = args.getParcelable(BASE_WINE);
 
             //spawned from deep links
             mBaseWineId = args.getString(BASE_WINE_ID);
@@ -264,11 +257,8 @@ public class WineProfileFragment extends BaseFragment implements
             //spawned from Feed Fragment
             mBaseWineId = mWineProfile.getBaseWineId();
         } else if (mBaseWineMinimal != null) {
-            //spawned from Search
+            //spawned from Search or User Captures
             mBaseWineId = mBaseWineMinimal.getId();
-        } else if (mBaseWine != null) {
-            //spawned from WineCaptureSubmitFragment
-            mBaseWineId = mBaseWine.getId();
         }
         //if spawned from deeplinks, mBaseWineId wil be already populated
 
@@ -305,7 +295,8 @@ public class WineProfileFragment extends BaseFragment implements
 
         // Setup Floating Camera Button
         mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
-        FloatingActionButton.FabOnScrollListener fabOnScrollListener = new FloatingActionButton.FabOnScrollListener() {
+        FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
 
             final View wineImageView = header.findViewById(R.id.wine_image);
 
@@ -343,12 +334,11 @@ public class WineProfileFragment extends BaseFragment implements
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         } else if (mBaseWineMinimal != null) {
-            //spawned from Search Wines
-            mBanner.updateData(mBaseWineMinimal);
+            //spawned from Search Wines or User Captures
+            mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
         } else if (mBaseWine != null) {
-            //spawned from WineCaptureSubmit
-            //also called after BaseWine is successfully fetched
-            mBanner.updateData(mBaseWine);
+            //called after BaseWine is successfully fetched
+            mBanner.updateData(mBaseWine, mCapturePhotoHash);
         }
     }
 
@@ -364,7 +354,6 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        //not spawned from WineCaptureSubmit, need to fetch BaseWine
         if (mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
@@ -551,7 +540,7 @@ public class WineProfileFragment extends BaseFragment implements
         if (baseWine == null) {
             return;
         }
-            //varietal info
+        //varietal info
         if (baseWine.getVarietalComposition().size() == 0) {
             //beers don't have varietal composition
             mVarietalContainer.setVisibility(View.GONE);

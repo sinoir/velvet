@@ -20,8 +20,6 @@ public class WineProfileActivity extends BaseActivity {
 
     private static final String PARAMS_CAPTURE_PHOTO_HASH = "PARAMS_CAPTURE_PHOTO_HASH";
 
-    private static final String PARAMS_BASE_WINE = "PARAMS_BASE_WINE";
-
     private static final String PARAMS_BASE_WINE_MINIMAL = "PARAMS_BASE_WINE_MINIMAL";
 
     //Deep Link keys
@@ -33,8 +31,6 @@ public class WineProfileActivity extends BaseActivity {
     private WineProfileMinimal mWineProfile;
 
     private PhotoHash mCapturePhotoHash;
-
-    private BaseWine mBaseWine;
 
     private BaseWineMinimal mBaseWineMinimal;
 
@@ -55,22 +51,12 @@ public class WineProfileActivity extends BaseActivity {
     }
 
     /**
-     * see {@link WineProfileFragment#newInstance(BaseWine)}
+     * see {@link WineProfileFragment#newInstance(BaseWineMinimal, PhotoHash)}
      */
-    public static Intent newIntent(Context packageContext, BaseWine baseWine) {
-        Intent intent = new Intent();
-        intent.putExtra(PARAMS_BASE_WINE, baseWine);
-        intent.setClass(packageContext, WineProfileActivity.class);
-        return intent;
-    }
-
-    /**
-     * Called from Wine Search, Starts a {@link WineProfileActivity} with a {@link BaseWineMinimal}
-     * object.
-     */
-    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine) {
+    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine, PhotoHash capturePhotoHash) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
+        intent.putExtra(PARAMS_CAPTURE_PHOTO_HASH, (Parcelable) capturePhotoHash);
         intent.setClass(packageContext, WineProfileActivity.class);
         return intent;
     }
@@ -83,8 +69,6 @@ public class WineProfileActivity extends BaseActivity {
         if (args != null) {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
-
-            mBaseWine = args.getParcelable(PARAMS_BASE_WINE);
 
             mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
         } else {
@@ -100,12 +84,9 @@ public class WineProfileActivity extends BaseActivity {
             if (mWineProfile != null) {
                 //spawned from a Feed Fragment
                 fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
-            } else if (mBaseWine != null) {
-                //spawned from WineCaptureSubmit
-                fragment = WineProfileFragment.newInstance(mBaseWine);
             } else if (mBaseWineMinimal != null) {
                 //spawned from search fragment
-                fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
+                fragment = WineProfileFragment.newInstance(mBaseWineMinimal, mCapturePhotoHash);
             } else if (mBaseWineId != null) {
                 //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
