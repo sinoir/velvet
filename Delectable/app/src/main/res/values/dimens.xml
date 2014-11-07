@@ -256,4 +256,7 @@
     <dimen name="capture_comment_post_button_width">51dp</dimen>
     <dimen name="capture_comment_post_button_height">36dp</dimen>
 
+    <!-- Purchase/Checkout Flow -->
+    <dimen name="checkout_info_left_margin">80dp</dimen>
+
 </resources>

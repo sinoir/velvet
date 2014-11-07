@@ -343,5 +343,21 @@
 
     <!-- Wine Purchase Flow / Checkout -->
     <string name="winecheckout_title">Checkout</string>
+    <string name="winecheckout_per_bottle">%s per bottle</string>
+    <string name="inecheckout_address_label">Address</string>
+    <string name="winecheckout_add_shipping_address">Add a shipping address</string>
+    <string name="winecheckout_payment_label">Payment</string>
+    <string name="winecheckout_add_payment_method">Add a payment method</string>
+    <string name="winecheckout_quantity_label">Quantity</string>
+    <string name="winecheckout_credit_applied_label">Credit applied</string>
+    <string name="winecheckout_add_promo_code">Add promo code</string>
+    <string name="winecheckout_shipping_tax_label">Shipping and tax</string>
+    <string name="winecheckout_total_label">Total</string>
+    <string name="winecheckout_confirm_pay">Confirm and pay</string>
+    <plurals name="winecheckout_num_bottles">
+        <item quantity="one">1 bottle</item>
+        <item quantity="other">%d bottles</item>
+    </plurals>
+
 
 </resources>

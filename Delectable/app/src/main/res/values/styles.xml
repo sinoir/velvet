@@ -303,6 +303,8 @@
         <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>
     </style>
 
+    <!-- Purchase Wine Styles -->
+
     <style name="PurchaseWineCheckPrice">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
@@ -319,6 +321,47 @@
         <item name="android:textColor">@color/d_medium_gray</item>
         <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="CheckoutRowLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginRight">28dp</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontName">whitney_medium_sc</item>
+    </style>
+
+    <style name="CheckoutAddStuffText" parent="PurchaseWineCheckPrice">
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="CheckoutShippingAddRemoveButton">
+        <item name="android:layout_width">@dimen/button_height</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/dark_gray_to_chestnut</item>
+        <item name="android:textSize">22sp</item>
+        <item name="fontName">whitney_medium_sc</item>
+    </style>
+
+    <style name="CheckoutPricingLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/checkout_info_left_margin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="CheckoutPricingAmount">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontName">whitney_book</item>
     </style>
 
 </resources>
