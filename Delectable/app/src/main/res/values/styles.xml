@@ -34,6 +34,7 @@
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="theme">@style/ToolbarTheme</item>
+        <item name="elevation">0dp</item>
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
@@ -56,8 +57,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog">
-    </style>
+    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"></style>
 
     <style name="DelectableTheme.Dialog.LoadingCircle">
         <item name="android:windowIsFloating">false</item>

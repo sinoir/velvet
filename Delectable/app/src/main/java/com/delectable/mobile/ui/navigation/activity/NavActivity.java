@@ -34,6 +34,8 @@ public class NavActivity extends BaseActivity
     @Inject
     protected EventBus mEventBus;
 
+    private Toolbar mToolbar;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -49,12 +51,18 @@ public class NavActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_nav);
         App.injectMembers(this);
 
-        setContentView(R.layout.activity_nav);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setLogo(R.drawable.ic_launcher);
+        }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -114,7 +122,6 @@ public class NavActivity extends BaseActivity
         }
         if (fragment != null) {
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-            //getActionBar().setTitle(mTitle);
         }
     }
 

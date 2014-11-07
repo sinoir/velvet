@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -61,7 +62,7 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Inject
     protected EventBus mEventBus;
 
-    protected ActionBar mActionBar;
+    private ActionBar mActionBar;
 
     private Set<LifecycleListener> lifecycleListeners;
 
@@ -89,8 +90,13 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         CrashlyticsUtil.log(TAG + ".onAttach");
-        if (activity instanceof ActionBarActivity) {
-            mActionBar = ((ActionBarActivity) activity).getSupportActionBar();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (getActivity() instanceof ActionBarActivity) {
+            mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         }
     }
 
@@ -151,8 +157,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         super.onDestroy();
         CrashlyticsUtil.log(TAG + ".onDestroy");
         lifecycleListeners.clear();
-        if (mActionBar != null) {
-            mActionBar.setTitle(null);
+        if (getActionBar() != null) {
+            getActionBar().setTitle(null);
         }
     }
 
@@ -170,6 +176,10 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void unregister(LifecycleListener listener) {
         lifecycleListeners.remove(listener);
+    }
+
+    protected ActionBar getActionBar() {
+        return mActionBar;
     }
 
     public void launchNextFragment(BaseFragment fragment) {
@@ -198,8 +208,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     }
 
     protected void setActionBarTitle(String title) {
-        if (mActionBar != null) {
-            mActionBar.setTitle(title);
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
         }
     }
 

@@ -69,7 +69,7 @@ public class TaggedPeopleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_people, container, false);
         ButterKnife.inject(this, view);
 
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         int numberOfTaggedPeople = mCaptureDetails.getRegisteredParticipants() != null
                 ? mCaptureDetails.getRegisteredParticipants().size()
                 : 0;

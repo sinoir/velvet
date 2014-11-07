@@ -10,11 +10,6 @@ import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCap
 import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.models.LabelScan;
-import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -153,7 +148,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY, byteArrayOutputStream);
+            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY,
+                    byteArrayOutputStream);
             mRawImageData = byteArrayOutputStream.toByteArray();
         }
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
@@ -166,7 +162,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
         ButterKnife.inject(this, mView);
 
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         setupRatingSeekBar();
 
@@ -214,7 +210,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mActionBar.show();
+        getActionBar().show();
     }
 
     @Override

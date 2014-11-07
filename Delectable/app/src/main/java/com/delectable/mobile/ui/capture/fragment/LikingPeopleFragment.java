@@ -57,7 +57,7 @@ public class LikingPeopleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_people, container, false);
         ButterKnife.inject(this, view);
 
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         String title = getResources()
                 .getQuantityString(R.plurals.cap_feed_likes_count, mLikingPeople.size(),

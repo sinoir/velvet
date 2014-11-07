@@ -71,7 +71,7 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
         mAdapter = new FoursquareVenuesAdapter(mVenues);
         mListView.setAdapter(mAdapter);
 
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

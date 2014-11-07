@@ -48,7 +48,8 @@ public class TagPeopleFragment extends BaseFragment {
     protected TextView mWithTextView;
 
     /**
-     * This view is a child of the empty view container, and covers the progress bar when it's set to visible.
+     * This view is a child of the empty view container, and covers the progress bar when it's set
+     * to visible.
      */
     @InjectView(R.id.empty_text_view)
     protected TextView mEmptyTextView;
@@ -98,7 +99,7 @@ public class TagPeopleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_tag_people, container, false);
         ButterKnife.inject(this, view);
 
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListView.setAdapter(mAdapter);
 
