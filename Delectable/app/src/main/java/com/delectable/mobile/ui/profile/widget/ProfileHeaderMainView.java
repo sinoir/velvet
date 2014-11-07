@@ -6,14 +6,20 @@ import com.delectable.mobile.ui.common.widget.CircleImageView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class ProfileHeaderMainView extends LinearLayout {
+public class ProfileHeaderMainView extends RelativeLayout {
+
+    @InjectView(R.id.profile_image1)
+    protected CircleImageView mUserImageView;
+
+    @InjectView(R.id.influencer_badge)
+    protected View mInfluencerBadge;
 
     @InjectView(R.id.user_name)
     protected TextView mUserNameTextView;
@@ -26,9 +32,6 @@ public class ProfileHeaderMainView extends LinearLayout {
 
     @InjectView(R.id.following_count)
     protected TextView mFollowingCountTextView;
-
-    @InjectView(R.id.profile_image1)
-    protected CircleImageView mUserImageView;
 
     private ActionListener mActionListener;
 
@@ -45,7 +48,6 @@ public class ProfileHeaderMainView extends LinearLayout {
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.profile_header_main, this);
         ButterKnife.inject(this);
-        setOrientation(VERTICAL);
     }
 
     // The Fragment/Activity will handle populating the imageview with an image
@@ -55,6 +57,10 @@ public class ProfileHeaderMainView extends LinearLayout {
 
     public void setUserName(String userName) {
         mUserNameTextView.setText(userName);
+    }
+
+    public void setInfluencer(boolean isInfluencer) {
+        mInfluencerBadge.setVisibility(isInfluencer ? View.VISIBLE : View.GONE);
     }
 
     public void setWineCount(int wineCount) {
