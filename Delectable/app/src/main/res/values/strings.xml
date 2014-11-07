@@ -172,8 +172,6 @@
 
     <string name="remove_this_wine_from_your_list">Remove this wine from your list?</string>
 
-
-
     <!-- Followers -->
     <string name="followers_title">Followers</string>
     <string name="followers_no_followers">Looks like there are no followers.</string>
@@ -205,7 +203,6 @@
         <item quantity="other">with %1$s and %2$d others</item>
     </plurals>
     <string name="cap_feed_with_two">with %1$s and 1 other</string>
-    <string name="capture_remove">Do you want to remove this wine from your history?</string>
     <string name="cap_feed_like_text_one">%s liked this</string>
     <string name="cap_feed_like_text_two">%1$s and %2$s liked this</string>
     <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more liked this</string>
