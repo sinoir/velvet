@@ -50,6 +50,13 @@ public class VintageWineInfo {
         return mWineProfileMinimal.getVintage();
     }
 
+    public int getRatingCount() {
+        if (mWineProfileMinimal == null || mWineProfileMinimal.getRatingsSummary() == null) {
+            return 0;
+        }
+        return mWineProfileMinimal.getRatingsSummary().getAllCount();
+    }
+
     public double getRating() {
         if (mWineProfileMinimal == null || mWineProfileMinimal.getRatingsSummary() == null) {
             return -1;

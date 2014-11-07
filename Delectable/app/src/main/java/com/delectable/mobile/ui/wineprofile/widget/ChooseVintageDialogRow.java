@@ -25,6 +25,9 @@ public class ChooseVintageDialogRow extends RelativeLayout {
     @InjectView(R.id.year)
     protected TextView mYear;
 
+    @InjectView(R.id.ratings_count)
+    protected TextView mRatingsCount;
+
     @InjectView(R.id.rating)
     protected TextView mRating;
 
@@ -47,8 +50,12 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    private void updateData(String year, double rating) {
+    private void updateData(String year, int ratingsCount, double rating) {
         mYear.setText(year);
+        String ratingCount = getResources()
+                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
+                        ratingsCount);
+        mRatingsCount.setText(ratingCount);
 
         //rating
         if (rating == NO_AVG_RATING) { //handling a no rating case, show a dash
@@ -63,14 +70,16 @@ public class ChooseVintageDialogRow extends RelativeLayout {
     }
 
     /**
-     * Convenience method that calls {@link #updateData(String, double)}, used to update the data
-     * for a normal row.
+     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
+     * data for a normal row.
      */
+
     public void updateData(VintageWineInfo wineInfo) {
         String year = wineInfo.getYear();
         double rating = wineInfo.getRating();
+        int ratingsCount = wineInfo.getRatingCount();
 
-        updateData(year, rating);
+        updateData(year, ratingsCount, rating);
         mWinePriceView.updateWithPriceInfo(wineInfo);
     }
 
