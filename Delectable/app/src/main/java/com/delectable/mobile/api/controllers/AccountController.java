@@ -45,6 +45,8 @@ import com.delectable.mobile.api.models.PaymentMethod;
 import com.delectable.mobile.api.models.ShippingAddress;
 import com.path.android.jobqueue.JobManager;
 
+import android.graphics.Bitmap;
+
 import javax.inject.Inject;
 
 
@@ -141,8 +143,8 @@ public class AccountController {
         mJobManager.addJobInBackground(new FacebookifyProfilePhotoJob());
     }
 
-    public void updateProfilePhoto(byte[] imageData) {
-        mJobManager.addJobInBackground(new UpdateProfilePhotoJob(imageData));
+    public void updateProfilePhoto(Bitmap bitmap) {
+        mJobManager.addJobInBackground(new UpdateProfilePhotoJob(bitmap));
     }
 
     public void updateProfile(String fname, String lname, String url, String bio) {

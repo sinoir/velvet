@@ -3,14 +3,19 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -58,7 +63,13 @@ public class WineCaptureConfirmFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.fragment_wine_capture_options, container, false);
         ButterKnife.inject(this, mView);
 
-        // TODO: Make previewImage Height = Width a square
+        // set preview image container height to match screen width
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point screenSize = new Point();
+        display.getSize(screenSize);
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
+        mPreviewImage.setLayoutParams(parms);
 
         displayCapturedImage();
         return mView;

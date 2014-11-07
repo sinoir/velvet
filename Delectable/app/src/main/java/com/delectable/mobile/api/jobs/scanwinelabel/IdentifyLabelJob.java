@@ -1,15 +1,19 @@
 package com.delectable.mobile.api.jobs.scanwinelabel;
 
-import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
-import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.LabelScanResponse;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
+import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.ProvisionCapture;
+import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.KahunaUtil;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -21,13 +25,8 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     @Inject
     BaseWineModel mBaseWineModel;
 
-    public IdentifyLabelJob(byte[] imageData) {
-        super(imageData);
-    }
-
-    @Override
-    public void onAdded() {
-        super.onAdded();
+    public IdentifyLabelJob(Bitmap bitmap) {
+        super(bitmap);
     }
 
     @Override
@@ -62,14 +61,26 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     }
 
     @Override
-    protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return super.shouldReRunOnThrowable(throwable);
-    }
+    public byte[] compressImage(Bitmap bitmap) {
 
-    @Override
-    public byte[] getResizedImage() {
-        // TODO: Resize Photo to 300x300 for Instant and 1280x1280 for Pending Capture
-        return getImageData();
+        // scale
+        Matrix matrix = new Matrix();
+        float scaleFactor = CameraUtil.MAX_SIZE_INSTANT / (float) bitmap.getHeight();
+        matrix.setScale(scaleFactor, scaleFactor);
+
+        Bitmap finalBitmap = Bitmap.createBitmap(
+                bitmap,
+                0,
+                0,
+                bitmap.getHeight(),
+                bitmap.getHeight(),
+                matrix,
+                true);
+
+        // compress
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        finalBitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY_INSTANT, os);
+        return os.toByteArray();
     }
 
     @Override

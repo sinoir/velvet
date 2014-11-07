@@ -28,7 +28,7 @@
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         android:gravity="center"
-        android:visibility="invisible"
+        android:alpha="0"
         android:background="@drawable/bg_light_gray_rounded_corner_border">
 
         <ImageView

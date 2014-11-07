@@ -1,5 +1,10 @@
 package com.delectable.mobile.util;
 
+import com.delectable.mobile.App;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,13 +14,28 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class CameraUtil {
+
+    public static final int MAX_SIZE_PENDING = 1280;
+
+    public static final int MAX_SIZE_INSTANT = 300;
+
+    public static final int MAX_SIZE_PROFILE_IMAGE = 640;
+
+    public static final int JPEG_QUALITY = 80;
+
+    public static final int JPEG_QUALITY_INSTANT = 75;
 
     public static final String TAG = "CameraUtil";
 
@@ -32,6 +52,23 @@ public class CameraUtil {
 
     public static void setCameraParameters(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
+
+        // Picture Size
+        int maxWidth = 0;
+        int maxHeight = 0;
+        for (Camera.Size size : parameters.getSupportedPictureSizes()) {
+            if (size.width > maxWidth) {
+                maxWidth = size.width;
+                maxHeight = size.height;
+            }
+        }
+        parameters.setPictureSize(maxWidth, maxHeight);
+        Log.d(TAG, "pictureSize: " + maxWidth + "x" + maxHeight);
+
+        // Preview Size with matching aspect ratio
+        Camera.Size previewSize = getOptimalPreviewSize(0, maxWidth, maxHeight, parameters);
+        parameters.setPreviewSize(previewSize.width, previewSize.height);
+        Log.d(TAG, "previewSize: " + previewSize.width + "x" + previewSize.height);
 
         // Continous Auto Focus
         List<String> focusModes = parameters.getSupportedFocusModes();
@@ -69,36 +106,34 @@ public class CameraUtil {
                         .hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
     }
 
-    public static void setCameraDisplayOrientation(Context context, int cameraId,
-            Camera camera) {
-        int rotationDegrees = getCameraRotationFixInDegrees(context, cameraId);
+    public static void setCameraDisplayOrientation(int cameraId, Camera camera) {
+        int rotationDegrees = getCameraRotationInDegrees(cameraId);
         camera.setDisplayOrientation(rotationDegrees);
     }
 
-    public static Bitmap getRotatedBitmapTakenFromCamera(
-            Context context,
-            byte[] imageData,
-            int cameraId, BitmapFactory.Options options) {
+    public static Bitmap rotateScaleAndCropImage(byte[] imageData, int cameraId) {
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
-        int rotationDegrees = getCameraRotationFixInDegrees(context, cameraId);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+        int rotationDegrees = getCameraRotationInDegrees(cameraId);
         Matrix matrix = new Matrix();
-        matrix.postRotate(rotationDegrees);
+        matrix.setRotate(rotationDegrees);
+        float scaleFactor = CameraUtil.MAX_SIZE_PENDING / (float) bitmap.getHeight();
+        matrix.postScale(scaleFactor, scaleFactor);
 
-        Bitmap rotatedBitmap = Bitmap.createBitmap(
+        Bitmap finalBitmap = Bitmap.createBitmap(
                 bitmap,
                 0,
                 0,
-                bitmap.getWidth(),
+                bitmap.getHeight(),
                 bitmap.getHeight(),
                 matrix,
-                false);
+                true);
 
-        return rotatedBitmap;
+        return finalBitmap;
     }
 
-    public static int getCameraRotationFixInDegrees(Context context, int cameraId) {
-        WindowManager windowManager = (WindowManager) context
+    public static int getCameraRotationInDegrees(int cameraId) {
+        WindowManager windowManager = (WindowManager) App.getInstance()
                 .getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
         int degrees = 0;
@@ -116,6 +151,7 @@ public class CameraUtil {
                 degrees = 270;
                 break;
         }
+        Log.d(TAG, "rotation: " + degrees);
 
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
@@ -159,5 +195,124 @@ public class CameraUtil {
                 Math.min(top + focusAreaSize, 1000));
 
         return new Camera.Area(focusArea, focusAreaSize);
+    }
+
+    public static Camera.Size getOptimalPreviewSize(int displayOrientation, int width, int height,
+            Camera.Parameters parameters) {
+        double targetRatio = (double) width / height;
+        List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+        int targetHeight = height;
+
+        if (displayOrientation == 90 || displayOrientation == 270) {
+            targetRatio = (double) height / width;
+        }
+
+        // Try to find an size match aspect ratio and size
+        for (Camera.Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+
+            if (Math.abs(ratio - targetRatio) <= 0.1) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+
+        // Cannot find the one match the aspect ratio, ignore
+        // the requirement
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+
+        return (optimalSize);
+    }
+
+    public static Bitmap loadBitmapFromUri(Uri imageUri, int maxSize)
+            throws Exception {
+
+        Bitmap bitmap = BitmapFactory.decodeStream(App.getInstance().getContentResolver().openInputStream(imageUri));
+
+        int rotationDegrees = getExifRotationInDegrees(imageUri);
+        int cropSize = (bitmap.getWidth() > bitmap.getHeight())
+                ? bitmap.getHeight()
+                : bitmap.getWidth();
+
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationDegrees);
+
+        if (bitmap.getHeight() > maxSize) {
+            float scaleFactor = maxSize / (float) cropSize;
+            matrix.postScale(scaleFactor, scaleFactor);
+        }
+
+        // TODO center crop
+        Bitmap finalBitmap = Bitmap.createBitmap(
+                bitmap,
+                0,
+                0,
+                cropSize,
+                cropSize,
+                matrix,
+                true);
+
+        return finalBitmap;
+    }
+
+    public static int getExifRotationInDegrees(Uri imageUri)
+            throws Exception {
+
+        // Make sure this is a JPEG
+        String mimeType = App.getInstance().getContentResolver().getType(imageUri);
+        if (!mimeType.equalsIgnoreCase("image/jpeg")) {
+            return 0;
+        }
+
+        int exifRotation = 0;
+
+        InputStream imageIs = null;
+
+        try {
+            imageIs = App.getInstance().getContentResolver().openInputStream(imageUri);
+            BufferedInputStream imageBis = new BufferedInputStream(imageIs);
+            Metadata metadata = ImageMetadataReader.readMetadata(imageBis, false);
+
+            ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
+
+            if (exifIFD0Directory != null && exifIFD0Directory
+                    .containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                exifRotation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (imageIs != null) {
+                    imageIs.close();
+                }
+            } catch (IOException io) {
+                // no-op
+            }
+        }
+
+        if (exifRotation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        }
+        if (exifRotation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        }
+        if (exifRotation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
     }
 }

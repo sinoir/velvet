@@ -3,10 +3,8 @@ package com.delectable.mobile.ui.common.fragment;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.CameraUtil;
-import com.delectable.mobile.util.PhotoUtil;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.hardware.Camera;
@@ -104,12 +102,6 @@ public class CameraFragment extends BaseFragment {
         }
     }
 
-    // Extend this method to do custom Cropping / Rotating
-    // Warning: This is called background thread!
-    public Bitmap cropRotatedCapturedBitmap(Bitmap bitmap) {
-        return bitmap;
-    }
-
     public boolean toggleFlash() {
         if (mCamera != null && CameraUtil.checkSystemHasFlash(getActivity())) {
             Camera.Parameters p = mCamera.getParameters();
@@ -164,23 +156,7 @@ public class CameraFragment extends BaseFragment {
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            // Just get the Size of the bitmap, so we can scale if necessary, this will not make a bitmap (it'll be null), so it shoudl be faster
-            options.inJustDecodeBounds = true;
-
-            BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-            // Gives us a Bitmap size that's small enough to handle quickly, 1024 is a rough max width/height to give us the appropriate sample size.  The resulting image won't be exact, and maybe a little larger.
-            options.inSampleSize = PhotoUtil.calculateInSampleSize(options, PhotoUtil.MAX_SIZE, PhotoUtil.MAX_SIZE);
-
-            // Make sure we reset the inJustDecodeBounds so we can create a bitmap
-            options.inJustDecodeBounds = false;
-
-            // Rotate Bitmap with passed data and options
-            Bitmap bitmap = CameraUtil.getRotatedBitmapTakenFromCamera(
-                    getActivity(), data, mCameraId, options);
-            Bitmap transformedBitmap = cropRotatedCapturedBitmap(bitmap);
-            return transformedBitmap;
+            return CameraUtil.rotateScaleAndCropImage(data, mCameraId);
         }
 
         @Override
