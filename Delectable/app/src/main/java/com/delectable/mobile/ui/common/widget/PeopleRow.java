@@ -20,6 +20,9 @@ public class PeopleRow extends RelativeLayout {
     @InjectView(R.id.row_name)
     TextView mName;
 
+    @InjectView(R.id.row_influencer_badge)
+    View mInfluencerBadge;
+
     @InjectView(R.id.row_rating)
     RatingTextView mRating;
 
@@ -37,11 +40,11 @@ public class PeopleRow extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    public void updateData(String profileImageUrl, String name) {
-        updateData(profileImageUrl, name, -1);
+    public void updateData(String profileImageUrl, String name, boolean isInfluencer) {
+        updateData(profileImageUrl, name, isInfluencer, -1);
     }
 
-    public void updateData(String profileImageUrl, String name, int rating) {
+    public void updateData(String profileImageUrl, String name, boolean isInfluencer, int rating) {
 
         //set no_photo first, so that when the user flicks through the list, it doesn't show another account's picture
         ImageLoaderUtil.loadImageIntoView(getContext(), R.drawable.no_photo, mImage);
@@ -50,6 +53,7 @@ public class PeopleRow extends RelativeLayout {
         }
 
         mName.setText(name);
+        mInfluencerBadge.setVisibility(isInfluencer ? View.VISIBLE : View.GONE);
 
         if (rating > -1) {
             mRating.setRatingOf40(rating);

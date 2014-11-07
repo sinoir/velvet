@@ -42,7 +42,8 @@ public class LikingPeopleAdapter extends BaseAdapter {
             row = (PeopleRow) inflater.inflate(R.layout.row_people_impl, parent, false);
         }
         AccountMinimal likingUser = getItem(position);
-        row.updateData(likingUser.getPhoto().getBestThumb(), likingUser.getFullName());
+        row.updateData(likingUser.getPhoto().getBestThumb(), likingUser.getFullName(),
+                likingUser.isInfluencer());
 
         return row;
     }
