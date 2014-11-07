@@ -335,4 +335,10 @@
     <string name="settings_disconnect_facebook">Disconnect facebook account?</string>
     <string name="settings_disconnect">disconnect</string>
 
+    <!-- Checkout Over 21 dialog text -->
+    <string name="over21dialog_title">Are you over 21 years old?</string>
+    <string name="over21dialog_note">Please note that someone 21 years or older may need to sign for delivery.</string>
+    <string name="over21dialog_over21">I am 21 years or older</string>
+    <string name="over21dialog_under21">I am younger than 21</string>
+
 </resources>

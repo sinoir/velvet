@@ -296,6 +296,13 @@
         <item name="fontName">whitney_medium</item>
     </style>
 
+    <style name="ButtonLargeDChestNutBg" parent="ButtonDChestNutBG">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>
+    </style>
+
     <style name="PurchaseWineCheckPrice">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
