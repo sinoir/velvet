@@ -20,10 +20,10 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
+import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
-import com.delectable.mobile.util.PhotoUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -55,7 +55,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -416,7 +415,7 @@ public class SettingsFragment extends BaseFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
+                    selectedImage = CameraUtil.loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PROFILE_IMAGE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);
@@ -492,10 +491,7 @@ public class SettingsFragment extends BaseFragment {
      */
     private void updateProfilePicture(Bitmap photo) {
         mPhoto = photo;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        mPhoto.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-        byte[] rawImageData = byteArrayOutputStream.toByteArray();
-        mAccountController.updateProfilePhoto(rawImageData);
+        mAccountController.updateProfilePhoto(photo);
     }
 
     /**

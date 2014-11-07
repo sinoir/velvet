@@ -93,7 +93,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         }
         try {
             // Rotate the camera to the appropriate display rotation
-            CameraUtil.setCameraDisplayOrientation(getContext(), mCameraId, mCamera);
+            CameraUtil.setCameraDisplayOrientation(mCameraId, mCamera);
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (IOException e) {
