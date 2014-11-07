@@ -1,12 +1,13 @@
 package com.delectable.mobile.api.cache;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import com.google.gson.Gson;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Motd;
-import com.google.gson.Gson;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class UserInfo {
 
@@ -28,8 +29,11 @@ public class UserInfo {
 
     private static final String PROPERTY_ACCOUNT_PRIVATE_TEMP = "accountPrivateTemp";
 
+    private static final String PROPERTY_USER_OVER_21 = "propertyUserOver21";
 
-    public static void onSignIn(String userId, String fullName, String email, String sessionKey, String sessionToken) {
+
+    public static void onSignIn(String userId, String fullName, String email, String sessionKey,
+            String sessionToken) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
 
@@ -54,6 +58,7 @@ public class UserInfo {
         editor.remove(PROPERTY_SESSION_TOKEN);
         editor.remove(PROPERTY_MOTD);
         editor.remove(PROPERTY_ACCOUNT_PRIVATE);
+        editor.remove(PROPERTY_USER_OVER_21);
         editor.commit();
     }
 
@@ -148,8 +153,8 @@ public class UserInfo {
      * TODO these two methods are not well implemented. The primary purpose is really just to
      * provide a place to persist the account object's original state while it's awaiting updates
      * from an endpoint. If said request returns in error, then we would roll back the real Account
-     * private object back to this original state. Specifically, I had a very hard time
-     * holding onto member objects in Jobs that had persist() called on them.
+     * private object back to this original state. Specifically, I had a very hard time holding onto
+     * member objects in Jobs that had persist() called on them.
      */
     public static void setTempAccount(Account account) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
@@ -162,7 +167,8 @@ public class UserInfo {
     }
 
     public static Account getTempAccountPrivate() {
-        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences prefs = App.getInstance()
+                .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String jsonString = prefs.getString(PROPERTY_ACCOUNT_PRIVATE_TEMP, null);
         if (jsonString != null) {
             Gson gson = new Gson();
@@ -180,5 +186,28 @@ public class UserInfo {
         editor.commit();
     }
 
+    /**
+     * Checks whether or not User has Confirmed their over 21 or not.
+     *
+     * Used for showing an over 21 dialog
+     */
+    public static boolean isOver21Set() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        return prefs.contains(PROPERTY_USER_OVER_21);
+    }
 
+    public static boolean isOver21() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        return prefs.getBoolean(PROPERTY_USER_OVER_21, false);
+    }
+
+    public static void setIsOver21(boolean isOver21) {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PROPERTY_USER_OVER_21, isOver21);
+        editor.commit();
+    }
 }
