@@ -28,6 +28,7 @@ import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
 import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
+import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -242,9 +243,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
             updateUIWithData();
         }
 
-        if (mAdapter.getItems().isEmpty()) {
-            loadLocalData();
-        }
+        loadLocalData();
     }
 
     @OnItemClick(R.id.list_view)
@@ -473,7 +472,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         if (state == CaptureState.IDENTIFIED) {
             intent = WineProfileActivity.newIntent(getActivity(), capture.getWineProfile(),
                     capture.getPhoto());
-        }else if (state == CaptureState.UNVERIFIED) {
+        } else if (state == CaptureState.UNVERIFIED) {
             intent = WineProfileActivity.newIntent(getActivity(), capture.getBaseWine(),
                     capture.getPhoto());
         }
@@ -485,7 +484,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void addRatingAndComment(PendingCapture capture) {
-
+        Intent intent = RateCaptureActivity.newIntent(getActivity(), capture.getId());
+        startActivity(intent);
     }
 
     @Override
