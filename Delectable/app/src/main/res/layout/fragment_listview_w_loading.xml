@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/d_white"
-        android:divider="@color/d_light_gray"
+        android:divider="@null"
         android:dividerHeight="1dp" />
 
     <include
