@@ -18,6 +18,7 @@ import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
 import com.delectable.mobile.util.TwitterUtil;
@@ -101,9 +102,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @InjectView(R.id.make_private)
     protected SwitchCompat mMakePrivateButton;
 
-    @InjectView(R.id.progress_bar)
-    protected View mProgressBar;
-
     protected View mActionView;
 
     protected FontTextView mPostButton;
@@ -131,6 +129,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private boolean mIsPostingCapture;
 
+    private LoadingCircleDialog mLoadingDialog;
+
     public WineCaptureSubmitFragment() {
     }
 
@@ -152,6 +152,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
+        mLoadingDialog = new LoadingCircleDialog();
     }
 
     @Override
@@ -319,7 +320,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             return;
         }
 
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
 
         mIsPostingCapture = true;
         mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
@@ -331,7 +332,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mWineScanController.createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
             mIsPostingCapture = false;
-            mProgressBar.setVisibility(View.GONE);
+            mLoadingDialog.dismiss();
             handleEventErrorMessage(event);
         }
     }
@@ -345,7 +346,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
         } else {
             mIsPostingCapture = false;
-            mProgressBar.setVisibility(View.GONE);
+            mLoadingDialog.dismiss();
             handleEventErrorMessage(event);
         }
     }
@@ -366,7 +367,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             handleEventErrorMessage(event);
         }
         mIsPostingCapture = false;
-        mProgressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
     }
 
     private void handleEventErrorMessage(BaseEvent event) {
@@ -397,11 +398,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment.newInstance(
                 this, REQUEST_LOCATION);
         launchNextFragment(fragment);
-    }
-
-    @OnClick(R.id.progress_bar)
-    protected void progressClicked() {
-        //no-op -> prevent views below it from being selected
     }
 
     @OnCheckedChanged(R.id.share_facebook)
