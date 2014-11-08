@@ -12,6 +12,7 @@ import com.delectable.mobile.ui.tagpeople.widget.TagPeopleAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,13 +94,18 @@ public class TagPeopleFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        setActionBarSubtitle(getString(R.string.capture_submit_drinking_with_who_text));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tag_people, container, false);
         ButterKnife.inject(this, view);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListView.setAdapter(mAdapter);
 

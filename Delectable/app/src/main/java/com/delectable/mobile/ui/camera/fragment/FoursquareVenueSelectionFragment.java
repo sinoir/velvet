@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -62,6 +63,13 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        setActionBarSubtitle(getString(R.string.capture_submit_drinking_where_text));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_listview, container, false);
@@ -70,8 +78,6 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
         mVenues = new ArrayList<FoursquareVenueItem>();
         mAdapter = new FoursquareVenuesAdapter(mVenues);
         mListView.setAdapter(mAdapter);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

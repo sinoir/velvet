@@ -59,7 +59,8 @@
         <activity
             android:name="com.delectable.mobile.ui.camera.activity.WineCaptureActivity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme.NoActionBar" />
 
         <activity
             android:name="com.delectable.mobile.ui.profile.activity.UserProfileActivity"

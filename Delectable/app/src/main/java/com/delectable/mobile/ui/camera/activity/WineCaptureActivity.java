@@ -11,7 +11,7 @@ public class WineCaptureActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_toolbar_fragment_container);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new WineCaptureCameraFragment())
