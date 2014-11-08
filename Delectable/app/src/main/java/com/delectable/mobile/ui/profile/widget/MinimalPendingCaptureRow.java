@@ -88,6 +88,7 @@ public class MinimalPendingCaptureRow extends RelativeLayout {
             case UNVERIFIED:
                 captureTitle = mPendingCapture.getBaseWine().getProducerName();
                 captureName = mPendingCapture.getBaseWine().getName();
+                break;
             case UNIDENTIFIED:
             default:
                 captureTitle = getResources().getString(R.string.user_captures_id_in_progress);
