@@ -14,6 +14,7 @@ import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,6 +106,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
 
+    protected View mActionView;
+
+    protected FontTextView mPostButton;
+
     @Inject
     protected WineScanController mWineScanController;
 
@@ -159,16 +165,18 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setActionBarTitle(null);
+        setActionBarTitle(getString(R.string.capture_submit_title));
         setActionBarSubtitle(null);
-        getActionBar().show();
         enableBackButton(true);
+        getActionBar().show();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
+        mActionView = inflater.inflate(R.layout.action_menu_button, null, false);
+        mPostButton = (FontTextView) mActionView.findViewById(R.id.action_button);
 
         ButterKnife.inject(this, mView);
 
@@ -184,8 +192,19 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // TODO customize the post button
         inflater.inflate(R.menu.capture_menu, menu);
+        MenuItem postItem = menu.findItem(R.id.post);
+        mPostButton.setText(getString(R.string.capture_submit_post));
+        mPostButton.setEnabled(true);
+        mPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommentEditText.clearFocus();
+                hideKeyboard();
+                postCapture();
+            }
+        });
+        MenuItemCompat.setActionView(postItem, mActionView);
     }
 
     @Override
@@ -193,11 +212,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().onBackPressed();
-                return true;
-            case R.id.post:
-                mCommentEditText.clearFocus();
-                hideKeyboard();
-                postCapture();
                 return true;
         }
         return super.onOptionsItemSelected(item);

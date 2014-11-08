@@ -66,6 +66,7 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         enableBackButton(true);
+        setActionBarTitle(null);
         setActionBarSubtitle(getString(R.string.capture_submit_drinking_where_text));
     }
 

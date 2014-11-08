@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/makeshift_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
