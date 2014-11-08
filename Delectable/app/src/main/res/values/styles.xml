@@ -3,7 +3,7 @@
     <style name="DelectableTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
-        <item name="colorPrimaryDark">@color/d_chestnut</item>
+        <item name="colorPrimaryDark">@color/d_medium_gray</item>
         <item name="colorAccent">@color/d_chestnut</item>
         <item name="actionBarStyle">@style/ActionBarStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -25,7 +25,7 @@
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@color/d_suva_gray</item>
+        <item name="color">@color/d_big_stone</item>
     </style>
 
     <style name="ToolbarStyle">
@@ -34,7 +34,20 @@
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="theme">@style/ToolbarTheme</item>
-        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="ToolbarStyle.Floating" parent="@style/ToolbarStyle">
+        <item name="android:background">@color/d_big_stone</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>
+    </style>
+
+    <style name="ToolbarStyle.Flat" parent="@style/ToolbarStyle">
+    <item name="elevation">0dp</item>
+    </style>
+
+    <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
@@ -43,17 +56,13 @@
         <item name="android:actionMenuTextColor">@color/d_big_stone</item>
     </style>
 
-    <style name="DelectableTheme.TranslucentActionBar" parent="@style/DelectableTheme">
-        <item name="actionBarStyle">@style/TranslucentActionBarStyle</item>
-    </style>
-
     <!-- TODO make this the new default when toolbars replace all action bars -->
     <style name="DelectableTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
         <item name="colorPrimaryDark">@color/d_chestnut</item>
         <item name="colorAccent">@color/d_chestnut</item>
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <!--<item name="actionBarStyle">@style/ActionBarStyle</item>-->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 

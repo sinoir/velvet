@@ -27,6 +27,7 @@ import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -38,6 +39,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
@@ -64,6 +66,8 @@ import butterknife.OnClick;
 //TODO paginate capturenotes listview? go to another screen?
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
+
+    public static final int ACTIONBAR_HIDE_DELAY = 1000;
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -277,11 +281,20 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // configure ActionBar
+        enableBackButton(true);
+        setActionBarSubtitle(mWineProfile.getProducerName() + " " + mWineProfile.getName());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        final ListView listView = (ListView) view.findViewById(R.id.list_view);
 
         //prepare header view
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
@@ -303,9 +316,13 @@ public class WineProfileFragment extends BaseFragment implements
         // empty state
         mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
 
+        final HideableActionBarScrollListener hideableActionBarScrollListener
+                = new HideableActionBarScrollListener(this);
+
         // Setup Floating Camera Button
         mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
-        FloatingActionButton.FabOnScrollListener fabOnScrollListener = new FloatingActionButton.FabOnScrollListener() {
+        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
 
             final View wineImageView = header.findViewById(R.id.wine_image);
 
@@ -321,6 +338,9 @@ public class WineProfileFragment extends BaseFragment implements
                     return;
                 }
                 wineImageView.setTranslationY(top / 2f);
+
+                hideableActionBarScrollListener
+                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
             }
         };
         mCameraButton.attachToListView(listView, fabOnScrollListener);
@@ -373,6 +393,8 @@ public class WineProfileFragment extends BaseFragment implements
         if (mAdapter.getItems().isEmpty()) {
             loadLocalData(Type.BASE_WINE, mBaseWineId);
         }
+
+        showOrHideActionBar(false, ACTIONBAR_HIDE_DELAY);
     }
 
     /**
