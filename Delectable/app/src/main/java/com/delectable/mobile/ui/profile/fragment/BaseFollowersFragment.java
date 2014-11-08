@@ -2,13 +2,13 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.FollowersFollowingModel;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.api.cache.FollowersFollowingModel;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
-import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -20,6 +20,7 @@ import com.delectable.mobile.util.SafeAsyncTask;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,6 +98,12 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
         mAccountId = args.getString(ACCOUNT_ID);
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
     }
 
     @Override

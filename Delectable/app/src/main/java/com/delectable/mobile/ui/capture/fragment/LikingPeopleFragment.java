@@ -8,6 +8,7 @@ import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,18 +52,23 @@ public class LikingPeopleFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        enableBackButton(true);
+        String title = getResources()
+                .getQuantityString(R.plurals.cap_feed_likes_text, mLikingPeople.size(),
+                        mLikingPeople.size());
+        setActionBarSubtitle(title);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_people, container, false);
         ButterKnife.inject(this, view);
-
-        enableBackButton(true);
-
-        String title = getResources()
-                .getQuantityString(R.plurals.cap_feed_likes_text, mLikingPeople.size(),
-                        mLikingPeople.size());
-        setActionBarSubtitle(title);
 
         mAdapter = new LikingPeopleAdapter(mLikingPeople);
         mListView.setAdapter(mAdapter);

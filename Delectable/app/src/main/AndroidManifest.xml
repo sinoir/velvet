@@ -86,8 +86,8 @@
             android:name="com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme">
-            <intent-filter android:label="">
+            android:theme="@style/DelectableTheme.NoActionBar">
+        <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
