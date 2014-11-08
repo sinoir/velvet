@@ -179,7 +179,10 @@
 
 
     <!-- Capture Feed -->
-    <string name="cap_feed_tagged_count">%d people shared this wine</string>
+    <plurals name="cap_feed_tagged_count">
+        <item quantity="one">%1$d person shared this wine with %2$s</item>
+        <item quantity="other">%1$d people shared this wine with %2$s</item>
+    </plurals>
     <plurals name="cap_feed_likes_count">
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>

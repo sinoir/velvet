@@ -121,7 +121,7 @@
             android:name="com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme" />
+            android:theme="@style/DelectableTheme.NoActionBar" />
 
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity"

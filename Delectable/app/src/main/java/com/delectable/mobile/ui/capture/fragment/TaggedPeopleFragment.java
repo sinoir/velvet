@@ -60,10 +60,11 @@ public class TaggedPeopleFragment extends BaseFragment {
         int numberOfTaggedPeople = mCaptureDetails.getRegisteredParticipants() != null
                 ? mCaptureDetails.getRegisteredParticipants().size()
                 : 0;
+        String capturerName = mCaptureDetails.getCapturerParticipant().getFname();
         String title = getResources()
-                .getString(R.string.cap_feed_tagged_count, numberOfTaggedPeople);
-        setActionBarTitle(title);
-
+                .getQuantityString(R.plurals.cap_feed_tagged_count, numberOfTaggedPeople,
+                        numberOfTaggedPeople, capturerName);
+        setActionBarSubtitle(title);
     }
 
     @Override
