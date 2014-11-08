@@ -36,18 +36,10 @@
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/post_button"
-            android:layout_width="@dimen/capture_comment_post_button_width"
-            android:layout_height="@dimen/capture_comment_post_button_height"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:background="@drawable/btn_login_done"
-            android:enabled="false"
-            android:gravity="center"
+            style="@style/ActionMenuButton"
             android:text="@string/capture_submit_post"
-            android:textColor="@color/d_white"
-            android:textSize="@dimen/custom_ab_action_text_size"
-            app:fontName="whitney_medium_sc" />
+            android:layout_alignParentRight="true"
+            android:enabled="false" />
 
         <View
             android:layout_width="match_parent"
