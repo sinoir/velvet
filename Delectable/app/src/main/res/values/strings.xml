@@ -187,6 +187,10 @@
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>
     </plurals>
+    <plurals name="cap_feed_likes_text">
+        <item quantity="one">1 person likes this wine</item>
+        <item quantity="other">%d people like this wine</item>
+    </plurals>
     <string name="cap_feed_divider">•</string>
     <plurals name="cap_feed_comments_count">
         <item quantity="one">%d comment</item>

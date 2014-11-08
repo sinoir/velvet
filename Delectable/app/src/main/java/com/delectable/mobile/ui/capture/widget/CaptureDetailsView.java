@@ -389,7 +389,13 @@ public class CaptureDetailsView extends RelativeLayout {
             String likesCountText = mContext.getResources()
                     .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
             mLikesCount.setText(likesCountText);
-            mLikesCount.setOnClickListener(expandLikesAndCommentsClickListener);
+            mLikesCount.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // launch activity with liking people
+                    mActionsHandler.launchLikingUsersListing(mCaptureData);
+                }
+            });
         } else {
             mLikesCount.setVisibility(View.GONE);
         }
