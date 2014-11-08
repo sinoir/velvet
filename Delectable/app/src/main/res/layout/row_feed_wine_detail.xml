@@ -51,7 +51,6 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="6dp"
                 android:text="User Name"
                 android:textColor="@color/d_black"
                 android:textSize="@dimen/cap_feed_comment_text_size"
@@ -64,6 +63,7 @@
                 android:layout_alignBottom="@id/user_name"
                 android:layout_alignTop="@id/user_name"
                 android:layout_toRightOf="@+id/user_name"
+                android:layout_marginLeft="6dp"
                 android:src="@drawable/ic_find_expert_pressed"
                 android:visibility="gone" />
 

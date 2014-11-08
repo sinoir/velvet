@@ -20,7 +20,6 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
-import com.delectable.mobile.util.PhotoUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -45,7 +44,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -117,8 +115,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private Bitmap mCapturedImageBitmap;
 
-    private byte[] mRawImageData;
-
     private View mView;
 
     private int mCurrentRating = -1;
@@ -154,10 +150,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         Bundle args = getArguments();
         if (args != null) {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            mCapturedImageBitmap.compress(Bitmap.CompressFormat.JPEG, PhotoUtil.JPEG_QUALITY,
-                    byteArrayOutputStream);
-            mRawImageData = byteArrayOutputStream.toByteArray();
         }
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
     }
@@ -330,13 +322,13 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         mProgressBar.setVisibility(View.VISIBLE);
 
         mIsPostingCapture = true;
-        mWineScanController.scanLabelInstantly(mRawImageData);
+        mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
     }
 
     public void onEventMainThread(IdentifyLabelScanEvent event) {
         if (event.isSuccessful()) {
             mLabelScanResult = event.getLabelScan();
-            mWineScanController.createPendingCapture(mRawImageData, mLabelScanResult.getId());
+            mWineScanController.createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
             mIsPostingCapture = false;
             mProgressBar.setVisibility(View.GONE);

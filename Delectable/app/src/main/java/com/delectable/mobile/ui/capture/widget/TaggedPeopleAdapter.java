@@ -47,7 +47,8 @@ public class TaggedPeopleAdapter extends BaseAdapter {
         }
         AccountMinimal likingUser = getItem(position);
         int rating = mCaptureDetails.getRatingForId(likingUser.getId());
-        row.updateData(likingUser.getPhoto().getBestThumb(), likingUser.getFullName(), rating);
+        row.updateData(likingUser.getPhoto().getBestThumb(), likingUser.getFullName(),
+                likingUser.isInfluencer(), rating);
 
         return row;
     }

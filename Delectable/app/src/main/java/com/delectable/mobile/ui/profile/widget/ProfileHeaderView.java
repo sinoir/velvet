@@ -125,11 +125,14 @@ public class ProfileHeaderView extends RelativeLayout implements
         String userName = account.getFullName();
         String imageUrl = account.getPhoto().getBestThumb();
         int numCaptures = account.getCaptureCount();
+        boolean isInfluencer = account.isInfluencer();
+        String influencerTitle = account.getInfluencerTitlesString();
 
         setWineCount(numCaptures);
 
         ImageLoaderUtil.loadImageIntoView(getContext(), imageUrl, getUserImageView());
         setUserName(userName);
+        setInfluencer(isInfluencer, influencerTitle);
         setFollowerCount(account.getFollowerCount());
         setFollowingCount(account.getFollowingCount());
         setUserBio(account.getBio());
@@ -149,6 +152,11 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public void setUserName(String userName) {
         mProfileHeaderMainView.setUserName(userName);
+    }
+
+    public void setInfluencer(boolean isInfluencer, String influencerTitle) {
+        mProfileHeaderMainView.setInfluencer(isInfluencer);
+        // TODO influencer title in bio section
     }
 
     public void setFollowerCount(int followerCount) {
