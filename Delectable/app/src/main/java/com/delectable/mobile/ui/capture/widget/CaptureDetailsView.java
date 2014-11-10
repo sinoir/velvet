@@ -326,7 +326,7 @@ public class CaptureDetailsView extends RelativeLayout {
                         ? (userComment + " " + captureTimeLocation)
                         : captureTimeLocation);
         spannableString
-                .setSpan(new ForegroundColorSpan(R.color.d_medium_gray),
+                .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
                         userComment.length(), spannableString.length(), 0);
         mUserComment.setText(spannableString, TextView.BufferType.SPANNABLE);
 
@@ -469,7 +469,7 @@ public class CaptureDetailsView extends RelativeLayout {
                     numLikes - 2);
         }
 
-        ForegroundColorSpan spanGray = new ForegroundColorSpan(R.color.d_medium_gray);
+        ForegroundColorSpan spanGray = new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray));
         SpannableString spannableString = SpannableString.valueOf(likeText);
         int positionAnd = likeText
                 .lastIndexOf(getResources().getString(R.string.cap_feed_like_text_anchor_and));

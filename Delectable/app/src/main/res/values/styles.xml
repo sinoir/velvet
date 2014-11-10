@@ -250,8 +250,8 @@
         <item name="android:gravity">bottom</item>
         <item name="android:selectable">true</item>
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/bg_white_to_light_opacity</item>
-        <item name="android:textColor">@color/d_black</item>
+        <item name="android:background">@color/d_white</item>
+        <item name="android:textColor">@color/black_to_chestnut</item>
         <item name="android:textSize">@dimen/settings_text_size</item>
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
