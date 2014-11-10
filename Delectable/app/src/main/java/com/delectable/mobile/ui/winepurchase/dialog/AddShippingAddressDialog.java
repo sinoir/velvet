@@ -1,8 +1,15 @@
 package com.delectable.mobile.ui.winepurchase.dialog;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.ShippingAddressModel;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
+import com.delectable.mobile.api.models.BaseAddress;
+import com.delectable.mobile.util.NameUtil;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -11,14 +18,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 public class AddShippingAddressDialog extends DialogFragment {
 
     private static final String TAG = AddShippingAddressDialog.class.getSimpleName();
+
+    @Inject
+    protected AccountController mAccountController;
+
+    @Inject
+    protected EventBus mEventBus;
+
+    @Inject
+    protected ShippingAddressModel mShippingAddressModel;
 
     @InjectView(R.id.name)
     protected EditText mName;
@@ -48,6 +68,7 @@ public class AddShippingAddressDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
     }
 
@@ -68,6 +89,25 @@ public class AddShippingAddressDialog extends DialogFragment {
         ButterKnife.inject(this, view);
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+            // no-op
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            mEventBus.unregister(this);
+        } catch (Throwable t) {
+        }
     }
 
     //region Helpers
