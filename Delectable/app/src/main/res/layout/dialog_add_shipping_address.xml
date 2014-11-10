@@ -65,13 +65,15 @@
                     android:id="@+id/zip_code"
                     style="@style/CheckoutEditText"
                     android:layout_weight="1"
-                    android:hint="@string/shippingaddress_zipcode" />
+                    android:hint="@string/shippingaddress_zipcode"
+                    android:inputType="number" />
             </LinearLayout>
 
             <com.delectable.mobile.ui.common.widget.FontEditText
                 android:id="@+id/phone_number"
                 style="@style/CheckoutEditText"
-                android:hint="@string/shippingaddress_phone_number" />
+                android:hint="@string/shippingaddress_phone_number"
+                android:inputType="phone" />
 
             <View
                 android:layout_width="match_parent"
