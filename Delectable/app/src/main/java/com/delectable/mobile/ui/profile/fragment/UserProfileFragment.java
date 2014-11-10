@@ -24,19 +24,28 @@ import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
 import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +53,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -67,6 +78,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private static final int DELETE_PENDING_CAPTURE_DIALOG = 1;
 
+    private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
+
     @Inject
     protected CapturesPendingCapturesListingModel mListingModel;
 
@@ -88,6 +101,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @InjectView(R.id.camera_button)
     protected FloatingActionButton mCameraButton;
+
+    private MutableForegroundColorSpan mAlphaSpan;
+
+    private SpannableString mTitle;
 
     @Inject
     protected AccountController mAccountController;
@@ -139,6 +156,13 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        getActionBarToolbar().setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
@@ -159,9 +183,69 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mListView.addHeaderView(mProfileHeaderView);
         // Does not work with list header
         mListView.setEmptyView(mEmptyStateLayout);
+        mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
+
+        final HideableActionBarScrollListener hideableActionBarScrollListener
+                = new HideableActionBarScrollListener(this);
 
         // Setup Floating Camera Button
-        mCameraButton.attachToListView(mListView);
+        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
+
+            boolean isTitleVisible = false;
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+
+                // decide if user name should be shown / transparent actionbar
+                if (mListView != null && mListView.getChildCount() > 1) {
+
+                    boolean firstItemVisible = mListView.getFirstVisiblePosition() > 0;
+                    if (isTitleVisible != firstItemVisible) {
+                        // title
+                        ObjectAnimator titleAnimator = new ObjectAnimator()
+                                .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
+                                        firstItemVisible ? 0 : 255, firstItemVisible ? 255 : 0);
+                        titleAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+                        titleAnimator.setInterpolator(new DecelerateInterpolator());
+                        titleAnimator.setEvaluator(new ArgbEvaluator());
+                        titleAnimator
+                                .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    @Override
+                                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                        setActionBarSubtitle(mTitle);
+                                    }
+                                });
+                        titleAnimator.start();
+                        // background
+                        int solidColor = getResources().getColor(R.color.d_off_white);
+                        int transparentColor = getResources()
+                                .getColor(R.color.d_off_white_transparent);
+                        final ValueAnimator bgAnimator = ValueAnimator.ofObject(
+                                new ArgbEvaluator(),
+                                firstItemVisible ? transparentColor : solidColor,
+                                firstItemVisible ? solidColor : transparentColor);
+                        bgAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+                        bgAnimator.setInterpolator(new DecelerateInterpolator());
+                        bgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                getActionBarToolbar().setBackgroundColor(
+                                        (Integer) bgAnimator.getAnimatedValue());
+                            }
+                        });
+                        bgAnimator.start();
+                    }
+                    isTitleVisible = firstItemVisible;
+                }
+
+                hideableActionBarScrollListener
+                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+            }
+        };
+        mCameraButton.attachToListView(mListView, fabOnScrollListener);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,6 +425,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
                 ? getResources().getString(R.string.empty_own_profile)
                 : String.format(getResources().getString(R.string.empty_user_profile), user);
         setEmptyStateText(emptyText);
+
+        mAlphaSpan = new MutableForegroundColorSpan(0,
+                getResources().getColor(R.color.d_big_stone));
+        mTitle = new SpannableString(mUserAccount.getFullName());
+//        mTitle = new SpannableString(mUserAccount.isUserRelationshipTypeSelf()
+//                ? getString(R.string.you)
+//                : mUserAccount.getFullName());
+        mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        setActionBarSubtitle(mTitle);
     }
 
     @Override

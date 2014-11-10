@@ -25,6 +25,7 @@ import com.twitter.sdk.android.core.models.Tweet;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -140,13 +141,17 @@ public class RateCaptureFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
         ButterKnife.inject(this, view);
-
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         setupRatingSeekBar();
 
@@ -177,12 +182,6 @@ public class RateCaptureFragment extends BaseFragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mActionBar.show();
     }
 
     @Override

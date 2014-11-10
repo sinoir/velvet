@@ -389,7 +389,13 @@ public class CaptureDetailsView extends RelativeLayout {
             String likesCountText = mContext.getResources()
                     .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
             mLikesCount.setText(likesCountText);
-            mLikesCount.setOnClickListener(expandLikesAndCommentsClickListener);
+            mLikesCount.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // launch activity with liking people
+                    mActionsHandler.launchLikingUsersListing(mCaptureData);
+                }
+            });
         } else {
             mLikesCount.setVisibility(View.GONE);
         }
@@ -469,7 +475,8 @@ public class CaptureDetailsView extends RelativeLayout {
                     numLikes - 2);
         }
 
-        ForegroundColorSpan spanGray = new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray));
+        ForegroundColorSpan spanGray = new ForegroundColorSpan(
+                getResources().getColor(R.color.d_medium_gray));
         SpannableString spannableString = SpannableString.valueOf(likeText);
         int positionAnd = likeText
                 .lastIndexOf(getResources().getString(R.string.cap_feed_like_text_anchor_and));

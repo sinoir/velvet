@@ -24,7 +24,7 @@ public class RateCaptureActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_toolbar_fragment_container);
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mPendingCaptureId = args.getString(PENDING_CAPTURE_ID);
@@ -35,9 +35,6 @@ public class RateCaptureActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)
                     .commit();
-        }
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 }

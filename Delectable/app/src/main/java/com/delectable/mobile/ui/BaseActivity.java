@@ -18,15 +18,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.animation.DecelerateInterpolator;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseActivity extends ActionBarActivity
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        implements HideableActionBar, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
+
+    private static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
+
+    private static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -37,6 +45,10 @@ public abstract class BaseActivity extends ActionBarActivity
     private LocationRequest mLocationRequest;
 
     private Location mLastLocation;
+
+    private Toolbar mActionBarToolbar;
+
+    private boolean mActionBarShown = true;
 
     /**
      * Track fragments that have been attached to the activity, so that we can easily forward out
@@ -74,7 +86,7 @@ public abstract class BaseActivity extends ActionBarActivity
 
     @Override
     protected void onStop() {
-        CrashlyticsUtil.log(TAG+".onStop");
+        CrashlyticsUtil.log(TAG + ".onStop");
         mGoogleApiClient.disconnect();
         KahunaAnalytics.stop();
         super.onStop();
@@ -109,6 +121,65 @@ public abstract class BaseActivity extends ActionBarActivity
         Fragment fragment = getFragmentManager().findFragmentByTag(entry.getName());
         fragment.onActivityResult(requestCode, resultCode, data);
         */
+    }
+
+    @Override
+    public void showOrHideActionBar(boolean show) {
+        showOrHideActionBar(show, 0);
+    }
+
+    @Override
+    public void showOrHideActionBar(final boolean show, final int delay) {
+        if (show == mActionBarShown) {
+            return;
+        }
+        if (delay > 0) {
+            mActionBarToolbar.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mActionBarShown = show;
+                    onActionBarShowOrHide(show);
+                }
+            }, delay);
+        } else {
+            mActionBarShown = show;
+            onActionBarShowOrHide(show);
+        }
+    }
+
+    protected void onActionBarShowOrHide(boolean shown) {
+        Toolbar toolbar = getActionBarToolbar();
+        if (shown) {
+            toolbar.animate()
+                    .setDuration(ACTIONBAR_SHOW_ANIM_DURATION)
+                    .translationY(0)
+                    .alpha(1)
+                    .setInterpolator(new DecelerateInterpolator());
+        } else {
+            toolbar.animate()
+                    .setDuration(ACTIONBAR_HIDE_ANIM_DURATION)
+                    .translationY(-toolbar.getBottom())
+                    .alpha(0)
+                    .setInterpolator(new DecelerateInterpolator());
+        }
+    }
+
+    public Toolbar getActionBarToolbar() {
+        if (mActionBarToolbar == null) {
+            mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+            if (mActionBarToolbar != null) {
+                setSupportActionBar(mActionBarToolbar);
+            }
+        }
+        return mActionBarToolbar;
+    }
+
+    @Override
+    public ActionBar getSupportActionBar() {
+        if (mActionBarToolbar == null) {
+            getActionBarToolbar();
+        }
+        return super.getSupportActionBar();
     }
 
     /**

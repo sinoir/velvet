@@ -1,34 +1,47 @@
 <resources>
 
-    <style name="DelectableTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="DelectableTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
         <item name="colorPrimaryDark">@color/d_chestnut</item>
         <item name="colorAccent">@color/d_chestnut</item>
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-    <style name="ActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:background">@color/d_off_white</item>
-        <item name="titleTextStyle">@style/ActionBarTitleTextStyle</item>
-    </style>
-
-    <style name="ActionBarTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/d_big_stone</item>
-        <!--<item name="android:textSize">20sp</item>-->
-    </style>
-
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-        <item name="color">@color/d_suva_gray</item>
+        <item name="spinBars">false</item>
+        <item name="color">@color/d_big_stone</item>
     </style>
 
-    <style name="DelectableTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="ToolbarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="theme">@style/ToolbarTheme</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog">
+    <style name="ToolbarStyle.Floating" parent="@style/ToolbarStyle">
+        <item name="android:background">@color/d_off_white</item>
+        <!--<item name="theme">@style/ThemeOverlay.AppCompat</item>-->
     </style>
+
+    <style name="ToolbarStyle.Flat" parent="@style/ToolbarStyle">
+    <item name="elevation">0dp</item>
+    </style>
+
+    <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:textColorPrimary">@color/d_big_stone</item>
+        <item name="android:textColorSecondary">@color/d_big_stone</item>
+        <item name="android:actionMenuTextColor">@color/d_big_stone</item>
+    </style>
+
+    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"></style>
 
     <style name="DelectableTheme.Dialog.LoadingCircle">
         <item name="android:windowIsFloating">false</item>
@@ -281,6 +294,21 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/d_medium_gray</item>
         <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="ActionMenuButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/d_white</item>
+        <item name="android:background">@drawable/btn_login_done</item>
+        <item name="fontName">whitney_medium_sc</item>
     </style>
 
 </resources>

@@ -97,7 +97,7 @@ public class MinimalPendingCaptureRow extends RelativeLayout {
         }
         String captureImageUrl = mPendingCapture.getPhoto().getBestThumb();
 
-        mProducerName.setText(captureTitle);
+        mProducerName.setText(captureTitle.toLowerCase());
         mWineName.setText(captureName);
         ImageLoaderUtil.loadImageIntoView(getContext(), captureImageUrl, mWineImage);
     }
