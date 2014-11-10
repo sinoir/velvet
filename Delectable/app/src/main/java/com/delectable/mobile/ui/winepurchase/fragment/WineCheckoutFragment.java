@@ -61,6 +61,9 @@ public class WineCheckoutFragment extends BaseFragment {
     @InjectView(R.id.credit_applied_amount)
     protected TextView mCreditAppliedAmount;
 
+    @InjectView(R.id.credit_applied_label)
+    protected View mCreditAppliedLabel;
+
     @InjectView(R.id.add_promo_code)
     protected View mAddPromoCode;
 
@@ -117,6 +120,13 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     //region Update UI methods
+    private void updateUI() {
+        updateWineDetails();
+        updateNumBottles();
+        updatePricing();
+        updatePromoUI();
+    }
+
     private void updateWineDetails() {
         if (mData == null) {
             return;
@@ -136,6 +146,38 @@ public class WineCheckoutFragment extends BaseFragment {
         mQuantityAmountText.setText(numBottlesText);
     }
 
+    private void updatePricing() {
+        mShippingAmount.setText(mData.getShippingPriceText());
+        mTaxAmount.setText(mData.getTaxPriceText());
+        mTotalAmount.setText(mData.getTotalPriceText());
+    }
+
+    private void updatePromoUI() {
+        if (mData.getPromoPriceText() == null) {
+            hidePromoCredit();
+        } else {
+            mCreditAppliedAmount.setText(mData.getPromoPriceText());
+            showPromoCredit();
+        }
+    }
+
+    /**
+     * Show Promo Credit Amount and hide the "Add Promo" button
+     */
+    private void showPromoCredit() {
+        mCreditAppliedAmount.setVisibility(View.VISIBLE);
+        mCreditAppliedLabel.setVisibility(View.VISIBLE);
+        mAddPromoCode.setVisibility(View.GONE);
+    }
+
+    /**
+     * Hide the Promo Credit and show the Add Promo Button
+     */
+    private void hidePromoCredit() {
+        mCreditAppliedAmount.setVisibility(View.GONE);
+        mCreditAppliedLabel.setVisibility(View.GONE);
+        mAddPromoCode.setVisibility(View.VISIBLE);
+    }
     //endregion
 
     //region Load Local Data
@@ -143,8 +185,7 @@ public class WineCheckoutFragment extends BaseFragment {
         mData.updateWithData(mWineSourceModel.getPurchaseOffer(mVintageId),
                 mWineSourceModel.getMinWineWithPrice(mVintageId));
 
-        updateWineDetails();
-        updateNumBottles();
+        updateUI();
     }
     //endregion
 
@@ -183,13 +224,13 @@ public class WineCheckoutFragment extends BaseFragment {
     @OnClick(R.id.plus_quantity)
     public void onAddBottleClicked() {
         mData.addBottle();
-        updateNumBottles();
+        updateUI();
     }
 
     @OnClick(R.id.minus_quantity)
     public void onSubtractBottleClicked() {
         mData.removeBottle();
-        updateNumBottles();
+        updateUI();
     }
 
     @OnClick(R.id.add_promo_code)

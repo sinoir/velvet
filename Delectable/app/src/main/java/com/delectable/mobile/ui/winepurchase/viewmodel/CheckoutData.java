@@ -37,6 +37,23 @@ public class CheckoutData {
     public String getPerBottleText() {
         return mWineProfileMinimal.getPriceText();
     }
+
+    public String getTotalPriceText() {
+        return mCurrentPrice.getTotal();
+    }
+
+    public String getShippingPriceText() {
+        return mCurrentPrice.getShipping();
+    }
+
+    public String getTaxPriceText() {
+        return mCurrentPrice.getTax();
+    }
+
+    public String getPromoPriceText() {
+        // TODO: Get Promo Amount Text once Promo Code is Implemented
+        return null;
+    }
     //endregion
 
     //region modifiers
@@ -48,6 +65,7 @@ public class CheckoutData {
         mMinNumBottles = mPurchaseOffer.getMinQuant();
         mMaxNumBottles = mPurchaseOffer.getMaxQuant();
         mQuantity = mPurchaseOffer.getDefaultQuant();
+        updatePricingData();
     }
 
     public void addBottle() {
@@ -55,6 +73,7 @@ public class CheckoutData {
             return;
         }
         mQuantity++;
+        updatePricingData();
     }
 
     public void removeBottle() {
@@ -62,6 +81,7 @@ public class CheckoutData {
             return;
         }
         mQuantity--;
+        updatePricingData();
     }
     //endregion
 
