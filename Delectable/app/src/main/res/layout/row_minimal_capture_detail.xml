@@ -20,6 +20,7 @@
         android:layout_below="@+id/wine_details_container"
         android:text="One of the worst wines at the Arlequin wine tasting right now. Bought 2 bottles for the park and now I regret. — with 3 friends at Arlequin 2 hours ago"
         android:textColor="@color/d_medium_gray"
+        android:lineSpacingMultiplier="1.2"
         android:textSize="16sp"
         android:layout_marginBottom="16dp"
         android:visibility="visible"
