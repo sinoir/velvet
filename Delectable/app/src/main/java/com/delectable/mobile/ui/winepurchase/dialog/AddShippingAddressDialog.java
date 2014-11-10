@@ -70,10 +70,30 @@ public class AddShippingAddressDialog extends DialogFragment {
         return view;
     }
 
+    //region Helpers
+    private boolean isFormValid() {
+        if (isFieldEmpty(mName) ||
+                isFieldEmpty(mAddress1) ||
+                isFieldEmpty(mCity) ||
+                isFieldEmpty(mState) ||
+                isFieldEmpty(mZipCode)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isFieldEmpty(EditText editText) {
+        return mName.getText().toString().trim().length() == 0;
+    }
+    //endregion
+
     //region onClicks
     @OnClick(R.id.save_button)
     protected void saveClicked() {
-        // TODO: Implement Saving
+        if (!isFormValid()) {
+            return;
+        }
     }
 
     @OnClick(R.id.cancel_button)
