@@ -29,6 +29,10 @@ import de.greenrobot.event.EventBus;
 
 public class AddShippingAddressDialog extends DialogFragment {
 
+    public static final String EXTRAS_SHIPPING_ADDRESS_ID = "EXTRAS_SHIPPING_ADDRESS_ID";
+
+    public static final int RESULT_SHIPPING_ADDRESS_SAVED = 1000;
+
     private static final String TAG = AddShippingAddressDialog.class.getSimpleName();
 
     @Inject
@@ -116,6 +120,15 @@ public class AddShippingAddressDialog extends DialogFragment {
         }
     }
 
+    private void dismissWithSelectedId(String id) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRAS_SHIPPING_ADDRESS_ID, id);
+        getTargetFragment().onActivityResult(getTargetRequestCode(),
+                RESULT_SHIPPING_ADDRESS_SAVED,
+                intent);
+        dismiss();
+    }
+
     //region Helpers
     private boolean isFormValid() {
         if (isFieldEmpty(mName) ||
@@ -132,6 +145,33 @@ public class AddShippingAddressDialog extends DialogFragment {
     private boolean isFieldEmpty(EditText editText) {
         return mName.getText().toString().trim().length() == 0;
     }
+
+    private BaseAddress buildAddress() {
+        BaseAddress address = new BaseAddress();
+        String[] name = NameUtil.getSplitName(mName.getText().toString());
+        String fName = name[NameUtil.FIRST_NAME];
+        String lName = name[NameUtil.LAST_NAME];
+
+        address.setFname(fName);
+        address.setLname(lName);
+        address.setAddr1(mAddress1.getText().toString());
+        address.setAddr2(mAddress2.getText().toString());
+        address.setCity(mCity.getText().toString());
+        address.setState(mState.getText().toString());
+        address.setZip(mZipCode.getText().toString());
+        address.setPhone(mPhoneNumber.getText().toString());
+
+        return address;
+    }
+    //endregion
+
+    //region Saving/Loading
+
+    private void saveShippingAddress() {
+        BaseAddress address = buildAddress();
+        mAccountController.addShippingAddress(address, true);
+    }
+
     //endregion
 
     //region onClicks
@@ -140,11 +180,28 @@ public class AddShippingAddressDialog extends DialogFragment {
         if (!isFormValid()) {
             return;
         }
+        // TODO: Add Update Ability
+        showLoader();
+        saveShippingAddress();
     }
 
     @OnClick(R.id.cancel_button)
     protected void cancelClicked() {
         dismiss();
+    }
+    //endregion
+
+    //region EventBus
+    public void onEventMainThread(AddedShippingAddressEvent event) {
+        hideLoader();
+        if (event.isSuccessful()) {
+            String shippingAddressId = mShippingAddressModel.getPrimaryShippingAddress().getId();
+            dismissWithSelectedId(shippingAddressId);
+        } else {
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
     //endregion
 
