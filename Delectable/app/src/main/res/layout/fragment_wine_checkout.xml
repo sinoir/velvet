@@ -147,7 +147,7 @@
                 android:id="@+id/minus_quantity"
                 style="@style/CheckoutShippingAddRemoveButton"
                 android:layout_toLeftOf="@+id/plus_quantity"
-                android:text="-" />
+                android:text="&#8211;" />
         </RelativeLayout>
 
         <RelativeLayout
