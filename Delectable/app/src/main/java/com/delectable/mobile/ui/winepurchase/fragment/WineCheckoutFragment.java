@@ -5,9 +5,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.WineSourceModel;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
-import com.delectable.mobile.api.models.PurchaseOffer;
-import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -76,17 +75,8 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private String mVintageId;
 
-    private WineProfileMinimal mWineProfile;
+    private CheckoutData mData;
 
-    private PurchaseOffer mPurchaseOffer;
-
-    // TODO: Keep track of pricing offset.
-
-    private int mNumBottles = 1;
-
-    private int mMinNumBottles = 1;
-
-    private int mMaxNumBotles = 1;
 
     public static WineCheckoutFragment newInstance(String vintageId) {
         WineCheckoutFragment fragment = new WineCheckoutFragment();
@@ -116,6 +106,8 @@ public class WineCheckoutFragment extends BaseFragment {
         // Always Fetch Latest Wine Source
         fetchWineSource();
 
+        mData = new CheckoutData();
+
         updateNumBottles();
 
         return view;
@@ -123,20 +115,21 @@ public class WineCheckoutFragment extends BaseFragment {
 
     //region Update UI methods
     private void updateWineDetails() {
-        if (mWineProfile == null) {
+        if (mData == null) {
             return;
         }
 
-        mProducerName.setText(mWineProfile.getProducerName());
-        mWineName.setText(mWineProfile.getName());
+        mProducerName.setText(mData.getProducerName());
+        mWineName.setText(mData.getWineName());
         String pricePerBottleText = getString(R.string.winecheckout_per_bottle,
-                mWineProfile.getPriceText());
+                mData.getPerBottleText());
         mPerBottlePriceText.setText(pricePerBottleText);
     }
 
     private void updateNumBottles() {
         String numBottlesText = getResources()
-                .getQuantityString(R.plurals.winecheckout_num_bottles, mNumBottles, mNumBottles);
+                .getQuantityString(R.plurals.winecheckout_num_bottles, mData.getQuantity(),
+                        mData.getQuantity());
         mQuantityAmountText.setText(numBottlesText);
     }
 
@@ -144,13 +137,8 @@ public class WineCheckoutFragment extends BaseFragment {
 
     //region Load Local Data
     private void loadWineAndPricingData() {
-        mPurchaseOffer = mWineSourceModel.getPurchaseOffer(mVintageId);
-        mWineProfile = mWineSourceModel.getMinWineWithPrice(mVintageId);
-        mPurchaseOffer = mWineSourceModel.getPurchaseOffer(mVintageId);
-
-        mMinNumBottles = mPurchaseOffer.getMinQuant();
-        mMaxNumBotles = mPurchaseOffer.getMaxQuant();
-        mNumBottles = mPurchaseOffer.getDefaultQuant();
+        mData.updateWithData(mWineSourceModel.getPurchaseOffer(mVintageId),
+                mWineSourceModel.getMinWineWithPrice(mVintageId));
 
         updateWineDetails();
         updateNumBottles();
@@ -191,19 +179,13 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @OnClick(R.id.plus_quantity)
     public void onAddBottleClicked() {
-        if (mNumBottles == mMaxNumBotles) {
-            return;
-        }
-        mNumBottles++;
+        mData.addBottle();
         updateNumBottles();
     }
 
     @OnClick(R.id.minus_quantity)
     public void onSubtractBottleClicked() {
-        if (mNumBottles == mMinNumBottles) {
-            return;
-        }
-        mNumBottles--;
+        mData.removeBottle();
         updateNumBottles();
     }
 
