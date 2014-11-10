@@ -3,7 +3,10 @@ package com.delectable.mobile.ui.winepurchase.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.WineSourceModel;
+import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
+import com.delectable.mobile.api.events.accounts.FetchedPaymentMethodsEvent;
+import com.delectable.mobile.api.events.accounts.FetchedShippingAddressesEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
@@ -27,6 +30,9 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @Inject
     protected BaseWineController mBaseWineController;
+
+    @Inject
+    protected AccountController mAccountController;
 
     @Inject
     protected WineSourceModel mWineSourceModel;
@@ -83,7 +89,6 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private CheckoutData mData;
 
-
     public static WineCheckoutFragment newInstance(String vintageId) {
         WineCheckoutFragment fragment = new WineCheckoutFragment();
         Bundle args = new Bundle();
@@ -112,11 +117,11 @@ public class WineCheckoutFragment extends BaseFragment {
         // Always Fetch Latest Wine Source
         fetchWineSource();
 
+        fetchUserData();
+
         mData = new CheckoutData();
 
         updateNumBottles();
-        // Default, select Primary Shipping Address if it exists
-        loadShippingAddress(null);
 
         return view;
     }
@@ -172,6 +177,28 @@ public class WineCheckoutFragment extends BaseFragment {
         }
     }
 
+    private void updatePaymentMethodUI() {
+        if (mData.getSelectedPaymentMethod() == null) {
+            hidePaymentInfo();
+        } else {
+            showPaymentInfo();
+            mPaymentMethodLastDigits.setText(mData.getPaymentMethidDisplayText());
+            // TODO: Set Icon
+        }
+    }
+
+    private void showPaymentInfo() {
+        mPaymentMethodCCImage.setVisibility(View.VISIBLE);
+        mPaymentMethodLastDigits.setVisibility(View.VISIBLE);
+        mAddPaymentMethod.setVisibility(View.GONE);
+    }
+
+    private void hidePaymentInfo() {
+        mPaymentMethodCCImage.setVisibility(View.VISIBLE);
+        mPaymentMethodLastDigits.setVisibility(View.VISIBLE);
+        mAddPaymentMethod.setVisibility(View.GONE);
+    }
+
     private void showShippingAddressInfo() {
         mShippingAddress.setVisibility(View.VISIBLE);
         mAddShippingAddress.setVisibility(View.GONE);
@@ -214,9 +241,18 @@ public class WineCheckoutFragment extends BaseFragment {
             mData.setSelectedShippingAddress(mShippingAddressModel.getPrimaryShippingAddress());
         } else {
             mData.setSelectedShippingAddress(
-                    mShippingAddressModel.getShippingAddress(mSelectedShippingAddressId));
+                    mShippingAddressModel.getShippingAddress(shippingAddressId));
         }
         updateShippingAddressUI();
+    }
+
+    private void loadPaymentMethod(String paymentMethodId) {
+        if (paymentMethodId == null) {
+            mData.setSelectedPaymentMethod(mPaymentMethodModel.getPrimaryPaymentMethod());
+        } else {
+            mData.setSelectedPaymentMethod(mPaymentMethodModel.getPaymentMethod(paymentMethodId));
+        }
+        updatePaymentMethodUI();
     }
 
     //endregion
@@ -224,6 +260,11 @@ public class WineCheckoutFragment extends BaseFragment {
     //region Fetch Remote Data
     private void fetchWineSource() {
         mBaseWineController.fetchWineSource(mVintageId);
+    }
+
+    private void fetchUserData() {
+        mAccountController.fetchShippingAddresses();
+        mAccountController.fetchPaymentMethods();
     }
     //endregion
 
@@ -238,6 +279,22 @@ public class WineCheckoutFragment extends BaseFragment {
         }
 
         loadWineAndPricingData();
+    }
+
+    public void onEventMainThread(FetchedShippingAddressesEvent event) {
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
+
+        loadShippingAddress(null);
+    }
+
+    public void onEventMainThread(FetchedPaymentMethodsEvent event) {
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
+
+        loadPaymentMethod(null);
     }
     //endregion
 
