@@ -159,7 +159,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setActionBarTitle(getString(R.string.capture_submit_title));
-        setActionBarSubtitle(null);
+        setActionBarSubtitle((String) null);
         enableBackButton(true);
         getActionBar().show();
     }
@@ -329,7 +329,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onEventMainThread(IdentifyLabelScanEvent event) {
         if (event.isSuccessful()) {
             mLabelScanResult = event.getLabelScan();
-            mWineScanController.createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
+            mWineScanController
+                    .createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
             mIsPostingCapture = false;
             mLoadingDialog.dismiss();

@@ -19,6 +19,7 @@ import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
@@ -337,12 +338,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void navHeaderUserImageClicked() {
-//        Intent intent = new Intent();
-//        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
-//        intent.setClass(getActivity(), UserProfileActivity.class);
-//        startActivity(intent);
-        navItemSelected(NavHeader.NAV_PROFILE);
-        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
+        intent.setClass(getActivity(), UserProfileActivity.class);
+        startActivity(intent);
+//        navItemSelected(NavHeader.NAV_PROFILE);
+//        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
     }
 
     public void onEventMainThread(NavigationEvent event) {

@@ -97,7 +97,7 @@ public class TagPeopleFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         enableBackButton(true);
-        setActionBarTitle(null);
+        setActionBarTitle((String) null);
         setActionBarSubtitle(getString(R.string.capture_submit_drinking_with_who_text));
     }
 

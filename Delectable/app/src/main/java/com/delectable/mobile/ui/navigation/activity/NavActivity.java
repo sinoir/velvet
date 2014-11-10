@@ -2,7 +2,6 @@ package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.events.NavigationEvent;
@@ -10,7 +9,6 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 
@@ -18,7 +16,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -52,13 +49,7 @@ public class NavActivity extends BaseActivity
         setContentView(R.layout.activity_nav);
         App.injectMembers(this);
 
-        Toolbar toolbar = getActionBarToolbar();
-//        if (toolbar != null) {
-//            getSupportActionBar().setDisplayUseLogoEnabled(true);
-//            getSupportActionBar().setHomeButtonEnabled(true);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            //getSupportActionBar().setLogo(R.drawable.ic_launcher);
-//        }
+        restoreActionBar();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -93,10 +84,13 @@ public class NavActivity extends BaseActivity
         BaseFragment fragment = null;
         switch (position) {
             case NavHeader.NAV_PROFILE:
-                fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
-                mTitle = "";
-                mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
-                break;
+                //fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
+                //mTitle = "";
+                //mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
+                // TODO always launch user profiles as fragments to allow access to nav drawer?
+                // launching as new activity from within NavigationDrawerFragment to prevent double action bar issue
+                return;
+            //break;
             case NavHeader.NAV_HOME:
                 fragment = new HomeFragment();
                 mTitle = getResources().getString(R.string.app_name);
@@ -125,7 +119,9 @@ public class NavActivity extends BaseActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(mTitle);
+        actionBar.setSubtitle(null);
     }
 
     @Override

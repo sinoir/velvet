@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -171,6 +172,14 @@ public abstract class BaseActivity extends ActionBarActivity
             }
         }
         return mActionBarToolbar;
+    }
+
+    @Override
+    public ActionBar getSupportActionBar() {
+        if (mActionBarToolbar == null) {
+            getActionBarToolbar();
+        }
+        return super.getSupportActionBar();
     }
 
     /**

@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -220,9 +221,27 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
     /**
      * Call this in Fragment#onActivityCreated
      */
+    protected void setActionBarTitle(SpannableString title) {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
     protected void setActionBarTitle(String title) {
         if (getActionBar() != null) {
             getActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarSubtitle(SpannableString subtitle) {
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle(subtitle);
         }
     }
 
