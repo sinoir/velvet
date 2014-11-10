@@ -9,8 +9,10 @@ import com.delectable.mobile.api.events.accounts.FetchedPaymentMethodsEvent;
 import com.delectable.mobile.api.events.accounts.FetchedShippingAddressesEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,8 @@ import butterknife.OnClick;
 public class WineCheckoutFragment extends BaseFragment {
 
     private static final String ARGS_VINTAGE_ID = "ARGS_VINTAGE_ID";
+
+    private static final int REQUEST_ADD_SHIPPING_ADDRESS_DIALOG = 100;
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -124,6 +128,15 @@ public class WineCheckoutFragment extends BaseFragment {
         updateNumBottles();
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ADD_SHIPPING_ADDRESS_DIALOG
+                && resultCode == AddShippingAddressDialog.RESULT_SHIPPING_ADDRESS_SAVED) {
+            loadShippingAddress(data
+                    .getStringExtra(AddShippingAddressDialog.EXTRAS_SHIPPING_ADDRESS_ID));
+        }
     }
 
     //region Update UI methods
@@ -302,6 +315,7 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @OnClick(R.id.shipping_address_container)
     public void onShippingAddressClicked() {
+        showAddShippingAddressDialog();
         // TODO: Implement Shipping Address (select / add dialog)
     }
 
@@ -332,5 +346,14 @@ public class WineCheckoutFragment extends BaseFragment {
         // TODO: Implement Confirm / Pay
     }
 
+    //endregion
+
+    //region Dialog Helpers
+    private void showAddShippingAddressDialog() {
+        AddShippingAddressDialog dialog = AddShippingAddressDialog.newInstance();
+        dialog.setTargetFragment(this, REQUEST_ADD_SHIPPING_ADDRESS_DIALOG);
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), "dialog");
+    }
     //endregion
 }
