@@ -115,6 +115,8 @@ public class WineCheckoutFragment extends BaseFragment {
         mData = new CheckoutData();
 
         updateNumBottles();
+        // Default, select Primary Shipping Address if it exists
+        loadShippingAddress(null);
 
         return view;
     }
@@ -161,6 +163,25 @@ public class WineCheckoutFragment extends BaseFragment {
         }
     }
 
+    private void updateShippingAddressUI() {
+        if (mData.getSelectedShippingAddress() == null) {
+            hideShippingAddressInfo();
+        } else {
+            showShippingAddressInfo();
+            mShippingAddress.setText(mData.getAddressDisplayText());
+        }
+    }
+
+    private void showShippingAddressInfo() {
+        mShippingAddress.setVisibility(View.VISIBLE);
+        mAddShippingAddress.setVisibility(View.GONE);
+    }
+
+    private void hideShippingAddressInfo() {
+        mShippingAddress.setVisibility(View.GONE);
+        mAddShippingAddress.setVisibility(View.VISIBLE);
+    }
+
     /**
      * Show Promo Credit Amount and hide the "Add Promo" button
      */
@@ -187,6 +208,17 @@ public class WineCheckoutFragment extends BaseFragment {
 
         updateUI();
     }
+
+    private void loadShippingAddress(String shippingAddressId) {
+        if (shippingAddressId == null) {
+            mData.setSelectedShippingAddress(mShippingAddressModel.getPrimaryShippingAddress());
+        } else {
+            mData.setSelectedShippingAddress(
+                    mShippingAddressModel.getShippingAddress(mSelectedShippingAddressId));
+        }
+        updateShippingAddressUI();
+    }
+
     //endregion
 
     //region Fetch Remote Data

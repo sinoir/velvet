@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.winepurchase.viewmodel;
 
 import com.delectable.mobile.api.models.Pricing;
 import com.delectable.mobile.api.models.PurchaseOffer;
+import com.delectable.mobile.api.models.ShippingAddress;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 
 public class CheckoutData {
@@ -12,6 +13,8 @@ public class CheckoutData {
 
     private Pricing mCurrentPrice;
 
+    private ShippingAddress mSelectedShippingAddress;
+
     private int mQuantity = 1;
 
     private int mMinNumBottles = 1;
@@ -21,13 +24,32 @@ public class CheckoutData {
     public CheckoutData() {
     }
 
-    //region Getters
+    //region Getters/Setters
     public String getProducerName() {
         return mWineProfileMinimal.getProducerName();
     }
 
     public String getWineName() {
         return mWineProfileMinimal.getName();
+    }
+
+    public ShippingAddress getSelectedShippingAddress() {
+        return mSelectedShippingAddress;
+    }
+
+    public void setSelectedShippingAddress(ShippingAddress selectedShippingAddress) {
+        mSelectedShippingAddress = selectedShippingAddress;
+    }
+
+    public String getAddressDisplayText() {
+        if (mSelectedShippingAddress == null) {
+            return "";
+        }
+        String addr2 = mSelectedShippingAddress.getAddr2() == null ? ""
+                : " " + mSelectedShippingAddress.getAddr2();
+        return mSelectedShippingAddress.getAddr1() + addr2 +
+                ", " + mSelectedShippingAddress.getCity()
+                + "," + mSelectedShippingAddress.getState();
     }
 
     public int getQuantity() {
@@ -49,12 +71,12 @@ public class CheckoutData {
     public String getTaxPriceText() {
         return mCurrentPrice.getTax();
     }
+    //endregion
 
     public String getPromoPriceText() {
         // TODO: Get Promo Amount Text once Promo Code is Implemented
         return null;
     }
-    //endregion
 
     //region modifiers
     public void updateWithData(PurchaseOffer purchaseOffer,
