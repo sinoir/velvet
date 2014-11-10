@@ -5,6 +5,7 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -163,8 +164,30 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     private void updateWineInfo() {
-        String captureTitle = mCaptureData.getDisplayTitle();
-        String captureName = mCaptureData.getDisplayDescription();
+
+        String captureTitle;
+        String captureName;
+
+        CaptureState state = CaptureState.getState(mCaptureData);
+        switch (state) {
+            case IDENTIFIED:
+                captureTitle = mCaptureData.getWineProfile().getProducerName();
+                captureName = mCaptureData.getWineProfile().getName();
+                break;
+            case IMPOSSIBLED:
+                captureTitle = "";
+                captureName = mCaptureData.getTranscriptionErrorMessage();
+                break;
+            case UNVERIFIED:
+                captureTitle = mCaptureData.getBaseWine().getProducerName();
+                captureName = mCaptureData.getBaseWine().getName();
+                break;
+            case UNIDENTIFIED:
+            default:
+                captureTitle = getResources().getString(R.string.user_captures_id_in_progress);
+                captureName = getResources().getString(R.string.user_captures_check_back);
+                break;
+        }
         String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
 
         mProducerName.setText(captureTitle);
