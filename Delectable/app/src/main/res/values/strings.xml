@@ -13,6 +13,7 @@
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
     <string name="cancel">cancel</string>
+    <string name="save">save</string>
     <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
@@ -360,5 +361,14 @@
         <item quantity="other">%d bottles</item>
     </plurals>
 
+    <!-- Add Shipping Address Dialog -->
+    <string name="shippingaddress_first_lastname">First and last name</string>
+    <string name="shippingaddress_line1">Address line 1</string>
+    <string name="shippingaddress_line2">Address line 2</string>
+    <string name="shippingaddress_city">City</string>
+    <string name="shippingaddress_state">State</string>
+    <string name="shippingaddress_zipcode">Zip code</string>
+    <string name="shippingaddress_phone_number">Phone number</string>
+    <string name="shippingaddress_add_title">Add a shipping address</string>
 
 </resources>

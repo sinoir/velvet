@@ -40,6 +40,7 @@
     <dimen name="dialog_title_text_size">22sp</dimen>
     <dimen name="dialog_action_text_size">20sp</dimen>
     <dimen name="dialog_header_height">60dp</dimen>
+    <dimen name="dialog_header_footer_height">48dp</dimen>
 
     <!-- General Row Unit Spacing -->
     <!-- Used in:

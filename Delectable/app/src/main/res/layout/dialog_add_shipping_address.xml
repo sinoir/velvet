@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_header_footer_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:text="@string/shippingaddress_add_title"
+        android:textSize="@dimen/choose_vintage_dialog_title_text_size"
+        app:fontName="whitney_book" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/d_dark_gray" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/name"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_first_lastname" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/address1"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_line1" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/address2"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_line2" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/city"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_city" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.delectable.mobile.ui.common.widget.FontEditText
+                    android:id="@+id/state"
+                    style="@style/CheckoutEditText"
+                    android:layout_weight="1"
+                    android:hint="@string/shippingaddress_state" />
+
+                <com.delectable.mobile.ui.common.widget.FontEditText
+                    android:id="@+id/zip_code"
+                    style="@style/CheckoutEditText"
+                    android:layout_weight="1"
+                    android:hint="@string/shippingaddress_zipcode" />
+            </LinearLayout>
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/phone_number"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_phone_number" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/d_dark_gray" />
+
+            <include layout="@layout/cancel_save_buttons" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
