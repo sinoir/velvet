@@ -41,7 +41,7 @@ public class NavActivity extends BaseActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    private CharSequence mTitle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +49,18 @@ public class NavActivity extends BaseActivity
         setContentView(R.layout.activity_nav);
         App.injectMembers(this);
 
-        restoreActionBar();
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment
                 .setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        restoreActionBar();
     }
 
     @Override
@@ -93,7 +96,8 @@ public class NavActivity extends BaseActivity
             //break;
             case NavHeader.NAV_HOME:
                 fragment = new HomeFragment();
-                mTitle = getResources().getString(R.string.app_name);
+                //mTitle = getResources().getString(R.string.app_name);
+                mTitle = null;
                 break;
             case NavHeader.NAV_FIND_FRIENDS:
                 fragment = new FollowFriendsFragment();
@@ -117,10 +121,19 @@ public class NavActivity extends BaseActivity
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle(mTitle);
+        actionBar.setLogo(R.drawable.feed_logo);
+        if (mTitle != null || (mTitle != null && mTitle.length() == 0)) {
+            actionBar.setTitle(mTitle);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setDisplayUseLogoEnabled(false);
+        } else {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setTitle((String) null);
+            actionBar.setDisplayUseLogoEnabled(true);
+        }
         actionBar.setSubtitle(null);
     }
 
