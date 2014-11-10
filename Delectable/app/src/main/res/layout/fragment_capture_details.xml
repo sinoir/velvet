@@ -7,6 +7,7 @@
     android:background="@color/d_white"
     android:fillViewport="false">
 
+    <!--TODO: figure out how to smoothly have text populate this view, animateLayoutChanges:true doesn't seem to work-->
     <com.delectable.mobile.ui.capture.widget.CaptureDetailsView
         android:id="@+id/capture_details_view"
         android:layout_width="match_parent"
