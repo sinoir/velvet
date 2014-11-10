@@ -17,6 +17,7 @@ import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.activity.WebViewActivty;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
@@ -790,25 +791,16 @@ public class SettingsFragment extends BaseFragment {
 
     @OnClick({R.id.send_feedback,
             R.id.terms_of_use,
-            R.id.privacy_policy,
             R.id.sign_out})
     void onAboutRowClick(View v) {
-
-        //TODO remove later, debugging toast
-        TextView tv = (TextView) v;
-        String text = tv.getText().toString();
-
         switch (v.getId()) {
             case R.id.send_feedback:
                 launchEmailFeedback();
                 break;
             case R.id.terms_of_use:
-                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-                //TODO go to terms of use
-                break;
-            case R.id.privacy_policy:
-                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-                //TODO go to privacy policy
+                String url = getString(R.string.terms_url);
+                String title = getString(R.string.signup_in_terms_of_use);
+                startActivity(WebViewActivty.newIntent(getActivity(), url, title));
                 break;
             case R.id.sign_out:
                 signout();

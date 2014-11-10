@@ -26,23 +26,23 @@ public class FollowersFollowingModel {
     protected AccountModel mAccountModel;
 
     public void saveCurrentFollowersListing(String accountId,
-            Listing<AccountMinimal> listing) {
+            Listing<AccountMinimal, String> listing) {
         String key = TYPE_FOLLOWERS + accountId;
         saveListing(key, listing);
     }
 
     public void saveCurrentFollowingListing(String accountId,
-            Listing<AccountMinimal> listing) {
+            Listing<AccountMinimal, String> listing) {
         String key = TYPE_FOLLOWING + accountId;
         saveListing(key, listing);
     }
 
-    public Listing<AccountMinimal> getFollowersListing(String accountId) {
+    public Listing<AccountMinimal, String> getFollowersListing(String accountId) {
         String key = TYPE_FOLLOWERS + accountId;
         return getCachedAccounts(key);
     }
 
-    public Listing<AccountMinimal> getFollowingListing(String accountId) {
+    public Listing<AccountMinimal, String> getFollowingListing(String accountId) {
         String key = TYPE_FOLLOWING + accountId;
         return getCachedAccounts(key);
     }
@@ -51,7 +51,7 @@ public class FollowersFollowingModel {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<AccountMinimal> listing) {
+    private void saveListing(String key, Listing<AccountMinimal, String> listing) {
 
         CacheListing<AccountMinimal> cacheListing = new CacheListing<AccountMinimal>(listing);
         mMap.put(key, cacheListing);
@@ -61,7 +61,7 @@ public class FollowersFollowingModel {
         }
     }
 
-    private Listing<AccountMinimal> getCachedAccounts(String key) {
+    private Listing<AccountMinimal, String> getCachedAccounts(String key) {
         CacheListing<AccountMinimal> cachelisting = mMap.get(key);
         if (cachelisting == null) {
             //nothing in cache
@@ -79,7 +79,7 @@ public class FollowersFollowingModel {
                         "Listing from cache inconsistency, account id from cachelisting object not found in cache");
             }
         }
-        Listing<AccountMinimal> listing = new Listing<AccountMinimal>(cachelisting, accounts);
+        Listing<AccountMinimal, String> listing = new Listing<AccountMinimal, String>(cachelisting, accounts);
 
         return listing;
     }

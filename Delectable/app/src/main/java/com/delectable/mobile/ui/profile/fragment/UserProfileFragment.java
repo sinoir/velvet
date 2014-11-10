@@ -6,13 +6,17 @@ import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.controllers.PendingCapturesController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
+import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEvent;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -25,6 +29,7 @@ import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
 import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
+import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -33,6 +38,7 @@ import com.melnykov.fab.FloatingActionButton;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -56,6 +62,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         ProfileHeaderView.ProfileHeaderActionListener, InfiniteScrollAdapter.ActionsHandler,
@@ -66,6 +73,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private static final String USER_ID = "USER_ID";
 
     private static final String CAPTURES_REQ = TAG + "_captures_req";
+
+    private static final String DELETE_PENDING_CAPTURE_REQ = TAG + "_delete_pending_capture_req";
+
+    private static final int DELETE_PENDING_CAPTURE_DIALOG = 1;
 
     private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
 
@@ -99,11 +110,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     protected AccountController mAccountController;
 
     @Inject
+    protected PendingCapturesController mPendingCapturesController;
+
+
+    @Inject
     protected AccountModel mAccountModel;
 
     private CapturesPendingCapturesAdapter mAdapter;
 
-    private Listing<BaseListingElement> mCapturesListing;
+    private Listing<BaseListingElement, DeleteHash> mCapturesListing;
 
     private boolean mFetching;
 
@@ -114,6 +129,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private AccountProfile mUserAccount;
 
     private String mUserId;
+
+    private PendingCapture mCaptureToDelete;
+
 
     public UserProfileFragment() {
     }
@@ -309,12 +327,24 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
             updateUIWithData();
         }
 
-        if (mAdapter.getItems().isEmpty()) {
-            loadLocalData();
+        loadLocalData();
+    }
+
+    @OnItemClick(R.id.list_view)
+    protected void onItemClick(int position) {
+        position--; //offset for header
+        BaseListingElement item = mAdapter.getItem(position);
+        if (item instanceof CaptureDetails) {
+            launchWineProfile((CaptureDetails) item);
+            return;
+        }
+        if (item instanceof PendingCapture) {
+            launchWineProfile((PendingCapture) item);
         }
     }
 
     public void onEventMainThread(UpdatedAccountProfileEvent event) {
+
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
@@ -342,7 +372,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<BaseListingElement> event) {
+    public void onEventMainThread(UpdatedListingEvent<BaseListingElement, DeleteHash> event) {
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }
@@ -432,14 +462,14 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private void loadLocalData() {
 
-        new SafeAsyncTask<Listing<BaseListingElement>>(this) {
+        new SafeAsyncTask<Listing<BaseListingElement, DeleteHash>>(this) {
             @Override
-            protected Listing<BaseListingElement> safeDoInBackground(Void[] params) {
+            protected Listing<BaseListingElement, DeleteHash> safeDoInBackground(Void[] params) {
                 return mListingModel.getUserCaptures(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<BaseListingElement> listing) {
+            protected void safeOnPostExecute(Listing<BaseListingElement, DeleteHash> listing) {
 
                 if (listing != null) {
                     mCapturesListing = listing;
@@ -529,16 +559,79 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void launchWineProfile(PendingCapture capture) {
-
+        //TODO captureDetails/PendingCapture should implement parceable, then all this logic can be abstracted into WineProfileFragment
+        Intent intent = null;
+        CaptureState state = CaptureState.getState(capture);
+        if (state == CaptureState.IDENTIFIED) {
+            intent = WineProfileActivity.newIntent(getActivity(), capture.getWineProfile(),
+                    capture.getPhoto());
+        } else if (state == CaptureState.UNVERIFIED) {
+            intent = WineProfileActivity.newIntent(getActivity(), capture.getBaseWine(),
+                    capture.getPhoto());
+        }
+        //if the capture state is impossibled or unidentified, not enough data to launch into launch into wineprofile screen
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
     public void addRatingAndComment(PendingCapture capture) {
-
+        Intent intent = RateCaptureActivity.newIntent(getActivity(), capture.getId());
+        startActivity(intent);
     }
 
     @Override
     public void discardCapture(PendingCapture capture) {
+        mCaptureToDelete = capture;
+        String message = getString(R.string.remove_this_wine_from_your_list);
+        String remove = getString(R.string.remove);
+        String cancel = getString(R.string.cancel);
+        showConfirmationNoTitle(message, remove, cancel, DELETE_PENDING_CAPTURE_DIALOG);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DELETE_PENDING_CAPTURE_DIALOG) {
+            if (resultCode == Activity.RESULT_OK) {
+                mPendingCapturesController
+                        .deleteCapture(DELETE_PENDING_CAPTURE_REQ, mUserId,
+                                mCaptureToDelete.getId());
+            }
+            mCaptureToDelete = null;
+        }
+    }
+
+
+    public void onEventMainThread(DeletedPendingCaptureEvent event) {
+        if (!DELETE_PENDING_CAPTURE_REQ.equals(event.getRequestId())) {
+            return;
+        }
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+
+            //revert back to original array to show all items
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.ALL);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        if (event.getState() == DeletedPendingCaptureEvent.State.DELETING) {
+            //have the adapter hide the items that are in the "deleting" state
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.WITHOUT_DELETING);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        if (event.getState() == DeletedPendingCaptureEvent.State.DELETED) {
+            mAdapter.removeItem(event.getCaptureId());
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.ALL);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
 
     }
+
 }

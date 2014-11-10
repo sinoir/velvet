@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal> {
+public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal, String> {
 
     private static final String TAG = FetchFollowersJob.class.getSimpleName();
 
@@ -29,7 +29,7 @@ public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal> {
      *                        return recent updates and not paginate the list for past items.
      */
     public FetchFollowingsJob(String requestId, String accountId,
-            Listing<AccountMinimal> listing,
+            Listing<AccountMinimal, String> listing,
             Boolean isPullToRefresh) {
         //context is not passed in bc this endpoint only returns account minimal contexts
         super(requestId, null, accountId, listing, isPullToRefresh);
@@ -41,20 +41,20 @@ public class FetchFollowingsJob extends BaseFetchListingJob<AccountMinimal> {
     }
 
     @Override
-    protected Listing<AccountMinimal> getCachedListing(String accountId) {
+    protected Listing<AccountMinimal, String> getCachedListing(String accountId) {
         return mListingModel.getFollowingListing(accountId);
     }
 
     @Override
     protected void saveListingToCache(String accountId,
-            Listing<AccountMinimal> listing) {
+            Listing<AccountMinimal, String> listing) {
         mListingModel.saveCurrentFollowingListing(accountId, listing);
 
     }
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<AccountMinimal>>() {
+        Type type = new TypeToken<ListingResponse<AccountMinimal, String>>() {
         }.getType();
         return type;
     }

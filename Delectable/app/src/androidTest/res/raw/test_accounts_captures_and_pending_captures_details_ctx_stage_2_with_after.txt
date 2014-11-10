@@ -1,0 +1,46 @@
+{
+    "success": true,
+    "payload": {
+        "boundaries": {
+            "from": {
+                "before": "capture::544994db442ed01df0000520",
+                "after": "capture::545816dc0523c30fa1000009",
+                "since": "1415224469.2382839"
+            },
+            "to": {
+                "before": "capture::544994db442ed01df0000520",
+                "after": "pending_capture::545a9d6f442ed0dc3a000048",
+                "since": "1415224713.5530062"
+            }
+        },
+        "before": [],
+        "after": [{
+            "id": "545a9d6f442ed0dc3a000048",
+            "created_at": 1415224687.506271,
+            "photo": {
+                "url": "https://d2mvsg0ph94s7h.cloudfront.net/wayne-murphy-1415224683-1f0c4ecdc95e.jpg",
+                "child_resolutions": {}
+            },
+            "from_camera_roll": false,
+            "capture_latitude": 37.77269152004821,
+            "capture_longitude": -122.4152533206107,
+            "wine_profile": null,
+            "base_wine": null,
+            "matches": [],
+            "context": "details",
+            "e_tag": "NsdC0NJQB5djbQ",
+            "list_params": {
+                "type": "pending_capture",
+                "z-score": 1415224687.506
+            }
+        }],
+        "updates": [],
+        "deletes": [],
+        "more": false,
+        "e_tag": "1415224713.5530062",
+        "context": "details"
+    },
+    "e_tag": "1415224713.5530062",
+    "context": "details",
+    "e_tag_match": false
+}

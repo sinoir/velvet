@@ -6,9 +6,9 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:theme="@style/DelectableTheme">
         <meta-data
@@ -134,6 +134,17 @@
                     android:scheme="delectable" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        
+        <activity
+            android:name="com.delectable.mobile.ui.common.activity.WebViewActivty"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/DelectableTheme" />
 
         <activity
             android:name="com.facebook.LoginActivity"

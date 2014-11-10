@@ -26,10 +26,10 @@ public class CaptureNoteTest extends BaseInstrumentationTestCase {
     public void testParseListingFirstQueryCaptureNote() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_capture_notes_listing_first_query);
 
-        Type type = new TypeToken<ListingResponse<CaptureNote>>() {
+        Type type = new TypeToken<ListingResponse<CaptureNote, String>>() {
         }.getType();
-        ListingResponse<CaptureNote> response = mGson.fromJson(json.toString(), type);
-        Listing<CaptureNote> actualListing = response.getPayload();
+        ListingResponse<CaptureNote, String> response = mGson.fromJson(json.toString(), type);
+        Listing<CaptureNote, String> actualListing = response.getPayload();
 
         assertNull(actualListing.getBoundariesFromBefore());
         assertNull(actualListing.getBoundariesFromAfter());

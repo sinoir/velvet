@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchTrendingCapturesJob extends BaseFetchListingJob<CaptureDetails> {
+public class FetchTrendingCapturesJob extends BaseFetchListingJob<CaptureDetails, String> {
 
     private static final String TAG = FetchTrendingCapturesJob.class.getSimpleName();
 
@@ -26,19 +26,19 @@ public class FetchTrendingCapturesJob extends BaseFetchListingJob<CaptureDetails
     }
 
     @Override
-    public Listing<CaptureDetails> getCachedListing(String accountId) {
+    public Listing<CaptureDetails, String> getCachedListing(String accountId) {
         return mListingModel.getTrendingFeed();
     }
 
     @Override
     public void saveListingToCache(String accountId,
-            Listing<CaptureDetails> apiListing) {
+            Listing<CaptureDetails, String> apiListing) {
         mListingModel.saveTrendingFeed(apiListing);
     }
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<CaptureDetails, String>>() {
         }.getType();
         return type;
     }
@@ -50,7 +50,7 @@ public class FetchTrendingCapturesJob extends BaseFetchListingJob<CaptureDetails
      */
     //only details context seems to be working with this endpoint currently
     public FetchTrendingCapturesJob(String requestId, CapturesContext context,
-            Listing<CaptureDetails> captureListing,
+            Listing<CaptureDetails, String> captureListing,
             Boolean isPullToRefresh) {
         super(requestId, context.toString(), null, captureListing, isPullToRefresh);
     }

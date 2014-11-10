@@ -29,7 +29,7 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     }
 
     //for gson deserialization
-    private static final Type TYPE = new TypeToken<ListingResponse<CaptureDetails>>() {
+    private static final Type TYPE = new TypeToken<ListingResponse<CaptureDetails, String>>() {
     }.getType();
 
     public void testParseCaptureDetailsCtx() throws JSONException {
@@ -365,8 +365,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testGetLikesCount() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
-        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        Listing<CaptureDetails> listing = response.getPayload();
+        ListingResponse<CaptureDetails, String> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails, String> listing = response.getPayload();
 
         CaptureDetails capture = listing.getUpdates().get(3);
         assertEquals(3, capture.getLikesCount());
@@ -383,8 +383,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testDoesUserLikeCaptureWithLikingParticipants() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
-        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        Listing<CaptureDetails> listing = response.getPayload();
+        ListingResponse<CaptureDetails, String> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails, String> listing = response.getPayload();
 
         CaptureDetails capture = listing.getUpdates().get(3);
         String userAccountId = "abc";
@@ -397,8 +397,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
     public void testToggleUserLikesCapture() throws JSONException {
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
 
-        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        Listing<CaptureDetails> listing = response.getPayload();
+        ListingResponse<CaptureDetails, String> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails, String> listing = response.getPayload();
 
         CaptureDetails capture = listing.getUpdates().get(3);
         // Tests if user doesn't like capture, and toggling makes user like the capture
@@ -458,8 +458,8 @@ public class CaptureTest extends BaseInstrumentationTestCase {
 
         // Get "Updated" capture
         JSONObject json = loadJsonObjectFromResource(R.raw.test_accounts_follower_feed_details_ctx);
-        ListingResponse<CaptureDetails> response = mGson.fromJson(json.toString(), TYPE);
-        Listing<CaptureDetails> listing = response.getPayload();
+        ListingResponse<CaptureDetails, String> response = mGson.fromJson(json.toString(), TYPE);
+        Listing<CaptureDetails, String> listing = response.getPayload();
 
         // this is just a test, ideally the updated capture will have the same ID
         CaptureDetails updatedCapture = listing.getUpdates().get(3);
