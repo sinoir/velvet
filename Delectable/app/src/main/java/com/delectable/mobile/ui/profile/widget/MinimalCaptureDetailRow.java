@@ -129,7 +129,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         String captureName = mCaptureData.getDisplayDescription();
         String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
 
-        mProducerName.setText(captureTitle);
+        mProducerName.setText(captureTitle.toLowerCase());
         mWineName.setText(captureName);
         ImageLoaderUtil.loadImageIntoView(getContext(), captureImageUrl, mWineImage);
     }

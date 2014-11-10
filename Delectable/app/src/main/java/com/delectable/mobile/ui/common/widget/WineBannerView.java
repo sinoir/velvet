@@ -136,7 +136,7 @@ public class WineBannerView extends RelativeLayout {
 
     public void updateViewWithData(String wineImageUrl, String producerName, String wineName) {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
-        mProducerName.setText(producerName);
+        mProducerName.setText(producerName.toLowerCase());
         mWineName.setText(wineName);
     }
 
