@@ -204,13 +204,6 @@
         <View style="@style/SettingsAboutCategoryDivider" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/privacy_policy"
-            style="@style/SettingsAboutCategoryRow"
-            android:text="@string/settings_privacy_policy" />
-
-        <View style="@style/SettingsAboutCategoryDivider" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/sign_out"
             style="@style/SettingsAboutCategoryRow"
             android:text="@string/settings_sign_out" />
