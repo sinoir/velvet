@@ -179,7 +179,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/shipping_tax_container"
+            android:id="@+id/shipping_container"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
@@ -187,10 +187,28 @@
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 style="@style/CheckoutPricingLabel"
-                android:text="@string/winecheckout_shipping_tax_label" />
+                android:text="@string/winecheckout_shipping_label" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/shipping_tax_amount"
+                android:id="@+id/shipping_amount"
+                style="@style/CheckoutPricingAmount"
+                android:text="-"
+                android:textColor="@color/d_dark_gray" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tax_container"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+            android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                style="@style/CheckoutPricingLabel"
+                android:text="@string/winecheckout_tax_label" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/tax_amount"
                 style="@style/CheckoutPricingAmount"
                 android:text="-"
                 android:textColor="@color/d_dark_gray" />

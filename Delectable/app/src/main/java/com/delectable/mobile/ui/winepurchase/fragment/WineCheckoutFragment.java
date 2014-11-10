@@ -64,8 +64,11 @@ public class WineCheckoutFragment extends BaseFragment {
     @InjectView(R.id.add_promo_code)
     protected View mAddPromoCode;
 
-    @InjectView(R.id.shipping_tax_amount)
-    protected TextView mShippingAndTaxAmount;
+    @InjectView(R.id.shipping_amount)
+    protected TextView mShippingAmount;
+
+    @InjectView(R.id.tax_amount)
+    protected TextView mTaxAmount;
 
     @InjectView(R.id.total_amount)
     protected TextView mTotalAmount;
