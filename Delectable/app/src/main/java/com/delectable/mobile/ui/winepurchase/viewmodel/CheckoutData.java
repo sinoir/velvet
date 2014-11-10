@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.winepurchase.viewmodel;
 
+import com.delectable.mobile.api.models.PaymentMethod;
 import com.delectable.mobile.api.models.Pricing;
 import com.delectable.mobile.api.models.PurchaseOffer;
 import com.delectable.mobile.api.models.ShippingAddress;
@@ -14,6 +15,8 @@ public class CheckoutData {
     private Pricing mCurrentPrice;
 
     private ShippingAddress mSelectedShippingAddress;
+
+    private PaymentMethod mSelectedPaymentMethod;
 
     private int mQuantity = 1;
 
@@ -51,6 +54,23 @@ public class CheckoutData {
                 ", " + mSelectedShippingAddress.getCity()
                 + "," + mSelectedShippingAddress.getState();
     }
+
+    public PaymentMethod getSelectedPaymentMethod() {
+        return mSelectedPaymentMethod;
+    }
+
+    public void setSelectedPaymentMethod(PaymentMethod selectedPaymentMethod) {
+        mSelectedPaymentMethod = selectedPaymentMethod;
+    }
+
+    public String getPaymentMethidDisplayText() {
+        if (mSelectedPaymentMethod == null) {
+            return "";
+        }
+        return mSelectedPaymentMethod.getLastFour();
+    }
+
+    // TODO: Payment Icon by Type
 
     public int getQuantity() {
         return mQuantity;
