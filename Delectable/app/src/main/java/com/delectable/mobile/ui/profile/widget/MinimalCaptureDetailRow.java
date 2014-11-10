@@ -284,7 +284,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (userComment != null) {
             SpannableString span = new SpannableString(userComment);
             span.setSpan(DARK_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            return TextUtils.concat(span, " - ", message);
+            return TextUtils.concat(span, " — ", message);
         }
 
         //we can straight return the message built above since these are user's captures
