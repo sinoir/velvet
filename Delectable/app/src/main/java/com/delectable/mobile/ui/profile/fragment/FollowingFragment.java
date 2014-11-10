@@ -24,13 +24,13 @@ public class FollowingFragment extends BaseFollowersFragment {
     }
 
     @Override
-    protected Listing<AccountMinimal> getCachedListing(String accountId) {
+    protected Listing<AccountMinimal, String> getCachedListing(String accountId) {
         return mListingModel.getFollowingListing(accountId);
     }
 
     @Override
     protected void fetchAccounts(String accountId,
-            Listing<AccountMinimal> accountListing, boolean isPullToRefresh) {
+            Listing<AccountMinimal, String> accountListing, boolean isPullToRefresh) {
         mAccountController.fetchFollowings(FOLLOWING_REQ, accountId, accountListing, isPullToRefresh);
     }
 
@@ -43,7 +43,7 @@ public class FollowingFragment extends BaseFollowersFragment {
         return view;
     }
 
-    public void onEventMainThread(UpdatedListingEvent<AccountMinimal> event) {
+    public void onEventMainThread(UpdatedListingEvent<AccountMinimal, String> event) {
         if (!FOLLOWING_REQ.equals(event.getRequestId())) {
             return;
         }

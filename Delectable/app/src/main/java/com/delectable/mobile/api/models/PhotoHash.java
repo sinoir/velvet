@@ -123,10 +123,13 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
      * see {@link ChildResolution#get450Plus()}
      */
     public String get450Plus() {
-        if (child_resolutions == null) {
-            return this.url;
+        if (child_resolutions != null) {
+            String thumb = child_resolutions.get450Plus();
+            if (thumb != null && !thumb.isEmpty()) {
+                return thumb;
+            }
         }
-        return child_resolutions.get450Plus();
+        return this.url;
     }
 
     @Override

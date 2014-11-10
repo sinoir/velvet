@@ -22,7 +22,7 @@ public class CaptureNoteListingModel {
             = new HashMap<String, CacheListing<CaptureNote>>();
 
 
-    public static void saveListing(String wineId, Listing<CaptureNote> listing) {
+    public static void saveListing(String wineId, Listing<CaptureNote, String> listing) {
         String key = KEY_PREFIX + wineId;
         CacheListing<CaptureNote> cacheListing = new CacheListing<CaptureNote>(listing);
         mMap.put(key, cacheListing);
@@ -32,7 +32,7 @@ public class CaptureNoteListingModel {
         }
     }
 
-    public static Listing<CaptureNote> getUserCaptures(String wineId) {
+    public static Listing<CaptureNote, String> getUserCaptures(String wineId) {
         String key = KEY_PREFIX + wineId;
         return getCachedListing(key);
     }
@@ -41,7 +41,7 @@ public class CaptureNoteListingModel {
         mMap.clear();
     }
 
-    private static Listing<CaptureNote> getCachedListing(String key) {
+    private static Listing<CaptureNote, String> getCachedListing(String key) {
         CacheListing<CaptureNote> cacheListing = mMap.get(key);
         if (cacheListing == null) {
             //nothing in cache
@@ -59,7 +59,7 @@ public class CaptureNoteListingModel {
                         "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
             }
         }
-        Listing<CaptureNote> listing = new Listing<CaptureNote>(cacheListing, captures);
+        Listing<CaptureNote, String> listing = new Listing<CaptureNote, String>(cacheListing, captures);
 
         return listing;
     }

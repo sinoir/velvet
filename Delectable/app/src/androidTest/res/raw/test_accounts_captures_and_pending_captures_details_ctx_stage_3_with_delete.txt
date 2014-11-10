@@ -1,0 +1,30 @@
+{
+    "success": true,
+    "payload": {
+        "boundaries": {
+            "from": {
+                "before": "capture::544994db442ed01df0000520",
+                "after": "pending_capture::545a9d6f442ed0dc3a000048",
+                "since": "1415224713.5530062"
+            },
+            "to": {
+                "before": "capture::544994db442ed01df0000520",
+                "after": "pending_capture::545a9d6f442ed0dc3a000048",
+                "since": "1415224894.9645438"
+            }
+        },
+        "before": [],
+        "after": [],
+        "updates": [],
+        "deletes": [{
+            "type": "pending_capture",
+            "id": "545a9d6f442ed0dc3a000048"
+        }],
+        "more": false,
+        "e_tag": "1415224894.9645438",
+        "context": "details"
+    },
+    "e_tag": "1415224894.9645438",
+    "context": "details",
+    "e_tag_match": false
+}

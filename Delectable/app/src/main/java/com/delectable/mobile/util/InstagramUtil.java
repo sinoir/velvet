@@ -37,6 +37,7 @@ public class InstagramUtil {
         share.putExtra(Intent.EXTRA_TEXT, caption);
         // Must set instagram package, otherwise it'll ask what app to share with
         share.setPackage("com.instagram.android");
-        activity.startActivity(share);
+        //chooser needs to be created, or instagram won't launch into their sharing flow
+        activity.startActivity(Intent.createChooser(share, ""));
     }
 }

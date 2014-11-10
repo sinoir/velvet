@@ -49,7 +49,7 @@ public class CaptureController {
     }
 
     public void fetchCaptureNotes(String requestId, String baseWineId, String wineProfileId,
-            Listing<CaptureNote> listing, String includeCaptureNote, Boolean isPullToRefresh) {
+            Listing<CaptureNote, String> listing, String includeCaptureNote, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchCaptureNotesJob(requestId, baseWineId, wineProfileId, listing,
                         includeCaptureNote, isPullToRefresh));
@@ -67,7 +67,7 @@ public class CaptureController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchTrendingCaptures(String requestId, CapturesContext context,
-            Listing<CaptureDetails> listing, Boolean isPullToRefresh) {
+            Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchTrendingCapturesJob(requestId, context, listing, isPullToRefresh));
     }

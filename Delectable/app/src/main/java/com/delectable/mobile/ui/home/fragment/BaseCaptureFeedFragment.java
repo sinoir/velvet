@@ -42,7 +42,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
     private CaptureDetailsAdapter mAdapter;
 
-    private Listing<CaptureDetails> mCapturesListing;
+    private Listing<CaptureDetails, String> mCapturesListing;
 
     private boolean mFetching;
 
@@ -113,15 +113,15 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     private void loadLocalData() {
         mRefreshContainer.setRefreshing(true);
         mFetching = true;
-        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
+        new SafeAsyncTask<Listing<CaptureDetails, String>>(this) {
             @Override
-            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureDetails, String> safeDoInBackground(Void[] params) {
                 Log.d(TAG, "loadLocalData:doInBg");
                 return getCachedFeed();
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<CaptureDetails, String> listing) {
                 Log.d(TAG, "loadLocalData:returnedFromCache");
                 if (listing != null) {
                     Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
@@ -143,9 +143,9 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected abstract Listing<CaptureDetails> getCachedFeed();
+    protected abstract Listing<CaptureDetails, String> getCachedFeed();
 
-    protected abstract void fetchCaptures(Listing<CaptureDetails> listing,
+    protected abstract void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh);
 
     private void refreshData() {
@@ -163,7 +163,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
      * The subclass will need to intercept the event and verify that the event was spawned from a
      * request the subclass.
      */
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());
         if (event.getListing() != null) {
             Log.d(TAG, "UpdatedListingEvent:etag:" + event.getListing().getETag());

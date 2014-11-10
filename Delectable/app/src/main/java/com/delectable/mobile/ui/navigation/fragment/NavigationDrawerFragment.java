@@ -337,7 +337,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<ActivityFeedItem> event) {
+    public void onEventMainThread(UpdatedListingEvent<ActivityFeedItem, String> event) {
         if (!event.getRequestId().equals(ACTIVITY_FEED_REQ)) {
             return;
         }
@@ -347,7 +347,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        Listing<ActivityFeedItem> mActivityRecipientListing = event.getListing();
+        Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
         mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
         mActivityFeedAdapter.notifyDataSetChanged();
     }

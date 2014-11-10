@@ -4,9 +4,15 @@ import com.delectable.mobile.api.cache.localmodels.CacheListing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
-public class Listing<T extends IDable> {
+/**
+ * @param <T> The type that the Listing is for.
+ * @param <D> The type for the {@link #deletes} array. {@code D}'s toString() must return the id in
+ *            order for this to work properly, or {@link #getId} can be overridden.
+ */
+public class Listing<T extends IDable, D> {
 
     private static final String TAG = Listing.class.getSimpleName();
 
@@ -18,7 +24,7 @@ public class Listing<T extends IDable> {
 
     protected ArrayList<T> updates;
 
-    protected ArrayList<String> deletes;
+    protected ArrayList<D> deletes;
 
     protected boolean more;
 
@@ -31,7 +37,7 @@ public class Listing<T extends IDable> {
     }
 
     /**
-     * Used to construct a ListingResponse from a CacheListing, for when retrieving from cache.
+     * Used to construct a Listing from a CacheListing, for when retrieving from cache.
      */
     public Listing(CacheListing cacheListing, ArrayList<T> updates) {
         boundaries = cacheListing.getBoundaries();
@@ -41,43 +47,43 @@ public class Listing<T extends IDable> {
     }
 
     public String getBoundariesFromBefore() {
-        if (boundaries != null && boundaries.from != null) {
-            return boundaries.from.before;
+        if (boundaries != null && boundaries.getFrom() != null) {
+            return boundaries.getFrom().getBefore();
         }
         return null;
     }
 
     public String getBoundariesFromAfter() {
-        if (boundaries != null && boundaries.from != null) {
-            return boundaries.from.after;
+        if (boundaries != null && boundaries.getFrom() != null) {
+            return boundaries.getFrom().getAfter();
         }
         return null;
     }
 
     public String getBoundariesFromSince() {
-        if (boundaries != null && boundaries.from != null) {
-            return boundaries.from.since;
+        if (boundaries != null && boundaries.getFrom() != null) {
+            return boundaries.getFrom().getSince();
         }
         return null;
     }
 
     public String getBoundariesToBefore() {
-        if (boundaries != null && boundaries.to != null) {
-            return boundaries.to.before;
+        if (boundaries != null && boundaries.getTo() != null) {
+            return boundaries.getTo().getBefore();
         }
         return null;
     }
 
     public String getBoundariesToAfter() {
-        if (boundaries != null && boundaries.to != null) {
-            return boundaries.to.after;
+        if (boundaries != null && boundaries.getTo() != null) {
+            return boundaries.getTo().getAfter();
         }
         return null;
     }
 
     public String getBoundariesToSince() {
-        if (boundaries != null && boundaries.to != null) {
-            return boundaries.to.since;
+        if (boundaries != null && boundaries.getTo() != null) {
+            return boundaries.getTo().getSince();
         }
         return null;
     }
@@ -122,11 +128,11 @@ public class Listing<T extends IDable> {
         this.updates = updates;
     }
 
-    public ArrayList<String> getDeletes() {
+    public ArrayList<D> getDeletes() {
         return deletes;
     }
 
-    public void setDeletes(ArrayList<String> deletes) {
+    public void setDeletes(ArrayList<D> deletes) {
         this.deletes = deletes;
     }
 
@@ -156,8 +162,8 @@ public class Listing<T extends IDable> {
 
 
     /**
-     * Clears the before, after, updates, and deletes lists. Used when saving a ListingResponse to
-     * cache, so that we can then in turn set our entire current list as our updates list.
+     * Clears the before, after, updates, and deletes lists. Used when saving a Listing to cache, so
+     * that we can then in turn set our entire current list as our updates list.
      */
     public void clearLists() {
         before.clear();
@@ -194,8 +200,7 @@ public class Listing<T extends IDable> {
         return items;
     }
 
-    private void performUpdatesAndDeletes(ArrayList<T> items, ArrayList<String> deleteIds) {
-
+    private void performUpdatesAndDeletes(ArrayList<T> items, ArrayList<D> deletes) {
         //1st pass: construct hashmap of key=id and value=arrayPositions
         HashMap<String, Integer> positionsMap = new HashMap<String, Integer>();
         for (int i = 0; i < items.size(); i++) {
@@ -203,21 +208,31 @@ public class Listing<T extends IDable> {
             positionsMap.put(item.getId(), i);
         }
 
+        HashSet<Integer> updatedItems = new HashSet<Integer>();
+
         //perform updates
         for (T update : updates) {
             if (positionsMap.containsKey(update.getId())) {
                 Integer position = positionsMap.get(update.getId());
                 items.set(position, update);
+                updatedItems.add(position);
             }
         }
 
         //perform deletes: replace items to delete with null
-        for (String deleteId : deleteIds) {
+        for (D delete : deletes) {
+            String deleteId = getId(delete);
             if (positionsMap.containsKey(deleteId)) {
                 Integer position = positionsMap.get(deleteId);
+                if (updatedItems.contains(position)) {
+                    //if this deleteId was an updated item, do not allow it to be deleted
+                    //when a pendingCapture becomes a capture, the pendingCapture id will show up in deletes, and the capture object will show up in updates
+                    continue;
+                }
                 items.set(position, null);
             }
         }
+
         //2nd pass: complete deletes: strips nulls
         cleanNulls(items);
     }
@@ -237,10 +252,19 @@ public class Listing<T extends IDable> {
         list.subList(pTo, len).clear();
     }
 
+    /**
+     * Allows subclass to provide the object id given a delete object. Most of the time the delete
+     * object is just the id string, which can be returned directly in this method. For the
+     * captures_and_pending_captures endpoint however, the delete object is a DeleteHash, and logic
+     * must be provided to retrieve the delete id from the hash.
+     */
+    protected String getId(D delete) {
+        return delete.toString();
+    }
 
     @Override
     public String toString() {
-        return "BaseListingResponse{" +
+        return "AbsListing{" +
                 "boundaries=" + boundaries +
                 ", before=" + before +
                 ", after=" + after +
@@ -250,49 +274,5 @@ public class Listing<T extends IDable> {
                 ", e_tag='" + e_tag + '\'' +
                 ", context='" + context + '\'' +
                 '}';
-    }
-
-    public static class Boundaries {
-
-        private Boundary from;
-
-        private Boundary to;
-
-        public Boundaries(Boundary from, Boundary to) {
-            this.from = from;
-            this.to = to;
-        }
-
-        @Override
-        public String toString() {
-            return "Boundaries{" +
-                    "from=" + from +
-                    ", to=" + to +
-                    '}';
-        }
-    }
-
-    public static class Boundary {
-
-        private String before;
-
-        private String after;
-
-        private String since;
-
-        public Boundary(String before, String after, String since) {
-            this.before = before;
-            this.after = after;
-            this.since = since;
-        }
-
-        @Override
-        public String toString() {
-            return "Boundary{" +
-                    "before='" + before + '\'' +
-                    ", after='" + after + '\'' +
-                    ", since=" + since +
-                    '}';
-        }
     }
 }
