@@ -40,10 +40,10 @@
     <color name="d_off_white_10p_dark">#DCDCDC</color>
 
     <!-- Ratings -->
-    <color name="d_rating_exquisite">#5fb3a9</color>
-    <color name="d_rating_good">#8bada9</color>
-    <color name="d_rating_ok">#aebbba</color>
-    <color name="d_rating_bad">#cbcbcb</color>
+    <color name="d_rating_exquisite">#13BAA6</color>
+    <color name="d_rating_good">#93C1AC</color>
+    <color name="d_rating_ok">#C5C4AF</color>
+    <color name="d_rating_bad">#DBC5B0</color>
 
     <color name="d_gray_disabled_done_button">#D2D2D2</color>
 
