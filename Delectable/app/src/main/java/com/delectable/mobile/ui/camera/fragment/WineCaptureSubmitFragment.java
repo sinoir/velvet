@@ -275,9 +275,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCaptureRequest.setNote(comment);
         }
 
-        if (!mMakePrivateButton.isChecked()) {
-            mCaptureRequest.setPrivate(false);
+        if (mMakePrivateButton.isChecked()) {
+            mCaptureRequest.setPrivate(true);
         } else {
+            mCaptureRequest.setPrivate(false);
             mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
             mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
             if (mShareTwitterButton.isChecked()) {
@@ -428,9 +429,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.make_private)
     protected void makeCaputrePrivate(CompoundButton view, boolean isChecked) {
-        // TODO: Verify, this was taken from when Post to Delectable was "make private"
         // Unselect everything if Post to Delectable is not selected
-        if (!isChecked) {
+        if (isChecked) {
             mShareFacebookButton.setChecked(false);
             mShareTwitterButton.setChecked(false);
             mShareInstagramButton.setChecked(false);

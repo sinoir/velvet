@@ -265,13 +265,11 @@ public class RateCaptureFragment extends BaseFragment {
         if (mMakePrivateButton.isChecked()) {
             request.setPrivate(true);
         } else {
-            if (!mMakePrivateButton.isChecked()) {
-                request.setPrivate(false);
-                request.setShareFb(mShareFacebookButton.isChecked());
-                request.setShareTw(mShareTwitterButton.isChecked());
-                if (mShareTwitterButton.isChecked()) {
-                    request.setUserTw(comment);
-                }
+            request.setPrivate(false);
+            request.setShareFb(mShareFacebookButton.isChecked());
+            request.setShareTw(mShareTwitterButton.isChecked());
+            if (mShareTwitterButton.isChecked()) {
+                request.setUserTw(comment);
             }
         }
 
