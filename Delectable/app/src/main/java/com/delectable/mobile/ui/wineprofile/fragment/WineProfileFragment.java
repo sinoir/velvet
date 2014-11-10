@@ -302,9 +302,12 @@ public class WineProfileFragment extends BaseFragment implements
                 .setBackgroundColor(getResources().getColor(R.color.d_off_white_translucent));
         mAlphaSpan = new MutableForegroundColorSpan(0,
                 getResources().getColor(R.color.d_big_stone));
-        mTitle = new SpannableString(mWineProfile.getProducerName() + " " + mWineProfile.getName());
-        mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setActionBarSubtitle(mTitle);
+        if (mWineProfile != null) {
+            mTitle = new SpannableString(
+                    mWineProfile.getProducerName() + " " + mWineProfile.getName());
+            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            setActionBarSubtitle(mTitle);
+        }
     }
 
     @Override
@@ -420,16 +423,27 @@ public class WineProfileFragment extends BaseFragment implements
      * was spawned.
      */
     private void updateBannerData() {
+        String wineTitle = null;
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+            wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
         } else if (mBaseWineMinimal != null) {
             //spawned from Search Wines
             mBanner.updateData(mBaseWineMinimal);
+            wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
         } else if (mBaseWine != null) {
             //spawned from WineCaptureSubmit
             //also called after BaseWine is successfully fetched
             mBanner.updateData(mBaseWine);
+            wineTitle = mBaseWine.getProducerName() + " " + mBaseWine.getName();
+        }
+
+        // update actionbar title
+        if (wineTitle != null) {
+            mTitle = new SpannableString(wineTitle);
+            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            setActionBarSubtitle(mTitle);
         }
     }
 
