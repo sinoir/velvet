@@ -51,7 +51,7 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Name"
+                android:text="-"
                 android:textColor="@color/d_black"
                 android:textSize="@dimen/cap_feed_comment_text_size"
                 app:fontName="whitney_medium" />
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_16"
             android:layout_below="@+id/profile_image"
-            android:text="COMMENT"
+            android:text=""
             android:lineSpacingMultiplier="1.2"
             android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/text_size_medium"
@@ -102,7 +102,7 @@
             android:layout_below="@id/user_comment"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <com.delectable.mobile.ui.common.widget.CircleImageView
                 android:id="@+id/tagged_user_image1"
@@ -152,7 +152,7 @@
             android:layout_below="@id/tagged_participants_container"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/likes_count"
@@ -219,7 +219,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_below="@id/collapsed_comments_container">
 
             <View

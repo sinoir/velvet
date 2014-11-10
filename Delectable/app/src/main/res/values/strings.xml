@@ -4,6 +4,7 @@
     <string name="app_id">201275219971584</string>
     <string name="app_name">Delectable</string>
     <string name="action_settings">Settings</string>
+    <string name="terms_url">https://delectable.com/terms</string>
 
     <!-- Common -->
     <string name="facebook_text">Facebook</string>
@@ -60,8 +61,6 @@
     <string name="signup_in_sign_up_using_google">sign up using google</string>
     <string name="signup_in_read_our">Read our&#160;</string>
     <string name="signup_in_terms_of_use">Terms of Use</string>
-    <string name="signup_in_and">&#160;and&#160;</string>
-    <string name="signup_in_privacy_policy">Privacy Policy</string>
 
     <string name="reset_password_dialog_title">Reset your password?</string>
     <string name="reset_password_dialog_email_hint">Enter your email address</string>
