@@ -58,6 +58,12 @@ public class AddShippingAddressDialog extends DialogFragment {
     @InjectView(R.id.zip_code)
     protected EditText mZipCode;
 
+    @InjectView(R.id.phone_number)
+    protected EditText mPhoneNumber;
+
+    @InjectView(R.id.progress_bar)
+    protected View mProgressBar;
+
     public static AddShippingAddressDialog newInstance() {
         AddShippingAddressDialog f = new AddShippingAddressDialog();
         Bundle args = new Bundle();
@@ -141,4 +147,12 @@ public class AddShippingAddressDialog extends DialogFragment {
         dismiss();
     }
     //endregion
+
+    private void showLoader() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoader() {
+        mProgressBar.setVisibility(View.GONE);
+    }
 }
