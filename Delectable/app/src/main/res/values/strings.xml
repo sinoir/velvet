@@ -372,4 +372,11 @@
     <string name="shippingaddress_add_title">Add a shipping address</string>
     <string name="shippingaddress_edit_title">Edit shipping address</string>
 
+    <!-- Payment method Dialog -->
+    <string name="paymentmethod_name">Name</string>
+    <string name="paymentmethod_card_number">Card number</string>
+    <string name="paymentmethod_expiration">MM/YY</string>
+    <string name="paymentmethod_cvc">CVC</string>
+    <string name="paymentmethod_add_title">Add a payment method</string>
+
 </resources>
