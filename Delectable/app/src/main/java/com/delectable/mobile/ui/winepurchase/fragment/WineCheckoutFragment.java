@@ -9,6 +9,7 @@ import com.delectable.mobile.api.events.accounts.FetchedPaymentMethodsEvent;
 import com.delectable.mobile.api.events.accounts.FetchedShippingAddressesEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
@@ -31,6 +32,8 @@ public class WineCheckoutFragment extends BaseFragment {
     private static final String ARGS_VINTAGE_ID = "ARGS_VINTAGE_ID";
 
     private static final int REQUEST_ADD_SHIPPING_ADDRESS_DIALOG = 100;
+
+    private static final int REQUEST_ADD_PAYMENT_METHOD = 300;
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -136,6 +139,9 @@ public class WineCheckoutFragment extends BaseFragment {
                 && resultCode == AddShippingAddressDialog.RESULT_SHIPPING_ADDRESS_SAVED) {
             loadShippingAddress(data
                     .getStringExtra(AddShippingAddressDialog.EXTRAS_SHIPPING_ADDRESS_ID));
+        } else if (requestCode == REQUEST_ADD_PAYMENT_METHOD
+                && resultCode == AddPaymentMethodDialog.RESULT_PAYMENT_METHOD_SAVED) {
+            loadPaymentMethod(data.getStringExtra(AddPaymentMethodDialog.EXTRAS_PAYMENT_METHOD_ID));
         }
     }
 
@@ -315,13 +321,23 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @OnClick(R.id.shipping_address_container)
     public void onShippingAddressClicked() {
-        showAddShippingAddressDialog();
-        // TODO: Implement Shipping Address (select / add dialog)
+        if (mData.getSelectedShippingAddress() == null) {
+            showAddShippingAddressDialog(null);
+        } else {
+            // TODO: Launch selection, right now launches edit for testing
+            showAddShippingAddressDialog(mData.getSelectedShippingAddress().getId());
+        }
     }
 
     @OnClick(R.id.payment_container)
     public void onPaymentMethodClicked() {
-        // TODO: Implement Payment Method (select / add dialog)
+        if (mData.getSelectedPaymentMethod() == null) {
+            showAddPaymentMethodDialog();
+        } else {
+            // TODO: Implement Payment selection method
+            // TODO: Launch selection, right now launches add..
+            showAddPaymentMethodDialog();
+        }
     }
 
     @OnClick(R.id.plus_quantity)
@@ -349,9 +365,16 @@ public class WineCheckoutFragment extends BaseFragment {
     //endregion
 
     //region Dialog Helpers
-    private void showAddShippingAddressDialog() {
-        AddShippingAddressDialog dialog = AddShippingAddressDialog.newInstance();
+    private void showAddShippingAddressDialog(String id) {
+        AddShippingAddressDialog dialog = AddShippingAddressDialog.newInstance(id);
         dialog.setTargetFragment(this, REQUEST_ADD_SHIPPING_ADDRESS_DIALOG);
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    private void showAddPaymentMethodDialog() {
+        AddPaymentMethodDialog dialog = AddPaymentMethodDialog.newInstance();
+        dialog.setTargetFragment(this, REQUEST_ADD_PAYMENT_METHOD);
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), "dialog");
     }
