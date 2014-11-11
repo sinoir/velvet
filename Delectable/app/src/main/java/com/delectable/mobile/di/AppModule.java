@@ -107,6 +107,7 @@ import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
+import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.fragment.WineCheckoutFragment;
 import com.path.android.jobqueue.JobManager;
@@ -150,6 +151,7 @@ import de.greenrobot.event.EventBus;
                 ChooseVintageDialog.class,
                 ResetPasswordDialog.class,
                 AddShippingAddressDialog.class,
+                AddPaymentMethodDialog.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
