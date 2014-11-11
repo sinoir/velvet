@@ -191,7 +191,7 @@ public class AddShippingAddressDialog extends DialogFragment {
     }
 
     private boolean isFieldEmpty(EditText editText) {
-        return mName.getText().toString().trim().length() == 0;
+        return editText.getText().toString().trim().length() == 0;
     }
 
     private ShippingAddress buildAddress() {
