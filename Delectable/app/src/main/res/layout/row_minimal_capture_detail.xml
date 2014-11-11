@@ -3,7 +3,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:padding="@dimen/cap_list_row_horizontal_spacing"
+    android:padding="@dimen/spacing_16"
     android:layout_height="300dp">
 
     <include
@@ -17,19 +17,20 @@
         android:id="@+id/capture_comment_tagged_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_16"
         android:layout_below="@+id/wine_details_container"
         android:text="One of the worst wines at the Arlequin wine tasting right now. Bought 2 bottles for the park and now I regret. — with 3 friends at Arlequin 2 hours ago"
         android:textColor="@color/d_medium_gray"
         android:lineSpacingMultiplier="1.2"
         android:textSize="16sp"
-        android:layout_marginBottom="16dp"
         android:visibility="visible"
         app:fontName="whitney_book" />
 
     <RelativeLayout
         android:id="@+id/like_comment_count_container"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_16"
         android:gravity="center"
         android:layout_below="@+id/capture_comment_tagged_text"
         android:visibility="visible">
@@ -99,7 +100,7 @@
         android:id="@+id/add_rating_remove_text_container"
         layout="@layout/layout_minimal_capture_add_rating_remove_texts"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="32dp"
         android:layout_below="@id/like_comment_buttons_container" />
 
     <ImageView
@@ -108,6 +109,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/btn_options_pressed"
+        android:src="@drawable/btn_options"
         android:visibility="visible" />
 </merge>
