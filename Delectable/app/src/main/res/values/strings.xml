@@ -370,5 +370,6 @@
     <string name="shippingaddress_zipcode">Zip code</string>
     <string name="shippingaddress_phone_number">Phone number</string>
     <string name="shippingaddress_add_title">Add a shipping address</string>
+    <string name="shippingaddress_edit_title">Edit shipping address</string>
 
 </resources>

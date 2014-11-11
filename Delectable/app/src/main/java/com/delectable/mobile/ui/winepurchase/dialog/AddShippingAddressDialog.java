@@ -5,7 +5,9 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.ShippingAddressModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedShippingAddressEvent;
 import com.delectable.mobile.api.models.BaseAddress;
+import com.delectable.mobile.api.models.ShippingAddress;
 import com.delectable.mobile.util.NameUtil;
 
 import android.app.Dialog;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import javax.inject.Inject;
@@ -35,6 +38,8 @@ public class AddShippingAddressDialog extends DialogFragment {
 
     private static final String TAG = AddShippingAddressDialog.class.getSimpleName();
 
+    private static final String ARGS_SHIPPING_ADDRESS_ID = "ARGS_SHIPPING_ADDRESS_ID";
+
     @Inject
     protected AccountController mAccountController;
 
@@ -43,6 +48,9 @@ public class AddShippingAddressDialog extends DialogFragment {
 
     @Inject
     protected ShippingAddressModel mShippingAddressModel;
+
+    @InjectView(R.id.dialog_title)
+    protected TextView mDialogTitle;
 
     @InjectView(R.id.name)
     protected EditText mName;
@@ -68,9 +76,21 @@ public class AddShippingAddressDialog extends DialogFragment {
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
 
+    private String mShippingAddressId;
+
+    private ShippingAddress mExistingShippingAddress;
+
     public static AddShippingAddressDialog newInstance() {
         AddShippingAddressDialog f = new AddShippingAddressDialog();
         Bundle args = new Bundle();
+        f.setArguments(args);
+        return f;
+    }
+
+    public static AddShippingAddressDialog newInstance(String shippingAddressId) {
+        AddShippingAddressDialog f = new AddShippingAddressDialog();
+        Bundle args = new Bundle();
+        args.putString(ARGS_SHIPPING_ADDRESS_ID, shippingAddressId);
         f.setArguments(args);
         return f;
     }
@@ -80,6 +100,8 @@ public class AddShippingAddressDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
+
+        mShippingAddressId = getArguments().getString(ARGS_SHIPPING_ADDRESS_ID);
     }
 
     @NonNull
@@ -97,6 +119,13 @@ public class AddShippingAddressDialog extends DialogFragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_shipping_address, container, false);
         ButterKnife.inject(this, view);
+
+        if (mShippingAddressId != null) {
+            mDialogTitle.setText(R.string.shippingaddress_edit_title);
+            loadExistingShippingAddress();
+        } else {
+            mDialogTitle.setText(R.string.shippingaddress_add_title);
+        }
 
         return view;
     }
@@ -129,6 +158,25 @@ public class AddShippingAddressDialog extends DialogFragment {
         dismiss();
     }
 
+    //region Update UI methods
+    private void updateFormWithExistingAddress() {
+        if (mExistingShippingAddress == null) {
+            return;
+        }
+        String fName = mExistingShippingAddress.getFname();
+        String lName = mExistingShippingAddress.getFname() == null ? ""
+                : " " + mExistingShippingAddress.getFname();
+
+        mName.setText(fName + lName);
+        mAddress1.setText(mExistingShippingAddress.getAddr1());
+        mAddress2.setText(mExistingShippingAddress.getAddr2());
+        mCity.setText(mExistingShippingAddress.getCity());
+        mState.setText(mExistingShippingAddress.getState());
+        mZipCode.setText(mExistingShippingAddress.getZip());
+        mPhoneNumber.setText(mExistingShippingAddress.getPhone());
+    }
+    //endregion
+
     //region Helpers
     private boolean isFormValid() {
         if (isFieldEmpty(mName) ||
@@ -146,8 +194,8 @@ public class AddShippingAddressDialog extends DialogFragment {
         return mName.getText().toString().trim().length() == 0;
     }
 
-    private BaseAddress buildAddress() {
-        BaseAddress address = new BaseAddress();
+    private ShippingAddress buildAddress() {
+        ShippingAddress address = new ShippingAddress();
         String[] name = NameUtil.getSplitName(mName.getText().toString());
         String fName = name[NameUtil.FIRST_NAME];
         String lName = name[NameUtil.LAST_NAME];
@@ -161,6 +209,10 @@ public class AddShippingAddressDialog extends DialogFragment {
         address.setZip(mZipCode.getText().toString());
         address.setPhone(mPhoneNumber.getText().toString());
 
+        if (mExistingShippingAddress != null) {
+            address.setId(mExistingShippingAddress.getId());
+        }
+
         return address;
     }
     //endregion
@@ -172,6 +224,16 @@ public class AddShippingAddressDialog extends DialogFragment {
         mAccountController.addShippingAddress(address, true);
     }
 
+    private void updateShippingAddress() {
+        ShippingAddress updatedAddress = buildAddress();
+        mAccountController.updateShippingAddress(updatedAddress, true);
+    }
+
+    private void loadExistingShippingAddress() {
+        mExistingShippingAddress = mShippingAddressModel.getShippingAddress(mShippingAddressId);
+        updateFormWithExistingAddress();
+    }
+
     //endregion
 
     //region onClicks
@@ -180,9 +242,12 @@ public class AddShippingAddressDialog extends DialogFragment {
         if (!isFormValid()) {
             return;
         }
-        // TODO: Add Update Ability
         showLoader();
-        saveShippingAddress();
+        if (mExistingShippingAddress == null) {
+            saveShippingAddress();
+        } else {
+            updateShippingAddress();
+        }
     }
 
     @OnClick(R.id.cancel_button)
@@ -197,6 +262,20 @@ public class AddShippingAddressDialog extends DialogFragment {
         if (event.isSuccessful()) {
             String shippingAddressId = mShippingAddressModel.getPrimaryShippingAddress().getId();
             dismissWithSelectedId(shippingAddressId);
+        } else {
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void onEventMainThread(UpdatedShippingAddressEvent event) {
+        if (!event.getShippingAddressId().equalsIgnoreCase(mShippingAddressId)) {
+            return;
+        }
+        hideLoader();
+        if (event.isSuccessful()) {
+            dismissWithSelectedId(mShippingAddressId);
         } else {
             if (getActivity() != null) {
                 Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
