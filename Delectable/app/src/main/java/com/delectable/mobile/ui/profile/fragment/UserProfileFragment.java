@@ -179,11 +179,11 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         mEmptyStateHeader.setActionListener(this);
 
-        mListView.setAdapter(mAdapter);
         mListView.addHeaderView(mProfileHeaderView);
         // Does not work with list header
         mListView.setEmptyView(mEmptyStateLayout);
         mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
+        mListView.setAdapter(mAdapter);
 
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);
