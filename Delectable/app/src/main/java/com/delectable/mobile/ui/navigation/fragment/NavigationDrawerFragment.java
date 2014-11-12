@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -228,6 +229,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // When the user runs the app for the first time, we want to land them with the
+        // navigation drawer open. But just the first time.
+        if (!UserInfo.isWelcomeDone()) {
+            // first run of the app starts with the nav drawer open
+            UserInfo.markWelcomeDone();
+            mDrawerLayout.openDrawer(Gravity.START);
+        }
     }
 
     @Override
