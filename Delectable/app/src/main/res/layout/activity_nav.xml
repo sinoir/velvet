@@ -8,17 +8,20 @@
     android:fitsSystemWindows="true"
     tools:context=".NavActivity">
 
-    <LinearLayout
-        android:id="@+id/container"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/ToolbarStyle" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <!-- The drawer is given a fixed width in dp and extends the full height of
          the container. -->

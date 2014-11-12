@@ -105,7 +105,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
@@ -215,6 +215,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
                     return;
                 }
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                showOrHideActionBar(true);
             }
         };
 
