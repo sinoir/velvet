@@ -70,7 +70,6 @@ public class ChooseShippingAddressDialog extends DialogFragment
 
     private ArrayList<ShippingAddress> mShippingAddressList;
 
-    // TODO: Will Remove items on "Save"
     private ArrayList<ShippingAddress> mRemoveShippingAddressList
             = new ArrayList<ShippingAddress>();
 
@@ -139,7 +138,7 @@ public class ChooseShippingAddressDialog extends DialogFragment
 
     private void dismissWithSelectedId(String id) {
         Intent intent = new Intent();
-        intent.putExtra(EXTRAS_SHIPPING_ADDRESS_ID, mSelectedShippingAddressId);
+        intent.putExtra(EXTRAS_SHIPPING_ADDRESS_ID, id);
         getTargetFragment().onActivityResult(getTargetRequestCode(),
                 RESULT_SHIPPING_ADDRESS_SELECTED,
                 intent);

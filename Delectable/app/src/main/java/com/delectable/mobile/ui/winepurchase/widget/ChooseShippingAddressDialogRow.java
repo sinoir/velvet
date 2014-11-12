@@ -5,7 +5,6 @@ import com.delectable.mobile.api.models.ShippingAddress;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
