@@ -1,7 +1,9 @@
 <resources>
 
-    <style name="DelectableTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="DelectableTheme" parent="DelectableBaseTheme" />
+
+    <style name="DelectableBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
         <item name="colorPrimaryDark">@color/status_bar</item>
         <item name="colorAccent">@color/d_chestnut</item>
