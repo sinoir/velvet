@@ -1,6 +1,5 @@
 package com.delectable.mobile.api.models;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -19,8 +18,6 @@ public class BaseListingElementDeserializer
 
     private static final String TAG = BaseListingElementDeserializer.class.getSimpleName();
 
-    private Gson mGson = new Gson();
-
     @Override
     public BaseListingElement deserialize(JsonElement json, Type typeOfT,
             JsonDeserializationContext context) throws JsonParseException {
@@ -28,24 +25,24 @@ public class BaseListingElementDeserializer
         JsonObject jsonItem = json.getAsJsonObject();
         JsonElement listParam = jsonItem.get("list_params");
         if (listParam == null) {
-            return mGson.fromJson(json, typeOfT); //return BaseListingElement
+            return context.deserialize(json, typeOfT); //return BaseListingElement
         }
         JsonObject listParamJson = listParam.getAsJsonObject();
         JsonElement type = listParamJson.get("type");
         if (type == null) {
-            return mGson.fromJson(json, typeOfT); //return BaseListingElement
+            return context.deserialize(json, typeOfT); //return BaseListingElement
         }
         String typeValue = type.getAsString();
 
         if ("pending_capture".equals(typeValue)) {
-            return mGson.fromJson(json, PendingCapture.class);
+            return context.deserialize(json, PendingCapture.class);
         }
 
         if ("capture".equals(typeValue)) {
-            return mGson.fromJson(json, CaptureDetails.class);
+            return context.deserialize(json, CaptureDetails.class);
         }
 
         //default return BaseListingElement if we didn't have a filter for it's type above
-        return mGson.fromJson(json, typeOfT);
+        return context.deserialize(json, typeOfT);
     }
 }

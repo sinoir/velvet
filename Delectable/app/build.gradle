@@ -119,7 +119,7 @@ dependencies {
     compile 'org.ocpsoft.prettytime:prettytime:3.0.2.Final@jar'
     compile project(':facebook')
     compile project(':viewPagerIndicator')
-    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'com.jakewharton:butterknife:6.0.0'
     //need to keep dagger at 1.1.0 (at least until dagger 2.0 comes out, bc proguard doesn't work with 1.2.2)
     compile 'com.squareup.dagger:dagger:1.1.0'
     compile 'com.squareup.dagger:dagger-compiler:1.1.0'
@@ -132,12 +132,12 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.0.6'
 
     // Crashlytics Kit
-    compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {
         transitive = true
     }
 
     // Twitter Kit
-    compile('com.twitter.sdk.android:twitter:1.0.0@aar') {
+    compile('com.twitter.sdk.android:twitter:1.0.1@aar') {
         transitive = true
     }
 }
