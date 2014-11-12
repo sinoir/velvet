@@ -22,6 +22,7 @@
         android:layout_marginRight="@dimen/dialog_horizontal_spacing"
         android:ellipsize="end"
         android:gravity="center_vertical"
+        android:lineSpacingExtra="4dp"
         android:text="Some very very very very very long name\nNew Street 45\nSan Francisco\nCA 94110"
         android:textSize="16sp"
         app:fontName="whitney_book" />
