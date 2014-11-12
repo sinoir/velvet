@@ -11,6 +11,7 @@ import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
 import android.content.Intent;
@@ -32,6 +33,8 @@ public class WineCheckoutFragment extends BaseFragment {
     private static final String ARGS_VINTAGE_ID = "ARGS_VINTAGE_ID";
 
     private static final int REQUEST_ADD_SHIPPING_ADDRESS_DIALOG = 100;
+
+    private static final int REQUEST_CHOOSE_SHIPPING_ADDRESS_DIALOG = 200;
 
     private static final int REQUEST_ADD_PAYMENT_METHOD = 300;
 
@@ -142,6 +145,9 @@ public class WineCheckoutFragment extends BaseFragment {
         } else if (requestCode == REQUEST_ADD_PAYMENT_METHOD
                 && resultCode == AddPaymentMethodDialog.RESULT_PAYMENT_METHOD_SAVED) {
             loadPaymentMethod(data.getStringExtra(AddPaymentMethodDialog.EXTRAS_PAYMENT_METHOD_ID));
+        } else if (requestCode == REQUEST_CHOOSE_SHIPPING_ADDRESS_DIALOG) {
+            loadShippingAddress(data.getStringExtra(
+                    ChooseShippingAddressDialog.EXTRAS_SHIPPING_ADDRESS_ID));
         }
     }
 
@@ -324,8 +330,7 @@ public class WineCheckoutFragment extends BaseFragment {
         if (mData.getSelectedShippingAddress() == null) {
             showAddShippingAddressDialog(null);
         } else {
-            // TODO: Launch selection, right now launches edit for testing
-            showAddShippingAddressDialog(mData.getSelectedShippingAddress().getId());
+            showChooseShippingAddressDialog(mData.getSelectedShippingAddress().getId());
         }
     }
 
@@ -368,6 +373,13 @@ public class WineCheckoutFragment extends BaseFragment {
     private void showAddShippingAddressDialog(String id) {
         AddShippingAddressDialog dialog = AddShippingAddressDialog.newInstance(id);
         dialog.setTargetFragment(this, REQUEST_ADD_SHIPPING_ADDRESS_DIALOG);
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    private void showChooseShippingAddressDialog(String id) {
+        ChooseShippingAddressDialog dialog = ChooseShippingAddressDialog.newInstance(id);
+        dialog.setTargetFragment(this, REQUEST_CHOOSE_SHIPPING_ADDRESS_DIALOG);
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), "dialog");
     }
