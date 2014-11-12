@@ -232,4 +232,8 @@ public class AccountController {
     public void removePaymentMethod(String paymentMethodId) {
         mJobManager.addJobInBackground(new RemovePaymentMethodJob(paymentMethodId));
     }
+
+    public void removePaymentMethods(ArrayList<String> ids) {
+        mJobManager.addJobInBackground(new RemovePaymentMethodJob(ids));
+    }
 }
