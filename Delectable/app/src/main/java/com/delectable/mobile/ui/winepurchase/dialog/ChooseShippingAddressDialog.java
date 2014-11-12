@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.ShippingAddressModel;
 import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.accounts.RemovedShippingAddressEvent;
 import com.delectable.mobile.api.models.ShippingAddress;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 import com.delectable.mobile.ui.winepurchase.widget.ChooseShippingAddressAdapter;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -164,13 +166,25 @@ public class ChooseShippingAddressDialog extends DialogFragment
         mAdapter.setData(mShippingAddressList);
         updateUIWithNewData();
     }
+
+    public void syncRemovedItems() {
+        showLoader();
+        ArrayList<String> addressIds = new ArrayList<String>();
+        for (ShippingAddress address : mRemoveShippingAddressList) {
+            addressIds.add(address.getId());
+        }
+        mAccountController.removeShippingAddresses(addressIds);
+    }
     //endregion
 
     //region onClicks
     @Override
     public void onSaveClicked() {
-        // TODO: Save / Sync all "Removed" items
-        dismissWithSelectedId(mSelectedShippingAddressId);
+        if (mRemoveShippingAddressList.size() > 0) {
+            syncRemovedItems();
+        } else {
+            dismissWithSelectedId(mSelectedShippingAddressId);
+        }
     }
 
     @Override
@@ -185,7 +199,29 @@ public class ChooseShippingAddressDialog extends DialogFragment
 
     @Override
     public void onDeleteClicked(String shippingAddressId) {
-        // TODO: Delete Shipping Address
+        // Remove Item From List
+        ShippingAddress addressToRemove = null;
+        for (ShippingAddress address : mShippingAddressList) {
+            if (address.getId().equalsIgnoreCase(shippingAddressId)) {
+                addressToRemove = address;
+                break;
+            }
+        }
+
+        mRemoveShippingAddressList.add(addressToRemove);
+        mShippingAddressList.remove(addressToRemove);
+
+        // Update Shipping Address ID if it was the item removed
+
+        if (mSelectedShippingAddressId.equalsIgnoreCase(shippingAddressId)) {
+            if (mShippingAddressList.size() > 0) {
+                mSelectedShippingAddressId = mShippingAddressList.get(0).getId();
+            } else {
+                mSelectedShippingAddressId = null;
+            }
+        }
+        mAdapter.setSelectedItemById(mSelectedShippingAddressId);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -197,6 +233,20 @@ public class ChooseShippingAddressDialog extends DialogFragment
     public void onRowClicked(String shippingAddressId) {
         mSelectedShippingAddressId = shippingAddressId;
         updateUIWithNewData();
+    }
+    //endregion
+
+    //region EventBus
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(RemovedShippingAddressEvent event) {
+        hideLoader();
+        if (event.isSuccessful()) {
+            dismissWithSelectedId(mSelectedShippingAddressId);
+        } else {
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), event.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
     //endregion
 

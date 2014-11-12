@@ -46,7 +46,9 @@ public class ChooseShippingAddressAdapter extends BaseAdapter {
     public void setSelectedItemById(String id) {
         if (id == null) {
             setSelectedItemPosition(-1);
+            return;
         }
+
         for (int i = 0; i < getCount(); i++) {
             if (id.equalsIgnoreCase(getItem(i).getId())) {
                 setSelectedItemPosition(i);
