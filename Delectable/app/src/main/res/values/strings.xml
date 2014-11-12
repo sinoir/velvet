@@ -381,5 +381,7 @@
     <string name="paymentmethod_expiration">MM/YY</string>
     <string name="paymentmethod_cvc">CVC</string>
     <string name="paymentmethod_add_title">Add a payment method</string>
+    <string name="paymentmethod_choose_title">Choose shipping address</string>
+    <string name="paymentmethod_add_another">Add another payment method</string>
 
 </resources>
