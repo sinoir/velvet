@@ -11,6 +11,7 @@ import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
@@ -37,6 +38,8 @@ public class WineCheckoutFragment extends BaseFragment {
     private static final int REQUEST_CHOOSE_SHIPPING_ADDRESS_DIALOG = 200;
 
     private static final int REQUEST_ADD_PAYMENT_METHOD = 300;
+
+    private static final int REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG = 400;
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -148,6 +151,9 @@ public class WineCheckoutFragment extends BaseFragment {
         } else if (requestCode == REQUEST_CHOOSE_SHIPPING_ADDRESS_DIALOG) {
             loadShippingAddress(data.getStringExtra(
                     ChooseShippingAddressDialog.EXTRAS_SHIPPING_ADDRESS_ID));
+        } else if (requestCode == REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG) {
+            loadPaymentMethod(
+                    data.getStringExtra(ChoosePaymentMethodDialog.EXTRAS_PAYMENT_METHOD_ID));
         }
     }
 
@@ -339,9 +345,7 @@ public class WineCheckoutFragment extends BaseFragment {
         if (mData.getSelectedPaymentMethod() == null) {
             showAddPaymentMethodDialog();
         } else {
-            // TODO: Implement Payment selection method
-            // TODO: Launch selection, right now launches add..
-            showAddPaymentMethodDialog();
+            showChoosePaymentMethodDialog(mData.getSelectedPaymentMethod().getId());
         }
     }
 
@@ -387,6 +391,13 @@ public class WineCheckoutFragment extends BaseFragment {
     private void showAddPaymentMethodDialog() {
         AddPaymentMethodDialog dialog = AddPaymentMethodDialog.newInstance();
         dialog.setTargetFragment(this, REQUEST_ADD_PAYMENT_METHOD);
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    private void showChoosePaymentMethodDialog(String id) {
+        ChoosePaymentMethodDialog dialog = ChoosePaymentMethodDialog.newInstance(id);
+        dialog.setTargetFragment(this, REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG);
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), "dialog");
     }
