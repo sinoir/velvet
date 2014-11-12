@@ -94,8 +94,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mCaptureController.fetchCapture(mCaptureId);
         loadLocalData();
+        mCaptureController.fetchCapture(mCaptureId);
     }
 
     @Override
