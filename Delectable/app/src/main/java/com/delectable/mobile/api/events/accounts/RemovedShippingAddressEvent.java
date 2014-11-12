@@ -5,20 +5,11 @@ import com.delectable.mobile.api.util.ErrorUtil;
 
 public class RemovedShippingAddressEvent extends BaseEvent {
 
-    private String mShippingAddressId;
-
-    public RemovedShippingAddressEvent(String shippingAddressId) {
+    public RemovedShippingAddressEvent() {
         super(true);
-        mShippingAddressId = shippingAddressId;
     }
 
-    public RemovedShippingAddressEvent(String errorMessage, ErrorUtil errorCode,
-            String shippingAddressId) {
+    public RemovedShippingAddressEvent(String errorMessage, ErrorUtil errorCode) {
         super(errorMessage, errorCode);
-        mShippingAddressId = shippingAddressId;
-    }
-
-    public String getShippingAddressId() {
-        return mShippingAddressId;
     }
 }

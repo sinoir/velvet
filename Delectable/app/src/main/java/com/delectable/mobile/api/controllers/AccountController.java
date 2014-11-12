@@ -46,6 +46,8 @@ import com.path.android.jobqueue.JobManager;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 
@@ -205,6 +207,10 @@ public class AccountController {
 
     public void removeShippingAddress(String addressId) {
         mJobManager.addJobInBackground(new RemoveShippingAddressJob(addressId));
+    }
+
+    public void removeShippingAddresses(ArrayList<String> addressIds) {
+        mJobManager.addJobInBackground(new RemoveShippingAddressJob(addressIds));
     }
 
     public void setPrimaryShippingAddress(String addressId) {

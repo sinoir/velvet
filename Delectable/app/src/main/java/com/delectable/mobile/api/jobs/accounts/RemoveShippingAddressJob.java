@@ -8,6 +8,8 @@ import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.path.android.jobqueue.Params;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 public class RemoveShippingAddressJob extends BaseJob {
@@ -17,27 +19,36 @@ public class RemoveShippingAddressJob extends BaseJob {
     @Inject
     protected ShippingAddressModel mShippingAddressModel;
 
-    private String mAddressId;
+    private ArrayList<String> mAddressIds;
 
     public RemoveShippingAddressJob(String addressId) {
         super(new Params(Priority.SYNC));
-        mAddressId = addressId;
+        mAddressIds = new ArrayList<String>();
+        mAddressIds.add(addressId);
+    }
+
+    public RemoveShippingAddressJob(ArrayList<String> addressIds) {
+        super(new Params(Priority.SYNC));
+        mAddressIds = addressIds;
     }
 
     @Override
     public void onRun() throws Throwable {
         String endpoint = "/accounts/remove_shipping_address";
-        ModifyShippingAddressRequest request = new ModifyShippingAddressRequest(mAddressId);
-        ShippingAddressesResponse response = getNetworkClient().post(endpoint, request,
-                ShippingAddressesResponse.class);
+        ShippingAddressesResponse latestResponse = null;
+        for (String addressId : mAddressIds) {
+            ModifyShippingAddressRequest request = new ModifyShippingAddressRequest(addressId);
+            latestResponse = getNetworkClient().post(endpoint, request,
+                    ShippingAddressesResponse.class);
+        }
         mShippingAddressModel.clear();
-        mShippingAddressModel.saveShippingAddresses(response.getPayload().getShippingAddresses());
-        getEventBus().post(new RemovedShippingAddressEvent(mAddressId));
+        mShippingAddressModel.saveShippingAddresses(
+                latestResponse.getPayload().getShippingAddresses());
+        getEventBus().post(new RemovedShippingAddressEvent());
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new RemovedShippingAddressEvent(getErrorMessage(), getErrorCode(),
-                mAddressId));
+        getEventBus().post(new RemovedShippingAddressEvent(getErrorMessage(), getErrorCode()));
     }
 }
