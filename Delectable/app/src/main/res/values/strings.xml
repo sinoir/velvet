@@ -18,6 +18,7 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
     <string name="report">Report</string>
+    <string name="dialog_edit">Edit</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
@@ -371,6 +372,8 @@
     <string name="shippingaddress_phone_number">Phone number</string>
     <string name="shippingaddress_add_title">Add a shipping address</string>
     <string name="shippingaddress_edit_title">Edit shipping address</string>
+    <string name="shippingaddress_choose_title">Choose shipping address</string>
+    <string name="shippingaddress_add_another">Add another shipping address</string>
 
     <!-- Payment method Dialog -->
     <string name="paymentmethod_name">Name</string>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:id="@+id/radio_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_horizontal_spacing"
+        android:layout_marginRight="@dimen/dialog_horizontal_spacing"
+        android:layout_marginTop="@dimen/dialog_vertical_spacing"
+        android:clickable="false" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/shipping_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/radio_button"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@id/radio_button"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:text="Some very very very very very long name\nNew Street 45\nSan Francisco\nCA 94110"
+        android:textSize="16sp"
+        app:fontName="whitney_book" />
+
+    <RelativeLayout
+        android:id="@+id/row_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/shipping_address"
+        android:layout_toRightOf="@id/radio_button">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingRight="10dp"
+            android:text="@string/dialog_edit"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="16sp"
+            app:fontName="whitney_book" />
+
+        <View
+            android:id="@+id/circle_divider"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/edit_button"
+            android:background="@drawable/btn_gray_circle" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/circle_divider"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/remove"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="16sp"
+            app:fontName="whitney_book" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/bottom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/row_action_container"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/radio_button"
+        android:background="@color/d_light_gray"></View>
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/add_another"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_below="@id/bottom_divider"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@id/radio_button"
+        android:gravity="center_vertical"
+        android:text="@string/shippingaddress_add_another"
+        android:textColor="@color/d_chestnut"
+        android:textSize="16sp"
+        app:fontName="whitney_book" />
+</merge>
