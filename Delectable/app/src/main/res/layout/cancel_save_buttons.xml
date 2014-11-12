@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dialog_header_footer_height"
-    android:orientation="horizontal">
+    android:layout_height="@dimen/dialog_header_footer_height">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/cancel_button"
@@ -26,4 +25,4 @@
         android:textColor="@color/d_chestnut"
         android:textSize="@dimen/choose_vintage_dialog_title_text_size"
         app:fontName="whitney_medium_sc" />
-</LinearLayout>
+</merge>

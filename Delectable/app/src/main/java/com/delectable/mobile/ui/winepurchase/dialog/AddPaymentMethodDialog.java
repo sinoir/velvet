@@ -6,6 +6,7 @@ import com.delectable.mobile.api.cache.PaymentMethodModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AddedPaymentMethodEvent;
 import com.delectable.mobile.api.models.PaymentMethod;
+import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,10 +25,10 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
-public class AddPaymentMethodDialog extends DialogFragment {
+public class AddPaymentMethodDialog extends DialogFragment
+        implements CancelSaveButtons.ActionsHandler {
 
     public static final String EXTRAS_PAYMENT_METHOD_ID = "EXTRAS_PAYMENT_METHOD_ID";
 
@@ -64,6 +65,9 @@ public class AddPaymentMethodDialog extends DialogFragment {
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
 
+    @InjectView(R.id.action_buttons)
+    protected CancelSaveButtons mActionButtons;
+
     public static AddPaymentMethodDialog newInstance() {
         AddPaymentMethodDialog f = new AddPaymentMethodDialog();
         Bundle args = new Bundle();
@@ -93,6 +97,8 @@ public class AddPaymentMethodDialog extends DialogFragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_payment_method, container, false);
         ButterKnife.inject(this, view);
+
+        mActionButtons.setActionsHandler(this);
 
         return view;
     }
@@ -171,8 +177,8 @@ public class AddPaymentMethodDialog extends DialogFragment {
     //endregion
 
     //region onClicks
-    @OnClick(R.id.save_button)
-    protected void saveClicked() {
+    @Override
+    public void onSaveClicked() {
         if (!isFormValid()) {
             return;
         }
@@ -180,8 +186,8 @@ public class AddPaymentMethodDialog extends DialogFragment {
         savePaymentMethod();
     }
 
-    @OnClick(R.id.cancel_button)
-    protected void cancelClicked() {
+    @Override
+    public void onCancelClicked() {
         dismiss();
     }
     //endregion

@@ -8,6 +8,7 @@ import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedShippingAddressEvent;
 import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.ShippingAddress;
+import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 import com.delectable.mobile.util.NameUtil;
 
 import android.app.Dialog;
@@ -27,10 +28,10 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
-public class AddShippingAddressDialog extends DialogFragment {
+public class AddShippingAddressDialog extends DialogFragment
+        implements CancelSaveButtons.ActionsHandler {
 
     public static final String EXTRAS_SHIPPING_ADDRESS_ID = "EXTRAS_SHIPPING_ADDRESS_ID";
 
@@ -75,6 +76,9 @@ public class AddShippingAddressDialog extends DialogFragment {
 
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
+
+    @InjectView(R.id.action_buttons)
+    protected CancelSaveButtons mActionButtons;
 
     private String mShippingAddressId;
 
@@ -126,6 +130,8 @@ public class AddShippingAddressDialog extends DialogFragment {
         } else {
             mDialogTitle.setText(R.string.shippingaddress_add_title);
         }
+
+        mActionButtons.setActionsHandler(this);
 
         return view;
     }
@@ -237,8 +243,8 @@ public class AddShippingAddressDialog extends DialogFragment {
     //endregion
 
     //region onClicks
-    @OnClick(R.id.save_button)
-    protected void saveClicked() {
+    @Override
+    public void onSaveClicked() {
         if (!isFormValid()) {
             return;
         }
@@ -250,8 +256,8 @@ public class AddShippingAddressDialog extends DialogFragment {
         }
     }
 
-    @OnClick(R.id.cancel_button)
-    protected void cancelClicked() {
+    @Override
+    public void onCancelClicked() {
         dismiss();
     }
     //endregion

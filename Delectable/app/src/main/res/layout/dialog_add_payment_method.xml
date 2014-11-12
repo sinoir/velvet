@@ -71,7 +71,10 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/d_dark_gray" />
 
-            <include layout="@layout/cancel_save_buttons" />
+            <com.delectable.mobile.ui.common.widget.CancelSaveButtons
+                android:id="@+id/action_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_header_footer_height" />
         </LinearLayout>
     </ScrollView>
 
