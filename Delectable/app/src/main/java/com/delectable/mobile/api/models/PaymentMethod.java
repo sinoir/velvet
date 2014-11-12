@@ -39,6 +39,29 @@ public class PaymentMethod {
         this.cvc = cvc;
     }
 
+    //region CC Type Helpers
+
+    public boolean isAmex() {
+        return isType("American Express");
+    }
+
+    public boolean isDiscover() {
+        return isType("discover");
+    }
+
+    public boolean isMastercard() {
+        return isType("mastercard");
+    }
+
+    public boolean isVisa() {
+        return isType("visa");
+    }
+
+    private boolean isType(String ccType) {
+        return ccType.equalsIgnoreCase(type);
+    }
+    //endregion
+
     public String getId() {
         return id;
     }
