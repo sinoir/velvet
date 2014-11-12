@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/radio_button"
-        android:layout_marginRight="16dp"
-        android:layout_toRightOf="@id/radio_button"
+        android:layout_marginLeft="@dimen/checkout_dialog_chooser_left_margin"
+        android:layout_marginRight="@dimen/dialog_horizontal_spacing"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:text="Some very very very very very long name\nNew Street 45\nSan Francisco\nCA 94110"
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@id/shipping_address"
-        android:layout_toRightOf="@id/radio_button">
+        android:layout_marginLeft="@dimen/checkout_dialog_chooser_left_margin">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/edit_button"
@@ -70,21 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/row_action_container"
+        android:layout_marginLeft="@dimen/checkout_dialog_chooser_left_margin"
         android:layout_marginTop="10dp"
-        android:layout_toRightOf="@id/radio_button"
         android:background="@color/d_light_gray"></View>
-
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/add_another"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:layout_below="@id/bottom_divider"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="16dp"
-        android:layout_toRightOf="@id/radio_button"
-        android:gravity="center_vertical"
-        android:text="@string/shippingaddress_add_another"
-        android:textColor="@color/d_chestnut"
-        android:textSize="16sp"
-        app:fontName="whitney_book" />
 </merge>

@@ -25,9 +25,6 @@ public class ChooseShippingAddressDialogRow extends RelativeLayout {
     @InjectView(R.id.shipping_address)
     protected TextView mShippingAddressText;
 
-    @InjectView(R.id.add_another)
-    protected View mAddAnother;
-
     private ShippingAddress mShippingAddress;
 
     private ActionsHandler mActionsHandler;
@@ -62,7 +59,6 @@ public class ChooseShippingAddressDialogRow extends RelativeLayout {
 
     public void setChecked(boolean checked) {
         mRadioButton.setChecked(checked);
-        Log.d(TAG, "Radio Button Checked? " + checked);
     }
 
     public void updateData(ShippingAddress address) {
@@ -98,28 +94,11 @@ public class ChooseShippingAddressDialogRow extends RelativeLayout {
         }
     }
 
-    @OnClick(R.id.add_another)
-    protected void onAddAnotherClicked() {
-        if (mActionsHandler != null) {
-            mActionsHandler.onAddAnother();
-        }
-    }
-
-    public void shouldShowAddAnother(boolean addAnother) {
-        if (addAnother) {
-            mAddAnother.setVisibility(View.VISIBLE);
-        } else {
-            mAddAnother.setVisibility(View.GONE);
-        }
-    }
-
     public interface ActionsHandler {
 
         public void onEditClicked(String shippingAddressId);
 
         public void onDeleteClicked(String shippingAddressId);
-
-        public void onAddAnother();
 
         public void onRowClicked(String shippingAddressId);
     }

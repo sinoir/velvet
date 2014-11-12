@@ -259,5 +259,6 @@
 
     <!-- Purchase/Checkout Flow -->
     <dimen name="checkout_info_left_margin">80dp</dimen>
+    <dimen name="checkout_dialog_chooser_left_margin">70dp</dimen>
 
 </resources>

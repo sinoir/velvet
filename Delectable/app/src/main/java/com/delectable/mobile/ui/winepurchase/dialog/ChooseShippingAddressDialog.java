@@ -27,7 +27,8 @@ import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 public class ChooseShippingAddressDialog extends DialogFragment
-        implements CancelSaveButtons.ActionsHandler, ChooseShippingAddressDialogRow.ActionsHandler {
+        implements CancelSaveButtons.ActionsHandler, ChooseShippingAddressDialogRow.ActionsHandler,
+        ChooseShippingAddressAdapter.ActionsHandler {
 
     public static final String EXTRAS_SHIPPING_ADDRESS_ID = "EXTRAS_SHIPPING_ADDRESS_ID";
 
@@ -98,6 +99,7 @@ public class ChooseShippingAddressDialog extends DialogFragment
         mActionButtons.setActionsHandler(this);
 
         mAdapter = new ChooseShippingAddressAdapter();
+        mAdapter.setRowActionsHandler(this);
         mAdapter.setActionsHandler(this);
         mListView.setAdapter(mAdapter);
 
@@ -187,7 +189,7 @@ public class ChooseShippingAddressDialog extends DialogFragment
     }
 
     @Override
-    public void onAddAnother() {
+    public void onAddAnotherClicked() {
         showAddShippingAddressDialog(null);
     }
 
@@ -196,10 +198,6 @@ public class ChooseShippingAddressDialog extends DialogFragment
         mSelectedShippingAddressId = shippingAddressId;
         updateUIWithNewData();
     }
-    //endregion
-
-    //region EventBus
-
     //endregion
 
     private void showAddShippingAddressDialog(String id) {
