@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.winepurchase.viewmodel;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.PaymentMethod;
 import com.delectable.mobile.api.models.Pricing;
 import com.delectable.mobile.api.models.PurchaseOffer;
@@ -63,14 +64,25 @@ public class CheckoutData {
         mSelectedPaymentMethod = selectedPaymentMethod;
     }
 
-    public String getPaymentMethidDisplayText() {
+    public String getPaymentMethodDisplayText() {
         if (mSelectedPaymentMethod == null) {
             return "";
         }
         return mSelectedPaymentMethod.getLastFour();
     }
 
-    // TODO: Payment Icon by Type
+    public int getPaymentMethodIconResId() {
+        if (mSelectedPaymentMethod.isAmex()) {
+            return R.drawable.ic_amex;
+        } else if (mSelectedPaymentMethod.isMastercard()) {
+            return R.drawable.ic_mastercard;
+        } else if (mSelectedPaymentMethod.isDiscover()) {
+            return R.drawable.ic_discover;
+        } else if (mSelectedPaymentMethod.isVisa()) {
+            return R.drawable.ic_visa;
+        }
+        return 0;
+    }
 
     public int getQuantity() {
         return mQuantity;

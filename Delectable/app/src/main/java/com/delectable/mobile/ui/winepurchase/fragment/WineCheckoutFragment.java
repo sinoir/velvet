@@ -213,8 +213,13 @@ public class WineCheckoutFragment extends BaseFragment {
             hidePaymentInfo();
         } else {
             showPaymentInfo();
-            mPaymentMethodLastDigits.setText(mData.getPaymentMethidDisplayText());
-            // TODO: Set Icon
+            mPaymentMethodLastDigits.setText(mData.getPaymentMethodDisplayText());
+            int paymentMethodResId = mData.getPaymentMethodIconResId();
+            if (paymentMethodResId != 0) {
+                mPaymentMethodCCImage.setImageResource(paymentMethodResId);
+            } else {
+                mPaymentMethodCCImage.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -225,9 +230,9 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void hidePaymentInfo() {
-        mPaymentMethodCCImage.setVisibility(View.VISIBLE);
-        mPaymentMethodLastDigits.setVisibility(View.VISIBLE);
-        mAddPaymentMethod.setVisibility(View.GONE);
+        mPaymentMethodCCImage.setVisibility(View.GONE);
+        mPaymentMethodLastDigits.setVisibility(View.GONE);
+        mAddPaymentMethod.setVisibility(View.VISIBLE);
     }
 
     private void showShippingAddressInfo() {
