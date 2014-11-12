@@ -40,7 +40,11 @@ public class RatingTextView extends FontTextView{
     public void setRatingOf10(float ratingOf10) {
         DecimalFormat df = new DecimalFormat("0.0");
         String ratingStr = df.format(ratingOf10);
-        setText(ratingStr);
+        if (ratingStr.equals("10.0")) {
+            setText("10");
+        } else {
+            setText(ratingStr);
+        }
 
         Rating rating = Rating.valueForRatingOfTen(ratingOf10);
         mBg.setColor(getResources().getColor(rating.getColorRes()));
