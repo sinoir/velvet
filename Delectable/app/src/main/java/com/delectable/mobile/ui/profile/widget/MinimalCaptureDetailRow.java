@@ -180,14 +180,16 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     private void updateWineInfo() {
 
-        String captureTitle;
-        String captureName;
+        String captureTitle = null;
+        String captureName = null;
+        String vintage = null;
 
         CaptureState state = CaptureState.getState(mCaptureData);
         switch (state) {
             case IDENTIFIED:
                 captureTitle = mCaptureData.getWineProfile().getProducerName();
                 captureName = mCaptureData.getWineProfile().getName();
+                vintage = mCaptureData.getWineProfile().getVintage();
                 break;
             case IMPOSSIBLED:
                 captureTitle = "";
@@ -202,6 +204,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
                 captureTitle = getResources().getString(R.string.user_captures_id_in_progress);
                 captureName = getResources().getString(R.string.user_captures_check_back);
                 break;
+        }
+        if (vintage != null && !vintage.equals("NV")) {
+            captureName += " " + vintage;
         }
         String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
 

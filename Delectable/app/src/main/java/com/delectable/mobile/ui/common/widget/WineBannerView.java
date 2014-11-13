@@ -91,8 +91,11 @@ public class WineBannerView extends RelativeLayout {
     public void updateData(CaptureDetails captureDetails) {
         String wineImageUrl = captureDetails.getPhoto().getUrl();
         String producerName = captureDetails.getDisplayTitle();
-        String wineName = captureDetails.getDisplayDescription() +
-                " " + captureDetails.getWineProfile().getVintage();
+        String vintage = captureDetails.getWineProfile().getVintage();
+        String wineName = captureDetails.getDisplayDescription();
+        if (vintage != null && !vintage.equals("NV")) {
+            wineName += " " + vintage;
+        }
 
         updateViewWithData(wineImageUrl, producerName, wineName);
     }
@@ -116,8 +119,9 @@ public class WineBannerView extends RelativeLayout {
         }
         String producerName = wineProfile.getProducerName();
         String wineName = wineProfile.getName();
+        String vintage = wineProfile.getVintage();
 
-        if (includeVintage) {
+        if (includeVintage && !vintage.equals("NV")) {
             wineName += " " + wineProfile.getVintage();
         }
 

@@ -219,7 +219,7 @@ public class CaptureDetailsView extends RelativeLayout {
         String producerName = mCaptureData.getDisplayTitle();
         String wineName = mCaptureData.getDisplayDescription();
 
-        mWineBannerView.updateViewWithData(wineImageUrl, producerName, wineName);
+        mWineBannerView.updateData(mCaptureData);
 
         mWineBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
