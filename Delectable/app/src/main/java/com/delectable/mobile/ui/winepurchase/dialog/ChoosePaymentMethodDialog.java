@@ -69,7 +69,7 @@ public class ChoosePaymentMethodDialog extends DialogFragment
 
     private ArrayList<PaymentMethod> mPaymentMethods;
 
-    private ArrayList<PaymentMethod> mRemovePaymentMethodList = new ArrayList<PaymentMethod>();
+    private ArrayList<String> mRemovePaymentMethodList = new ArrayList<String>();
 
     public static ChoosePaymentMethodDialog newInstance(String paymentMethodId) {
         ChoosePaymentMethodDialog f = new ChoosePaymentMethodDialog();
@@ -154,8 +154,17 @@ public class ChoosePaymentMethodDialog extends DialogFragment
     private void loadExistingPaymentMethods() {
         mPaymentMethods = (ArrayList<PaymentMethod>) mPaymentMethodModel.getAllPaymentMethods();
 
-        for (PaymentMethod address : mRemovePaymentMethodList) {
-            mPaymentMethods.remove(address);
+        ArrayList<PaymentMethod> toRemove = new ArrayList<PaymentMethod>();
+        for (PaymentMethod paymentMethod : mPaymentMethods) {
+            if (mRemovePaymentMethodList.contains(paymentMethod.getId())) {
+                toRemove.add(paymentMethod);
+            }
+        }
+
+        mPaymentMethods.removeAll(toRemove);
+
+        if (mSelectedPaymentMethodId == null && mPaymentMethods.size() > 0) {
+            mSelectedPaymentMethodId = mPaymentMethods.get(0).getId();
         }
 
         mAdapter.setData(mPaymentMethods);
@@ -164,11 +173,7 @@ public class ChoosePaymentMethodDialog extends DialogFragment
 
     public void syncRemovedItems() {
         showLoader();
-        ArrayList<String> ids = new ArrayList<String>();
-        for (PaymentMethod paymentMethod : mRemovePaymentMethodList) {
-            ids.add(paymentMethod.getId());
-        }
-        mAccountController.removePaymentMethods(ids);
+        mAccountController.removePaymentMethods(mRemovePaymentMethodList);
     }
     //endregion
 
@@ -190,16 +195,16 @@ public class ChoosePaymentMethodDialog extends DialogFragment
     @Override
     public void onDeleteClicked(String id) {
         // Remove Item From List
-        PaymentMethod itemsToRemove = null;
+        PaymentMethod itemToRemove = null;
         for (PaymentMethod address : mPaymentMethods) {
             if (address.getId().equalsIgnoreCase(id)) {
-                itemsToRemove = address;
+                itemToRemove = address;
                 break;
             }
         }
 
-        mRemovePaymentMethodList.add(itemsToRemove);
-        mPaymentMethods.remove(itemsToRemove);
+        mRemovePaymentMethodList.add(id);
+        mPaymentMethods.remove(itemToRemove);
 
         if (mSelectedPaymentMethodId.equalsIgnoreCase(id)) {
             if (mPaymentMethods.size() > 0) {
