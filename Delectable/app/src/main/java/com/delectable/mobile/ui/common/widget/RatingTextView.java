@@ -32,12 +32,12 @@ public class RatingTextView extends FontTextView{
         setBackgroundDrawable(mBg);
     }
 
-    public void setRatingOf40(float rating) {
-        float ratingOf10 = Rating.getRatingOfTenFrom40(rating);
+    public void setRatingOf40(double rating) {
+        double ratingOf10 = Rating.getRatingOfTenFrom40(rating);
         setRatingOf10(ratingOf10);
     }
 
-    public void setRatingOf10(float ratingOf10) {
+    public void setRatingOf10(double ratingOf10) {
         DecimalFormat df = new DecimalFormat("0.0");
         String ratingStr = df.format(ratingOf10);
         if (ratingStr.equals("10.0")) {

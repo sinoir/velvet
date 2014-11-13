@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
+import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
@@ -47,6 +48,7 @@ import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,11 +80,11 @@ import butterknife.OnClick;
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
+    public static final String TAG = WineProfileFragment.class.getSimpleName();
+
     public static final int ACTIONBAR_HIDE_DELAY = 1000;
 
     private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
-
-    public static final String TAG = WineProfileFragment.class.getSimpleName();
 
     private static final int NO_AVG_RATING = -1;
 
@@ -101,6 +103,10 @@ public class WineProfileFragment extends BaseFragment implements
     private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
 
     private static final String WINE_PROFILE_NOTES_REQ = "wine_profile_notes_req";
+
+    private static final DecimalFormat ONE_DECIMAL_SPACE = new DecimalFormat("0.0");
+
+    private static final RelativeSizeSpan RATING_BIG_TEXT_SPAN = new RelativeSizeSpan(1.3f);
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -200,8 +206,8 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param wineProfile      used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
-     *                         photo wants to be used instead of the {@code wineProfile}'s photo. Pass in
-     *                         {@code null} to use {@code wineProfile}'s photo.
+     *                         photo wants to be used instead of the {@code wineProfile}'s photo.
+     *                         Pass in {@code null} to use {@code wineProfile}'s photo.
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
@@ -217,8 +223,8 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param baseWine         used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
-     *                         photo wants to be used instead of the {@code baseWine}'s. Pass in {@code null}
-     *                         to use {@code baseWine}'s photo.
+     *                         photo wants to be used instead of the {@code baseWine}'s. Pass in
+     *                         {@code null} to use {@code baseWine}'s photo.
      */
     //used for Search Wines and User Profiles
     public static WineProfileFragment newInstance(BaseWineMinimal baseWine,
@@ -669,23 +675,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     private void updateRatingsView(Ratingsable ratingsable) {
         //rating avg
-        double allAvg = ratingsable.getRatingsSummary().getAllAvgOfTen();
-        double proAvg = ratingsable.getRatingsSummary().getProAvgOfTen();
-        DecimalFormat format = new DecimalFormat("0.0");
-        if (allAvg == NO_AVG_RATING) { //handling a no rating case, show a dash
-            mAllRatingsAverageTextView.setText("-");
-            mAllRatingsAverageTextView.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            String allAvgStr = format.format(allAvg);
-            mAllRatingsAverageTextView.setText(makeRatingDisplayText(allAvgStr));
-        }
-        if (proAvg == NO_AVG_RATING) {
-            mProRatingsAverageTextView.setText("-");
-            mProRatingsAverageTextView.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            String proAvgStr = format.format(proAvg);
-            mProRatingsAverageTextView.setText(makeRatingDisplayText(proAvgStr));
-        }
+        double allAvg = ratingsable.getRatingsSummary().getAllAvg();
+        double proAvg = ratingsable.getRatingsSummary().getProAvg();
+        mAllRatingsAverageTextView.setText(makeRatingDisplayText(allAvg));
+        mProRatingsAverageTextView.setText(makeRatingDisplayText(proAvg));
 
         //ratings count
         int allCount = ratingsable.getRatingsSummary().getAllCount();
@@ -701,10 +694,42 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * Makes the rating display text where the rating is a bit bigger than the 10.
      */
-    private CharSequence makeRatingDisplayText(String rating) {
-        SpannableString ss = new SpannableString(rating);
-        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
-        CharSequence displayText = TextUtils.concat(ss, "/10");
+    private CharSequence makeRatingDisplayText(double ratingOf40) {
+        //handling a no rating case, show a dash
+        //we need to set it's size, otherwise the text will become unaligned if there are only user ratings and no pro ratings or vice versa
+        if (ratingOf40 == NO_AVG_RATING) {
+            String dash = "-";
+            SpannableString span = new SpannableString(dash);
+            ForegroundColorSpan GRAY_COLOR = new ForegroundColorSpan(
+                    getResources().getColor(R.color.d_medium_gray));
+            span.setSpan(RATING_BIG_TEXT_SPAN, 0, dash.length(), 0); // set size
+            span.setSpan(GRAY_COLOR, 0, dash.length(), 0); // set color
+            return span;
+        }
+
+        double ratingOf10 = Rating.getRatingOfTenFrom40(ratingOf40);
+        String ratingStr = ONE_DECIMAL_SPACE.format(ratingOf10);
+        //10.0 always displays as 10
+        if (ratingStr.equals("10.0")) {
+            ratingStr = "10";
+        }
+        Rating ratingItem = Rating.valueForRatingOfFourty(ratingOf40);
+
+        //RelativeSizeSpan RATING_BIG_TEXT_SPAN = new RelativeSizeSpan(1.3f);
+        ForegroundColorSpan COLOR = new ForegroundColorSpan(
+                getResources().getColor(ratingItem.getColorRes()));
+        ForegroundColorSpan COLOR2 = new ForegroundColorSpan(
+                getResources().getColor(ratingItem.getColorRes()));
+
+        SpannableString ratingSpan = new SpannableString(ratingStr);
+        ratingSpan.setSpan(RATING_BIG_TEXT_SPAN, 0, ratingStr.length(), 0); // set size
+        ratingSpan.setSpan(COLOR, 0, ratingStr.length(), 0); // set color
+
+        String of10 = "/10";
+        SpannableString of10Span = new SpannableString(of10);
+        of10Span.setSpan(COLOR2, 0, of10.length(), 0); // set color
+
+        CharSequence displayText = TextUtils.concat(ratingSpan, of10Span);
         return displayText;
     }
 
