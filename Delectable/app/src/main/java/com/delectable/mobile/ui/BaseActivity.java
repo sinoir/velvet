@@ -22,7 +22,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.animation.DecelerateInterpolator;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public abstract class BaseActivity extends ActionBarActivity
     private Toolbar mActionBarToolbar;
 
     private boolean mActionBarShown = true;
+
+    private List<View> mHeaderViews = new ArrayList<View>();
 
     /**
      * Track fragments that have been attached to the activity, so that we can easily forward out
@@ -79,7 +83,7 @@ public abstract class BaseActivity extends ActionBarActivity
     protected void onStart() {
         super.onStart();
 
-        CrashlyticsUtil.log(TAG+".onStart");
+        CrashlyticsUtil.log(TAG + ".onStart");
         mGoogleApiClient.connect();
         KahunaAnalytics.start();
     }
@@ -147,20 +151,37 @@ public abstract class BaseActivity extends ActionBarActivity
         }
     }
 
-    protected void onActionBarShowOrHide(boolean shown) {
+    public void onActionBarShowOrHide(boolean shown) {
         Toolbar toolbar = getActionBarToolbar();
+        Interpolator interpolator = new AccelerateDecelerateInterpolator();
+
         if (shown) {
             toolbar.animate()
                     .setDuration(ACTIONBAR_SHOW_ANIM_DURATION)
                     .translationY(0)
-                    .alpha(1)
-                    .setInterpolator(new DecelerateInterpolator());
+//                    .alpha(1)
+                    .setInterpolator(interpolator);
         } else {
             toolbar.animate()
                     .setDuration(ACTIONBAR_HIDE_ANIM_DURATION)
                     .translationY(-toolbar.getBottom())
-                    .alpha(0)
-                    .setInterpolator(new DecelerateInterpolator());
+//                    .alpha(0)
+                    .setInterpolator(interpolator);
+        }
+
+        // translate header views (e.g. tab strip) so they take up the space of the hidden action bar
+        for (View view : mHeaderViews) {
+            if (shown) {
+                view.animate()
+                        .translationY(0)
+                        .setDuration(ACTIONBAR_SHOW_ANIM_DURATION)
+                        .setInterpolator(interpolator);
+            } else {
+                view.animate()
+                        .translationY(-toolbar.getHeight())
+                        .setDuration(ACTIONBAR_HIDE_ANIM_DURATION)
+                        .setInterpolator(interpolator);
+            }
         }
     }
 
@@ -180,6 +201,18 @@ public abstract class BaseActivity extends ActionBarActivity
             getActionBarToolbar();
         }
         return super.getSupportActionBar();
+    }
+
+    public void registerHeaderView(View headerView) {
+        if (!mHeaderViews.contains(headerView)) {
+            mHeaderViews.add(headerView);
+        }
+    }
+
+    public void deregisterHeaderView(View headerView) {
+        if (mHeaderViews.contains(headerView)) {
+            mHeaderViews.remove(headerView);
+        }
     }
 
     /**
@@ -219,7 +252,7 @@ public abstract class BaseActivity extends ActionBarActivity
     }
 
     public boolean isFromDeepLink() {
-        return mDeepLinkUriData != null ;
+        return mDeepLinkUriData != null;
     }
 
     public Uri getDeepLinkUriData() {

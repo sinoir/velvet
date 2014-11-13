@@ -7,6 +7,7 @@ import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,6 +66,18 @@ public class HomeFragment extends BaseFragment {
         mTabStrip.setViewPager(mViewPager);
 
         return mView;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        getBaseActivity().deregisterHeaderView(mTabStrip);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getBaseActivity().registerHeaderView(mTabStrip);
     }
 
     @Override
