@@ -20,6 +20,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.activity.WebViewActivty;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.settings.activity.NotificationsActivty;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.DateHelperUtil;
@@ -157,24 +158,6 @@ public class SettingsFragment extends BaseFragment {
 
     @InjectView(R.id.twitter_value)
     FontTextView mTwitterField;
-
-    @InjectView(R.id.following_phone_notification)
-    ImageButton mFollowingPhoneIcon;
-
-    @InjectView(R.id.comment_phone_notification)
-    ImageButton mCommentPhoneIcon;
-
-    @InjectView(R.id.tagged_phone_notification)
-    ImageButton mTaggedPhoneIcon;
-
-    @InjectView(R.id.following_email_notification)
-    ImageButton mFollowingEmailIcon;
-
-    @InjectView(R.id.comment_email_notification)
-    ImageButton mCommentEmailIcon;
-
-    @InjectView(R.id.tagged_email_notification)
-    ImageButton mTaggedEmailIcon;
     //endregion
 
     @InjectView(R.id.delectable_version)
@@ -634,20 +617,6 @@ public class SettingsFragment extends BaseFragment {
     }
     //endregion
 
-    private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
-        mAccountController.updateSetting(key, setting);
-    }
-
-    public void onEventMainThread(UpdatedSettingEvent event) {
-        if (event.isSuccessful()) {
-            event.getKey();
-            mUserAccount.getAccountConfig().setSetting(event.getKey(), event.getSetting());
-        } else {
-            showToastError(event.getErrorMessage());
-        }
-        updateUI(); //ui reverts back to original state if error
-    }
-
     //region Profile Image Actions
     @OnClick(R.id.profile_image)
     void onProfileImageClick() {
@@ -752,42 +721,10 @@ public class SettingsFragment extends BaseFragment {
         updateUI(); //ui reverts back to original state if error
     }
 
-
-    @OnClick({R.id.following_phone_notification,
-            R.id.comment_phone_notification,
-            R.id.tagged_phone_notification,
-            R.id.following_email_notification,
-            R.id.comment_email_notification,
-            R.id.tagged_email_notification})
-    void onNotificationClick(View v) {
-
-        v.setSelected(!v.isSelected());
-
-        AccountConfig.Key key = null;
-        switch (v.getId()) {
-            case R.id.following_phone_notification:
-                key = AccountConfig.Key.PN_NEW_FOLLOWER;
-                break;
-            case R.id.comment_phone_notification:
-                key = AccountConfig.Key.PN_COMMENT_ON_OWN_WINE;
-                break;
-            case R.id.tagged_phone_notification:
-                key = AccountConfig.Key.PN_TAGGED;
-                break;
-            case R.id.following_email_notification:
-                //TODO following_email_notification
-                break;
-            case R.id.comment_email_notification:
-                //TODO comment_email_notification
-                break;
-            case R.id.tagged_email_notification:
-                //TODO tagged_email_notification
-                break;
-        }
-
-        if (key != null) {
-            updateAccountSettings(key, v.isSelected());
-        }
+    @OnClick(R.id.notifications_row)
+    protected void onNotificationsRowClick() {
+        String title = getString(R.string.settings_notifications);
+        startActivity(NotificationsActivty.newIntent(getActivity(), title));
     }
 
     @OnClick({R.id.send_feedback,
@@ -894,16 +831,6 @@ public class SettingsFragment extends BaseFragment {
             mTwitterField.setText(R.string.settings_facebook_connect);
             mTwitterField.setSelected(false);
         }
-
-        //notifications
-        boolean followingYouPhone = mUserAccount.getAccountConfig().getPnNewFollower();
-        boolean commentPhone = mUserAccount.getAccountConfig().getPnCommentOnOwnWine();
-        boolean taggedPhone = mUserAccount.getAccountConfig().getPnTagged();
-        mFollowingPhoneIcon.setSelected(followingYouPhone);
-        mCommentPhoneIcon.setSelected(commentPhone);
-        mTaggedPhoneIcon.setSelected(taggedPhone);
-
-        //TODO no fields for email notifications yet for API, implement when ready
     }
 
     private void updatePhoneNumberUI() {

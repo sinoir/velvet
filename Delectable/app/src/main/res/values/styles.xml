@@ -240,18 +240,14 @@
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
 
-    <style name="SettingsEmailNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:src">@drawable/ic_settings_email_notification</item>
-        <item name="android:contentDescription">@string/settings_cd_email_notifications</item>
-    </style>
 
-    <style name="SettingsPhoneNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_marginRight">
-            @dimen/settings_notification_icon_horizontal_spacing
-        </item>
-        <item name="android:src">@drawable/ic_settings_phone_notification</item>
-        <item name="android:contentDescription">@string/settings_cd_phone_notifications</item>
+    <style name="NotificationsSwitch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@null</item>
+
     </style>
 
     <style name="SettingsAboutCategoryRow">

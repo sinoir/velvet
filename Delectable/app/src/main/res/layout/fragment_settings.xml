@@ -123,66 +123,12 @@
         </RelativeLayout>
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/notification_category_label"
-            style="@style/SettingsCategoryLabel"
-            android:text="@string/settings_notification" />
+            android:id="@+id/notifications_row"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_notifications" />
 
-        <RelativeLayout style="@style/SettingsRow">
+        <View style="@style/SettingsAboutCategoryDivider" />
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/following_you"
-                style="@style/SettingsRowTextLabel"
-                android:text="@string/settings_following_you" />
-
-            <ImageButton
-                android:id="@+id/following_phone_notification"
-                style="@style/SettingsPhoneNotificationIcon"
-                android:layout_alignParentRight="true" />
-            <!--android:layout_toLeftOf="@+id/following_email_notification" -->
-            <!-- TODO uncomment layoutleft and set visibility visible when email notifs are ready -->
-            <ImageButton
-                android:id="@+id/following_email_notification"
-                style="@style/SettingsEmailNotificationIcon"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <RelativeLayout style="@style/SettingsRow">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/comment_on_your_wine"
-                style="@style/SettingsRowTextLabel"
-                android:text="@string/settings_comment_on_your_wine" />
-
-            <ImageButton
-                android:id="@+id/comment_phone_notification"
-                style="@style/SettingsPhoneNotificationIcon"
-                android:layout_alignParentRight="true" />
-            <!--android:layout_toLeftOf="@+id/comment_email_notification" -->
-            <!-- TODO uncomment layoutleft and set visibility visible when email notifs are ready -->
-            <ImageButton
-                android:id="@+id/comment_email_notification"
-                style="@style/SettingsEmailNotificationIcon"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <RelativeLayout style="@style/SettingsRow">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/tagged_on_a_wine"
-                style="@style/SettingsRowTextLabel"
-                android:text="@string/settings_tagged_on_a_wine" />
-
-            <ImageButton
-                android:id="@+id/tagged_phone_notification"
-                style="@style/SettingsPhoneNotificationIcon"
-                android:layout_alignParentRight="true" />
-            <!--android:layout_toLeftOf="@+id/tagged_email_notification" />-->
-            <!-- TODO uncomment layoutleft and set visibility visible when email notifs are ready -->
-            <ImageButton
-                android:id="@+id/tagged_email_notification"
-                style="@style/SettingsEmailNotificationIcon"
-                android:visibility="gone" />
-        </RelativeLayout>
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/about_category_label"
