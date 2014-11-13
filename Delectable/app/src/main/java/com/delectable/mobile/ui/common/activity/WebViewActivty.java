@@ -7,6 +7,7 @@ import com.delectable.mobile.ui.common.fragment.WebViewFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 public class WebViewActivty extends BaseActivity {
 
@@ -35,7 +36,7 @@ public class WebViewActivty extends BaseActivity {
         String title = args.getString(TITLE);
         setTitle(title);
 
-        setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_toolbar_fragment_container);
 
         String url = args.getString(URL);
 
@@ -48,5 +49,15 @@ public class WebViewActivty extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finishDeepLinkActivity();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
