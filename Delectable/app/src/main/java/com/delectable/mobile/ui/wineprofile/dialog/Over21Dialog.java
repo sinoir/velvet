@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.wineprofile.dialog;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class Over21Dialog extends DialogFragment {
+
+    public static final int RESULT_OVER21 = 1000;
 
     private static final String TAG = Over21Dialog.class.getSimpleName();
 
@@ -40,6 +43,10 @@ public class Over21Dialog extends DialogFragment {
     @OnClick(R.id.over21_button)
     public void onOver21Clicked() {
         UserInfo.setIsOver21(true);
+        Intent intent = new Intent();
+        getTargetFragment().onActivityResult(getTargetRequestCode(),
+                RESULT_OVER21,
+                intent);
         dismiss();
     }
 

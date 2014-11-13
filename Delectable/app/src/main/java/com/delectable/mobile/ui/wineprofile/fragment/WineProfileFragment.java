@@ -462,6 +462,10 @@ public class WineProfileFragment extends BaseFragment implements
                 startWinePurchaseFlow(wineId);
             }
         }
+
+        if (requestCode == REQUEST_AGE_DIALOG && resultCode == Over21Dialog.RESULT_OVER21) {
+            startWinePurchaseFlow(mSelectedWineVintage.getId());
+        }
     }
 
     private void startWinePurchaseFlow(String wineId) {
