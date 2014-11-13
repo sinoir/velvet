@@ -37,22 +37,34 @@
             <com.delectable.mobile.ui.common.widget.FontEditText
                 android:id="@+id/name"
                 style="@style/CheckoutEditText"
-                android:hint="@string/shippingaddress_first_lastname" />
+                android:hint="@string/shippingaddress_first_lastname"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/address1"
+                android:singleLine="true" />
 
             <com.delectable.mobile.ui.common.widget.FontEditText
                 android:id="@+id/address1"
                 style="@style/CheckoutEditText"
-                android:hint="@string/shippingaddress_line1" />
+                android:hint="@string/shippingaddress_line1"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/address2"
+                android:singleLine="true" />
 
             <com.delectable.mobile.ui.common.widget.FontEditText
                 android:id="@+id/address2"
                 style="@style/CheckoutEditText"
-                android:hint="@string/shippingaddress_line2" />
+                android:hint="@string/shippingaddress_line2"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/city"
+                android:singleLine="true" />
 
             <com.delectable.mobile.ui.common.widget.FontEditText
                 android:id="@+id/city"
                 style="@style/CheckoutEditText"
-                android:hint="@string/shippingaddress_city" />
+                android:hint="@string/shippingaddress_city"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/state"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,14 +75,20 @@
                     android:id="@+id/state"
                     style="@style/CheckoutEditText"
                     android:layout_weight="1"
-                    android:hint="@string/shippingaddress_state" />
+                    android:hint="@string/shippingaddress_state"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/zip_code"
+                    android:singleLine="true" />
 
                 <com.delectable.mobile.ui.common.widget.FontEditText
                     android:id="@+id/zip_code"
                     style="@style/CheckoutEditText"
                     android:layout_weight="1"
                     android:hint="@string/shippingaddress_zipcode"
-                    android:inputType="number" />
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:nextFocusForward="@+id/phone_number"
+                    android:singleLine="true" />
             </LinearLayout>
 
             <com.delectable.mobile.ui.common.widget.FontEditText
