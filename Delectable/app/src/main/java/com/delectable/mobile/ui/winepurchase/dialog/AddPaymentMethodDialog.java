@@ -56,8 +56,11 @@ public class AddPaymentMethodDialog extends DialogFragment
     @InjectView(R.id.credit_card_number)
     protected EditText mCreditCardNumber;
 
-    @InjectView(R.id.expiration)
-    protected EditText mExpiration;
+    @InjectView(R.id.expiration_month)
+    protected EditText mExpirationMonth;
+
+    @InjectView(R.id.expiration_year)
+    protected EditText mExpirationYear;
 
     @InjectView(R.id.cvc)
     protected EditText mCVC;
@@ -133,11 +136,10 @@ public class AddPaymentMethodDialog extends DialogFragment
 
     //region Helpers
     private boolean isFormValid() {
-        // TODO: Validate Form Properly
-        // TODO: Implement formatter
         if (isFieldEmpty(mName) ||
                 isFieldEmpty(mCreditCardNumber) ||
-                isFieldEmpty(mExpiration) ||
+                isFieldEmpty(mExpirationMonth) ||
+                isFieldEmpty(mExpirationYear) ||
                 isFieldEmpty(mCVC)) {
             return false;
         }
@@ -152,11 +154,8 @@ public class AddPaymentMethodDialog extends DialogFragment
     private PaymentMethod buildPaymentMethod() {
         PaymentMethod paymentMethod = new PaymentMethod();
 
-        String expiration = mExpiration.getText().toString();
-
-        // TODO: Split Month / Year Properly
-        String month = "04";
-        String year = "15";
+        String month = mExpirationMonth.getText().toString();
+        String year = mExpirationYear.getText().toString();
 
         String creditCardNumber = mCreditCardNumber.getText().toString().trim().replace(" ", "");
         paymentMethod.setExpMonth(month);
