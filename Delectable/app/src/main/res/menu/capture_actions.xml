@@ -6,4 +6,16 @@
         android:id="@+id/capture_action_recommend"
         android:title="@string/cap_action_recommend"></item>
 
+    <item
+        android:id="@+id/capture_action_edit"
+        android:title="@string/cap_action_edit"></item>
+
+    <item
+        android:id="@+id/capture_action_flag"
+        android:title="@string/cap_action_flag"></item>
+
+    <item
+        android:id="@+id/capture_action_remove"
+        android:title="@string/cap_action_remove"></item>
+
 </menu>

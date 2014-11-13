@@ -5,6 +5,7 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -123,10 +124,6 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private PopupMenu mPopupMenu;
 
-    private PopupMenu mPopupMenuOwn;
-
-    private PopupMenu mPopupMenuOther;
-
     public CaptureDetailsView(Context context) {
         this(context, null);
     }
@@ -163,12 +160,9 @@ public class CaptureDetailsView extends RelativeLayout {
             }
         };
 
-        mPopupMenuOwn = new PopupMenu(mContext, mMenuButton);
-        mPopupMenuOwn.inflate(R.menu.capture_actions_own);
-        mPopupMenuOwn.setOnMenuItemClickListener(popUpListener);
-        mPopupMenuOther = new PopupMenu(mContext, mMenuButton);
-        mPopupMenuOther.inflate(R.menu.capture_actions);
-        mPopupMenuOther.setOnMenuItemClickListener(popUpListener);
+        mPopupMenu = new PopupMenu(mContext, mMenuButton);
+        mPopupMenu.inflate(R.menu.capture_actions);
+        mPopupMenu.setOnMenuItemClickListener(popUpListener);
     }
 
     public void updateData(CaptureDetails captureData, boolean showComments) {
@@ -198,7 +192,23 @@ public class CaptureDetailsView extends RelativeLayout {
     private void setupPopUpMenu() {
         boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(mContext));
-        mPopupMenu = isOwnCapture ? mPopupMenuOwn : mPopupMenuOther;
+        CaptureState captureState = CaptureState.getState(mCaptureData);
+        boolean isUnidentified =
+                captureState == CaptureState.UNIDENTIFIED
+                        || captureState == CaptureState.IMPOSSIBLED;
+
+        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
+        if (isUnidentified) {
+            actionRecommend.setVisible(false);
+        }
+        if (!isOwnCapture) {
+            actionEdit.setVisible(false);
+            actionFlag.setVisible(false);
+            actionRemove.setVisible(false);
+        }
     }
 
     private void setupTopWineDetails() {
