@@ -12,7 +12,6 @@ import com.delectable.mobile.ui.BaseFragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,17 +93,8 @@ public class NotificationsFragment extends BaseFragment {
             R.id.friend_joined_delectable_switch
     })
     protected void onSwitchChanged(SwitchCompat switchCompat) {
-        Log.d(TAG, "switchClicked");
-        Log.d(TAG, "switchChecked?: " + switchCompat.isChecked());
-
         AccountConfig.Key key = VIEW_KEY_MAP.get(switchCompat.getId());
-        if (key != null) {
-            updateAccountSettings(key, switchCompat.isChecked());
-        }
-    }
-
-    private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
-        mAccountController.updateSetting(key, setting);
+        mAccountController.updateSetting(key, switchCompat.isChecked());
     }
 
     public void onEventMainThread(UpdatedSettingEvent event) {
@@ -113,6 +103,8 @@ public class NotificationsFragment extends BaseFragment {
         }
 
         mAccount.getAccountConfig().setSetting(event.getKey(), event.getSetting());
+        UserInfo.setAccountPrivate(mAccount);
+
     }
 }
 
