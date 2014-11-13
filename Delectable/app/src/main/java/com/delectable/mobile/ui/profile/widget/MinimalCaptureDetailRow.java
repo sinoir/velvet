@@ -96,10 +96,6 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     private PopupMenu mPopupMenu;
 
-    private PopupMenu mPopupMenuOwn;
-
-    private PopupMenu mPopupMenuOther;
-
     public MinimalCaptureDetailRow(Context context) {
         this(context, null);
     }
@@ -136,12 +132,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
             }
         };
 
-        mPopupMenuOwn = new PopupMenu(context, mOverflowButton);
-        mPopupMenuOwn.inflate(R.menu.capture_actions_own);
-        mPopupMenuOwn.setOnMenuItemClickListener(popUpListener);
-        mPopupMenuOther = new PopupMenu(context, mOverflowButton);
-        mPopupMenuOther.inflate(R.menu.capture_actions);
-        mPopupMenuOther.setOnMenuItemClickListener(popUpListener);
+        mPopupMenu = new PopupMenu(context, mOverflowButton);
+        mPopupMenu.inflate(R.menu.capture_actions);
+        mPopupMenu.setOnMenuItemClickListener(popUpListener);
     }
 
     public void updateData(CaptureDetails capture, String userId) {
@@ -154,13 +147,35 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         String capturerId = capture.getCapturerParticipant().getId();
         mUserIsCapturer = mSelectedUserId.equals(capturerId);
 
-        mPopupMenu = mIsLoggedInUsersCapture ? mPopupMenuOwn : mPopupMenuOther;
+        setupPopUpMenu();
 
         updateWineInfo();
         updateUserRating();
         updateCommentsAndTags();
         // Must be configured last
         updateButtonDisplay();
+    }
+
+    private void setupPopUpMenu() {
+        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
+                .equals(UserInfo.getUserId(getContext()));
+        CaptureState captureState = CaptureState.getState(mCaptureData);
+        boolean isUnidentified =
+                captureState == CaptureState.UNIDENTIFIED
+                        || captureState == CaptureState.IMPOSSIBLED;
+
+        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
+        if (isUnidentified) {
+            actionRecommend.setVisible(false);
+        }
+        if (!isOwnCapture) {
+            actionEdit.setVisible(false);
+            actionFlag.setVisible(false);
+            actionRemove.setVisible(false);
+        }
     }
 
     private void updateWineInfo() {
