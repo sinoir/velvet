@@ -99,6 +99,14 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     private PopupMenu mPopupMenu;
 
+    private MenuItem mMenuActionRecommend;
+
+    private MenuItem mMenuActionEdit;
+
+    private MenuItem mMenuActionFlag;
+
+    private MenuItem mMenuActionRemove;
+
     public MinimalCaptureDetailRow(Context context) {
         this(context, null);
     }
@@ -138,6 +146,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mPopupMenu = new PopupMenu(context, mOverflowButton);
         mPopupMenu.inflate(R.menu.capture_actions);
         mPopupMenu.setOnMenuItemClickListener(popUpListener);
+        mMenuActionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        mMenuActionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        mMenuActionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        mMenuActionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
     }
 
     public void updateData(CaptureDetails capture, String userId) {
@@ -150,35 +162,69 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         String capturerId = capture.getCapturerParticipant().getId();
         mUserIsCapturer = mSelectedUserId.equals(capturerId);
 
-        setupPopUpMenu();
 
         updateWineInfo();
         updateUserRating();
         updateCommentsAndTags();
-        // Must be configured last
+        // Must be configured last, depending on mHasRating set in updateUserRating
+        setupPopUpMenu();
         updateButtonDisplay();
     }
 
     private void setupPopUpMenu() {
-        boolean isOwnCapture = mCaptureDetails.getCapturerParticipant().getId()
+        //first hide entire menu
+        mMenuActionRecommend.setVisible(false);
+        mMenuActionEdit.setVisible(false);
+        mMenuActionFlag.setVisible(false);
+        mMenuActionRemove.setVisible(false);
+
+        boolean loggedInUserIsCapturer = mCaptureDetails.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(getContext()));
         CaptureState captureState = CaptureState.getState(mCaptureDetails);
-        boolean isUnidentified =
-                captureState == CaptureState.UNIDENTIFIED
-                        || captureState == CaptureState.IMPOSSIBLED;
 
-        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
-        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
-        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
-        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
-        if (isUnidentified) {
-            actionRecommend.setVisible(false);
+        //handle viewing other people captures first
+        if (!mIsLoggedInUsersCapture) {
+            mMenuActionRecommend.setVisible(true);
+            return;
         }
-        if (!isOwnCapture) {
-            actionEdit.setVisible(false);
-            actionFlag.setVisible(false);
-            actionRemove.setVisible(false);
+
+        //viewing own captures from here down
+
+        //viewing own captures where we are capturer
+        if (loggedInUserIsCapturer) {
+            if (CaptureState.UNIDENTIFIED == captureState) {
+                mMenuActionEdit.setVisible(true);
+                mMenuActionRemove.setVisible(true);
+                return;
+            }
+
+            if (CaptureState.IMPOSSIBLED == captureState) {
+                mMenuActionEdit.setVisible(true);
+                mMenuActionRemove.setVisible(true);
+                mMenuActionFlag.setVisible(true);
+                return;
+            }
+
+            //for unverified or identified captures show everything
+            mMenuActionRecommend.setVisible(true);
+            mMenuActionEdit.setVisible(true);
+            mMenuActionFlag.setVisible(true);
+            mMenuActionRemove.setVisible(true);
+            return;
         }
+
+        //from here down, viewing own captures where we're tagged in
+        if (!mHasRating) { //and there was no rating
+            mMenuActionRecommend.setVisible(true);
+            mMenuActionFlag.setVisible(true);
+            return;
+        }
+
+        //we're tagged and rated already
+        mMenuActionRecommend.setVisible(true);
+        mMenuActionEdit.setVisible(true);
+        mMenuActionFlag.setVisible(true);
+        mMenuActionRemove.setVisible(true);
     }
 
     private void updateWineInfo() {
