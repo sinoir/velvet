@@ -104,6 +104,7 @@ import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
+import com.delectable.mobile.ui.settings.fragment.NotificationsFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
@@ -134,6 +135,7 @@ import de.greenrobot.event.EventBus;
                 FollowerFeedTabFragment.class,
                 TrendingTabFragment.class,
                 SettingsFragment.class,
+                NotificationsFragment.class,
                 FollowExpertsTabFragment.class,
                 FollowContactsTabFragment.class,
                 FollowFacebookFriendsTabFragment.class,

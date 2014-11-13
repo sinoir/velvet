@@ -311,18 +311,23 @@
     <string name="settings_facebook_connected">Connected</string>
     <string name="settings_twitter_label">Twitter</string>
     <string name="settings_twitter_hint">\@twitter</string>
-    <string name="settings_notification">notification</string>
-    <string name="settings_following_you">Following you</string>
-    <string name="settings_comment_on_your_wine">Comment on your wine</string>
-    <string name="settings_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="settings_notifications">Notifications</string>
     <string name="settings_about">about</string>
     <string name="settings_feedback">Send us feedback</string>
     <string name="settings_terms_of_use">Terms of use</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_sign_out">Sign out</string>
     <string name="settings_delectable_version">Delectable %1$s</string>
-    <string name="settings_cd_phone_notifications">phone notifications</string>
-    <string name="settings_cd_email_notifications">email notifications</string>
+    <!--notifications-->
+    <string name="notifications_wine_identification">Wine identification</string>
+    <string name="notifications_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="notifications_comment_on_your_wine">Comment on your wine</string>
+    <string name="notifications_respond_to_comment">Respond to comment</string>
+    <string name="notifications_like_your_wine">Like your wine</string>
+    <string name="notifications_following_you">Following you</string>
+    <string name="notifications_friend_joined_delectable">Friend joined Delectable</string>
+
+
     <!-- contact email strings -->
     <string name="settings_contact_email_intent_dialog_title">Send mail...</string>
     <string name="settings_contact_email">feedback@delectable.com</string>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d_white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/d_white"
+        android:orientation="vertical">
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/wine_identification_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_wine_identification" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/wine_identification_switch"
+                style="@style/NotificationsSwitch" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/tagged_on_a_wine_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_tagged_on_a_wine" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/tagged_on_a_wine_switch"
+                style="@style/NotificationsSwitch"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/comment_on_your_wine_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_comment_on_your_wine" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/comment_on_your_wine_switch"
+                style="@style/NotificationsSwitch"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/respond_to_comment_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_respond_to_comment" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/respond_to_comment_switch"
+                style="@style/NotificationsSwitch"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/like_your_wine_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_like_your_wine" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/like_your_wine_switch"
+                style="@style/NotificationsSwitch"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/following_you_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_following_you" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/following_you_switch"
+                style="@style/NotificationsSwitch" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/SettingsRow">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/friend_joined_delectable_label"
+                style="@style/SettingsRowTextLabel"
+                android:text="@string/notifications_friend_joined_delectable" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/friend_joined_delectable_switch"
+                style="@style/NotificationsSwitch"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</ScrollView>
