@@ -8,6 +8,7 @@ import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.events.accounts.FetchedPaymentMethodsEvent;
 import com.delectable.mobile.api.events.accounts.FetchedShippingAddressesEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
+import com.delectable.mobile.api.events.wines.PurchasedWineEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
@@ -98,6 +99,9 @@ public class WineCheckoutFragment extends BaseFragment {
     @InjectView(R.id.confirm_button)
     protected View mConfirmButton;
 
+    @InjectView(R.id.progress_bar)
+    protected View mProgressBar;
+
     private String mVintageId;
 
     private CheckoutData mData;
@@ -155,6 +159,16 @@ public class WineCheckoutFragment extends BaseFragment {
             loadPaymentMethod(
                     data.getStringExtra(ChoosePaymentMethodDialog.EXTRAS_PAYMENT_METHOD_ID));
         }
+    }
+
+    private void startPurchaseWine() {
+        showLoader();
+        mBaseWineController.purchaseWine(mData.getWineId(), mData.getPurchaseOfferId(),
+                mData.getPaymentMethodId(), mData.getShippingAddressId(), mData.getQuantity(), "");
+    }
+
+    private void showConfirmation() {
+        replaceWithNewFragment(ConfirmationFragment.newInstance());
     }
 
     //region Update UI methods
@@ -262,6 +276,15 @@ public class WineCheckoutFragment extends BaseFragment {
         mCreditAppliedLabel.setVisibility(View.GONE);
         mAddPromoCode.setVisibility(View.VISIBLE);
     }
+
+    private void showLoader() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoader() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
     //endregion
 
     //region Load Local Data
@@ -305,6 +328,16 @@ public class WineCheckoutFragment extends BaseFragment {
     //endregion
 
     //region EventBus
+    public void onEventMainThread(PurchasedWineEvent event) {
+        hideLoader();
+
+        if (event.isSuccessful()) {
+            showConfirmation();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+    }
+
     public void onEventMainThread(FetchedWineSourceEvent event) {
         if (!mVintageId.equalsIgnoreCase(event.getWineId())) {
             return;
@@ -335,7 +368,6 @@ public class WineCheckoutFragment extends BaseFragment {
     //endregion
 
     //region onClicks
-
     @OnClick(R.id.shipping_address_container)
     public void onShippingAddressClicked() {
         if (mData.getSelectedShippingAddress() == null) {
@@ -373,9 +405,10 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @OnClick(R.id.confirm_button)
     public void onConfirmClicked() {
-        // TODO: Implement Confirm / Pay
+        if (mData.isDataValid()) {
+            startPurchaseWine();
+        }
     }
-
     //endregion
 
     //region Dialog Helpers

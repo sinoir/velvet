@@ -152,5 +152,37 @@ public class CheckoutData {
             }
         }
     }
+
+    public boolean isDataValid() {
+        if (mSelectedPaymentMethod == null) {
+            return false;
+        }
+        if (mSelectedShippingAddress == null) {
+            return false;
+        }
+        if (mCurrentPrice == null) {
+            return false;
+        }
+        if (mWineProfileMinimal == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public String getWineId() {
+        return mWineProfileMinimal.getId();
+    }
+
+    public String getPurchaseOfferId() {
+        return mPurchaseOffer.getId();
+    }
+
+    public String getPaymentMethodId() {
+        return mSelectedPaymentMethod.getId();
+    }
+
+    public String getShippingAddressId() {
+        return mSelectedShippingAddress.getId();
+    }
     //endregion
 }
