@@ -91,7 +91,8 @@ public class WineBannerView extends RelativeLayout {
     public void updateData(CaptureDetails captureDetails) {
         String wineImageUrl = captureDetails.getPhoto().getUrl();
         String producerName = captureDetails.getDisplayTitle();
-        String vintage = captureDetails.getWineProfile().getVintage();
+        WineProfileMinimal wineProfile = captureDetails.getWineProfile();
+        String vintage = (wineProfile != null ? wineProfile.getVintage() : null);
         String wineName = captureDetails.getDisplayDescription();
         if (vintage != null && !vintage.equals("NV")) {
             wineName += " " + vintage;

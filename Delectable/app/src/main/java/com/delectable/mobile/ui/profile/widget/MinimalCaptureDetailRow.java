@@ -38,6 +38,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
 
+    @InjectView(R.id.private_indicator)
+    protected View mPrivateIndicator;
+
     @InjectView(R.id.producer_name)
     protected FontTextView mProducerName;
 
@@ -80,7 +83,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.overflow_button)
     protected ImageView mOverflowButton;
 
-    private CaptureDetails mCaptureData;
+    private CaptureDetails mCaptureDetails;
 
     private String mSelectedUserId;
 
@@ -116,16 +119,16 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.capture_action_recommend:
-                        mCaptureDetailsActionsHandler.shareCapture(mCaptureData);
+                        mCaptureDetailsActionsHandler.shareCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_edit:
-                        mCaptureDetailsActionsHandler.editCapture(mCaptureData);
+                        mCaptureDetailsActionsHandler.editCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_flag:
-                        mCaptureDetailsActionsHandler.flagCapture(mCaptureData);
+                        mCaptureDetailsActionsHandler.flagCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_remove:
-                        mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureData);
+                        mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureDetails);
                         return true;
                 }
                 return false;
@@ -140,7 +143,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     public void updateData(CaptureDetails capture, String userId) {
         mSelectedUserId = userId;
         mIsLoggedInUsersCapture = mSelectedUserId.equals(UserInfo.getUserId(getContext()));
-        mCaptureData = capture;
+        mCaptureDetails = capture;
         mHasComment = false;
         mHasRating = false;
 
@@ -157,9 +160,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     private void setupPopUpMenu() {
-        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
+        boolean isOwnCapture = mCaptureDetails.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(getContext()));
-        CaptureState captureState = CaptureState.getState(mCaptureData);
+        CaptureState captureState = CaptureState.getState(mCaptureDetails);
         boolean isUnidentified =
                 captureState == CaptureState.UNIDENTIFIED
                         || captureState == CaptureState.IMPOSSIBLED;
@@ -184,20 +187,20 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         String captureName = null;
         String vintage = null;
 
-        CaptureState state = CaptureState.getState(mCaptureData);
+        CaptureState state = CaptureState.getState(mCaptureDetails);
         switch (state) {
             case IDENTIFIED:
-                captureTitle = mCaptureData.getWineProfile().getProducerName();
-                captureName = mCaptureData.getWineProfile().getName();
-                vintage = mCaptureData.getWineProfile().getVintage();
+                captureTitle = mCaptureDetails.getWineProfile().getProducerName();
+                captureName = mCaptureDetails.getWineProfile().getName();
+                vintage = mCaptureDetails.getWineProfile().getVintage();
                 break;
             case IMPOSSIBLED:
                 captureTitle = "";
-                captureName = mCaptureData.getTranscriptionErrorMessage();
+                captureName = mCaptureDetails.getTranscriptionErrorMessage();
                 break;
             case UNVERIFIED:
-                captureTitle = mCaptureData.getBaseWine().getProducerName();
-                captureName = mCaptureData.getBaseWine().getName();
+                captureTitle = mCaptureDetails.getBaseWine().getProducerName();
+                captureName = mCaptureDetails.getBaseWine().getName();
                 break;
             case UNIDENTIFIED:
             default:
@@ -208,15 +211,18 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (vintage != null && !vintage.equals("NV")) {
             captureName += " " + vintage;
         }
-        String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
+        String captureImageUrl = mCaptureDetails.getPhoto().getBestThumb();
 
         mProducerName.setText(captureTitle.toLowerCase());
         mWineName.setText(captureName);
         ImageLoaderUtil.loadImageIntoView(getContext(), captureImageUrl, mWineImage);
+
+        boolean isPrivate = mCaptureDetails.getPrivate();
+        mPrivateIndicator.setVisibility(isPrivate ? View.VISIBLE : View.GONE);
     }
 
     private void updateUserRating() {
-        float captureRating = mCaptureData.getRatingForId(mSelectedUserId);
+        float captureRating = mCaptureDetails.getRatingForId(mSelectedUserId);
         if (captureRating > 0.0f) {
             mRating.setVisibility(View.VISIBLE);
             mRating.setRatingOf40(captureRating);
@@ -228,7 +234,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     private void updateCommentsAndTags() {
-        CharSequence message = getDisplayMessage(mCaptureData, mSelectedUserId);
+        CharSequence message = getDisplayMessage(mCaptureDetails, mSelectedUserId);
         mCommentText.setText(message);
         mHasComment = true;
     }
@@ -372,8 +378,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
         //setup likes/comments counts
-        int likes = mCaptureData.getLikesCount();
-        int comments = mCaptureData.getComments().size();
+        int likes = mCaptureDetails.getLikesCount();
+        int comments = mCaptureDetails.getComments().size();
         mLikesCount.setText(
                 getResources().getQuantityString(R.plurals.likes_count, likes, likes));
         mCommentsCount.setText(
@@ -394,7 +400,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         }
 
         //show like and comment counts if at least one of them is populated
-        if (mCaptureData.getLikesCount() > 0 || !mCaptureData.getComments().isEmpty()) {
+        if (mCaptureDetails.getLikesCount() > 0 || !mCaptureDetails.getComments().isEmpty()) {
             mCountTextsContainer.setVisibility(View.VISIBLE);
         }
     }
@@ -403,42 +409,42 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @OnClick({R.id.wine_image, R.id.wine_name, R.id.producer_name})
     protected void onWineDetailsClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.launchWineProfile(mCaptureData);
+            mCaptureDetailsActionsHandler.launchWineProfile(mCaptureDetails);
         }
     }
 
     @OnClick({R.id.likes_count, R.id.comments_count})
     protected void onLikesCommentsCountClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.launchCaptureDetails(mCaptureData);
+            mCaptureDetailsActionsHandler.launchCaptureDetails(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.like_button)
     protected void onLikeClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureData);
+            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.comment_button)
     protected void onCommentButtonClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureData);
+            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.add_rating_textview)
     protected void onAddRatingClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureData);
+            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.remove_textview)
     protected void onRemoveClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureData);
+            mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureDetails);
         }
     }
 

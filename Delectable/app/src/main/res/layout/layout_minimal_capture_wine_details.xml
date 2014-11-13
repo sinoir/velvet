@@ -8,21 +8,37 @@
     android:layout_height="wrap_content"
     android:visibility="visible">
 
-    <ImageView
-        android:id="@+id/wine_image"
+    <FrameLayout
+        android:id="@+id/wine_image_container"
         android:layout_width="@dimen/cap_list_row_image_size"
-        android:layout_marginRight="@dimen/spacing_16"
         android:layout_height="@dimen/cap_list_row_image_size"
+        android:layout_marginRight="@dimen/spacing_16"
         android:layout_marginBottom="@dimen/spacing_8"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true">
+
+        <ImageView
+            android:id="@+id/wine_image"
+            android:layout_width="@dimen/cap_list_row_image_size"
+            android:layout_height="@dimen/cap_list_row_image_size" />
+
+        <ImageView
+            android:id="@+id/private_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/spacing_4"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/producer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/wine_image"
+        android:layout_alignTop="@+id/wine_image_container"
         android:layout_toLeftOf="@+id/rating_textview"
-        android:layout_toRightOf="@+id/wine_image"
+        android:layout_toRightOf="@+id/wine_image_container"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="LA RAME"
