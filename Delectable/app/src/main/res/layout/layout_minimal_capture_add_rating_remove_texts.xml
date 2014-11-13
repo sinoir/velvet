@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical|left"
-        android:text="ADD YOUR RATING"
+        android:text="@string/minimal_capture_add_rating"
         android:textColor="@color/chestnut_to_chestnut_pressed"
         android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium_sc" />
@@ -24,7 +24,7 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/add_rating_textview"
         android:gravity="center_vertical|left"
-        android:text="REMOVE"
+        android:text="@string/minimal_capture_remove"
         android:textColor="@color/medium_gray_to_dark_gray"
         android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium_sc" />
