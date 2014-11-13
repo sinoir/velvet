@@ -11,6 +11,7 @@ import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -52,6 +53,21 @@ public class TaggedPeopleFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        enableBackButton(true);
+        int numberOfTaggedPeople = mCaptureDetails.getRegisteredParticipants() != null
+                ? mCaptureDetails.getRegisteredParticipants().size()
+                : 0;
+        String capturerName = mCaptureDetails.getCapturerParticipant().getFname();
+        String title = getResources()
+                .getQuantityString(R.plurals.cap_feed_tagged_count, numberOfTaggedPeople,
+                        numberOfTaggedPeople, capturerName);
+        setActionBarSubtitle(title);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
@@ -68,14 +84,6 @@ public class TaggedPeopleFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_people, container, false);
         ButterKnife.inject(this, view);
-
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        int numberOfTaggedPeople = mCaptureDetails.getRegisteredParticipants() != null
-                ? mCaptureDetails.getRegisteredParticipants().size()
-                : 0;
-        String title = getResources()
-                .getString(R.string.cap_feed_tagged_count, numberOfTaggedPeople);
-        setActionBarTitle(title);
 
         mAdapter = new TaggedPeopleAdapter(mCaptureDetails);
         mListView.setAdapter(mAdapter);

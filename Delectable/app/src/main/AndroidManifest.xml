@@ -34,8 +34,8 @@
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
-            <intent-filter>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,12 +45,11 @@
         <activity
             android:name="com.delectable.mobile.ui.registration.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.navigation.activity.NavActivity"
-            android:label="@string/app_name"
+            android:label=""
             android:screenOrientation="portrait" />
 
         <activity
@@ -61,9 +60,8 @@
         <activity
             android:name="com.delectable.mobile.ui.profile.activity.UserProfileActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme.NoActionBar">
-            <intent-filter android:label="">
+            android:screenOrientation="portrait">
+        <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -82,9 +80,8 @@
         <activity
             android:name="com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme">
-            <intent-filter android:label="">
+            android:screenOrientation="portrait">
+        <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -93,11 +90,9 @@
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme.NoActionBar">
-            <intent-filter android:label="">
+            android:screenOrientation="portrait">
+        <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "delectable://capture” -->
@@ -111,29 +106,24 @@
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.LikingPeopleActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/DelectableTheme.NoActionBar">
-            <intent-filter android:label="">
+            android:screenOrientation="portrait">
+        <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "delectable://base_wine” -->
@@ -159,6 +149,16 @@
                     android:scheme="delectable" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        
+        <activity
+            android:name="com.delectable.mobile.ui.common.activity.WebViewActivty"
+            android:label=""
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.facebook.LoginActivity"

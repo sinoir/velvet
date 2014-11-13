@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:headerDividersEnabled="false"
-        android:animateLayoutChanges="true"
         android:visibility="gone"
         tools:context="com.delectable.mobile.ui.profile.fragment.UserProfileFragment" />
+    <!--android:animateLayoutChanges="true"-->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/empty_state_layout"
@@ -25,7 +25,7 @@
         <com.delectable.mobile.ui.profile.widget.ProfileHeaderView
             android:id="@+id/empty_view_header"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="356dp"
             android:background="@color/d_off_white" />
 
         <ProgressBar
@@ -46,6 +46,10 @@
             android:padding="@dimen/spacing_32"
             android:gravity="center" />
     </RelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle.Floating" />
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/camera_button"

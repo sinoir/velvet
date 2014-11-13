@@ -43,7 +43,7 @@ public class FollowersFollowingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_toolbar_fragment_container);
         Bundle args = getIntent().getExtras();
         if (args == null) {
             throw new RuntimeException(

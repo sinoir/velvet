@@ -9,6 +9,7 @@ import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout;
+import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import butterknife.ButterKnife;
@@ -42,7 +44,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
     private CaptureDetailsAdapter mAdapter;
 
-    private Listing<CaptureDetails> mCapturesListing;
+    private Listing<CaptureDetails, String> mCapturesListing;
 
     private boolean mFetching;
 
@@ -80,6 +82,13 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         mRefreshContainer.setListView(mListView);
         mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
 
+        // consider ActionBar and TabStrip height for top padding
+        mRefreshContainer.setProgressViewOffset(false, mListView.getPaddingTop(),
+                mListView.getPaddingTop() * 2);
+        int topPadding = mListView.getPaddingTop() + getResources()
+                .getDimensionPixelSize(R.dimen.tab_height);
+        mListView.setPadding(0, topPadding, 0, 0);
+
         mListView.setAdapter(mAdapter);
 
         //pull to refresh setup
@@ -91,7 +100,22 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         });
 
         // Setup Floating Camera Button
-        mCameraButton.attachToListView(mListView);
+        final HideableActionBarScrollListener hideableActionBarScrollListener
+                = new HideableActionBarScrollListener(this);
+
+        // Setup Floating Camera Button
+        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                hideableActionBarScrollListener
+                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+            }
+        };
+        mCameraButton.attachToListView(mListView, fabOnScrollListener);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,15 +137,15 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     private void loadLocalData() {
         mRefreshContainer.setRefreshing(true);
         mFetching = true;
-        new SafeAsyncTask<Listing<CaptureDetails>>(this) {
+        new SafeAsyncTask<Listing<CaptureDetails, String>>(this) {
             @Override
-            protected Listing<CaptureDetails> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureDetails, String> safeDoInBackground(Void[] params) {
                 Log.d(TAG, "loadLocalData:doInBg");
                 return getCachedFeed();
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureDetails> listing) {
+            protected void safeOnPostExecute(Listing<CaptureDetails, String> listing) {
                 Log.d(TAG, "loadLocalData:returnedFromCache");
                 if (listing != null) {
                     Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
@@ -143,9 +167,9 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected abstract Listing<CaptureDetails> getCachedFeed();
+    protected abstract Listing<CaptureDetails, String> getCachedFeed();
 
-    protected abstract void fetchCaptures(Listing<CaptureDetails> listing,
+    protected abstract void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh);
 
     private void refreshData() {
@@ -163,7 +187,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
      * The subclass will need to intercept the event and verify that the event was spawned from a
      * request the subclass.
      */
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());
         if (event.getListing() != null) {
             Log.d(TAG, "UpdatedListingEvent:etag:" + event.getListing().getETag());

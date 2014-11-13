@@ -108,10 +108,12 @@ public class BaseWine extends BaseWineMinimal implements Parcelable, Ratingsable
         }
 
         //region path comes back from API in macro->micro order, we reverse it to make our paramaterized string
-        Collections.reverse(region_path);
         String[] regions = new String[region_path.size()];
-        for (int i = 0; i < region_path.size(); i++) {
-            regions[i] = region_path.get(i).getName();
+        int last = region_path.size()-1;
+        int position = 0; //count forward to populate new array
+        for (int i = last; i >= 0; i--) {
+            regions[position] = region_path.get(i).getName();
+            position++;
         }
 
         int stringResource = R.string.wine_profile_region_path_1_node;

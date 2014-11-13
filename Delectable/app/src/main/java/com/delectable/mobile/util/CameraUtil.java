@@ -243,25 +243,28 @@ public class CameraUtil {
         Bitmap bitmap = BitmapFactory.decodeStream(App.getInstance().getContentResolver().openInputStream(imageUri));
 
         int rotationDegrees = getExifRotationInDegrees(imageUri);
-        int cropSize = (bitmap.getWidth() > bitmap.getHeight())
-                ? bitmap.getHeight()
-                : bitmap.getWidth();
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        boolean isPortrait = height > width;
+
+        int shorterEdge = (isPortrait) ? width : height;
+        int longerEdge = (isPortrait) ? height : width;
+        int offset = (longerEdge - shorterEdge) / 2;
 
         Matrix matrix = new Matrix();
         matrix.setRotate(rotationDegrees);
 
         if (bitmap.getHeight() > maxSize) {
-            float scaleFactor = maxSize / (float) cropSize;
+            float scaleFactor = maxSize / (float) shorterEdge;
             matrix.postScale(scaleFactor, scaleFactor);
         }
 
-        // TODO center crop
         Bitmap finalBitmap = Bitmap.createBitmap(
                 bitmap,
-                0,
-                0,
-                cropSize,
-                cropSize,
+                isPortrait ? 0 : offset,
+                isPortrait ? offset : 0,
+                shorterEdge,
+                shorterEdge,
                 matrix,
                 true);
 

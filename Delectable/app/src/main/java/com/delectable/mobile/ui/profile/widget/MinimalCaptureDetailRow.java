@@ -5,6 +5,7 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -17,8 +18,10 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,6 +32,8 @@ import butterknife.OnClick;
 public class MinimalCaptureDetailRow extends RelativeLayout {
 
     private static final String TAG = MinimalCaptureDetailRow.class.getSimpleName();
+
+    private final ForegroundColorSpan DARK_GRAY_SPAN;
 
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
@@ -89,7 +94,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     private CaptureDetailsView.CaptureActionsHandler mCaptureDetailsActionsHandler;
 
-    private final ForegroundColorSpan DARK_GRAY_SPAN;
+    private PopupMenu mPopupMenu;
 
     public MinimalCaptureDetailRow(Context context) {
         this(context, null);
@@ -105,6 +110,31 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         DARK_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_dark_gray));
         View.inflate(context, R.layout.row_minimal_capture_detail, this);
         ButterKnife.inject(this);
+
+        PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.capture_action_recommend:
+                        mCaptureDetailsActionsHandler.shareCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_edit:
+                        mCaptureDetailsActionsHandler.editCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_flag:
+                        mCaptureDetailsActionsHandler.flagCapture(mCaptureData);
+                        return true;
+                    case R.id.capture_action_remove:
+                        mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureData);
+                        return true;
+                }
+                return false;
+            }
+        };
+
+        mPopupMenu = new PopupMenu(context, mOverflowButton);
+        mPopupMenu.inflate(R.menu.capture_actions);
+        mPopupMenu.setOnMenuItemClickListener(popUpListener);
     }
 
     public void updateData(CaptureDetails capture, String userId) {
@@ -117,6 +147,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         String capturerId = capture.getCapturerParticipant().getId();
         mUserIsCapturer = mSelectedUserId.equals(capturerId);
 
+        setupPopUpMenu();
+
         updateWineInfo();
         updateUserRating();
         updateCommentsAndTags();
@@ -124,12 +156,56 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         updateButtonDisplay();
     }
 
+    private void setupPopUpMenu() {
+        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
+                .equals(UserInfo.getUserId(getContext()));
+        CaptureState captureState = CaptureState.getState(mCaptureData);
+        boolean isUnidentified =
+                captureState == CaptureState.UNIDENTIFIED
+                        || captureState == CaptureState.IMPOSSIBLED;
+
+        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
+        if (isUnidentified) {
+            actionRecommend.setVisible(false);
+        }
+        if (!isOwnCapture) {
+            actionEdit.setVisible(false);
+            actionFlag.setVisible(false);
+            actionRemove.setVisible(false);
+        }
+    }
+
     private void updateWineInfo() {
-        String captureTitle = mCaptureData.getDisplayTitle();
-        String captureName = mCaptureData.getDisplayDescription();
+
+        String captureTitle;
+        String captureName;
+
+        CaptureState state = CaptureState.getState(mCaptureData);
+        switch (state) {
+            case IDENTIFIED:
+                captureTitle = mCaptureData.getWineProfile().getProducerName();
+                captureName = mCaptureData.getWineProfile().getName();
+                break;
+            case IMPOSSIBLED:
+                captureTitle = "";
+                captureName = mCaptureData.getTranscriptionErrorMessage();
+                break;
+            case UNVERIFIED:
+                captureTitle = mCaptureData.getBaseWine().getProducerName();
+                captureName = mCaptureData.getBaseWine().getName();
+                break;
+            case UNIDENTIFIED:
+            default:
+                captureTitle = getResources().getString(R.string.user_captures_id_in_progress);
+                captureName = getResources().getString(R.string.user_captures_check_back);
+                break;
+        }
         String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
 
-        mProducerName.setText(captureTitle);
+        mProducerName.setText(captureTitle.toLowerCase());
         mWineName.setText(captureName);
         ImageLoaderUtil.loadImageIntoView(getContext(), captureImageUrl, mWineImage);
     }
@@ -223,7 +299,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (userComment != null) {
             SpannableString span = new SpannableString(userComment);
             span.setSpan(DARK_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            return TextUtils.concat(span, " - ", message);
+            return TextUtils.concat(span, " — ", message);
         }
 
         //we can straight return the message built above since these are user's captures
@@ -364,7 +440,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @OnClick(R.id.overflow_button)
     protected void onOverflowClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            //TODO implement
+            mPopupMenu.show();
         }
     }
 

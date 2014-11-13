@@ -12,6 +12,7 @@ import com.delectable.mobile.ui.tagpeople.widget.TagPeopleAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,8 @@ public class TagPeopleFragment extends BaseFragment {
     protected TextView mWithTextView;
 
     /**
-     * This view is a child of the empty view container, and covers the progress bar when it's set to visible.
+     * This view is a child of the empty view container, and covers the progress bar when it's set
+     * to visible.
      */
     @InjectView(R.id.empty_text_view)
     protected TextView mEmptyTextView;
@@ -92,13 +94,19 @@ public class TagPeopleFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        setActionBarTitle((String) null);
+        setActionBarSubtitle(getString(R.string.capture_submit_drinking_with_who_text));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tag_people, container, false);
         ButterKnife.inject(this, view);
-
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mListView.setAdapter(mAdapter);
 

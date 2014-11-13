@@ -46,11 +46,11 @@ public class FetchActivityFeedJob extends BaseJob {
         String endpoint = "/accounts/activity_feed";
         ListingRequest request = new ListingRequest(mContext, mETag, null, mBefore, mAfter,
                 mIsPullToRefresh);
-        Type type = new TypeToken<ListingResponse<ActivityFeedItem>>() {
+        Type type = new TypeToken<ListingResponse<ActivityFeedItem, String>>() {
         }.getType();
-        ListingResponse<ActivityFeedItem> response = getNetworkClient().post(
+        ListingResponse<ActivityFeedItem, String> response = getNetworkClient().post(
                 endpoint, request, type);
-        getEventBus().post(new UpdatedListingEvent<ActivityFeedItem>(mRequestId, null,
+        getEventBus().post(new UpdatedListingEvent<ActivityFeedItem, String>(mRequestId, null,
                 response.getPayload()));
 
 

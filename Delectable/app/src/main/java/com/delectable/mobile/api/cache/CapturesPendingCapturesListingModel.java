@@ -3,6 +3,7 @@ package com.delectable.mobile.api.cache;
 import com.delectable.mobile.api.cache.localmodels.CacheListing;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PendingCapture;
 
@@ -19,8 +20,6 @@ public class CapturesPendingCapturesListingModel {
 
     private static final String TAG = CapturesPendingCapturesListingModel.class.getSimpleName();
 
-    private static final String TYPE_USER_CAPTURES = TAG + "users_";
-
     private final HashMap<String, CacheListing<BaseListingElement>> mMap
             = new HashMap<String, CacheListing<BaseListingElement>>();
 
@@ -30,22 +29,35 @@ public class CapturesPendingCapturesListingModel {
         mCaptureDetailsModel = capturesModel;
     }
 
-    public Listing<BaseListingElement> getUserCaptures(String accountId) {
-        String key = TYPE_USER_CAPTURES + accountId;
-        return getCachedCaptures(key);
-
+    public Listing<BaseListingElement, DeleteHash> getUserCaptures(String accountId) {
+        return getCachedCaptures(accountId);
     }
 
-    public void saveUserCaptures(String accountId, Listing<BaseListingElement> listing) {
-        String key = TYPE_USER_CAPTURES + accountId;
-        saveListing(key, listing);
+    public void saveUserCaptures(String accountId, Listing<BaseListingElement, DeleteHash> listing) {
+        saveListing(accountId, listing);
+    }
+
+    public void discardCaptureFromList(String accountId, String captureId) {
+
+        //first remove string id from cacheListing
+        CacheListing<BaseListingElement> cacheListing = mMap.get(accountId);
+        if (cacheListing == null) {
+            //nothing in cache
+            return;
+        }
+        cacheListing.removeItemId(captureId);
+
+        //then remove object from model
+        mPendingCapturesModel.deleteCapture(captureId);
+
+        //no need to delete item from CaptureDetailsModel bc
     }
 
     public void clear() {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<BaseListingElement> listing) {
+    private void saveListing(String key, Listing<BaseListingElement, DeleteHash> listing) {
 
         CacheListing<BaseListingElement> cacheListing = new CacheListing<BaseListingElement>(
                 listing);
@@ -65,7 +77,7 @@ public class CapturesPendingCapturesListingModel {
         }
     }
 
-    private Listing<BaseListingElement> getCachedCaptures(String key) {
+    private Listing<BaseListingElement, DeleteHash> getCachedCaptures(String key) {
         CacheListing<BaseListingElement> cacheListing = mMap.get(key);
         if (cacheListing == null) {
             //nothing in cache
@@ -93,7 +105,7 @@ public class CapturesPendingCapturesListingModel {
             Log.e(TAG,
                     "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
         }
-        Listing<BaseListingElement> listing = new Listing<BaseListingElement>(cacheListing,
+        Listing<BaseListingElement, DeleteHash> listing = new Listing<BaseListingElement, DeleteHash>(cacheListing,
                 captures);
 
         return listing;

@@ -31,6 +31,7 @@ public class UserInfo {
 
     private static final String PROPERTY_USER_OVER_21 = "propertyUserOver21";
 
+    private static final String PROPERTY_WELCOME_DONE = "welcomeDone";
 
     public static void onSignIn(String userId, String fullName, String email, String sessionKey,
             String sessionToken) {
@@ -201,6 +202,20 @@ public class UserInfo {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
         return prefs.getBoolean(PROPERTY_USER_OVER_21, false);
+    }
+    
+    public static boolean isWelcomeDone() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        return prefs.getBoolean(PROPERTY_WELCOME_DONE, false);
+    }
+
+    public static void markWelcomeDone() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PROPERTY_WELCOME_DONE, true);
+        editor.commit();
     }
 
     public static void setIsOver21(boolean isOver21) {

@@ -1,14 +1,15 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.ui.events.NavigationEvent;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 
 import android.os.Bundle;
@@ -53,7 +54,10 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         View emptyView = view.findViewById(R.id.empty_view_following);
-        View followButton = emptyView.findViewById(R.id.search_friends_button);
+        Delectabutton followButton = (Delectabutton) emptyView
+                .findViewById(R.id.search_friends_button);
+        followButton.setIconDrawable(
+                getResources().getDrawable(R.drawable.ic_nav_drawer_friends_normal));
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,12 +70,12 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected Listing<CaptureDetails> getCachedFeed() {
+    protected Listing<CaptureDetails, String> getCachedFeed() {
         return mCaptureListingModel.getFollowerFeed();
     }
 
     @Override
-    protected void fetchCaptures(Listing<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh) {
         mAccountController
                 .fetchFollowerFeed(CAPTURES_REQ, CapturesContext.DETAILS, listing,
@@ -79,7 +83,7 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         Log.d(TAG, "UpdatedListingEvent");
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;

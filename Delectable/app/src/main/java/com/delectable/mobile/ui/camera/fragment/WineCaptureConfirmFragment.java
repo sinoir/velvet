@@ -7,7 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.Nullable;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,9 +76,9 @@ public class WineCaptureConfirmFragment extends BaseFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActionBar().hide();
     }
 
     private void displayCapturedImage() {

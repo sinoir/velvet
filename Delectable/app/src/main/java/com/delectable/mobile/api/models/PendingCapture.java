@@ -14,7 +14,7 @@ public class PendingCapture extends BaseListingElement {
 
     private WineProfileMinimal wine_profile;
 
-    private BaseWine base_wine;
+    private BaseWineMinimal base_wine;
 
     private String transcription_error_message;
 
@@ -52,7 +52,7 @@ public class PendingCapture extends BaseListingElement {
         this.capture_longitude = capture_longitude;
     }
 
-    public BaseWine getBaseWine() {
+    public BaseWineMinimal getBaseWine() {
         return base_wine;
     }
 

@@ -103,12 +103,11 @@ public class WineBannerView extends RelativeLayout {
     /**
      * @param capturePhotoHash include the {@link com.delectable.mobile.api.models.CaptureDetails
      *                         CaptureDetails}' {@link PhotoHash} if you want the view to show the
-     *                         capture photo. Passing in {@code null} will use {@link WineProfileMinimal}'s
-     *                         photo.
+     *                         capture photo. Passing in {@code null} will use {@link
+     *                         WineProfileMinimal}'s photo.
      * @param includeVintage   {@code true} to show the vintage year.
      */
     //Wine Profile screen (accessed from Follower Feed) uses this method to update their WineBannerView
-    //Wine Profile screen (accessed from Wishlist) also uses this method, but also shows the vintage.
     public void updateData(WineProfileMinimal wineProfile, PhotoHash capturePhotoHash,
             boolean includeVintage) {
 
@@ -130,9 +129,20 @@ public class WineBannerView extends RelativeLayout {
         updateViewWithData(wineImageUrl, producerName, wineName);
     }
 
-    //Wine Profile coming from Search Wine, WineCaptureSubmit screen uses this method
-    public void updateData(BaseWineMinimal baseWine) {
-        String wineImageUrl = baseWine.getPhoto().get450Plus();
+    /**
+     * @param baseWine         uses the baseWine's data to populate this view.
+     * @param capturePhotoHash if provided, uses this photoHash for the photo display. Pass in
+     *                         {@code null} to default to using the BaseWine's photo.
+     */
+    //Wine Profile coming from Search Wine, User Captures screen uses this method
+    public void updateData(BaseWineMinimal baseWine, PhotoHash capturePhotoHash) {
+
+        String wineImageUrl;
+        if (capturePhotoHash != null) {
+            wineImageUrl = capturePhotoHash.get450Plus();
+        } else {
+            wineImageUrl = baseWine.getPhoto().get450Plus();
+        }
         String producerName = baseWine.getProducerName();
         String wineName = baseWine.getName();
 
@@ -141,7 +151,7 @@ public class WineBannerView extends RelativeLayout {
 
     public void updateViewWithData(String wineImageUrl, String producerName, String wineName) {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
-        mProducerName.setText(producerName);
+        mProducerName.setText(producerName.toLowerCase());
         mWineName.setText(wineName);
     }
 

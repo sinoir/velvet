@@ -73,7 +73,6 @@ public class ChooseVintageDialogRow extends RelativeLayout {
      * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
      * data for a normal row.
      */
-
     public void updateData(VintageWineInfo wineInfo) {
         String year = wineInfo.getYear();
         double rating = wineInfo.getRating();

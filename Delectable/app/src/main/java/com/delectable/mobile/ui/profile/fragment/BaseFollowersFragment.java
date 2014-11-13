@@ -2,13 +2,13 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.FollowersFollowingModel;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.api.cache.FollowersFollowingModel;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
-import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -20,6 +20,7 @@ import com.delectable.mobile.util.SafeAsyncTask;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,17 +68,17 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     private String mAccountId;
 
-    private Listing<AccountMinimal> mFollowerListing;
+    private Listing<AccountMinimal, String> mFollowerListing;
 
     /**
      * Flag to know when we are already fetching
      */
     private boolean mFetching;
 
-    protected abstract Listing<AccountMinimal> getCachedListing(String accountId);
+    protected abstract Listing<AccountMinimal, String> getCachedListing(String accountId);
 
     protected abstract void fetchAccounts(String accountId,
-            Listing<AccountMinimal> accountListing, boolean isPullToRefresh);
+            Listing<AccountMinimal, String> accountListing, boolean isPullToRefresh);
 
     protected void setArguments(String accountId) {
         Bundle args = new Bundle();
@@ -97,6 +98,12 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
         mAccountId = args.getString(ACCOUNT_ID);
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
     }
 
     @Override
@@ -124,14 +131,14 @@ public abstract class BaseFollowersFragment extends BaseFragment
     }
 
     private void loadLocalData() {
-        new SafeAsyncTask<Listing<AccountMinimal>>(this) {
+        new SafeAsyncTask<Listing<AccountMinimal, String>>(this) {
             @Override
-            protected Listing<AccountMinimal> safeDoInBackground(Void[] params) {
+            protected Listing<AccountMinimal, String> safeDoInBackground(Void[] params) {
                 return getCachedListing(mAccountId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<AccountMinimal> listing) {
+            protected void safeOnPostExecute(Listing<AccountMinimal, String> listing) {
 
                 if (listing != null) {
                     mFollowerListing = listing;
@@ -153,7 +160,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected void handleFetchFollowersEvent(UpdatedListingEvent<AccountMinimal> event) {
+    protected void handleFetchFollowersEvent(UpdatedListingEvent<AccountMinimal, String> event) {
         if (!mAccountId.equals(event.getAccountId())) {
             return;
         }

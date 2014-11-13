@@ -88,6 +88,7 @@ public class MinimalPendingCaptureRow extends RelativeLayout {
             case UNVERIFIED:
                 captureTitle = mPendingCapture.getBaseWine().getProducerName();
                 captureName = mPendingCapture.getBaseWine().getName();
+                break;
             case UNIDENTIFIED:
             default:
                 captureTitle = getResources().getString(R.string.user_captures_id_in_progress);
@@ -96,7 +97,7 @@ public class MinimalPendingCaptureRow extends RelativeLayout {
         }
         String captureImageUrl = mPendingCapture.getPhoto().getBestThumb();
 
-        mProducerName.setText(captureTitle);
+        mProducerName.setText(captureTitle.toLowerCase());
         mWineName.setText(captureName);
         ImageLoaderUtil.loadImageIntoView(getContext(), captureImageUrl, mWineImage);
     }

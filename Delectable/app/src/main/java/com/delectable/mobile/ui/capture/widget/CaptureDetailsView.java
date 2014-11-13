@@ -5,6 +5,7 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
@@ -123,10 +124,6 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private PopupMenu mPopupMenu;
 
-    private PopupMenu mPopupMenuOwn;
-
-    private PopupMenu mPopupMenuOther;
-
     public CaptureDetailsView(Context context) {
         this(context, null);
     }
@@ -163,12 +160,9 @@ public class CaptureDetailsView extends RelativeLayout {
             }
         };
 
-        mPopupMenuOwn = new PopupMenu(mContext, mMenuButton);
-        mPopupMenuOwn.inflate(R.menu.capture_actions_own);
-        mPopupMenuOwn.setOnMenuItemClickListener(popUpListener);
-        mPopupMenuOther = new PopupMenu(mContext, mMenuButton);
-        mPopupMenuOther.inflate(R.menu.capture_actions);
-        mPopupMenuOther.setOnMenuItemClickListener(popUpListener);
+        mPopupMenu = new PopupMenu(mContext, mMenuButton);
+        mPopupMenu.inflate(R.menu.capture_actions);
+        mPopupMenu.setOnMenuItemClickListener(popUpListener);
     }
 
     public void updateData(CaptureDetails captureData, boolean showComments) {
@@ -198,7 +192,23 @@ public class CaptureDetailsView extends RelativeLayout {
     private void setupPopUpMenu() {
         boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(mContext));
-        mPopupMenu = isOwnCapture ? mPopupMenuOwn : mPopupMenuOther;
+        CaptureState captureState = CaptureState.getState(mCaptureData);
+        boolean isUnidentified =
+                captureState == CaptureState.UNIDENTIFIED
+                        || captureState == CaptureState.IMPOSSIBLED;
+
+        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
+        if (isUnidentified) {
+            actionRecommend.setVisible(false);
+        }
+        if (!isOwnCapture) {
+            actionEdit.setVisible(false);
+            actionFlag.setVisible(false);
+            actionRemove.setVisible(false);
+        }
     }
 
     private void setupTopWineDetails() {
@@ -326,7 +336,7 @@ public class CaptureDetailsView extends RelativeLayout {
                         ? (userComment + " " + captureTimeLocation)
                         : captureTimeLocation);
         spannableString
-                .setSpan(new ForegroundColorSpan(R.color.d_medium_gray),
+                .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
                         userComment.length(), spannableString.length(), 0);
         mUserComment.setText(spannableString, TextView.BufferType.SPANNABLE);
 
@@ -389,7 +399,13 @@ public class CaptureDetailsView extends RelativeLayout {
             String likesCountText = mContext.getResources()
                     .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
             mLikesCount.setText(likesCountText);
-            mLikesCount.setOnClickListener(expandLikesAndCommentsClickListener);
+            mLikesCount.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // launch activity with liking people
+                    mActionsHandler.launchLikingUsersListing(mCaptureData);
+                }
+            });
         } else {
             mLikesCount.setVisibility(View.GONE);
         }
@@ -428,7 +444,8 @@ public class CaptureDetailsView extends RelativeLayout {
                         : View.GONE
         );
         mCommentsDivider.setVisibility(
-                (mCommentsCount.getVisibility() == View.VISIBLE
+                ((mCommentsCount.getVisibility() == View.VISIBLE
+                        || mLikesCount.getVisibility() == View.VISIBLE)
                         && mRateButton.getVisibility() == View.VISIBLE)
                         ? View.VISIBLE
                         : View.GONE
@@ -469,7 +486,8 @@ public class CaptureDetailsView extends RelativeLayout {
                     numLikes - 2);
         }
 
-        ForegroundColorSpan spanGray = new ForegroundColorSpan(R.color.d_medium_gray);
+        ForegroundColorSpan spanGray = new ForegroundColorSpan(
+                getResources().getColor(R.color.d_medium_gray));
         SpannableString spannableString = SpannableString.valueOf(likeText);
         int positionAnd = likeText
                 .lastIndexOf(getResources().getString(R.string.cap_feed_like_text_anchor_and));

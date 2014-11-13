@@ -14,9 +14,11 @@ import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.InstagramUtil;
 import com.delectable.mobile.util.TwitterUtil;
@@ -29,6 +31,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -98,8 +102,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @InjectView(R.id.make_private)
     protected SwitchCompat mMakePrivateButton;
 
-    @InjectView(R.id.progress_bar)
-    protected View mProgressBar;
+    protected View mActionView;
+
+    protected FontTextView mPostButton;
 
     @Inject
     protected WineScanController mWineScanController;
@@ -124,6 +129,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     private boolean mIsPostingCapture;
 
+    private LoadingCircleDialog mLoadingDialog;
+
     public WineCaptureSubmitFragment() {
     }
 
@@ -145,16 +152,26 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCapturedImageBitmap = args.getParcelable(sArgsImageData);
         }
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
+        mLoadingDialog = new LoadingCircleDialog();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setActionBarTitle(getString(R.string.capture_submit_title));
+        setActionBarSubtitle((String) null);
+        enableBackButton(true);
+        getActionBar().show();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
+        mActionView = inflater.inflate(R.layout.action_menu_button, null, false);
+        mPostButton = (FontTextView) mActionView.findViewById(R.id.action_button);
 
         ButterKnife.inject(this, mView);
-
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         setupRatingSeekBar();
 
@@ -168,8 +185,19 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // TODO customize the post button
         inflater.inflate(R.menu.capture_menu, menu);
+        MenuItem postItem = menu.findItem(R.id.post);
+        mPostButton.setText(getString(R.string.capture_submit_post));
+        mPostButton.setEnabled(true);
+        mPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommentEditText.clearFocus();
+                hideKeyboard();
+                postCapture();
+            }
+        });
+        MenuItemCompat.setActionView(postItem, mActionView);
     }
 
     @Override
@@ -177,11 +205,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().onBackPressed();
-                return true;
-            case R.id.post:
-                mCommentEditText.clearFocus();
-                hideKeyboard();
-                postCapture();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -197,12 +220,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         if (mIsPostingCapture) {
             launchCurrentUserProfile();
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mActionBar.show();
     }
 
     @Override
@@ -275,9 +292,10 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCaptureRequest.setNote(comment);
         }
 
-        if (!mMakePrivateButton.isChecked()) {
-            mCaptureRequest.setPrivate(false);
+        if (mMakePrivateButton.isChecked()) {
+            mCaptureRequest.setPrivate(true);
         } else {
+            mCaptureRequest.setPrivate(false);
             mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
             mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
             if (mShareTwitterButton.isChecked()) {
@@ -303,7 +321,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             return;
         }
 
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
 
         mIsPostingCapture = true;
         mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
@@ -312,10 +330,11 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     public void onEventMainThread(IdentifyLabelScanEvent event) {
         if (event.isSuccessful()) {
             mLabelScanResult = event.getLabelScan();
-            mWineScanController.createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
+            mWineScanController
+                    .createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
             mIsPostingCapture = false;
-            mProgressBar.setVisibility(View.GONE);
+            mLoadingDialog.dismiss();
             handleEventErrorMessage(event);
         }
     }
@@ -329,7 +348,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
         } else {
             mIsPostingCapture = false;
-            mProgressBar.setVisibility(View.GONE);
+            mLoadingDialog.dismiss();
             handleEventErrorMessage(event);
         }
     }
@@ -350,7 +369,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             handleEventErrorMessage(event);
         }
         mIsPostingCapture = false;
-        mProgressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
     }
 
     private void handleEventErrorMessage(BaseEvent event) {
@@ -381,11 +400,6 @@ public class WineCaptureSubmitFragment extends BaseFragment {
         FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment.newInstance(
                 this, REQUEST_LOCATION);
         launchNextFragment(fragment);
-    }
-
-    @OnClick(R.id.progress_bar)
-    protected void progressClicked() {
-        //no-op -> prevent views below it from being selected
     }
 
     @OnCheckedChanged(R.id.share_facebook)
@@ -428,9 +442,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.make_private)
     protected void makeCaputrePrivate(CompoundButton view, boolean isChecked) {
-        // TODO: Verify, this was taken from when Post to Delectable was "make private"
         // Unselect everything if Post to Delectable is not selected
-        if (!isChecked) {
+        if (isChecked) {
             mShareFacebookButton.setChecked(false);
             mShareTwitterButton.setChecked(false);
             mShareInstagramButton.setChecked(false);

@@ -39,6 +39,12 @@ public class AddCaptureCommentJob extends BaseJob {
         super.onRun();
         String endpoint = "/captures/comment";
 
+        //don't run job if comment doesn't exist
+        if (mCaptureComment==null || mCaptureComment.trim().isEmpty()) {
+            mEventBus.post(new AddCaptureCommentEvent(false, mCaptureId));
+            return;
+        }
+
         CapturesCommentRequest request = new CapturesCommentRequest(mCaptureId, mCaptureComment);
 
         CaptureDetailsResponse response = getNetworkClient().post(endpoint, request,

@@ -47,7 +47,11 @@ public class FetchCaptureDetailsJob extends BaseJob {
 
         CaptureDetails capture = response.getCapture();
 
-        mCapturesModel.saveCaptureDetails(capture);
+        if (capture != null) {
+            mCapturesModel.saveCaptureDetails(capture);
+        }
+        //capture will be null if e_tag match was true
+
         getEventBus().post(new UpdatedCaptureDetailsEvent(true, mCaptureId));
     }
 

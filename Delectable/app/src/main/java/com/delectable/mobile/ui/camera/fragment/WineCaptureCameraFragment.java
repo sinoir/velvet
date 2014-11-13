@@ -14,7 +14,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -91,9 +91,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActionBar().hide();
     }
 
     @OnClick(R.id.close_button)

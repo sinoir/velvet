@@ -1,19 +1,28 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureNote;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
-import com.delectable.mobile.ui.common.widget.RatingsBarView;
+import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * A representation of the {@link CaptureNote} model, this is the row for the listview that appears
@@ -21,19 +30,31 @@ import android.widget.TextView;
  */
 public class WineProfileCommentUnitRow extends RelativeLayout {
 
-    private CircleImageView mProfileImage;
+    private final ForegroundColorSpan MEDIUM_GRAY_SPAN;
 
-    private TextView mUserName;
+    @InjectView(R.id.profile_image)
+    protected CircleImageView mProfileImage;
 
-    private TextView mInfluencerTitles;
+    @InjectView(R.id.user_name)
+    protected TextView mUserName;
 
-    private TextView mUserComment;
+    @InjectView(R.id.influencer_badge)
+    protected ImageView mInfluencerBadge;
 
-    private RatingsBarView mRatingsBar;
+    @InjectView(R.id.influencer_titles)
+    protected TextView mInfluencerTitles;
 
-    private TextView mHelpfulCount;
+    @InjectView(R.id.rating)
+    protected RatingTextView mRatingTextView;
 
-    private ImageButton mHelpfulButton;
+    @InjectView(R.id.user_comment)
+    protected TextView mUserComment;
+
+    @InjectView(R.id.helpful_count)
+    protected TextView mHelpfulCount;
+
+    @InjectView(R.id.helpful_button)
+    protected ImageButton mHelpfulButton;
 
     private ActionsHandler mActionsHandler;
 
@@ -50,55 +71,42 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
     public WineProfileCommentUnitRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        MEDIUM_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray));
         View.inflate(context, R.layout.row_wine_profile_comment_unit, this);
+        ButterKnife.inject(this);
+    }
 
-        mProfileImage = (CircleImageView) findViewById(R.id.profile_image);
-        mUserName = (TextView) findViewById(R.id.user_name);
-        mInfluencerTitles = (TextView) findViewById(R.id.influencer_titles);
-        mUserComment = (TextView) findViewById(R.id.user_comment);
-        mRatingsBar = (RatingsBarView) findViewById(R.id.rating_bar);
-        mHelpfulCount = (TextView) findViewById(R.id.helpful_count);
-        mHelpfulButton = (ImageButton) findViewById(R.id.helpful_button);
+    @OnClick({R.id.profile_image, R.id.capturer_container})
+    public void launchUserProfile() {
+        String userId = mCaptureNote.getCapturerParticipant().getId();
+        mActionsHandler.launchUserProfile(userId);
+    }
 
-        OnClickListener launchUserProfileClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userId = mCaptureNote.getCapturerParticipant().getId();
-                mActionsHandler.launchUserProfile(userId);
-            }
-        };
-        mProfileImage.setOnClickListener(launchUserProfileClickListener);
-        mUserName.setOnClickListener(launchUserProfileClickListener);
-        mInfluencerTitles.setOnClickListener(launchUserProfileClickListener);
+    @OnClick(R.id.helpful_button)
+    protected void onHelpfulClick(View v) {
+        v.setSelected(!v.isSelected());
 
-        mHelpfulButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setSelected(!v.isSelected());
-
-                //TODO caching might need to be done here
-                //currently this is only modifying the reference in memory and not performing any sort of syncing
-                if (v.isSelected()) {
-                    mCaptureNote.markHelpful(UserInfo.getUserId(getContext()));
-                } else {
-                    mCaptureNote.unmarkHelpful(UserInfo.getUserId(getContext()));
-                }
-                updateHelpfulViews(mCaptureNote);
-                mActionsHandler.toggleHelpful(mCaptureNote, v.isSelected());
-            }
-        });
+        if (v.isSelected()) {
+            mCaptureNote.markHelpful(UserInfo.getUserId(getContext()));
+        } else {
+            mCaptureNote.unmarkHelpful(UserInfo.getUserId(getContext()));
+        }
+        updateHelpfulViews(mCaptureNote);
+        mActionsHandler.toggleHelpful(mCaptureNote, v.isSelected());
     }
 
     public void setActionsHandler(ActionsHandler actionsHandler) {
         mActionsHandler = actionsHandler;
     }
 
-    public void updateCaptureNoteData(CaptureNote captureNote) {
+    public void updateData(CaptureNote captureNote) {
         mCaptureNote = captureNote;
         AccountMinimal capturer = captureNote.getCapturerParticipant();
 
         //user image
-        String profileImageUrl = getThumbnailParticipantPhotoFromAccount(capturer);
+        //load empty photo first, so user doesn't see old photo flash when rows recycle
+        ImageLoaderUtil.loadImageIntoView(getContext(), R.drawable.no_photo, mProfileImage);
+        String profileImageUrl = capturer.getPhoto().getBestThumb();
         ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mProfileImage);
 
         //user name
@@ -106,6 +114,8 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
 
         //influencer title(s)
         if (capturer.isInfluencer()) {
+            mInfluencerBadge.setVisibility(View.VISIBLE);
+
             String titles = capturer.getInfluencerTitlesString();
             if (titles.equals("")) {
                 mInfluencerTitles.setVisibility(View.GONE);
@@ -116,28 +126,32 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
         } else {
             //not an influencer
             mInfluencerTitles.setVisibility(View.GONE);
+            mInfluencerBadge.setVisibility(View.GONE);
         }
 
         //capture comment
-        String message;
+        CharSequence message;
         if (captureNote.getNote() == null || captureNote.getNote().equals("")) {
             message = getResources()
                     .getString(R.string.wine_profile_empty_comment_message, capturer.getFname(),
                             captureNote.getVintage());
         } else {
-            //TODO vintage string needs to be made medium gray
+            //color the vintage text medium gray
             String vintage = getResources()
                     .getString(R.string.wine_profile_vintage, captureNote.getVintage());
-            message = captureNote.getNote() + vintage;
+            SpannableString span = new SpannableString(vintage);
+            span.setSpan(MEDIUM_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            message = TextUtils.concat(captureNote.getNote(), span);
         }
+
         mUserComment.setText(message);
 
         //rating
-        if (captureNote.getRatingPercent() > 0.0f) {
-            mRatingsBar.setVisibility(View.VISIBLE);
-            mRatingsBar.setPercent(captureNote.getRatingPercent());
+        if (captureNote.getCapturerRating() >= 0) {
+            mRatingTextView.setVisibility(View.VISIBLE);
+            mRatingTextView.setRatingOf40(captureNote.getCapturerRating());
         } else {
-            mRatingsBar.setVisibility(View.GONE);
+            mRatingTextView.setVisibility(View.GONE);
         }
 
         updateHelpfulViews(captureNote);
@@ -159,20 +173,6 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
         boolean markedHelpful = captureNote.getHelpfulingAccountIds()
                 .contains(UserInfo.getUserId(getContext()));
         mHelpfulButton.setSelected(markedHelpful);
-    }
-
-
-    //TODO: possibly make this a static global method, this is copied from CaptureDetailsView
-    private String getThumbnailParticipantPhotoFromAccount(AccountMinimal account) {
-        String profileImageUrl = "";
-        if (account.getPhoto() != null) {
-            if (account.getPhoto().getThumbUrl() != null) {
-                profileImageUrl = account.getPhoto().getThumbUrl();
-            } else {
-                profileImageUrl = account.getPhoto().getUrl();
-            }
-        }
-        return profileImageUrl;
     }
 
     public static interface ActionsHandler {

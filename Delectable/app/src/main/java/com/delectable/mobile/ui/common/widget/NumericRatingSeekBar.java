@@ -63,7 +63,7 @@ public class NumericRatingSeekBar extends RelativeLayout {
             @Override
             public void onRatingsChanged(int rating) {
 
-                float ratingOf10 = Rating.getRatingOfTenFrom40(rating);
+                double ratingOf10 = Rating.getRatingOfTenFrom40(rating);
                 String ratingStr = DECIMAL_FORMAT.format(ratingOf10);
                 mScoreTextView.setText(ratingStr);
 

@@ -92,7 +92,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment
     }
 
     private void launchWineProfile(BaseWineMinimal baseWine) {
-        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine);
+        Intent intent = WineProfileActivity.newIntent(getActivity(), baseWine, null);
         startActivity(intent);
     }
 

@@ -8,24 +8,18 @@ public class CaptureDetailsModel {
 
     private static final String TAG = CaptureDetailsModel.class.getSimpleName();
 
-    private static final String KEY_PREFIX = "capture_details_";
-
-    /**
-     * static final Map used as a singleton for caching.
-     */
     private final HashMap<String, CaptureDetails> mMap = new HashMap<String, CaptureDetails>();
 
     public CaptureDetails getCapture(String id) {
-        return mMap.get(KEY_PREFIX + id);
+        return mMap.get(id);
     }
 
     public void saveCaptureDetails(CaptureDetails captureDetails) {
-        String key = KEY_PREFIX + captureDetails.getId();
-        mMap.put(key, captureDetails);
+        mMap.put(captureDetails.getId(), captureDetails);
     }
 
     public void deleteCaptureDetails(String captureId) {
-        mMap.remove(KEY_PREFIX + captureId);
+        mMap.remove(captureId);
     }
 
     public void clear() {

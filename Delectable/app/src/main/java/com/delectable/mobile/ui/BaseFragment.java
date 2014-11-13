@@ -23,7 +23,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +41,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseFragment extends Fragment implements LifecycleProvider {
+public class BaseFragment extends Fragment implements LifecycleProvider, HideableActionBar {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -61,9 +63,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Inject
     protected EventBus mEventBus;
 
-    protected ActionBar mActionBar;
-
     private Set<LifecycleListener> lifecycleListeners;
+
+    private Toolbar mActionBarToolbar;
 
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
@@ -89,9 +91,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         CrashlyticsUtil.log(TAG + ".onAttach");
-        if (activity instanceof ActionBarActivity) {
-            mActionBar = ((ActionBarActivity) activity).getSupportActionBar();
-        }
     }
 
     @Override
@@ -151,9 +150,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         super.onDestroy();
         CrashlyticsUtil.log(TAG + ".onDestroy");
         lifecycleListeners.clear();
-        if (mActionBar != null) {
-            mActionBar.setTitle(null);
-        }
     }
 
     @Override
@@ -202,10 +198,85 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
 
-    protected void setActionBarTitle(String title) {
-        if (mActionBar != null) {
-            mActionBar.setTitle(title);
+    protected BaseActivity getBaseActivity() {
+        return (BaseActivity) getActivity();
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected Toolbar getActionBarToolbar() {
+        if (mActionBarToolbar == null) {
+            mActionBarToolbar = getBaseActivity().getActionBarToolbar();
         }
+        return mActionBarToolbar;
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected ActionBar getActionBar() {
+        // Toolbar will be set as ActionBar when calling getActionBarToolbar()
+        if (mActionBarToolbar == null) {
+            getActionBarToolbar();
+        }
+        return getBaseActivity().getSupportActionBar();
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarTitle(SpannableString title) {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarTitle(String title) {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarSubtitle(SpannableString subtitle) {
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle(subtitle);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarSubtitle(String subtitle) {
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle(subtitle);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void enableBackButton(boolean enable) {
+        if (getActionBar() != null) {
+            Log.d(TAG, "Cannot enable back button, ActionBar is null");
+            getActionBar().setDisplayHomeAsUpEnabled(enable);
+        }
+    }
+
+    @Override
+    public void showOrHideActionBar(boolean show) {
+        getBaseActivity().showOrHideActionBar(show);
+    }
+
+    @Override
+    public void showOrHideActionBar(boolean show, int delay) {
+        getBaseActivity().showOrHideActionBar(show, delay);
     }
 
     public void signout() {

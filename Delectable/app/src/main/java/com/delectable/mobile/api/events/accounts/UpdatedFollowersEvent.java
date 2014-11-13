@@ -10,7 +10,7 @@ import com.delectable.mobile.api.models.Listing;
  */
 public class UpdatedFollowersEvent extends BaseFetchedFollowersEvent {
 
-    public UpdatedFollowersEvent(String accountId, Listing<AccountMinimal> listing,
+    public UpdatedFollowersEvent(String accountId, Listing<AccountMinimal, String> listing,
             boolean invalidate) {
         super(accountId, listing, invalidate);
     }

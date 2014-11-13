@@ -40,29 +40,29 @@ public class CaptureListingModel {
      *                  current list, and that list have been saved as the updates array to this
      *                  object.
      */
-    public void saveUserCaptures(String accountId, Listing<CaptureDetails> listing) {
+    public void saveUserCaptures(String accountId, Listing<CaptureDetails, String> listing) {
         String key = TYPE_USER_CAPTURES + accountId;
         saveListing(key, listing);
     }
 
-    public Listing<CaptureDetails> getUserCaptures(String accountId) {
+    public Listing<CaptureDetails, String> getUserCaptures(String accountId) {
         String key = TYPE_USER_CAPTURES + accountId;
         return getCachedCaptures(key);
     }
 
-    public void saveTrendingFeed(Listing<CaptureDetails> listing) {
+    public void saveTrendingFeed(Listing<CaptureDetails, String> listing) {
         saveListing(TYPE_TRENDING, listing);
     }
 
-    public Listing<CaptureDetails> getTrendingFeed() {
+    public Listing<CaptureDetails, String> getTrendingFeed() {
         return getCachedCaptures(TYPE_TRENDING);
     }
 
-    public void saveFollowerFeed(Listing<CaptureDetails> listing) {
+    public void saveFollowerFeed(Listing<CaptureDetails, String> listing) {
         saveListing(TYPE_FOLLOW_FEED, listing);
     }
 
-    public Listing<CaptureDetails> getFollowerFeed() {
+    public Listing<CaptureDetails, String> getFollowerFeed() {
         return getCachedCaptures(TYPE_FOLLOW_FEED);
     }
 
@@ -70,7 +70,7 @@ public class CaptureListingModel {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<CaptureDetails> listing) {
+    private void saveListing(String key, Listing<CaptureDetails, String> listing) {
 
         CacheListing<CaptureDetails> cacheListing = new CacheListing<CaptureDetails>(listing);
         mMap.put(key, cacheListing);
@@ -80,7 +80,7 @@ public class CaptureListingModel {
         }
     }
 
-    private Listing<CaptureDetails> getCachedCaptures(String key) {
+    private Listing<CaptureDetails, String> getCachedCaptures(String key) {
         CacheListing<CaptureDetails> cacheListing = mMap.get(key);
         if (cacheListing == null) {
             //nothing in cache
@@ -98,7 +98,7 @@ public class CaptureListingModel {
                         "Listing from cache inconsistency, capture id from cachelisting object not found in cache");
             }
         }
-        Listing<CaptureDetails> listing = new Listing<CaptureDetails>(cacheListing, captures);
+        Listing<CaptureDetails, String> listing = new Listing<CaptureDetails, String>(cacheListing, captures);
 
         return listing;
     }

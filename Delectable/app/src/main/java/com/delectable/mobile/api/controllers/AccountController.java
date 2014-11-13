@@ -38,6 +38,7 @@ import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.PaymentMethod;
@@ -78,7 +79,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchFollowers(String requestId, String accountId,
-            Listing<AccountMinimal> listing, Boolean isPullToRefresh) {
+            Listing<AccountMinimal, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowersJob(requestId, accountId, listing, isPullToRefresh));
     }
@@ -91,7 +92,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchFollowings(String requestId, String accountId,
-            Listing<AccountMinimal> listing, Boolean isPullToRefresh) {
+            Listing<AccountMinimal, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowingsJob(requestId, accountId, listing, isPullToRefresh));
     }
@@ -105,7 +106,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchAccountCaptures(String requestId, CapturesContext context, String accountId,
-            Listing<BaseListingElement> listing, Boolean isPullToRefresh) {
+            Listing<BaseListingElement, DeleteHash> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchAccountCapturesJob(requestId, context, accountId, listing,
                         isPullToRefresh));
@@ -188,7 +189,7 @@ public class AccountController {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public void fetchFollowerFeed(String requestId, CapturesContext context,
-            Listing<CaptureDetails> listing, Boolean isPullToRefresh) {
+            Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchFollowerFeedJob(requestId, context, listing, isPullToRefresh));
     }

@@ -11,6 +11,7 @@ import com.delectable.mobile.api.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureCommentRateActivity;
@@ -104,6 +105,9 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     private void sendComment(final CaptureDetails capture, String comment) {
         // TODO: Loader?
+        if (comment.trim().isEmpty()) {
+            return; //do nothing if commment was empty
+        }
         // Temp comment for instant UI
         final CaptureComment tempComment = new CaptureComment();
         tempComment.setAccountId(UserInfo.getUserId(getActivity()));
@@ -171,7 +175,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     @Override
     public void discardCaptureClicked(CaptureDetails capture) {
         mTempCaptureForAction = capture;
-        showConfirmationNoTitle(getString(R.string.capture_remove), getString(R.string.remove),
+        showConfirmationNoTitle(getString(R.string.remove_this_wine_from_your_list), getString(R.string.remove),
                 null, REQUEST_DELETE_CONFIRMATION);
     }
 
@@ -235,7 +239,12 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
         if (requestCode == REQUEST_FLAG_CONFIRMATION) {
             if (resultCode == Activity.RESULT_OK) {
-                mCaptureController.flagCapture(mTempCaptureForAction.getId());
+                CaptureState captureState = CaptureState.getState(mTempCaptureForAction);
+                if (captureState == CaptureState.IDENTIFIED
+                        || captureState == CaptureState.IMPOSSIBLED) {
+                    // do not flag when it has not been identified yet but leave the option as a placebo
+                    mCaptureController.flagCapture(mTempCaptureForAction.getId());
+                }
             }
             mTempCaptureForAction = null;
         }

@@ -70,6 +70,7 @@ import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.api.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.api.jobs.motd.FetchMotdJob;
+import com.delectable.mobile.api.jobs.pendingcaptures.DeletePendingCaptureJob;
 import com.delectable.mobile.api.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.api.jobs.registrations.LoginJob;
 import com.delectable.mobile.api.jobs.registrations.RegisterJob;
@@ -107,6 +108,7 @@ import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
@@ -146,6 +148,7 @@ import de.greenrobot.event.EventBus;
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
                 WineCaptureSubmitFragment.class,
+                RateCaptureFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
@@ -191,6 +194,7 @@ import de.greenrobot.event.EventBus;
                 RateCaptureJob.class,
                 DeleteCaptureJob.class,
                 FlagCaptureJob.class,
+                DeletePendingCaptureJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 FetchFacebookSuggestionsJob.class,
                 FetchTwitterSuggestionsJob.class,
