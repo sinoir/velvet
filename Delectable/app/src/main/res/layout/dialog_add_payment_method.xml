@@ -46,7 +46,9 @@
                 android:id="@+id/credit_card_number"
                 style="@style/CheckoutEditText"
                 android:hint="@string/paymentmethod_card_number"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
+                android:nextFocusForward="@+id/expiration_month"
                 android:singleLine="true" />
 
             <LinearLayout
