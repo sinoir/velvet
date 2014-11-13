@@ -112,7 +112,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Inject
     protected PendingCapturesController mPendingCapturesController;
 
-
     @Inject
     protected AccountModel mAccountModel;
 
@@ -121,8 +120,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private Listing<BaseListingElement, DeleteHash> mCapturesListing;
 
     private boolean mFetching;
-
-    private String mEmptyStateText;
 
     private ProfileHeaderView mProfileHeaderView;
 
@@ -171,8 +168,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         View view = View.inflate(getActivity(), R.layout.fragment_user_profile, null);
         ButterKnife.inject(this, view);
 
-        setEmptyStateText(mEmptyStateText);
-
         mProfileHeaderView = (ProfileHeaderView) inflater
                 .inflate(R.layout.profile_header_impl, mListView, false);
         mProfileHeaderView.setActionListener(this);
@@ -180,7 +175,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mEmptyStateHeader.setActionListener(this);
 
         mListView.addHeaderView(mProfileHeaderView);
-        // Does not work with list header
+        // empty view does not work with list header, thus it's duplicated in the empty layout
         mListView.setEmptyView(mEmptyStateLayout);
         mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
         mListView.setAdapter(mAdapter);
@@ -521,11 +516,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void dataSetChanged() {
         mAdapter.notifyDataSetChanged();
-        if (mAdapter.isEmpty()) {
-            mEmptyStateLayout.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyStateLayout.setVisibility(View.GONE);
-        }
+        mNoCapturesTextView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -536,7 +527,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     public void setEmptyStateText(String emptyText) {
-        mEmptyStateText = emptyText;
         if (mNoCapturesTextView != null) {
             mNoCapturesTextView.setText(emptyText);
         }

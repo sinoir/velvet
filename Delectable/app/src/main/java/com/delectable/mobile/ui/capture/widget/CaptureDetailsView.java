@@ -219,7 +219,7 @@ public class CaptureDetailsView extends RelativeLayout {
         String producerName = mCaptureData.getDisplayTitle();
         String wineName = mCaptureData.getDisplayDescription();
 
-        mWineBannerView.updateViewWithData(wineImageUrl, producerName, wineName);
+        mWineBannerView.updateData(mCaptureData);
 
         mWineBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -500,6 +500,7 @@ public class CaptureDetailsView extends RelativeLayout {
             spannableString.setSpan(spanGray, positionLiked, likeText.length(), 0);
         }
         mLikesText.setText(spannableString, TextView.BufferType.SPANNABLE);
+        mLikesText.setVisibility(View.VISIBLE);
         mLikesText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

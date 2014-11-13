@@ -105,7 +105,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     private void sendComment(final CaptureDetails capture, String comment) {
         // TODO: Loader?
-        if (comment.trim().isEmpty()) {
+        if (comment != null && comment.trim().isEmpty()) {
             return; //do nothing if commment was empty
         }
         // Temp comment for instant UI

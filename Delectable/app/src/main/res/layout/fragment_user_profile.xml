@@ -38,7 +38,7 @@
         <com.delectable.mobile.ui.common.widget.FontTextView
             style="@style/TextEmptyState"
             android:id="@+id/nothing_to_display_textview"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/empty_view_header"

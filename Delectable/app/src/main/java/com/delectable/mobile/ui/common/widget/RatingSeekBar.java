@@ -9,15 +9,20 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.SeekBar;
 
-public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener {
+public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener,
+        View.OnTouchListener {
 
     public static final int INCREMENTS = CaptureMinimal.MAX_RATING_VALUE;
 
     private RatingsBar mRatingsBar;
 
     private OnRatingsChangeListener mRatingChangeListener;
+
+    private OnTouchListener mOnTouchListener;
 
     // Can toggle this to use bar colors
     private boolean mShowColors = false;
@@ -50,6 +55,24 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
         setThumb(thumb);
 
         setOnSeekBarChangeListener(this);
+        setOnTouchListener(this);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (mRatingChangeListener != null) {
+                    mRatingChangeListener.onStartTrackingTouch(this);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (mRatingChangeListener != null) {
+                    mRatingChangeListener.onStopTrackingTouch(this);
+                }
+                break;
+        }
+        return false;
     }
 
     @Override
