@@ -434,7 +434,8 @@ public class CaptureDetailsView extends RelativeLayout {
                         : View.GONE
         );
         mCommentsDivider.setVisibility(
-                (mCommentsCount.getVisibility() == View.VISIBLE
+                ((mCommentsCount.getVisibility() == View.VISIBLE
+                        || mLikesCount.getVisibility() == View.VISIBLE)
                         && mRateButton.getVisibility() == View.VISIBLE)
                         ? View.VISIBLE
                         : View.GONE
