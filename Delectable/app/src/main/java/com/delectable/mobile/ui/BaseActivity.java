@@ -67,14 +67,14 @@ public abstract class BaseActivity extends ActionBarActivity
     protected void onStart() {
         super.onStart();
 
-        CrashlyticsUtil.log(TAG+".onStart");
+        CrashlyticsUtil.log(TAG + ".onStart");
         mGoogleApiClient.connect();
         KahunaAnalytics.start();
     }
 
     @Override
     protected void onStop() {
-        CrashlyticsUtil.log(TAG+".onStop");
+        CrashlyticsUtil.log(TAG + ".onStop");
         mGoogleApiClient.disconnect();
         KahunaAnalytics.stop();
         super.onStop();
@@ -139,6 +139,21 @@ public abstract class BaseActivity extends ActionBarActivity
         transaction.commit();
     }
 
+    // Replaces Fragment completely with no backstack
+    public void popAndReplaceWithFragment(BaseFragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.fade_in, R.anim.fade_out,
+                R.anim.fade_in, R.anim.fade_out);
+
+        //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
+        //the fragment from the backstack in onActivityResult
+        String fragmentName = fragment.getClass().getSimpleName();
+        transaction.replace(R.id.container, fragment, fragmentName);
+        transaction.commit();
+    }
+
     public String getDeepLinkParam(String key) {
         String param = null;
         if (isFromDeepLink()) {
@@ -148,7 +163,7 @@ public abstract class BaseActivity extends ActionBarActivity
     }
 
     public boolean isFromDeepLink() {
-        return mDeepLinkUriData != null ;
+        return mDeepLinkUriData != null;
     }
 
     public Uri getDeepLinkUriData() {

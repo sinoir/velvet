@@ -177,6 +177,11 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         activity.replaceWithFragment(fragment);
     }
 
+    public void replaceWithNewFragment(BaseFragment fragment) {
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.popAndReplaceWithFragment(fragment);
+    }
+
     public void showToastError(String error) {
         if (getActivity() != null) {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
