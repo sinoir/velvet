@@ -32,6 +32,7 @@ import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.TextUtil;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
@@ -86,8 +87,6 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
 
-    private static final int NO_AVG_RATING = -1;
-
     private static final String WINE_PROFILE = "wineProfile";
 
     private static final String PHOTO_HASH = "photoHash";
@@ -103,10 +102,6 @@ public class WineProfileFragment extends BaseFragment implements
     private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
 
     private static final String WINE_PROFILE_NOTES_REQ = "wine_profile_notes_req";
-
-    private static final DecimalFormat ONE_DECIMAL_SPACE = new DecimalFormat("0.0");
-
-    private static final RelativeSizeSpan RATING_BIG_TEXT_SPAN = new RelativeSizeSpan(1.3f);
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -677,8 +672,8 @@ public class WineProfileFragment extends BaseFragment implements
         //rating avg
         double allAvg = ratingsable.getRatingsSummary().getAllAvg();
         double proAvg = ratingsable.getRatingsSummary().getProAvg();
-        mAllRatingsAverageTextView.setText(makeRatingDisplayText(allAvg));
-        mProRatingsAverageTextView.setText(makeRatingDisplayText(proAvg));
+        mAllRatingsAverageTextView.setText(TextUtil.makeRatingDisplayText(getActivity(), allAvg));
+        mProRatingsAverageTextView.setText(TextUtil.makeRatingDisplayText(getActivity(), proAvg));
 
         //ratings count
         int allCount = ratingsable.getRatingsSummary().getAllCount();
@@ -690,49 +685,6 @@ public class WineProfileFragment extends BaseFragment implements
         mAllRatingsCountTextView.setText(allRatingsCount);
         mProRatingsCountTextView.setText(proRatingsCount);
     }
-
-    /**
-     * Makes the rating display text where the rating is a bit bigger than the 10.
-     */
-    private CharSequence makeRatingDisplayText(double ratingOf40) {
-        //handling a no rating case, show a dash
-        //we need to set it's size, otherwise the text will become unaligned if there are only user ratings and no pro ratings or vice versa
-        if (ratingOf40 == NO_AVG_RATING) {
-            String dash = "-";
-            SpannableString span = new SpannableString(dash);
-            ForegroundColorSpan GRAY_COLOR = new ForegroundColorSpan(
-                    getResources().getColor(R.color.d_medium_gray));
-            span.setSpan(RATING_BIG_TEXT_SPAN, 0, dash.length(), 0); // set size
-            span.setSpan(GRAY_COLOR, 0, dash.length(), 0); // set color
-            return span;
-        }
-
-        double ratingOf10 = Rating.getRatingOfTenFrom40(ratingOf40);
-        String ratingStr = ONE_DECIMAL_SPACE.format(ratingOf10);
-        //10.0 always displays as 10
-        if (ratingStr.equals("10.0")) {
-            ratingStr = "10";
-        }
-        Rating ratingItem = Rating.valueForRatingOfFourty(ratingOf40);
-
-        //RelativeSizeSpan RATING_BIG_TEXT_SPAN = new RelativeSizeSpan(1.3f);
-        ForegroundColorSpan COLOR = new ForegroundColorSpan(
-                getResources().getColor(ratingItem.getColorRes()));
-        ForegroundColorSpan COLOR2 = new ForegroundColorSpan(
-                getResources().getColor(ratingItem.getColorRes()));
-
-        SpannableString ratingSpan = new SpannableString(ratingStr);
-        ratingSpan.setSpan(RATING_BIG_TEXT_SPAN, 0, ratingStr.length(), 0); // set size
-        ratingSpan.setSpan(COLOR, 0, ratingStr.length(), 0); // set color
-
-        String of10 = "/10";
-        SpannableString of10Span = new SpannableString(of10);
-        of10Span.setSpan(COLOR2, 0, of10.length(), 0); // set color
-
-        CharSequence displayText = TextUtils.concat(ratingSpan, of10Span);
-        return displayText;
-    }
-
 
     @Override
     public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {
