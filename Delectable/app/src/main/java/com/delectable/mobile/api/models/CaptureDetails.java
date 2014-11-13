@@ -87,7 +87,7 @@ public class CaptureDetails extends CaptureMinimal {
         boolean likesCapture = false;
         if (liking_participants != null) {
             for (AccountMinimal account : liking_participants) {
-                if (account.getId().equalsIgnoreCase(accountId)) {
+                if (account.getId().equals(accountId)) {
                     likesCapture = true;
                     break;
                 }
@@ -97,11 +97,11 @@ public class CaptureDetails extends CaptureMinimal {
     }
 
     //TODO this method should take the isLiked value as well bc wierd syncing issues may occur
-    public void toggleUserLikesCapture(String accountId) {
+    public void toggleUserLikesCapture(AccountMinimal userAccount) {
         boolean userLikedCapture = false;
         if (liking_participants != null) {
             for (AccountMinimal account : liking_participants) {
-                if (account.getId().equalsIgnoreCase(accountId)) {
+                if (account.getId().equals(userAccount.getId())) {
                     userLikedCapture = true;
                     liking_participants.remove(account);
                     break;
@@ -112,9 +112,7 @@ public class CaptureDetails extends CaptureMinimal {
             if (liking_participants == null) {
                 liking_participants = new ArrayList<AccountMinimal>();
             }
-            AccountMinimal tempUserAccount = new AccountMinimal();
-            tempUserAccount.setId(accountId);
-            liking_participants.add(tempUserAccount);
+            liking_participants.add(userAccount);
         }
     }
 
