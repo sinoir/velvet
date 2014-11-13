@@ -56,6 +56,13 @@ public class CheckoutData {
                 + "," + mSelectedShippingAddress.getState();
     }
 
+    public String getShippingState() {
+        if (mSelectedShippingAddress == null) {
+            return null;
+        }
+        return mSelectedShippingAddress.getState();
+    }
+
     public PaymentMethod getSelectedPaymentMethod() {
         return mSelectedPaymentMethod;
     }

@@ -135,9 +135,6 @@ public class WineCheckoutFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_wine_checkout, null, false);
         ButterKnife.inject(this, view);
 
-        // Always Fetch Latest Wine Source
-        fetchWineSource();
-
         fetchUserData();
 
         mData = new CheckoutData();
@@ -307,6 +304,9 @@ public class WineCheckoutFragment extends BaseFragment {
                     mShippingAddressModel.getShippingAddress(shippingAddressId));
         }
         updateShippingAddressUI();
+
+        // Fetch Wine Prices when Shipping address changes
+        fetchWineSource();
     }
 
     private void loadPaymentMethod(String paymentMethodId) {
@@ -317,12 +317,12 @@ public class WineCheckoutFragment extends BaseFragment {
         }
         updatePaymentMethodUI();
     }
-
     //endregion
 
     //region Fetch Remote Data
     private void fetchWineSource() {
-        mBaseWineController.fetchWineSource(mVintageId);
+        showLoader();
+        mBaseWineController.fetchWineSource(mVintageId, mData.getShippingState());
     }
 
     private void fetchUserData() {
@@ -343,6 +343,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     public void onEventMainThread(FetchedWineSourceEvent event) {
+        hideLoader();
         if (!mVintageId.equalsIgnoreCase(event.getWineId())) {
             return;
         }

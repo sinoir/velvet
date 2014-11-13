@@ -23,11 +23,19 @@ public class FetchWineSourceJob extends BaseJob {
 
     private String mState;
 
-    public FetchWineSourceJob(String wineId) {
+    /**
+     * Fetches Source for Wine and State
+     *
+     * @param wineId - Wine ID
+     * @param state  - Optional State, if null, will use State from User Account or CA
+     */
+    public FetchWineSourceJob(String wineId, String state) {
         super(new Params(Priority.SYNC));
         mWineId = wineId;
 
-        if (UserInfo.getAccountPrivate(App.getInstance()) != null) {
+        mState = state;
+
+        if (UserInfo.getAccountPrivate(App.getInstance()) != null && mState == null) {
             mState = UserInfo.getAccountPrivate(App.getInstance()).getSourcingState();
         }
         // Default State is California if user hasn't set Sourcing State yet

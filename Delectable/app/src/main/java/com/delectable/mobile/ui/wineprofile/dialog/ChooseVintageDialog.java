@@ -234,7 +234,7 @@ public class ChooseVintageDialog extends DialogFragment
 
     //region Fetch Remote data
     private void fetchPriceForWine(String wineId) {
-        mBaseWineController.fetchWineSource(wineId);
+        mBaseWineController.fetchWineSource(wineId, null);
     }
     //endregion
 

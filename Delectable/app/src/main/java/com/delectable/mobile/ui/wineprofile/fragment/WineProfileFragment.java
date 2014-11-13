@@ -650,7 +650,7 @@ public class WineProfileFragment extends BaseFragment implements
     //region Fetch Remote Data
 
     private void fetchWineSource() {
-        mBaseWineController.fetchWineSource(mSelectedWineVintage.getId());
+        mBaseWineController.fetchWineSource(mSelectedWineVintage.getId(), null);
     }
 
     /**
