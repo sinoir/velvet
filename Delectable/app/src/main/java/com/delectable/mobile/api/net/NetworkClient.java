@@ -1,6 +1,7 @@
 package com.delectable.mobile.api.net;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.api.cache.ServerInfo;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
@@ -11,16 +12,26 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import android.os.Build;
 import android.util.Log;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 public class NetworkClient extends BaseNetworkClient {
 
     private static final String TAG = NetworkClient.class.getSimpleName();
 
-    private static final String USER_AGENT = "DelectableAndroid";
+    /**
+     * Looks like this: {@code DelectableAndroid 1.09 rv:4 (Sony D6503; 4.4.2; en_US)}
+     */
+    private static final String USER_AGENT = "DelectableAndroid " +
+            BuildConfig.VERSION_NAME +
+            " rv:" + BuildConfig.VERSION_CODE +
+            " (" + Build.MANUFACTURER + " " + Build.MODEL + "; " +
+            Build.VERSION.RELEASE + "; " +
+            Locale.getDefault().toString() + ")";
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 

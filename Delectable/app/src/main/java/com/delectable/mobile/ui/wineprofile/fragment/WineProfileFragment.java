@@ -23,6 +23,7 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
+import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
@@ -31,6 +32,7 @@ import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.TextUtil;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +49,7 @@ import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,13 +81,11 @@ import butterknife.OnClick;
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
+    public static final String TAG = WineProfileFragment.class.getSimpleName();
+
     public static final int ACTIONBAR_HIDE_DELAY = 1000;
 
     private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
-
-    public static final String TAG = WineProfileFragment.class.getSimpleName();
-
-    private static final int NO_AVG_RATING = -1;
 
     private static final String WINE_PROFILE = "wineProfile";
 
@@ -200,8 +201,8 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param wineProfile      used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
-     *                         photo wants to be used instead of the {@code wineProfile}'s photo. Pass in
-     *                         {@code null} to use {@code wineProfile}'s photo.
+     *                         photo wants to be used instead of the {@code wineProfile}'s photo.
+     *                         Pass in {@code null} to use {@code wineProfile}'s photo.
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
@@ -217,8 +218,8 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param baseWine         used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
-     *                         photo wants to be used instead of the {@code baseWine}'s. Pass in {@code null}
-     *                         to use {@code baseWine}'s photo.
+     *                         photo wants to be used instead of the {@code baseWine}'s. Pass in
+     *                         {@code null} to use {@code baseWine}'s photo.
      */
     //used for Search Wines and User Profiles
     public static WineProfileFragment newInstance(BaseWineMinimal baseWine,
@@ -669,23 +670,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     private void updateRatingsView(Ratingsable ratingsable) {
         //rating avg
-        double allAvg = ratingsable.getRatingsSummary().getAllAvgOfTen();
-        double proAvg = ratingsable.getRatingsSummary().getProAvgOfTen();
-        DecimalFormat format = new DecimalFormat("0.0");
-        if (allAvg == NO_AVG_RATING) { //handling a no rating case, show a dash
-            mAllRatingsAverageTextView.setText("-");
-            mAllRatingsAverageTextView.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            String allAvgStr = format.format(allAvg);
-            mAllRatingsAverageTextView.setText(makeRatingDisplayText(allAvgStr));
-        }
-        if (proAvg == NO_AVG_RATING) {
-            mProRatingsAverageTextView.setText("-");
-            mProRatingsAverageTextView.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            String proAvgStr = format.format(proAvg);
-            mProRatingsAverageTextView.setText(makeRatingDisplayText(proAvgStr));
-        }
+        double allAvg = ratingsable.getRatingsSummary().getAllAvg();
+        double proAvg = ratingsable.getRatingsSummary().getProAvg();
+        mAllRatingsAverageTextView.setText(TextUtil.makeRatingDisplayText(getActivity(), allAvg));
+        mProRatingsAverageTextView.setText(TextUtil.makeRatingDisplayText(getActivity(), proAvg));
 
         //ratings count
         int allCount = ratingsable.getRatingsSummary().getAllCount();
@@ -697,17 +685,6 @@ public class WineProfileFragment extends BaseFragment implements
         mAllRatingsCountTextView.setText(allRatingsCount);
         mProRatingsCountTextView.setText(proRatingsCount);
     }
-
-    /**
-     * Makes the rating display text where the rating is a bit bigger than the 10.
-     */
-    private CharSequence makeRatingDisplayText(String rating) {
-        SpannableString ss = new SpannableString(rating);
-        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
-        CharSequence displayText = TextUtils.concat(ss, "/10");
-        return displayText;
-    }
-
 
     @Override
     public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {

@@ -59,7 +59,7 @@
     <string name="signup_in_sign_in_using_google">sign in using google</string>
     <string name="signup_in_sign_up_using_facebook">sign up using facebook</string>
     <string name="signup_in_sign_up_using_google">sign up using google</string>
-    <string name="signup_in_read_our">Read our&#160;</string>
+    <string name="signup_in_agree_to">By signing up you agree to Delectable\'s&#160;</string>
     <string name="signup_in_terms_of_use">Terms of Use</string>
 
     <string name="reset_password_dialog_title">Reset your password?</string>
@@ -170,6 +170,9 @@
     </plurals>
 
     <string name="remove_this_wine_from_your_list">Remove this wine from your list?</string>
+
+    <string name="minimal_capture_remove">remove</string>
+    <string name="minimal_capture_add_rating">add your rating</string>
 
     <!-- Followers -->
     <string name="followers_title">Followers</string>

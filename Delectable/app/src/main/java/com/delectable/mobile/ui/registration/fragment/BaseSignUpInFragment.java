@@ -164,6 +164,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         App.injectMembers(this);
         mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
         mFacebookUiHelper.onCreate(savedInstanceState);
+        //TODO loader is not retrieving email properly for some reason, commented out for now. might be relate to v21 support library
+        //getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -184,7 +186,6 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         mFacebookUiHelper.onResume();
-        getLoaderManager().initLoader(LOADER_EMAIL_AUTOCOMPLETE, null, this);
     }
 
     @Override
@@ -241,6 +242,10 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<String>();
+        if (cursor == null) {
+            return;
+        }
+
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));

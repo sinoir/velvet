@@ -8,6 +8,10 @@ public class CaptureDetailsResponse extends BaseResponse {
     private Payload payload;
 
     public CaptureDetails getCapture() {
+        if (payload == null) {
+            return null;
+        }
+
         return payload.capture;
     }
 

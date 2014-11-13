@@ -96,9 +96,6 @@ public class RateCaptureFragment extends BaseFragment {
     @InjectView(R.id.make_private)
     protected SwitchCompat mMakePrivateButton;
 
-    @InjectView(R.id.progress_bar)
-    protected View mProgressBar;
-
     @Inject
     protected WineScanController mWineScanController;
 
@@ -285,7 +282,6 @@ public class RateCaptureFragment extends BaseFragment {
     }
 
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
-        mProgressBar.setVisibility(View.GONE);
         if (!event.isSuccessful()) {
             handleEventErrorMessage(event);
             return;
@@ -324,11 +320,6 @@ public class RateCaptureFragment extends BaseFragment {
         FoursquareVenueSelectionFragment fragment = FoursquareVenueSelectionFragment.newInstance(
                 this, REQUEST_LOCATION);
         launchNextFragment(fragment);
-    }
-
-    @OnClick(R.id.progress_bar)
-    protected void progressClicked() {
-        //no-op -> prevent views below it from being selected
     }
 
     @OnCheckedChanged(R.id.share_facebook)

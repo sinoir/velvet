@@ -25,6 +25,9 @@
 -dontwarn android.support.v4.**
 -dontwarn android.support.v13.**
 
+#we need to keep this because oddly enough, proguard removes this class and it messes up everything.
+-keep class android.support.v7.widget.SearchView { *; }
+
 # greenrobot's EventBus
 -keepclassmembers class ** {
     public void onEvent*(**);

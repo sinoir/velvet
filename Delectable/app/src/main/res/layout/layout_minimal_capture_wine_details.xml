@@ -11,9 +11,9 @@
     <ImageView
         android:id="@+id/wine_image"
         android:layout_width="@dimen/cap_list_row_image_size"
-        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/spacing_16"
         android:layout_height="@dimen/cap_list_row_image_size"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/spacing_8"
         android:layout_alignParentLeft="true"/>
 
     <com.delectable.mobile.ui.common.widget.FontTextView
