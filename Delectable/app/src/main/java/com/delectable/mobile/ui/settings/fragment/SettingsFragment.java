@@ -301,6 +301,7 @@ public class SettingsFragment extends BaseFragment {
         super.onStop();
         //cached out account object in case identifiers/profile items were modified
         UserInfo.setAccountPrivate(mUserAccount);
+        mFacebookUiHelper.onStop();
     }
     //endregion
 
