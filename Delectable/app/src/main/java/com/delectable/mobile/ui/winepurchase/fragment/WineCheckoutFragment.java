@@ -106,6 +106,10 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private CheckoutData mData;
 
+    private boolean mHasLaodedShippingAddresses = false;
+
+    private boolean mHasLaodedPaymentMethods = false;
+
     public static WineCheckoutFragment newInstance(String vintageId) {
         WineCheckoutFragment fragment = new WineCheckoutFragment();
         Bundle args = new Bundle();
@@ -351,6 +355,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     public void onEventMainThread(FetchedShippingAddressesEvent event) {
+        mHasLaodedShippingAddresses = true;
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
         }
@@ -359,6 +364,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     public void onEventMainThread(FetchedPaymentMethodsEvent event) {
+        mHasLaodedPaymentMethods = true;
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
         }
@@ -370,6 +376,10 @@ public class WineCheckoutFragment extends BaseFragment {
     //region onClicks
     @OnClick(R.id.shipping_address_container)
     public void onShippingAddressClicked() {
+        // Disabled when we haven't loaded shipping address yet
+        if (!mHasLaodedShippingAddresses) {
+            return;
+        }
         if (mData.getSelectedShippingAddress() == null) {
             showAddShippingAddressDialog(null);
         } else {
@@ -379,6 +389,10 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @OnClick(R.id.payment_container)
     public void onPaymentMethodClicked() {
+        // Disabled when we haven't loaded Payment Methods yet
+        if (!mHasLaodedPaymentMethods) {
+            return;
+        }
         if (mData.getSelectedPaymentMethod() == null) {
             showAddPaymentMethodDialog();
         } else {

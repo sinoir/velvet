@@ -73,7 +73,8 @@
                 android:id="@+id/add_shipping_address"
                 style="@style/CheckoutAddStuffText"
                 android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:text="@string/winecheckout_add_shipping_address" />
+                android:text="@string/winecheckout_add_shipping_address"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -112,7 +113,8 @@
                 android:id="@+id/add_payment_method"
                 style="@style/CheckoutAddStuffText"
                 android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:text="@string/winecheckout_add_payment_method" />
+                android:text="@string/winecheckout_add_payment_method"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
