@@ -70,8 +70,7 @@ public class ChooseShippingAddressDialog extends DialogFragment
 
     private ArrayList<ShippingAddress> mShippingAddressList;
 
-    private ArrayList<ShippingAddress> mRemoveShippingAddressList
-            = new ArrayList<ShippingAddress>();
+    private ArrayList<String> mRemoveShippingAddressList = new ArrayList<String>();
 
     public static ChooseShippingAddressDialog newInstance(String shippingAddressId) {
         ChooseShippingAddressDialog f = new ChooseShippingAddressDialog();
@@ -157,9 +156,17 @@ public class ChooseShippingAddressDialog extends DialogFragment
         mShippingAddressList = (ArrayList<ShippingAddress>) mShippingAddressModel
                 .getAllShippingAddresses();
 
-        // Run though Shipping Addresses to remove
-        for (ShippingAddress address : mRemoveShippingAddressList) {
-            mShippingAddressList.remove(address);
+        ArrayList<ShippingAddress> toRemove = new ArrayList<ShippingAddress>();
+        for (ShippingAddress shippingAddress : mShippingAddressList) {
+            if (mRemoveShippingAddressList.contains(shippingAddress.getId())) {
+                toRemove.add(shippingAddress);
+            }
+        }
+
+        mShippingAddressList.removeAll(toRemove);
+
+        if (mSelectedShippingAddressId == null && mShippingAddressList.size() > 0) {
+            mSelectedShippingAddressId = mShippingAddressList.get(0).getId();
         }
 
         mAdapter.setData(mShippingAddressList);
@@ -168,11 +175,7 @@ public class ChooseShippingAddressDialog extends DialogFragment
 
     public void syncRemovedItems() {
         showLoader();
-        ArrayList<String> addressIds = new ArrayList<String>();
-        for (ShippingAddress address : mRemoveShippingAddressList) {
-            addressIds.add(address.getId());
-        }
-        mAccountController.removeShippingAddresses(addressIds);
+        mAccountController.removeShippingAddresses(mRemoveShippingAddressList);
     }
     //endregion
 
@@ -207,7 +210,7 @@ public class ChooseShippingAddressDialog extends DialogFragment
             }
         }
 
-        mRemoveShippingAddressList.add(addressToRemove);
+        mRemoveShippingAddressList.add(shippingAddressId);
         mShippingAddressList.remove(addressToRemove);
 
         // Update Shipping Address ID if it was the item removed
