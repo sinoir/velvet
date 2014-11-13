@@ -177,7 +177,7 @@
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/SignUpInTermsText"
-                    android:text="@string/signup_in_read_our"
+                    android:text="@string/signup_in_agree_to"
                     android:textColor="@color/d_medium_gray" />
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
