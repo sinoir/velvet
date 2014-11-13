@@ -1,9 +1,11 @@
 <resources>
 
-    <style name="DelectableTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="DelectableTheme" parent="DelectableBaseTheme" />
+
+    <style name="DelectableBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
-        <item name="colorPrimaryDark">@color/d_chestnut</item>
+        <item name="colorPrimaryDark">@color/status_bar</item>
         <item name="colorAccent">@color/d_chestnut</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
@@ -17,17 +19,19 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@drawable/tab_bg</item>
+        <!--<item name="android:background">?attr/colorPrimary</item>-->
         <item name="theme">@style/ToolbarTheme</item>
     </style>
 
     <style name="ToolbarStyle.Floating" parent="@style/ToolbarStyle">
-        <item name="android:background">@color/d_off_white</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <!--<item name="theme">@style/ThemeOverlay.AppCompat</item>-->
     </style>
 
     <style name="ToolbarStyle.Flat" parent="@style/ToolbarStyle">
-    <item name="elevation">0dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="elevation">0dp</item>
     </style>
 
     <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">

@@ -1,0 +1,7 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="DelectableTheme" parent="DelectableBaseTheme">
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+</resources>

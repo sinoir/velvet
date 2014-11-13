@@ -1,17 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
+            android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/d_white"
+        android:visibility="gone"
         android:orientation="vertical">
-
-        <com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip
-            android:id="@+id/tabstrip"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height" />
 
         <View
             android:id="@+id/tab_divider"
@@ -20,10 +16,17 @@
             android:background="@color/d_light_gray"
             android:visibility="gone" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
-</RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip
+        android:id="@+id/tabstrip"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_height" />
+
+</FrameLayout>
