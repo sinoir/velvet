@@ -55,6 +55,7 @@ import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.jobs.basewines.FetchBaseWineJob;
 import com.delectable.mobile.api.jobs.basewines.FetchWineSourceJob;
+import com.delectable.mobile.api.jobs.basewines.PurchaseWineJob;
 import com.delectable.mobile.api.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.api.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
@@ -111,6 +112,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.fragment.ConfirmationFragment;
 import com.delectable.mobile.ui.winepurchase.fragment.WineCheckoutFragment;
 import com.path.android.jobqueue.JobManager;
 
@@ -149,6 +151,7 @@ import de.greenrobot.event.EventBus;
                 WineProfileFragment.class,
                 TaggedPeopleFragment.class,
                 WineCheckoutFragment.class,
+                ConfirmationFragment.class,
                 // Dialogs
                 ChooseVintageDialog.class,
                 ResetPasswordDialog.class,
@@ -222,6 +225,7 @@ import de.greenrobot.event.EventBus;
                 AddPaymentMethodJob.class,
                 SetPrimaryPaymentMethodJob.class,
                 RemovePaymentMethodJob.class,
+                PurchaseWineJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
