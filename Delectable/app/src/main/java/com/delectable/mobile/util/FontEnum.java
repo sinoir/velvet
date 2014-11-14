@@ -1,5 +1,8 @@
 package com.delectable.mobile.util;
 
+import android.content.Context;
+import android.graphics.Typeface;
+
 //This is mapped directly to attrs.xml's fontName enum, changes here should be reflected there as well
 public enum FontEnum {
 
@@ -30,4 +33,7 @@ public enum FontEnum {
         return mFileName;
     }
 
+    public Typeface getTypeface(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/" + mFileName);
+    }
 }

@@ -23,7 +23,7 @@
             android:layout_marginBottom="@dimen/settings_view_horizontal_padding"
             android:src="@drawable/no_photo" />
 
-        <com.delectable.mobile.ui.common.widget.FontEditText
+        <EditText
             android:id="@+id/name"
             style="@style/SettingsEditText"
             android:hint="@string/settings_name_hint"
@@ -31,13 +31,13 @@
             android:inputType="textPersonName"
             android:singleLine="true" />
 
-        <com.delectable.mobile.ui.common.widget.FontEditText
+        <EditText
             android:id="@+id/short_bio"
             style="@style/SettingsEditText"
             android:hint="@string/settings_short_bio_hint"
             android:imeOptions="actionDone" />
 
-        <com.delectable.mobile.ui.common.widget.FontEditText
+        <EditText
             android:id="@+id/website"
             style="@style/SettingsEditText"
             android:hint="@string/settings_website_hint"

@@ -24,6 +24,7 @@ import com.delectable.mobile.ui.settings.activity.NotificationsActivty;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.DateHelperUtil;
+import com.delectable.mobile.util.FontEnum;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.TwitterUtil;
@@ -40,6 +41,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -163,6 +165,8 @@ public class SettingsFragment extends BaseFragment {
     @InjectView(R.id.delectable_version)
     TextView mVersionText;
 
+    private Typeface mWhitneyBookFont;
+
     private String mUserId;
 
     private Account mUserAccount;
@@ -200,6 +204,7 @@ public class SettingsFragment extends BaseFragment {
 
         mUserId = UserInfo.getUserId(getActivity());
 
+        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
     }
 
     //region Lifecycle
@@ -228,6 +233,12 @@ public class SettingsFragment extends BaseFragment {
                 return false;
             }
         };
+
+        //need to manually set typeface instead of using FontEditText because of support library limitations with subclassing EditText
+        mNameField.setTypeface(mWhitneyBookFont);
+        mShortBioField.setTypeface(mWhitneyBookFont);
+        mWebsiteField.setTypeface(mWhitneyBookFont);
+
         mNameField.setOnEditorActionListener(doneListener);
         mShortBioField.setOnEditorActionListener(doneListener);
         mWebsiteField.setOnEditorActionListener(doneListener);
