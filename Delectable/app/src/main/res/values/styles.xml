@@ -35,14 +35,20 @@
     </style>
 
     <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="android:background">@drawable/bg_toolbar_gradient</item>
+        <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
         <item name="android:textColorPrimary">@color/d_big_stone</item>
         <item name="android:textColorSecondary">@color/d_big_stone</item>
         <item name="android:actionMenuTextColor">@color/d_big_stone</item>
+    </style>
+
+    <style name="ToolbarTheme.Translucent" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:textColorPrimary">@color/d_white</item>
+        <item name="android:textColorSecondary">@color/d_white</item>
+        <item name="android:actionMenuTextColor">@color/d_white</item>
     </style>
 
     <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"></style>
