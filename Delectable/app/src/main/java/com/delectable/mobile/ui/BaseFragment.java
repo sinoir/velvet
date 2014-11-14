@@ -259,8 +259,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
      */
     protected void enableBackButton(boolean enable) {
         if (getActionBar() != null) {
-            Log.d(TAG, "Cannot enable back button, ActionBar is null");
             getActionBar().setDisplayHomeAsUpEnabled(enable);
+        } else {
+            Log.d(TAG, "Cannot enable back button, ActionBar is null");
         }
     }
 

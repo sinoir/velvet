@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
             android:clipToPadding="false"
-            android:overScrollMode="never"
             android:background="@android:color/white"
             android:listSelector="@android:color/white" />
 
