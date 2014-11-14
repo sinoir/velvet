@@ -398,4 +398,7 @@
     <string name="order_confirmation_title">Order Confirmation</string>
     <string name="order_confirmation_text">Text TBD</string>
 
+    <!-- Checkout Errors -->
+    <string name="checkout_no_internet">An internet connection is required</string>
+
 </resources>

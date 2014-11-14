@@ -9,7 +9,9 @@ import com.delectable.mobile.api.events.accounts.FetchedPaymentMethodsEvent;
 import com.delectable.mobile.api.events.accounts.FetchedShippingAddressesEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.events.wines.PurchasedWineEvent;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
@@ -18,6 +20,8 @@ import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +45,9 @@ public class WineCheckoutFragment extends BaseFragment {
     private static final int REQUEST_ADD_PAYMENT_METHOD = 300;
 
     private static final int REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG = 400;
+
+
+    private static final int DELAY_ERROR_DISPLAY = 2000;
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -110,6 +117,8 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private boolean mHasLaodedPaymentMethods = false;
 
+    private Toolbar mErrorToolbar;
+
     public static WineCheckoutFragment newInstance(String vintageId) {
         WineCheckoutFragment fragment = new WineCheckoutFragment();
         Bundle args = new Bundle();
@@ -145,6 +154,16 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // configure ActionBar
+        enableBackButton(true);
+        getActionBarToolbar()
+                .setBackgroundColor(getResources().getColor(R.color.d_off_white_translucent));
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_ADD_SHIPPING_ADDRESS_DIALOG
                 && resultCode == AddShippingAddressDialog.RESULT_SHIPPING_ADDRESS_SAVED) {
@@ -170,6 +189,14 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private void showConfirmation() {
         replaceWithNewFragment(ConfirmationFragment.newInstance());
+    }
+
+    private void showError(String error) {
+        if (!(getActivity() instanceof WineCheckoutActivity)) {
+            return;
+        }
+        ((WineCheckoutActivity) getActivity()).showOrHideErrorBar(true, 0, error);
+        ((WineCheckoutActivity) getActivity()).showOrHideErrorBar(false, DELAY_ERROR_DISPLAY, "");
     }
 
     //region Update UI methods
@@ -338,7 +365,7 @@ public class WineCheckoutFragment extends BaseFragment {
         if (event.isSuccessful()) {
             showConfirmation();
         } else {
-            showToastError(event.getErrorMessage());
+            handleError(event.getErrorCode(), event.getErrorMessage());
         }
     }
 
@@ -349,7 +376,7 @@ public class WineCheckoutFragment extends BaseFragment {
         }
 
         if (!event.isSuccessful()) {
-            showToastError(event.getErrorMessage());
+            handleError(event.getErrorCode(), event.getErrorMessage());
         }
 
         loadWineAndPricingData();
@@ -358,7 +385,7 @@ public class WineCheckoutFragment extends BaseFragment {
     public void onEventMainThread(FetchedShippingAddressesEvent event) {
         mHasLaodedShippingAddresses = true;
         if (!event.isSuccessful()) {
-            showToastError(event.getErrorMessage());
+            handleError(event.getErrorCode(), event.getErrorMessage());
         }
 
         loadShippingAddress(null);
@@ -367,7 +394,7 @@ public class WineCheckoutFragment extends BaseFragment {
     public void onEventMainThread(FetchedPaymentMethodsEvent event) {
         mHasLaodedPaymentMethods = true;
         if (!event.isSuccessful()) {
-            showToastError(event.getErrorMessage());
+            handleError(event.getErrorCode(), event.getErrorMessage());
         }
 
         loadPaymentMethod(null);
@@ -455,4 +482,20 @@ public class WineCheckoutFragment extends BaseFragment {
         dialog.show(getFragmentManager(), "dialog");
     }
     //endregion
+
+
+    protected Toolbar getActionBarToolbar() {
+        if (mErrorToolbar == null && (getActivity() instanceof WineCheckoutActivity)) {
+            mErrorToolbar = ((WineCheckoutActivity) getActivity()).getActionBarToolbar();
+        }
+        return mErrorToolbar;
+    }
+
+    private void handleError(ErrorUtil errorCode, String errorMessage) {
+        if (errorCode == ErrorUtil.NO_NETWORK_ERROR) {
+            errorMessage = getString(R.string.checkout_no_internet);
+        }
+
+        showError(errorMessage);
+    }
 }
