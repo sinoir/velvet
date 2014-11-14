@@ -1,258 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/d_white">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/producer_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginRight="@dimen/general_row_horizontal_spacing"
-            android:paddingTop="22dp"
-            android:textColor="@color/d_dark_gray"
-            android:textSize="17sp"
-            app:fontName="whitney_medium_sc" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/wine_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/producer_name"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginRight="@dimen/general_row_horizontal_spacing"
-            android:textColor="@color/d_black"
-            android:textSize="17sp"
-            app:fontName="whitney_book" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/per_bottle_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginRight="@dimen/general_row_horizontal_spacing"
-            android:paddingTop="14dp"
-            android:textSize="17sp"
-            app:fontName="whitney_book" />
-
-        <RelativeLayout
-            android:id="@+id/shipping_address_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_bottom_border"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/address_label"
-                style="@style/CheckoutRowLabel"
-                android:text="@string/inecheckout_address_label" />
+                android:id="@+id/producer_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+                android:paddingTop="22dp"
+                android:textColor="@color/d_dark_gray"
+                android:textSize="17sp"
+                app:fontName="whitney_medium_sc" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/shipping_address"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:textSize="16sp"
-                android:visibility="gone"
-                app:fontName="whitney_book" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/add_shipping_address"
-                style="@style/CheckoutAddStuffText"
-                android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:text="@string/winecheckout_add_shipping_address"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/payment_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_bottom_border"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/payment_label"
-                style="@style/CheckoutRowLabel"
-                android:text="@string/winecheckout_payment_label" />
-
-            <ImageView
-                android:id="@+id/payment_method_cc_image"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:layout_marginRight="10dp"
-                android:visibility="invisible" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/payment_method_last_digits"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/payment_method_cc_image"
-                android:gravity="center_vertical"
-                android:textSize="16sp"
-                android:visibility="visible"
-                app:fontName="whitney_book" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/add_payment_method"
-                style="@style/CheckoutAddStuffText"
-                android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:text="@string/winecheckout_add_payment_method"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/quantity_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_bottom_border"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/quantity_label"
-                style="@style/CheckoutRowLabel"
-                android:text="@string/winecheckout_quantity_label" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/quantity_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:gravity="center_vertical"
-                android:textSize="16sp"
-                android:visibility="visible"
-                app:fontName="whitney_book" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/plus_quantity"
-                style="@style/CheckoutShippingAddRemoveButton"
-                android:layout_alignParentRight="true"
-                android:text="+" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/minus_quantity"
-                style="@style/CheckoutShippingAddRemoveButton"
-                android:layout_toLeftOf="@+id/plus_quantity"
-                android:text="&#8211;" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/promo_code_container"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:layout_marginTop="20dp"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/credit_applied_label"
-                style="@style/CheckoutPricingLabel"
-                android:text="@string/winecheckout_credit_applied_label"
-                android:visibility="gone" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/credit_applied_amount"
-                style="@style/CheckoutPricingAmount"
-                android:textColor="@color/d_light_green"
-                android:visibility="gone" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/add_promo_code"
-                style="@style/CheckoutAddStuffText"
-                android:layout_marginLeft="@dimen/checkout_info_left_margin"
-                android:text="@string/winecheckout_add_promo_code"
-                android:textSize="14sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/shipping_container"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                style="@style/CheckoutPricingLabel"
-                android:text="@string/winecheckout_shipping_label" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/shipping_amount"
-                style="@style/CheckoutPricingAmount"
-                android:text="-"
-                android:textColor="@color/d_dark_gray" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/tax_container"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                style="@style/CheckoutPricingLabel"
-                android:text="@string/winecheckout_tax_label" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/tax_amount"
-                style="@style/CheckoutPricingAmount"
-                android:text="-"
-                android:textColor="@color/d_dark_gray" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/total_price_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-            android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                style="@style/CheckoutPricingLabel"
-                android:text="@string/winecheckout_total_label" />
-
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/total_amount"
-                style="@style/CheckoutPricingAmount"
-                android:text="-"
+                android:id="@+id/wine_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/producer_name"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginRight="@dimen/general_row_horizontal_spacing"
                 android:textColor="@color/d_black"
-                android:textSize="16sp"
-                app:fontName="whitney_medium" />
-        </RelativeLayout>
+                android:textSize="17sp"
+                app:fontName="whitney_book" />
 
-    </LinearLayout>
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/per_bottle_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+                android:paddingTop="14dp"
+                android:textSize="17sp"
+                app:fontName="whitney_book" />
 
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/confirm_button"
-        style="@style/ButtonLargeDChestNutBg"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:text="@string/winecheckout_confirm_pay" />
+            <RelativeLayout
+                android:id="@+id/shipping_address_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_bottom_border"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/address_label"
+                    style="@style/CheckoutRowLabel"
+                    android:text="@string/inecheckout_address_label" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/shipping_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/checkout_info_left_margin"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:fontName="whitney_book" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/add_shipping_address"
+                    style="@style/CheckoutAddStuffText"
+                    android:layout_marginLeft="@dimen/checkout_info_left_margin"
+                    android:text="@string/winecheckout_add_shipping_address"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/payment_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_bottom_border"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/payment_label"
+                    style="@style/CheckoutRowLabel"
+                    android:text="@string/winecheckout_payment_label" />
+
+                <ImageView
+                    android:id="@+id/payment_method_cc_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/checkout_info_left_margin"
+                    android:layout_marginRight="10dp"
+                    android:visibility="invisible" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/payment_method_last_digits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/payment_method_cc_image"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    app:fontName="whitney_book" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/add_payment_method"
+                    style="@style/CheckoutAddStuffText"
+                    android:layout_marginLeft="@dimen/checkout_info_left_margin"
+                    android:text="@string/winecheckout_add_payment_method"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/quantity_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_bottom_border"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/quantity_label"
+                    style="@style/CheckoutRowLabel"
+                    android:text="@string/winecheckout_quantity_label" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/quantity_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/checkout_info_left_margin"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    app:fontName="whitney_book" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/plus_quantity"
+                    style="@style/CheckoutShippingAddRemoveButton"
+                    android:layout_alignParentRight="true"
+                    android:text="+" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/minus_quantity"
+                    style="@style/CheckoutShippingAddRemoveButton"
+                    android:layout_toLeftOf="@+id/plus_quantity"
+                    android:text="&#8211;" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/promo_code_container"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginTop="20dp"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/credit_applied_label"
+                    style="@style/CheckoutPricingLabel"
+                    android:text="@string/winecheckout_credit_applied_label"
+                    android:visibility="gone" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/credit_applied_amount"
+                    style="@style/CheckoutPricingAmount"
+                    android:textColor="@color/d_light_green"
+                    android:visibility="gone" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/add_promo_code"
+                    style="@style/CheckoutAddStuffText"
+                    android:layout_marginLeft="@dimen/checkout_info_left_margin"
+                    android:text="@string/winecheckout_add_promo_code"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/shipping_container"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    style="@style/CheckoutPricingLabel"
+                    android:text="@string/winecheckout_shipping_label" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/shipping_amount"
+                    style="@style/CheckoutPricingAmount"
+                    android:text="-"
+                    android:textColor="@color/d_dark_gray" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tax_container"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    style="@style/CheckoutPricingLabel"
+                    android:text="@string/winecheckout_tax_label" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/tax_amount"
+                    style="@style/CheckoutPricingAmount"
+                    android:text="-"
+                    android:textColor="@color/d_dark_gray" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/total_price_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    style="@style/CheckoutPricingLabel"
+                    android:text="@string/winecheckout_total_label" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/total_amount"
+                    style="@style/CheckoutPricingAmount"
+                    android:text="-"
+                    android:textColor="@color/d_black"
+                    android:textSize="16sp"
+                    app:fontName="whitney_medium" />
+            </RelativeLayout>
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/confirm_button"
+                style="@style/ButtonLargeDChestNutBg"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:text="@string/winecheckout_confirm_pay" />
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle.Floating" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/error_toolbar"
+        style="@style/ToolbarStyle.Error"
+        android:visibility="gone"
+        app:theme="@style/ToolbarStyle.Error"
+        app:titleTextAppearance="@style/ToolbarStyleText" />
 
     <FrameLayout
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/form_container"
-        android:layout_alignTop="@+id/dialog_title"
         android:background="#88000000"
         android:clickable="true"
         android:visibility="gone">
@@ -263,4 +277,4 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
-</RelativeLayout>
+</FrameLayout>

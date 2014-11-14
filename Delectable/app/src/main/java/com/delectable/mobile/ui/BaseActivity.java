@@ -34,9 +34,9 @@ public abstract class BaseActivity extends ActionBarActivity
         implements HideableActionBar, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
+    protected static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
 
-    private static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
+    protected static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
 
     private final String TAG = this.getClass().getSimpleName();
 
