@@ -91,7 +91,7 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     public String getSmallest() {
         if (child_resolutions != null) {
             String smallest = child_resolutions.getSmallest();
-            if (smallest != null && !smallest.isEmpty()) {
+            if (smallest != null) {
                 return smallest;
             }
         }
@@ -101,17 +101,20 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     public String getLargest() {
         if (child_resolutions != null) {
             String largest = child_resolutions.getLargest();
-            if (largest != null && !largest.isEmpty()) {
+            if (largest != null) {
                 return largest;
             }
         }
         return this.url;
     }
 
+    /**
+     * see {@link ChildResolution#getBestThumb()}
+     */
     public String getBestThumb() {
         if (child_resolutions != null) {
             String thumb = child_resolutions.getBestThumb();
-            if (thumb != null && !thumb.isEmpty()) {
+            if (thumb != null) {
                 return thumb;
             }
         }
@@ -124,13 +127,28 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
      */
     public String get450Plus() {
         if (child_resolutions != null) {
-            String thumb = child_resolutions.get450Plus();
-            if (thumb != null && !thumb.isEmpty()) {
-                return thumb;
+            String pic = child_resolutions.get450Plus();
+            if (pic != null) {
+                return pic;
             }
         }
         return this.url;
     }
+
+    /**
+     * see {@link ChildResolution#getMediumPlus()}
+     */
+    public String getMediumPlus() {
+        if (child_resolutions != null) {
+            String pic = child_resolutions.getMediumPlus();
+            if (pic != null) {
+                return pic;
+            }
+        }
+        return this.url;
+    }
+
+
 
     @Override
     public String toString() {
@@ -265,11 +283,22 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         }
 
         /**
+         * Returns the 640px or better image url.
+         */
+        public String getMediumPlus() {
+            String[] sizes = {
+                    size_medium,
+                    size_blur
+            };
+            return getTopPhoto(sizes);
+        }
+
+        /**
          * Returns the first non null photo url.
          */
         private String getTopPhoto(String[] photos) {
             for (String size : photos) {
-                if (size != null && !size.trim().equals("")) {
+                if (size != null && !size.trim().isEmpty()) {
                     return size;
                 }
             }
