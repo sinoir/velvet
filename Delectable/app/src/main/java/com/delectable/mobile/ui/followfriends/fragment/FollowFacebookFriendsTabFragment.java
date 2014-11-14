@@ -105,6 +105,7 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mFacebookUiHelper.onActivityResult(requestCode, resultCode, data);
         mHiddenFacebookLoginButton.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -126,6 +127,11 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
 
             if (state.isOpened()) {
                 facebookConnect();
+                return;
+            }
+
+            //logout event
+            if (state.isClosed()) {
                 return;
             }
 
