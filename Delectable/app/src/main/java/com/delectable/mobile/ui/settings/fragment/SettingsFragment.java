@@ -11,9 +11,7 @@ import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
@@ -55,7 +53,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +64,8 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
+import butterknife.OnFocusChange;
 
 
 public class SettingsFragment extends BaseFragment {
@@ -107,7 +106,8 @@ public class SettingsFragment extends BaseFragment {
             mUserAccount.setTwTokenSecret(twitterInfo.tokenSecret);
             updateUI();
 
-            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token, twitterInfo.tokenSecret, twitterInfo.screenName);
+            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token,
+                    twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override
@@ -188,6 +188,8 @@ public class SettingsFragment extends BaseFragment {
 
     private UiLifecycleHelper mFacebookUiHelper;
 
+    private boolean mUpdatingViaDoneClick = false;
+
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
@@ -218,57 +220,43 @@ public class SettingsFragment extends BaseFragment {
 
         mRealFacebookLoginButton.setFragment(this);
 
-        //listens for done button on soft keyboard
-        TextView.OnEditorActionListener doneListener = new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    EditText editText = (EditText) v;
-                    String text = editText.getText().toString();
-                    updateInfo(editText, text);
-
-                    hideKeyboard();
-                    return true;
-                }
-                return false;
-            }
-        };
-
         //need to manually set typeface instead of using FontEditText because of support library limitations with subclassing EditText
         mNameField.setTypeface(mWhitneyBookFont);
         mShortBioField.setTypeface(mWhitneyBookFont);
         mWebsiteField.setTypeface(mWhitneyBookFont);
 
-        mNameField.setOnEditorActionListener(doneListener);
-        mShortBioField.setOnEditorActionListener(doneListener);
-        mWebsiteField.setOnEditorActionListener(doneListener);
-
-        mEmailField.setOnEditorActionListener(doneListener);
-        mPhoneNumberField.setOnEditorActionListener(doneListener);
-
-        //listens for focus loss, so we know when to init an update info request
-        View.OnFocusChangeListener focusLossListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    EditText editText = (EditText) v;
-                    String text = editText.getText().toString();
-                    updateInfo(editText, text);
-                }
-            }
-        };
-        mNameField.setOnFocusChangeListener(focusLossListener);
-        mShortBioField.setOnFocusChangeListener(focusLossListener);
-        mWebsiteField.setOnFocusChangeListener(focusLossListener);
-
-        mEmailField.setOnFocusChangeListener(focusLossListener);
-        mPhoneNumberField.setOnFocusChangeListener(focusLossListener);
-
         mHiddenTwitterLoginButton.setCallback(TwitterCallback);
-
         mVersionText.setText(getString(R.string.settings_delectable_version, getAppVersion()));
 
         return view;
+    }
+
+    @OnEditorAction({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    protected boolean onKeyboardDoneAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            EditText editText = (EditText) v;
+            String text = editText.getText().toString();
+            mUpdatingViaDoneClick = true;
+            updateInfo(editText, text);
+
+            hideKeyboard();
+            return true;
+        }
+        return false;
+    }
+
+    @OnFocusChange({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    protected void onFocusLoss(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            EditText editText = (EditText) v;
+            String text = editText.getText().toString();
+            //don't double send the same request if it was already invoked by a done click
+            if (mUpdatingViaDoneClick) {
+                mUpdatingViaDoneClick = false;
+                return;
+            }
+            updateInfo(editText, text);
+        }
     }
 
     @Override
@@ -411,7 +399,8 @@ public class SettingsFragment extends BaseFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = CameraUtil.loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PROFILE_IMAGE);
+                    selectedImage = CameraUtil
+                            .loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PROFILE_IMAGE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);
