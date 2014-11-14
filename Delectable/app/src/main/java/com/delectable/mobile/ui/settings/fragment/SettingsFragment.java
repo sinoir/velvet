@@ -88,6 +88,11 @@ public class SettingsFragment extends BaseFragment {
                 return;
             }
 
+            //logout event
+            if (state.isClosed()) {
+                return;
+            }
+
             // TODO: Handle more errors and other conditions.
             showToastError(getString(R.string.error_facebook_connect_failed));
         }
