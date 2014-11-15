@@ -4,6 +4,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -12,6 +14,16 @@ public class CaptureDetailsActivity extends BaseActivity {
     public static final String PARAMS_CAPTURE_ID = "PARAMS_CAPTURE_ID";
 
     private static final String TAG = CaptureDetailsActivity.class.getSimpleName();
+
+    /**
+     * see {@link CaptureDetailsFragment#newInstance(String)}
+     */
+    public static Intent newIntent(Context packageContext, String captureId) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_CAPTURE_ID, captureId);
+        intent.setClass(packageContext, CaptureDetailsActivity.class);
+        return intent;
+    }
 
     private String mCaptureId;
 
