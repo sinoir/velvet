@@ -2,13 +2,14 @@ package com.delectable.mobile.api.jobs.registrations;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.endpointmodels.registrations.AuthorizeFacebookRequest;
 import com.delectable.mobile.api.endpointmodels.registrations.RegistrationsFacebookResponse;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.registrations.AuthorizeFacebookRequest;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
@@ -58,8 +59,10 @@ public class LoginFacebookJob extends BaseJob {
         if (newUser) {
             KahunaUtil.trackSignUp("facebook", account.getFname(), account.getLname(),
                     Calendar.getInstance().getTime());
+            mAnalytics.trackRegister(AnalyticsUtil.ACCOUNT_FACEBOOK);
         } else {
             KahunaUtil.trackLogin(account.getId(), account.getEmail());
+            mAnalytics.identify(account.getId());
         }
     }
 

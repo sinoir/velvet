@@ -1,12 +1,13 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,14 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
         mListView.setEmptyView(emptyView);
 
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAnalytics.trackSwitchFeed(AnalyticsUtil.FEED_TRENDING);
+        }
     }
 
     @Override

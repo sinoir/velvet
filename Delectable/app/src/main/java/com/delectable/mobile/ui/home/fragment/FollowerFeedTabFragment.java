@@ -11,6 +11,7 @@ import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +68,14 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
         mListView.setEmptyView(emptyView);
 
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAnalytics.trackSwitchFeed(AnalyticsUtil.FEED_FOLLOWING);
+        }
     }
 
     @Override
