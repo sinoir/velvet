@@ -85,6 +85,7 @@
             android:text="Soft in texture with a jolt of acidity lifting the blackberry"
             android:textColor="@color/d_dark_gray"
             android:textSize="@dimen/text_size_medium"
+            android:lineSpacingMultiplier="1.2"
             app:fontName="whitney_book" />
 
         <ImageButton
