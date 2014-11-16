@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/capture_details_scroll_view"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/d_white"
-    android:fillViewport="false">
+    android:layout_height="match_parent">
 
-    <!--TODO: figure out how to smoothly have text populate this view, animateLayoutChanges:true doesn't seem to work-->
-    <com.delectable.mobile.ui.capture.widget.CaptureDetailsView
-        android:id="@+id/capture_details_view"
+    <ScrollView
+        android:id="@+id/capture_details_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</ScrollView>
+        android:layout_height="match_parent"
+        android:background="@color/d_white"
+        android:fillViewport="false">
+
+        <!--TODO: figure out how to smoothly have text populate this view, animateLayoutChanges:true doesn't seem to work-->
+        <com.delectable.mobile.ui.capture.widget.CaptureDetailsView
+            android:id="@+id/capture_details_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle.Translucent" />
+
+</FrameLayout>
