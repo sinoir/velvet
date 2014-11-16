@@ -13,6 +13,7 @@ import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.facebook.Session;
@@ -62,6 +63,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
 
     @Inject
     protected EventBus mEventBus;
+
+    @Inject
+    protected AnalyticsUtil mAnalytics;
 
     private Set<LifecycleListener> lifecycleListeners;
 

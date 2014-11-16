@@ -443,6 +443,13 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
                 mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
                 return;
             }
+        } else if (mUserIsCapturer && !mHasRating && !mHasComment) {
+            // my own capture without a rating
+            mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
+            // remove redundant overflow actions
+            mMenuActionEdit.setVisible(false);
+            mMenuActionRemove.setVisible(false);
+            return;
         }
 
         //show like and comment counts if at least one of them is populated

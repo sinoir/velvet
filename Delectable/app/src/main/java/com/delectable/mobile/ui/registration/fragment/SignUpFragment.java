@@ -118,4 +118,5 @@ public class SignUpFragment extends BaseSignUpInFragment {
         String title = getString(R.string.signup_in_terms_of_use);
         startActivity(WebViewActivty.newIntent(getActivity(), url, title));
     }
+
 }

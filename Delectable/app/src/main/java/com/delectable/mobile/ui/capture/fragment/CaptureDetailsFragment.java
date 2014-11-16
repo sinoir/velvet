@@ -7,10 +7,12 @@ import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
+import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,14 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     private View mScrollView;
 
     private CaptureDetailsView mCaptureDetailsView;
+
+    private View mWineBanner;
+
+    private View mWineImageView;
+
+    private Toolbar mToolbar;
+
+    private int mStickyToolbarHeight;
 
     private String mCaptureId;
 
@@ -58,6 +68,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         if (args != null) {
             mCaptureId = args.getString(sArgsCaptureId);
         }
+
+        mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
     }
 
     @Override
@@ -72,23 +84,43 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         mScrollView.getViewTreeObserver().addOnScrollChangedListener(
                 new ViewTreeObserver.OnScrollChangedListener() {
 
-                    View wineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
-
-                    View wineImageView = wineBanner.findViewById(R.id.wine_image);
-
                     @Override
                     public void onScrollChanged() {
-                        int scrollY = mScrollView.getScrollY();
-                        float height = wineBanner.getHeight();
-                        // check if header is still visible
-                        if (scrollY > height) {
-                            return;
-                        }
-                        wineImageView.setTranslationY(scrollY / 2f);
+                        CaptureDetailsFragment.this.onScrollChanged();
+//                        int scrollY = mScrollView.getScrollY();
+//                        float height = mWineBanner.getHeight();
+//                        // check if header is still visible
+//                        if (scrollY > height) {
+//                            return;
+//                        }
+//                        mWineImageView.setTranslationY(scrollY / 2f);
                     }
                 });
 
+        mWineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
+        mWineImageView = mWineBanner.findViewById(R.id.wine_image);
+
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        getBaseActivity().setSupportActionBar(mToolbar);
+        getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         return view;
+    }
+
+    private void onScrollChanged() {
+        int top = -mScrollView.getScrollY();
+        int bannerHeight = mWineBanner.getHeight();
+
+        // parallax effect on wine image
+        if (top <= bannerHeight) {
+            mWineImageView.setTranslationY(-top / 2f);
+        }
+
+        // drag toolbar off the screen when reaching the bottom of the header
+        int toolbarHeight = mToolbar.getHeight();
+        int toolbarDragOffset = bannerHeight - mStickyToolbarHeight;
+        int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
+        mToolbar.setTranslationY(toolbarTranslation);
     }
 
     @Override

@@ -110,6 +110,7 @@ import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Singleton;
@@ -120,6 +121,7 @@ import de.greenrobot.event.EventBus;
 
 @Module(
         injects = {
+                App.class,
                 MainActivity.class,
                 NavActivity.class,
                 // Fragments
@@ -299,4 +301,9 @@ public class AppModule {
         return new MotdNetworkClient();
     }
 
+    @Provides
+    @Singleton
+    AnalyticsUtil provideAnalytics() {
+        return new AnalyticsUtil();
+    }
 }
