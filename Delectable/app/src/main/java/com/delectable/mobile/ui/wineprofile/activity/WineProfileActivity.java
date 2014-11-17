@@ -1,7 +1,6 @@
 package com.delectable.mobile.ui.wineprofile.activity;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
@@ -86,10 +85,6 @@ public class WineProfileActivity extends BaseActivity {
             //from deep links
             mBaseWineId = args.getString(DEEP_BASE_WINE_ID);
             mVintageId = args.getString(DEEP_BASE_VINTAGE_ID);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mBaseWineId = getDeepLinkParam(DEEP_BASE_WINE_ID);
-            mVintageId = getDeepLinkParam(DEEP_BASE_VINTAGE_ID);
         }
 
         if (savedInstanceState == null) {

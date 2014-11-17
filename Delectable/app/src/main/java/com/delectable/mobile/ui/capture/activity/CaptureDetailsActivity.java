@@ -25,23 +25,20 @@ public class CaptureDetailsActivity extends BaseActivity {
         return intent;
     }
 
-    private String mCaptureId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
+
+        String captureId = null;
         Bundle args = getIntent().getExtras();
         if (args != null) {
-            mCaptureId = args.getString(PARAMS_CAPTURE_ID);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mCaptureId = getDeepLinkParam("capture_id");
+            captureId = args.getString(PARAMS_CAPTURE_ID);
         }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, CaptureDetailsFragment.newInstance(mCaptureId))
+                    .add(R.id.container, CaptureDetailsFragment.newInstance(captureId))
                     .commit();
         }
 
