@@ -147,7 +147,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.delectable.mobile.ui.common.activity.WebViewActivty"
+            android:name=".ui.common.activity.WebViewActivity"
             android:label=""
             android:screenOrientation="portrait" />
 

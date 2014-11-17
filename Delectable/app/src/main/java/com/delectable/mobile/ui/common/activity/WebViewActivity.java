@@ -9,9 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class WebViewActivty extends BaseActivity {
+public class WebViewActivity extends BaseActivity {
 
-    private static final String TAG = WebViewActivty.class.getSimpleName();
+    private static final String TAG = WebViewActivity.class.getSimpleName();
 
     public static final String URL = "url";
     public static final String TITLE = "title";
@@ -21,7 +21,7 @@ public class WebViewActivty extends BaseActivity {
         Intent intent = new Intent();
         intent.putExtra(URL, url);
         intent.putExtra(TITLE, title);
-        intent.setClass(packageContext, WebViewActivty.class);
+        intent.setClass(packageContext, WebViewActivity.class);
         return intent;
     }
 
