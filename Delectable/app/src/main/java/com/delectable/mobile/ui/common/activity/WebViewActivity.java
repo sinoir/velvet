@@ -55,7 +55,7 @@ public class WebViewActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finishDeepLinkActivity();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
