@@ -5,8 +5,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.FoursquareController;
 import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
 import com.delectable.mobile.api.events.foursquare.SearchedFoursquareVenuesEvent;
-import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.camera.widget.FoursquareVenuesAdapter;
 import com.delectable.mobile.util.HelperUtil;
 
@@ -118,7 +118,7 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Location lastLocation = ((BaseActivity) getActivity()).getLastLocation();
+        Location lastLocation = ((WineCaptureActivity) getActivity()).getLastLocation();
         if (lastLocation != null) {
             mFoursquareController
                     .searchFoursquareVenuesByLatLon(HelperUtil.getLatLngFromLocation(lastLocation));
