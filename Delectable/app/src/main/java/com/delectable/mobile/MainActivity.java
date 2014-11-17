@@ -1,32 +1,24 @@
 package com.delectable.mobile;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.AssetManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.delectable.mobile.api.controllers.VersionPropsFileController;
 import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.api.events.builddatecheck.BuildDateCheckedEvent;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
-import com.delectable.mobile.ui.versionupgrade.dialog.VersionUpgradeDialog;
+import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.KahunaUtil;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import javax.inject.Inject;
-
-import de.greenrobot.event.EventBus;
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.TaskStackBuilder;
 
 
 public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String DELECTABLE_DEEPLINK_SCHEME = "delectable";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +26,25 @@ public class MainActivity extends Activity {
 
         KahunaUtil.trackStart();
         App.injectMembers(this);
-        setContentView(R.layout.activity_fragment_container);
 
+        Intent intent = getIntent();
+        String action = intent.getAction();
+
+        //spawned from deep link
+        if (Intent.ACTION_VIEW.equals(action)) {
+            if (intent.getData() != null) {
+                Uri data = intent.getData();
+                String scheme = data.getScheme();
+                if (DELECTABLE_DEEPLINK_SCHEME.equalsIgnoreCase(scheme)) {
+                    launchDeepLinkFlow(data);
+                    return;
+                }
+            }
+        }
+        launchNavOrLogin();
+    }
+
+    private void launchNavOrLogin() {
         Intent launchIntent = new Intent();
         if (UserInfo.isSignedIn(this)) {
             launchIntent.setClass(getApplicationContext(), NavActivity.class);
@@ -47,6 +56,39 @@ public class MainActivity extends Activity {
         startActivity(launchIntent);
 
         finish();
+    }
+
+    /**
+     * @return {@code true} if the event was consumed, {@code false} if it didn't.
+     */
+    private void launchDeepLinkFlow(Uri data) {
+        //user needs to be signed in to access any part of the app
+        if (!UserInfo.isSignedIn(this)) {
+            Intent intent = new Intent();
+            intent.setClass(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        Intent intent = DeepLink.getIntent(this, data);
+        if (intent == null) {
+            //catch undocumented deeplinks and redirect them to a normal app launch flow
+            launchNavOrLogin();
+            return;
+        }
+
+        //Synthesize backstack so when use hits back they go back to navactivity
+        PendingIntent pendingIntent = TaskStackBuilder.create(this)
+                .addNextIntentWithParentStack(intent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        try {
+            pendingIntent.send(this, 0, new Intent());
+            finish();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+            launchNavOrLogin();
+        }
     }
 }
 

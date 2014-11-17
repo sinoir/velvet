@@ -40,8 +40,6 @@ public abstract class BaseActivity extends ActionBarActivity
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private Uri mDeepLinkUriData;
-
     private GoogleApiClient mGoogleApiClient;
 
     private LocationRequest mLocationRequest;
@@ -63,14 +61,6 @@ public abstract class BaseActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Deep Link stuff
-        Intent intent = getIntent();
-        // Action not used yet, not sure if we'll need it.  Right now the action only VIEW.
-        if (intent != null) {
-            String action = intent.getAction();
-            mDeepLinkUriData = intent.getData();
-        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -241,22 +231,6 @@ public abstract class BaseActivity extends ActionBarActivity
         transaction.addToBackStack(fragmentName);
 
         transaction.commit();
-    }
-
-    public String getDeepLinkParam(String key) {
-        String param = null;
-        if (isFromDeepLink()) {
-            param = mDeepLinkUriData.getQueryParameter(key);
-        }
-        return param;
-    }
-
-    public boolean isFromDeepLink() {
-        return mDeepLinkUriData != null;
-    }
-
-    public Uri getDeepLinkUriData() {
-        return mDeepLinkUriData;
     }
 
     public Location getLastLocation() {
