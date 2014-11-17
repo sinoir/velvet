@@ -58,6 +58,7 @@
             android:id="@+id/empty_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/d_white"
             android:gravity="center"
             android:padding="@dimen/spacing_32"
             android:text="@string/tag_friends_empty_state_text"
