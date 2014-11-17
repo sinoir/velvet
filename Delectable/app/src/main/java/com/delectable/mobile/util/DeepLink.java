@@ -59,6 +59,16 @@ public enum DeepLink {
         if (data == null) {
             return UNKNOWN;
         }
+
+        //TODO remove when this case is handled
+        //currently unable to handle base_wine deeplink without a base_wine_id (just a vintage_id param)
+        if (DeepLink.BASE_WINE == valueOfHost(data.getHost())) {
+            String baseWineId = data.getQueryParameter("base_wine_id");
+            if (baseWineId == null) {
+                return UNKNOWN;
+            }
+        }
+
         return valueOfHost(data.getHost());
     }
 
