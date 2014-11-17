@@ -59,6 +59,7 @@ public class LoginFacebookJob extends BaseJob {
         if (newUser) {
             KahunaUtil.trackSignUp("facebook", account.getFname(), account.getLname(),
                     Calendar.getInstance().getTime());
+            mAnalytics.alias(account.getId());
             mAnalytics.trackRegister(AnalyticsUtil.ACCOUNT_FACEBOOK);
         } else {
             KahunaUtil.trackLogin(account.getId(), account.getEmail());

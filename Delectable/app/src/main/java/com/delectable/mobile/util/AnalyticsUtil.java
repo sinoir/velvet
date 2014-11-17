@@ -72,7 +72,7 @@ public class AnalyticsUtil {
             .getInstance(App.getInstance(), BuildConfig.MIXPANEL_TOKEN);
 
     public AnalyticsUtil() {
-        setSuperProperties();
+        setSuperProperties(null);
     }
 
     public void flush() {
@@ -80,18 +80,21 @@ public class AnalyticsUtil {
     }
 
     public void identify(String userId) {
+        setSuperProperties(userId);
         mixpanel.identify(userId);
-        // TODO alias here? ask Dima
-        alias(userId);
         Log.d(TAG, "identify: " + userId);
     }
 
+    /**
+     * Call this only ONCE per user, after they signed up
+     */
     public void alias(String userId) {
         mixpanel.alias(userId, null);
+        mixpanel.identify(userId);
         Log.d(TAG, "alias: " + userId);
     }
 
-    public void setSuperProperties() {
+    public void setSuperProperties(String accountId) {
         JSONObject props = new JSONObject();
         try {
             props.put("zSP-OS", "Android");
@@ -99,6 +102,8 @@ public class AnalyticsUtil {
             props.put("zSP-Version-Device", Build.MANUFACTURER + " " + Build.MODEL);
             props.put("zSP-Version-App",
                     BuildConfig.VERSION_NAME + " rv:" + BuildConfig.VERSION_CODE);
+            props.put("zSP-AccountID", accountId);
+            props.put("zSP-UDID", mixpanel.getDistinctId());
         } catch (JSONException e) {
             e.printStackTrace();
         }
