@@ -1,7 +1,9 @@
 package com.delectable.mobile.ui.camera.widget;
 
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -37,7 +39,9 @@ public class FoursquareVenuesAdapter extends BaseAdapter {
 
         FoursquareVenueRow row = (FoursquareVenueRow) convertView;
         if (row == null) {
-            row = new FoursquareVenueRow(parent.getContext());
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            row = (FoursquareVenueRow) inflater
+                    .inflate(R.layout.row_foursquare_venue_impl, parent, false);
         }
         row.updateVenueData(mVenues.get(position));
         return row;
