@@ -107,12 +107,18 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         final FloatingActionButton.FabOnScrollListener fabOnScrollListener
                 = new FloatingActionButton.FabOnScrollListener() {
 
+            int lastVisibleItem = -1;
+
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                     int totalItemCount) {
                 super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
                 hideableActionBarScrollListener
                         .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                if (lastVisibleItem < firstVisibleItem) {
+                    lastVisibleItem = firstVisibleItem;
+                    mAnalytics.trackViewItemInFeed(getFeedName());
+                }
             }
         };
         mCameraButton.attachToListView(mListView, fabOnScrollListener);
@@ -124,6 +130,10 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         });
 
         return view;
+    }
+
+    protected String getFeedName() {
+        return null;
     }
 
     @Override

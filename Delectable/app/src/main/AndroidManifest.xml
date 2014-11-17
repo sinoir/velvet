@@ -156,6 +156,8 @@
             android:label="@string/action_facebook_login"
             android:screenOrientation="portrait" />
 
+        <activity android:name="com.mixpanel.android.surveys.SurveyActivity" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />

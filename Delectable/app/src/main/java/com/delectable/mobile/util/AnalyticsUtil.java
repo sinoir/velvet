@@ -141,14 +141,17 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Feed-Mobile-Item visible", props);
+        Log.d(TAG, "trackViewItemInFeed: " + feed);
     }
 
     public void trackViewWineProfile() {
         mixpanel.track("Wine profile-Mobile-View wine profile", null);
+        Log.d(TAG, "trackViewWineProfile");
     }
 
     public void trackViewCaptureDetails() {
         mixpanel.track("Capture-Mobile-View a capture", null);
+        Log.d(TAG, "trackViewCaptureDetails");
     }
 
     public void trackViewUserProfile(String type) {
@@ -159,6 +162,7 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("View user profile", props);
+        Log.d(TAG, "trackViewUserProfile: " + type);
     }
 
     public void trackActivity(String type) {
@@ -169,6 +173,7 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Activity-Mobile-Click Activity item", props);
+        Log.d(TAG, "trackActivity: " + type);
     }
 
     public void trackSearch(String type) {
@@ -179,6 +184,7 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Explore-Mobile-Search query", props);
+        Log.d(TAG, "trackSearch: " + type);
     }
 
     public void trackScan(String photoType) {

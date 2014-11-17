@@ -43,6 +43,11 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
+    protected String getFeedName() {
+        return AnalyticsUtil.FEED_TRENDING;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
