@@ -72,7 +72,7 @@ public class AnalyticsUtil {
             .getInstance(App.getInstance(), BuildConfig.MIXPANEL_TOKEN);
 
     public AnalyticsUtil() {
-        setSuperProperties();
+        setSuperProperties(null);
     }
 
     public void flush() {
@@ -80,18 +80,21 @@ public class AnalyticsUtil {
     }
 
     public void identify(String userId) {
+        setSuperProperties(userId);
         mixpanel.identify(userId);
-        // TODO alias here? ask Dima
-        alias(userId);
         Log.d(TAG, "identify: " + userId);
     }
 
+    /**
+     * Call this only ONCE per user, after they signed up
+     */
     public void alias(String userId) {
         mixpanel.alias(userId, null);
+        mixpanel.identify(userId);
         Log.d(TAG, "alias: " + userId);
     }
 
-    public void setSuperProperties() {
+    public void setSuperProperties(String accountId) {
         JSONObject props = new JSONObject();
         try {
             props.put("zSP-OS", "Android");
@@ -99,6 +102,8 @@ public class AnalyticsUtil {
             props.put("zSP-Version-Device", Build.MANUFACTURER + " " + Build.MODEL);
             props.put("zSP-Version-App",
                     BuildConfig.VERSION_NAME + " rv:" + BuildConfig.VERSION_CODE);
+            props.put("zSP-AccountID", accountId);
+            props.put("zSP-UDID", mixpanel.getDistinctId());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -136,14 +141,17 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Feed-Mobile-Item visible", props);
+        Log.d(TAG, "trackViewItemInFeed: " + feed);
     }
 
     public void trackViewWineProfile() {
         mixpanel.track("Wine profile-Mobile-View wine profile", null);
+        Log.d(TAG, "trackViewWineProfile");
     }
 
     public void trackViewCaptureDetails() {
         mixpanel.track("Capture-Mobile-View a capture", null);
+        Log.d(TAG, "trackViewCaptureDetails");
     }
 
     public void trackViewUserProfile(String type) {
@@ -154,6 +162,7 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("View user profile", props);
+        Log.d(TAG, "trackViewUserProfile: " + type);
     }
 
     public void trackActivity(String type) {
@@ -164,6 +173,7 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Activity-Mobile-Click Activity item", props);
+        Log.d(TAG, "trackActivity: " + type);
     }
 
     public void trackSearch(String type) {
@@ -174,6 +184,7 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Explore-Mobile-Search query", props);
+        Log.d(TAG, "trackSearch: " + type);
     }
 
     public void trackScan(String photoType) {

@@ -2,14 +2,15 @@ package com.delectable.mobile.ui.search.fragment;
 
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.BaseWineController;
+import com.delectable.mobile.api.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.BaseWineController;
-import com.delectable.mobile.api.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.search.widget.WineSearchAdapter;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.content.Intent;
 import android.view.View;
@@ -57,6 +58,8 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment
         mBaseWinesController.searchWine(query, 0, LIMIT);
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
+
+        mAnalytics.trackSearch(AnalyticsUtil.SEARCH_WINE);
         return true;
     }
 

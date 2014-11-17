@@ -20,6 +20,7 @@ import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
@@ -244,6 +245,31 @@ public class NavigationDrawerFragment extends BaseFragment implements
         position--; //offset bc of header
         ActivityFeedItem feedItem = mActivityFeedAdapter.getItem(position);
 
+        // check ID prefix for activity type
+        // TODO watch out for additional activity feed types and changes!
+        String itemId = feedItem.getId();
+        if (itemId != null) {
+            String activityType = null;
+            if (itemId.startsWith("Follow")) {
+                activityType = AnalyticsUtil.ACTIVITY_FOLLOW;
+            } else if (itemId.startsWith("FixedTranscription")) {
+                activityType = AnalyticsUtil.ACTIVITY_TRANSCRIPTION;
+            } else if (itemId.startsWith("IdentifiedTranscription")) {
+                activityType = AnalyticsUtil.ACTIVITY_TRANSCRIPTION;
+            } else if (itemId.startsWith("Helpful")) {
+                activityType = AnalyticsUtil.ACTIVITY_HELPFUL;
+            } else if (itemId.startsWith("Like")) {
+                activityType = AnalyticsUtil.ACTIVITY_LIKE;
+            } else if (itemId.startsWith("NewAccount")) {
+                activityType = AnalyticsUtil.ACTIVITY_NEWACCOUNT;
+            } else if (itemId.startsWith("Tagged")) {
+                activityType = AnalyticsUtil.ACTIVITY_TAGGING;
+            } else if (itemId.startsWith("Comment")) {
+                activityType = AnalyticsUtil.ACTIVITY_COMMENT;
+            }
+            mAnalytics.trackActivity(activityType);
+        }
+
         //let click on row be absorbed by rightImageLink first. if that's null, then let the leftImageLink handle it.
         if (feedItem.getRightImageLink() != null && feedItem.getRightImageLink().getUrl() != null) {
             final String rightImageUrl = feedItem.getRightImageLink().getUrl();
@@ -255,6 +281,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
             final String leftImageUrl = feedItem.getLeftImageLink().getUrl();
             openDeepLink(leftImageUrl);
         }
+
     }
 
     //region EventBus events

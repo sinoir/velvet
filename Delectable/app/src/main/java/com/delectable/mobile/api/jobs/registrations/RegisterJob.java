@@ -66,6 +66,7 @@ public class RegisterJob extends BaseJob {
         KahunaUtil.trackSignUp("email", account.getFname(), account.getLname(),
                 Calendar.getInstance().getTime());
 
+        mAnalytics.alias(account.getId());
         mAnalytics.trackRegister(AnalyticsUtil.ACCOUNT_EMAIL);
     }
 

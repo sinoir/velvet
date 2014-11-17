@@ -31,6 +31,7 @@ import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -258,11 +259,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         // Update User Private account info as well
         // TODO: Need to store this as 1 object, storing duplicate account info is causing weird issues.
-        if (mUserId != null && mUserId.equals(UserInfo.getUserId(getActivity()))) {
+        boolean isOwnProfile = mUserId != null && mUserId.equals(UserInfo.getUserId(getActivity()));
+        if (isOwnProfile) {
             mAccountController.fetchAccountPrivate(mUserId);
         }
         // fetch profile to check for updates (we're using eTags, so no big deal)
         mAccountController.fetchProfile(mUserId);
+
+        mAnalytics.trackViewUserProfile(
+                isOwnProfile ? AnalyticsUtil.USER_PROFILE_OWN : AnalyticsUtil.USER_PROFILE_OTHERS);
     }
 
     @Override

@@ -131,6 +131,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         super.onResume();
         loadLocalData();
         mCaptureController.fetchCapture(mCaptureId);
+
+        mAnalytics.trackViewCaptureDetails();
     }
 
     @Override

@@ -256,7 +256,7 @@
     </plurals>
 
     <!-- TODO consult w bjorn: Beers have no vintage, "NV vintage" is unsightly-->
-    <string name="wine_profile_vintage">\u0020- %1$s vintage</string>
+    <string name="wine_profile_vintage">\u0020— %1$s vintage</string>
     <!-- TODO consult w bjorn: Beers have no vintage, if user leaves no comment, this will read like "Wayne had the NV vintage", also unsightly-->
     <string name="wine_profile_empty_comment_message">%1$s had the %2$s vintage</string>
     <plurals name="wine_profile_helpful_count">
