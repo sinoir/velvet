@@ -43,6 +43,7 @@ public class App extends Application {
             KahunaAnalytics
                     .onAppCreate(this, BuildConfig.KAHUNA_SECRET, BuildConfig.KAHUNA_PUSH_ID);
             KahunaAnalytics.setPushReceiver(PushReceiver.class);
+            KahunaAnalytics.disableKahunaGenerateNotifications();
             updateKahunaAttributes();
         } catch (Exception ex) {
             Log.wtf(TAG, "Kahuna Failed", ex);
