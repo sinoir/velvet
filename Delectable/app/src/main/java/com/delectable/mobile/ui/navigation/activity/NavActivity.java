@@ -11,6 +11,7 @@ import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,9 @@ public class NavActivity extends BaseActivity
 
     @Inject
     protected EventBus mEventBus;
+
+    @Inject
+    AnalyticsUtil mAnalytics;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -61,6 +65,12 @@ public class NavActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
         restoreActionBar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAnalytics.flush();
     }
 
     @Override

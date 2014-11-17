@@ -30,7 +30,6 @@
         android:id="@+id/like_comment_count_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_16"
         android:gravity="center"
         android:layout_below="@+id/capture_comment_tagged_text"
         android:visibility="visible">
@@ -75,6 +74,7 @@
         android:id="@+id/like_comment_buttons_container"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginTop="@dimen/spacing_16"
         android:layout_below="@id/like_comment_count_container"
         android:visibility="visible">
 

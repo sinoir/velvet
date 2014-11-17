@@ -1,8 +1,9 @@
 package com.delectable.mobile.api.jobs;
 
-import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.api.net.NetworkClient;
 import com.delectable.mobile.api.util.DelException;
+import com.delectable.mobile.api.util.ErrorUtil;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
@@ -21,6 +22,9 @@ public class BaseJob extends Job {
 
     @Inject
     protected NetworkClient mNetworkClient;
+
+    @Inject
+    protected AnalyticsUtil mAnalytics;
 
     private String mErrorMessage;
 

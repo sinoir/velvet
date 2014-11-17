@@ -20,10 +20,10 @@ import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -381,14 +381,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void openDeepLink(String url) {
         Uri deepLinkUri = Uri.parse(url);
-        try {
-            Intent intent = new Intent();
-            intent.setData(deepLinkUri);
+        Intent intent = DeepLink.getIntent(getActivity(), deepLinkUri);
+        if (intent != null) {
             startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            // TODO: Add remote log here, this will happen if we have a new deep link url and we haven't implemented it yet...
-            Log.wtf(TAG, "Failed to open deeplink", ex);
-            showToastError(ex.getLocalizedMessage());
         }
     }
 

@@ -2,7 +2,7 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.common.activity.WebViewActivty;
+import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.util.HelperUtil;
 import com.delectable.mobile.util.NameUtil;
@@ -116,6 +116,7 @@ public class SignUpFragment extends BaseSignUpInFragment {
     protected void goToTermsOfUse() {
         String url = getString(R.string.terms_url);
         String title = getString(R.string.signup_in_terms_of_use);
-        startActivity(WebViewActivty.newIntent(getActivity(), url, title));
+        startActivity(WebViewActivity.newIntent(getActivity(), url, title));
     }
+
 }
