@@ -69,8 +69,7 @@ public class PushReceiver extends BroadcastReceiver {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             builder.setContentIntent(piMainActivity)
-                    //TODO change to white 24dp icon
-                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_notification_logo)
                     .setLargeIcon(icon)
                     .setContentTitle(context.getString(R.string.app_name))
                     .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
