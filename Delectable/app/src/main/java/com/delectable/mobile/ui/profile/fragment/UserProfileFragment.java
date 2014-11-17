@@ -535,14 +535,25 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void launchWineProfile(CaptureDetails captureDetails) {
         Intent intent = new Intent();
+
         // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
-        if (captureDetails.getWineProfile() != null) {
-            intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
-                    captureDetails.getPhoto());
-        } else {
-            intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
-                    captureDetails.getId());
-            intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        CaptureState state = CaptureState.getState(captureDetails);
+        switch (state) {
+            case UNVERIFIED:
+                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getBaseWine(),
+                        captureDetails.getPhoto());
+                break;
+            case IDENTIFIED:
+                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
+                        captureDetails.getPhoto());
+                break;
+            case UNIDENTIFIED:
+            case IMPOSSIBLED:
+            default:
+                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                        captureDetails.getId());
+                intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                break;
         }
         startActivity(intent);
     }
