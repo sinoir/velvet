@@ -68,6 +68,7 @@ public class NumericRatingSeekBar extends RelativeLayout {
         mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {
+                rating++; //offset to make rating scale is 6.1-10 instead of 6.0-9.9
 
                 double ratingOf10 = Rating.getRatingOfTenFrom40(rating);
                 String ratingStr = DECIMAL_FORMAT.format(ratingOf10);
