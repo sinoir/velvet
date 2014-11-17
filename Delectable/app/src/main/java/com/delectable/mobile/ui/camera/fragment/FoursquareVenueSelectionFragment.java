@@ -8,6 +8,7 @@ import com.delectable.mobile.api.events.foursquare.SearchedFoursquareVenuesEvent
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.camera.widget.FoursquareVenuesAdapter;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.util.HelperUtil;
 
 import android.app.Activity;
@@ -23,9 +24,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 public class FoursquareVenueSelectionFragment extends BaseFragment {
 
@@ -36,15 +39,22 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
     private static final String TAG = FoursquareVenueSelectionFragment.class.getSimpleName();
 
     @Inject
-    FoursquareController mFoursquareController;
+    protected FoursquareController mFoursquareController;
 
-    private View mView;
+    @InjectView(R.id.list_view)
+    protected ListView mListView;
 
-    private ListView mListView;
+    @InjectView(R.id.empty_state_layout)
+    protected View mEmptyStateLayout;
 
-    private FoursquareVenuesAdapter mAdapter;
+    /**
+     * In the layout, this covers the loading circle when it's set to visible, so there's no need to
+     * hide the loading circle.
+     */
+    @InjectView(R.id.nothing_to_display_textview)
+    protected FontTextView mNoListDataText;
 
-    private ArrayList<FoursquareVenueItem> mVenues;
+    private FoursquareVenuesAdapter mAdapter = new FoursquareVenuesAdapter();
 
     public FoursquareVenueSelectionFragment() {
     }
@@ -73,36 +83,30 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_listview, container, false);
-
-        mListView = (ListView) mView;
-        mVenues = new ArrayList<FoursquareVenueItem>();
-        mAdapter = new FoursquareVenuesAdapter(mVenues);
+        View view = inflater.inflate(R.layout.fragment_listview_w_loading, container, false);
+        ButterKnife.inject(this, view);
+        mListView.setEmptyView(mEmptyStateLayout);
         mListView.setAdapter(mAdapter);
+        mNoListDataText.setText(getString(R.string.failed_to_get_location));
+        return view;
+    }
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (getTargetFragment() != null) {
-                    // Pass Back the Fourdquare ID and Name
-                    FoursquareVenueItem venue = mAdapter.getItem(position);
-                    Intent data = new Intent();
-                    Bundle resultArgs = new Bundle();
-                    resultArgs.putString(RESULT_FOURSQUARE_ID, venue.getId());
-                    resultArgs.putString(RESULT_FOURSQUARE_NAME, venue.getName());
-                    data.putExtras(resultArgs);
-                    getTargetFragment().onActivityResult(getTargetRequestCode(),
-                            Activity.RESULT_OK, data);
-                }
-                getActivity().onBackPressed();
-            }
-        });
-
-        return mView;
+    @OnItemClick(R.id.list_view)
+    protected void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (getTargetFragment() != null) {
+            // Pass Back the Foursquare ID and Name
+            FoursquareVenueItem venue = mAdapter.getItem(position);
+            Intent data = new Intent();
+            data.putExtra(RESULT_FOURSQUARE_ID, venue.getId());
+            data.putExtra(RESULT_FOURSQUARE_NAME, venue.getName());
+            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
+        }
+        getActivity().onBackPressed();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (getTargetFragment() != null) {
@@ -120,21 +124,19 @@ public class FoursquareVenueSelectionFragment extends BaseFragment {
         super.onResume();
         Location lastLocation = ((WineCaptureActivity) getActivity()).getLastLocation();
         if (lastLocation != null) {
+            mNoListDataText.setVisibility(View.GONE);
             mFoursquareController
                     .searchFoursquareVenuesByLatLon(HelperUtil.getLatLngFromLocation(lastLocation));
-        } else {
-            // TODO: Show empty state for no location / can't find user's location
-            showToastError("Failed to get Location");
         }
     }
 
     public void onEventMainThread(SearchedFoursquareVenuesEvent event) {
+        mNoListDataText.setVisibility(View.VISIBLE);
         if (event.isSuccessful()) {
-            mVenues.clear();
-            mVenues.addAll(event.getVenues());
+            mAdapter.setVenues(event.getVenues());
             mAdapter.notifyDataSetChanged();
         } else if (event.getErrorMessage() != null) {
-            showToastError(event.getErrorMessage());
+            mNoListDataText.setText(R.string.trouble_retrieving_locations);
         }
     }
 }

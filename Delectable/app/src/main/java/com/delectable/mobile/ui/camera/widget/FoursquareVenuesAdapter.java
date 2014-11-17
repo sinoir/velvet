@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FoursquareVenuesAdapter extends BaseAdapter {
 
-    private ArrayList<FoursquareVenueItem> mVenues;
+    private List<FoursquareVenueItem> mVenues = new ArrayList<FoursquareVenueItem>();
 
-    public FoursquareVenuesAdapter(ArrayList<FoursquareVenueItem> venues) {
+    public void setVenues(List<FoursquareVenueItem> venues) {
         mVenues = venues;
     }
 
