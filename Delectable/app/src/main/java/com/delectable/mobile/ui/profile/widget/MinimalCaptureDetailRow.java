@@ -474,7 +474,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @OnClick(R.id.comment_button)
     protected void onCommentButtonClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureDetails);
+            mCaptureDetailsActionsHandler.writeCommentForCapture(mCaptureDetails);
         }
     }
 
