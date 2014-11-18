@@ -402,13 +402,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void toggleFollowUserClicked(boolean isFollowingSelected) {
-        // Update Count
-        int followerCountDiff = isFollowingSelected ? 1 : -1;
-        mUserAccount.setFollowerCount(mUserAccount.getFollowerCount() + followerCountDiff);
-        int relationship = isFollowingSelected ? AccountProfile.RELATION_TYPE_FOLLOWING
-                : AccountProfile.RELATION_TYPE_NONE;
-        mUserAccount.setCurrentUserRelationship(relationship);
-        updateUIWithData();
         mAccountController.followAccount(mUserId, isFollowingSelected);
     }
 
