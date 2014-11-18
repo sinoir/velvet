@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/foursquare_venue_row_height"
@@ -28,4 +28,4 @@
         android:textColor="@color/d_medium_gray"
         android:textSize="@dimen/foursquare_location_address_text_size"
         app:fontName="whitney_book" />
-</RelativeLayout>
+</merge>

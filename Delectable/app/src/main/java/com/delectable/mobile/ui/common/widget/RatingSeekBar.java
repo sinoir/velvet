@@ -16,7 +16,8 @@ import android.widget.SeekBar;
 public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener,
         View.OnTouchListener {
 
-    public static final int INCREMENTS = CaptureMinimal.MAX_RATING_VALUE;
+    //ratings only go from 6.1 to 10, offset the increments count by 1 so that 0-39 maps well with 6.1-10
+    public static final int INCREMENTS = CaptureMinimal.MAX_RATING_VALUE - 1;
 
     private RatingsBar mRatingsBar;
 

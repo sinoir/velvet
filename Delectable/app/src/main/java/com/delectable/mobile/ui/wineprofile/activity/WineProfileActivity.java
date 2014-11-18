@@ -1,7 +1,6 @@
 package com.delectable.mobile.ui.wineprofile.activity;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
@@ -61,6 +60,17 @@ public class WineProfileActivity extends BaseActivity {
         return intent;
     }
 
+    /**
+     * see {@link WineProfileFragment#newInstance(String, String)}
+     */
+    public static Intent newIntent(Context packageContext, String baseWineId, String vintageId) {
+        Intent intent = new Intent();
+        intent.putExtra(DEEP_BASE_WINE_ID, baseWineId);
+        intent.putExtra(DEEP_BASE_VINTAGE_ID, vintageId);
+        intent.setClass(packageContext, WineProfileActivity.class);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,10 +81,10 @@ public class WineProfileActivity extends BaseActivity {
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
 
             mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mBaseWineId = getDeepLinkParam(DEEP_BASE_WINE_ID);
-            mVintageId = getDeepLinkParam(DEEP_BASE_VINTAGE_ID);
+
+            //from deep links
+            mBaseWineId = args.getString(DEEP_BASE_WINE_ID);
+            mVintageId = args.getString(DEEP_BASE_VINTAGE_ID);
         }
 
         if (savedInstanceState == null) {
@@ -87,7 +97,7 @@ public class WineProfileActivity extends BaseActivity {
             } else if (mBaseWineMinimal != null) {
                 //spawned from search fragment
                 fragment = WineProfileFragment.newInstance(mBaseWineMinimal, mCapturePhotoHash);
-            } else if (mBaseWineId != null) {
+            } else if (mBaseWineId != null || mVintageId !=null) {
                 //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }

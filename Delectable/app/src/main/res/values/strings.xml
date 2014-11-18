@@ -256,7 +256,7 @@
     </plurals>
 
     <!-- TODO consult w bjorn: Beers have no vintage, "NV vintage" is unsightly-->
-    <string name="wine_profile_vintage">\u0020- %1$s vintage</string>
+    <string name="wine_profile_vintage">\u0020— %1$s vintage</string>
     <!-- TODO consult w bjorn: Beers have no vintage, if user leaves no comment, this will read like "Wayne had the NV vintage", also unsightly-->
     <string name="wine_profile_empty_comment_message">%1$s had the %2$s vintage</string>
     <plurals name="wine_profile_helpful_count">
@@ -275,6 +275,11 @@
     <!--Capture Flow: Tag Friends -->
     <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>
     <string name="tag_friends_error">Error retrieving your friends list, please try again later.</string>
+
+    <!--Capture Flow: Get Location-->
+    <string name="failed_to_get_location">Sorry, we couldn\'t get your location. Is your GPS turned on?</string>
+    <!--when foursquare fetch for location fails-->
+    <string name="trouble_retrieving_locations">Sorry, we had trouble retrieving locations near you, please try again later!</string>
 
 
     <!--Follow Friends -->

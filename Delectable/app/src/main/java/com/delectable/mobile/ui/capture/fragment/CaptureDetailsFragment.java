@@ -51,6 +51,9 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         // Required empty public constructor
     }
 
+    /**
+     * Fetches the capture for the captureId provided.
+     */
     public static CaptureDetailsFragment newInstance(String captureId) {
         CaptureDetailsFragment fragment = new CaptureDetailsFragment();
         Bundle args = new Bundle();
@@ -128,6 +131,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         super.onResume();
         loadLocalData();
         mCaptureController.fetchCapture(mCaptureId);
+
+        mAnalytics.trackViewCaptureDetails();
     }
 
     @Override

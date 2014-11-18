@@ -13,6 +13,7 @@ import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.util.DateHelperUtil;
+import com.delectable.mobile.util.FontEnum;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -21,6 +22,7 @@ import com.facebook.widget.LoginButton;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -157,6 +159,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
      */
     private String mPhoneEmail;
 
+    private Typeface mWhitneyBookFont;
+
     //region Lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,6 +168,9 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         App.injectMembers(this);
         mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
         mFacebookUiHelper.onCreate(savedInstanceState);
+
+        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
+
         //TODO loader is not retrieving email properly for some reason, commented out for now. might be relate to v21 support library
         //getLoaderManager().initLoader(0, null, this);
     }
@@ -175,6 +182,10 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         View rootView = inflater.inflate(R.layout.fragment_sign_in_sign_up_form, container, false);
         ButterKnife.inject(this, rootView);
         mPasswordField.setOnEditorActionListener(DoneActionListener);
+
+        mNameField.setTypeface(mWhitneyBookFont);
+        mEmailField.setTypeface(mWhitneyBookFont);
+        mPasswordField.setTypeface(mWhitneyBookFont);
 
         mRealFacebookButton.setFragment(this);
         //TODO may need to set more permissions onto the facebook login button

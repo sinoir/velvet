@@ -15,7 +15,7 @@ import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.activity.WebViewActivty;
+import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.settings.activity.NotificationsActivty;
@@ -743,7 +743,7 @@ public class SettingsFragment extends BaseFragment {
             case R.id.terms_of_use:
                 String url = getString(R.string.terms_url);
                 String title = getString(R.string.signup_in_terms_of_use);
-                startActivity(WebViewActivty.newIntent(getActivity(), url, title));
+                startActivity(WebViewActivity.newIntent(getActivity(), url, title));
                 break;
             case R.id.sign_out:
                 signout();

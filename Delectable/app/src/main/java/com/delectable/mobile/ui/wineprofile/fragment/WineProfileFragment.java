@@ -473,6 +473,8 @@ public class WineProfileFragment extends BaseFragment implements
         if (mAdapter.getItems().isEmpty()) {
             loadLocalData(Type.BASE_WINE, mBaseWineId);
         }
+
+        mAnalytics.trackViewWineProfile();
     }
 
     /**

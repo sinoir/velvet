@@ -64,7 +64,7 @@
 -keep class **$$StaticInjection
 
 #TODO this may be too broad, perhaps scope down
--keepnames !abstract class com.delectable.mobile.**
+#-keepnames !abstract class com.delectable.mobile.**
 
 -keepnames class dagger.Lazy
 

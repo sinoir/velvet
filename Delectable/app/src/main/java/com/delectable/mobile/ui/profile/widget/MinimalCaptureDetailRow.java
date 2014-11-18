@@ -87,11 +87,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     private String mSelectedUserId;
 
-    private boolean mHasComment;
-
     private boolean mHasRating;
 
-    private boolean mIsLoggedInUsersCapture;
+    private boolean mIsViewingOwnCaptures;
 
     private boolean mUserIsCapturer;
 
@@ -154,14 +152,12 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     public void updateData(CaptureDetails capture, String userId) {
         mSelectedUserId = userId;
-        mIsLoggedInUsersCapture = mSelectedUserId.equals(UserInfo.getUserId(getContext()));
+        mIsViewingOwnCaptures = mSelectedUserId.equals(UserInfo.getUserId(getContext()));
         mCaptureDetails = capture;
-        mHasComment = false;
         mHasRating = false;
 
         String capturerId = capture.getCapturerParticipant().getId();
         mUserIsCapturer = mSelectedUserId.equals(capturerId);
-
 
         updateWineInfo();
         updateUserRating();
@@ -178,12 +174,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mMenuActionFlag.setVisible(false);
         mMenuActionRemove.setVisible(false);
 
-        boolean loggedInUserIsCapturer = mCaptureDetails.getCapturerParticipant().getId()
-                .equals(UserInfo.getUserId(getContext()));
         CaptureState captureState = CaptureState.getState(mCaptureDetails);
 
         //handle viewing other people captures first
-        if (!mIsLoggedInUsersCapture) {
+        if (!mIsViewingOwnCaptures) {
             mMenuActionRecommend.setVisible(true);
             return;
         }
@@ -191,7 +185,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         //viewing own captures from here down
 
         //viewing own captures where we are capturer
-        if (loggedInUserIsCapturer) {
+        if (mUserIsCapturer) {
             if (CaptureState.UNIDENTIFIED == captureState) {
                 mMenuActionEdit.setVisible(true);
                 mMenuActionRemove.setVisible(true);
@@ -282,7 +276,6 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     private void updateCommentsAndTags() {
         CharSequence message = getDisplayMessage(mCaptureDetails, mSelectedUserId);
         mCommentText.setText(message);
-        mHasComment = true;
     }
 
     /**
@@ -369,7 +362,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         //handling viewing own captures case
         String userFirstName = "";
 
-        if (mIsLoggedInUsersCapture) {
+        if (mIsViewingOwnCaptures) {
             userFirstName = getResources().getString(R.string.you);
         } else {
             AccountMinimal account = capture.getTaggeeParticipants()
@@ -420,7 +413,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mCountTextsContainer.setVisibility(View.GONE);
 
         //hide like and comment buttons if viewing own user profile
-        int visibility = mIsLoggedInUsersCapture ? View.GONE : View.VISIBLE;
+        int visibility = mIsViewingOwnCaptures ? View.GONE : View.VISIBLE;
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
         //setup likes/comments counts
@@ -431,24 +424,21 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mCommentsCount.setText(
                 getResources().getQuantityString(R.plurals.comments_count, comments, comments));
 
-        if (!mIsLoggedInUsersCapture) { //looking at someone else's captures
+        if (!mIsViewingOwnCaptures) { //looking at someone else's captures
             //always show this even when there are no likes/comments so user can click like/comment button and not have view jump
             mCountTextsContainer.setVisibility(View.VISIBLE);
             return;
         }
 
         //from here down, looking at your own feed
-        if (!mUserIsCapturer) { //and you were tagged
-            if (!mHasRating) { //and there was no rating
-                mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
-                return;
-            }
-        } else if (mUserIsCapturer && !mHasRating && !mHasComment) {
-            // my own capture without a rating
+        if (!mHasRating) { //and there was no rating
             mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
+
             // remove redundant overflow actions
             mMenuActionEdit.setVisible(false);
             mMenuActionRemove.setVisible(false);
+
+            //don't show like/comment count here, so return
             return;
         }
 
@@ -456,6 +446,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (mCaptureDetails.getLikesCount() > 0 || !mCaptureDetails.getComments().isEmpty()) {
             mCountTextsContainer.setVisibility(View.VISIBLE);
         }
+
     }
 
 
@@ -483,7 +474,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @OnClick(R.id.comment_button)
     protected void onCommentButtonClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureDetails);
+            mCaptureDetailsActionsHandler.writeCommentForCapture(mCaptureDetails);
         }
     }
 

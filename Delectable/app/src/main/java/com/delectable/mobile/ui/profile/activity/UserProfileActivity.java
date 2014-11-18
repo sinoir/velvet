@@ -15,8 +15,6 @@ public class UserProfileActivity extends BaseActivity {
 
     private static final String TAG = UserProfileActivity.class.getSimpleName();
 
-    private String mUserId;
-
     /**
      * Inits UserProfileActivity with the provided userAccountId.
      */
@@ -31,17 +29,16 @@ public class UserProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
+
+        String userId = null;
         Bundle args = getIntent().getExtras();
         if (args != null) {
-            mUserId = args.getString(PARAMS_USER_ID);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mUserId = getDeepLinkParam("account_id");
+            userId = args.getString(PARAMS_USER_ID);
         }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, UserProfileFragment.newInstance(mUserId)).commit();
+                    .add(R.id.container, UserProfileFragment.newInstance(userId)).commit();
         }
     }
 

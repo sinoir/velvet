@@ -4,6 +4,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -13,23 +15,30 @@ public class CaptureDetailsActivity extends BaseActivity {
 
     private static final String TAG = CaptureDetailsActivity.class.getSimpleName();
 
-    private String mCaptureId;
+    /**
+     * see {@link CaptureDetailsFragment#newInstance(String)}
+     */
+    public static Intent newIntent(Context packageContext, String captureId) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_CAPTURE_ID, captureId);
+        intent.setClass(packageContext, CaptureDetailsActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
+
+        String captureId = null;
         Bundle args = getIntent().getExtras();
         if (args != null) {
-            mCaptureId = args.getString(PARAMS_CAPTURE_ID);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mCaptureId = getDeepLinkParam("capture_id");
+            captureId = args.getString(PARAMS_CAPTURE_ID);
         }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, CaptureDetailsFragment.newInstance(mCaptureId))
+                    .add(R.id.container, CaptureDetailsFragment.newInstance(captureId))
                     .commit();
         }
 
