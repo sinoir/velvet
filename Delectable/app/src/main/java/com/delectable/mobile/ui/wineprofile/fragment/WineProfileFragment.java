@@ -36,21 +36,20 @@ import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
+import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.delectable.mobile.util.TextUtil;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -59,7 +58,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -84,8 +83,6 @@ public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
-
-    public static final int ACTIONBAR_HIDE_DELAY = 1000;
 
     private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
 
@@ -151,6 +148,16 @@ public class WineProfileFragment extends BaseFragment implements
 
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
+
+    protected Toolbar mToolbar;
+
+    protected ListView mListView;
+
+    protected View mWineBanner;
+
+    protected View mWineImageView;
+
+    protected int mStickyToolbarHeight;
 
     protected FloatingActionButton mCameraButton;
 
@@ -241,7 +248,6 @@ public class WineProfileFragment extends BaseFragment implements
         return fragment;
     }
 
-
     /**
      * {@link WineProfileFragment} accessed by deep links will use this method to start up the
      * fragment. It can contain either just {@code baseWineId}, or both {@code baseWineId} and
@@ -290,32 +296,14 @@ public class WineProfileFragment extends BaseFragment implements
 
         //ensured that baseWineId is populated, set as our fetchingId
         mFetchingId = mBaseWineId;
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // configure ActionBar
-        enableBackButton(true);
-        getActionBarToolbar()
-                .setBackgroundColor(getResources().getColor(R.color.d_off_white_translucent));
-        mAlphaSpan = new MutableForegroundColorSpan(0,
-                getResources().getColor(R.color.d_big_stone));
-        if (mWineProfile != null) {
-            mTitle = new SpannableString(
-                    mWineProfile.getProducerName() + " " + mWineProfile.getName());
-            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            setActionBarSubtitle(mTitle);
-        }
+        mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
-
-        final ListView listView = (ListView) view.findViewById(R.id.list_view);
 
         //prepare header view
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
@@ -324,18 +312,49 @@ public class WineProfileFragment extends BaseFragment implements
         updateBannerData();
         updateVarietyRegionRatingView(mBaseWine);
 
-        listView.addHeaderView(header, null, false);
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        getBaseActivity().setSupportActionBar(mToolbar);
+        getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mAlphaSpan = new MutableForegroundColorSpan(0,
+//                getResources().getColor(R.color.d_big_stone));
+//        if (mWineProfile != null) {
+//            mTitle = new SpannableString(
+//                    mWineProfile.getProducerName() + " " + mWineProfile.getName());
+//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
+//        }
+
+        mListView = (ListView) view.findViewById(R.id.list_view);
+        mListView.addHeaderView(header, null, false);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 position--; //headerview offsets position of listitems by 1
                 launchCaptureDetails(mAdapter.getItem(position));
             }
         });
+        mListView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @SuppressWarnings("deprecation")
+                    @Override
+                    public void onGlobalLayout() {
+                        onScrollChanged();
+
+                        ViewTreeObserver obs = mListView.getViewTreeObserver();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            obs.removeOnGlobalLayoutListener(this);
+                        } else {
+                            obs.removeGlobalOnLayoutListener(this);
+                        }
+                    }
+                });
 
         // empty state
         mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
+        mWineImageView = header.findViewById(R.id.wine_image);
+        mWineBanner = header.findViewById(R.id.wine_banner_view);
 
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);
@@ -345,69 +364,14 @@ public class WineProfileFragment extends BaseFragment implements
         final FloatingActionButton.FabOnScrollListener fabOnScrollListener
                 = new FloatingActionButton.FabOnScrollListener() {
 
-            final View wineImageView = header.findViewById(R.id.wine_image);
-
-            boolean isTitleVisible = false;
-
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                     int totalItemCount) {
                 super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-
-                final float top = -header.getTop();
-                float height = header.getHeight();
-                // check if header is still visible
-                if (top <= height) {
-                    wineImageView.setTranslationY(top / 2f);
-                }
-
-                // decide if title should be shown / transparent actionbar
-                if (listView != null && listView.getChildCount() > 1) {
-
-                    boolean firstItemVisible = listView.getFirstVisiblePosition() > 0;
-                    if (isTitleVisible != firstItemVisible) {
-                        // title
-                        ObjectAnimator titleAnimator = new ObjectAnimator()
-                                .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
-                                        firstItemVisible ? 0 : 255, firstItemVisible ? 255 : 0);
-                        titleAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
-                        titleAnimator.setInterpolator(new DecelerateInterpolator());
-                        titleAnimator.setEvaluator(new ArgbEvaluator());
-                        titleAnimator
-                                .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                        setActionBarSubtitle(mTitle);
-                                    }
-                                });
-                        titleAnimator.start();
-                        // background
-                        int solidColor = getResources().getColor(R.color.d_off_white);
-                        int translucentColor = getResources()
-                                .getColor(R.color.d_off_white_translucent);
-                        final ValueAnimator bgAnimator = ValueAnimator.ofObject(
-                                new ArgbEvaluator(),
-                                firstItemVisible ? translucentColor : solidColor,
-                                firstItemVisible ? solidColor : translucentColor);
-                        bgAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
-                        bgAnimator.setInterpolator(new DecelerateInterpolator());
-                        bgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                getActionBarToolbar().setBackgroundColor(
-                                        (Integer) bgAnimator.getAnimatedValue());
-                            }
-                        });
-                        bgAnimator.start();
-                    }
-                    isTitleVisible = firstItemVisible;
-                }
-
-                hideableActionBarScrollListener
-                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                onScrollChanged();
             }
         };
-        mCameraButton.attachToListView(listView, fabOnScrollListener);
+        mCameraButton.attachToListView(mListView, fabOnScrollListener);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,7 +413,7 @@ public class WineProfileFragment extends BaseFragment implements
             loadLocalData(Type.BASE_WINE, mBaseWineId);
         }
 
-        showOrHideActionBar(false, ACTIONBAR_HIDE_DELAY);
+        mAnalytics.trackViewWineProfile();
     }
 
     @Override
@@ -670,6 +634,62 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
     //endregion
+
+    private void onScrollChanged() {
+        View v = mListView.getChildAt(0);
+        int top = (v == null ? 0 : v.getTop());
+        int bannerHeight = mWineBanner.getHeight();
+        boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
+
+        if (isHeaderVisible) {
+            // parallax effect on wine image
+            mWineImageView.setTranslationY(-top / 2f);
+
+            // drag toolbar off the screen when reaching the bottom of the header
+            int toolbarHeight = mToolbar.getHeight();
+            int toolbarDragOffset = bannerHeight - mStickyToolbarHeight;
+            int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
+            mToolbar.setTranslationY(toolbarTranslation);
+
+//            Log.d(TAG, "####### toolBarTranslation=" + toolbarTranslation);
+            //showOrHideActionBar((top < toolbarDragOffset) ? false : true);
+
+            // TODO sticky toolbar
+//            // title
+//            ObjectAnimator titleAnimator = new ObjectAnimator()
+//                    .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
+//                            isToolbarSolid ? 255 : 0, isToolbarSolid ? 0 : 255);
+//            titleAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+//            titleAnimator.setInterpolator(new DecelerateInterpolator());
+//            titleAnimator.setEvaluator(new ArgbEvaluator());
+//            titleAnimator
+//                    .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                        @Override
+//                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                            setActionBarSubtitle(mTitle);
+//                        }
+//                    });
+//            titleAnimator.start();
+//            // background
+//            int solidColor = getResources().getColor(R.color.d_off_white);
+//            int translucentColor = getResources()
+//                    .getColor(android.R.color.transparent);
+//            final ValueAnimator bgAnimator = ValueAnimator.ofObject(
+//                    new ArgbEvaluator(),
+//                    isToolbarSolid ? solidColor : translucentColor,
+//                    isToolbarSolid ? translucentColor : solidColor);
+//            bgAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+//            bgAnimator.setInterpolator(new DecelerateInterpolator());
+//            bgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                    getActionBarToolbar().setBackgroundColor(
+//                            (Integer) bgAnimator.getAnimatedValue());
+//                }
+//            });
+//            bgAnimator.start();
+        }
+    }
 
     private void updateVarietyRegionRatingView(BaseWine baseWine) {
         if (baseWine == null) {

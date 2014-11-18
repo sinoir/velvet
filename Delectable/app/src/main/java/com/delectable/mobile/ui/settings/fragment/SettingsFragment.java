@@ -11,18 +11,18 @@ import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.AccountConfig;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.activity.WebViewActivty;
+import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.settings.activity.NotificationsActivty;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.DateHelperUtil;
+import com.delectable.mobile.util.FontEnum;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
 import com.delectable.mobile.util.TwitterUtil;
@@ -39,6 +39,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -52,7 +53,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +64,8 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
+import butterknife.OnFocusChange;
 
 
 public class SettingsFragment extends BaseFragment {
@@ -86,6 +88,11 @@ public class SettingsFragment extends BaseFragment {
                 return;
             }
 
+            //logout event
+            if (state.isClosed()) {
+                return;
+            }
+
             // TODO: Handle more errors and other conditions.
             showToastError(getString(R.string.error_facebook_connect_failed));
         }
@@ -104,7 +111,8 @@ public class SettingsFragment extends BaseFragment {
             mUserAccount.setTwTokenSecret(twitterInfo.tokenSecret);
             updateUI();
 
-            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token, twitterInfo.tokenSecret, twitterInfo.screenName);
+            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token,
+                    twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override
@@ -157,28 +165,12 @@ public class SettingsFragment extends BaseFragment {
 
     @InjectView(R.id.twitter_value)
     FontTextView mTwitterField;
-
-    @InjectView(R.id.following_phone_notification)
-    ImageButton mFollowingPhoneIcon;
-
-    @InjectView(R.id.comment_phone_notification)
-    ImageButton mCommentPhoneIcon;
-
-    @InjectView(R.id.tagged_phone_notification)
-    ImageButton mTaggedPhoneIcon;
-
-    @InjectView(R.id.following_email_notification)
-    ImageButton mFollowingEmailIcon;
-
-    @InjectView(R.id.comment_email_notification)
-    ImageButton mCommentEmailIcon;
-
-    @InjectView(R.id.tagged_email_notification)
-    ImageButton mTaggedEmailIcon;
     //endregion
 
     @InjectView(R.id.delectable_version)
     TextView mVersionText;
+
+    private Typeface mWhitneyBookFont;
 
     private String mUserId;
 
@@ -201,6 +193,8 @@ public class SettingsFragment extends BaseFragment {
 
     private UiLifecycleHelper mFacebookUiHelper;
 
+    private boolean mUpdatingViaDoneClick = false;
+
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
@@ -217,6 +211,7 @@ public class SettingsFragment extends BaseFragment {
 
         mUserId = UserInfo.getUserId(getActivity());
 
+        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
     }
 
     //region Lifecycle
@@ -230,51 +225,43 @@ public class SettingsFragment extends BaseFragment {
 
         mRealFacebookLoginButton.setFragment(this);
 
-        //listens for done button on soft keyboard
-        TextView.OnEditorActionListener doneListener = new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    EditText editText = (EditText) v;
-                    String text = editText.getText().toString();
-                    updateInfo(editText, text);
-
-                    hideKeyboard();
-                    return true;
-                }
-                return false;
-            }
-        };
-        mNameField.setOnEditorActionListener(doneListener);
-        mShortBioField.setOnEditorActionListener(doneListener);
-        mWebsiteField.setOnEditorActionListener(doneListener);
-
-        mEmailField.setOnEditorActionListener(doneListener);
-        mPhoneNumberField.setOnEditorActionListener(doneListener);
-
-        //listens for focus loss, so we know when to init an update info request
-        View.OnFocusChangeListener focusLossListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    EditText editText = (EditText) v;
-                    String text = editText.getText().toString();
-                    updateInfo(editText, text);
-                }
-            }
-        };
-        mNameField.setOnFocusChangeListener(focusLossListener);
-        mShortBioField.setOnFocusChangeListener(focusLossListener);
-        mWebsiteField.setOnFocusChangeListener(focusLossListener);
-
-        mEmailField.setOnFocusChangeListener(focusLossListener);
-        mPhoneNumberField.setOnFocusChangeListener(focusLossListener);
+        //need to manually set typeface instead of using FontEditText because of support library limitations with subclassing EditText
+        mNameField.setTypeface(mWhitneyBookFont);
+        mShortBioField.setTypeface(mWhitneyBookFont);
+        mWebsiteField.setTypeface(mWhitneyBookFont);
 
         mHiddenTwitterLoginButton.setCallback(TwitterCallback);
-
         mVersionText.setText(getString(R.string.settings_delectable_version, getAppVersion()));
 
         return view;
+    }
+
+    @OnEditorAction({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    protected boolean onKeyboardDoneAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            EditText editText = (EditText) v;
+            String text = editText.getText().toString();
+            mUpdatingViaDoneClick = true;
+            updateInfo(editText, text);
+
+            hideKeyboard();
+            return true;
+        }
+        return false;
+    }
+
+    @OnFocusChange({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    protected void onFocusLoss(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            EditText editText = (EditText) v;
+            String text = editText.getText().toString();
+            //don't double send the same request if it was already invoked by a done click
+            if (mUpdatingViaDoneClick) {
+                mUpdatingViaDoneClick = false;
+                return;
+            }
+            updateInfo(editText, text);
+        }
     }
 
     @Override
@@ -417,7 +404,8 @@ public class SettingsFragment extends BaseFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = CameraUtil.loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PROFILE_IMAGE);
+                    selectedImage = CameraUtil
+                            .loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PROFILE_IMAGE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);
@@ -634,20 +622,6 @@ public class SettingsFragment extends BaseFragment {
     }
     //endregion
 
-    private void updateAccountSettings(AccountConfig.Key key, boolean setting) {
-        mAccountController.updateSetting(key, setting);
-    }
-
-    public void onEventMainThread(UpdatedSettingEvent event) {
-        if (event.isSuccessful()) {
-            event.getKey();
-            mUserAccount.getAccountConfig().setSetting(event.getKey(), event.getSetting());
-        } else {
-            showToastError(event.getErrorMessage());
-        }
-        updateUI(); //ui reverts back to original state if error
-    }
-
     //region Profile Image Actions
     @OnClick(R.id.profile_image)
     void onProfileImageClick() {
@@ -752,42 +726,10 @@ public class SettingsFragment extends BaseFragment {
         updateUI(); //ui reverts back to original state if error
     }
 
-
-    @OnClick({R.id.following_phone_notification,
-            R.id.comment_phone_notification,
-            R.id.tagged_phone_notification,
-            R.id.following_email_notification,
-            R.id.comment_email_notification,
-            R.id.tagged_email_notification})
-    void onNotificationClick(View v) {
-
-        v.setSelected(!v.isSelected());
-
-        AccountConfig.Key key = null;
-        switch (v.getId()) {
-            case R.id.following_phone_notification:
-                key = AccountConfig.Key.PN_NEW_FOLLOWER;
-                break;
-            case R.id.comment_phone_notification:
-                key = AccountConfig.Key.PN_COMMENT_ON_OWN_WINE;
-                break;
-            case R.id.tagged_phone_notification:
-                key = AccountConfig.Key.PN_TAGGED;
-                break;
-            case R.id.following_email_notification:
-                //TODO following_email_notification
-                break;
-            case R.id.comment_email_notification:
-                //TODO comment_email_notification
-                break;
-            case R.id.tagged_email_notification:
-                //TODO tagged_email_notification
-                break;
-        }
-
-        if (key != null) {
-            updateAccountSettings(key, v.isSelected());
-        }
+    @OnClick(R.id.notifications_row)
+    protected void onNotificationsRowClick() {
+        String title = getString(R.string.settings_notifications);
+        startActivity(NotificationsActivty.newIntent(getActivity(), title));
     }
 
     @OnClick({R.id.send_feedback,
@@ -801,7 +743,7 @@ public class SettingsFragment extends BaseFragment {
             case R.id.terms_of_use:
                 String url = getString(R.string.terms_url);
                 String title = getString(R.string.signup_in_terms_of_use);
-                startActivity(WebViewActivty.newIntent(getActivity(), url, title));
+                startActivity(WebViewActivity.newIntent(getActivity(), url, title));
                 break;
             case R.id.sign_out:
                 signout();
@@ -894,16 +836,6 @@ public class SettingsFragment extends BaseFragment {
             mTwitterField.setText(R.string.settings_facebook_connect);
             mTwitterField.setSelected(false);
         }
-
-        //notifications
-        boolean followingYouPhone = mUserAccount.getAccountConfig().getPnNewFollower();
-        boolean commentPhone = mUserAccount.getAccountConfig().getPnCommentOnOwnWine();
-        boolean taggedPhone = mUserAccount.getAccountConfig().getPnTagged();
-        mFollowingPhoneIcon.setSelected(followingYouPhone);
-        mCommentPhoneIcon.setSelected(commentPhone);
-        mTaggedPhoneIcon.setSelected(taggedPhone);
-
-        //TODO no fields for email notifications yet for API, implement when ready
     }
 
     private void updatePhoneNumberUI() {

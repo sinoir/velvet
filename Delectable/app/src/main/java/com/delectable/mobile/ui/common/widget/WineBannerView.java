@@ -92,10 +92,14 @@ public class WineBannerView extends RelativeLayout {
      */
     //Follower Feed ListView items use this method to update their views.
     public void updateData(CaptureDetails captureDetails) {
-        String wineImageUrl = captureDetails.getPhoto().getUrl();
+        String wineImageUrl = captureDetails.getPhoto().getMediumPlus();
         String producerName = captureDetails.getDisplayTitle();
-        String wineName = captureDetails.getDisplayDescription() +
-                " " + captureDetails.getWineProfile().getVintage();
+        WineProfileMinimal wineProfile = captureDetails.getWineProfile();
+        String vintage = (wineProfile != null ? wineProfile.getVintage() : null);
+        String wineName = captureDetails.getDisplayDescription();
+        if (vintage != null && !vintage.equals("NV")) {
+            wineName += " " + vintage;
+        }
 
         updateViewWithData(wineImageUrl, producerName, wineName);
     }
@@ -113,14 +117,15 @@ public class WineBannerView extends RelativeLayout {
 
         String wineImageUrl;
         if (capturePhotoHash != null) {
-            wineImageUrl = capturePhotoHash.get450Plus();
+            wineImageUrl = capturePhotoHash.getMediumPlus();
         } else {
-            wineImageUrl = wineProfile.getPhoto().get450Plus();
+            wineImageUrl = wineProfile.getPhoto().getMediumPlus();
         }
         String producerName = wineProfile.getProducerName();
         String wineName = wineProfile.getName();
+        String vintage = wineProfile.getVintage();
 
-        if (includeVintage) {
+        if (includeVintage && !vintage.equals("NV")) {
             updateVintage(wineProfile.getVintage());
         } else {
             mWineVintage.setVisibility(View.INVISIBLE);

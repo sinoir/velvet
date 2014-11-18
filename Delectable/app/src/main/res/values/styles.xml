@@ -35,8 +35,8 @@
     </style>
 
     <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="android:background">@drawable/bg_toolbar_gradient</item>
+        <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
@@ -65,6 +65,11 @@
         <item name="fontName">whitney_medium</item>
     </style>
 
+    <style name="ToolbarTheme.Translucent" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:textColorPrimary">@color/d_white</item>
+        <item name="android:textColorSecondary">@color/d_white</item>
+        <item name="android:actionMenuTextColor">@color/d_white</item>
+    </style>
 
     <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"></style>
 
@@ -265,18 +270,14 @@
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
 
-    <style name="SettingsEmailNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:src">@drawable/ic_settings_email_notification</item>
-        <item name="android:contentDescription">@string/settings_cd_email_notifications</item>
-    </style>
 
-    <style name="SettingsPhoneNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_marginRight">
-            @dimen/settings_notification_icon_horizontal_spacing
-        </item>
-        <item name="android:src">@drawable/ic_settings_phone_notification</item>
-        <item name="android:contentDescription">@string/settings_cd_phone_notifications</item>
+    <style name="NotificationsSwitch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@null</item>
+
     </style>
 
     <style name="SettingsAboutCategoryRow">

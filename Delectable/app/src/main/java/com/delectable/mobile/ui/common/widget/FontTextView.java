@@ -43,8 +43,6 @@ public class FontTextView extends TextView {
      * Convenience method that calls {@link #setTypeface(android.graphics.Typeface)}
      */
     public void setTypeface(FontEnum font) {
-        Typeface typeface = Typeface
-                .createFromAsset(getContext().getAssets(), "fonts/" + font.getFileName());
-        setTypeface(typeface);
+        setTypeface(font.getTypeface(getContext()));
     }
 }

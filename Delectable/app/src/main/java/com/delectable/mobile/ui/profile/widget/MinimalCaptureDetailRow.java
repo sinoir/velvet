@@ -38,6 +38,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
 
+    @InjectView(R.id.private_indicator)
+    protected View mPrivateIndicator;
+
     @InjectView(R.id.producer_name)
     protected FontTextView mProducerName;
 
@@ -80,21 +83,27 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.overflow_button)
     protected ImageView mOverflowButton;
 
-    private CaptureDetails mCaptureData;
+    private CaptureDetails mCaptureDetails;
 
     private String mSelectedUserId;
 
-    private boolean mHasComment;
-
     private boolean mHasRating;
 
-    private boolean mIsLoggedInUsersCapture;
+    private boolean mIsViewingOwnCaptures;
 
     private boolean mUserIsCapturer;
 
     private CaptureDetailsView.CaptureActionsHandler mCaptureDetailsActionsHandler;
 
     private PopupMenu mPopupMenu;
+
+    private MenuItem mMenuActionRecommend;
+
+    private MenuItem mMenuActionEdit;
+
+    private MenuItem mMenuActionFlag;
+
+    private MenuItem mMenuActionRemove;
 
     public MinimalCaptureDetailRow(Context context) {
         this(context, null);
@@ -116,16 +125,16 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.capture_action_recommend:
-                        mCaptureDetailsActionsHandler.shareCapture(mCaptureData);
+                        mCaptureDetailsActionsHandler.shareCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_edit:
-                        mCaptureDetailsActionsHandler.editCapture(mCaptureData);
+                        mCaptureDetailsActionsHandler.editCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_flag:
-                        mCaptureDetailsActionsHandler.flagCapture(mCaptureData);
+                        mCaptureDetailsActionsHandler.flagCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_remove:
-                        mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureData);
+                        mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureDetails);
                         return true;
                 }
                 return false;
@@ -135,67 +144,103 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mPopupMenu = new PopupMenu(context, mOverflowButton);
         mPopupMenu.inflate(R.menu.capture_actions);
         mPopupMenu.setOnMenuItemClickListener(popUpListener);
+        mMenuActionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        mMenuActionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        mMenuActionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        mMenuActionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
     }
 
     public void updateData(CaptureDetails capture, String userId) {
         mSelectedUserId = userId;
-        mIsLoggedInUsersCapture = mSelectedUserId.equals(UserInfo.getUserId(getContext()));
-        mCaptureData = capture;
-        mHasComment = false;
+        mIsViewingOwnCaptures = mSelectedUserId.equals(UserInfo.getUserId(getContext()));
+        mCaptureDetails = capture;
         mHasRating = false;
 
         String capturerId = capture.getCapturerParticipant().getId();
         mUserIsCapturer = mSelectedUserId.equals(capturerId);
 
-        setupPopUpMenu();
-
         updateWineInfo();
         updateUserRating();
         updateCommentsAndTags();
-        // Must be configured last
+        // Must be configured last, depending on mHasRating set in updateUserRating
+        setupPopUpMenu();
         updateButtonDisplay();
     }
 
     private void setupPopUpMenu() {
-        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
-                .equals(UserInfo.getUserId(getContext()));
-        CaptureState captureState = CaptureState.getState(mCaptureData);
-        boolean isUnidentified =
-                captureState == CaptureState.UNIDENTIFIED
-                        || captureState == CaptureState.IMPOSSIBLED;
+        //first hide entire menu
+        mMenuActionRecommend.setVisible(false);
+        mMenuActionEdit.setVisible(false);
+        mMenuActionFlag.setVisible(false);
+        mMenuActionRemove.setVisible(false);
 
-        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
-        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
-        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
-        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
-        if (isUnidentified) {
-            actionRecommend.setVisible(false);
+        CaptureState captureState = CaptureState.getState(mCaptureDetails);
+
+        //handle viewing other people captures first
+        if (!mIsViewingOwnCaptures) {
+            mMenuActionRecommend.setVisible(true);
+            return;
         }
-        if (!isOwnCapture) {
-            actionEdit.setVisible(false);
-            actionFlag.setVisible(false);
-            actionRemove.setVisible(false);
+
+        //viewing own captures from here down
+
+        //viewing own captures where we are capturer
+        if (mUserIsCapturer) {
+            if (CaptureState.UNIDENTIFIED == captureState) {
+                mMenuActionEdit.setVisible(true);
+                mMenuActionRemove.setVisible(true);
+                return;
+            }
+
+            if (CaptureState.IMPOSSIBLED == captureState) {
+                mMenuActionEdit.setVisible(true);
+                mMenuActionRemove.setVisible(true);
+                mMenuActionFlag.setVisible(true);
+                return;
+            }
+
+            //for unverified or identified captures show everything
+            mMenuActionRecommend.setVisible(true);
+            mMenuActionEdit.setVisible(true);
+            mMenuActionFlag.setVisible(true);
+            mMenuActionRemove.setVisible(true);
+            return;
         }
+
+        //from here down, viewing own captures where we're tagged in
+        if (!mHasRating) { //and there was no rating
+            mMenuActionRecommend.setVisible(true);
+            mMenuActionFlag.setVisible(true);
+            return;
+        }
+
+        //we're tagged and rated already
+        mMenuActionRecommend.setVisible(true);
+        mMenuActionEdit.setVisible(true);
+        mMenuActionFlag.setVisible(true);
+        mMenuActionRemove.setVisible(true);
     }
 
     private void updateWineInfo() {
 
-        String captureTitle;
-        String captureName;
+        String captureTitle = null;
+        String captureName = null;
+        String vintage = null;
 
-        CaptureState state = CaptureState.getState(mCaptureData);
+        CaptureState state = CaptureState.getState(mCaptureDetails);
         switch (state) {
             case IDENTIFIED:
-                captureTitle = mCaptureData.getWineProfile().getProducerName();
-                captureName = mCaptureData.getWineProfile().getName();
+                captureTitle = mCaptureDetails.getWineProfile().getProducerName();
+                captureName = mCaptureDetails.getWineProfile().getName();
+                vintage = mCaptureDetails.getWineProfile().getVintage();
                 break;
             case IMPOSSIBLED:
                 captureTitle = "";
-                captureName = mCaptureData.getTranscriptionErrorMessage();
+                captureName = mCaptureDetails.getTranscriptionErrorMessage();
                 break;
             case UNVERIFIED:
-                captureTitle = mCaptureData.getBaseWine().getProducerName();
-                captureName = mCaptureData.getBaseWine().getName();
+                captureTitle = mCaptureDetails.getBaseWine().getProducerName();
+                captureName = mCaptureDetails.getBaseWine().getName();
                 break;
             case UNIDENTIFIED:
             default:
@@ -203,15 +248,21 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
                 captureName = getResources().getString(R.string.user_captures_check_back);
                 break;
         }
-        String captureImageUrl = mCaptureData.getPhoto().getBestThumb();
+        if (vintage != null && !vintage.equals("NV")) {
+            captureName += " " + vintage;
+        }
+        String captureImageUrl = mCaptureDetails.getPhoto().getBestThumb();
 
         mProducerName.setText(captureTitle.toLowerCase());
         mWineName.setText(captureName);
         ImageLoaderUtil.loadImageIntoView(getContext(), captureImageUrl, mWineImage);
+
+        boolean isPrivate = mCaptureDetails.getPrivate();
+        mPrivateIndicator.setVisibility(isPrivate ? View.VISIBLE : View.GONE);
     }
 
     private void updateUserRating() {
-        float captureRating = mCaptureData.getRatingForId(mSelectedUserId);
+        float captureRating = mCaptureDetails.getRatingForId(mSelectedUserId);
         if (captureRating > 0.0f) {
             mRating.setVisibility(View.VISIBLE);
             mRating.setRatingOf40(captureRating);
@@ -223,9 +274,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     private void updateCommentsAndTags() {
-        CharSequence message = getDisplayMessage(mCaptureData, mSelectedUserId);
+        CharSequence message = getDisplayMessage(mCaptureDetails, mSelectedUserId);
         mCommentText.setText(message);
-        mHasComment = true;
     }
 
     /**
@@ -312,7 +362,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         //handling viewing own captures case
         String userFirstName = "";
 
-        if (mIsLoggedInUsersCapture) {
+        if (mIsViewingOwnCaptures) {
             userFirstName = getResources().getString(R.string.you);
         } else {
             AccountMinimal account = capture.getTaggeeParticipants()
@@ -363,77 +413,82 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mCountTextsContainer.setVisibility(View.GONE);
 
         //hide like and comment buttons if viewing own user profile
-        int visibility = mIsLoggedInUsersCapture ? View.GONE : View.VISIBLE;
+        int visibility = mIsViewingOwnCaptures ? View.GONE : View.VISIBLE;
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
         //setup likes/comments counts
-        int likes = mCaptureData.getLikesCount();
-        int comments = mCaptureData.getComments().size();
+        int likes = mCaptureDetails.getLikesCount();
+        int comments = mCaptureDetails.getComments().size();
         mLikesCount.setText(
                 getResources().getQuantityString(R.plurals.likes_count, likes, likes));
         mCommentsCount.setText(
                 getResources().getQuantityString(R.plurals.comments_count, comments, comments));
 
-        if (!mIsLoggedInUsersCapture) { //looking at someone else's captures
+        if (!mIsViewingOwnCaptures) { //looking at someone else's captures
             //always show this even when there are no likes/comments so user can click like/comment button and not have view jump
             mCountTextsContainer.setVisibility(View.VISIBLE);
             return;
         }
 
         //from here down, looking at your own feed
-        if (!mUserIsCapturer) { //and you were tagged
-            if (!mHasRating) { //and there was no rating
-                mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
-                return;
-            }
+        if (!mHasRating) { //and there was no rating
+            mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
+
+            // remove redundant overflow actions
+            mMenuActionEdit.setVisible(false);
+            mMenuActionRemove.setVisible(false);
+
+            //don't show like/comment count here, so return
+            return;
         }
 
         //show like and comment counts if at least one of them is populated
-        if (mCaptureData.getLikesCount() > 0 || !mCaptureData.getComments().isEmpty()) {
+        if (mCaptureDetails.getLikesCount() > 0 || !mCaptureDetails.getComments().isEmpty()) {
             mCountTextsContainer.setVisibility(View.VISIBLE);
         }
+
     }
 
 
     @OnClick({R.id.wine_image, R.id.wine_name, R.id.producer_name})
     protected void onWineDetailsClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.launchWineProfile(mCaptureData);
+            mCaptureDetailsActionsHandler.launchWineProfile(mCaptureDetails);
         }
     }
 
     @OnClick({R.id.likes_count, R.id.comments_count})
     protected void onLikesCommentsCountClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.launchCaptureDetails(mCaptureData);
+            mCaptureDetailsActionsHandler.launchCaptureDetails(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.like_button)
     protected void onLikeClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureData);
+            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.comment_button)
     protected void onCommentButtonClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureData);
+            mCaptureDetailsActionsHandler.writeCommentForCapture(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.add_rating_textview)
     protected void onAddRatingClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureData);
+            mCaptureDetailsActionsHandler.rateAndCommentForCapture(mCaptureDetails);
         }
     }
 
     @OnClick(R.id.remove_textview)
     protected void onRemoveClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureData);
+            mCaptureDetailsActionsHandler.discardCaptureClicked(mCaptureDetails);
         }
     }
 

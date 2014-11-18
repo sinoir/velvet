@@ -20,8 +20,6 @@ public class WineCheckoutActivity extends BaseActivity {
     //Deep Link keys
     private static final String DEEP_BASE_VINTAGE_ID = "vintage_id";
 
-    private String mVintageId;
-
     private Toolbar mErrorTooblar;
 
     private boolean mErrorBarShown = false;
@@ -38,16 +36,14 @@ public class WineCheckoutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
         Bundle args = getIntent().getExtras();
+        String vintageId = null;
         if (args != null) {
-            mVintageId = args.getString(PARAMS_VINTAGE_ID);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mVintageId = getDeepLinkParam(DEEP_BASE_VINTAGE_ID);
+            vintageId = args.getString(PARAMS_VINTAGE_ID);
         }
 
         if (savedInstanceState == null) {
 
-            WineCheckoutFragment fragment = WineCheckoutFragment.newInstance(mVintageId);
+            WineCheckoutFragment fragment = WineCheckoutFragment.newInstance(vintageId);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)

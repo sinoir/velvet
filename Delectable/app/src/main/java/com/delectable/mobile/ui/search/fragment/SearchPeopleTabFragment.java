@@ -2,16 +2,17 @@ package com.delectable.mobile.ui.search.fragment;
 
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.AccountSearch;
-import com.delectable.mobile.api.models.SearchHit;
-import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.SearchAccountsEvent;
+import com.delectable.mobile.api.models.AccountSearch;
+import com.delectable.mobile.api.models.SearchHit;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.search.widget.AccountSearchAdapter;
 import com.delectable.mobile.ui.search.widget.SearchPeopleRow;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.content.Intent;
 import android.view.View;
@@ -71,6 +72,8 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
         mAccountController.searchAccounts(query, 0, LIMIT);
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
+
+        mAnalytics.trackSearch(AnalyticsUtil.SEARCH_PEOPLE);
         return false;
     }
 

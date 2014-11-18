@@ -28,8 +28,10 @@
             android:layout_height="356dp"
             android:background="@color/d_off_white" />
 
-        <ProgressBar
+        <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"
+            style="?attr/android:progressBarStyle"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/general_row_height"
             android:layout_below="@id/empty_view_header"
@@ -38,7 +40,7 @@
         <com.delectable.mobile.ui.common.widget.FontTextView
             style="@style/TextEmptyState"
             android:id="@+id/nothing_to_display_textview"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/empty_view_header"

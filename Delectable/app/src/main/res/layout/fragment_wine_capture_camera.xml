@@ -25,11 +25,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
-        android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+        android:layout_marginLeft="@dimen/spacing_16"
+        android:layout_marginRight="@dimen/spacing_16"
         android:background="@null"
         android:drawableLeft="@drawable/ic_flash"
         android:text="@string/flash_off"
+        android:textSize="18sp"
         android:textColor="@color/btn_flash_translucent_to_white" />
 
     <RelativeLayout

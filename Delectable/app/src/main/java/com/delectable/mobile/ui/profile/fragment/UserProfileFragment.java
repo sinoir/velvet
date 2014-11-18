@@ -31,6 +31,7 @@ import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -44,9 +45,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -89,6 +90,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @InjectView(R.id.empty_state_layout)
     protected View mEmptyStateLayout;
 
+    @InjectView(R.id.progress_bar)
+    protected ContentLoadingProgressBar mProgressBar;
+
     @InjectView(R.id.empty_view_header)
     protected ProfileHeaderView mEmptyStateHeader;
 
@@ -112,7 +116,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Inject
     protected PendingCapturesController mPendingCapturesController;
 
-
     @Inject
     protected AccountModel mAccountModel;
 
@@ -121,8 +124,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private Listing<BaseListingElement, DeleteHash> mCapturesListing;
 
     private boolean mFetching;
-
-    private String mEmptyStateText;
 
     private ProfileHeaderView mProfileHeaderView;
 
@@ -171,8 +172,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         View view = View.inflate(getActivity(), R.layout.fragment_user_profile, null);
         ButterKnife.inject(this, view);
 
-        setEmptyStateText(mEmptyStateText);
-
         mProfileHeaderView = (ProfileHeaderView) inflater
                 .inflate(R.layout.profile_header_impl, mListView, false);
         mProfileHeaderView.setActionListener(this);
@@ -180,7 +179,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mEmptyStateHeader.setActionListener(this);
 
         mListView.addHeaderView(mProfileHeaderView);
-        // Does not work with list header
+        // empty view does not work with list header, thus it's duplicated in the empty layout
         mListView.setEmptyView(mEmptyStateLayout);
         mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
         mListView.setAdapter(mAdapter);
@@ -259,20 +258,18 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        loadUserData();
 
-        // Update User Private account info as well
-        // TODO: Need to store this as 1 object, storing duplicate account info is causing weird issues.
-        if (mUserId != null && mUserId.equals(UserInfo.getUserId(getActivity()))) {
-            mAccountController.fetchAccountPrivate(mUserId);
-        }
         // fetch profile to check for updates (we're using eTags, so no big deal)
         mAccountController.fetchProfile(mUserId);
+
+        boolean isOwnProfile = UserInfo.isLoggedInUser(getActivity(), mUserId);
+        mAnalytics.trackViewUserProfile(
+                isOwnProfile ? AnalyticsUtil.USER_PROFILE_OWN : AnalyticsUtil.USER_PROFILE_OTHERS);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Custom Back Arrow...
         inflater.inflate(R.menu.profile_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -293,41 +290,25 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
     }
 
-    private void loadData() {
-/*
-        new SafeAsyncTask<Account>(this) {
+    private void loadUserData() {
+
+        new SafeAsyncTask<AccountProfile>(this) {
             @Override
-            protected Account safeDoInBackground(Void[] params) {
+            protected AccountProfile safeDoInBackground(Void[] params) {
                 return mAccountModel.getAccount(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Account account) {
-                mUserAccount = account;
-                if (mUserAccount != null) {
-                    mCaptureDetails.clear();
-                    if (mUserAccount.getCaptureSummaries() != null
-                            && mUserAccount.getCaptureSummaries().size() > 0) {
-                        for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                            mCaptureDetails.addAll(summary.getCaptures());
-                        }
-                    }
-                    updateUIWithData();
+            protected void safeOnPostExecute(AccountProfile account) {
+                if (account != null) {
+                    mUserAccount = account;
+                    //items were successfully retrieved from cache, set to view!
+                    updateViews(mUserAccount);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-*/
 
-        // FIXME Use asynchronous method above once the other requests are refactored as well
-        // and see if the UI speed will improve, otherwise we might stick with the
-        // synchronous retrieval for small data
-        mUserAccount = mAccountModel.getAccount(mUserId);
-        if (mUserAccount != null) {
-            Log.d(TAG, "CACHE HIT for profile: " + mUserId);
-            updateUIWithData();
-        }
-
-        loadLocalData();
+        loadLocalCapturesData();
     }
 
     @OnItemClick(R.id.list_view)
@@ -351,7 +332,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         if (event.isSuccessful()) {
             mUserAccount = event.getAccount();
-            updateUIWithData();
+            updateViews(mUserAccount);
             return;
         }
         showToastError(event.getErrorMessage());
@@ -364,7 +345,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
 
         // Reload Data
-        loadData();
+        loadUserData();
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else if (!event.isSuccessful()) {
@@ -381,6 +362,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
 
         mFetching = false;
+        mProgressBar.hide();
 
         if (mAdapter.getItems().isEmpty()) {
             mNoCapturesTextView.setVisibility(View.VISIBLE);
@@ -402,25 +384,18 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void toggleFollowUserClicked(boolean isFollowingSelected) {
-        // Update Count
-        int followerCountDiff = isFollowingSelected ? 1 : -1;
-        mUserAccount.setFollowerCount(mUserAccount.getFollowerCount() + followerCountDiff);
-        int relationship = isFollowingSelected ? AccountProfile.RELATION_TYPE_FOLLOWING
-                : AccountProfile.RELATION_TYPE_NONE;
-        mUserAccount.setCurrentUserRelationship(relationship);
-        updateUIWithData();
         mAccountController.followAccount(mUserId, isFollowingSelected);
     }
 
-    private void updateUIWithData() {
-        mProfileHeaderView.setDataToView(mUserAccount);
-        mEmptyStateHeader.setDataToView(mUserAccount);
-
-        if (mUserAccount == null) {
+    private void updateViews(AccountProfile account) {
+        if (account == null) {
             return;
         }
-        boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
-        String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
+        mProfileHeaderView.setDataToView(account);
+        mEmptyStateHeader.setDataToView(account);
+
+        boolean isSelf = account.isUserRelationshipTypeSelf();
+        String user = account.getFname() != null ? account.getFname() : "This user";
         String emptyText = isSelf
                 ? getResources().getString(R.string.empty_own_profile)
                 : String.format(getResources().getString(R.string.empty_user_profile), user);
@@ -428,7 +403,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         mAlphaSpan = new MutableForegroundColorSpan(0,
                 getResources().getColor(R.color.d_big_stone));
-        mTitle = new SpannableString(mUserAccount.getFullName());
+        mTitle = new SpannableString(account.getFullName());
 //        mTitle = new SpannableString(mUserAccount.isUserRelationshipTypeSelf()
 //                ? getString(R.string.you)
 //                : mUserAccount.getFullName());
@@ -460,9 +435,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         //launchNextFragment(FollowingFragment.newInstance(mUserId));
     }
 
-    private void loadLocalData() {
+    private void loadLocalCapturesData() {
 
         new SafeAsyncTask<Listing<BaseListingElement, DeleteHash>>(this) {
+
+            @Override
+            protected void onPreExecute() {
+                mProgressBar.show();
+            }
+
             @Override
             protected Listing<BaseListingElement, DeleteHash> safeDoInBackground(Void[] params) {
                 return mListingModel.getUserCaptures(mUserId);
@@ -515,17 +496,13 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void reloadLocalData() {
-        loadLocalData();
+        loadLocalCapturesData();
     }
 
     @Override
     public void dataSetChanged() {
         mAdapter.notifyDataSetChanged();
-        if (mAdapter.isEmpty()) {
-            mEmptyStateLayout.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyStateLayout.setVisibility(View.GONE);
-        }
+        mNoCapturesTextView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -536,7 +513,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     public void setEmptyStateText(String emptyText) {
-        mEmptyStateText = emptyText;
         if (mNoCapturesTextView != null) {
             mNoCapturesTextView.setText(emptyText);
         }
@@ -545,14 +521,25 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void launchWineProfile(CaptureDetails captureDetails) {
         Intent intent = new Intent();
+
         // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
-        if (captureDetails.getWineProfile() != null) {
-            intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
-                    captureDetails.getPhoto());
-        } else {
-            intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
-                    captureDetails.getId());
-            intent.setClass(getActivity(), CaptureDetailsActivity.class);
+        CaptureState state = CaptureState.getState(captureDetails);
+        switch (state) {
+            case UNVERIFIED:
+                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getBaseWine(),
+                        captureDetails.getPhoto());
+                break;
+            case IDENTIFIED:
+                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
+                        captureDetails.getPhoto());
+                break;
+            case UNIDENTIFIED:
+            case IMPOSSIBLED:
+            default:
+                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                        captureDetails.getId());
+                intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                break;
         }
         startActivity(intent);
     }

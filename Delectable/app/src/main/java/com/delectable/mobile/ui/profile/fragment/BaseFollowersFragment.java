@@ -89,7 +89,6 @@ public abstract class BaseFollowersFragment extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
         App.injectMembers(this);
         Bundle args = getArguments();
         if (args == null) {
@@ -109,7 +108,6 @@ public abstract class BaseFollowersFragment extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_listview_w_loading, container, false);
         ButterKnife.inject(this, view);
 
@@ -121,11 +119,10 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
     @Override
     public void onResume() {
-        Log.d(TAG, "onResume");
         super.onResume();
 
         if (mAdapter.getItems().isEmpty()) {
-            Log.d(TAG, "onResume:loadLocalData");
+            mNoFollowersText.setVisibility(View.GONE);
             loadLocalData();
         }
     }

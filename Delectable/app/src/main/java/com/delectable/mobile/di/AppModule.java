@@ -105,6 +105,7 @@ import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
 import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
+import com.delectable.mobile.ui.settings.fragment.NotificationsFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
@@ -116,6 +117,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.fragment.ConfirmationFragment;
 import com.delectable.mobile.ui.winepurchase.fragment.WineCheckoutFragment;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Singleton;
@@ -126,6 +128,7 @@ import de.greenrobot.event.EventBus;
 
 @Module(
         injects = {
+                App.class,
                 MainActivity.class,
                 NavActivity.class,
                 // Fragments
@@ -141,6 +144,7 @@ import de.greenrobot.event.EventBus;
                 FollowerFeedTabFragment.class,
                 TrendingTabFragment.class,
                 SettingsFragment.class,
+                NotificationsFragment.class,
                 FollowExpertsTabFragment.class,
                 FollowContactsTabFragment.class,
                 FollowFacebookFriendsTabFragment.class,
@@ -311,4 +315,9 @@ public class AppModule {
         return new MotdNetworkClient();
     }
 
+    @Provides
+    @Singleton
+    AnalyticsUtil provideAnalytics() {
+        return new AnalyticsUtil();
+    }
 }

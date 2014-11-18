@@ -260,7 +260,7 @@
     </plurals>
 
     <!-- TODO consult w bjorn: Beers have no vintage, "NV vintage" is unsightly-->
-    <string name="wine_profile_vintage">\u0020- %1$s vintage</string>
+    <string name="wine_profile_vintage">\u0020— %1$s vintage</string>
     <!-- TODO consult w bjorn: Beers have no vintage, if user leaves no comment, this will read like "Wayne had the NV vintage", also unsightly-->
     <string name="wine_profile_empty_comment_message">%1$s had the %2$s vintage</string>
     <plurals name="wine_profile_helpful_count">
@@ -279,6 +279,11 @@
     <!--Capture Flow: Tag Friends -->
     <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>
     <string name="tag_friends_error">Error retrieving your friends list, please try again later.</string>
+
+    <!--Capture Flow: Get Location-->
+    <string name="failed_to_get_location">Sorry, we couldn\'t get your location. Is your GPS turned on?</string>
+    <!--when foursquare fetch for location fails-->
+    <string name="trouble_retrieving_locations">Sorry, we had trouble retrieving locations near you, please try again later!</string>
 
 
     <!--Follow Friends -->
@@ -315,18 +320,23 @@
     <string name="settings_facebook_connected">Connected</string>
     <string name="settings_twitter_label">Twitter</string>
     <string name="settings_twitter_hint">\@twitter</string>
-    <string name="settings_notification">notification</string>
-    <string name="settings_following_you">Following you</string>
-    <string name="settings_comment_on_your_wine">Comment on your wine</string>
-    <string name="settings_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="settings_notifications">Notifications</string>
     <string name="settings_about">about</string>
     <string name="settings_feedback">Send us feedback</string>
     <string name="settings_terms_of_use">Terms of use</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_sign_out">Sign out</string>
     <string name="settings_delectable_version">Delectable %1$s</string>
-    <string name="settings_cd_phone_notifications">phone notifications</string>
-    <string name="settings_cd_email_notifications">email notifications</string>
+    <!--notifications-->
+    <string name="notifications_wine_identification">Wine identification</string>
+    <string name="notifications_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="notifications_comment_on_your_wine">Comment on your wine</string>
+    <string name="notifications_respond_to_comment">Respond to comment</string>
+    <string name="notifications_like_your_wine">Like your wine</string>
+    <string name="notifications_following_you">Following you</string>
+    <string name="notifications_friend_joined_delectable">Friend joined Delectable</string>
+
+
     <!-- contact email strings -->
     <string name="settings_contact_email_intent_dialog_title">Send mail...</string>
     <string name="settings_contact_email">feedback@delectable.com</string>

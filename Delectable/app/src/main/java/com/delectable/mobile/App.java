@@ -3,6 +3,7 @@ package com.delectable.mobile;
 import com.crashlytics.android.Crashlytics;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.di.AppModule;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.kahuna.sdk.KahunaAnalytics;
@@ -11,6 +12,8 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import android.app.Application;
 import android.util.Log;
+
+import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
@@ -35,6 +38,9 @@ public class App extends Application {
         getInstance().mObjectGraph.inject(object);
     }
 
+    @Inject
+    AnalyticsUtil mAnalytics;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,12 +49,14 @@ public class App extends Application {
             KahunaAnalytics
                     .onAppCreate(this, BuildConfig.KAHUNA_SECRET, BuildConfig.KAHUNA_PUSH_ID);
             KahunaAnalytics.setPushReceiver(PushReceiver.class);
+            KahunaAnalytics.disableKahunaGenerateNotifications();
             updateKahunaAttributes();
         } catch (Exception ex) {
             Log.wtf(TAG, "Kahuna Failed", ex);
         }
 
         mObjectGraph = ObjectGraph.create(new AppModule());
+        App.injectMembers(this);
 
         TwitterAuthConfig authConfig = TwitterUtil.getAuthConfig();
         if (BuildConfig.REPORT_CRASHES) {
@@ -63,8 +71,8 @@ public class App extends Application {
         } else {
             Fabric.with(this, new Twitter(authConfig));
         }
-    }
 
+    }
 
     public void updateKahunaAttributes() {
         if (UserInfo.isSignedIn(this)) {
@@ -76,6 +84,5 @@ public class App extends Application {
             KahunaAnalytics.enablePush();
         }
     }
-
 
 }

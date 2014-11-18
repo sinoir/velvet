@@ -32,7 +32,7 @@ public class FetchActivityFeedJob extends BaseJob {
 
     public FetchActivityFeedJob(String requestId, String before, String after,
             Boolean isPullToRefresh) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC).requireNetwork());
 
         //TODO optimize for etag use
         mRequestId = requestId;

@@ -46,13 +46,14 @@ android {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 4
-        versionName '1.09'
+        versionName '1.1'
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
         buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
         buildConfigField 'String', 'TWITTER_KEY', '"fSGhGQRt4QCl0lQMLKEr4g"'
         buildConfigField 'String', 'TWITTER_SECRET', '"EVTtbtBOZFY9YMlV6GlkbUbiZwi7n62cfJSEfb5x9hI"'
+        buildConfigField 'String', 'MIXPANEL_TOKEN', '"e46cbff0ba48b387cd070c3b38b49f2e"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
     }
 
@@ -130,6 +131,7 @@ dependencies {
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
     compile 'com.melnykov:floatingactionbutton:1.0.6'
+    compile "com.mixpanel.android:mixpanel-android:4.4.1@aar"
 
     // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {

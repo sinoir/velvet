@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
             android:clipToPadding="false"
-            android:overScrollMode="never"
             android:background="@android:color/white"
             android:listSelector="@android:color/white" />
 
@@ -35,13 +34,16 @@
             android:orientation="vertical">
 
             <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/empty_text_view"
                 style="@style/TextEmptyState"
+                android:visibility="gone"
                 android:text="@string/empty_following_feed"
                 android:paddingBottom="@dimen/spacing_32" />
 
             <com.delectable.mobile.ui.common.widget.Delectabutton
                 android:id="@+id/search_friends_button"
                 style="@style/delectabutton_large"
+                android:visibility="gone"
                 app:icon="@drawable/ic_nav_drawer_friends_normal"
                 android:text="@string/empty_following_feed_button" />
 

@@ -84,6 +84,7 @@
         android:id="@+id/varietal_region_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/d_white"
         android:orientation="vertical"
         android:paddingBottom="@dimen/wine_profile_varietal_region_container_vertical_spacing"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"

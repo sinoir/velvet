@@ -124,6 +124,11 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private PopupMenu mPopupMenu;
 
+    private MenuItem mMenuActionRecommend;
+    private MenuItem mMenuActionEdit;
+    private MenuItem mMenuActionFlag;
+    private MenuItem mMenuActionRemove;
+
     public CaptureDetailsView(Context context) {
         this(context, null);
     }
@@ -163,6 +168,10 @@ public class CaptureDetailsView extends RelativeLayout {
         mPopupMenu = new PopupMenu(mContext, mMenuButton);
         mPopupMenu.inflate(R.menu.capture_actions);
         mPopupMenu.setOnMenuItemClickListener(popUpListener);
+        mMenuActionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
+        mMenuActionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
+        mMenuActionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
+        mMenuActionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
     }
 
     public void updateData(CaptureDetails captureData, boolean showComments) {
@@ -190,6 +199,12 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupPopUpMenu() {
+        //first set everything to visible
+        mMenuActionRecommend.setVisible(true);
+        mMenuActionEdit.setVisible(true);
+        mMenuActionFlag.setVisible(true);
+        mMenuActionRemove.setVisible(true);
+
         boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(mContext));
         CaptureState captureState = CaptureState.getState(mCaptureData);
@@ -197,17 +212,13 @@ public class CaptureDetailsView extends RelativeLayout {
                 captureState == CaptureState.UNIDENTIFIED
                         || captureState == CaptureState.IMPOSSIBLED;
 
-        MenuItem actionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
-        MenuItem actionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
-        MenuItem actionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
-        MenuItem actionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
         if (isUnidentified) {
-            actionRecommend.setVisible(false);
+            mMenuActionRecommend.setVisible(false);
         }
         if (!isOwnCapture) {
-            actionEdit.setVisible(false);
-            actionFlag.setVisible(false);
-            actionRemove.setVisible(false);
+            mMenuActionEdit.setVisible(false);
+            mMenuActionFlag.setVisible(false);
+            mMenuActionRemove.setVisible(false);
         }
     }
 
@@ -219,7 +230,7 @@ public class CaptureDetailsView extends RelativeLayout {
         String producerName = mCaptureData.getDisplayTitle();
         String wineName = mCaptureData.getDisplayDescription();
 
-        mWineBannerView.updateViewWithData(wineImageUrl, producerName, wineName);
+        mWineBannerView.updateData(mCaptureData);
 
         mWineBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -500,6 +511,7 @@ public class CaptureDetailsView extends RelativeLayout {
             spannableString.setSpan(spanGray, positionLiked, likeText.length(), 0);
         }
         mLikesText.setText(spannableString, TextView.BufferType.SPANNABLE);
+        mLikesText.setVisibility(View.VISIBLE);
         mLikesText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

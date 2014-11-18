@@ -1,27 +1,17 @@
 package com.delectable.mobile.ui;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 
 import android.content.Intent;
-import android.location.Location;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -31,22 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseActivity extends ActionBarActivity
-        implements HideableActionBar, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        implements HideableActionBar {
 
     protected static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
 
     protected static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
 
     private final String TAG = this.getClass().getSimpleName();
-
-    private Uri mDeepLinkUriData;
-
-    private GoogleApiClient mGoogleApiClient;
-
-    private LocationRequest mLocationRequest;
-
-    private Location mLastLocation;
 
     private Toolbar mActionBarToolbar;
 
@@ -61,37 +42,15 @@ public abstract class BaseActivity extends ActionBarActivity
     private List<WeakReference<Fragment>> mFragmentList = new ArrayList<WeakReference<Fragment>>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Deep Link stuff
-        Intent intent = getIntent();
-        // Action not used yet, not sure if we'll need it.  Right now the action only VIEW.
-        if (intent != null) {
-            String action = intent.getAction();
-            mDeepLinkUriData = intent.getData();
-        }
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
-
         CrashlyticsUtil.log(TAG + ".onStart");
-        mGoogleApiClient.connect();
         KahunaAnalytics.start();
     }
 
     @Override
     protected void onStop() {
         CrashlyticsUtil.log(TAG + ".onStop");
-        mGoogleApiClient.disconnect();
         KahunaAnalytics.stop();
         super.onStop();
     }
@@ -257,64 +216,4 @@ public abstract class BaseActivity extends ActionBarActivity
         transaction.replace(R.id.container, fragment, fragmentName);
         transaction.commit();
     }
-
-    public String getDeepLinkParam(String key) {
-        String param = null;
-        if (isFromDeepLink()) {
-            param = mDeepLinkUriData.getQueryParameter(key);
-        }
-        return param;
-    }
-
-    public boolean isFromDeepLink() {
-        return mDeepLinkUriData != null;
-    }
-
-    public Uri getDeepLinkUriData() {
-        return mDeepLinkUriData;
-    }
-
-    public Location getLastLocation() {
-        return mLastLocation;
-    }
-
-    /**
-     * Update Last location by pinging the LocationService once.
-     */
-    public void updateLastLocation() {
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        // We only want 1 update
-        mLocationRequest.setNumUpdates(1);
-
-        LocationServices.FusedLocationApi
-                .requestLocationUpdates(mGoogleApiClient, mLocationRequest, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        // We just want to update once, and remove the listener
-                        mLastLocation = location;
-                        Log.d(TAG, "Updated Location:" + location);
-                    }
-                });
-    }
-
-    //region Google Play Services Callbacks
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(TAG, "On LocationServices Connected: " + bundle);
-        updateLastLocation();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        // TODO : Properly handle different error scenarios, i.e: Google Play Services is missing.
-        Log.e(TAG, "On LocationServices Connection Failed: " + connectionResult);
-    }
-    //endregion
-
 }

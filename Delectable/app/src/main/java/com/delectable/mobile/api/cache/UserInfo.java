@@ -102,7 +102,11 @@ public class UserInfo {
         return prefs.getString(PROPERTY_USER_ID, null);
     }
 
-    public static String getUserName(Context context) {
+    public static boolean isLoggedInUser(Context context, String userId) {
+        return userId != null && userId.equals(getUserId(context));
+    }
+
+        public static String getUserName(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String name = prefs.getString(PROPERTY_USER_NAME, null);
         //this check is necessary this method was created after 1.0 release, their user name might not have been
