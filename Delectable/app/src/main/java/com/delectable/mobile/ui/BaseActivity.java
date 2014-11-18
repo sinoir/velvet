@@ -1,27 +1,17 @@
 package com.delectable.mobile.ui;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 
 import android.content.Intent;
-import android.location.Location;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -199,9 +189,7 @@ public abstract class BaseActivity extends ActionBarActivity
     public void replaceWithFragment(BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(
-                R.anim.fade_in, R.anim.fade_out,
-                R.anim.fade_in, R.anim.fade_out);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
         //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
         //the fragment from the backstack in onActivityResult
