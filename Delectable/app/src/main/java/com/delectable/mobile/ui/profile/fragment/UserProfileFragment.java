@@ -45,6 +45,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -88,6 +89,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @InjectView(R.id.empty_state_layout)
     protected View mEmptyStateLayout;
+
+    @InjectView(R.id.progress_bar)
+    protected ContentLoadingProgressBar mProgressBar;
 
     @InjectView(R.id.empty_view_header)
     protected ProfileHeaderView mEmptyStateHeader;
@@ -358,6 +362,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
 
         mFetching = false;
+        mProgressBar.hide();
 
         if (mAdapter.getItems().isEmpty()) {
             mNoCapturesTextView.setVisibility(View.VISIBLE);
@@ -433,6 +438,12 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     private void loadLocalCapturesData() {
 
         new SafeAsyncTask<Listing<BaseListingElement, DeleteHash>>(this) {
+
+            @Override
+            protected void onPreExecute() {
+                mProgressBar.show();
+            }
+
             @Override
             protected Listing<BaseListingElement, DeleteHash> safeDoInBackground(Void[] params) {
                 return mListingModel.getUserCaptures(mUserId);

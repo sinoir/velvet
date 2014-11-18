@@ -28,8 +28,10 @@
             android:layout_height="356dp"
             android:background="@color/d_off_white" />
 
-        <ProgressBar
+        <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"
+            style="?attr/android:progressBarStyle"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/general_row_height"
             android:layout_below="@id/empty_view_header"
