@@ -47,7 +47,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -255,24 +254,18 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        loadUserData();
 
-        // Update User Private account info as well
-        // TODO: Need to store this as 1 object, storing duplicate account info is causing weird issues.
-        boolean isOwnProfile = mUserId != null && mUserId.equals(UserInfo.getUserId(getActivity()));
-        if (isOwnProfile) {
-            mAccountController.fetchAccountPrivate(mUserId);
-        }
         // fetch profile to check for updates (we're using eTags, so no big deal)
         mAccountController.fetchProfile(mUserId);
 
+        boolean isOwnProfile = UserInfo.isLoggedInUser(getActivity(), mUserId);
         mAnalytics.trackViewUserProfile(
                 isOwnProfile ? AnalyticsUtil.USER_PROFILE_OWN : AnalyticsUtil.USER_PROFILE_OTHERS);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Custom Back Arrow...
         inflater.inflate(R.menu.profile_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -293,41 +286,25 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
     }
 
-    private void loadData() {
-/*
-        new SafeAsyncTask<Account>(this) {
+    private void loadUserData() {
+
+        new SafeAsyncTask<AccountProfile>(this) {
             @Override
-            protected Account safeDoInBackground(Void[] params) {
+            protected AccountProfile safeDoInBackground(Void[] params) {
                 return mAccountModel.getAccount(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Account account) {
-                mUserAccount = account;
-                if (mUserAccount != null) {
-                    mCaptureDetails.clear();
-                    if (mUserAccount.getCaptureSummaries() != null
-                            && mUserAccount.getCaptureSummaries().size() > 0) {
-                        for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                            mCaptureDetails.addAll(summary.getCaptures());
-                        }
-                    }
-                    updateUIWithData();
+            protected void safeOnPostExecute(AccountProfile account) {
+                if (account != null) {
+                    mUserAccount = account;
+                    //items were successfully retrieved from cache, set to view!
+                    updateViews(mUserAccount);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-*/
 
-        // FIXME Use asynchronous method above once the other requests are refactored as well
-        // and see if the UI speed will improve, otherwise we might stick with the
-        // synchronous retrieval for small data
-        mUserAccount = mAccountModel.getAccount(mUserId);
-        if (mUserAccount != null) {
-            Log.d(TAG, "CACHE HIT for profile: " + mUserId);
-            updateUIWithData();
-        }
-
-        loadLocalData();
+        loadLocalCapturesData();
     }
 
     @OnItemClick(R.id.list_view)
@@ -351,7 +328,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         if (event.isSuccessful()) {
             mUserAccount = event.getAccount();
-            updateUIWithData();
+            updateViews(mUserAccount);
             return;
         }
         showToastError(event.getErrorMessage());
@@ -364,7 +341,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
 
         // Reload Data
-        loadData();
+        loadUserData();
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else if (!event.isSuccessful()) {
@@ -405,15 +382,15 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mAccountController.followAccount(mUserId, isFollowingSelected);
     }
 
-    private void updateUIWithData() {
-        mProfileHeaderView.setDataToView(mUserAccount);
-        mEmptyStateHeader.setDataToView(mUserAccount);
-
-        if (mUserAccount == null) {
+    private void updateViews(AccountProfile account) {
+        if (account == null) {
             return;
         }
-        boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
-        String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
+        mProfileHeaderView.setDataToView(account);
+        mEmptyStateHeader.setDataToView(account);
+
+        boolean isSelf = account.isUserRelationshipTypeSelf();
+        String user = account.getFname() != null ? account.getFname() : "This user";
         String emptyText = isSelf
                 ? getResources().getString(R.string.empty_own_profile)
                 : String.format(getResources().getString(R.string.empty_user_profile), user);
@@ -421,7 +398,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         mAlphaSpan = new MutableForegroundColorSpan(0,
                 getResources().getColor(R.color.d_big_stone));
-        mTitle = new SpannableString(mUserAccount.getFullName());
+        mTitle = new SpannableString(account.getFullName());
 //        mTitle = new SpannableString(mUserAccount.isUserRelationshipTypeSelf()
 //                ? getString(R.string.you)
 //                : mUserAccount.getFullName());
@@ -453,7 +430,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         //launchNextFragment(FollowingFragment.newInstance(mUserId));
     }
 
-    private void loadLocalData() {
+    private void loadLocalCapturesData() {
 
         new SafeAsyncTask<Listing<BaseListingElement, DeleteHash>>(this) {
             @Override
@@ -508,7 +485,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void reloadLocalData() {
-        loadLocalData();
+        loadLocalCapturesData();
     }
 
     @Override
