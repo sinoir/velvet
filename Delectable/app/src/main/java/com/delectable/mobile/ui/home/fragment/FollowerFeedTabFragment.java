@@ -1,15 +1,17 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.ui.events.NavigationEvent;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,10 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     @Inject
     protected AccountController mAccountController;
 
+    private View mEmptyViewText;
+
+    private Delectabutton mEmptyViewButton;
+
     public FollowerFeedTabFragment() {
         // Required empty public constructor
     }
@@ -48,13 +54,23 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
+    protected String getFeedName() {
+        return AnalyticsUtil.FEED_FOLLOWING;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         View emptyView = view.findViewById(R.id.empty_view_following);
-        View followButton = emptyView.findViewById(R.id.search_friends_button);
-        followButton.setOnClickListener(new View.OnClickListener() {
+        mEmptyViewText = emptyView
+                .findViewById(R.id.empty_text_view);
+        mEmptyViewButton = (Delectabutton) emptyView
+                .findViewById(R.id.search_friends_button);
+        mEmptyViewButton.setIconDrawable(
+                getResources().getDrawable(R.drawable.ic_nav_drawer_friends_normal));
+        mEmptyViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mEventBus.post(new NavigationEvent(NavHeader.NAV_FIND_FRIENDS));
@@ -66,12 +82,20 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected Listing<CaptureDetails> getCachedFeed() {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAnalytics.trackSwitchFeed(AnalyticsUtil.FEED_FOLLOWING);
+        }
+    }
+
+    @Override
+    protected Listing<CaptureDetails, String> getCachedFeed() {
         return mCaptureListingModel.getFollowerFeed();
     }
 
     @Override
-    protected void fetchCaptures(Listing<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh) {
         mAccountController
                 .fetchFollowerFeed(CAPTURES_REQ, CapturesContext.DETAILS, listing,
@@ -79,11 +103,15 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         Log.d(TAG, "UpdatedListingEvent");
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }
+
         super.onEventMainThread(event);
+        boolean showEmptyState = mAdapter.isEmpty();
+        mEmptyViewText.setVisibility(showEmptyState ? View.VISIBLE : View.GONE);
+        mEmptyViewButton.setVisibility(showEmptyState ? View.VISIBLE : View.GONE);
     }
 }

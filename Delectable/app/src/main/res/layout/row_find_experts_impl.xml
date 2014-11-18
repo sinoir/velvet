@@ -3,4 +3,5 @@
 <com.delectable.mobile.ui.followfriends.widget.FollowExpertsRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/follow_experts_row_height"
-    android:background="@drawable/bg_bottom_border_white_bg" />
+    android:descendantFocusability="blocksDescendants"
+    android:background="@drawable/bg_bottom_border_white_to_black10p" />

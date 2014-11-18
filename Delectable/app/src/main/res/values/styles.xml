@@ -1,54 +1,57 @@
 <resources>
 
-    <!-- Light theme -->
-    <style name="DelectableTheme" parent="android:Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/DelectableActionBar</item>
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="DelectableTheme" parent="DelectableBaseTheme" />
+
+    <style name="DelectableBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimary">@color/d_off_white</item>
+        <item name="colorPrimaryDark">@color/status_bar</item>
+        <item name="colorAccent">@color/d_chestnut</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-    <style name="DelectableActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/d_off_white</item>
-        <item name="android:titleTextStyle">@style/DelectableActionBarTitleText</item>
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">false</item>
+        <item name="color">@color/d_big_stone</item>
     </style>
 
-    <!-- ActionBar title text -->
-    <style name="DelectableActionBarTitleText" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/d_black</item>
-    </style>
-    <!-- Light Theme End -->
-
-
-    <!-- Dark Theme -->
-    <style name="DelectableTheme.Dark" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/DelectableActionBar.Dark</item>
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="ToolbarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:background">@drawable/tab_bg</item>
+        <!--<item name="android:background">?attr/colorPrimary</item>-->
+        <item name="theme">@style/ToolbarTheme</item>
     </style>
 
-    <style name="DelectableActionBar.Dark" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/d_big_stone</item>
-        <item name="android:titleTextStyle">@style/DelectableActionBarTitleText.Dark</item>
+    <style name="ToolbarStyle.Floating" parent="@style/ToolbarStyle">
+        <item name="android:background">?attr/colorPrimary</item>
+        <!--<item name="theme">@style/ThemeOverlay.AppCompat</item>-->
     </style>
 
-    <!-- ActionBar title text -->
-    <style name="DelectableActionBarTitleText.Dark" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/d_white</item>
-    </style>
-    <!-- Dark Theme End -->
-
-
-    <style name="DelectableTheme.NoActionBar" parent="android:Theme.Holo.Light.NoActionBar">
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
+    <style name="ToolbarStyle.Flat" parent="@style/ToolbarStyle">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="elevation">0dp</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="android:Theme.Holo.Light.Dialog">
-        <item name="android:editTextStyle">@style/Delectable.EditText</item>
+    <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
+        <item name="android:background">@drawable/bg_toolbar_gradient</item>
+        <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
-    <style name="Delectable.EditText" parent="android:Widget.Holo.Light.EditText">
-        <item name="android:background">@drawable/bg_edit_text</item>
+    <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:textColorPrimary">@color/d_big_stone</item>
+        <item name="android:textColorSecondary">@color/d_big_stone</item>
+        <item name="android:actionMenuTextColor">@color/d_big_stone</item>
     </style>
+
+    <style name="ToolbarTheme.Translucent" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:textColorPrimary">@color/d_white</item>
+        <item name="android:textColorSecondary">@color/d_white</item>
+        <item name="android:actionMenuTextColor">@color/d_white</item>
+    </style>
+
+    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"></style>
 
     <style name="DelectableTheme.Dialog.LoadingCircle">
         <item name="android:windowIsFloating">false</item>
@@ -66,11 +69,11 @@
     <!-- Navigation Item Styles -->
     <style name="NavigationItem">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:background">@color/d_white</item>
-        <item name="android:drawablePadding">16dp</item>
+        <item name="android:drawablePadding">32dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
@@ -80,20 +83,19 @@
 
     <!--Rating TextView-->
     <style name="RatingTextView">
-        <item name="android:layout_width">29dp</item>
-        <item name="android:layout_height">27dp</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">28dp</item>
         <item name="fontName">whitney_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/d_white</item>
     </style>
 
-
     <!-- User Profile Styles -->
     <style name="UserProfileCountTexts">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textColor">@color/d_big_stone</item>
         <item name="android:textSize">@dimen/profile_counts_text_size</item>
         <item name="fontName">whitney_book</item>
     </style>
@@ -110,7 +112,6 @@
         <item name="fontName">whitney_medium</item>
     </style>
 
-    <!-- TODO: Customize Switch Style -->
     <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel"></style>
 
     <style name="WineCaptureDividers" parent="VerticalDivider">
@@ -249,18 +250,14 @@
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
 
-    <style name="SettingsEmailNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:src">@drawable/ic_settings_email_notification</item>
-        <item name="android:contentDescription">@string/settings_cd_email_notifications</item>
-    </style>
 
-    <style name="SettingsPhoneNotificationIcon" parent="SettingsBaseNotificationIconStyle">
-        <item name="android:layout_marginRight">
-            @dimen/settings_notification_icon_horizontal_spacing
-        </item>
-        <item name="android:src">@drawable/ic_settings_phone_notification</item>
-        <item name="android:contentDescription">@string/settings_cd_phone_notifications</item>
+    <style name="NotificationsSwitch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@null</item>
+
     </style>
 
     <style name="SettingsAboutCategoryRow">
@@ -272,8 +269,8 @@
         <item name="android:gravity">bottom</item>
         <item name="android:selectable">true</item>
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/bg_white_to_light_opacity</item>
-        <item name="android:textColor">@color/d_black</item>
+        <item name="android:background">@color/d_white</item>
+        <item name="android:textColor">@color/black_to_chestnut</item>
         <item name="android:textSize">@dimen/settings_text_size</item>
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
     </style>
@@ -285,14 +282,15 @@
         <item name="android:background">@color/d_light_gray</item>
     </style>
 
-    <style name="FloatyCameraButtonStyle">
+    <style name="FloatingCameraButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginBottom">@dimen/activity_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/activity_vertical_margin</item>
-        <item name="android:src">@drawable/btn_floating_shutter</item>
+        <item name="android:layout_gravity">bottom|right</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:src">@drawable/ic_camera</item>
+        <item name="fab_colorNormal">@color/d_chestnut</item>
+        <item name="fab_colorPressed">@color/d_chestnut_pressed</item>
+        <item name="fab_colorRipple">@color/d_chestnut</item>
     </style>
 
     <style name="TextEmptyState">
@@ -302,6 +300,21 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/d_medium_gray</item>
         <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="ActionMenuButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/d_white</item>
+        <item name="android:background">@drawable/btn_login_done</item>
+        <item name="fontName">whitney_medium_sc</item>
     </style>
 
 </resources>

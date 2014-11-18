@@ -3,21 +3,27 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
-import com.delectable.mobile.util.PhotoUtil;
+import com.delectable.mobile.util.CameraUtil;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,6 +68,14 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mView = inflater.inflate(R.layout.fragment_wine_capture_camera, container, false);
         ButterKnife.inject(this, mView);
 
+        // set camera container height to match screen width
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point screenSize = new Point();
+        display.getSize(screenSize);
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
+        mCameraContainer.setLayoutParams(parms);
+
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
 
@@ -77,9 +91,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        getActivity().getActionBar().hide();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActionBar().hide();
     }
 
     @OnClick(R.id.close_button)
@@ -127,20 +141,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     @Override
-    public Bitmap cropRotatedCapturedBitmap(Bitmap bitmap) {
-        int frameWidth = mCameraContainer.getWidth();
-        int frameHeight = mCameraContainer.getHeight();
-        int imageHeight = bitmap.getHeight();
-        int imageWidth = bitmap.getWidth();
-
-        // Scale the view height to match the image dpi
-        float previewScale = (float) imageWidth / (float) frameWidth;
-        int croppedHeight = Math.min((int) (frameHeight * previewScale), imageHeight);
-
-        return Bitmap.createBitmap(bitmap, 0, 0, imageWidth, croppedHeight);
-    }
-
-    @Override
     public boolean toggleFlash() {
         boolean isFlashOn = super.toggleFlash();
         mFlashButton.setSelected(isFlashOn);
@@ -174,7 +174,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = PhotoUtil.loadBitmapFromUri(selectedImageUri, 1024);
+                    selectedImage = CameraUtil.loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PENDING);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);

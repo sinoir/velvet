@@ -21,7 +21,7 @@ def key_alias = "androiddebugkey"
 def key_password = "android"
 
 if (keystoreCredsFile.canRead()) {
-    keystoreProps = new Properties()
+    ext.keystoreProps = new Properties()
     keystoreProps.load(new FileInputStream(keystoreCredsFile))
 
     store_password = keystoreProps['STORE_PASSWORD'].toString()
@@ -35,9 +35,8 @@ def build_date_var = getDate()
 def propFile = new File("app/version.properties");
 propFile.createNewFile();
 def versionProps = new Properties()
-versionProps['BUILD_DATE']=build_date_var
+versionProps['BUILD_DATE'] = build_date_var
 versionProps.store(propFile.newWriter(), null);
-
 
 
 android {
@@ -46,14 +45,15 @@ android {
     defaultConfig {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
-        versionCode 3
-        versionName '1.02'
+        versionCode 4
+        versionName '1.1'
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
         buildConfigField 'String', 'KAHUNA_PUSH_ID', '"1011661250607"'
         buildConfigField 'String', 'TWITTER_KEY', '"fSGhGQRt4QCl0lQMLKEr4g"'
         buildConfigField 'String', 'TWITTER_SECRET', '"EVTtbtBOZFY9YMlV6GlkbUbiZwi7n62cfJSEfb5x9hI"'
+        buildConfigField 'String', 'MIXPANEL_TOKEN', '"e46cbff0ba48b387cd070c3b38b49f2e"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
     }
 
@@ -85,15 +85,9 @@ android {
             signingConfig signingConfigs.debug
             buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
         }
-        alpha {
-            versionNameSuffix "-alpha-" + build_date_var
-            debuggable false
-            runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
-            signingConfig signingConfigs.release
-            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-        }
+
         release {
+            debuggable false
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
@@ -109,14 +103,14 @@ android {
 
 repositories {
     mavenCentral()
-    maven { url 'https://raw.githubusercontent.com/iainconnor/ObjectCache/master/maven/' }
     maven { url 'https://maven.fabric.io/repo' }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
-    compile 'com.android.support:support-v13:19.1'
+    compile 'com.android.support:support-v4:21.+'
+    compile "com.android.support:appcompat-v7:21.0.+"
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.apache.commons:commons-lang3:3.1@jar'
     compile 'com.squareup.picasso:picasso:2.3.3'
@@ -126,31 +120,26 @@ dependencies {
     compile 'org.ocpsoft.prettytime:prettytime:3.0.2.Final@jar'
     compile project(':facebook')
     compile project(':viewPagerIndicator')
-    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'com.jakewharton:butterknife:6.0.0'
     //need to keep dagger at 1.1.0 (at least until dagger 2.0 comes out, bc proguard doesn't work with 1.2.2)
     compile 'com.squareup.dagger:dagger:1.1.0'
     compile 'com.squareup.dagger:dagger-compiler:1.1.0'
-    compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT@aar'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.path:android-priority-jobqueue:1.1.2'
-    compile 'com.google.android.gms:play-services:5.0.89'
+    compile 'com.google.android.gms:play-services:6.1.+'
     compile files('libs/kahuna_489.jar')
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
+    compile 'com.melnykov:floatingactionbutton:1.0.6'
+    compile "com.mixpanel.android:mixpanel-android:4.4.1@aar"
 
     // Crashlytics Kit
-    compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {
         transitive = true
     }
 
     // Twitter Kit
-    compile('com.twitter.sdk.android:twitter:1.0.0@aar') {
-        transitive = true
-    }
-
-    // MoPub Kit
-    compile('com.mopub.sdk.android:mopub:3.1.0@aar') {
+    compile('com.twitter.sdk.android:twitter:1.0.1@aar') {
         transitive = true
     }
 }

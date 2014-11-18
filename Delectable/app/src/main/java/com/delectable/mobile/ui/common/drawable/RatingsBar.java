@@ -1,5 +1,10 @@
 package com.delectable.mobile.ui.common.drawable;
 
+import com.delectable.mobile.R;
+import com.delectable.mobile.ui.common.widget.Rating;
+import com.delectable.mobile.util.ColorsUtil;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -26,17 +31,21 @@ public class RatingsBar extends Drawable {
 
     private float mCornerRadius;
 
-    public RatingsBar(float barHeight) {
+    private Context mContext;
+
+    public RatingsBar(Context context, float barHeight) {
+        mContext = context;
         mBarHeight = barHeight;
         mPercent = 0.0f;
         mCornerRadius = 2.0f;
 
+        int lightGray = mContext.getResources().getColor(R.color.d_light_gray);
         mDefaultBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mDefaultBarPaint.setColor(0xFFDEDEDE);
+        mDefaultBarPaint.setColor(lightGray);
         mDefaultBarPaint.setStyle(Paint.Style.FILL);
 
         mColorOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mColorOverlayPaint.setColor(0xFF7BCC2F);
+        mColorOverlayPaint.setColor(lightGray); //doesn't really matter what this is set to
         mColorOverlayPaint.setStyle(Paint.Style.FILL);
 
         mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -124,15 +133,7 @@ public class RatingsBar extends Drawable {
     }
 
     public int colorForPercent() {
-        float hue = mPercent * 130.0f;
-        float saturation = 0.80f;
-        float value = 0.80f;
-
-        float[] hsv = new float[]{
-                hue,
-                saturation,
-                value,
-        };
-        return Color.HSVToColor(hsv);
+        Rating rating = Rating.valueForPercentage(mPercent);
+        return mContext.getResources().getColor(rating.getColorRes());
     }
 }

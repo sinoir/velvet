@@ -1,27 +1,5 @@
 package com.delectable.mobile.ui.registration.fragment;
 
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
@@ -35,10 +13,34 @@ import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.util.DateHelperUtil;
+import com.delectable.mobile.util.FontEnum;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
+
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.Settings;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,6 +159,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
      */
     private String mPhoneEmail;
 
+    private Typeface mWhitneyBookFont;
+
     //region Lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,15 +168,24 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         App.injectMembers(this);
         mFacebookUiHelper = new UiLifecycleHelper(getActivity(), mFacebookCallback);
         mFacebookUiHelper.onCreate(savedInstanceState);
+
+        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
+
+        //TODO loader is not retrieving email properly for some reason, commented out for now. might be relate to v21 support library
+        //getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_sign_in_sign_up_form, container, false);
         ButterKnife.inject(this, rootView);
         mPasswordField.setOnEditorActionListener(DoneActionListener);
+
+        mNameField.setTypeface(mWhitneyBookFont);
+        mEmailField.setTypeface(mWhitneyBookFont);
+        mPasswordField.setTypeface(mWhitneyBookFont);
 
         mRealFacebookButton.setFragment(this);
         //TODO may need to set more permissions onto the facebook login button
@@ -184,7 +197,6 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         mFacebookUiHelper.onResume();
-        getLoaderManager().initLoader(LOADER_EMAIL_AUTOCOMPLETE, null, this);
     }
 
     @Override
@@ -241,6 +253,10 @@ public abstract class BaseSignUpInFragment extends BaseFragment
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<String>();
+        if (cursor == null) {
+            return;
+        }
+
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));

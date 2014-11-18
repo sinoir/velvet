@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
+public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails, String> {
 
     private static final String TAG = FetchFollowerFeedJob.class.getSimpleName();
 
@@ -26,19 +26,19 @@ public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
     }
 
     @Override
-    public Listing<CaptureDetails> getCachedListing(String accountId) {
+    public Listing<CaptureDetails, String> getCachedListing(String accountId) {
         return mListingModel.getFollowerFeed();
     }
 
     @Override
     public void saveListingToCache(String accountId,
-            Listing<CaptureDetails> apiListing) {
+            Listing<CaptureDetails, String> apiListing) {
         mListingModel.saveFollowerFeed(apiListing);
     }
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<CaptureDetails, String>>() {
         }.getType();
         return type;
     }
@@ -49,7 +49,7 @@ public class FetchFollowerFeedJob extends BaseFetchListingJob<CaptureDetails> {
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public FetchFollowerFeedJob(String requestId, CapturesContext context,
-            Listing<CaptureDetails> captureListing,
+            Listing<CaptureDetails, String> captureListing,
             Boolean isPullToRefresh) {
         super(requestId, context.toString(), null, captureListing, isPullToRefresh);
     }

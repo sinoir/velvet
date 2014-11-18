@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/not_for_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rate_seek_bar"
+        android:layout_alignLeft="@+id/rate_seek_bar"
+        android:layout_marginLeft="@dimen/capture_submit_margins"
+        android:text="@string/dialog_rating_notforme"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/dialog_rating_end_text_size"
+        app:fontName="whitney_medium_sc" />
+
+    <RelativeLayout
+        android:id="@+id/happy_face_score_container"
+        android:layout_width="76dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rate_seek_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:gravity="center"
+        android:alpha="0"
+        android:background="@drawable/bg_light_gray_rounded_corner_border">
+
+        <ImageView
+            android:id="@+id/rating_happy_face"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_ratingbar_good" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/score_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/rating_happy_face"
+            android:layout_alignTop="@id/rating_happy_face"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/rating_happy_face"
+            android:gravity="center"
+            android:text="10.0"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:fontName="whitney_medium" />
+
+    </RelativeLayout>
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rate_seek_bar"
+        android:layout_alignRight="@+id/rate_seek_bar"
+        android:layout_marginRight="@dimen/capture_submit_margins"
+        android:text="@string/dialog_rating_loveit"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/dialog_rating_end_text_size"
+        app:fontName="whitney_medium_sc" />
+
+    <com.delectable.mobile.ui.common.widget.RatingSeekBar
+        android:id="@+id/rate_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+</merge>

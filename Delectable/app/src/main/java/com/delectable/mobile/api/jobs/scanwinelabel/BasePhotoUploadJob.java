@@ -1,13 +1,15 @@
 package com.delectable.mobile.api.jobs.scanwinelabel;
 
-import com.delectable.mobile.api.models.ProvisionCapture;
-import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.ProvisionPhotoResponse;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.api.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.api.util.DelException;
 import com.path.android.jobqueue.Params;
+
+import android.graphics.Bitmap;
 
 import java.io.IOException;
 
@@ -18,35 +20,11 @@ public abstract class BasePhotoUploadJob extends BaseJob {
     @Inject
     protected S3ImageUploadNetworkClient mS3ImageUploadNetworkClient;
 
-    private byte[] mImageData;
+    private Bitmap mBitmap;
 
-    public BasePhotoUploadJob(byte[] imageData) {
+    public BasePhotoUploadJob(Bitmap image) {
         super(new Params(Priority.SYNC));
-        mImageData = imageData;
-    }
-
-    protected byte[] getImageData() {
-        return mImageData;
-    }
-
-    @Override
-    public void onAdded() {
-        super.onAdded();
-    }
-
-    @Override
-    public void onRun() throws Throwable {
-        super.onRun();
-    }
-
-    @Override
-    protected void onCancel() {
-        super.onCancel();
-    }
-
-    @Override
-    protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return super.shouldReRunOnThrowable(throwable);
+        mBitmap = image;
     }
 
     /**
@@ -57,7 +35,7 @@ public abstract class BasePhotoUploadJob extends BaseJob {
      */
     protected ProvisionCapture uploadImage() throws IOException, DelException {
         ProvisionCapture provisionCapture = provisionPhotoUpload();
-        mS3ImageUploadNetworkClient.uploadImage(getResizedImage(), provisionCapture);
+        mS3ImageUploadNetworkClient.uploadImage(compressImage(mBitmap), provisionCapture);
         return provisionCapture;
     }
 
@@ -73,6 +51,6 @@ public abstract class BasePhotoUploadJob extends BaseJob {
 
     public abstract String getProvisionEndpoint();
 
-    public abstract byte[] getResizedImage();
+    public abstract byte[] compressImage(Bitmap bitmap);
 
 }

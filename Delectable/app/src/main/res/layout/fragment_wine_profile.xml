@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ListView
-    android:id="@+id/list_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"></ListView>
+    android:layout_height="match_parent"
+    android:background="@color/d_white">
+
+<ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle.Translucent" />
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/camera_button"
+        style="@style/FloatingCameraButton" />
+
+</FrameLayout>

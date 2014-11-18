@@ -1,12 +1,13 @@
 package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.cache.CaptureListingModel;
-import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,11 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
+    protected String getFeedName() {
+        return AnalyticsUtil.FEED_TRENDING;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
@@ -53,12 +59,20 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    protected Listing<CaptureDetails> getCachedFeed() {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAnalytics.trackSwitchFeed(AnalyticsUtil.FEED_TRENDING);
+        }
+    }
+
+    @Override
+    protected Listing<CaptureDetails, String> getCachedFeed() {
         return mCaptureListingModel.getTrendingFeed();
     }
 
     @Override
-    protected void fetchCaptures(Listing<CaptureDetails> listing,
+    protected void fetchCaptures(Listing<CaptureDetails, String> listing,
             boolean isPullToRefresh) {
         mCaptureController
                 .fetchTrendingCaptures(CAPTURES_REQ, CapturesContext.DETAILS, listing,
@@ -66,7 +80,7 @@ public class TrendingTabFragment extends BaseCaptureFeedFragment implements
     }
 
     @Override
-    public void onEventMainThread(UpdatedListingEvent<CaptureDetails> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         Log.d(TAG, "UpdatedListingEvent");
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;

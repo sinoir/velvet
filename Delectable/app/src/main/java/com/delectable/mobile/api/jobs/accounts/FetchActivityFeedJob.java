@@ -32,7 +32,7 @@ public class FetchActivityFeedJob extends BaseJob {
 
     public FetchActivityFeedJob(String requestId, String before, String after,
             Boolean isPullToRefresh) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC).requireNetwork());
 
         //TODO optimize for etag use
         mRequestId = requestId;
@@ -46,11 +46,11 @@ public class FetchActivityFeedJob extends BaseJob {
         String endpoint = "/accounts/activity_feed";
         ListingRequest request = new ListingRequest(mContext, mETag, null, mBefore, mAfter,
                 mIsPullToRefresh);
-        Type type = new TypeToken<ListingResponse<ActivityFeedItem>>() {
+        Type type = new TypeToken<ListingResponse<ActivityFeedItem, String>>() {
         }.getType();
-        ListingResponse<ActivityFeedItem> response = getNetworkClient().post(
+        ListingResponse<ActivityFeedItem, String> response = getNetworkClient().post(
                 endpoint, request, type);
-        getEventBus().post(new UpdatedListingEvent<ActivityFeedItem>(mRequestId, null,
+        getEventBus().post(new UpdatedListingEvent<ActivityFeedItem, String>(mRequestId, null,
                 response.getPayload()));
 
 

@@ -13,11 +13,11 @@ public class BaseFetchedFollowersEvent extends BaseEvent {
 
     private String mAccountId;
 
-    private Listing<AccountMinimal> mListing;
+    private Listing<AccountMinimal, String> mListing;
 
     private boolean mInvalidate;
 
-    public BaseFetchedFollowersEvent(String accountId, Listing<AccountMinimal> listing,
+    public BaseFetchedFollowersEvent(String accountId, Listing<AccountMinimal, String> listing,
             boolean invalidate) {
         super(true);
         mAccountId = accountId;
@@ -33,7 +33,7 @@ public class BaseFetchedFollowersEvent extends BaseEvent {
         return mAccountId;
     }
 
-    public Listing<AccountMinimal> getListing() {
+    public Listing<AccountMinimal, String> getListing() {
         return mListing;
     }
 

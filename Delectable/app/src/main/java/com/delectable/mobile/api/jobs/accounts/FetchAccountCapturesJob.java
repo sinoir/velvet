@@ -2,42 +2,44 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.endpointmodels.ListingResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.jobs.BaseFetchListingJob;
+import com.delectable.mobile.api.models.BaseListingElement;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.DeleteHash;
 import com.delectable.mobile.api.models.Listing;
 
 import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails> {
+public class FetchAccountCapturesJob extends BaseFetchListingJob<BaseListingElement, DeleteHash> {
 
     private static final String TAG = FetchAccountCapturesJob.class.getSimpleName();
 
     @Inject
-    protected CaptureListingModel mListingModel;
+    CapturesPendingCapturesListingModel mListingModel;
 
     @Override
     public String getEndpoint() {
-        return "/accounts/captures";
+        return "/accounts/captures_and_pending_captures";
     }
 
     @Override
-    public Listing<CaptureDetails> getCachedListing(String dataItemId) {
+    public Listing<BaseListingElement, DeleteHash> getCachedListing(String dataItemId) {
         return mListingModel.getUserCaptures(dataItemId);
     }
 
     @Override
-    public void saveListingToCache(String dataItemId, Listing<CaptureDetails> apiListing) {
+    public void saveListingToCache(String dataItemId, Listing<BaseListingElement, DeleteHash> apiListing) {
         mListingModel.saveUserCaptures(dataItemId, apiListing);
     }
 
     @Override
     public Type getResponseType() {
-        Type type = new TypeToken<ListingResponse<CaptureDetails>>() {
+        Type type = new TypeToken<ListingResponse<BaseListingElement, DeleteHash>>() {
         }.getType();
         return type;
     }
@@ -49,7 +51,7 @@ public class FetchAccountCapturesJob extends BaseFetchListingJob<CaptureDetails>
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
     public FetchAccountCapturesJob(String requestId, CapturesContext context, String accountId,
-            Listing<CaptureDetails> captureListing,
+            Listing<BaseListingElement, DeleteHash> captureListing,
             Boolean isPullToRefresh) {
         super(requestId, context.toString(), accountId, captureListing, isPullToRefresh);
     }

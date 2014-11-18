@@ -4,11 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/d_big_stone">
+    android:layout_height="wrap_content">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/profile_header_viewpager"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_pager_header_height" />
 
@@ -17,26 +17,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_header_viewpager"
-        android:background="@color/d_big_stone"
         android:padding="@dimen/circle_pager_indicator_padding"
-        custom:fillColor="@color/d_white_80op"
-        custom:pageColor="@color/d_white_20op"
+        custom:fillColor="@color/d_suva_gray"
+        custom:pageColor="@color/d_light_gray"
         custom:radius="@dimen/circle_pager_indicator_radius"
         custom:strokeColor="@android:color/transparent"
         custom:strokeWidth="0dp" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/follow_button"
-        android:layout_width="102dp"
-        android:layout_height="30dp"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
         android:layout_below="@id/pager_indicator"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/profile_vertical_spacing"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/btn_follow_background"
         android:gravity="center"
         android:textColor="@color/chestnut_to_white"
         android:textSize="@dimen/profile_follow_button_text_size"
-        android:visibility="visible"
+        android:visibility="invisible"
         custom:fontName="whitney_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/d_light_gray" />
 
 </merge>

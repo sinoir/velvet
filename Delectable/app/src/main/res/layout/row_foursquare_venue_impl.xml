@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.delectable.mobile.ui.camera.widget.FoursquareVenueRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/foursquare_venue_row_height"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical" />

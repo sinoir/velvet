@@ -177,24 +177,13 @@
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/SignUpInTermsText"
-                    android:text="@string/signup_in_read_our"
+                    android:text="@string/signup_in_agree_to"
                     android:textColor="@color/d_medium_gray" />
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     android:id="@+id/terms_textview"
                     style="@style/SignUpInTermsText"
                     android:text="@string/signup_in_terms_of_use"
-                    android:textColor="@color/text_black_to_dark_gray" />
-
-                <com.delectable.mobile.ui.common.widget.FontTextView
-                    style="@style/SignUpInTermsText"
-                    android:text="@string/signup_in_and"
-                    android:textColor="@color/d_medium_gray" />
-
-                <com.delectable.mobile.ui.common.widget.FontTextView
-                    android:id="@+id/privacy_textview"
-                    style="@style/SignUpInTermsText"
-                    android:text="@string/signup_in_privacy_policy"
                     android:textColor="@color/text_black_to_dark_gray" />
             </LinearLayout>
         </RelativeLayout>

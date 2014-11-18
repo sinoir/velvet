@@ -1,12 +1,13 @@
 package com.delectable.mobile.api.cache;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import com.google.gson.Gson;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Motd;
-import com.google.gson.Gson;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class UserInfo {
 
@@ -27,6 +28,8 @@ public class UserInfo {
     private static final String PROPERTY_ACCOUNT_PRIVATE = "accountPrivate";
 
     private static final String PROPERTY_ACCOUNT_PRIVATE_TEMP = "accountPrivateTemp";
+
+    private static final String PROPERTY_WELCOME_DONE = "welcomeDone";
 
 
     public static void onSignIn(String userId, String fullName, String email, String sessionKey, String sessionToken) {
@@ -96,7 +99,11 @@ public class UserInfo {
         return prefs.getString(PROPERTY_USER_ID, null);
     }
 
-    public static String getUserName(Context context) {
+    public static boolean isLoggedInUser(Context context, String userId) {
+        return userId != null && userId.equals(getUserId(context));
+    }
+
+        public static String getUserName(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String name = prefs.getString(PROPERTY_USER_NAME, null);
         //this check is necessary this method was created after 1.0 release, their user name might not have been
@@ -180,5 +187,18 @@ public class UserInfo {
         editor.commit();
     }
 
+    public static boolean isWelcomeDone() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        return prefs.getBoolean(PROPERTY_WELCOME_DONE, false);
+    }
+
+    public static void markWelcomeDone() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PROPERTY_WELCOME_DONE, true);
+        editor.commit();
+    }
 
 }

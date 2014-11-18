@@ -1,25 +1,5 @@
 package com.delectable.mobile.ui.navigation.fragment;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
@@ -40,7 +20,25 @@ import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
+import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.ImageLoaderUtil;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import javax.inject.Inject;
 
@@ -50,6 +48,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
         AdapterView.OnItemClickListener {
 
     private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
+
+    private static final int NAVDRAWER_LAUNCH_DELAY = 250;
 
     private static final String ACTIVITY_FEED_REQ = TAG + "_activity_feed";
 
@@ -92,6 +92,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+
+        setHasOptionsMenu(true);
         mUserId = UserInfo.getUserId(getActivity());
 
         if (savedInstanceState != null) {
@@ -104,15 +106,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
@@ -146,7 +141,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
         loadActivityFeed();
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -177,16 +171,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            showGlobalContextActionBar();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -206,23 +190,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
-        mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+        mFragmentContainerView = getActivity().findViewById(fragmentId);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -244,6 +217,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
                     return;
                 }
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                showOrHideActionBar(true);
             }
         };
 
@@ -256,12 +230,45 @@ public class NavigationDrawerFragment extends BaseFragment implements
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // When the user runs the app for the first time, we want to land them with the
+        // navigation drawer open. But just the first time.
+        if (!UserInfo.isWelcomeDone()) {
+            // first run of the app starts with the nav drawer open
+            UserInfo.markWelcomeDone();
+            mDrawerLayout.openDrawer(Gravity.START);
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         position--; //offset bc of header
         ActivityFeedItem feedItem = mActivityFeedAdapter.getItem(position);
+
+        // check ID prefix for activity type
+        // TODO watch out for additional activity feed types and changes!
+        String itemId = feedItem.getId();
+        if (itemId != null) {
+            String activityType = null;
+            if (itemId.startsWith("Follow")) {
+                activityType = AnalyticsUtil.ACTIVITY_FOLLOW;
+            } else if (itemId.startsWith("FixedTranscription")) {
+                activityType = AnalyticsUtil.ACTIVITY_TRANSCRIPTION;
+            } else if (itemId.startsWith("IdentifiedTranscription")) {
+                activityType = AnalyticsUtil.ACTIVITY_TRANSCRIPTION;
+            } else if (itemId.startsWith("Helpful")) {
+                activityType = AnalyticsUtil.ACTIVITY_HELPFUL;
+            } else if (itemId.startsWith("Like")) {
+                activityType = AnalyticsUtil.ACTIVITY_LIKE;
+            } else if (itemId.startsWith("NewAccount")) {
+                activityType = AnalyticsUtil.ACTIVITY_NEWACCOUNT;
+            } else if (itemId.startsWith("Tagged")) {
+                activityType = AnalyticsUtil.ACTIVITY_TAGGING;
+            } else if (itemId.startsWith("Comment")) {
+                activityType = AnalyticsUtil.ACTIVITY_COMMENT;
+            }
+            mAnalytics.trackActivity(activityType);
+        }
 
         //let click on row be absorbed by rightImageLink first. if that's null, then let the leftImageLink handle it.
         if (feedItem.getRightImageLink() != null && feedItem.getRightImageLink().getUrl() != null) {
@@ -274,6 +281,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
             final String leftImageUrl = feedItem.getLeftImageLink().getUrl();
             openDeepLink(leftImageUrl);
         }
+
     }
 
     //region EventBus events
@@ -333,7 +341,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<ActivityFeedItem> event) {
+    public void onEventMainThread(UpdatedListingEvent<ActivityFeedItem, String> event) {
         if (!event.getRequestId().equals(ACTIVITY_FEED_REQ)) {
             return;
         }
@@ -343,7 +351,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        Listing<ActivityFeedItem> mActivityRecipientListing = event.getListing();
+        Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
         mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
         mActivityFeedAdapter.notifyDataSetChanged();
     }
@@ -365,28 +373,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
                 mNavHeader.getUserImageView());
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-    }
-
-    private ActionBar getActionBar() {
-        return getActivity().getActionBar();
-    }
-
     @Override
     public void navHeaderUserImageClicked() {
-        // TODO: Figure out whether we open in Activity or in Fragment with Nav
         Intent intent = new Intent();
         intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
         intent.setClass(getActivity(), UserProfileActivity.class);
         startActivity(intent);
+//        navItemSelected(NavHeader.NAV_PROFILE);
+//        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
     }
 
     public void onEventMainThread(NavigationEvent event) {
@@ -395,28 +389,28 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
-    public void navItemSelected(int navItem) {
+    public void navItemSelected(final int navItem) {
         boolean wasNavAlreadySelected = mCurrentSelectedNavItem == navItem;
         mCurrentSelectedNavItem = navItem;
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null && !wasNavAlreadySelected) {
-            mCallbacks.onNavigationDrawerItemSelected(navItem);
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mCallbacks.onNavigationDrawerItemSelected(navItem);
+                }
+            }, NAVDRAWER_LAUNCH_DELAY);
         }
     }
 
     @Override
     public void openDeepLink(String url) {
         Uri deepLinkUri = Uri.parse(url);
-        try {
-            Intent intent = new Intent();
-            intent.setData(deepLinkUri);
+        Intent intent = DeepLink.getIntent(getActivity(), deepLinkUri);
+        if (intent != null) {
             startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            // TODO: Add remote log here, this will happen if we have a new deep link url and we haven't implemented it yet...
-            Log.wtf(TAG, "Failed to open deeplink", ex);
-            showToastError(ex.getLocalizedMessage());
         }
     }
 

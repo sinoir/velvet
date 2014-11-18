@@ -3,7 +3,7 @@
         <attr name="type" format="enum">
             <enum name="large" value="0" />
         </attr>
-        <attr name="icon" format="reference" />
+        <attr name="android:icon" />
         <attr name="android:text" />
         <attr name="android:textSize" />
         <attr name="android:textColor" />

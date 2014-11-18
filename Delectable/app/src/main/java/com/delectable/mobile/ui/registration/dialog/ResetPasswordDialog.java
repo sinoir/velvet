@@ -4,12 +4,14 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.ui.common.widget.FontEditText;
+import com.delectable.mobile.util.FontEnum;
 import com.delectable.mobile.util.HelperUtil;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,9 +39,11 @@ public class ResetPasswordDialog extends DialogFragment {
     RegistrationController mRegistrationController;
 
     @InjectView(R.id.email_address_field)
-    FontEditText mEmailField;
+    EditText mEmailField;
 
     private String mPhoneEmail;
+
+    private Typeface mWhitneyBookFont;
 
     /**
      * @param email The email that you want to prepopulate the email field with. Typically the
@@ -60,6 +65,8 @@ public class ResetPasswordDialog extends DialogFragment {
         if (getArguments() != null) {
             mPhoneEmail = getArguments().getString(EMAIL);
         }
+        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
+
     }
 
     @Override
@@ -69,6 +76,7 @@ public class ResetPasswordDialog extends DialogFragment {
         ButterKnife.inject(this, view);
 
         mEmailField.setText(mPhoneEmail);
+        mEmailField.setTypeface(mWhitneyBookFont);
         mEmailField.setOnEditorActionListener(DoneActionListener);
         mEmailField.setOnFocusChangeListener(ShowKeyboardOnFocusListener);
 

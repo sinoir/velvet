@@ -102,7 +102,7 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         ButterKnife.inject(this, view);
         mListView.setAdapter(getAdapter());
         mListView.setEmptyView(mEmptyView);
-
+        mListView.setOnItemClickListener(this);
         return view;
     }
 

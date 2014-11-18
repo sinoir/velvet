@@ -89,36 +89,66 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
     }
 
     public String getSmallest() {
-        String imageUrl = this.child_resolutions.getSmallest();
-        if (imageUrl != null) {
-            return imageUrl;
+        if (child_resolutions != null) {
+            String smallest = child_resolutions.getSmallest();
+            if (smallest != null) {
+                return smallest;
+            }
         }
         return this.url;
     }
 
     public String getLargest() {
-        return this.child_resolutions.getLargest();
-    }
-
-    public String getBestThumb() {
-        String imageUrl = this.child_resolutions != null ? this.child_resolutions.getBestThumb()
-                : null;
-        if (this.child_resolutions != null && imageUrl != null) {
-            return imageUrl;
+        if (child_resolutions != null) {
+            String largest = child_resolutions.getLargest();
+            if (largest != null) {
+                return largest;
+            }
         }
         return this.url;
     }
 
     /**
-     * see {@link ChildResolution#get450Plus()}
+     * see {@link ChildResolution#getBestThumb()}
      */
-    public String get450Plus() {
-        String imageUrl = this.child_resolutions.get450Plus();
-        if (imageUrl != null) {
-            return imageUrl;
+    public String getBestThumb() {
+        if (child_resolutions != null) {
+            String thumb = child_resolutions.getBestThumb();
+            if (thumb != null) {
+                return thumb;
+            }
         }
         return this.url;
     }
+
+
+    /**
+     * see {@link ChildResolution#get450Plus()}
+     */
+    public String get450Plus() {
+        if (child_resolutions != null) {
+            String pic = child_resolutions.get450Plus();
+            if (pic != null) {
+                return pic;
+            }
+        }
+        return this.url;
+    }
+
+    /**
+     * see {@link ChildResolution#getMediumPlus()}
+     */
+    public String getMediumPlus() {
+        if (child_resolutions != null) {
+            String pic = child_resolutions.getMediumPlus();
+            if (pic != null) {
+                return pic;
+            }
+        }
+        return this.url;
+    }
+
+
 
     @Override
     public String toString() {
@@ -253,11 +283,22 @@ public class PhotoHash extends BaseResponse implements Parcelable, Serializable 
         }
 
         /**
+         * Returns the 640px or better image url.
+         */
+        public String getMediumPlus() {
+            String[] sizes = {
+                    size_medium,
+                    size_blur
+            };
+            return getTopPhoto(sizes);
+        }
+
+        /**
          * Returns the first non null photo url.
          */
         private String getTopPhoto(String[] photos) {
             for (String size : photos) {
-                if (size != null && !size.trim().equals("")) {
+                if (size != null && !size.trim().isEmpty()) {
                     return size;
                 }
             }

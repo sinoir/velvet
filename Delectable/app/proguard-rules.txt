@@ -25,6 +25,9 @@
 -dontwarn android.support.v4.**
 -dontwarn android.support.v13.**
 
+#we need to keep this because oddly enough, proguard removes this class and it messes up everything.
+-keep class android.support.v7.widget.SearchView { *; }
+
 # greenrobot's EventBus
 -keepclassmembers class ** {
     public void onEvent*(**);
@@ -61,7 +64,7 @@
 -keep class **$$StaticInjection
 
 #TODO this may be too broad, perhaps scope down
--keepnames !abstract class com.delectable.mobile.**
+#-keepnames !abstract class com.delectable.mobile.**
 
 -keepnames class dagger.Lazy
 
@@ -125,6 +128,9 @@
 
 #JobQueue classes need to be kept in order to use the proguard-optimize rules for removing logs
 -keep class com.path.android.** { *; }
+
+#Floating Action Button
+-dontwarn com.melnykov.**
 
 #Remove Logs
 -assumenosideeffects class android.util.Log {

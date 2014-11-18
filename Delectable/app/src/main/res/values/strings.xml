@@ -4,18 +4,20 @@
     <string name="app_id">201275219971584</string>
     <string name="app_name">Delectable</string>
     <string name="action_settings">Settings</string>
+    <string name="terms_url">https://delectable.com/terms</string>
 
     <!-- Common -->
     <string name="facebook_text">Facebook</string>
     <string name="twitter_text">Twitter</string>
     <string name="instagram_text">Instagram</string>
-    <string name="make_private">Post to Delectable</string>
+    <string name="make_private">Make private</string>
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
     <string name="cancel">cancel</string>
     <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
+    <string name="report">Report</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
@@ -57,10 +59,8 @@
     <string name="signup_in_sign_in_using_google">sign in using google</string>
     <string name="signup_in_sign_up_using_facebook">sign up using facebook</string>
     <string name="signup_in_sign_up_using_google">sign up using google</string>
-    <string name="signup_in_read_our">Read our&#160;</string>
+    <string name="signup_in_agree_to">By signing up you agree to Delectable\'s&#160;</string>
     <string name="signup_in_terms_of_use">Terms of Use</string>
-    <string name="signup_in_and">&#160;and&#160;</string>
-    <string name="signup_in_privacy_policy">Privacy Policy</string>
 
     <string name="reset_password_dialog_title">Reset your password?</string>
     <string name="reset_password_dialog_email_hint">Enter your email address</string>
@@ -124,6 +124,56 @@
     <string name="profile_tab_recent">recent</string>
     <string name="profile_tab_top_rated">top rated</string>
 
+    <!--user captures -->
+    <string name="user_captures_id_in_progress">identification in progress</string>
+    <string name="user_captures_check_back">Check back in a few minutes</string>
+    <plurals name="likes_count">
+        <item quantity="one">1 like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="comments_count">
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
+    <!--used when signed in user is part of context-->
+    <string name="you">you</string>
+
+    <!--you without location / other user with comment-->
+    <plurals name="with_xx_friends_zz_time_ago">
+        <!--"zero" quantity would just be the time stamp-->
+        <item quantity="one">with %1$d friend %2$s</item>
+        <item quantity="other">with %1$d friends %2$s</item>
+    </plurals>
+
+    <!--you with location / other user with comment-->
+    <!--this is the "zero" quantity of the plural below, bc english grammar doesn't differentiate zero quantities-->
+    <string name="at_yy_place_zz_time_ago">at %1$s %2$s</string>
+    <plurals name="with_xx_friends_at_yy_place_zz_time_ago">
+        <item quantity="one">with %1$d friend at %2$s %3$s</item>
+        <item quantity="other">with %1$d friends at %2$s %3$s</item>
+    </plurals>
+
+    <!--other user without location-->=
+    <!--"zero" quantity-->
+    <string name="capturer_tagged_user_zz_time_ago">%1$s tagged %2$s %3$s</string>
+    <plurals name="capturer_tagged_user_and_xx_friends_zz_time_ago">
+        <item quantity="one">%1$s tagged %2$s and %3$d friend %4$s</item>
+        <item quantity="other">%1$s tagged %2$s and %3$d friends %4$s</item>
+    </plurals>
+
+    <!--other user with location-->
+    <!--"zero" quantity-->
+    <string name="capturer_tagged_user_at_yy_place_zz_time_ago">%1$s tagged %2$s at %3$s %4$s</string>
+    <plurals name="capturer_tagged_user_and_xx_friends_at_yy_place_zz_time_ago">
+        <item quantity="one">%1$s tagged %2$s and %3$d friend at %4$s %5$s</item>
+        <item quantity="other">%1$s tagged %2$s and %3$d friends at %4$s %5$s</item>
+    </plurals>
+
+    <string name="remove_this_wine_from_your_list">Remove this wine from your list?</string>
+
+    <string name="minimal_capture_remove">remove</string>
+    <string name="minimal_capture_add_rating">add your rating</string>
+
     <!-- Followers -->
     <string name="followers_title">Followers</string>
     <string name="followers_no_followers">Looks like there are no followers.</string>
@@ -132,15 +182,50 @@
 
 
     <!-- Capture Feed -->
+    <plurals name="cap_feed_tagged_count">
+        <item quantity="one">%1$d person shared this wine with %2$s</item>
+        <item quantity="other">%1$d people shared this wine with %2$s</item>
+    </plurals>
     <plurals name="cap_feed_likes_count">
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="cap_feed_likes_text">
+        <item quantity="one">1 person likes this wine</item>
+        <item quantity="other">%d people like this wine</item>
+    </plurals>
+    <string name="cap_feed_divider">•</string>
+    <plurals name="cap_feed_comments_count">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
     </plurals>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
     <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
     <string name="cap_feed_at_location">at %s</string>
-    <string name="capture_remove">Do you want to remove this wine from your history?</string>
+    <string name="cap_feed_at_location_time">— at %1$s %2$s</string>
+    <string name="cap_feed_at_time">— added %s</string>
+    <string name="cap_feed_no_comment">At %1$s %2$s</string>
+    <string name="cap_feed_no_comment_no_location">Added %s</string>
+    <plurals name="cap_feed_with">
+        <item quantity="one">with %s</item>
+        <item quantity="other">with %1$s and %2$d others</item>
+    </plurals>
+    <string name="cap_feed_with_two">with %1$s and 1 other</string>
+    <string name="cap_feed_like_text_one">%s liked this</string>
+    <string name="cap_feed_like_text_two">%1$s and %2$s liked this</string>
+    <string name="cap_feed_like_text_more">%1$s, %2$s and %3$d more liked this</string>
+    <!-- anchors are used to find spanning bounds -->
+    <string name="cap_feed_like_text_anchor_like">like</string>
+    <string name="cap_feed_like_text_anchor_and">and</string>
+
+    <!-- Capture Overflow Menu -->
+    <string name="cap_action_recommend">Recommend</string>
+    <string name="cap_action_recommend_text">You might like this wine! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
+    <string name="cap_action_edit">Edit rating</string>
+    <string name="cap_action_flag">Report incorrect wine</string>
+    <string name="cap_action_remove">Remove</string>
+    <string name="capture_report">Do you want to report this wine as incorrect?</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>
@@ -171,7 +256,7 @@
     </plurals>
 
     <!-- TODO consult w bjorn: Beers have no vintage, "NV vintage" is unsightly-->
-    <string name="wine_profile_vintage">\u0020- %1$s vintage</string>
+    <string name="wine_profile_vintage">\u0020— %1$s vintage</string>
     <!-- TODO consult w bjorn: Beers have no vintage, if user leaves no comment, this will read like "Wayne had the NV vintage", also unsightly-->
     <string name="wine_profile_empty_comment_message">%1$s had the %2$s vintage</string>
     <plurals name="wine_profile_helpful_count">
@@ -180,6 +265,7 @@
     </plurals>
 
     <!-- Wine Capture Flow Screens-->
+    <string name="capture_submit_title">Comment &amp; Rate</string>
     <string name="capture_submit_leave_comment_hint">Write a comment or taste note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
     <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
@@ -189,6 +275,11 @@
     <!--Capture Flow: Tag Friends -->
     <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>
     <string name="tag_friends_error">Error retrieving your friends list, please try again later.</string>
+
+    <!--Capture Flow: Get Location-->
+    <string name="failed_to_get_location">Sorry, we couldn\'t get your location. Is your GPS turned on?</string>
+    <!--when foursquare fetch for location fails-->
+    <string name="trouble_retrieving_locations">Sorry, we had trouble retrieving locations near you, please try again later!</string>
 
 
     <!--Follow Friends -->
@@ -225,18 +316,23 @@
     <string name="settings_facebook_connected">Connected</string>
     <string name="settings_twitter_label">Twitter</string>
     <string name="settings_twitter_hint">\@twitter</string>
-    <string name="settings_notification">notification</string>
-    <string name="settings_following_you">Following you</string>
-    <string name="settings_comment_on_your_wine">Comment on your wine</string>
-    <string name="settings_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="settings_notifications">Notifications</string>
     <string name="settings_about">about</string>
-    <string name="settings_contact">Contact</string>
+    <string name="settings_feedback">Send us feedback</string>
     <string name="settings_terms_of_use">Terms of use</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_sign_out">Sign out</string>
     <string name="settings_delectable_version">Delectable %1$s</string>
-    <string name="settings_cd_phone_notifications">phone notifications</string>
-    <string name="settings_cd_email_notifications">email notifications</string>
+    <!--notifications-->
+    <string name="notifications_wine_identification">Wine identification</string>
+    <string name="notifications_tagged_on_a_wine">Tagged on a wine</string>
+    <string name="notifications_comment_on_your_wine">Comment on your wine</string>
+    <string name="notifications_respond_to_comment">Respond to comment</string>
+    <string name="notifications_like_your_wine">Like your wine</string>
+    <string name="notifications_following_you">Following you</string>
+    <string name="notifications_friend_joined_delectable">Friend joined Delectable</string>
+
+
     <!-- contact email strings -->
     <string name="settings_contact_email_intent_dialog_title">Send mail...</string>
     <string name="settings_contact_email">feedback@delectable.com</string>

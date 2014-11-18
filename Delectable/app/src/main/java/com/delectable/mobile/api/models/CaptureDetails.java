@@ -87,7 +87,7 @@ public class CaptureDetails extends CaptureMinimal {
         boolean likesCapture = false;
         if (liking_participants != null) {
             for (AccountMinimal account : liking_participants) {
-                if (account.getId().equalsIgnoreCase(accountId)) {
+                if (account.getId().equals(accountId)) {
                     likesCapture = true;
                     break;
                 }
@@ -97,11 +97,11 @@ public class CaptureDetails extends CaptureMinimal {
     }
 
     //TODO this method should take the isLiked value as well bc wierd syncing issues may occur
-    public void toggleUserLikesCapture(String accountId) {
+    public void toggleUserLikesCapture(AccountMinimal userAccount) {
         boolean userLikedCapture = false;
         if (liking_participants != null) {
             for (AccountMinimal account : liking_participants) {
-                if (account.getId().equalsIgnoreCase(accountId)) {
+                if (account.getId().equals(userAccount.getId())) {
                     userLikedCapture = true;
                     liking_participants.remove(account);
                     break;
@@ -112,9 +112,7 @@ public class CaptureDetails extends CaptureMinimal {
             if (liking_participants == null) {
                 liking_participants = new ArrayList<AccountMinimal>();
             }
-            AccountMinimal tempUserAccount = new AccountMinimal();
-            tempUserAccount.setId(accountId);
-            liking_participants.add(tempUserAccount);
+            liking_participants.add(userAccount);
         }
     }
 
@@ -234,6 +232,16 @@ public class CaptureDetails extends CaptureMinimal {
         this.comments = comments;
     }
 
+    public int getCommentsCount() {
+        if (comments == null || comments.isEmpty()) {
+            return 0;
+        }
+        // if first comment is from capturer it is not considered a regular comment
+        return (comments.get(0).getAccountId().equals(capturer_participant.getId()))
+                ? comments.size() - 1
+                : comments.size();
+    }
+
     @Override
     public String toString() {
         return "CaptureDetails{" +
@@ -265,6 +273,30 @@ public class CaptureDetails extends CaptureMinimal {
         ArrayList<TaggeeContact> facebook;
 
         ArrayList<TaggeeContact> contact;
+
+        public ArrayList<AccountMinimal> getRegistered() {
+            return registered;
+        }
+
+        public ArrayList<TaggeeContact> getFacebook() {
+            return facebook;
+        }
+
+        public ArrayList<TaggeeContact> getContact() {
+            return contact;
+        }
+
+        /**
+         * @return Returns {@code null} if userId wasn't found.
+         */
+        public AccountMinimal checkForRegisteredUser(String userId) {
+            for (AccountMinimal account : registered) {
+                if (account.getId().equals(userId)) {
+                    return account;
+                }
+            }
+            return null;
+        }
 
         @Override
         public String toString() {

@@ -22,13 +22,18 @@ import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
+import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.TextUtil;
+import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,20 +41,22 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,18 +67,21 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 //TODO paginate capturenotes listview? go to another screen?
+
+/**
+ * Inits request for full {@link BaseWine} information and {@link CaptureNote CaptureNotes} for that
+ * {@code baseWine} using the {@code baseWineId} provided.
+ */
 public class WineProfileFragment extends BaseFragment implements
         WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
-    private static final int NO_AVG_RATING = -1;
+    private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
 
     private static final String WINE_PROFILE = "wineProfile";
 
     private static final String PHOTO_HASH = "photoHash";
-
-    private static final String BASE_WINE = "baseWine";
 
     private static final String BASE_WINE_MINIMAL = "baseWineMinimal";
 
@@ -127,6 +137,22 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
 
+    protected Toolbar mToolbar;
+
+    protected ListView mListView;
+
+    protected View mWineBanner;
+
+    protected View mWineImageView;
+
+    protected int mStickyToolbarHeight;
+
+    protected FloatingActionButton mCameraButton;
+
+    private MutableForegroundColorSpan mAlphaSpan;
+
+    private SpannableString mTitle;
+
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this, this);
 
     private WineProfileMinimal mWineProfile;
@@ -155,7 +181,7 @@ public class WineProfileFragment extends BaseFragment implements
     private BaseWineMinimal mBaseWineMinimal;
 
 
-    private Listing<CaptureNote> mCaptureNoteListing;
+    private Listing<CaptureNote, String> mCaptureNoteListing;
 
     /**
      * these maps are used to retain references to {@link CaptureNote} objects expecting updates to
@@ -175,12 +201,10 @@ public class WineProfileFragment extends BaseFragment implements
 
 
     /**
-     * Returns fragment that uses the provided {@link PhotoHash} as it's wine image. Uses {@code
-     * wineProfile} to populate some basic wine metadata and inits request for {@link CaptureNote
-     * CaptureNotes} using the {@code baseWineId} in {@link WineProfileMinimal}.
-     *
-     * @param capturePhotoHash {@link com.delectable.mobile.api.models.CaptureDetails
-     *                         CaptureDetails}' PhotoHash. Pass in null to use WineProfile's image.
+     * @param wineProfile      used to populate the producer and wine name.
+     * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
+     *                         photo wants to be used instead of the {@code wineProfile}'s photo.
+     *                         Pass in {@code null} to use {@code wineProfile}'s photo.
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
@@ -194,27 +218,21 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     /**
-     * Launching from WineCaptureSubmitFragment.
+     * @param baseWine         used to populate the producer and wine name.
+     * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
+     *                         photo wants to be used instead of the {@code baseWine}'s. Pass in
+     *                         {@code null} to use {@code baseWine}'s photo.
      */
-    public static WineProfileFragment newInstance(BaseWine baseWine) {
-        WineProfileFragment fragment = new WineProfileFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(BASE_WINE, baseWine);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * Search Wines uses this method to make make it's {@link WineProfileFragment}.
-     */
-    public static WineProfileFragment newInstance(BaseWineMinimal baseWine) {
+    //used for Search Wines and User Profiles
+    public static WineProfileFragment newInstance(BaseWineMinimal baseWine,
+            PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(BASE_WINE_MINIMAL, baseWine);
+        args.putParcelable(PHOTO_HASH, capturePhotoHash);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     /**
      * {@link WineProfileFragment} accessed by deep links will use this method to start up the
@@ -244,11 +262,8 @@ public class WineProfileFragment extends BaseFragment implements
             mWineProfile = args.getParcelable(WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PHOTO_HASH);
 
-            //spawned from Search
+            //spawned from Search or User Captures
             mBaseWineMinimal = args.getParcelable(BASE_WINE_MINIMAL);
-
-            //spawned from WineCaptureSubmit
-            mBaseWine = args.getParcelable(BASE_WINE);
 
             //spawned from deep links
             mBaseWineId = args.getString(BASE_WINE_ID);
@@ -260,16 +275,15 @@ public class WineProfileFragment extends BaseFragment implements
             //spawned from Feed Fragment
             mBaseWineId = mWineProfile.getBaseWineId();
         } else if (mBaseWineMinimal != null) {
-            //spawned from Search
+            //spawned from Search or User Captures
             mBaseWineId = mBaseWineMinimal.getId();
-        } else if (mBaseWine != null) {
-            //spawned from WineCaptureSubmitFragment
-            mBaseWineId = mBaseWine.getId();
         }
         //if spawned from deeplinks, mBaseWineId wil be already populated
 
         //ensured that baseWineId is populated, set as our fetchingId
         mFetchingId = mBaseWineId;
+
+        mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
     }
 
     @Override
@@ -277,29 +291,138 @@ public class WineProfileFragment extends BaseFragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
-        ListView listview = (ListView) view.findViewById(R.id.list_view);
-
         //prepare header view
-        View header = inflater.inflate(R.layout.wine_profile_header, null, false);
+        final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
 
         updateBannerData();
         updateVarietyRegionRatingView(mBaseWine);
 
-        listview.addHeaderView(header, null, false);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        getBaseActivity().setSupportActionBar(mToolbar);
+        getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mAlphaSpan = new MutableForegroundColorSpan(0,
+//                getResources().getColor(R.color.d_big_stone));
+//        if (mWineProfile != null) {
+//            mTitle = new SpannableString(
+//                    mWineProfile.getProducerName() + " " + mWineProfile.getName());
+//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
+//        }
+
+        mListView = (ListView) view.findViewById(R.id.list_view);
+        mListView.addHeaderView(header, null, false);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 position--; //headerview offsets position of listitems by 1
                 launchCaptureDetails(mAdapter.getItem(position));
             }
         });
+        mListView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @SuppressWarnings("deprecation")
+                    @Override
+                    public void onGlobalLayout() {
+                        onScrollChanged();
+
+                        ViewTreeObserver obs = mListView.getViewTreeObserver();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            obs.removeOnGlobalLayoutListener(this);
+                        } else {
+                            obs.removeGlobalOnLayoutListener(this);
+                        }
+                    }
+                });
 
         // empty state
         mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
 
+        mWineImageView = header.findViewById(R.id.wine_image);
+        mWineBanner = header.findViewById(R.id.wine_banner_view);
+
+        final HideableActionBarScrollListener hideableActionBarScrollListener
+                = new HideableActionBarScrollListener(this);
+
+        // Setup Floating Camera Button
+        mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
+        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                onScrollChanged();
+            }
+        };
+        mCameraButton.attachToListView(mListView, fabOnScrollListener);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
+
         return view;
+    }
+
+    private void onScrollChanged() {
+
+        View v = mListView.getChildAt(0);
+        int top = (v == null ? 0 : v.getTop());
+        int bannerHeight = mWineBanner.getHeight();
+        boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
+
+        if (isHeaderVisible) {
+            // parallax effect on wine image
+            mWineImageView.setTranslationY(-top / 2f);
+
+            // drag toolbar off the screen when reaching the bottom of the header
+            int toolbarHeight = mToolbar.getHeight();
+            int toolbarDragOffset = bannerHeight - mStickyToolbarHeight;
+            int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
+            mToolbar.setTranslationY(toolbarTranslation);
+
+//            Log.d(TAG, "####### toolBarTranslation=" + toolbarTranslation);
+            //showOrHideActionBar((top < toolbarDragOffset) ? false : true);
+
+            // TODO sticky toolbar
+//            // title
+//            ObjectAnimator titleAnimator = new ObjectAnimator()
+//                    .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
+//                            isToolbarSolid ? 255 : 0, isToolbarSolid ? 0 : 255);
+//            titleAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+//            titleAnimator.setInterpolator(new DecelerateInterpolator());
+//            titleAnimator.setEvaluator(new ArgbEvaluator());
+//            titleAnimator
+//                    .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                        @Override
+//                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                            setActionBarSubtitle(mTitle);
+//                        }
+//                    });
+//            titleAnimator.start();
+//            // background
+//            int solidColor = getResources().getColor(R.color.d_off_white);
+//            int translucentColor = getResources()
+//                    .getColor(android.R.color.transparent);
+//            final ValueAnimator bgAnimator = ValueAnimator.ofObject(
+//                    new ArgbEvaluator(),
+//                    isToolbarSolid ? solidColor : translucentColor,
+//                    isToolbarSolid ? translucentColor : solidColor);
+//            bgAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+//            bgAnimator.setInterpolator(new DecelerateInterpolator());
+//            bgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                    getActionBarToolbar().setBackgroundColor(
+//                            (Integer) bgAnimator.getAnimatedValue());
+//                }
+//            });
+//            bgAnimator.start();
+        }
     }
 
     /**
@@ -307,17 +430,27 @@ public class WineProfileFragment extends BaseFragment implements
      * was spawned.
      */
     private void updateBannerData() {
+        String wineTitle = null;
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+            wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
         } else if (mBaseWineMinimal != null) {
-            //spawned from Search Wines
-            mBanner.updateData(mBaseWineMinimal);
+            //spawned from Search Wines or User Captures
+            mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
+            wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
         } else if (mBaseWine != null) {
-            //spawned from WineCaptureSubmit
-            //also called after BaseWine is successfully fetched
-            mBanner.updateData(mBaseWine);
+            //called after BaseWine is successfully fetched
+            mBanner.updateData(mBaseWine, mCapturePhotoHash);
+            wineTitle = mBaseWine.getProducerName() + " " + mBaseWine.getName();
         }
+
+//        // update actionbar title
+//        if (wineTitle != null) {
+//            mTitle = new SpannableString(wineTitle);
+//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
+//        }
     }
 
     @OnClick(R.id.all_years_textview)
@@ -332,7 +465,6 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        //not spawned from WineCaptureSubmit, need to fetch BaseWine
         if (mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
@@ -341,6 +473,8 @@ public class WineProfileFragment extends BaseFragment implements
         if (mAdapter.getItems().isEmpty()) {
             loadLocalData(Type.BASE_WINE, mBaseWineId);
         }
+
+        mAnalytics.trackViewWineProfile();
     }
 
     /**
@@ -348,15 +482,15 @@ public class WineProfileFragment extends BaseFragment implements
      */
     private void loadLocalData(final Type type, final String wineId) {
         mFetching = true;
-        new SafeAsyncTask<Listing<CaptureNote>>(this) {
+        new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
             @Override
-            protected Listing<CaptureNote> safeDoInBackground(Void[] params) {
+            protected Listing<CaptureNote, String> safeDoInBackground(Void[] params) {
                 Log.d(TAG, "loadLocalData:doInBg");
                 return CaptureNoteListingModel.getUserCaptures(wineId);
             }
 
             @Override
-            protected void safeOnPostExecute(Listing<CaptureNote> listing) {
+            protected void safeOnPostExecute(Listing<CaptureNote, String> listing) {
                 Log.d(TAG, "loadLocalData:returnedFromCache");
                 if (listing != null) {
                     Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
@@ -441,7 +575,7 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param idType Whether to load captures notes for a base wine or a wine profile.
      */
-    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote> listing,
+    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote, String> listing,
             Boolean isPullToRefresh) {
         mFetching = true;
         if (idType == Type.BASE_WINE) {
@@ -455,7 +589,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedListingEvent<CaptureNote> event) {
+    public void onEventMainThread(UpdatedListingEvent<CaptureNote, String> event) {
         if (!event.getRequestId().equals(WINE_PROFILE_NOTES_REQ)) {
             if (!event.getRequestId().equals(BASE_WINE_NOTES_REQ)) {
                 return;
@@ -519,7 +653,7 @@ public class WineProfileFragment extends BaseFragment implements
         if (baseWine == null) {
             return;
         }
-            //varietal info
+        //varietal info
         if (baseWine.getVarietalComposition().size() == 0) {
             //beers don't have varietal composition
             mVarietalContainer.setVisibility(View.GONE);
@@ -552,23 +686,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     private void updateRatingsView(Ratingsable ratingsable) {
         //rating avg
-        double allAvg = ratingsable.getRatingsSummary().getAllAvgOfTen();
-        double proAvg = ratingsable.getRatingsSummary().getProAvgOfTen();
-        DecimalFormat format = new DecimalFormat("0.0");
-        if (allAvg == NO_AVG_RATING) { //handling a no rating case, show a dash
-            mAllRatingsAverageTextView.setText("-");
-            mAllRatingsAverageTextView.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            String allAvgStr = format.format(allAvg);
-            mAllRatingsAverageTextView.setText(makeRatingDisplayText(allAvgStr));
-        }
-        if (proAvg == NO_AVG_RATING) {
-            mProRatingsAverageTextView.setText("-");
-            mProRatingsAverageTextView.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            String proAvgStr = format.format(proAvg);
-            mProRatingsAverageTextView.setText(makeRatingDisplayText(proAvgStr));
-        }
+        double allAvg = ratingsable.getRatingsSummary().getAllAvg();
+        double proAvg = ratingsable.getRatingsSummary().getProAvg();
+        mAllRatingsAverageTextView.setText(TextUtil.makeRatingDisplayText(getActivity(), allAvg));
+        mProRatingsAverageTextView.setText(TextUtil.makeRatingDisplayText(getActivity(), proAvg));
 
         //ratings count
         int allCount = ratingsable.getRatingsSummary().getAllCount();
@@ -580,17 +701,6 @@ public class WineProfileFragment extends BaseFragment implements
         mAllRatingsCountTextView.setText(allRatingsCount);
         mProRatingsCountTextView.setText(proRatingsCount);
     }
-
-    /**
-     * Makes the rating display text where the rating is a bit bigger than the 10.
-     */
-    private CharSequence makeRatingDisplayText(String rating) {
-        SpannableString ss = new SpannableString(rating);
-        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
-        CharSequence displayText = TextUtils.concat(ss, "/10");
-        return displayText;
-    }
-
 
     @Override
     public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {

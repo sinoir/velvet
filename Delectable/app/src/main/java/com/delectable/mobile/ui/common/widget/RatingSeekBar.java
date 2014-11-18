@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.CaptureMinimal;
 import com.delectable.mobile.ui.common.drawable.RatingsBar;
 
 import android.content.Context;
@@ -8,13 +9,21 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.SeekBar;
 
-public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener {
+public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeListener,
+        View.OnTouchListener {
+
+    //ratings only go from 6.1 to 10, offset the increments count by 1 so that 0-39 maps well with 6.1-10
+    public static final int INCREMENTS = CaptureMinimal.MAX_RATING_VALUE - 1;
 
     private RatingsBar mRatingsBar;
 
     private OnRatingsChangeListener mRatingChangeListener;
+
+    private OnTouchListener mOnTouchListener;
 
     // Can toggle this to use bar colors
     private boolean mShowColors = false;
@@ -38,14 +47,33 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
     }
 
     private void init() {
-        int barHeight = getContext().getResources()
-                .getDimensionPixelSize(R.dimen.rating_bar_seek_height);
-        mRatingsBar = new RatingsBar(barHeight);
+        setMax(INCREMENTS);
+
+        int barHeight = getResources().getDimensionPixelSize(R.dimen.rating_bar_seek_height);
+        mRatingsBar = new RatingsBar(getContext(), barHeight);
         setProgressDrawable(mRatingsBar);
         Drawable thumb = getResources().getDrawable(R.drawable.btn_rating_bar_slider_normal);
         setThumb(thumb);
 
         setOnSeekBarChangeListener(this);
+        setOnTouchListener(this);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (mRatingChangeListener != null) {
+                    mRatingChangeListener.onStartTrackingTouch(this);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (mRatingChangeListener != null) {
+                    mRatingChangeListener.onStopTrackingTouch(this);
+                }
+                break;
+        }
+        return false;
     }
 
     @Override
@@ -61,10 +89,16 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        if (mRatingChangeListener != null) {
+            mRatingChangeListener.onStartTrackingTouch(seekBar);
+        }
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        if (mRatingChangeListener != null) {
+            mRatingChangeListener.onStopTrackingTouch(seekBar);
+        }
     }
 
     private void updateRatingBarColors() {
@@ -108,6 +142,10 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
     public interface OnRatingsChangeListener {
 
         void onRatingsChanged(int rating);
+
+        void onStartTrackingTouch(SeekBar seekBar);
+
+        void onStopTrackingTouch(SeekBar seekBar);
     }
 
     static class RatingsSavedState extends BaseSavedState {

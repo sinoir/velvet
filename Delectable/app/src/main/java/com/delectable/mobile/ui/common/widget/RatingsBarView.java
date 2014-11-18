@@ -22,7 +22,7 @@ public class RatingsBarView extends View {
             int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mRatingsBar = new RatingsBar(getHeight());
+        mRatingsBar = new RatingsBar(getContext(), getHeight());
         setBackgroundDrawable(mRatingsBar);
 
         setupFakeData();

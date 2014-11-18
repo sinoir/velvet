@@ -1,36 +1,40 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
+import com.delectable.mobile.api.cache.PaymentMethodModel;
+import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.cache.ServerInfo;
+import com.delectable.mobile.api.cache.ShippingAddressModel;
 import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
+import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.facebook.Session;
-import com.iainconnor.objectcache.CacheManager;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -38,41 +42,43 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseFragment extends Fragment implements LifecycleProvider {
+public class BaseFragment extends Fragment implements LifecycleProvider, HideableActionBar {
 
     private final String TAG = this.getClass().getSimpleName();
 
     @Inject
-    public EventBus mEventBus;
+    protected CapturesPendingCapturesListingModel mCapturesPendingCapturesListingModel;
 
     @Inject
-    CacheManager mCache;
+    protected PendingCapturesModel mPendingCapturesModel;
 
-    private State state;
+    @Inject
+    protected CaptureDetailsModel mCaptureDetailsModel;
+
+    @Inject
+    protected ShippingAddressModel mShippingAddressModel;
+
+    @Inject
+    protected PaymentMethodModel mPaymentMethodModel;
+
+    @Inject
+    protected EventBus mEventBus;
+
+    @Inject
+    protected AnalyticsUtil mAnalytics;
 
     private Set<LifecycleListener> lifecycleListeners;
 
-    private ActionBar mActionBar;
-
-    private ImageView mCustomHomeImageView;
-
-    private RelativeLayout mCustomActionBarView;
-
-    private boolean mIsUsingCustomActionbarView = false;
-
-    private boolean mHasCustomActionBarTitle;
+    private Toolbar mActionBarToolbar;
 
     public BaseFragment() {
         lifecycleListeners = new CopyOnWriteArraySet<LifecycleListener>();
-        state = State.constructed;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CrashlyticsUtil.log(TAG+".onCreate");
-        state = State.created;
-        mActionBar = getActivity().getActionBar();
+        CrashlyticsUtil.log(TAG + ".onCreate");
         setHasOptionsMenu(true);
     }
 
@@ -88,21 +94,20 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        CrashlyticsUtil.log(TAG+".onAttach");
+        CrashlyticsUtil.log(TAG + ".onAttach");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        CrashlyticsUtil.log(TAG+".onCreateView");
+        CrashlyticsUtil.log(TAG + ".onCreateView");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        CrashlyticsUtil.log(TAG+".onStart");
-        state = State.started;
+        CrashlyticsUtil.log(TAG + ".onStart");
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStart();
         }
@@ -115,24 +120,20 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onResume() {
         super.onResume();
-        CrashlyticsUtil.log(TAG+".onResume");
-        state = State.resumed;
-        toggleCustomActionBar();
+        CrashlyticsUtil.log(TAG + ".onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CrashlyticsUtil.log(TAG+".onPause");
-        state = State.paused;
+        CrashlyticsUtil.log(TAG + ".onPause");
         hideKeyboard();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        CrashlyticsUtil.log(TAG+".onStop");
-        state = State.stopped;
+        CrashlyticsUtil.log(TAG + ".onStop");
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStop();
         }
@@ -145,24 +146,20 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        CrashlyticsUtil.log(TAG+".onDestroyView");
+        CrashlyticsUtil.log(TAG + ".onDestroyView");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        CrashlyticsUtil.log(TAG+".onDestroy");
-        state = State.destroyed;
+        CrashlyticsUtil.log(TAG + ".onDestroy");
         lifecycleListeners.clear();
-        if (mHasCustomActionBarTitle && getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(null);
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        CrashlyticsUtil.log(TAG+".onDetach");
+        CrashlyticsUtil.log(TAG + ".onDetach");
     }
 
     @Override
@@ -200,11 +197,86 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
     }
 
-    protected void setActionBarTitle(String title) {
-        mHasCustomActionBarTitle = true;
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(title);
+    protected BaseActivity getBaseActivity() {
+        return (BaseActivity) getActivity();
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected Toolbar getActionBarToolbar() {
+        if (mActionBarToolbar == null) {
+            mActionBarToolbar = getBaseActivity().getActionBarToolbar();
         }
+        return mActionBarToolbar;
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected ActionBar getActionBar() {
+        // Toolbar will be set as ActionBar when calling getActionBarToolbar()
+        if (mActionBarToolbar == null) {
+            getActionBarToolbar();
+        }
+        return getBaseActivity().getSupportActionBar();
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarTitle(SpannableString title) {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarTitle(String title) {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarSubtitle(SpannableString subtitle) {
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle(subtitle);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void setActionBarSubtitle(String subtitle) {
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle(subtitle);
+        }
+    }
+
+    /**
+     * Call this in Fragment#onActivityCreated
+     */
+    protected void enableBackButton(boolean enable) {
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(enable);
+        } else {
+            Log.d(TAG, "Cannot enable back button, ActionBar is null");
+        }
+    }
+
+    @Override
+    public void showOrHideActionBar(boolean show) {
+        getBaseActivity().showOrHideActionBar(show);
+    }
+
+    @Override
+    public void showOrHideActionBar(boolean show, int delay) {
+        getBaseActivity().showOrHideActionBar(show, delay);
     }
 
     public void signout() {
@@ -220,15 +292,16 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         CrashlyticsUtil.onSignOut();
 
         //Clear listings
+        mCapturesPendingCapturesListingModel.clear();
+        mPendingCapturesModel.clear();
+        mCaptureDetailsModel.clear();
+
+        // Clear some caches
+        mShippingAddressModel.clear();
+        mPaymentMethodModel.clear();
+
         CaptureNoteListingModel.clear();
         CaptureListingModel.clear();
-
-        try {
-            // TODO: run this on background thread?  Also, might be handy to be selective on what gets deleted.
-            mCache.clear();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // Launch Sign Up / Log In screen
         Intent launchIntent = new Intent();
@@ -252,64 +325,9 @@ public class BaseFragment extends Fragment implements LifecycleProvider {
         mEventBus.post(new NavigationDrawerCloseEvent());
     }
 
-    /**
-     * * Override home icon with custom view with click listener <p/> Note: Having a title will push
-     * this view to the right of the title.
-     *
-     * @param resId    - Drawable resource
-     * @param listener (Optional) - OnClick for the custom view
-     */
-    public void overrideHomeIcon(int resId, View.OnClickListener listener) {
-        // TODO: Find if there's a better alternative: having a title will push this custom view to the right
-        ActionBar.LayoutParams customViewpParams = new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        RelativeLayout.LayoutParams imageViewpParams = new RelativeLayout.LayoutParams(
-                ActionBar.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-
-        mCustomActionBarView = new RelativeLayout(getActivity());
-
-        // Custom Image View
-        mCustomHomeImageView = new ImageView(getActivity());
-        int horizontalPadding = (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-        mCustomHomeImageView.setPadding(horizontalPadding, 0, horizontalPadding, 0);
-        mCustomHomeImageView.setImageResource(resId);
-
-        if (listener != null) {
-            mCustomHomeImageView.setOnClickListener(listener);
-        }
-
-        mCustomActionBarView.addView(mCustomHomeImageView, imageViewpParams);
-
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setCustomView(mCustomActionBarView, customViewpParams);
-        mIsUsingCustomActionbarView = true;
-    }
-
-    private void toggleCustomActionBar() {
-        if (mActionBar == null) {
-            return;
-        }
-        if (mIsUsingCustomActionbarView && mCustomActionBarView != null) {
-            mActionBar.setDisplayShowCustomEnabled(true);
-            mActionBar.setDisplayShowHomeEnabled(false);
-            mActionBar.setCustomView(mCustomActionBarView);
-        } else if (mActionBar.getCustomView() != null) {
-            mActionBar.setDisplayShowCustomEnabled(false);
-            mActionBar.setDisplayShowHomeEnabled(true);
-        }
-    }
-
-    private static enum State {
-        constructed,
-        created,
-        started,
-        resumed,
-        paused,
-        stopped,
-        destroyed
+    public void launchWineCapture() {
+        Intent launchIntent = new Intent(getActivity(), WineCaptureActivity.class);
+        startActivity(launchIntent);
     }
 
 }

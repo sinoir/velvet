@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "payload": {
+    "payment_methods": [
+      {
+        "id": "54593f8fd95202a273000001",
+        "last_four": "4242",
+        "type": "Visa",
+        "expiration": "1/2015",
+        "primary": false
+      },
+      {
+        "id": "54593fb875df065e1f000001",
+        "last_four": "4444",
+        "type": "MasterCard",
+        "expiration": "1/2015",
+        "primary": true
+      }
+    ]
+  }
+}

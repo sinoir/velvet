@@ -1,9 +1,10 @@
 package com.delectable.mobile.api.controllers;
 
-import com.delectable.mobile.api.jobs.registrations.LoginJob;
 import com.delectable.mobile.api.jobs.registrations.LoginFacebookJob;
+import com.delectable.mobile.api.jobs.registrations.LoginJob;
 import com.delectable.mobile.api.jobs.registrations.RegisterJob;
 import com.delectable.mobile.api.jobs.registrations.ResetPasswordJob;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
@@ -16,6 +17,8 @@ public class RegistrationController {
     @Inject
     JobManager mJobManager;
 
+    @Inject
+    AnalyticsUtil mAnalytics;
 
     public void register(String email, String password, String fname, String lname) {
         mJobManager.addJobInBackground(new RegisterJob(email, password, fname, lname));

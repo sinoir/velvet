@@ -2,122 +2,147 @@ package com.delectable.mobile.ui.profile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.AccountProfile;
-import com.delectable.mobile.api.util.ErrorUtil;
-import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.cache.AccountModel;
+import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.controllers.PendingCapturesController;
+import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
+import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
-import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.ObservableScrollView;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEvent;
+import com.delectable.mobile.api.models.AccountProfile;
+import com.delectable.mobile.api.models.BaseListingElement;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
+import com.delectable.mobile.api.models.DeleteHash;
+import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.PendingCapture;
+import com.delectable.mobile.api.util.ErrorUtil;
+import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
+import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
+import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
+import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
+import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.util.AnalyticsUtil;
+import com.delectable.mobile.util.HideableActionBarScrollListener;
+import com.delectable.mobile.util.SafeAsyncTask;
+import com.melnykov.fab.FloatingActionButton;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class UserProfileFragment extends BaseFragment implements
-        ProfileHeaderView.ProfileHeaderActionListener, ObservableScrollView.Callbacks,
-        RecentCapturesTabFragment.Callback {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
+
+public class UserProfileFragment extends BaseCaptureDetailsFragment implements
+        ProfileHeaderView.ProfileHeaderActionListener, InfiniteScrollAdapter.ActionsHandler,
+        MinimalPendingCaptureRow.ActionsHandler {
 
     private static final String TAG = UserProfileFragment.class.getSimpleName();
 
-    private static final String sArgsUserId = "sArgsUserId";
+    private static final String USER_ID = "USER_ID";
+
+    private static final String CAPTURES_REQ = TAG + "_captures_req";
+
+    private static final String DELETE_PENDING_CAPTURE_REQ = TAG + "_delete_pending_capture_req";
+
+    private static final int DELETE_PENDING_CAPTURE_DIALOG = 1;
+
+    private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
+
+    @Inject
+    protected CapturesPendingCapturesListingModel mListingModel;
+
+    @InjectView(R.id.list_view)
+    protected ListView mListView;
+
+    @InjectView(R.id.empty_state_layout)
+    protected View mEmptyStateLayout;
+
+    @InjectView(R.id.progress_bar)
+    protected ContentLoadingProgressBar mProgressBar;
+
+    @InjectView(R.id.empty_view_header)
+    protected ProfileHeaderView mEmptyStateHeader;
+
+    /**
+     * In the layout, this covers the loading circle complete when it's set to visible, so there's
+     * no need to hide the loading circle.
+     */
+    @InjectView(R.id.nothing_to_display_textview)
+    protected FontTextView mNoCapturesTextView;
+
+    @InjectView(R.id.camera_button)
+    protected FloatingActionButton mCameraButton;
+
+    private MutableForegroundColorSpan mAlphaSpan;
+
+    private SpannableString mTitle;
 
     @Inject
     protected AccountController mAccountController;
 
     @Inject
+    protected PendingCapturesController mPendingCapturesController;
+
+    @Inject
     protected AccountModel mAccountModel;
 
-    private View mView;
+    private CapturesPendingCapturesAdapter mAdapter;
+
+    private Listing<BaseListingElement, DeleteHash> mCapturesListing;
+
+    private boolean mFetching;
 
     private ProfileHeaderView mProfileHeaderView;
-
-    private ViewPager mViewPager;
-
-    private SlidingPagerTabStrip mTabStrip;
-
-    private SlidingPagerAdapter mTabsAdapter;
-
-    private RecentCapturesTabFragment mRecentCapturesTabFragment;
 
     private AccountProfile mUserAccount;
 
     private String mUserId;
 
-    private ObservableScrollView mScrollView;
+    private PendingCapture mCaptureToDelete;
 
-    private View mContainer;
-
-    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener
-            = new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
-            resizeContainer();
-        }
-    };
-
-    private int mLastScrollY;
 
     public UserProfileFragment() {
-        // Required empty public constructor
     }
 
     public static UserProfileFragment newInstance(String userId) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
-        args.putString(sArgsUserId, userId);
+        args.putString(USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    /**
-     * Resize the Container View within the Scroll to allow scrolling.
-     */
-    private void resizeContainer() {
-        int scrollHeight = mScrollView.getMeasuredHeight();
-        int headerHeight = mProfileHeaderView.getMeasuredHeight();
-        int middleHeight = mTabStrip.getMeasuredHeight();
-
-        // Setup Container Height
-        int currentContainerHeight = mContainer.getMeasuredHeight();
-        int newContainerHeight = scrollHeight + headerHeight;
-        if (newContainerHeight != currentContainerHeight) {
-            ViewGroup.LayoutParams params = mContainer.getLayoutParams();
-            params.height = newContainerHeight;
-            mContainer.setLayoutParams(params);
-        }
-
-        // Setup ListView height to fill the rest
-        int currentListHeight = mViewPager.getMeasuredHeight();
-        int newListHeight = newContainerHeight - (headerHeight + middleHeight);
-        if (newListHeight != currentListHeight) {
-            ViewGroup.LayoutParams params = mViewPager.getLayoutParams();
-            params.height = newListHeight;
-            mViewPager.setLayoutParams(params);
-        }
-        // Scroll to last position, if it was just created, it'll be 0.  Otherwise it'll scroll
-        // randomly to the bottom, and back to top when the UI redraws, such as when selecting
-        // different tabs
-        mScrollView.setScrollY(mLastScrollY);
     }
 
     @Override
@@ -126,9 +151,16 @@ public class UserProfileFragment extends BaseFragment implements
         App.injectMembers(this);
         Bundle args = getArguments();
         if (args != null) {
-            mUserId = args.getString(sArgsUserId);
+            mUserId = args.getString(USER_ID);
+            mAdapter = new CapturesPendingCapturesAdapter(this, this, this, mUserId);
         }
-        mLastScrollY = 0;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        getActionBarToolbar().setBackgroundColor(Color.TRANSPARENT);
     }
 
     @Override
@@ -137,70 +169,107 @@ public class UserProfileFragment extends BaseFragment implements
 
         setHasOptionsMenu(true);
 
-        mView = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        mScrollView = (ObservableScrollView) mView;
+        View view = View.inflate(getActivity(), R.layout.fragment_user_profile, null);
+        ButterKnife.inject(this, view);
 
-        mProfileHeaderView = (ProfileHeaderView) mView.findViewById(R.id.profile_header_view);
+        mProfileHeaderView = (ProfileHeaderView) inflater
+                .inflate(R.layout.profile_header_impl, mListView, false);
         mProfileHeaderView.setActionListener(this);
 
-        mContainer = mView.findViewById(R.id.container);
-        mViewPager = (ViewPager) mView.findViewById(R.id.pager);
-        mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
+        mEmptyStateHeader.setActionListener(this);
 
-        ArrayList<SlidingPagerAdapter.SlidingPagerItem> tabItems
-                = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
+        mListView.addHeaderView(mProfileHeaderView);
+        // empty view does not work with list header, thus it's duplicated in the empty layout
+        mListView.setEmptyView(mEmptyStateLayout);
+        mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
+        mListView.setAdapter(mAdapter);
 
-        // "RECENT" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                mRecentCapturesTabFragment = RecentCapturesTabFragment.newInstance(mUserId),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
-                getString(R.string.profile_tab_recent)));
+        final HideableActionBarScrollListener hideableActionBarScrollListener
+                = new HideableActionBarScrollListener(this);
 
-        // "TOP RATED" tab
-        // TODO: Replace with TOP Rated or whatever other tabs
-//        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-//                RecentCapturesTabFragment.newInstance(mUserId),
-//                R.color.d_off_white,
-//                R.color.d_chestnut,
-//                R.color.dark_gray_to_chestnut,
-//                getString(R.string.profile_tab_top_rated)));
+        // Setup Floating Camera Button
+        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
+                = new FloatingActionButton.FabOnScrollListener() {
 
-        // TODO: Unhide Indicator when we implement another tab
-        mTabStrip.setVisibility(View.GONE);
+            boolean isTitleVisible = false;
 
-        mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
 
-        mViewPager.setAdapter(mTabsAdapter);
-        mTabStrip.setViewPager(mViewPager);
+                // decide if user name should be shown / transparent actionbar
+                if (mListView != null && mListView.getChildCount() > 1) {
 
-        setupCustomScrolling();
-        return mView;
+                    boolean firstItemVisible = mListView.getFirstVisiblePosition() > 0;
+                    if (isTitleVisible != firstItemVisible) {
+                        // title
+                        ObjectAnimator titleAnimator = new ObjectAnimator()
+                                .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
+                                        firstItemVisible ? 0 : 255, firstItemVisible ? 255 : 0);
+                        titleAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+                        titleAnimator.setInterpolator(new DecelerateInterpolator());
+                        titleAnimator.setEvaluator(new ArgbEvaluator());
+                        titleAnimator
+                                .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    @Override
+                                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                        setActionBarSubtitle(mTitle);
+                                    }
+                                });
+                        titleAnimator.start();
+                        // background
+                        int solidColor = getResources().getColor(R.color.d_off_white);
+                        int transparentColor = getResources()
+                                .getColor(R.color.d_off_white_transparent);
+                        final ValueAnimator bgAnimator = ValueAnimator.ofObject(
+                                new ArgbEvaluator(),
+                                firstItemVisible ? transparentColor : solidColor,
+                                firstItemVisible ? solidColor : transparentColor);
+                        bgAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
+                        bgAnimator.setInterpolator(new DecelerateInterpolator());
+                        bgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                getActionBarToolbar().setBackgroundColor(
+                                        (Integer) bgAnimator.getAnimatedValue());
+                            }
+                        });
+                        bgAnimator.start();
+                    }
+                    isTitleVisible = firstItemVisible;
+                }
+
+                hideableActionBarScrollListener
+                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+            }
+        };
+        mCameraButton.attachToListView(mListView, fabOnScrollListener);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
+
+        return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
-        // Must reassign the helper listview callbacks because of inner fragments get reinitialized
-        // from a saved state.
-        getRecentCapturesTabFragment().setCallback(this);
-        // TODO: Replace this once we add another Tab
-//        getTopRatedTabFragment().setCallback(this);
+        loadUserData();
 
-        // Update User Private account info as well
-        // TODO: Need to store this as 1 object, storing duplciate account info is causing weird issues.
-        if (mUserId != null && mUserId.equals(UserInfo.getUserId(getActivity()))) {
-            mAccountController.fetchAccountPrivate(mUserId);
-        }
         // fetch profile to check for updates (we're using eTags, so no big deal)
         mAccountController.fetchProfile(mUserId);
+
+        boolean isOwnProfile = UserInfo.isLoggedInUser(getActivity(), mUserId);
+        mAnalytics.trackViewUserProfile(
+                isOwnProfile ? AnalyticsUtil.USER_PROFILE_OWN : AnalyticsUtil.USER_PROFILE_OTHERS);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Custom Back Arrow...
         inflater.inflate(R.menu.profile_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -216,76 +285,54 @@ public class UserProfileFragment extends BaseFragment implements
         }
     }
 
-
-    private RecentCapturesTabFragment getRecentCapturesTabFragment() {
-        return (RecentCapturesTabFragment) mTabsAdapter.getItem(0);
-    }
-
-    private RecentCapturesTabFragment getTopRatedTabFragment() {
-        return (RecentCapturesTabFragment) mTabsAdapter.getItem(1);
-    }
-
-    /**
-     * Sets up scroll observers and such.
-     */
-    private void setupCustomScrolling() {
-        mScrollView.setCallbacks(this);
-        ViewTreeObserver vto = mScrollView.getViewTreeObserver();
-        if (vto.isAlive()) {
-            vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
-        }
-    }
-
     private void launchFindPeople() {
         // TODO: Find People screen
         Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
     }
 
-    private void loadData() {
-/*
-        new SafeAsyncTask<Account>(this) {
+    private void loadUserData() {
+
+        new SafeAsyncTask<AccountProfile>(this) {
             @Override
-            protected Account safeDoInBackground(Void[] params) {
+            protected AccountProfile safeDoInBackground(Void[] params) {
                 return mAccountModel.getAccount(mUserId);
             }
 
             @Override
-            protected void safeOnPostExecute(Account account) {
-                mUserAccount = account;
-                if (mUserAccount != null) {
-                    mCaptureDetails.clear();
-                    if (mUserAccount.getCaptureSummaries() != null
-                            && mUserAccount.getCaptureSummaries().size() > 0) {
-                        for (CaptureSummary summary : mUserAccount.getCaptureSummaries()) {
-                            mCaptureDetails.addAll(summary.getCaptures());
-                        }
-                    }
-                    updateUIWithData();
+            protected void safeOnPostExecute(AccountProfile account) {
+                if (account != null) {
+                    mUserAccount = account;
+                    //items were successfully retrieved from cache, set to view!
+                    updateViews(mUserAccount);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-*/
 
-        // FIXME Use asynchronous method above once the other requests are refactored as well
-        // and see if the UI speed will improve, otherwise we might stick with the
-        // synchronous retrieval for small data
-        mUserAccount = mAccountModel.getAccount(mUserId);
-        if (mUserAccount != null) {
-            Log.d(TAG, "CACHE HIT for profile: " + mUserId);
-            updateUIWithData();
-        }
-
+        loadLocalCapturesData();
     }
 
-    //region EventBus Events
+    @OnItemClick(R.id.list_view)
+    protected void onItemClick(int position) {
+        position--; //offset for header
+        BaseListingElement item = mAdapter.getItem(position);
+        if (item instanceof CaptureDetails) {
+            launchWineProfile((CaptureDetails) item);
+            return;
+        }
+        if (item instanceof PendingCapture) {
+            launchWineProfile((PendingCapture) item);
+        }
+    }
+
     public void onEventMainThread(UpdatedAccountProfileEvent event) {
+
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
         }
 
         if (event.isSuccessful()) {
             mUserAccount = event.getAccount();
-            updateUIWithData();
+            updateViews(mUserAccount);
             return;
         }
         showToastError(event.getErrorMessage());
@@ -298,44 +345,76 @@ public class UserProfileFragment extends BaseFragment implements
         }
 
         // Reload Data
-        loadData();
+        loadUserData();
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
         }
     }
-    //endregion
+
+    public void onEventMainThread(UpdatedListingEvent<BaseListingElement, DeleteHash> event) {
+        if (!CAPTURES_REQ.equals(event.getRequestId())) {
+            return;
+        }
+        if (!mUserId.equals(event.getAccountId())) {
+            return;
+        }
+
+        mFetching = false;
+        mProgressBar.hide();
+
+        if (mAdapter.getItems().isEmpty()) {
+            mNoCapturesTextView.setVisibility(View.VISIBLE);
+        }
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+            return;
+        }
+
+        if (event.getListing() != null) {
+            mCapturesListing = event.getListing();
+            mAdapter.setItems(mCapturesListing.getUpdates());
+            mAdapter.notifyDataSetChanged();
+        }
+        //if cacheListing is null, means there are no updates
+        //we don't let mFollowerListing get assigned null
+    }
 
     @Override
     public void toggleFollowUserClicked(boolean isFollowingSelected) {
-        // Update Count
-        int followerCountDiff = isFollowingSelected ? 1 : -1;
-        mUserAccount.setFollowerCount(mUserAccount.getFollowerCount() + followerCountDiff);
-        int relationship = isFollowingSelected ? AccountProfile.RELATION_TYPE_FOLLOWING
-                : AccountProfile.RELATION_TYPE_NONE;
-        mUserAccount.setCurrentUserRelationship(relationship);
-        updateUIWithData();
         mAccountController.followAccount(mUserId, isFollowingSelected);
     }
 
-    private void updateUIWithData() {
-        mProfileHeaderView.setDataToView(mUserAccount);
-        
-        if (mUserAccount == null) {
+    private void updateViews(AccountProfile account) {
+        if (account == null) {
             return;
         }
-        boolean isSelf = mUserAccount.isUserRelationshipTypeSelf();
-        String user = mUserAccount.getFname() != null ? mUserAccount.getFname() : "This user";
+        mProfileHeaderView.setDataToView(account);
+        mEmptyStateHeader.setDataToView(account);
+
+        boolean isSelf = account.isUserRelationshipTypeSelf();
+        String user = account.getFname() != null ? account.getFname() : "This user";
         String emptyText = isSelf
-                        ? getResources().getString(R.string.empty_own_profile)
-                        : String.format(getResources().getString(R.string.empty_user_profile), user);
-        mRecentCapturesTabFragment.setEmptyStateText(emptyText);
+                ? getResources().getString(R.string.empty_own_profile)
+                : String.format(getResources().getString(R.string.empty_user_profile), user);
+        setEmptyStateText(emptyText);
+
+        mAlphaSpan = new MutableForegroundColorSpan(0,
+                getResources().getColor(R.color.d_big_stone));
+        mTitle = new SpannableString(account.getFullName());
+//        mTitle = new SpannableString(mUserAccount.isUserRelationshipTypeSelf()
+//                ? getString(R.string.you)
+//                : mUserAccount.getFullName());
+        mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        setActionBarSubtitle(mTitle);
     }
 
     @Override
     public void wineCountClicked() {
-        // TODO: Do we do anything?
+        // scroll down to wine list
+        mListView.smoothScrollToPositionFromTop(1, 0, 400);
     }
 
     @Override
@@ -354,32 +433,192 @@ public class UserProfileFragment extends BaseFragment implements
                 .newIntent(getActivity(), FollowersFollowingActivity.Type.FOLLOWING, mUserId);
         startActivity(intent);
         //launchNextFragment(FollowingFragment.newInstance(mUserId));
+    }
 
+    private void loadLocalCapturesData() {
+
+        new SafeAsyncTask<Listing<BaseListingElement, DeleteHash>>(this) {
+
+            @Override
+            protected void onPreExecute() {
+                mProgressBar.show();
+            }
+
+            @Override
+            protected Listing<BaseListingElement, DeleteHash> safeDoInBackground(Void[] params) {
+                return mListingModel.getUserCaptures(mUserId);
+            }
+
+            @Override
+            protected void safeOnPostExecute(Listing<BaseListingElement, DeleteHash> listing) {
+
+                if (listing != null) {
+                    mCapturesListing = listing;
+                    //items were successfully retrieved from cache, set to view!
+                    mAdapter.setItems(listing.getUpdates());
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                mFetching = true;
+                if (mAdapter.getItems().isEmpty()) {
+                    //only if there were no cache items do we make the call to fetch entries
+                    mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
+                            mUserId, null, false);
+
+                } else {
+                    //simulate a pull to refresh if there are items
+                    mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
+                            mUserId, mCapturesListing, true);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
-    public void onScrollChanged(int deltaX, int deltaY) {
-        // no-op
+    public void shouldLoadNextPage() {
+        if (mFetching) {
+            return;
+        }
 
-    }
+        if (mCapturesListing == null) {
+            //reached end of list/there are no items, we do nothing.
+            //though, this should never be null bc the fragment doesn't it allow it to be.
+            return;
+        }
 
-    @Override
-    public void onScrollViewOverScrollBy(int deltaY, int scrollY, boolean isTouchEvent,
-            boolean overScrollResult) {
-        // When Overscrolling on the bottom of the main ScrollView, we lock the scroll view, this
-        // snaps the mid section to the top, since the height of the container is extended by
-        // the height of the header and allows us to start scrolling the list view
-        mLastScrollY = scrollY;
-        if (overScrollResult && deltaY > 0) {
-            mScrollView.setScrollingCanceled(true);
+        if (mCapturesListing.getMore()) {
+            mFetching = true;
+            //mNoFollowersText.setVisibility(View.GONE);
+            mAccountController.fetchAccountCaptures(CAPTURES_REQ, CapturesContext.DETAILS,
+                    mUserId, mCapturesListing, false);
         }
     }
 
     @Override
-    public void onCaptureListOverScrolledTop() {
-        // Once the ListView overscrolls to the top, show the header by scrolling to the top.
-        mScrollView.setScrollingCanceled(false);
-        mLastScrollY = 0;
-        mScrollView.smoothScrollTo(0, 0);
+    public void reloadLocalData() {
+        loadLocalCapturesData();
     }
+
+    @Override
+    public void dataSetChanged() {
+        mAdapter.notifyDataSetChanged();
+        mNoCapturesTextView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void deleteCapture(CaptureDetails capture) {
+        super.deleteCapture(capture);
+        mAdapter.getItems().remove(capture);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void setEmptyStateText(String emptyText) {
+        if (mNoCapturesTextView != null) {
+            mNoCapturesTextView.setText(emptyText);
+        }
+    }
+
+    @Override
+    public void launchWineProfile(CaptureDetails captureDetails) {
+        Intent intent = new Intent();
+
+        // Launch WineProfile if the capture matched a wine, otherwise launch the capture details
+        CaptureState state = CaptureState.getState(captureDetails);
+        switch (state) {
+            case UNVERIFIED:
+                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getBaseWine(),
+                        captureDetails.getPhoto());
+                break;
+            case IDENTIFIED:
+                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
+                        captureDetails.getPhoto());
+                break;
+            case UNIDENTIFIED:
+            case IMPOSSIBLED:
+            default:
+                intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
+                        captureDetails.getId());
+                intent.setClass(getActivity(), CaptureDetailsActivity.class);
+                break;
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void launchWineProfile(PendingCapture capture) {
+        //TODO captureDetails/PendingCapture should implement parceable, then all this logic can be abstracted into WineProfileFragment
+        Intent intent = null;
+        CaptureState state = CaptureState.getState(capture);
+        if (state == CaptureState.IDENTIFIED) {
+            intent = WineProfileActivity.newIntent(getActivity(), capture.getWineProfile(),
+                    capture.getPhoto());
+        } else if (state == CaptureState.UNVERIFIED) {
+            intent = WineProfileActivity.newIntent(getActivity(), capture.getBaseWine(),
+                    capture.getPhoto());
+        }
+        //if the capture state is impossibled or unidentified, not enough data to launch into launch into wineprofile screen
+        if (intent != null) {
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void addRatingAndComment(PendingCapture capture) {
+        Intent intent = RateCaptureActivity.newIntent(getActivity(), capture.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void discardCapture(PendingCapture capture) {
+        mCaptureToDelete = capture;
+        String message = getString(R.string.remove_this_wine_from_your_list);
+        String remove = getString(R.string.remove);
+        String cancel = getString(R.string.cancel);
+        showConfirmationNoTitle(message, remove, cancel, DELETE_PENDING_CAPTURE_DIALOG);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DELETE_PENDING_CAPTURE_DIALOG) {
+            if (resultCode == Activity.RESULT_OK) {
+                mPendingCapturesController
+                        .deleteCapture(DELETE_PENDING_CAPTURE_REQ, mUserId,
+                                mCaptureToDelete.getId());
+            }
+            mCaptureToDelete = null;
+        }
+    }
+
+
+    public void onEventMainThread(DeletedPendingCaptureEvent event) {
+        if (!DELETE_PENDING_CAPTURE_REQ.equals(event.getRequestId())) {
+            return;
+        }
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+
+            //revert back to original array to show all items
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.ALL);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        if (event.getState() == DeletedPendingCaptureEvent.State.DELETING) {
+            //have the adapter hide the items that are in the "deleting" state
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.WITHOUT_DELETING);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        if (event.getState() == DeletedPendingCaptureEvent.State.DELETED) {
+            mAdapter.removeItem(event.getCaptureId());
+            mAdapter.setType(CapturesPendingCapturesAdapter.Type.ALL);
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+
+    }
+
 }

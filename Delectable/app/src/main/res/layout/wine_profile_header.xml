@@ -16,7 +16,7 @@
         android:id="@+id/varietal_region_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/d_off_white"
+        android:background="@color/d_white"
         android:orientation="vertical"
         android:paddingBottom="@dimen/wine_profile_varietal_region_container_vertical_spacing"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
@@ -132,15 +132,6 @@
                 android:textSize="@dimen/wine_profile_ratings_count_text_size" />
         </LinearLayout>
 
-        <View
-            android:id="@+id/vertical_divider"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/general_row_horizontal_spacing"
-            android:layout_toLeftOf="@+id/all_years_textview"
-            android:background="@color/d_light_gray"
-            android:visibility="visible" />
-
         <TextView
             android:id="@+id/all_years_textview"
             android:layout_width="wrap_content"
@@ -160,7 +151,7 @@
         android:id="@+id/empty_view_wine_profile"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:padding="@dimen/spacing_large"
+        android:padding="@dimen/spacing_32"
         android:text="@string/empty_wine_profile"
         android:visibility="gone" />
 

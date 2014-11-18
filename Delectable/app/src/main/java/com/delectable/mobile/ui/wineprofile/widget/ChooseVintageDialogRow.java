@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.wineprofile.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
+import com.delectable.mobile.util.TextUtil;
 
 import android.content.Context;
 import android.text.SpannableString;
@@ -13,15 +14,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 /**
- * A representation of the {@link WineProfileSubProfile} model, this is the row for the listview that appears
- * in the Choose Vintage dialog.
+ * A representation of the {@link WineProfileSubProfile} model, this is the row for the listview
+ * that appears in the Choose Vintage dialog.
  */
 public class ChooseVintageDialogRow extends RelativeLayout {
-
-    private static final int NO_AVG_RATING = -1;
 
     private final TextView mYear;
 
@@ -49,21 +46,10 @@ public class ChooseVintageDialogRow extends RelativeLayout {
 
     public void updateData(String year, int ratingsCount, double rating) {
         mYear.setText(year);
-        String ratingCount = getResources()
-                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
-                        ratingsCount);
+        String ratingCount = getResources().getQuantityString(
+                R.plurals.choose_vintage_dialog_ratings_count, ratingsCount, ratingsCount);
         mRatingsCount.setText(ratingCount);
-
-        //rating
-        if (rating == NO_AVG_RATING) { //handling a no rating case, show a dash
-            mRating.setText("-");
-            mRating.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            DecimalFormat format = new DecimalFormat("0.0");
-            String allAvgStr = format.format(rating);
-            mRating.setText(makeRatingDisplayText(allAvgStr));
-            mRating.setTextColor(getResources().getColor(R.color.d_light_green));
-        }
+        mRating.setText(TextUtil.makeRatingDisplayText(getContext(), rating));
     }
 
     /**
@@ -73,7 +59,7 @@ public class ChooseVintageDialogRow extends RelativeLayout {
     public void updateData(WineProfileSubProfile wineProfile) {
         String year = wineProfile.getVintage();
         int reviewCount = wineProfile.getRatingsSummary().getAllCount();
-        double rating = wineProfile.getRatingsSummary().getAllAvgOfTen();
+        double rating = wineProfile.getRatingsSummary().getAllAvg();
 
         updateData(year, reviewCount, rating);
     }
@@ -85,7 +71,7 @@ public class ChooseVintageDialogRow extends RelativeLayout {
     public void updateData(BaseWine baseWine) {
         String year = getResources().getString(R.string.choose_vintage_dialog_all_years);
         int reviewCount = baseWine.getRatingsSummary().getAllCount();
-        double rating = baseWine.getRatingsSummary().getAllAvgOfTen();
+        double rating = baseWine.getRatingsSummary().getAllAvg();
 
         updateData(year, reviewCount, rating);
     }
@@ -101,4 +87,5 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         CharSequence displayText = TextUtils.concat(ss, "/10");
         return displayText;
     }
+
 }

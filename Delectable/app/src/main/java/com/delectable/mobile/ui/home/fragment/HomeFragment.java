@@ -3,12 +3,11 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,15 +15,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends BaseFragment {
 
     private View mView;
-
-    private ImageView mCameraButton;
 
     private ViewPager mViewPager;
 
@@ -41,9 +37,6 @@ public class HomeFragment extends BaseFragment {
         String currentUserId = UserInfo.getUserId(getActivity());
 
         mView = inflater.inflate(R.layout.fragment_viewpager_with_tabstrip, container, false);
-
-        mCameraButton = (ImageView) mView.findViewById(R.id.camera_button);
-        mCameraButton.setVisibility(View.VISIBLE);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
@@ -72,15 +65,19 @@ public class HomeFragment extends BaseFragment {
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
 
-        // Setup Floating Camera Button
-        mCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchWineCapture();
-            }
-        });
-
         return mView;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        getBaseActivity().deregisterHeaderView(mTabStrip);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getBaseActivity().registerHeaderView(mTabStrip);
     }
 
     @Override
@@ -97,9 +94,4 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    public void launchWineCapture() {
-        Intent launchIntent = new Intent();
-        launchIntent.setClass(getActivity(), WineCaptureActivity.class);
-        startActivity(launchIntent);
-    }
 }

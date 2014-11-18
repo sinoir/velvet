@@ -5,7 +5,6 @@ import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowingFragment;
-import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +18,7 @@ public class FollowersFollowingActivity extends BaseActivity {
     }
 
     public static final String TYPE = "type";
+
     public static final String ACCOUNT_ID = "accountId";
 
 
@@ -43,10 +43,11 @@ public class FollowersFollowingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_toolbar_fragment_container);
         Bundle args = getIntent().getExtras();
         if (args == null) {
-            throw new RuntimeException(TAG + " must be instantiated with a fragment type and accountId");
+            throw new RuntimeException(
+                    TAG + " must be instantiated with a fragment type and accountId");
         }
 
         int position = args.getInt(TYPE);
@@ -61,11 +62,11 @@ public class FollowersFollowingActivity extends BaseActivity {
                 //default is followers
                 fragment = FollowersFragment.newInstance(mAccountId);
             }
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment).commit();
         }
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 

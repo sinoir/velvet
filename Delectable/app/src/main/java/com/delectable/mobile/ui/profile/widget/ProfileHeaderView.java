@@ -10,6 +10,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,7 +56,8 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public ProfileHeaderView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        View.inflate(context, R.layout.profile_header, this);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.profile_header, this, true);
 
         mViewPager = (ViewPager) findViewById(R.id.profile_header_viewpager);
         mIndicator = (CirclePageIndicator) findViewById(R.id.pager_indicator);
@@ -123,11 +125,14 @@ public class ProfileHeaderView extends RelativeLayout implements
         String userName = account.getFullName();
         String imageUrl = account.getPhoto().getBestThumb();
         int numCaptures = account.getCaptureCount();
+        boolean isInfluencer = account.isInfluencer();
+        String influencerTitle = account.getInfluencerTitlesString();
 
         setWineCount(numCaptures);
 
         ImageLoaderUtil.loadImageIntoView(getContext(), imageUrl, getUserImageView());
         setUserName(userName);
+        setInfluencer(isInfluencer, influencerTitle);
         setFollowerCount(account.getFollowerCount());
         setFollowingCount(account.getFollowingCount());
         setUserBio(account.getBio());
@@ -147,6 +152,11 @@ public class ProfileHeaderView extends RelativeLayout implements
 
     public void setUserName(String userName) {
         mProfileHeaderMainView.setUserName(userName);
+    }
+
+    public void setInfluencer(boolean isInfluencer, String influencerTitle) {
+        mProfileHeaderMainView.setInfluencer(isInfluencer);
+        // TODO influencer title in bio section
     }
 
     public void setFollowerCount(int followerCount) {
@@ -209,6 +219,13 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     @Override
+    public void wineCountClicked() {
+        if (mActionListener != null) {
+            mActionListener.wineCountClicked();
+        }
+    }
+
+    @Override
     public void followerCountClicked() {
         if (mActionListener != null) {
             mActionListener.followerCountClicked();
@@ -222,14 +239,9 @@ public class ProfileHeaderView extends RelativeLayout implements
         }
     }
 
-    public static interface ProfileHeaderActionListener {
-
-        public void wineCountClicked();
+    public static interface ProfileHeaderActionListener extends ProfileHeaderMainView.ActionListener {
 
         public void toggleFollowUserClicked(boolean isFollowing);
 
-        public void followerCountClicked();
-
-        public void followingCountClicked();
     }
 }

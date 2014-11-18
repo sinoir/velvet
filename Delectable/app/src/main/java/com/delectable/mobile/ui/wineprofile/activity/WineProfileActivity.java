@@ -1,7 +1,6 @@
 package com.delectable.mobile.ui.wineprofile.activity;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
@@ -20,8 +19,6 @@ public class WineProfileActivity extends BaseActivity {
 
     private static final String PARAMS_CAPTURE_PHOTO_HASH = "PARAMS_CAPTURE_PHOTO_HASH";
 
-    private static final String PARAMS_BASE_WINE = "PARAMS_BASE_WINE";
-
     private static final String PARAMS_BASE_WINE_MINIMAL = "PARAMS_BASE_WINE_MINIMAL";
 
     //Deep Link keys
@@ -33,8 +30,6 @@ public class WineProfileActivity extends BaseActivity {
     private WineProfileMinimal mWineProfile;
 
     private PhotoHash mCapturePhotoHash;
-
-    private BaseWine mBaseWine;
 
     private BaseWineMinimal mBaseWineMinimal;
 
@@ -55,22 +50,23 @@ public class WineProfileActivity extends BaseActivity {
     }
 
     /**
-     * see {@link WineProfileFragment#newInstance(BaseWine)}
+     * see {@link WineProfileFragment#newInstance(BaseWineMinimal, PhotoHash)}
      */
-    public static Intent newIntent(Context packageContext, BaseWine baseWine) {
+    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine, PhotoHash capturePhotoHash) {
         Intent intent = new Intent();
-        intent.putExtra(PARAMS_BASE_WINE, baseWine);
+        intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
+        intent.putExtra(PARAMS_CAPTURE_PHOTO_HASH, (Parcelable) capturePhotoHash);
         intent.setClass(packageContext, WineProfileActivity.class);
         return intent;
     }
 
     /**
-     * Called from Wine Search, Starts a {@link WineProfileActivity} with a {@link BaseWineMinimal}
-     * object.
+     * see {@link WineProfileFragment#newInstance(String, String)}
      */
-    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine) {
+    public static Intent newIntent(Context packageContext, String baseWineId, String vintageId) {
         Intent intent = new Intent();
-        intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
+        intent.putExtra(DEEP_BASE_WINE_ID, baseWineId);
+        intent.putExtra(DEEP_BASE_VINTAGE_ID, vintageId);
         intent.setClass(packageContext, WineProfileActivity.class);
         return intent;
     }
@@ -84,13 +80,11 @@ public class WineProfileActivity extends BaseActivity {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
 
-            mBaseWine = args.getParcelable(PARAMS_BASE_WINE);
-
             mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
-        } else {
-            // Check if Deep Link params contains data if the bundle args doesn't
-            mBaseWineId = getDeepLinkParam(DEEP_BASE_WINE_ID);
-            mVintageId = getDeepLinkParam(DEEP_BASE_VINTAGE_ID);
+
+            //from deep links
+            mBaseWineId = args.getString(DEEP_BASE_WINE_ID);
+            mVintageId = args.getString(DEEP_BASE_VINTAGE_ID);
         }
 
         if (savedInstanceState == null) {
@@ -100,23 +94,20 @@ public class WineProfileActivity extends BaseActivity {
             if (mWineProfile != null) {
                 //spawned from a Feed Fragment
                 fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
-            } else if (mBaseWine != null) {
-                //spawned from WineCaptureSubmit
-                fragment = WineProfileFragment.newInstance(mBaseWine);
             } else if (mBaseWineMinimal != null) {
                 //spawned from search fragment
-                fragment = WineProfileFragment.newInstance(mBaseWineMinimal);
-            } else if (mBaseWineId != null) {
+                fragment = WineProfileFragment.newInstance(mBaseWineMinimal, mCapturePhotoHash);
+            } else if (mBaseWineId != null || mVintageId !=null) {
                 //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }
 
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)
                     .commit();
         }
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 

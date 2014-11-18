@@ -2,11 +2,7 @@ package com.delectable.mobile.api.models;
 
 import java.util.List;
 
-public class PendingCapture {
-
-    private String id;
-
-    private double created_at;
+public class PendingCapture extends BaseListingElement {
 
     private PhotoHash photo;
 
@@ -16,29 +12,13 @@ public class PendingCapture {
 
     private double capture_longitude;
 
-    private BaseWine base_wine;
-
     private WineProfileMinimal wine_profile;
+
+    private BaseWineMinimal base_wine;
 
     private String transcription_error_message;
 
     private List<Match> matches;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public double getCreatedAt() {
-        return created_at;
-    }
-
-    public void setCreatedAt(double created_at) {
-        this.created_at = created_at;
-    }
 
     public PhotoHash getPhoto() {
         return photo;
@@ -48,7 +28,7 @@ public class PendingCapture {
         this.photo = photo;
     }
 
-    public boolean getFromCameraRoll() {
+    public boolean isFromCameraRoll() {
         return from_camera_roll;
     }
 
@@ -72,7 +52,7 @@ public class PendingCapture {
         this.capture_longitude = capture_longitude;
     }
 
-    public BaseWine getBaseWine() {
+    public BaseWineMinimal getBaseWine() {
         return base_wine;
     }
 
@@ -104,26 +84,22 @@ public class PendingCapture {
         this.matches = matches;
     }
 
-    public static class Match {
-
-        private double score;
-
-        private BaseWine base_wine;
-
-        public double getScore() {
-            return score;
-        }
-
-        public void setScore(double score) {
-            this.score = score;
-        }
-
-        public BaseWine getBase_wine() {
-            return base_wine;
-        }
-
-        public void setBase_wine(BaseWine base_wine) {
-            this.base_wine = base_wine;
-        }
+    @Override
+    public String toString() {
+        return "PendingCapture{" +
+                "id='" + getId() + '\'' +
+                ", created_at=" + getCreatedAt() +
+                "photo=" + photo +
+                ", from_camera_roll=" + from_camera_roll +
+                ", capture_latitude=" + capture_latitude +
+                ", capture_longitude=" + capture_longitude +
+                ", wine_profile=" + wine_profile +
+                ", base_wine=" + base_wine +
+                ", transcription_error_message='" + transcription_error_message + '\'' +
+                ", matches=" + matches +
+                ", context='" + getContext() + '\'' +
+                ", e_tag='" + getETag() + '\'' +
+                ", listing_params=" + getListParams() +
+                '}';
     }
 }
