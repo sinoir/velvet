@@ -15,6 +15,8 @@ import com.delectable.mobile.ui.search.widget.SearchPeopleRow;
 import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -61,6 +63,12 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
     @Override
     protected BaseAdapter getAdapter() {
         return mAdapter;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mSearchView.setQueryHint(getString(R.string.search_people_hint));
     }
 
     @Override
