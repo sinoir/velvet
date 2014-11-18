@@ -42,7 +42,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     @InjectView(R.id.camera_button)
     protected FloatingActionButton mCameraButton;
 
-    private CaptureDetailsAdapter mAdapter;
+    protected CaptureDetailsAdapter mAdapter;
 
     private Listing<CaptureDetails, String> mCapturesListing;
 

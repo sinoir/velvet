@@ -34,6 +34,10 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
     @Inject
     protected AccountController mAccountController;
 
+    private View mEmptyViewText;
+
+    private Delectabutton mEmptyViewButton;
+
     public FollowerFeedTabFragment() {
         // Required empty public constructor
     }
@@ -60,11 +64,13 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         View emptyView = view.findViewById(R.id.empty_view_following);
-        Delectabutton followButton = (Delectabutton) emptyView
+        mEmptyViewText = emptyView
+                .findViewById(R.id.empty_text_view);
+        mEmptyViewButton = (Delectabutton) emptyView
                 .findViewById(R.id.search_friends_button);
-        followButton.setIconDrawable(
+        mEmptyViewButton.setIconDrawable(
                 getResources().getDrawable(R.drawable.ic_nav_drawer_friends_normal));
-        followButton.setOnClickListener(new View.OnClickListener() {
+        mEmptyViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mEventBus.post(new NavigationEvent(NavHeader.NAV_FIND_FRIENDS));
@@ -102,6 +108,10 @@ public class FollowerFeedTabFragment extends BaseCaptureFeedFragment implements
         if (!CAPTURES_REQ.equals(event.getRequestId())) {
             return;
         }
+
         super.onEventMainThread(event);
+        boolean showEmptyState = mAdapter.isEmpty();
+        mEmptyViewText.setVisibility(showEmptyState ? View.VISIBLE : View.GONE);
+        mEmptyViewButton.setVisibility(showEmptyState ? View.VISIBLE : View.GONE);
     }
 }
