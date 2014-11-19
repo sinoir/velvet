@@ -776,12 +776,13 @@ public class WineProfileFragment extends BaseFragment implements
             mBanner.updateVintage(mSelectedWineVintage.getVintage());
         }
 
+        // TODO sticky toolbar ?
         // update actionbar title
-        if (wineTitle != null) {
-            mTitle = new SpannableString(wineTitle);
-            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            setActionBarSubtitle(mTitle);
-        }
+//        if (wineTitle != null) {
+//            mTitle = new SpannableString(wineTitle);
+//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            setActionBarSubtitle(mTitle);
+//        }
     }
 
     private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
