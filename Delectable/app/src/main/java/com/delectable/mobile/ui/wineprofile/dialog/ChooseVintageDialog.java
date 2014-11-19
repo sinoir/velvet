@@ -9,6 +9,7 @@ import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
+import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
@@ -30,9 +31,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 
-public class ChooseVintageDialog extends DialogFragment
+public class ChooseVintageDialog extends BaseEventBusDialogFragment
         implements WinePriceView.WinePriceViewActionsCallback {
 
     public static final String EXTRAS_RESULT_WINE_ID = "EXTRAS_RESULT_WINE_ID";
@@ -47,9 +47,6 @@ public class ChooseVintageDialog extends DialogFragment
 
     @Inject
     protected BaseWineController mBaseWineController;
-
-    @Inject
-    protected EventBus mEventBus;
 
     @Inject
     protected BaseWineModel mBaseWineModel;
@@ -86,7 +83,6 @@ public class ChooseVintageDialog extends DialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
         if (getArguments() != null) {
             mBaseWineId = getArguments().getString(BASE_WINE_ID);
         }
@@ -122,25 +118,6 @@ public class ChooseVintageDialog extends DialogFragment
         loadData();
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            mEventBus.register(this);
-        } catch (Throwable t) {
-            // no-op
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            mEventBus.unregister(this);
-        } catch (Throwable t) {
-        }
     }
 
     //region LoadLocal Data

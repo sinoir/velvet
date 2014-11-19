@@ -8,6 +8,7 @@ import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedShippingAddressEvent;
 import com.delectable.mobile.api.models.BaseAddress;
 import com.delectable.mobile.api.models.ShippingAddress;
+import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 import com.delectable.mobile.util.NameUtil;
 
@@ -28,9 +29,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 
-public class AddShippingAddressDialog extends DialogFragment
+public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler {
 
     public static final String EXTRAS_SHIPPING_ADDRESS_ID = "EXTRAS_SHIPPING_ADDRESS_ID";
@@ -43,9 +43,6 @@ public class AddShippingAddressDialog extends DialogFragment
 
     @Inject
     protected AccountController mAccountController;
-
-    @Inject
-    protected EventBus mEventBus;
 
     @Inject
     protected ShippingAddressModel mShippingAddressModel;
@@ -134,25 +131,6 @@ public class AddShippingAddressDialog extends DialogFragment
         mActionButtons.setActionsHandler(this);
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            mEventBus.register(this);
-        } catch (Throwable t) {
-            // no-op
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            mEventBus.unregister(this);
-        } catch (Throwable t) {
-        }
     }
 
     private void dismissWithSelectedId(String id) {

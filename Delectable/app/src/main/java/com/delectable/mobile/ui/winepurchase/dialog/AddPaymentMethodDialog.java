@@ -6,13 +6,13 @@ import com.delectable.mobile.api.cache.PaymentMethodModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AddedPaymentMethodEvent;
 import com.delectable.mobile.api.models.PaymentMethod;
+import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +25,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 
-public class AddPaymentMethodDialog extends DialogFragment
+public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler {
 
     public static final String EXTRAS_PAYMENT_METHOD_ID = "EXTRAS_PAYMENT_METHOD_ID";
@@ -40,9 +39,6 @@ public class AddPaymentMethodDialog extends DialogFragment
 
     @Inject
     protected AccountController mAccountController;
-
-    @Inject
-    protected EventBus mEventBus;
 
     @Inject
     protected PaymentMethodModel mPaymentMethodModel;
@@ -82,7 +78,6 @@ public class AddPaymentMethodDialog extends DialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
     }
 
     @NonNull
@@ -104,25 +99,6 @@ public class AddPaymentMethodDialog extends DialogFragment
         mActionButtons.setActionsHandler(this);
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            mEventBus.register(this);
-        } catch (Throwable t) {
-            // no-op
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            mEventBus.unregister(this);
-        } catch (Throwable t) {
-        }
     }
 
     private void dismissWithSelectedId(String id) {

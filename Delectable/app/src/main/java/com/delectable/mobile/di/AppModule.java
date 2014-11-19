@@ -89,6 +89,8 @@ import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
+import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
@@ -160,6 +162,8 @@ import de.greenrobot.event.EventBus;
                 WineCheckoutFragment.class,
                 ConfirmationFragment.class,
                 // Dialogs
+                BaseDialogFragment.class,
+                BaseEventBusDialogFragment.class,
                 ChooseVintageDialog.class,
                 ResetPasswordDialog.class,
                 AddShippingAddressDialog.class,

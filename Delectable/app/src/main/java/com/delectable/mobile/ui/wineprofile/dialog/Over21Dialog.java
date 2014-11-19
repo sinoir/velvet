@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.wineprofile.dialog;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class Over21Dialog extends DialogFragment {
+public class Over21Dialog extends BaseDialogFragment {
 
     public static final int RESULT_OVER21 = 1000;
 
@@ -29,7 +30,6 @@ public class Over21Dialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
     }
 
     @Override

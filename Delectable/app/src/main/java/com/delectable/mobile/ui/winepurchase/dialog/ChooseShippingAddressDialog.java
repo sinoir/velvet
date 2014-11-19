@@ -6,6 +6,7 @@ import com.delectable.mobile.api.cache.ShippingAddressModel;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.RemovedShippingAddressEvent;
 import com.delectable.mobile.api.models.ShippingAddress;
+import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 import com.delectable.mobile.ui.winepurchase.widget.ChooseShippingAddressAdapter;
 import com.delectable.mobile.ui.winepurchase.widget.ChooseShippingAddressDialogRow;
@@ -26,9 +27,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 
-public class ChooseShippingAddressDialog extends DialogFragment
+public class ChooseShippingAddressDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler, ChooseShippingAddressDialogRow.ActionsHandler,
         ChooseShippingAddressAdapter.ActionsHandler {
 
@@ -45,9 +45,6 @@ public class ChooseShippingAddressDialog extends DialogFragment
 
     @Inject
     protected AccountController mAccountController;
-
-    @Inject
-    protected EventBus mEventBus;
 
     @Inject
     protected ShippingAddressModel mShippingAddressModel;
@@ -84,7 +81,6 @@ public class ChooseShippingAddressDialog extends DialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
         mSelectedShippingAddressId = getArguments().getString(ARGS_SELECTED_SHIPPING_ADDRESS_ID);
     }
 
@@ -106,25 +102,6 @@ public class ChooseShippingAddressDialog extends DialogFragment
         loadExistingShippingAddress();
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            mEventBus.register(this);
-        } catch (Throwable t) {
-            // no-op
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            mEventBus.unregister(this);
-        } catch (Throwable t) {
-        }
     }
 
     @Override
