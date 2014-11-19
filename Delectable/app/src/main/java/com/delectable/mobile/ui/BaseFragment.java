@@ -174,7 +174,12 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
 
     public void launchNextFragment(BaseFragment fragment) {
         BaseActivity activity = (BaseActivity) getActivity();
-        activity.replaceWithFragment(fragment);
+        activity.replaceWithFragment(fragment, true);
+    }
+
+    public void replaceWithNewFragment(BaseFragment fragment) {
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.replaceWithFragment(fragment, false);
     }
 
     public void showToastError(String error) {

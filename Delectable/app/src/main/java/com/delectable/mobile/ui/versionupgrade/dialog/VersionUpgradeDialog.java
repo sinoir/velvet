@@ -1,9 +1,9 @@
 package com.delectable.mobile.ui.versionupgrade.dialog;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class VersionUpgradeDialog extends DialogFragment {
+public class VersionUpgradeDialog extends BaseDialogFragment {
 
     public static final String TAG = VersionUpgradeDialog.class.getSimpleName();
 
@@ -26,7 +26,6 @@ public class VersionUpgradeDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.DelectableTheme_Dialog);
         setCancelable(false);
     }
 
@@ -45,7 +44,6 @@ public class VersionUpgradeDialog extends DialogFragment {
 
 
     @OnClick(R.id.cancel_textview)
-
     protected void onCancelClick() {
         if (getTargetFragment() != null) {
             getTargetFragment()

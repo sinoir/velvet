@@ -15,7 +15,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
         <activity
             android:name="com.delectable.mobile.MainActivity"
             android:excludeFromRecents="false"
@@ -134,6 +133,23 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.delectable.mobile.ui.navigation.activity.NavActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.winepurchase.activity.WineCheckoutActivity"
+            android:label="@string/winecheckout_title"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter android:label="">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "delectable://purchase?vintage_id=$VINTAGE_ID” -->
+                <data
+                    android:host="purchase"
+                    android:scheme="delectable" />
+            </intent-filter>
         </activity>
 
         <activity

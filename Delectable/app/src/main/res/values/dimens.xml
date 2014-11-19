@@ -45,6 +45,7 @@
     <dimen name="dialog_title_text_size">22sp</dimen>
     <dimen name="dialog_action_text_size">20sp</dimen>
     <dimen name="dialog_header_height">60dp</dimen>
+    <dimen name="dialog_header_footer_height">48dp</dimen>
 
     <!-- General Row Unit Spacing -->
     <!-- Used in:
@@ -183,7 +184,7 @@
     <dimen name="choose_vintage_dialog_ratings_count_text_size">14sp</dimen>
     <dimen name="choose_vintage_dialog_text_horizontal_spacing">5dp</dimen>
     <dimen name="choose_vintage_dialog_rating_textview_width">50dp</dimen>
-    <dimen name="choose_vintage_dialog_rating_text_size">14sp</dimen>
+    <dimen name="choose_vintage_dialog_rating_text_size">16sp</dimen>
 
     <!-- Wine Banner -->
     <dimen name="wine_banner_triangle_width">14dp</dimen>
@@ -260,5 +261,9 @@
     <!-- Capture comment stuff -->
     <dimen name="capture_comment_post_button_width">51dp</dimen>
     <dimen name="capture_comment_post_button_height">36dp</dimen>
+
+    <!-- Purchase/Checkout Flow -->
+    <dimen name="checkout_info_left_margin">80dp</dimen>
+    <dimen name="checkout_dialog_chooser_left_margin">70dp</dimen>
 
 </resources>

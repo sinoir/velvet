@@ -5,16 +5,11 @@ import com.delectable.mobile.api.util.ErrorUtil;
 
 public class RemovePaymentMethodEvent extends BaseEvent {
 
-    private String mPaymentMethodId;
-
-    public RemovePaymentMethodEvent(String paymentMethodId) {
+    public RemovePaymentMethodEvent() {
         super(true);
-        mPaymentMethodId = paymentMethodId;
     }
 
-    public RemovePaymentMethodEvent(String errorMessage, ErrorUtil errorCode,
-            String paymentMethodId) {
+    public RemovePaymentMethodEvent(String errorMessage, ErrorUtil errorCode) {
         super(errorMessage, errorCode);
-        mPaymentMethodId = paymentMethodId;
     }
 }
