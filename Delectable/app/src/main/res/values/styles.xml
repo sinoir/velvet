@@ -3,7 +3,7 @@
     <style name="DelectableTheme" parent="DelectableBaseTheme" />
 
     <style name="DelectableBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-    <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
         <item name="colorPrimaryDark">@color/status_bar</item>
         <item name="colorAccent">@color/d_chestnut</item>
@@ -43,6 +43,26 @@
         <item name="android:textColorPrimary">@color/d_big_stone</item>
         <item name="android:textColorSecondary">@color/d_big_stone</item>
         <item name="android:actionMenuTextColor">@color/d_big_stone</item>
+    </style>
+
+    <style name="ToolbarStyle.Error" parent="ToolbarStyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawableLeft">@drawable/ic_alert</item>
+        <item name="android:drawablePadding">20dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorPrimary">@color/d_white</item>
+        <item name="android:textColorSecondary">@color/d_white</item>
+        <item name="android:background">@color/d_chestnut</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="ToolbarStyleText">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawableLeft">@drawable/ic_alert</item>
+        <item name="android:drawablePadding">20dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/d_white</item>
+        <item name="fontName">whitney_medium</item>
     </style>
 
     <style name="ToolbarTheme.Translucent" parent="Widget.AppCompat.Light.ActionBar.Solid">
@@ -299,6 +319,100 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="ButtonDChestNutBG">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_login_done</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textColor">@color/d_white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="ButtonLargeDChestNutBg" parent="ButtonDChestNutBG">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:layout_marginLeft">@dimen/general_row_horizontal_spacing</item>
+        <item name="android:layout_marginRight">@dimen/general_row_horizontal_spacing</item>
+    </style>
+
+    <!-- Purchase Wine Styles -->
+
+    <style name="PurchaseWineCheckPrice">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/d_chestnut</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="PurchaseWineSoldOut">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <style name="CheckoutRowLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginRight">28dp</item>
+        <item name="android:textColor">@color/d_medium_gray</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontName">whitney_medium_sc</item>
+    </style>
+
+    <style name="CheckoutAddStuffText" parent="PurchaseWineCheckPrice">
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="CheckoutShippingAddRemoveButton">
+        <item name="android:layout_width">@dimen/button_height</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/dark_gray_to_chestnut</item>
+        <item name="android:textSize">22sp</item>
+        <item name="fontName">whitney_medium_sc</item>
+    </style>
+
+    <style name="CheckoutPricingLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/checkout_info_left_margin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="CheckoutPricingAmount">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
+    <style name="CheckoutEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_marginLeft">@dimen/dialog_horizontal_spacing</item>
+        <item name="android:layout_marginRight">@dimen/dialog_horizontal_spacing</item>
+        <item name="android:background">@drawable/bg_bottom_border</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_book</item>
     </style>
 

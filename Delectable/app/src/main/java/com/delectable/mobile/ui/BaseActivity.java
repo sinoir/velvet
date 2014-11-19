@@ -23,9 +23,9 @@ import java.util.List;
 public abstract class BaseActivity extends ActionBarActivity
         implements HideableActionBar {
 
-    private static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
+    protected static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
 
-    private static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
+    protected static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -186,7 +186,7 @@ public abstract class BaseActivity extends ActionBarActivity
         super.finish();
     }
 
-    public void replaceWithFragment(BaseFragment fragment) {
+    public void replaceWithFragment(BaseFragment fragment, boolean addToBackstack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -195,9 +195,10 @@ public abstract class BaseActivity extends ActionBarActivity
         //the fragment from the backstack in onActivityResult
         String fragmentName = fragment.getClass().getSimpleName();
         transaction.replace(R.id.container, fragment, fragmentName);
-        transaction.addToBackStack(fragmentName);
+        if (addToBackstack) {
+            transaction.addToBackStack(fragmentName);
+        }
 
         transaction.commit();
     }
-
 }

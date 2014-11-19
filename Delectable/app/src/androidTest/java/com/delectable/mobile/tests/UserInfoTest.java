@@ -1,9 +1,9 @@
 package com.delectable.mobile.tests;
 
+import com.delectable.mobile.api.cache.UserInfo;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.delectable.mobile.api.cache.UserInfo;
 
 public class UserInfoTest extends BaseAndroidTestCase {
 
@@ -37,7 +37,6 @@ public class UserInfoTest extends BaseAndroidTestCase {
         super.tearDown();
     }
 
-
     public void testOnSignIn() {
         UserInfo.onSignIn(mExpectedId, mExpectedName, mExpectedEmail, mExpectedKey, mExpectedToken);
         SharedPreferences prefs = getContext().getSharedPreferences(UserInfo.PREFERENCES,
@@ -48,17 +47,20 @@ public class UserInfoTest extends BaseAndroidTestCase {
         assertEquals(mExpectedEmail, UserInfo.getUserEmail(getContext()));
         assertEquals(mExpectedName, UserInfo.getUserName(getContext()));
 
-
         assertEquals(5, prefs.getAll().size());
     }
 
     public void testOnSignOut() {
         UserInfo.onSignIn(mExpectedId, mExpectedName, mExpectedEmail, mExpectedKey, mExpectedToken);
+        // Set Over21 to make sure we unset this value on Signout
+        UserInfo.setIsOver21(true);
+        
         UserInfo.onSignOut(getContext());
         SharedPreferences prefs = getContext().getSharedPreferences(UserInfo.PREFERENCES,
                 Context.MODE_PRIVATE);
         assertNull(UserInfo.getSessionKey(getContext()));
         assertNull(UserInfo.getSessionToken(getContext()));
+        assertFalse(UserInfo.isOver21Set());
 
         assertEquals(0, prefs.getAll().size());
     }
@@ -71,5 +73,11 @@ public class UserInfoTest extends BaseAndroidTestCase {
 
         UserInfo.onSignOut(getContext());
         assertFalse(UserInfo.isSignedIn(getContext()));
+    }
+
+    public void testIsOver21Set() {
+        assertFalse(UserInfo.isOver21Set());
+        UserInfo.setIsOver21(false);
+        assertTrue(UserInfo.isOver21Set());
     }
 }

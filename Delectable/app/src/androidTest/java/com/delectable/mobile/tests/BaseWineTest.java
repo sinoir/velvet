@@ -261,4 +261,24 @@ public class BaseWineTest extends BaseInstrumentationTestCase {
         assertEquals("", firstWineProfile.getDescription());
         assertEquals("Buy it - $21", firstWineProfile.getPriceText());
     }
+
+    public void testGetDefaultWineProfile() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_profile_ctx);
+        BaseWineResponse responseObject = mGson.fromJson(json.toString(), BaseWineResponse.class);
+        BaseWine expectedBaseWine = responseObject.getBaseWine();
+
+        WineProfileSubProfile expectedWine = expectedBaseWine.getWineProfiles().get(0);
+
+        assertEquals(expectedWine, expectedBaseWine.getDefaultWineProfile());
+    }
+
+    public void testGetWineProfileByWineId() throws JSONException {
+        JSONObject json = loadJsonObjectFromResource(R.raw.test_base_wine_profile_ctx);
+        BaseWineResponse responseObject = mGson.fromJson(json.toString(), BaseWineResponse.class);
+        BaseWine expectedBaseWine = responseObject.getBaseWine();
+
+        WineProfileSubProfile expectedWine = expectedBaseWine.getWineProfiles().get(0);
+
+        assertEquals(expectedWine, expectedBaseWine.getWineProfileByWineId(expectedWine.getId()));
+    }
 }
