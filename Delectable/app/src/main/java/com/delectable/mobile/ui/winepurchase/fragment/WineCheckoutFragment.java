@@ -212,7 +212,7 @@ public class WineCheckoutFragment extends BaseFragment {
             return;
         }
 
-        mProducerName.setText(mData.getProducerName());
+        mProducerName.setText(mData.getProducerName().toLowerCase());
         mWineName.setText(mData.getWineName());
         String pricePerBottleText = getString(R.string.winecheckout_per_bottle,
                 mData.getPerBottleText());
