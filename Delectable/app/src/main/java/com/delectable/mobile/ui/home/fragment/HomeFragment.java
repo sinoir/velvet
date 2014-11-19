@@ -3,8 +3,8 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
+import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
@@ -24,9 +25,9 @@ public class HomeFragment extends BaseFragment {
 
     private ViewPager mViewPager;
 
-    private SlidingPagerTabStrip mTabStrip;
+    private SlidingTabLayout mTabLayout;
 
-    private SlidingPagerAdapter mTabsAdapter;
+    private SlidingTabAdapter mTabsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,34 +37,31 @@ public class HomeFragment extends BaseFragment {
 
         String currentUserId = UserInfo.getUserId(getActivity());
 
-        mView = inflater.inflate(R.layout.fragment_viewpager_with_tabstrip, container, false);
+        mView = inflater.inflate(R.layout.fragment_viewpager_with_sliding_tabs, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
-        mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
+        mTabLayout = (SlidingTabLayout) mView.findViewById(R.id.tab_layout);
+        mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
 
-        ArrayList<SlidingPagerAdapter.SlidingPagerItem> tabItems
-                = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
+        List<SlidingTabAdapter.SlidingTabItem> tabItems
+                = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
 
         // "FOLLOWING" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
+        tabItems.add(new SlidingTabAdapter.SlidingTabItem(
                 FollowerFeedTabFragment.newInstance(currentUserId),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
-                getString(R.string.home_tab_following)));
+                getString(R.string.home_tab_following),
+                false));
 
-        // "YOU" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
+        // "TRENDING" tab
+        tabItems.add(new SlidingTabAdapter.SlidingTabItem(
                 TrendingTabFragment.newInstance(currentUserId),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
-                getString(R.string.home_tab_trending)));
+                getString(R.string.home_tab_trending),
+                true));
 
-        mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
-
+        mTabsAdapter = new SlidingTabAdapter(getFragmentManager(), tabItems);
         mViewPager.setAdapter(mTabsAdapter);
-        mTabStrip.setViewPager(mViewPager);
+        mTabLayout.setViewPager(mViewPager);
 
         return mView;
     }
@@ -71,13 +69,13 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        getBaseActivity().deregisterHeaderView(mTabStrip);
+        getBaseActivity().deregisterHeaderView(mTabLayout);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getBaseActivity().registerHeaderView(mTabStrip);
+        getBaseActivity().registerHeaderView(mTabLayout);
     }
 
     @Override
