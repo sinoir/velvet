@@ -55,6 +55,7 @@ import com.delectable.mobile.api.jobs.accounts.UpdateSettingJob;
 import com.delectable.mobile.api.jobs.accounts.UpdateShippingAddressJob;
 import com.delectable.mobile.api.jobs.basewines.FetchBaseWineJob;
 import com.delectable.mobile.api.jobs.basewines.FetchWineSourceJob;
+import com.delectable.mobile.api.jobs.basewines.PurchaseWineJob;
 import com.delectable.mobile.api.jobs.basewines.SearchWinesJob;
 import com.delectable.mobile.api.jobs.builddatecheck.FetchVersionPropsJob;
 import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
@@ -88,6 +89,8 @@ import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
+import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
@@ -110,6 +113,12 @@ import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
+import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.fragment.ConfirmationFragment;
+import com.delectable.mobile.ui.winepurchase.fragment.WineCheckoutFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.path.android.jobqueue.JobManager;
 
@@ -150,9 +159,17 @@ import de.greenrobot.event.EventBus;
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
                 TaggedPeopleFragment.class,
+                WineCheckoutFragment.class,
+                ConfirmationFragment.class,
                 // Dialogs
+                BaseDialogFragment.class,
+                BaseEventBusDialogFragment.class,
                 ChooseVintageDialog.class,
                 ResetPasswordDialog.class,
+                AddShippingAddressDialog.class,
+                AddPaymentMethodDialog.class,
+                ChooseShippingAddressDialog.class,
+                ChoosePaymentMethodDialog.class,
                 // Models
                 AccountModel.class,
                 CaptureDetailsModel.class,
@@ -220,6 +237,7 @@ import de.greenrobot.event.EventBus;
                 AddPaymentMethodJob.class,
                 SetPrimaryPaymentMethodJob.class,
                 RemovePaymentMethodJob.class,
+                PurchaseWineJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
