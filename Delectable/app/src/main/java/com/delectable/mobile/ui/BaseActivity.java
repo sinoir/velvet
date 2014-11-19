@@ -186,7 +186,7 @@ public abstract class BaseActivity extends ActionBarActivity
         super.finish();
     }
 
-    public void replaceWithFragment(BaseFragment fragment) {
+    public void replaceWithFragment(BaseFragment fragment, boolean addToBackstack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(
@@ -197,23 +197,10 @@ public abstract class BaseActivity extends ActionBarActivity
         //the fragment from the backstack in onActivityResult
         String fragmentName = fragment.getClass().getSimpleName();
         transaction.replace(R.id.container, fragment, fragmentName);
-        transaction.addToBackStack(fragmentName);
+        if (addToBackstack) {
+            transaction.addToBackStack(fragmentName);
+        }
 
-        transaction.commit();
-    }
-
-    // Replaces Fragment completely with no backstack
-    public void popAndReplaceWithFragment(BaseFragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(
-                R.anim.fade_in, R.anim.fade_out,
-                R.anim.fade_in, R.anim.fade_out);
-
-        //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
-        //the fragment from the backstack in onActivityResult
-        String fragmentName = fragment.getClass().getSimpleName();
-        transaction.replace(R.id.container, fragment, fragmentName);
         transaction.commit();
     }
 }
