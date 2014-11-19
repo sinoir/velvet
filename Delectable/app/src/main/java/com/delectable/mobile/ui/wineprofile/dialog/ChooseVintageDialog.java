@@ -198,7 +198,7 @@ public class ChooseVintageDialog extends DialogFragment
         if (mBaseWine == null) {
             return;
         }
-        mProducerName.setText(mBaseWine.getProducerName());
+        mProducerName.setText(mBaseWine.getProducerName().toLowerCase());
         mWineName.setText(mBaseWine.getName());
 
         mAdapter.notifyDataSetChanged();
