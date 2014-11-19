@@ -66,7 +66,7 @@ public class ChooseVintageDialog extends DialogFragment
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
-    private WineProfilesAdapter mAdapter;
+    private WineProfilesAdapter mAdapter = new WineProfilesAdapter(this);
 
     private BaseWine mBaseWine;
 
@@ -97,8 +97,6 @@ public class ChooseVintageDialog extends DialogFragment
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
         ButterKnife.inject(this, view);
-
-        mAdapter = new WineProfilesAdapter(this);
 
         mListView.setAdapter(mAdapter);
 
