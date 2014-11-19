@@ -368,11 +368,11 @@
     <!-- Wine Purchase Flow / Checkout -->
     <string name="winecheckout_title">Checkout</string>
     <string name="winecheckout_per_bottle">%s per bottle</string>
-    <string name="winecheckout_address_label">Address</string>
+    <string name="winecheckout_address_label">address</string>
     <string name="winecheckout_add_shipping_address">Add a shipping address</string>
-    <string name="winecheckout_payment_label">Payment</string>
+    <string name="winecheckout_payment_label">payment</string>
     <string name="winecheckout_add_payment_method">Add a payment method</string>
-    <string name="winecheckout_quantity_label">Quantity</string>
+    <string name="winecheckout_quantity_label">quantity</string>
     <string name="winecheckout_credit_applied_label">Credit applied</string>
     <string name="winecheckout_add_promo_code">Add promo code</string>
     <string name="winecheckout_shipping_label">Shipping</string>
