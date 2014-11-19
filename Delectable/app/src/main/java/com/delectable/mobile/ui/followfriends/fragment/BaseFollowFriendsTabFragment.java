@@ -100,6 +100,10 @@ public abstract class BaseFollowFriendsTabFragment extends BaseFragment
         ViewGroup view = (ViewGroup) inflater
                 .inflate(R.layout.fragment_listview_no_divider, container, false);
         ButterKnife.inject(this, view);
+        int spacing8 = getResources().getDimensionPixelSize(R.dimen.spacing_8);
+        // FIXME when increasing top padding a gray line becomes visible on top of the list. Can't find where it's coming from though...
+        mListView.setPadding(0, mListView.getPaddingTop()/* + spacing8 */, 0,
+                mListView.getPaddingBottom() + spacing8);
         mListView.setAdapter(getAdapter());
         mListView.setEmptyView(mEmptyView);
         mListView.setOnItemClickListener(this);
