@@ -60,7 +60,7 @@
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     android:id="@+id/address_label"
                     style="@style/CheckoutRowLabel"
-                    android:text="@string/inecheckout_address_label" />
+                    android:text="@string/winecheckout_address_label" />
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     android:id="@+id/shipping_address"

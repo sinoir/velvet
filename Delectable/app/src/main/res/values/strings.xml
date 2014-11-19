@@ -366,7 +366,7 @@
     <!-- Wine Purchase Flow / Checkout -->
     <string name="winecheckout_title">Checkout</string>
     <string name="winecheckout_per_bottle">%s per bottle</string>
-    <string name="inecheckout_address_label">Address</string>
+    <string name="winecheckout_address_label">Address</string>
     <string name="winecheckout_add_shipping_address">Add a shipping address</string>
     <string name="winecheckout_payment_label">Payment</string>
     <string name="winecheckout_add_payment_method">Add a payment method</string>
