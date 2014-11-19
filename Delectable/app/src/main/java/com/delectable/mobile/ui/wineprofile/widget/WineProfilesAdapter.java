@@ -57,9 +57,7 @@ public class WineProfilesAdapter extends BaseAdapter {
                     .inflate(R.layout.row_dialog_choose_vintage_with_sizing, parent, false);
             row.setWinePriceActionCallback(mWinePriceViewActionsCallback);
         }
-        if (mVintageWineInfos.size() > 0) {
-            row.updateData(mVintageWineInfos.get(position));
-        }
+        row.updateData(getItem(position));
         return row;
     }
 }
