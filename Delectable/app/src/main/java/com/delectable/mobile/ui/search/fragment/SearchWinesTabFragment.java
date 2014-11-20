@@ -13,6 +13,8 @@ import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -34,8 +36,6 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment
 
     private WineSearchAdapter mAdapter = new WineSearchAdapter(this);
 
-    private String mCurrentQuery;
-
     private boolean mLoadingNextPage = false;
 
     /**
@@ -50,11 +50,16 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mSearchView.setQueryHint(getString(R.string.search_wines_hint));
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
         super.onQueryTextSubmit(query);
         mEndOfList = false; //new search query, reset this flag
         mAdapter.getItems().clear(); //clear current data set
-        mCurrentQuery = query;
         mBaseWinesController.searchWine(query, 0, LIMIT);
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
@@ -84,7 +89,7 @@ public class SearchWinesTabFragment extends BaseSearchTabFragment
             showToastError(ErrorUtil.NO_NETWORK_ERROR.getUserFriendlyMessage());
         } else {
             showToastError(event.getErrorMessage());
-            mEmptyStateTextView.setText(event.getErrorMessage()); //TODO no empty state designs yet
+            mEmptyStateTextView.setText(event.getErrorMessage());
         }
     }
 

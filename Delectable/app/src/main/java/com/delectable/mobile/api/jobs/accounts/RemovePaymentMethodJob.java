@@ -8,6 +8,8 @@ import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.path.android.jobqueue.Params;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 public class RemovePaymentMethodJob extends BaseJob {
@@ -17,27 +19,35 @@ public class RemovePaymentMethodJob extends BaseJob {
     @Inject
     protected PaymentMethodModel mPaymentMethodModel;
 
-    private String mPaymentId;
+    private ArrayList<String> mPaymentMethodIds;
 
     public RemovePaymentMethodJob(String paymentId) {
         super(new Params(Priority.SYNC));
-        mPaymentId = paymentId;
+        mPaymentMethodIds = new ArrayList<String>();
+        mPaymentMethodIds.add(paymentId);
+    }
+
+    public RemovePaymentMethodJob(ArrayList<String> paymentIds) {
+        super(new Params(Priority.SYNC));
+        mPaymentMethodIds = paymentIds;
     }
 
     @Override
     public void onRun() throws Throwable {
         String endpoint = "/accounts/remove_payment_method";
-        ModifyPaymentMethodRequest request = new ModifyPaymentMethodRequest(mPaymentId);
-        PaymentMethodResponse response = getNetworkClient()
-                .post(endpoint, request, PaymentMethodResponse.class);
+
+        PaymentMethodResponse lastResponse = null;
+        for (String paymentId : mPaymentMethodIds) {
+            ModifyPaymentMethodRequest request = new ModifyPaymentMethodRequest(paymentId);
+            lastResponse = getNetworkClient().post(endpoint, request, PaymentMethodResponse.class);
+        }
         mPaymentMethodModel.clear();
-        mPaymentMethodModel.savePaymentMethods(response.getPayload().getPaymentMethods());
-        getEventBus().post(new RemovePaymentMethodEvent(mPaymentId));
+        mPaymentMethodModel.savePaymentMethods(lastResponse.getPayload().getPaymentMethods());
+        getEventBus().post(new RemovePaymentMethodEvent());
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new RemovePaymentMethodEvent(getErrorMessage(), getErrorCode(),
-                mPaymentId));
+        getEventBus().post(new RemovePaymentMethodEvent(getErrorMessage(), getErrorCode()));
     }
 }

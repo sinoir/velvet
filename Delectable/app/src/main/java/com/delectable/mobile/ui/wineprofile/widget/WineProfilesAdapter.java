@@ -3,8 +3,8 @@ package com.delectable.mobile.ui.wineprofile.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
+import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,44 +19,31 @@ import java.util.ArrayList;
  */
 public class WineProfilesAdapter extends BaseAdapter {
 
-    private static final int FIRST_ROW = 0;
+    private ArrayList<VintageWineInfo> mVintageWineInfos = new ArrayList<VintageWineInfo>();
 
-    private static final int FIRST_ROW_OFFSET = 1;
+    private WinePriceView.WinePriceViewActionsCallback mWinePriceViewActionsCallback;
 
-    private BaseWine mBaseWine;
-
-    private ArrayList<WineProfileSubProfile> mWineProfiles = new ArrayList<WineProfileSubProfile>();
-
-    public WineProfilesAdapter() {
-
+    public WineProfilesAdapter(
+            WinePriceView.WinePriceViewActionsCallback winePriceViewActionsCallback) {
+        mWinePriceViewActionsCallback = winePriceViewActionsCallback;
     }
 
-    public void setBaseWine(BaseWine baseWine) {
-        mBaseWine = baseWine;
-        mWineProfiles = baseWine.getWineProfiles();
+    public void setData(ArrayList<VintageWineInfo> vintageWineInfos) {
+        mVintageWineInfos = vintageWineInfos;
     }
 
     @Override
     public int getCount() {
-        return mWineProfiles.size() + FIRST_ROW_OFFSET; //+1 for the all years row
+        return mVintageWineInfos.size();
     }
 
-    /**
-     * @return Can return a {@link BaseWine} (if the first item was clicked) or a {@link
-     * WineProfileSubProfile}.
-     */
     @Override
-    public Parcelable getItem(int position) {
-        if (position == FIRST_ROW) {
-            return mBaseWine;
-        }
-        position -= FIRST_ROW_OFFSET;
-        return mWineProfiles.get(position);
+    public VintageWineInfo getItem(int position) {
+        return mVintageWineInfos.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        position -= FIRST_ROW_OFFSET;
         return position;
     }
 
@@ -68,15 +55,9 @@ public class WineProfilesAdapter extends BaseAdapter {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             row = (ChooseVintageDialogRow) inflater
                     .inflate(R.layout.row_dialog_choose_vintage_with_sizing, parent, false);
+            row.setWinePriceActionCallback(mWinePriceViewActionsCallback);
         }
-
-        if (position == FIRST_ROW && mBaseWine != null) {
-            row.updateData(mBaseWine);
-        } else if (mWineProfiles.size() > 0) {
-            position -= FIRST_ROW_OFFSET; //adjust position so show the correct wine profile data
-            row.updateData(mWineProfiles.get(position));
-        }
+        row.updateData(getItem(position));
         return row;
     }
-
 }

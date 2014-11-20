@@ -14,10 +14,12 @@
     <string name="flash_on">ON</string>
     <string name="flash_off">OFF</string>
     <string name="cancel">cancel</string>
+    <string name="save">save</string>
     <string name="ok">ok</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="remove">Remove</string>
     <string name="report">Report</string>
+    <string name="dialog_edit">Edit</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
     <!-- Common Errors -->
@@ -248,11 +250,13 @@
         <item quantity="other">%d PRO RATINGS</item>
     </plurals>
     <string name="wine_profile_all_years">All years</string>
+    <string name="wine_profile_check_price">Check price</string>
+    <string name="wine_profile_sold_out">Sold out</string>
     <string name="choose_vintage_dialog_title">Choose vintage</string>
     <string name="choose_vintage_dialog_all_years">All years</string>
     <plurals name="choose_vintage_dialog_ratings_count">
-        <item quantity="one">1 rating</item>
-        <item quantity="other">%d ratings</item>
+        <item quantity="one">(1 rating)</item>
+        <item quantity="other">(%d ratings)</item>
     </plurals>
 
     <!-- TODO consult w bjorn: Beers have no vintage, "NV vintage" is unsightly-->
@@ -297,6 +301,8 @@
     <!-- Search -->
     <string name="search_title">Search</string>
     <string name="search_hint">Search for wines or people</string>
+    <string name="search_wines_hint">Search for wines</string>
+    <string name="search_people_hint">Search for people</string>
     <string name="search_wines">wines</string>
     <string name="search_people">people</string>
 
@@ -352,5 +358,59 @@
     <string name="settings_disconnect_twitter">Disconnect twitter account?</string>
     <string name="settings_disconnect_facebook">Disconnect facebook account?</string>
     <string name="settings_disconnect">disconnect</string>
+
+    <!-- Checkout Over 21 dialog text -->
+    <string name="over21dialog_title">Are you over 21 years old?</string>
+    <string name="over21dialog_note">Please note that someone 21 years or older may need to sign for delivery.</string>
+    <string name="over21dialog_over21">I am 21 years or older</string>
+    <string name="over21dialog_under21">I am younger than 21</string>
+
+    <!-- Wine Purchase Flow / Checkout -->
+    <string name="winecheckout_title">Checkout</string>
+    <string name="winecheckout_per_bottle">%s per bottle</string>
+    <string name="winecheckout_address_label">address</string>
+    <string name="winecheckout_add_shipping_address">Add a shipping address</string>
+    <string name="winecheckout_payment_label">payment</string>
+    <string name="winecheckout_add_payment_method">Add a payment method</string>
+    <string name="winecheckout_quantity_label">quantity</string>
+    <string name="winecheckout_credit_applied_label">Credit applied</string>
+    <string name="winecheckout_add_promo_code">Add promo code</string>
+    <string name="winecheckout_shipping_label">Shipping</string>
+    <string name="winecheckout_tax_label">Tax</string>
+    <string name="winecheckout_total_label">Total</string>
+    <string name="winecheckout_confirm_pay">Confirm and pay</string>
+    <plurals name="winecheckout_num_bottles">
+        <item quantity="one">1 bottle</item>
+        <item quantity="other">%d bottles</item>
+    </plurals>
+
+    <!-- Add Shipping Address Dialog -->
+    <string name="shippingaddress_first_lastname">First and last name</string>
+    <string name="shippingaddress_line1">Address line 1</string>
+    <string name="shippingaddress_line2">Address line 2</string>
+    <string name="shippingaddress_city">City</string>
+    <string name="shippingaddress_state">State</string>
+    <string name="shippingaddress_zipcode">Zip code</string>
+    <string name="shippingaddress_phone_number">Phone number</string>
+    <string name="shippingaddress_add_title">Add a shipping address</string>
+    <string name="shippingaddress_edit_title">Edit shipping address</string>
+    <string name="shippingaddress_choose_title">Choose shipping address</string>
+    <string name="shippingaddress_add_another">Add another shipping address</string>
+
+    <!-- Payment method Dialog -->
+    <string name="paymentmethod_name">Name</string>
+    <string name="paymentmethod_card_number">Card number</string>
+    <string name="paymentmethod_expiration">MM/YY</string>
+    <string name="paymentmethod_cvc">CVC</string>
+    <string name="paymentmethod_add_title">Add a payment method</string>
+    <string name="paymentmethod_choose_title">Choose payment method</string>
+    <string name="paymentmethod_add_another">Add another payment method</string>
+
+    <!-- Order Confirmation -->
+    <string name="order_confirmation_title">Order Confirmation</string>
+    <string name="order_confirmation_text">Text TBD</string>
+
+    <!-- Checkout Errors -->
+    <string name="checkout_no_internet">An internet connection is required</string>
 
 </resources>

@@ -1,10 +1,10 @@
 package com.delectable.mobile.ui.settings.dialog;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 import com.delectable.mobile.ui.settings.widget.SetProfilePicRowAdapter;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class SetProfilePicDialog extends DialogFragment {
+public class SetProfilePicDialog extends BaseDialogFragment {
 
     private static final String TAG = SetProfilePicDialog.class.getSimpleName();
 
@@ -35,7 +35,6 @@ public class SetProfilePicDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
 
         if (getArguments() != null) {
             ArrayList<String> listItems = getArguments().getStringArrayList(LIST_ITEMS);

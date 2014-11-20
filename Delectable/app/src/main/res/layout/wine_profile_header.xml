@@ -1,16 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="600dp"
     android:orientation="vertical">
-
 
     <com.delectable.mobile.ui.common.widget.WineBannerView
         android:id="@+id/wine_banner_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cap_feed_row_wine_banner_height"
         android:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/ratings_all_years_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/wine_profile_ratings_all_years_container_height"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:paddingRight="@dimen/general_row_horizontal_spacing">
+
+        <LinearLayout
+            android:id="@+id/all_ratings_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/all_ratings_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:fontName="whitney_medium"
+                android:textColor="@color/d_light_green"
+                android:textSize="@dimen/wine_profile_rating_text_size" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/all_ratings_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:fontName="whitney_medium"
+                android:textColor="@color/d_medium_gray"
+                android:textSize="@dimen/wine_profile_ratings_count_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pro_ratings_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/wine_profile_ratings_texts_horizontal_spacing"
+            android:layout_toRightOf="@+id/all_ratings_container"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/pro_ratings_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:fontName="whitney_medium"
+                android:textColor="@color/d_light_green"
+                android:textSize="@dimen/wine_profile_rating_text_size" />
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/pro_ratings_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:fontName="whitney_medium"
+                android:textColor="@color/d_medium_gray"
+                android:textSize="@dimen/wine_profile_ratings_count_text_size" />
+        </LinearLayout>
+
+        <com.delectable.mobile.ui.wineprofile.widget.WinePriceView
+            android:id="@+id/price_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/varietal_region_container"
@@ -37,12 +110,13 @@
                 android:layout_marginRight="@dimen/general_row_horizontal_spacing"
                 android:src="@drawable/ic_varietal" />
 
-            <TextView
+            <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/varietal_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|left"
                 android:text="-"
+                app:fontName="whitney_book"
                 android:textColor="@color/d_dark_gray"
                 android:textSize="@dimen/wine_profile_varietal_text_height" />
         </LinearLayout>
@@ -60,97 +134,25 @@
                 android:layout_marginRight="@dimen/general_row_horizontal_spacing"
                 android:src="@drawable/ic_location" />
 
-            <TextView
+            <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/region_path_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|left"
                 android:text="-"
+                app:fontName="whitney_book"
                 android:textColor="@color/d_dark_gray"
                 android:textSize="@dimen/wine_profile_varietal_text_height" />
         </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/ratings_all_years_container"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/wine_profile_ratings_all_years_container_height"
-        android:background="@drawable/bg_wine_profile_top_bottom_border"
-        android:paddingLeft="@dimen/general_row_horizontal_spacing"
-        android:paddingRight="@dimen/general_row_horizontal_spacing">
-
-        <LinearLayout
-            android:id="@+id/all_ratings_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/all_ratings_average"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/d_light_green"
-                android:textSize="@dimen/wine_profile_rating_text_size" />
-
-            <TextView
-                android:id="@+id/all_ratings_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/d_medium_gray"
-                android:textSize="@dimen/wine_profile_ratings_count_text_size" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/pro_ratings_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/wine_profile_ratings_texts_horizontal_spacing"
-            android:layout_toRightOf="@+id/all_ratings_container"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/pro_ratings_average"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/d_light_green"
-                android:textSize="@dimen/wine_profile_rating_text_size" />
-
-            <TextView
-                android:id="@+id/pro_ratings_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/d_medium_gray"
-                android:textSize="@dimen/wine_profile_ratings_count_text_size" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/all_years_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical|right"
-            android:text="@string/wine_profile_all_years"
-            android:textColor="@color/chestnut_to_chestnut_pressed"
-            android:textSize="@dimen/wine_profile_all_years_text_size" />
-
-    </RelativeLayout>
-
     <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/empty_view_wine_profile"
         style="@style/TextEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@android:color/white"
         android:gravity="center"
-        android:id="@+id/empty_view_wine_profile"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
         android:padding="@dimen/spacing_32"
         android:text="@string/empty_wine_profile"
         android:visibility="gone" />
