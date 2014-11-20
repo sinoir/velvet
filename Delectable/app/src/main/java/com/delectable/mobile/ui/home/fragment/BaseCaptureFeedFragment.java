@@ -83,8 +83,8 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
 
         // consider ActionBar and TabStrip height for top padding
-        mRefreshContainer.setProgressViewOffset(false, mListView.getPaddingTop(),
-                mListView.getPaddingTop() * 2);
+        mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
+                mListView.getPaddingTop() * 3);
         int topPadding = mListView.getPaddingTop() + getResources()
                 .getDimensionPixelSize(R.dimen.tab_height);
         mListView.setPadding(0, topPadding, 0, 0);
