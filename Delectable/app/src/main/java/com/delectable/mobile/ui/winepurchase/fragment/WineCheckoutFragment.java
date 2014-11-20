@@ -16,6 +16,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.ConfirmationDialogFragment;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
 import android.content.Intent;
@@ -188,10 +189,6 @@ public class WineCheckoutFragment extends BaseFragment {
         showLoader();
         mBaseWineController.purchaseWine(mData.getWineId(), mData.getPurchaseOfferId(),
                 mData.getPaymentMethodId(), mData.getShippingAddressId(), mData.getQuantity(), "");
-    }
-
-    private void showConfirmation() {
-        replaceWithNewFragment(ConfirmationFragment.newInstance());
     }
 
     private void showError(String error) {
@@ -495,6 +492,13 @@ public class WineCheckoutFragment extends BaseFragment {
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), "dialog");
     }
+
+    private void showConfirmation() {
+        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance();
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
     //endregion
 
 

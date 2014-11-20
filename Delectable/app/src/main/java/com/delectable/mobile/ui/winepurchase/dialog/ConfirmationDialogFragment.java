@@ -1,8 +1,8 @@
-package com.delectable.mobile.ui.winepurchase.fragment;
+package com.delectable.mobile.ui.winepurchase.dialog;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 
-public class ConfirmationFragment extends BaseFragment {
+public class ConfirmationDialogFragment extends BaseDialogFragment {
 
-    public static ConfirmationFragment newInstance() {
-        ConfirmationFragment fragment = new ConfirmationFragment();
+    public static ConfirmationDialogFragment newInstance() {
+        ConfirmationDialogFragment fragment = new ConfirmationDialogFragment();
         return fragment;
     }
 

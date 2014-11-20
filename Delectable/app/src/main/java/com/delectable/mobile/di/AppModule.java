@@ -117,7 +117,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
-import com.delectable.mobile.ui.winepurchase.fragment.ConfirmationFragment;
+import com.delectable.mobile.ui.winepurchase.dialog.ConfirmationDialogFragment;
 import com.delectable.mobile.ui.winepurchase.fragment.WineCheckoutFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.path.android.jobqueue.JobManager;
@@ -160,7 +160,7 @@ import de.greenrobot.event.EventBus;
                 WineProfileFragment.class,
                 TaggedPeopleFragment.class,
                 WineCheckoutFragment.class,
-                ConfirmationFragment.class,
+                ConfirmationDialogFragment.class,
                 // Dialogs
                 BaseDialogFragment.class,
                 BaseEventBusDialogFragment.class,
