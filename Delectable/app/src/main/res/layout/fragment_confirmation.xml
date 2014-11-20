@@ -35,7 +35,7 @@
         android:layout_marginRight="@dimen/general_row_horizontal_spacing"
         android:gravity="center_horizontal"
         android:text="@string/order_confirmation_text"
-        android:textColor="@color/d_big_stone"
+        android:textColor="@color/d_dark_gray"
         android:textSize="16sp"
         app:fontName="whitney_book" />
 
