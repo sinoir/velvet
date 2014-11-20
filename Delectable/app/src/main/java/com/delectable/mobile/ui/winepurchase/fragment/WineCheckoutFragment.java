@@ -47,6 +47,7 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private static final int REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG = 400;
 
+    private static final int REQUEST_CONFIRMATION_DIALOG = 500;
 
     private static final int DELAY_ERROR_DISPLAY = 2000;
 
@@ -182,6 +183,8 @@ public class WineCheckoutFragment extends BaseFragment {
         } else if (requestCode == REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG) {
             loadPaymentMethod(
                     data.getStringExtra(ChoosePaymentMethodDialog.EXTRAS_PAYMENT_METHOD_ID));
+        } else if (requestCode == REQUEST_CONFIRMATION_DIALOG) {
+            getActivity().onBackPressed();
         }
     }
 
@@ -495,6 +498,7 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private void showConfirmation() {
         ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance();
+        dialog.setTargetFragment(this, REQUEST_CONFIRMATION_DIALOG);
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), "dialog");
     }
