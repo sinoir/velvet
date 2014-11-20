@@ -62,6 +62,7 @@ import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.api.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
+import com.delectable.mobile.api.jobs.captures.FetchCaptureListJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
 import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
@@ -190,6 +191,7 @@ import de.greenrobot.event.EventBus;
                 ResetPasswordJob.class,
                 LoginFacebookJob.class,
                 FetchCaptureDetailsJob.class,
+                FetchCaptureListJob.class,
                 FetchAccountProfileJob.class,
                 FetchAccountPrivateJob.class,
                 FetchFollowersJob.class,

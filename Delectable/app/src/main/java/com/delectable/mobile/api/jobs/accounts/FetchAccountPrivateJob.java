@@ -2,12 +2,12 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountContext;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountsContextRequest;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
 import com.path.android.jobqueue.Params;
 
 public class FetchAccountPrivateJob extends BaseJob {
@@ -44,6 +44,10 @@ public class FetchAccountPrivateJob extends BaseJob {
 
         //cache to shared prefs
         UserInfo.setAccountPrivate(account);
+
+        //save capture feeds
+        UserInfo.setCaptureFeeds(account.getCaptureFeeds());
+
         mEventBus.post(new UpdatedAccountEvent(account));
     }
 
