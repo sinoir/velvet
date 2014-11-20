@@ -28,19 +28,7 @@
         android:gravity="center_vertical"
         android:singleLine="true"
         android:textColor="@color/d_light_green"
-        android:textSize="@dimen/choose_vintage_dialog_rating_text_size"
-        app:fontName="whitney_medium" />
-
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/ratings_count"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/rating"
-        android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textColor="@color/d_medium_gray"
-        android:textSize="14sp"
+        android:textSize="@dimen/wine_profile_rating_text_size"
         app:fontName="whitney_medium" />
 
     <com.delectable.mobile.ui.wineprofile.widget.WinePriceView

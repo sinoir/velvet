@@ -2,14 +2,13 @@ package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
+import com.delectable.mobile.util.TextUtil;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.text.DecimalFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -24,9 +23,6 @@ public class ChooseVintageDialogRow extends RelativeLayout {
 
     @InjectView(R.id.year)
     protected TextView mYear;
-
-    @InjectView(R.id.ratings_count)
-    protected TextView mRatingsCount;
 
     @InjectView(R.id.rating)
     protected TextView mRating;
@@ -50,35 +46,27 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
-    private void updateData(String year, int ratingsCount, double rating) {
+    private void updateData(String year, double rating) {
         mYear.setText(year);
-        String ratingCount = getResources()
-                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
-                        ratingsCount);
-        mRatingsCount.setText(ratingCount);
 
         //rating
         if (rating == NO_AVG_RATING) { //handling a no rating case, show a dash
             mRating.setText("-");
             mRating.setTextColor(getResources().getColor(R.color.d_medium_gray));
         } else {
-            DecimalFormat format = new DecimalFormat("0.0");
-            String allAvgStr = format.format(rating);
-            mRating.setText(allAvgStr);
-            mRating.setTextColor(getResources().getColor(R.color.d_light_green));
+            mRating.setText(TextUtil.makeRatingDisplayText(getContext(), rating));
         }
     }
 
     /**
-     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
-     * data for a normal row.
+     * Convenience method that calls {@link #updateData(String, double)}, used to update the data
+     * for a normal row.
      */
     public void updateData(VintageWineInfo wineInfo) {
         String year = wineInfo.getYear();
         double rating = wineInfo.getRating();
-        int ratingsCount = wineInfo.getRatingCount();
 
-        updateData(year, ratingsCount, rating);
+        updateData(year, rating);
         mWinePriceView.updateWithPriceInfo(wineInfo);
     }
 
