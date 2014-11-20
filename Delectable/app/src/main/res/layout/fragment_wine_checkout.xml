@@ -159,13 +159,15 @@
                     android:text="&#8211;" />
             </RelativeLayout>
 
+            <!-- TOOD: Make VISIBLE once Add Promo Code is implemented -->
             <RelativeLayout
                 android:id="@+id/promo_code_container"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
                 android:layout_marginTop="20dp"
-                android:paddingRight="@dimen/general_row_horizontal_spacing">
+                android:paddingRight="@dimen/general_row_horizontal_spacing"
+                android:visibility="gone">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     android:id="@+id/credit_applied_label"
@@ -187,11 +189,13 @@
                     android:textSize="14sp" />
             </RelativeLayout>
 
+            <!-- TODO: Margin Top is temporarily set to 20dp, once Promo Code is Added, remove this margin-->
             <RelativeLayout
                 android:id="@+id/shipping_container"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginTop="20dp"
                 android:paddingRight="@dimen/general_row_horizontal_spacing">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
@@ -243,12 +247,39 @@
                     app:fontName="whitney_medium" />
             </RelativeLayout>
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
+            <RelativeLayout
                 android:id="@+id/confirm_button"
                 style="@style/ButtonLargeDChestNutBg"
+                android:layout_height="60dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
-                android:text="@string/winecheckout_confirm_pay" />
+                android:gravity="center">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/confirm_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/winecheckout_confirm_pay"
+                    android:textColor="@color/d_white"
+                    android:textSize="16sp"
+                    app:fontName="whitney_medium" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/marketing_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/confirm_text"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:textColor="@color/d_off_white_translucent"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:fontName="whitney_medium" />
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -1,6 +1,6 @@
 package com.delectable.mobile.ui.wineprofile.viewmodel;
 
-import com.delectable.mobile.api.models.PurchaseOffer;
+import com.delectable.mobile.api.models.RatingsSummaryHash;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 
 /**
@@ -9,9 +9,9 @@ import com.delectable.mobile.api.models.WineProfileSubProfile;
  */
 public class VintageWineInfo {
 
-    private PurchaseOffer mPurchaseOffer;
-
     private WineProfileSubProfile mWineProfileMinimal;
+
+    private RatingsSummaryHash mRatingsSummaryHash;
 
     private boolean mIsLoading;
 
@@ -19,9 +19,15 @@ public class VintageWineInfo {
         this(wineProfileMinimal, null);
     }
 
-    public VintageWineInfo(WineProfileSubProfile wineProfileMinimal, PurchaseOffer purchaseOffer) {
-        mPurchaseOffer = purchaseOffer;
+    public VintageWineInfo(WineProfileSubProfile wineProfileMinimal,
+            RatingsSummaryHash ratingsSummaryHash) {
         mWineProfileMinimal = wineProfileMinimal;
+
+        if (ratingsSummaryHash == null) {
+            mRatingsSummaryHash = wineProfileMinimal.getRatingsSummary();
+        } else {
+            mRatingsSummaryHash = ratingsSummaryHash;
+        }
     }
 
     public boolean isSoldOut() {
@@ -31,14 +37,10 @@ public class VintageWineInfo {
     }
 
     public boolean hasPrice() {
-        return hasPurchaseOfferPrice() || hasWineProfilePrice();
+        return hasWineProfilePrice();
     }
 
     public String getPriceText() {
-        if (hasPurchaseOfferPrice()) {
-            return mPurchaseOffer.getPricing().get(0).getPerBbottle();
-        }
-
         if (hasWineProfilePrice()) {
             return mWineProfileMinimal.getPriceText();
         }
@@ -51,22 +53,17 @@ public class VintageWineInfo {
     }
 
     public int getRatingCount() {
-        if (mWineProfileMinimal == null || mWineProfileMinimal.getRatingsSummary() == null) {
+        if (mRatingsSummaryHash == null) {
             return 0;
         }
-        return mWineProfileMinimal.getRatingsSummary().getAllCount();
+        return mRatingsSummaryHash.getAllCount();
     }
 
     public double getRating() {
-        if (mWineProfileMinimal == null || mWineProfileMinimal.getRatingsSummary() == null) {
+        if (mRatingsSummaryHash == null) {
             return -1;
         }
-        return mWineProfileMinimal.getRatingsSummary().getAllAvgOfTen();
-    }
-
-    private boolean hasPurchaseOfferPrice() {
-        return mPurchaseOffer != null && mPurchaseOffer.getPricing() != null
-                && mPurchaseOffer.getPricing().size() > 0;
+        return mRatingsSummaryHash.getAllAvg();
     }
 
     private boolean hasWineProfilePrice() {
@@ -75,10 +72,6 @@ public class VintageWineInfo {
 
     public WineProfileSubProfile getWineProfileMinimal() {
         return mWineProfileMinimal;
-    }
-
-    public void setWineProfileMinimal(WineProfileSubProfile wineProfileMinimal) {
-        mWineProfileMinimal = wineProfileMinimal;
     }
 
     public String getWineId() {
