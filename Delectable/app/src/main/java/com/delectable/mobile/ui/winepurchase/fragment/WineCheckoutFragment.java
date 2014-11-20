@@ -106,6 +106,9 @@ public class WineCheckoutFragment extends BaseFragment {
     @InjectView(R.id.confirm_button)
     protected View mConfirmButton;
 
+    @InjectView(R.id.marketing_message)
+    protected TextView mMarketingMessage;
+
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
 
@@ -205,6 +208,17 @@ public class WineCheckoutFragment extends BaseFragment {
         updateNumBottles();
         updatePricing();
         updatePromoUI();
+        updateMarketingMessage();
+    }
+
+    private void updateMarketingMessage() {
+        if (mData.getMarketingMessage() == null) {
+            mMarketingMessage.setText("");
+            mMarketingMessage.setVisibility(View.GONE);
+        } else {
+            mMarketingMessage.setText(mData.getMarketingMessage());
+            mMarketingMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateWineDetails() {

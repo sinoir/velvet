@@ -176,6 +176,10 @@ public class CheckoutData {
         return true;
     }
 
+    public String getMarketingMessage() {
+        return mPurchaseOffer.getMarketingMessage();
+    }
+
     public String getWineId() {
         return mWineProfileMinimal.getId();
     }

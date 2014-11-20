@@ -247,12 +247,39 @@
                     app:fontName="whitney_medium" />
             </RelativeLayout>
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
+            <RelativeLayout
                 android:id="@+id/confirm_button"
                 style="@style/ButtonLargeDChestNutBg"
+                android:layout_height="60dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
-                android:text="@string/winecheckout_confirm_pay" />
+                android:gravity="center">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/confirm_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/winecheckout_confirm_pay"
+                    android:textColor="@color/d_white"
+                    android:textSize="16sp"
+                    app:fontName="whitney_medium" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/marketing_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/confirm_text"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:textColor="@color/d_off_white_translucent"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:fontName="whitney_medium" />
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 
