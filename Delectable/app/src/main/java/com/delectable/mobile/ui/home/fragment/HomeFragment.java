@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 
@@ -20,6 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends BaseFragment {
+
+    /**
+     * Used with the ViewPager in order to cache a certain amount of pages
+     */
+    public static final int PREFETCH_FEED_COUNT = 5;
 
     private View mView;
 
@@ -61,6 +67,10 @@ public class HomeFragment extends BaseFragment {
 
         mTabsAdapter = new SlidingTabAdapter(getFragmentManager(), tabItems);
         mViewPager.setAdapter(mTabsAdapter);
+        mViewPager.setOffscreenPageLimit(PREFETCH_FEED_COUNT);
+        // TODO page margin does not work with the tab indicator
+//        mViewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.spacing_16));
+        mViewPager.setPageTransformer(true, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
 
         return mView;

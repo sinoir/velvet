@@ -207,7 +207,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
                             .scaleX(2)
                             .scaleY(2)
                             .setDuration(300)
-                            .setStartDelay(500)
+                            .setStartDelay(300)
                             .setInterpolator(new AccelerateInterpolator())
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
