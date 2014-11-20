@@ -159,13 +159,15 @@
                     android:text="&#8211;" />
             </RelativeLayout>
 
+            <!-- TOOD: Make VISIBLE once Add Promo Code is implemented -->
             <RelativeLayout
                 android:id="@+id/promo_code_container"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
                 android:layout_marginTop="20dp"
-                android:paddingRight="@dimen/general_row_horizontal_spacing">
+                android:paddingRight="@dimen/general_row_horizontal_spacing"
+                android:visibility="gone">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     android:id="@+id/credit_applied_label"
@@ -187,11 +189,13 @@
                     android:textSize="14sp" />
             </RelativeLayout>
 
+            <!-- TODO: Margin Top is temporarily set to 20dp, once Promo Code is Added, remove this margin-->
             <RelativeLayout
                 android:id="@+id/shipping_container"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+                android:layout_marginTop="20dp"
                 android:paddingRight="@dimen/general_row_horizontal_spacing">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
