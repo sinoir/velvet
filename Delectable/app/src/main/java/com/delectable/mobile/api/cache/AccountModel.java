@@ -15,10 +15,10 @@ public class AccountModel {
 
     private static final String PROFILE = KEY_PREFIX + "profile_" + VERSION;
 
-    private static final HashMap<String, AccountProfile> mAccountProfileMap
+    private final HashMap<String, AccountProfile> mAccountProfileMap
             = new HashMap<String, AccountProfile>();
 
-    private static final HashMap<String, AccountMinimal> mAccountMinimalMap
+    private final HashMap<String, AccountMinimal> mAccountMinimalMap
             = new HashMap<String, AccountMinimal>();
 
     public AccountProfile getAccount(String id) {
@@ -41,7 +41,7 @@ public class AccountModel {
         mAccountMinimalMap.put(key, account);
     }
 
-    public static void clear() {
+    public void clear() {
         mAccountProfileMap.clear();
         mAccountMinimalMap.clear();
     }
