@@ -5,7 +5,16 @@
 set -e # stop if command returns non zero
 echo packaging apk for S3 enterprise distribution
 
-GIT_BRANCH_NO_PATH=$(echo ${GIT_BRANCH} | sed -e 's,.*/\(.*\),\1,')
+if [[ ${GIT_BRANCH} == *release* ]]
+then
+	#GIT_BRANCH will look like this: remotes/origin/release/1.1
+	#if a release branch, label it release and not something like 1.1
+	GIT_BRANCH_NO_PATH="release"
+else
+	#GIT_BRANCH will look like this: remotes/origin/master
+	#just label after the branch because we're not using namespaces
+	GIT_BRANCH_NO_PATH=$(echo ${GIT_BRANCH} | sed -e 's,.*/\(.*\),\1,')
+fi
 ENTERPRISE_PRODUCT_DIRECTORY=${WORKSPACE}/BuildsForS3
 mkdir -p "${ENTERPRISE_PRODUCT_DIRECTORY}"
 
