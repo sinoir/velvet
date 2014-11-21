@@ -61,6 +61,19 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
         mIsPullToRefresh = isPullToRefresh;
     }
 
+    public BaseFetchListingJob(String requestId, String dataItemId,
+            Listing<T, D> listing, Boolean isPullToRefresh) {
+        super(new Params(Priority.PREFETCH).requireNetwork());
+        mRequestId = requestId;
+        mDataItemId = dataItemId;
+        if (listing != null) {
+            mBefore = listing.getBoundariesToBefore();
+            mAfter = listing.getBoundariesToAfter();
+            mETag = listing.getETag();
+        }
+        mIsPullToRefresh = isPullToRefresh;
+    }
+
     public BaseFetchListingJob(String requestId, String context, String dataItemId, String etag,
             String before, String after, Boolean isPullToRefresh) {
         super(new Params(Priority.PREFETCH).requireNetwork());
@@ -129,8 +142,6 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
         super.onRun();
         String endpoint = getEndpoint();
 
-//        ListingRequest request = new ListingRequest(mContext, mETag, mAccountId,
-//                mBefore, mAfter, mIsPullToRefresh);
         BaseRequest request = getRequestObject();
 
         Type type = getResponseType();

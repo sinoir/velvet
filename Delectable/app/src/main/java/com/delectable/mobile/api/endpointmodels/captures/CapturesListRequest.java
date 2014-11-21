@@ -9,11 +9,13 @@ public class CapturesListRequest extends BaseRequest {
 
     private Payload payload;
 
-    public CapturesListRequest(String list_key, String before, String after) {
+    public CapturesListRequest(String list_key, String eTag, String before, String after) {
+        super(null, eTag);
         payload = new Payload(list_key, before, after);
     }
 
-    public CapturesListRequest(String list_key) {
+    public CapturesListRequest(String list_key, String eTag) {
+        super(null, eTag);
         payload = new Payload(list_key);
     }
 

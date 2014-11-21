@@ -21,7 +21,15 @@ public class FetchCaptureListJob extends BaseFetchListingJob<CaptureDetails, Str
     @Inject
     protected CaptureListingModel mCaptureListingModel;
 
-    private String mListKey;
+    /**
+     * @param listing         The previous listing if paginating. Pass in {@code null} if making a
+     *                        fresh request.
+     * @param isPullToRefresh true if user invoked this call via a pull to refresh.
+     */
+    public FetchCaptureListJob(String requestId, String listKey,
+            Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
+        super(requestId, listKey, listing, isPullToRefresh);
+    }
 
     @Override
     public String getEndpoint() {
@@ -48,24 +56,7 @@ public class FetchCaptureListJob extends BaseFetchListingJob<CaptureDetails, Str
 
     @Override
     protected BaseRequest getRequestObject() {
-        return new CapturesListRequest(mListKey, mBefore, mAfter);
-    }
-
-    /**
-     * @param listing         The previous listing if paginating. Pass in {@code null} if making a
-     *                        fresh request.
-     * @param isPullToRefresh true if user invoked this call via a pull to refresh.
-     */
-    public FetchCaptureListJob(String requestId, String listKey,
-            Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
-        super(requestId, listKey);
-        mListKey = listKey;
-        if (listing != null) {
-            mBefore = listing.getBoundariesToBefore();
-            mAfter = listing.getBoundariesToAfter();
-            mETag = listing.getETag();
-        }
-        mIsPullToRefresh = isPullToRefresh;
+        return new CapturesListRequest(mDataItemId, mETag, mBefore, mAfter);
     }
 
 }

@@ -235,7 +235,6 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     }
 
     protected Listing<CaptureDetails, String> getCachedFeed() {
-//        Log.d(TAG, "############### getCachedFeed.title: " + mCaptureListingModel.getCaptureList(mListKey).getFeedParams().getTitle());
         return mCaptureListingModel.getCaptureList(mListKey);
     }
 
@@ -257,10 +256,6 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         fetchCaptures(mCapturesListing, true);
     }
 
-    /**
-     * The subclass will need to intercept the event and verify that the event was spawned from a
-     * request the subclass.
-     */
     public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
         if (!LIST_REQUEST.equals(event.getRequestId())) {
             return;

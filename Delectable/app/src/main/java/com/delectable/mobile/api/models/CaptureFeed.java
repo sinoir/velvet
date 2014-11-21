@@ -96,4 +96,44 @@ public class CaptureFeed {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CaptureFeed that = (CaptureFeed) o;
+
+        if (banner != null ? !banner.equals(that.banner) : that.banner != null) {
+            return false;
+        }
+        if (banner_attributes != null ? !banner_attributes.equals(that.banner_attributes)
+                : that.banner_attributes != null) {
+            return false;
+        }
+        if (feed_type != null ? !feed_type.equals(that.feed_type) : that.feed_type != null) {
+            return false;
+        }
+        if (!key.equals(that.key)) {
+            return false;
+        }
+        if (title != null ? !title.equals(that.title) : that.title != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key.hashCode();
+        result = 31 * result + (feed_type != null ? feed_type.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (banner != null ? banner.hashCode() : 0);
+        result = 31 * result + (banner_attributes != null ? banner_attributes.hashCode() : 0);
+        return result;
+    }
 }
