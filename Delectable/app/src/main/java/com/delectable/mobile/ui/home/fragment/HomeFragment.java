@@ -78,7 +78,7 @@ public class HomeFragment extends BaseFragment {
         mViewPager.setOffscreenPageLimit(PREFETCH_FEED_COUNT);
         // TODO page margin does not work with the tab indicator
 //        mViewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.spacing_16));
-        mViewPager.setPageTransformer(true, new FeedPageTransformer());
+        mViewPager.setPageTransformer(false, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
 
     }
