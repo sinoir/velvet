@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import com.delectable.mobile.R;
+
 import java.util.ArrayList;
 
 public class CaptureDetails extends CaptureMinimal {
@@ -136,14 +138,20 @@ public class CaptureDetails extends CaptureMinimal {
      * @return Wine Producer Name if it was a match, otherwise "UNIDENTIFIED"
      */
     public String getDisplayTitle() {
-        String title = "";
-        if (getWineProfile() != null) {
-            title = getWineProfile().getProducerName();
-            // Else if the capture went through that had no wine
-        } else if (getTranscriptionErrorMessage() == null) {
-            title = "UNIDENTIFIED";
+        CaptureState state = CaptureState.getState(this);
+        switch (state) {
+            case IDENTIFIED:
+                return getWineProfile().getProducerName();
+            case UNVERIFIED:
+                return getBaseWine().getProducerName();
+            case IMPOSSIBLED:
+                return "";
+            case UNIDENTIFIED:
+            default:
+                //TODO pass in context and use proper string from strings.xml
+                //title = getResources().getString(R.string.user_captures_id_in_progress);
+                return "UNIDENTIFIED";
         }
-        return title;
     }
 
     /**
@@ -152,16 +160,20 @@ public class CaptureDetails extends CaptureMinimal {
      * @return Wine Name if it was a match, otherwise error / currently identifying wine text
      */
     public String getDisplayDescription() {
-        String desc = "";
-        if (getWineProfile() != null) {
-            desc = getWineProfile().getName();
-            // Else if the capture went through that had no wine
-        } else if (getTranscriptionErrorMessage() != null) {
-            desc = getTranscriptionErrorMessage();
-        } else {
-            desc = "We are identifying this wine.";
+
+        CaptureState state = CaptureState.getState(this);
+        switch (state) {
+            case IDENTIFIED:
+                return getWineProfile().getName();
+            case UNVERIFIED:
+                return getBaseWine().getName();
+            case IMPOSSIBLED:
+                return transcription_error_message;
+            case UNIDENTIFIED:
+            default:
+                //TODO pass in context and use proper string from strings.xml
+                return "We are identifying this wine.";
         }
-        return desc;
     }
 
     public String getTranscriptionErrorMessage() {
