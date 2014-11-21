@@ -84,6 +84,7 @@
     <string name="empty_following_feed">See what friends and experts are drinking by following their updates.</string>
     <string name="empty_following_feed_button">follow friends &amp; experts</string>
     <string name="empty_trending_feed">An internet connection is required to see trending wines.</string>
+    <string name="empty_feed">An internet connection is required to see feeds.</string>
     <string name="empty_experts">Seems like there\'s a problem connecting</string>
     <string name="empty_facebook">Connect your account to Facebook. We never spam anyone.</string>
     <string name="connect_facebook_button">connect to facebook</string>

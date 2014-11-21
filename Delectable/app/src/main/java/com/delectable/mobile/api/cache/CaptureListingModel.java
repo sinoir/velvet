@@ -80,7 +80,7 @@ public class CaptureListingModel {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<CaptureDetails, String> listing) {
+    private synchronized void saveListing(String key, Listing<CaptureDetails, String> listing) {
 
         CacheListing<CaptureDetails> cacheListing = new CacheListing<CaptureDetails>(listing);
         mMap.put(key, cacheListing);

@@ -2,13 +2,17 @@ package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
+import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout;
+import com.delectable.mobile.ui.events.NavigationEvent;
+import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -20,18 +24,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ListView;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment implements
+public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         InfiniteScrollAdapter.ActionsHandler {
 
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
 
-    private final String TAG = this.getClass().getSimpleName();
+    private static final String LIST_KEY = "LIST_KEY";
+
+    private static final String LIST_TITLE = "LIST_TITLE";
+
+    private static final String TAG = CaptureListFragment.class.getSimpleName();
+
+    private String LIST_REQUEST = TAG + "_list_req_";
 
     @InjectView(R.id.swipe_container)
     protected NestedSwipeRefreshLayout mRefreshContainer;
@@ -42,19 +55,38 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     @InjectView(R.id.camera_button)
     protected FloatingActionButton mCameraButton;
 
+    protected View mEmptyView;
+
+    @Inject
+    protected CaptureListingModel mCaptureListingModel;
+
     protected CaptureDetailsAdapter mAdapter;
 
     private Listing<CaptureDetails, String> mCapturesListing;
 
     private boolean mFetching;
 
-    public BaseCaptureFeedFragment() {
+    protected String mListKey;
+
+    protected String mTitle;
+
+    public CaptureListFragment() {
         // Required empty public constructor
     }
 
-    protected static Bundle bundleArgs(String accountId) {
+    public static CaptureListFragment newInstance(String accountId, String listKey,
+            String listTitle) {
+        CaptureListFragment fragment = new CaptureListFragment();
+        Bundle args = bundleArgs(accountId, listKey, listTitle);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    protected static Bundle bundleArgs(String accountId, String listKey, String listTitle) {
         Bundle args = new Bundle();
         args.putString(ACCOUNT_ID, accountId);
+        args.putString(LIST_KEY, listKey);
+        args.putString(LIST_TITLE, listTitle);
         return args;
     }
 
@@ -64,10 +96,13 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         App.injectMembers(this);
 
         if (getArguments() == null) {
-            throw new RuntimeException(TAG + " needs to be initialized with an accountId");
+            throw new IllegalArgumentException(TAG + " needs to be initialized with a list key");
         }
 
         String accountId = getArguments().getString(ACCOUNT_ID);
+        mListKey = getArguments().getString(LIST_KEY);
+        LIST_REQUEST += mListKey;
+        mTitle = getArguments().getString(LIST_TITLE);
         mAdapter = new CaptureDetailsAdapter(this, this, accountId);
         mAdapter.setRowType(CaptureDetailsAdapter.RowType.DETAIL);
     }
@@ -76,7 +111,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater
-                .inflate(R.layout.fragment_home_follow_feed_tab, container, false);
+                .inflate(R.layout.fragment_feed_tab, container, false);
         ButterKnife.inject(this, view);
 
         mRefreshContainer.setListView(mListView);
@@ -85,11 +120,33 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         // consider ActionBar and TabStrip height for top padding
         mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
                 mListView.getPaddingTop() * 3);
-        int topPadding = mListView.getPaddingTop() + getResources()
-                .getDimensionPixelSize(R.dimen.tab_height);
-        mListView.setPadding(0, topPadding, 0, 0);
+        // First capture photo will be under tab bar, but at least there is no whitespace on top
+//        int topPadding = mListView.getPaddingTop() + getResources()
+//                .getDimensionPixelSize(R.dimen.tab_height);
+//        mListView.setPadding(0, topPadding, 0, 0);
 
         mListView.setAdapter(mAdapter);
+
+        // empty state
+        if (mTitle.equalsIgnoreCase("following")) {
+            View emptyViewContainer = view.findViewById(R.id.empty_view_following_container);
+            mEmptyView = emptyViewContainer.findViewById(R.id.empty_view_following);
+            Delectabutton emptyViewButton = (Delectabutton) emptyViewContainer
+                    .findViewById(R.id.search_friends_button);
+            emptyViewButton.setIconDrawable(
+                    getResources().getDrawable(R.drawable.ic_nav_drawer_friends_normal));
+            emptyViewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mEventBus.post(new NavigationEvent(NavHeader.NAV_FIND_FRIENDS));
+                }
+            });
+            mListView.setEmptyView(emptyViewContainer);
+        } else {
+            View emptyViewContainer = view.findViewById(R.id.empty_view_container);
+            mEmptyView = emptyViewContainer.findViewById(R.id.empty_view);
+            mListView.setEmptyView(emptyViewContainer);
+        }
 
         //pull to refresh setup
         mRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -133,7 +190,7 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     }
 
     protected String getFeedName() {
-        return null;
+        return mTitle;
     }
 
     @Override
@@ -177,10 +234,17 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    protected abstract Listing<CaptureDetails, String> getCachedFeed();
+    protected Listing<CaptureDetails, String> getCachedFeed() {
+//        Log.d(TAG, "############### getCachedFeed.title: " + mCaptureListingModel.getCaptureList(mListKey).getFeedParams().getTitle());
+        return mCaptureListingModel.getCaptureList(mListKey);
+    }
 
-    protected abstract void fetchCaptures(Listing<CaptureDetails, String> listing,
-            boolean isPullToRefresh);
+    protected void fetchCaptures(Listing<CaptureDetails, String> listing,
+            boolean isPullToRefresh) {
+        mCaptureController
+                .fetchCaptureList(LIST_REQUEST, mListKey, listing,
+                        isPullToRefresh);
+    }
 
     private void refreshData() {
         Log.d(TAG, "refreshData");
@@ -198,6 +262,9 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
      * request the subclass.
      */
     public void onEventMainThread(UpdatedListingEvent<CaptureDetails, String> event) {
+        if (!LIST_REQUEST.equals(event.getRequestId())) {
+            return;
+        }
         Log.d(TAG, "UpdatedListingEvent:reqMatch:" + event.getRequestId());
         if (event.getListing() != null) {
             Log.d(TAG, "UpdatedListingEvent:etag:" + event.getListing().getETag());
@@ -225,6 +292,11 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
         //if cacheListing is null, means there are no updates
         //we don't let mFollowerListing get assigned null
 
+        boolean showEmptyView = mAdapter.isEmpty();
+        mEmptyView.setAlpha(showEmptyView ? 0 : 1);
+        mEmptyView.setVisibility(showEmptyView ? View.VISIBLE : View.GONE);
+        mEmptyView.animate().alpha(showEmptyView ? 1 : 0)
+                .setInterpolator(new DecelerateInterpolator()).setDuration(300).start();
     }
 
     @Override
@@ -244,7 +316,6 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
 
         if (mCapturesListing.getMore()) {
             mFetching = true;
-            //mNoFollowersText.setVisibility(View.GONE);
             fetchCaptures(mCapturesListing, false);
             Log.d(TAG, "shouldLoadNextPage:moreTrue");
         }
@@ -259,4 +330,13 @@ public abstract class BaseCaptureFeedFragment extends BaseCaptureDetailsFragment
     public void dataSetChanged() {
         mAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAnalytics.trackSwitchFeed(mTitle);
+        }
+    }
+
 }

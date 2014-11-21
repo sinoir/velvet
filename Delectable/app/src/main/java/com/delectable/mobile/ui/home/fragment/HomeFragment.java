@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.home.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
@@ -41,8 +42,6 @@ public class HomeFragment extends BaseFragment {
 
         setHasOptionsMenu(true);
 
-        String currentUserId = UserInfo.getUserId(getActivity());
-
         mView = inflater.inflate(R.layout.fragment_viewpager_with_sliding_tabs, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
@@ -50,20 +49,29 @@ public class HomeFragment extends BaseFragment {
         mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
         mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
 
+        populateFeedTabs();
+
+        return mView;
+    }
+
+    // TODO trigger this when feeds change, e.g. after initial fetch, maybe listen for UpdatedAccountEvent?
+    private void populateFeedTabs() {
+        String currentUserId = UserInfo.getUserId(getActivity());
         List<SlidingTabAdapter.SlidingTabItem> tabItems
                 = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
 
-        // "FOLLOWING" tab
-        tabItems.add(new SlidingTabAdapter.SlidingTabItem(
-                FollowerFeedTabFragment.newInstance(currentUserId),
-                getString(R.string.home_tab_following),
-                false));
-
-        // "TRENDING" tab
-        tabItems.add(new SlidingTabAdapter.SlidingTabItem(
-                TrendingTabFragment.newInstance(currentUserId),
-                getString(R.string.home_tab_trending),
-                true));
+        List<CaptureFeed> captureFeeds = UserInfo.getCaptureFeeds();
+        if (captureFeeds != null) {
+            for (CaptureFeed feed : captureFeeds) {
+                tabItems.add(new SlidingTabAdapter.SlidingTabItem(
+                        // TODO feed header
+                        CaptureListFragment
+                                .newInstance(currentUserId, feed.getKey(), feed.getTitle()),
+                        feed.getTitle().toLowerCase(),
+                        true // TODO update indicator
+                ));
+            }
+        }
 
         mTabsAdapter = new SlidingTabAdapter(getFragmentManager(), tabItems);
         mViewPager.setAdapter(mTabsAdapter);
@@ -73,7 +81,6 @@ public class HomeFragment extends BaseFragment {
         mViewPager.setPageTransformer(true, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
 
-        return mView;
     }
 
     @Override

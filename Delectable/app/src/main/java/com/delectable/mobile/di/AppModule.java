@@ -96,8 +96,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
-import com.delectable.mobile.ui.home.fragment.FollowerFeedTabFragment;
-import com.delectable.mobile.ui.home.fragment.TrendingTabFragment;
+import com.delectable.mobile.ui.home.fragment.CaptureListFragment;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
@@ -141,11 +140,10 @@ import de.greenrobot.event.EventBus;
                 NavigationDrawerFragment.class,
                 UserProfileFragment.class,
                 FollowersFragment.class,
+                CaptureListFragment.class,
                 FollowingFragment.class,
                 BaseCaptureDetailsFragment.class,
                 CaptureDetailsFragment.class,
-                FollowerFeedTabFragment.class,
-                TrendingTabFragment.class,
                 SettingsFragment.class,
                 NotificationsFragment.class,
                 FollowExpertsTabFragment.class,
