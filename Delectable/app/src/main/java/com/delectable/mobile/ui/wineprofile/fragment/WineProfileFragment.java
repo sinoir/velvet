@@ -5,10 +5,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.cache.WineSourceModel;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
+import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
@@ -26,8 +28,12 @@ import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.dialog.Over21Dialog;
+import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
+import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
+import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
@@ -46,6 +52,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +71,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 //TODO paginate capturenotes listview? go to another screen?
 
@@ -89,7 +95,9 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String VINTAGE_ID = "vintageId";
 
-    private static final int CHOOSE_VINTAGE_DIALOG = 1;
+    private static final int REQUEST_CHOOSE_VINTAGE_DIALOG = 1;
+
+    private static final int REQUEST_AGE_DIALOG = 2;
 
     private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
 
@@ -104,8 +112,14 @@ public class WineProfileFragment extends BaseFragment implements
     @Inject
     protected BaseWineModel mBaseWineModel;
 
+    @Inject
+    protected WineSourceModel mWineSourceModel;
+
     @InjectView(R.id.wine_banner_view)
     protected WineBannerView mBanner;
+
+    @InjectView(R.id.price_view)
+    protected WinePriceView mWinePriceView;
 
     @InjectView(R.id.varietal_container)
     protected View mVarietalContainer;
@@ -131,9 +145,6 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.pro_ratings_count)
     protected TextView mProRatingsCountTextView;
 
-    @InjectView(R.id.all_years_textview)
-    protected TextView mAllYearsTextView;
-
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
 
@@ -156,6 +167,8 @@ public class WineProfileFragment extends BaseFragment implements
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this, this);
 
     private WineProfileMinimal mWineProfile;
+
+    private WineProfileSubProfile mSelectedWineVintage;
 
     private PhotoHash mCapturePhotoHash;
 
@@ -365,11 +378,263 @@ public class WineProfileFragment extends BaseFragment implements
             }
         });
 
+        mWinePriceView.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
+            @Override
+            public void onPriceCheckClicked(VintageWineInfo wineInfo) {
+                fetchWineSource();
+                mWinePriceView.showLoading();
+            }
+
+            @Override
+            public void onPriceClicked(VintageWineInfo wineInfo) {
+                showVintageDialog();
+            }
+
+            @Override
+            public void onSoldOutClicked(VintageWineInfo wineInfo) {
+                showVintageDialog();
+            }
+        });
+
         return view;
     }
 
-    private void onScrollChanged() {
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        if (mBaseWine == null) {
+            loadLocalBaseWineData(); //load from model to show something first
+            mBaseWineController.fetchBaseWine(mBaseWineId);
+        }
+
+        if (mAdapter.getItems().isEmpty()) {
+            loadLocalData(Type.BASE_WINE, mBaseWineId);
+        }
+
+        mAnalytics.trackViewWineProfile();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CHOOSE_VINTAGE_DIALOG) {
+            String wineId = data.getStringExtra(ChooseVintageDialog.EXTRAS_RESULT_WINE_ID);
+            if (resultCode == ChooseVintageDialog.RESULT_SWITCH_VINTAGE) {
+                changeVintage(wineId);
+            } else if (resultCode == ChooseVintageDialog.RESULT_PURCHASE_WINE) {
+                startWinePurchaseFlow(wineId);
+            }
+        }
+
+        if (requestCode == REQUEST_AGE_DIALOG && resultCode == Over21Dialog.RESULT_OVER21) {
+            startWinePurchaseFlow(mSelectedWineVintage.getId());
+        }
+    }
+
+    private void startWinePurchaseFlow(String wineId) {
+        changeVintage(wineId);
+        if (!UserInfo.isOver21()) {
+            showOver21Dialog();
+        } else if (UserInfo.isOver21()) {
+            launchWineCheckout(wineId);
+        }
+    }
+
+    private void changeVintage(String wineId) {
+        String mOldFetchingId = mFetchingId;
+
+        mSelectedWineVintage = mBaseWine.getWineProfileByWineId(wineId);
+
+        mType = Type.WINE_PROFILE;
+        updateRatingsView(mSelectedWineVintage);
+        mFetchingId = mSelectedWineVintage.getId();
+        loadPricingData();
+
+        //only clear list if fetching id has changed
+        if (!mOldFetchingId.equals(mFetchingId)) {
+            mAdapter.getItems().clear();
+
+            //first query cache to see if we have something on hand already
+            loadLocalData(mType, mFetchingId);
+        }
+        // Update the BannerView with new vintage
+        updateBannerData();
+    }
+
+    //region Load Local Data
+
+    /**
+     * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
+     */
+    private void loadLocalData(final Type type, final String wineId) {
+        mFetching = true;
+        new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
+            @Override
+            protected Listing<CaptureNote, String> safeDoInBackground(Void[] params) {
+                Log.d(TAG, "loadLocalData:doInBg");
+                return CaptureNoteListingModel.getUserCaptures(wineId);
+            }
+
+            @Override
+            protected void safeOnPostExecute(Listing<CaptureNote, String> listing) {
+                Log.d(TAG, "loadLocalData:returnedFromCache");
+                if (listing != null) {
+                    Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
+                    mCaptureNoteListing = listing;
+                    //items were successfully retrieved from cache, set to view!
+                    mAdapter.setItems(listing.getUpdates());
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                if (mAdapter.getItems().isEmpty()) {
+                    //only if there were no cache items do we make the call to fetch entries
+                    fetchCaptureNotes(type, wineId, null, false);
+                } else {
+                    Log.d(TAG, "loadLocalData:success");
+                    //simulate a pull to refresh if there are items
+                    fetchCaptureNotes(type, wineId, mCaptureNoteListing, true);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void loadLocalBaseWineData() {
+        //retrieve full base wine information
+        mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
+        if (mBaseWine == null) {
+            return;
+        }
+
+        //if spawned from a Feed Fragment, mCapturePhotoHash won't be null, we don't want to replace that capture photo with the basewine's photo
+        if (mCapturePhotoHash == null) {
+            mCapturePhotoHash = mBaseWine.getPhoto();
+        }
+
+        if (mSelectedWineVintage == null) {
+            mSelectedWineVintage = mBaseWine.getDefaultWineProfile();
+        }
+        loadPricingData();
+        updateVarietyRegionRatingView(mBaseWine);
+    }
+
+    private void loadPricingData() {
+        if (mSelectedWineVintage == null) {
+            return;
+        }
+        WineProfileSubProfile wineWithPrice = mWineSourceModel
+                .getMinWineWithPrice(mSelectedWineVintage.getId());
+        if (wineWithPrice != null) {
+            mSelectedWineVintage = wineWithPrice;
+        }
+
+        updatePriceView();
+    }
+    //endregion
+
+    //region EventBus Events
+    public void onEventMainThread(UpdatedBaseWineEvent event) {
+        if (!mBaseWineId.equals(event.getBaseWineId())) {
+            return;
+        }
+
+        if (event.isSuccessful()) {
+            loadLocalBaseWineData();
+        } else {
+            showToastError(event.getErrorMessage());
+        }
+    }
+
+    public void onEventMainThread(FetchedWineSourceEvent event) {
+        if (mSelectedWineVintage == null || !mSelectedWineVintage.getId()
+                .equals(event.getWineId())) {
+            return;
+        }
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
+
+        loadPricingData();
+    }
+
+    public void onEventMainThread(UpdatedListingEvent<CaptureNote, String> event) {
+        if (!event.getRequestId().equals(WINE_PROFILE_NOTES_REQ)) {
+            if (!event.getRequestId().equals(BASE_WINE_NOTES_REQ)) {
+                return;
+            }
+        }
+
+        mFetching = false;
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+            return;
+        }
+
+        if (event.getListing() != null) {
+            mCaptureNoteListing = event.getListing();
+            mAdapter.setItems(mCaptureNoteListing.getUpdates());
+            mAdapter.notifyDataSetChanged();
+        }
+        //if listing is null, means there are no updates
+        //we don't let listing get assigned null
+
+        // empty state
+        mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
+    }
+
+    public void onEventMainThread(MarkedCaptureHelpfulEvent event) {
+        String captureId = event.getCaptureId();
+        CaptureNote captureNote = mCaptureNotesExpectingUpdate.remove(captureId);
+        Boolean expectedHelpful = mCaptureNoteExpectedHelpfulStatus.remove(captureId);
+        if (captureNote == null) {
+            return; //capturenote didn't exist in the hashmap, means this event wasn't called from this fragment
+        }
+
+        //the captureNote object's helpfuling account ids list was modified when the user pressed helpful,
+        // if the event errored we need to revert the list back to it's original form
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+
+            //revert helpfulness, bc event failed
+            String userId = UserInfo.getUserId(getActivity());
+            if (expectedHelpful) {
+                captureNote.unmarkHelpful(userId);
+            } else {
+                captureNote.markHelpful(userId);
+            }
+        }
+        //will reset following toggle button back to original setting if error
+        mAdapter.notifyDataSetChanged();
+    }
+    //endregion
+
+    //region Fetch Remote Data
+
+    private void fetchWineSource() {
+        mBaseWineController.fetchWineSource(mSelectedWineVintage.getId(), null);
+    }
+
+    /**
+     * @param idType Whether to load captures notes for a base wine or a wine profile.
+     */
+    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote, String> listing,
+            Boolean isPullToRefresh) {
+        mFetching = true;
+        if (idType == Type.BASE_WINE) {
+            mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, listing, null,
+                    isPullToRefresh);
+        }
+        if (idType == Type.WINE_PROFILE) {
+            mCaptureController
+                    .fetchCaptureNotes(WINE_PROFILE_NOTES_REQ, null, id, listing, null,
+                            isPullToRefresh);
+        }
+    }
+    //endregion
+
+    private void onScrollChanged() {
         View v = mListView.getChildAt(0);
         int top = (v == null ? 0 : v.getTop());
         int bannerHeight = mWineBanner.getHeight();
@@ -425,230 +690,6 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    /**
-     * The WineBannerView can be set with different types of data depending from where this fragment
-     * was spawned.
-     */
-    private void updateBannerData() {
-        String wineTitle = null;
-        if (mWineProfile != null) {
-            //spawned from Feed Fragment
-            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
-            wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
-        } else if (mBaseWineMinimal != null) {
-            //spawned from Search Wines or User Captures
-            mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
-            wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
-        } else if (mBaseWine != null) {
-            //called after BaseWine is successfully fetched
-            mBanner.updateData(mBaseWine, mCapturePhotoHash);
-            wineTitle = mBaseWine.getProducerName() + " " + mBaseWine.getName();
-        }
-
-//        // update actionbar title
-//        if (wineTitle != null) {
-//            mTitle = new SpannableString(wineTitle);
-//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
-//        }
-    }
-
-    @OnClick(R.id.all_years_textview)
-    protected void onAllYearsTextClick() {
-        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
-        dialog.setTargetFragment(WineProfileFragment.this,
-                CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
-        dialog.show(getFragmentManager(), "dialog");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mBaseWine == null) {
-            loadLocalBaseWineData(); //load from model to show something first
-            mBaseWineController.fetchBaseWine(mBaseWineId);
-        }
-
-        if (mAdapter.getItems().isEmpty()) {
-            loadLocalData(Type.BASE_WINE, mBaseWineId);
-        }
-
-        mAnalytics.trackViewWineProfile();
-    }
-
-    /**
-     * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
-     */
-    private void loadLocalData(final Type type, final String wineId) {
-        mFetching = true;
-        new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
-            @Override
-            protected Listing<CaptureNote, String> safeDoInBackground(Void[] params) {
-                Log.d(TAG, "loadLocalData:doInBg");
-                return CaptureNoteListingModel.getUserCaptures(wineId);
-            }
-
-            @Override
-            protected void safeOnPostExecute(Listing<CaptureNote, String> listing) {
-                Log.d(TAG, "loadLocalData:returnedFromCache");
-                if (listing != null) {
-                    Log.d(TAG, "loadLocalData:listingExists size: " + listing.getUpdates().size());
-                    mCaptureNoteListing = listing;
-                    //items were successfully retrieved from cache, set to view!
-                    mAdapter.setItems(listing.getUpdates());
-                    mAdapter.notifyDataSetChanged();
-                }
-
-                if (mAdapter.getItems().isEmpty()) {
-                    //only if there were no cache items do we make the call to fetch entries
-                    fetchCaptureNotes(type, wineId, null, false);
-                } else {
-                    Log.d(TAG, "loadLocalData:success");
-                    //simulate a pull to refresh if there are items
-                    fetchCaptureNotes(type, wineId, mCaptureNoteListing, true);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        switch (requestCode) {
-            case CHOOSE_VINTAGE_DIALOG:
-                Object wine = data.getParcelableExtra(ChooseVintageDialog.WINE);
-                String mOldFetchingId = mFetchingId;
-                //when All Years is selected from dialog
-                if (wine instanceof BaseWine) {
-                    mType = Type.BASE_WINE;
-                    BaseWine baseWine = (BaseWine) wine;
-                    updateRatingsView(baseWine);
-                    mFetchingId = baseWine.getId();
-                }
-                //when a vintage year is selected from the dialog
-                if (wine instanceof WineProfileSubProfile) {
-                    mType = Type.WINE_PROFILE;
-                    WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
-                    updateRatingsView(wineProfile);
-                    mFetchingId = wineProfile.getId();
-                }
-
-                //only clear list if fetching id has changed
-                if (!mOldFetchingId.equals(mFetchingId)) {
-                    mAdapter.getItems().clear();
-
-                    //first query cache to see if we have something on hand already
-                    loadLocalData(mType, mFetchingId);
-                }
-
-        }
-    }
-
-    private void loadLocalBaseWineData() {
-        //retrieve full base wine information
-        mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
-        if (mBaseWine == null) {
-            return;
-        }
-
-        //if spawned from a Feed Fragment, mCapturePhotoHash won't be null, we don't want to replace that capture photo with the basewine's photo
-        if (mCapturePhotoHash == null) {
-            mCapturePhotoHash = mBaseWine.getPhoto();
-        }
-        updateBannerData();
-        updateVarietyRegionRatingView(mBaseWine);
-    }
-
-    public void onEventMainThread(UpdatedBaseWineEvent event) {
-        if (!mBaseWineId.equals(event.getBaseWineId())) {
-            return;
-        }
-
-        if (event.isSuccessful()) {
-            loadLocalBaseWineData();
-        } else {
-            showToastError(event.getErrorMessage());
-        }
-    }
-
-    /**
-     * @param idType Whether to load captures notes for a base wine or a wine profile.
-     */
-    private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote, String> listing,
-            Boolean isPullToRefresh) {
-        mFetching = true;
-        if (idType == Type.BASE_WINE) {
-            mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, listing, null,
-                    isPullToRefresh);
-        }
-        if (idType == Type.WINE_PROFILE) {
-            mCaptureController
-                    .fetchCaptureNotes(WINE_PROFILE_NOTES_REQ, null, id, listing, null,
-                            isPullToRefresh);
-        }
-    }
-
-    public void onEventMainThread(UpdatedListingEvent<CaptureNote, String> event) {
-        if (!event.getRequestId().equals(WINE_PROFILE_NOTES_REQ)) {
-            if (!event.getRequestId().equals(BASE_WINE_NOTES_REQ)) {
-                return;
-            }
-        }
-
-        mFetching = false;
-
-        if (!event.isSuccessful()) {
-            showToastError(event.getErrorMessage());
-            return;
-        }
-
-        if (event.getListing() != null) {
-            mCaptureNoteListing = event.getListing();
-            mAdapter.setItems(mCaptureNoteListing.getUpdates());
-            mAdapter.notifyDataSetChanged();
-        }
-        //if listing is null, means there are no updates
-        //we don't let listing get assigned null
-
-        // empty state
-        mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
-
-    }
-
-    private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
-        mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
-        mCaptureNoteExpectedHelpfulStatus.put(captureNote.getId(), markHelpful);
-
-        mCaptureController.markCaptureHelpful(captureNote, markHelpful);
-    }
-
-    public void onEventMainThread(MarkedCaptureHelpfulEvent event) {
-        String captureId = event.getCaptureId();
-        CaptureNote captureNote = mCaptureNotesExpectingUpdate.remove(captureId);
-        Boolean expectedHelpful = mCaptureNoteExpectedHelpfulStatus.remove(captureId);
-        if (captureNote == null) {
-            return; //capturenote didn't exist in the hashmap, means this event wasn't called from this fragment
-        }
-
-        //the captureNote object's helpfuling account ids list was modified when the user pressed helpful,
-        // if the event errored we need to revert the list back to it's original form
-        if (!event.isSuccessful()) {
-            showToastError(event.getErrorMessage());
-
-            //revert helpfulness, bc event failed
-            String userId = UserInfo.getUserId(getActivity());
-            if (expectedHelpful) {
-                captureNote.unmarkHelpful(userId);
-            } else {
-                captureNote.markHelpful(userId);
-            }
-        }
-        //will reset following toggle button back to original setting if error
-        mAdapter.notifyDataSetChanged();
-    }
-
-
     private void updateVarietyRegionRatingView(BaseWine baseWine) {
         if (baseWine == null) {
             return;
@@ -684,6 +725,13 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
+    private void updatePriceView() {
+        if (mSelectedWineVintage == null) {
+            return;
+        }
+        mWinePriceView.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
+    }
+
     private void updateRatingsView(Ratingsable ratingsable) {
         //rating avg
         double allAvg = ratingsable.getRatingsSummary().getAllAvg();
@@ -702,9 +750,78 @@ public class WineProfileFragment extends BaseFragment implements
         mProRatingsCountTextView.setText(proRatingsCount);
     }
 
+    /**
+     * The WineBannerView can be set with different types of data depending from where this fragment
+     * was spawned.
+     */
+    private void updateBannerData() {
+        String wineTitle = null;
+        if (mWineProfile != null) {
+            //spawned from Feed Fragment
+            mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
+            wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
+        } else if (mBaseWineMinimal != null) {
+            //spawned from Search Wines or User Captures
+            mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
+            wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
+        } else if (mBaseWine != null) {
+            //called after BaseWine is successfully fetched
+            mBanner.updateData(mBaseWine, mCapturePhotoHash);
+            wineTitle = mBaseWine.getProducerName() + " " + mBaseWine.getName();
+        }
+
+        if (mSelectedWineVintage != null) {
+            // When we select a new Vintage
+            mBanner.updateVintage(mSelectedWineVintage.getVintage());
+        }
+
+        // TODO sticky toolbar ?
+        // update actionbar title
+//        if (wineTitle != null) {
+//            mTitle = new SpannableString(wineTitle);
+//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            setActionBarSubtitle(mTitle);
+//        }
+    }
+
+    private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
+        mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
+        mCaptureNoteExpectedHelpfulStatus.put(captureNote.getId(), markHelpful);
+
+        mCaptureController.markCaptureHelpful(captureNote, markHelpful);
+    }
+
+    /**
+     * Makes the rating display text where the rating is a bit bigger than the 10.
+     */
+    private CharSequence makeRatingDisplayText(String rating) {
+        SpannableString ss = new SpannableString(rating);
+        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
+        CharSequence displayText = TextUtils.concat(ss, "/10");
+        return displayText;
+    }
+
     @Override
     public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {
         markCaptureAsHelpful(captureNote, markHelpful);
+    }
+
+    private void showVintageDialog() {
+        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
+        dialog.setTargetFragment(WineProfileFragment.this,
+                REQUEST_CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
+    private void launchWineCheckout(String wineId) {
+        Intent intent = WineCheckoutActivity.newIntent(getActivity(), wineId);
+        startActivity(intent);
+    }
+
+    private void showOver21Dialog() {
+        Over21Dialog dialog = Over21Dialog.newInstance();
+        dialog.setTargetFragment(WineProfileFragment.this, REQUEST_AGE_DIALOG);
+        dialog.show(getFragmentManager(), "dialog");
     }
 
     public void launchCaptureDetails(CaptureNote captureNote) {

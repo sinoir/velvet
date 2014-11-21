@@ -3,7 +3,7 @@ package com.delectable.mobile.ui.registration.dialog;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.RegistrationController;
-import com.delectable.mobile.ui.common.widget.FontEditText;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 import com.delectable.mobile.util.FontEnum;
 import com.delectable.mobile.util.HelperUtil;
 
@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +28,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class ResetPasswordDialog extends DialogFragment {
-
-    private static final String TAG = ResetPasswordDialog.class.getSimpleName();
+public class ResetPasswordDialog extends BaseDialogFragment {
 
     public static final String EMAIL = "EMAIL";
+
+    private static final String TAG = ResetPasswordDialog.class.getSimpleName();
 
     @Inject
     RegistrationController mRegistrationController;
@@ -44,44 +43,6 @@ public class ResetPasswordDialog extends DialogFragment {
     private String mPhoneEmail;
 
     private Typeface mWhitneyBookFont;
-
-    /**
-     * @param email The email that you want to prepopulate the email field with. Typically the
-     *              phone's account email.
-     */
-    public static ResetPasswordDialog newInstance(String email) {
-        ResetPasswordDialog f = new ResetPasswordDialog();
-        Bundle args = new Bundle();
-        args.putString(EMAIL, email);
-        f.setArguments(args);
-        return f;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        App.injectMembers(this);
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.DelectableTheme_Dialog);
-        if (getArguments() != null) {
-            mPhoneEmail = getArguments().getString(EMAIL);
-        }
-        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_reset_password, container, false);
-        ButterKnife.inject(this, view);
-
-        mEmailField.setText(mPhoneEmail);
-        mEmailField.setTypeface(mWhitneyBookFont);
-        mEmailField.setOnEditorActionListener(DoneActionListener);
-        mEmailField.setOnFocusChangeListener(ShowKeyboardOnFocusListener);
-
-        return view;
-    }
 
     /**
      * Brings up the soft keyboard right when the dialog shows up.
@@ -116,6 +77,43 @@ public class ResetPasswordDialog extends DialogFragment {
             return false;
         }
     };
+
+    /**
+     * @param email The email that you want to prepopulate the email field with. Typically the
+     *              phone's account email.
+     */
+    public static ResetPasswordDialog newInstance(String email) {
+        ResetPasswordDialog f = new ResetPasswordDialog();
+        Bundle args = new Bundle();
+        args.putString(EMAIL, email);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.injectMembers(this);
+        if (getArguments() != null) {
+            mPhoneEmail = getArguments().getString(EMAIL);
+        }
+        mWhitneyBookFont = FontEnum.WHITNEY_BOOK.getTypeface(getActivity());
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.dialog_reset_password, container, false);
+        ButterKnife.inject(this, view);
+
+        mEmailField.setText(mPhoneEmail);
+        mEmailField.setTypeface(mWhitneyBookFont);
+        mEmailField.setOnEditorActionListener(DoneActionListener);
+        mEmailField.setOnFocusChangeListener(ShowKeyboardOnFocusListener);
+
+        return view;
+    }
 
     @OnClick(R.id.cancel_textview)
     protected void onCancelClick() {

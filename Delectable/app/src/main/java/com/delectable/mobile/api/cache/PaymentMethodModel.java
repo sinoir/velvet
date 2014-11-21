@@ -2,6 +2,7 @@ package com.delectable.mobile.api.cache;
 
 import com.delectable.mobile.api.models.PaymentMethod;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,6 +57,14 @@ public class PaymentMethodModel {
             }
         }
         return null;
+    }
+
+    public List<PaymentMethod> getAllPaymentMethods() {
+        ArrayList<PaymentMethod> paymentMethods = new ArrayList<PaymentMethod>();
+        for (PaymentMethod paymentMethod : mData.values()) {
+            paymentMethods.add(paymentMethod);
+        }
+        return paymentMethods;
     }
 
     public void removePaymentMethod(String id) {

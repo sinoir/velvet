@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/sold_out"
+        style="@style/PurchaseWineSoldOut"
+        android:text="@string/wine_profile_sold_out"
+        android:visibility="gone" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/check_price_button"
+        style="@style/PurchaseWineCheckPrice"
+        android:text="@string/wine_profile_check_price"
+        android:visibility="gone" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/price_button"
+        style="@style/ButtonDChestNutBG"
+        android:text="$10"
+        android:textAllCaps="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

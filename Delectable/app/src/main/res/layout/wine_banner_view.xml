@@ -31,22 +31,35 @@
         android:paddingRight="@dimen/general_row_horizontal_spacing"
         android:textColor="@android:color/white"
         android:textSize="19sp"
-        app:fontName="whitney_medium_sc"
-        android:visibility="visible" />
+        android:visibility="visible"
+        app:fontName="whitney_medium_sc" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/wine_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/wine_vintage"
         android:layout_alignParentLeft="true"
-        android:paddingBottom="24dp"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
         android:paddingRight="@dimen/general_row_horizontal_spacing"
         android:textColor="@android:color/white"
         android:textSize="19sp"
-        app:fontName="whitney_book"
-        android:visibility="visible" />
+        android:visibility="visible"
+        app:fontName="whitney_book" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/wine_vintage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="6dp"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:paddingRight="@dimen/general_row_horizontal_spacing"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:fontName="whitney_book" />
 </merge>
 
 

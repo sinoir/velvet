@@ -42,7 +42,9 @@ public class SearchWineRow extends RelativeLayout {
 
     private void updateData(String profileImageUrl, String producerName, String wineName) {
         ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mWineImage);
-        mProducerName.setText(producerName);
+        if (producerName != null) {
+            mProducerName.setText(producerName.toLowerCase());
+        }
         mWineName.setText(wineName);
     }
 
