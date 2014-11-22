@@ -12,7 +12,7 @@ public class CaptureFeed {
 
     private String banner;
 
-    private List<BannerAttributes> banner_attributes;
+    private List<BannerAttribute> banner_attributes;
 
     public String getKey() {
         return key;
@@ -46,11 +46,11 @@ public class CaptureFeed {
         this.banner = banner;
     }
 
-    public List<BannerAttributes> getBannerAttributes() {
+    public List<BannerAttribute> getBannerAttributes() {
         return banner_attributes;
     }
 
-    public void setBannerAttributes(List<BannerAttributes> banner_attributes) {
+    public void setBannerAttributes(List<BannerAttribute> banner_attributes) {
         this.banner_attributes = banner_attributes;
     }
 
@@ -65,7 +65,11 @@ public class CaptureFeed {
                 '}';
     }
 
-    public static class BannerAttributes {
+    public static class BannerAttribute {
+
+        public static final String BG_COLOR = "background_color";
+
+        public static final String TEXT_COLOR = "text_color";
 
         private String type;
 
@@ -104,7 +108,7 @@ public class CaptureFeed {
                 return false;
             }
 
-            BannerAttributes that = (BannerAttributes) o;
+            BannerAttribute that = (BannerAttribute) o;
 
             if (!type.equals(that.type)) {
                 return false;

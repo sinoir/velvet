@@ -14,7 +14,7 @@ public class FeedParams {
 
     private String banner;
 
-    private List<CaptureFeed.BannerAttributes> banner_attributes;
+    private List<CaptureFeed.BannerAttribute> banner_attributes;
 
     public String getKey() {
         return key;
@@ -56,11 +56,11 @@ public class FeedParams {
         this.banner = banner;
     }
 
-    public List<CaptureFeed.BannerAttributes> getBannerAttributes() {
+    public List<CaptureFeed.BannerAttribute> getBannerAttributes() {
         return banner_attributes;
     }
 
-    public void setBannerAttributes(List<CaptureFeed.BannerAttributes> banner_attributes) {
+    public void setBannerAttributes(List<CaptureFeed.BannerAttribute> banner_attributes) {
         this.banner_attributes = banner_attributes;
     }
 

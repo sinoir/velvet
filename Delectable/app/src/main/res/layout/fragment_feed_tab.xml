@@ -20,6 +20,9 @@
             android:paddingTop="?attr/actionBarSize"
             android:clipToPadding="false"
             android:background="@android:color/white"
+            android:divider="@null"
+            android:headerDividersEnabled="false"
+            android:footerDividersEnabled="false"
             android:listSelector="@android:color/white" />
 
         <FrameLayout

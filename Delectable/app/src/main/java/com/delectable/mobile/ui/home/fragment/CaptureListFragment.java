@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -41,6 +42,12 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     private static final String LIST_KEY = "LIST_KEY";
 
     private static final String LIST_TITLE = "LIST_TITLE";
+
+    private static final String LIST_BANNER = "LIST_BANNER";
+
+    private static final String LIST_BANNER_BACKGROUND_COLOR = "LIST_BG_COLOR";
+
+    private static final String LIST_BANNER_TEXT_COLOR = "LIST_TEXT_COLOR";
 
     private static final String TAG = CaptureListFragment.class.getSimpleName();
 
@@ -70,23 +77,34 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
     protected String mTitle;
 
+    protected String mBanner;
+
+    protected int mBannerBackgroundColor;
+
+    protected int mBannerTextColor;
+
     public CaptureListFragment() {
         // Required empty public constructor
     }
 
     public static CaptureListFragment newInstance(String accountId, String listKey,
-            String listTitle) {
+            String listTitle, String banner, int bannerBackgroundColor, int bannerTextColor) {
         CaptureListFragment fragment = new CaptureListFragment();
-        Bundle args = bundleArgs(accountId, listKey, listTitle);
+        Bundle args = bundleArgs(accountId, listKey, listTitle, banner, bannerBackgroundColor,
+                bannerTextColor);
         fragment.setArguments(args);
         return fragment;
     }
 
-    protected static Bundle bundleArgs(String accountId, String listKey, String listTitle) {
+    protected static Bundle bundleArgs(String accountId, String listKey, String listTitle,
+            String banner, int bannerBackgroundColor, int bannerTextColor) {
         Bundle args = new Bundle();
         args.putString(ACCOUNT_ID, accountId);
         args.putString(LIST_KEY, listKey);
         args.putString(LIST_TITLE, listTitle);
+        args.putString(LIST_BANNER, banner);
+        args.putInt(LIST_BANNER_BACKGROUND_COLOR, bannerBackgroundColor);
+        args.putInt(LIST_BANNER_TEXT_COLOR, bannerTextColor);
         return args;
     }
 
@@ -103,6 +121,9 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mListKey = getArguments().getString(LIST_KEY);
         LIST_REQUEST += mListKey;
         mTitle = getArguments().getString(LIST_TITLE);
+        mBanner = getArguments().getString(LIST_BANNER);
+        mBannerBackgroundColor = getArguments().getInt(LIST_BANNER_BACKGROUND_COLOR);
+        mBannerTextColor = getArguments().getInt(LIST_BANNER_TEXT_COLOR);
         mAdapter = new CaptureDetailsAdapter(this, this, accountId);
         mAdapter.setRowType(CaptureDetailsAdapter.RowType.DETAIL);
     }
@@ -120,10 +141,20 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         // consider ActionBar and TabStrip height for top padding
         mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
                 mListView.getPaddingTop() * 3);
-        // First capture photo will be under tab bar, but at least there is no whitespace on top
-//        int topPadding = mListView.getPaddingTop() + getResources()
-//                .getDimensionPixelSize(R.dimen.tab_height);
-//        mListView.setPadding(0, topPadding, 0, 0);
+
+        // list banner
+        if (mBanner != null && !mBanner.isEmpty()) {
+            TextView bannerView = (TextView) inflater
+                    .inflate(R.layout.list_banner, mListView, false);
+            bannerView.setText(mBanner);
+            bannerView.setTextColor(mBannerTextColor);
+            bannerView.setBackgroundColor(mBannerBackgroundColor);
+            mListView.addHeaderView(bannerView);
+            // adjust list padding on top, so list banner is not under tab bar
+            int topPadding = mListView.getPaddingTop() + getResources()
+                    .getDimensionPixelSize(R.dimen.tab_height);
+            mListView.setPadding(0, topPadding, 0, 0);
+        }
 
         mListView.setAdapter(mAdapter);
 

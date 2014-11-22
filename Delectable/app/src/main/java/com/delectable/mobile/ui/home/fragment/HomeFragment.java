@@ -10,10 +10,10 @@ import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,7 +65,6 @@ public class HomeFragment extends BaseFragment {
         return mView;
     }
 
-    // TODO trigger this when feeds change, e.g. after initial fetch, maybe listen for UpdatedAccountEvent?
     private void populateFeedTabs(List<CaptureFeed> captureFeeds) {
         String currentUserId = UserInfo.getUserId(getActivity());
         List<CaptureFeed> storedCaptureFeeds = UserInfo.getCaptureFeeds();
@@ -74,10 +73,31 @@ public class HomeFragment extends BaseFragment {
 
         if (captureFeeds != null) {
             for (CaptureFeed feed : captureFeeds) {
+                // list banner
+                int backgroundColor = getResources().getColor(R.color.d_suva_gray);
+                int textColor = getResources().getColor(R.color.d_white);
+                List<CaptureFeed.BannerAttribute> attr = feed.getBannerAttributes();
+                if (attr != null) {
+                    for (CaptureFeed.BannerAttribute a : attr) {
+                        if (a.getType().equals(CaptureFeed.BannerAttribute.BG_COLOR)) {
+                            try {
+                                backgroundColor = Color.parseColor(a.getValue());
+                            } catch (IllegalArgumentException e) {
+                            }
+                        } else if (a.getType().equals(CaptureFeed.BannerAttribute.TEXT_COLOR)) {
+                            try {
+                                textColor = Color.parseColor(a.getValue());
+                            } catch (IllegalArgumentException e) {
+                            }
+                        }
+                    }
+                }
+
+                // add feed to tabs
                 tabItems.add(new SlidingTabAdapter.SlidingTabItem(
-                        // TODO feed header
                         CaptureListFragment
-                                .newInstance(currentUserId, feed.getKey(), feed.getTitle()),
+                                .newInstance(currentUserId, feed.getKey(), feed.getTitle(),
+                                        feed.getBanner(), backgroundColor, textColor),
                         feed.getTitle().toLowerCase(),
                         (storedCaptureFeeds != null && storedCaptureFeeds.contains(feed)) ? false
                                 : true // TODO update indicator
@@ -99,13 +119,11 @@ public class HomeFragment extends BaseFragment {
     public void onEventMainThread(UpdatedCaptureFeedsEvent event) {
         if (event.isSuccessful()) {
             if (event.getCaptureFeeds() != null && !event.getCaptureFeeds().equals(mCaptureFeeds)) {
-                Log.d("HomeFragment",
-                        "############## populating feed tabs after feeds have changed");
-                Log.d("HomeFragment", "############## old list: " + mCaptureFeeds);
-                Log.d("HomeFragment", "############## new list: " + event.getCaptureFeeds());
+//                Log.d("HomeFragment",
+//                        "############## populating feed tabs after feeds have changed");
+//                Log.d("HomeFragment", "############## old list: " + mCaptureFeeds);
+//                Log.d("HomeFragment", "############## new list: " + event.getCaptureFeeds());
                 populateFeedTabs(event.getCaptureFeeds());
-            } else {
-                Log.d("HomeFragment", "############## feeds did not change");
             }
         }
     }
