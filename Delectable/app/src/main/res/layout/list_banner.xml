@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.delectable.mobile.ui.common.widget.FontTextView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_banner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/spacing_32"
+    android:paddingRight="@dimen/spacing_32"
+    android:paddingTop="@dimen/spacing_24"
+    android:paddingBottom="@dimen/spacing_24"
+    android:background="@color/d_suva_gray"
+    android:textColor="@color/d_white"
+    android:textSize="16sp"
+    android:lineSpacingMultiplier="1.2"
+    android:textAlignment="center"
+    app:fontName="whitney_book" />

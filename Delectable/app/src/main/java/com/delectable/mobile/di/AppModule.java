@@ -1,6 +1,7 @@
 package com.delectable.mobile.di;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.MainActivity;
 import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.BaseWineModel;
@@ -62,6 +63,7 @@ import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.api.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
+import com.delectable.mobile.api.jobs.captures.FetchCaptureListJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
 import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
@@ -95,8 +97,8 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowTwitterFriendsTabFragment;
-import com.delectable.mobile.ui.home.fragment.FollowerFeedTabFragment;
-import com.delectable.mobile.ui.home.fragment.TrendingTabFragment;
+import com.delectable.mobile.ui.home.fragment.CaptureListFragment;
+import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
@@ -138,13 +140,13 @@ import de.greenrobot.event.EventBus;
                 SignUpFragment.class,
                 SignInFragment.class,
                 NavigationDrawerFragment.class,
+                HomeFragment.class,
                 UserProfileFragment.class,
                 FollowersFragment.class,
+                CaptureListFragment.class,
                 FollowingFragment.class,
                 BaseCaptureDetailsFragment.class,
                 CaptureDetailsFragment.class,
-                FollowerFeedTabFragment.class,
-                TrendingTabFragment.class,
                 SettingsFragment.class,
                 NotificationsFragment.class,
                 FollowExpertsTabFragment.class,
@@ -190,6 +192,7 @@ import de.greenrobot.event.EventBus;
                 ResetPasswordJob.class,
                 LoginFacebookJob.class,
                 FetchCaptureDetailsJob.class,
+                FetchCaptureListJob.class,
                 FetchAccountProfileJob.class,
                 FetchAccountPrivateJob.class,
                 FetchFollowersJob.class,
@@ -286,6 +289,11 @@ public class AppModule {
     @Provides
     @Singleton
     EventBus provideEventBus() {
+        EventBus.builder()
+                .sendNoSubscriberEvent(false)
+                .logNoSubscriberMessages(true)
+                .throwSubscriberException(BuildConfig.DEBUG)
+                .installDefaultEventBus();
         return EventBus.getDefault();
     }
 

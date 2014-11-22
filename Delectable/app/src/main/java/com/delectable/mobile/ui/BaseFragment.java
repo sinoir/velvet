@@ -113,6 +113,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
         }
         try {
             mEventBus.register(this);
+        } catch (NullPointerException e) {
+            Log.e(TAG, "EventBus is null. Missing injection?");
         } catch (Throwable t) {
         }
     }

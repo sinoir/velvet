@@ -1,11 +1,16 @@
 package com.delectable.mobile.ui.home.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.events.accounts.UpdatedCaptureFeedsEvent;
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
+import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
+import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -17,16 +22,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends BaseFragment {
+
+    /**
+     * Used with the ViewPager in order to cache a certain amount of pages
+     */
+    public static final int PREFETCH_FEED_COUNT = 5;
 
     private View mView;
 
     private ViewPager mViewPager;
 
-    private SlidingPagerTabStrip mTabStrip;
+    private SlidingTabLayout mTabLayout;
 
-    private SlidingPagerAdapter mTabsAdapter;
+    private SlidingTabAdapter mTabsAdapter;
+
+    private List<CaptureFeed> mCaptureFeeds;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.injectMembers(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,50 +53,91 @@ public class HomeFragment extends BaseFragment {
 
         setHasOptionsMenu(true);
 
-        String currentUserId = UserInfo.getUserId(getActivity());
-
-        mView = inflater.inflate(R.layout.fragment_viewpager_with_tabstrip, container, false);
+        mView = inflater.inflate(R.layout.fragment_viewpager_with_sliding_tabs, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
-        mTabStrip = (SlidingPagerTabStrip) mView.findViewById(R.id.tabstrip);
+        mTabLayout = (SlidingTabLayout) mView.findViewById(R.id.tab_layout);
+        mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
 
-        ArrayList<SlidingPagerAdapter.SlidingPagerItem> tabItems
-                = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
-
-        // "FOLLOWING" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                FollowerFeedTabFragment.newInstance(currentUserId),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
-                getString(R.string.home_tab_following)));
-
-        // "YOU" tab
-        tabItems.add(new SlidingPagerAdapter.SlidingPagerItem(
-                TrendingTabFragment.newInstance(currentUserId),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
-                getString(R.string.home_tab_trending)));
-
-        mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
-
-        mViewPager.setAdapter(mTabsAdapter);
-        mTabStrip.setViewPager(mViewPager);
+        populateFeedTabs(UserInfo.getCaptureFeeds());
 
         return mView;
+    }
+
+    private void populateFeedTabs(List<CaptureFeed> captureFeeds) {
+        String currentUserId = UserInfo.getUserId(getActivity());
+        List<CaptureFeed> storedCaptureFeeds = UserInfo.getCaptureFeeds();
+        List<SlidingTabAdapter.SlidingTabItem> tabItems
+                = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
+
+        if (captureFeeds != null) {
+            for (CaptureFeed feed : captureFeeds) {
+                // list banner
+                int backgroundColor = getResources().getColor(R.color.d_suva_gray);
+                int textColor = getResources().getColor(R.color.d_white);
+                List<CaptureFeed.BannerAttribute> attr = feed.getBannerAttributes();
+                if (attr != null) {
+                    for (CaptureFeed.BannerAttribute a : attr) {
+                        if (a.getType().equals(CaptureFeed.BannerAttribute.BG_COLOR)) {
+                            try {
+                                backgroundColor = Color.parseColor(a.getValue());
+                            } catch (IllegalArgumentException e) {
+                            }
+                        } else if (a.getType().equals(CaptureFeed.BannerAttribute.TEXT_COLOR)) {
+                            try {
+                                textColor = Color.parseColor(a.getValue());
+                            } catch (IllegalArgumentException e) {
+                            }
+                        }
+                    }
+                }
+
+                // add feed to tabs
+                tabItems.add(new SlidingTabAdapter.SlidingTabItem(
+                        CaptureListFragment
+                                .newInstance(currentUserId, feed.getKey(), feed.getTitle(),
+                                        feed.getBanner(), backgroundColor, textColor),
+                        feed.getTitle().toLowerCase(),
+                        (storedCaptureFeeds != null && storedCaptureFeeds.contains(feed)) ? false
+                                : true // TODO update indicator
+                ));
+            }
+        }
+        mCaptureFeeds = captureFeeds;
+
+        mTabsAdapter = new SlidingTabAdapter(getFragmentManager(), tabItems);
+        mViewPager.setAdapter(mTabsAdapter);
+        mViewPager.setOffscreenPageLimit(PREFETCH_FEED_COUNT);
+        // TODO page margin does not work with the tab indicator
+//        mViewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.spacing_16));
+        mViewPager.setPageTransformer(false, new FeedPageTransformer());
+        mTabLayout.setViewPager(mViewPager);
+
+    }
+
+    public void onEventMainThread(UpdatedCaptureFeedsEvent event) {
+        if (event.isSuccessful()) {
+            if (event.getCaptureFeeds() != null && !event.getCaptureFeeds().equals(mCaptureFeeds)) {
+//                Log.d("HomeFragment",
+//                        "############## populating feed tabs after feeds have changed");
+//                Log.d("HomeFragment", "############## old list: " + mCaptureFeeds);
+//                Log.d("HomeFragment", "############## new list: " + event.getCaptureFeeds());
+                populateFeedTabs(event.getCaptureFeeds());
+            }
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        getBaseActivity().deregisterHeaderView(mTabStrip);
+        getBaseActivity().deregisterHeaderView(mTabLayout);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getBaseActivity().registerHeaderView(mTabStrip);
+        getBaseActivity().registerHeaderView(mTabLayout);
     }
 
     @Override

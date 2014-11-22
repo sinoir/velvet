@@ -1,13 +1,17 @@
 package com.delectable.mobile.api.cache;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.api.models.Motd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import java.util.List;
 
 public class UserInfo {
 
@@ -28,6 +32,8 @@ public class UserInfo {
     private static final String PROPERTY_ACCOUNT_PRIVATE = "accountPrivate";
 
     private static final String PROPERTY_ACCOUNT_PRIVATE_TEMP = "accountPrivateTemp";
+
+    private static final String PROPERTY_CAPTURE_FEEDS = "captureFeeds";
 
     private static final String PROPERTY_USER_OVER_21 = "propertyUserOver21";
 
@@ -80,6 +86,16 @@ public class UserInfo {
         String jsonString = gson.toJson(account);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_ACCOUNT_PRIVATE, jsonString);
+        editor.commit();
+    }
+
+    public static void setCaptureFeeds(List<CaptureFeed> captureFeeds) {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(captureFeeds);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_CAPTURE_FEEDS, jsonString);
         editor.commit();
     }
 
@@ -153,6 +169,19 @@ public class UserInfo {
         return null;
     }
 
+    public static List<CaptureFeed> getCaptureFeeds() {
+        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+                Context.MODE_PRIVATE);
+        String jsonString = prefs.getString(PROPERTY_CAPTURE_FEEDS, null);
+        if (jsonString != null) {
+            Gson gson = new Gson();
+            List<CaptureFeed> captureFeeds = gson
+                    .fromJson(jsonString, new TypeToken<List<CaptureFeed>>() {
+                    }.getType());
+            return captureFeeds;
+        }
+        return null;
+    }
 
     /**
      * TODO these two methods are not well implemented. The primary purpose is really just to

@@ -5,6 +5,7 @@ import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.api.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
+import com.delectable.mobile.api.jobs.captures.FetchCaptureListJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
 import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
 import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
@@ -70,6 +71,19 @@ public class CaptureController {
             Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchTrendingCapturesJob(requestId, context, listing, isPullToRefresh));
+    }
+
+    /**
+     * @param requestId       Unique identifier for Event callback.
+     * @param listKey         List identifier
+     * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
+     *                        making a fresh request.
+     * @param isPullToRefresh true if user invoke this call via a pull to refresh.
+     */
+    public void fetchCaptureList(String requestId, String listKey,
+            Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
+        mJobManager.addJobInBackground(
+                new FetchCaptureListJob(requestId, listKey, listing, isPullToRefresh));
     }
 
     public void flagCapture(String captureId) {
