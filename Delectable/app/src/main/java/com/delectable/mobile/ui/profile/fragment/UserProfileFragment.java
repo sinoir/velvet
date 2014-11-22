@@ -1,6 +1,5 @@
 package com.delectable.mobile.ui.profile.fragment;
 
-import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.CapturesPendingCapturesListingModel;
@@ -148,7 +147,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.injectMembers(this);
         Bundle args = getArguments();
         if (args != null) {
             mUserId = args.getString(USER_ID);
@@ -530,8 +528,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
                         captureDetails.getPhoto());
                 break;
             case IDENTIFIED:
-                intent = WineProfileActivity.newIntent(getActivity(), captureDetails.getWineProfile(),
-                        captureDetails.getPhoto());
+                intent = WineProfileActivity
+                        .newIntent(getActivity(), captureDetails.getWineProfile(),
+                                captureDetails.getPhoto());
                 break;
             case UNIDENTIFIED:
             case IMPOSSIBLED:

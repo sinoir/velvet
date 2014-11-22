@@ -94,6 +94,34 @@ public class CaptureFeed {
                     ", value='" + value + '\'' +
                     '}';
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            BannerAttributes that = (BannerAttributes) o;
+
+            if (!type.equals(that.type)) {
+                return false;
+            }
+            if (!value.equals(that.value)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = type.hashCode();
+            result = 31 * result + value.hashCode();
+            return result;
+        }
     }
 
     @Override

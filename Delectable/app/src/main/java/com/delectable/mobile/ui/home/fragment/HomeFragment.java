@@ -1,7 +1,9 @@
 package com.delectable.mobile.ui.home.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.events.accounts.UpdatedCaptureFeedsEvent;
 import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
@@ -11,6 +13,7 @@ import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +39,14 @@ public class HomeFragment extends BaseFragment {
 
     private SlidingTabAdapter mTabsAdapter;
 
+    private List<CaptureFeed> mCaptureFeeds;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.injectMembers(this);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -49,18 +60,18 @@ public class HomeFragment extends BaseFragment {
         mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
         mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
 
-        populateFeedTabs();
+        populateFeedTabs(UserInfo.getCaptureFeeds());
 
         return mView;
     }
 
     // TODO trigger this when feeds change, e.g. after initial fetch, maybe listen for UpdatedAccountEvent?
-    private void populateFeedTabs() {
+    private void populateFeedTabs(List<CaptureFeed> captureFeeds) {
         String currentUserId = UserInfo.getUserId(getActivity());
+        List<CaptureFeed> storedCaptureFeeds = UserInfo.getCaptureFeeds();
         List<SlidingTabAdapter.SlidingTabItem> tabItems
                 = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
 
-        List<CaptureFeed> captureFeeds = UserInfo.getCaptureFeeds();
         if (captureFeeds != null) {
             for (CaptureFeed feed : captureFeeds) {
                 tabItems.add(new SlidingTabAdapter.SlidingTabItem(
@@ -68,10 +79,12 @@ public class HomeFragment extends BaseFragment {
                         CaptureListFragment
                                 .newInstance(currentUserId, feed.getKey(), feed.getTitle()),
                         feed.getTitle().toLowerCase(),
-                        true // TODO update indicator
+                        (storedCaptureFeeds != null && storedCaptureFeeds.contains(feed)) ? false
+                                : true // TODO update indicator
                 ));
             }
         }
+        mCaptureFeeds = captureFeeds;
 
         mTabsAdapter = new SlidingTabAdapter(getFragmentManager(), tabItems);
         mViewPager.setAdapter(mTabsAdapter);
@@ -81,6 +94,20 @@ public class HomeFragment extends BaseFragment {
         mViewPager.setPageTransformer(false, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
 
+    }
+
+    public void onEventMainThread(UpdatedCaptureFeedsEvent event) {
+        if (event.isSuccessful()) {
+            if (event.getCaptureFeeds() != null && !event.getCaptureFeeds().equals(mCaptureFeeds)) {
+                Log.d("HomeFragment",
+                        "############## populating feed tabs after feeds have changed");
+                Log.d("HomeFragment", "############## old list: " + mCaptureFeeds);
+                Log.d("HomeFragment", "############## new list: " + event.getCaptureFeeds());
+                populateFeedTabs(event.getCaptureFeeds());
+            } else {
+                Log.d("HomeFragment", "############## feeds did not change");
+            }
+        }
     }
 
     @Override
