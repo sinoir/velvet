@@ -5,6 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        //had java.lang.NoClassDefFoundError errors when using 0.14.4, so keeping it at this version until another revision is released
         classpath 'com.android.tools.build:gradle:0.14.1'
     }
 }

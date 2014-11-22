@@ -175,7 +175,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     @Override
     public void discardCaptureClicked(CaptureDetails capture) {
         mTempCaptureForAction = capture;
-        showConfirmationNoTitle(getString(R.string.remove_this_wine_from_your_list), getString(R.string.remove),
+        showConfirmationNoTitle(getString(R.string.remove_this_wine_from_your_list),
+                getString(R.string.remove),
                 null, REQUEST_DELETE_CONFIRMATION);
     }
 
@@ -198,9 +199,20 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void shareCapture(CaptureDetails capture) {
-        String vintage = capture.getWineProfile().getVintage();
+        //prepare vintage string
+        String vintage = "";
+        CaptureState state = CaptureState.getState(capture);
+        if (CaptureState.IDENTIFIED == state) {
+            vintage = capture.getWineProfile().getVintage() + " ";
+        }
+        //strip NV or -- if necessary
+        if (vintage.trim().equals("NV") ||
+                vintage.trim().equals("--")) {
+            vintage = "";
+        }
+
         String shareText = getResources().getString(R.string.cap_action_recommend_text,
-                capture.getDisplayTitle() + " " + (vintage.equals("NV") ? "" : (vintage + " "))
+                capture.getDisplayTitle() + " " + vintage
                         + capture.getDisplayDescription(),
                 capture.getShortShareUrl());
         Intent shareIntent = new Intent();

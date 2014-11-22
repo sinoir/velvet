@@ -16,6 +16,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
+import com.delectable.mobile.ui.winepurchase.dialog.ConfirmationDialogFragment;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
 
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class WineCheckoutFragment extends BaseFragment {
 
     private static final int REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG = 400;
 
+    private static final int REQUEST_CONFIRMATION_DIALOG = 500;
 
     private static final int DELAY_ERROR_DISPLAY = 2000;
 
@@ -105,6 +107,9 @@ public class WineCheckoutFragment extends BaseFragment {
 
     @InjectView(R.id.confirm_button)
     protected View mConfirmButton;
+
+    @InjectView(R.id.marketing_message)
+    protected TextView mMarketingMessage;
 
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
@@ -178,6 +183,8 @@ public class WineCheckoutFragment extends BaseFragment {
         } else if (requestCode == REQUEST_CHOOSE_PAYMENT_METHOD_DIALOG) {
             loadPaymentMethod(
                     data.getStringExtra(ChoosePaymentMethodDialog.EXTRAS_PAYMENT_METHOD_ID));
+        } else if (requestCode == REQUEST_CONFIRMATION_DIALOG) {
+            getActivity().onBackPressed();
         }
     }
 
@@ -185,10 +192,6 @@ public class WineCheckoutFragment extends BaseFragment {
         showLoader();
         mBaseWineController.purchaseWine(mData.getWineId(), mData.getPurchaseOfferId(),
                 mData.getPaymentMethodId(), mData.getShippingAddressId(), mData.getQuantity(), "");
-    }
-
-    private void showConfirmation() {
-        replaceWithNewFragment(ConfirmationFragment.newInstance());
     }
 
     private void showError(String error) {
@@ -205,6 +208,17 @@ public class WineCheckoutFragment extends BaseFragment {
         updateNumBottles();
         updatePricing();
         updatePromoUI();
+        updateMarketingMessage();
+    }
+
+    private void updateMarketingMessage() {
+        if (mData.getMarketingMessage() == null) {
+            mMarketingMessage.setText("");
+            mMarketingMessage.setVisibility(View.GONE);
+        } else {
+            mMarketingMessage.setText(mData.getMarketingMessage());
+            mMarketingMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateWineDetails() {
@@ -481,6 +495,14 @@ public class WineCheckoutFragment extends BaseFragment {
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), "dialog");
     }
+
+    private void showConfirmation() {
+        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance();
+        dialog.setTargetFragment(this, REQUEST_CONFIRMATION_DIALOG);
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), "dialog");
+    }
+
     //endregion
 
 

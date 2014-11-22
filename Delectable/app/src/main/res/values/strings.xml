@@ -408,8 +408,10 @@
     <string name="paymentmethod_add_another">Add another payment method</string>
 
     <!-- Order Confirmation -->
-    <string name="order_confirmation_title">Order Confirmation</string>
-    <string name="order_confirmation_text">Text TBD</string>
+    <string name="order_confirmation_thanks">Thanks for your order!</string>
+    <string name="order_confirmation_text">You will receive an email confirmation shortly. Email us at %s if you have any questions.</string>
+    <string name="order_confirmation_email">orders@delectable.com</string>
+    <string name="order_confirmation_okay">Okay</string>
 
     <!-- Checkout Errors -->
     <string name="checkout_no_internet">An internet connection is required</string>

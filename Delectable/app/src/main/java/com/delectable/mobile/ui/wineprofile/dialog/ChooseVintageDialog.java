@@ -142,7 +142,7 @@ public class ChooseVintageDialog extends BaseEventBusDialogFragment
             WineProfileSubProfile wineWithPrice = mWineSourceModel
                     .getMinWineWithPrice(wineProfile.getId());
             if (wineWithPrice != null) {
-                mVintageWineInfos.add(new VintageWineInfo(wineWithPrice));
+                mVintageWineInfos.add(new VintageWineInfo(wineWithPrice, wineProfile.getRatingsSummary()));
             } else {
                 mVintageWineInfos.add(new VintageWineInfo(wineProfile));
             }
