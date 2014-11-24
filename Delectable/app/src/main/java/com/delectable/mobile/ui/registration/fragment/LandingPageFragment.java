@@ -32,13 +32,21 @@ public class LandingPageFragment extends BaseFragment {
     protected Spinner mServerEnvSpinner;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (BuildConfig.FLAVOR.startsWith("qa")) {
+            ServerInfo.setEnvironment(Environment.STAGING);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_landing_page, container, false);
         ButterKnife.inject(this, rootView);
 
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("debug")) {
+        if (BuildConfig.SHOW_ENV_PICKER) {
             setupDebugSpinner();
         } else {
             mServerEnvSpinner.setVisibility(View.GONE);
