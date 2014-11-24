@@ -22,14 +22,6 @@
         android:paddingRight="@dimen/spacing_16"
         android:visibility="visible">
 
-        <com.delectable.mobile.ui.common.widget.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="@dimen/small_profile_image_size"
-            android:layout_height="@dimen/small_profile_image_size"
-            android:layout_marginRight="@dimen/spacing_12"
-            android:layout_marginBottom="@dimen/spacing_8"
-            android:src="@drawable/ab_profile_normal" />
-
         <com.delectable.mobile.ui.common.widget.RatingTextView
             android:id="@+id/capturer_rating"
             style="@style/RatingTextView"
@@ -39,18 +31,24 @@
         <RelativeLayout
             android:id="@+id/capturer_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/small_profile_image_size"
+            android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
-            android:layout_alignBottom="@id/profile_image"
-            android:layout_alignTop="@id/profile_image"
-            android:layout_toRightOf="@id/profile_image"
             android:clickable="true"
             android:gravity="center_vertical">
+
+            <com.delectable.mobile.ui.common.widget.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/small_profile_image_size"
+                android:layout_height="@dimen/small_profile_image_size"
+                android:layout_marginRight="@dimen/spacing_12"
+                android:layout_marginBottom="@dimen/spacing_8"
+                android:src="@drawable/ab_profile_normal" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/profile_image"
                 android:text="-"
                 android:textColor="@color/d_black"
                 android:textSize="@dimen/cap_feed_comment_text_size"
@@ -72,6 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_name"
+                android:layout_toRightOf="@id/profile_image"
                 android:ellipsize="marquee"
                 android:lines="1"
                 android:text="User Title"
@@ -87,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_16"
-            android:layout_below="@+id/profile_image"
+            android:layout_below="@+id/capturer_container"
             android:text=""
             android:lineSpacingMultiplier="1.2"
             android:textColor="@color/d_dark_gray"

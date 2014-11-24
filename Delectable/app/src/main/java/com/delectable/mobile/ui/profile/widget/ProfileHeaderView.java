@@ -74,8 +74,8 @@ public class ProfileHeaderView extends RelativeLayout implements
         mViewPager.setAdapter(mAdapter);
         // Must set pager to indicator after pager has adapter
         mIndicator.setViewPager(mViewPager);
-        // Default is invisible, unless we add bio view
-        mIndicator.setVisibility(View.INVISIBLE);
+        // Default is gone, unless we add bio view
+        mIndicator.setVisibility(View.GONE);
 
         mFollowText = context.getString(R.string.profile_follow);
         mFollowingText = context.getString(R.string.profile_following_cap);
@@ -111,7 +111,7 @@ public class ProfileHeaderView extends RelativeLayout implements
         // Remove view if has already been added
         if (mPagerViews.contains(mProfileHeaderBioView)) {
             mPagerViews.remove(mProfileHeaderBioView);
-            mIndicator.setVisibility(View.INVISIBLE);
+            mIndicator.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged();
         }
     }
