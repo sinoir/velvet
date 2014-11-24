@@ -100,7 +100,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', 'proguard-delectable.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
 
         /**
@@ -112,7 +111,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
     }
     productFlavors {
@@ -121,6 +119,7 @@ android {
          */
         vanilla {
             applicationId "com.delectable.mobile"
+            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
         /**
          * the staging product flavor really only gets used for QA/applause testing when we prepare a release branch
