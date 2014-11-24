@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,7 +34,7 @@ public class LandingPageFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.FLAVOR.startsWith("staging")) {
+        if (BuildConfig.FLAVOR.startsWith("qa")) {
             ServerInfo.setEnvironment(Environment.STAGING);
         }
     }
@@ -51,9 +50,6 @@ public class LandingPageFragment extends BaseFragment {
             setupDebugSpinner();
         } else {
             mServerEnvSpinner.setVisibility(View.GONE);
-        }
-        if (BuildConfig.REPORT_CRASHES) {
-            ((TextView) rootView.findViewById(R.id.join_textview)).setText("reporting crashes");
         }
         return rootView;
     }
