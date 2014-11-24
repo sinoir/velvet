@@ -5,7 +5,6 @@ import com.delectable.mobile.R;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.View;
@@ -43,10 +42,13 @@ public class CommentRatingRowView extends RelativeLayout {
     public void setNameAndComment(String name, String comment) {
         String text = name + (comment.isEmpty() ? "" : ": ") + comment;
         SpannableString spannableString = SpannableString.valueOf(text);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, name.length(), 0);
-        spannableString
-                .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_dark_gray)), 0,
-                        name.length() + (comment.isEmpty() ? 0 : 1), 0);
+        if (name != null && !name.isEmpty()) {
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, name.length(), 0);
+//            spannableString
+//                    .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_dark_gray)),
+//                            0,
+//                            name.length() + (comment.isEmpty() ? 0 : 1), 0);
+        }
         mNameCommentTextView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 
