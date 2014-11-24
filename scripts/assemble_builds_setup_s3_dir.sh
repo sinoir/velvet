@@ -26,7 +26,7 @@ echo "build.gradle path: $GRADLE_BUILD_FILE_PATH"
 GIT_COMMIT_SHORT=${GIT_COMMIT:0:7}
 echo "commit: $GIT_COMMIT_SHORT"
 
-VERSION_NAME=`grep "versionName" $GRADLE_BUILD_FILE_PATH | sed -e "s,.*'\(.*\)',\1,"`
+VERSION_NAME=`grep "versionName" "$GRADLE_BUILD_FILE_PATH" | sed -e "s,.*'\(.*\)',\1,"`
 VERSION_NAME_WITH_EXTRAS="${VERSION_NAME} - #${BUILD_NUMBER} (${GIT_COMMIT_SHORT})"
 echo "version: $VERSION_NAME_WITH_EXTRAS"
 
