@@ -71,10 +71,10 @@
         <item name="android:actionMenuTextColor">@color/d_white</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"></style>
+    <style name="DelectableTheme.Dialog" parent="@style/DelectableTheme"></style>
 
-    <style name="DelectableTheme.Dialog.LoadingCircle">
-        <item name="android:windowIsFloating">false</item>
+    <style name="DelectableTheme.Dialog.LoadingCircle" parent="DelectableTheme.Dialog">
+    <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@color/d_white_80op</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
     </style>

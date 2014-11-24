@@ -525,8 +525,6 @@ public class CaptureDetailsView extends RelativeLayout {
         CommentRatingRowView.LayoutParams layoutParams = new CommentRatingRowView.LayoutParams(
                 CommentRatingRowView.LayoutParams.MATCH_PARENT,
                 CommentRatingRowView.LayoutParams.WRAP_CONTENT);
-        //int verticalSpacing = mContext.getResources()
-        //        .getDimensionPixelSize(R.dimen.spacing_8);
 
         // TODO: Finalize Test out with feed with participants.
         // TODO: Show multiple comments for user
@@ -550,8 +548,8 @@ public class CaptureDetailsView extends RelativeLayout {
                         .getComment() : "";
                 // TODO : Figure out how to layout multiple comments with ratings?
                 if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
-                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
-                    //commentRow.setPadding(0, 0, 0, verticalSpacing);
+                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
+                            mActionsHandler, participant.getId());
                     commentRow.setNameCommentWithRating(participant.getFullName(), firstCommentText,
                             rating);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
@@ -559,8 +557,8 @@ public class CaptureDetailsView extends RelativeLayout {
                     numDisplayedComments++;
                 }
                 for (int i = (firstIndex + 1); i < comments.size(); i++) {
-                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext);
-                    //commentRow.setPadding(0, 0, 0, verticalSpacing);
+                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
+                            mActionsHandler, participant.getId());
                     commentRow.setNameCommentWithRating(participant.getFullName(),
                             comments.get(i).getComment(), -1);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
