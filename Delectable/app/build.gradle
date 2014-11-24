@@ -50,7 +50,6 @@ android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
     defaultConfig {
-        multiDexEnabled true
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 4
@@ -64,6 +63,10 @@ android {
         buildConfigField 'String', 'MIXPANEL_TOKEN', '"e46cbff0ba48b387cd070c3b38b49f2e"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
         buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
+    }
+
+    dexOptions {
+        jumboMode = true
     }
 
     signingConfigs {
