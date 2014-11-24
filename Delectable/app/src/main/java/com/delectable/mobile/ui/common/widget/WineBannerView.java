@@ -97,7 +97,7 @@ public class WineBannerView extends RelativeLayout {
         WineProfileMinimal wineProfile = captureDetails.getWineProfile();
         String vintage = (wineProfile != null ? wineProfile.getVintage() : null);
         String wineName = captureDetails.getDisplayDescription();
-        if (vintage != null && !vintage.equals("NV")) {
+        if (vintage != null && !vintage.equals("NV") && !vintage.equals("--")) {
             wineName += " " + vintage;
         }
 
@@ -125,7 +125,7 @@ public class WineBannerView extends RelativeLayout {
         String wineName = wineProfile.getName();
         String vintage = wineProfile.getVintage();
 
-        if (includeVintage && !vintage.equals("NV")) {
+        if (includeVintage && !vintage.equals("NV") && !vintage.equals("--")) {
             updateVintage(wineProfile.getVintage());
         } else {
             mWineVintage.setVisibility(View.INVISIBLE);
