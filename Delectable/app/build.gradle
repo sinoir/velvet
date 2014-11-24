@@ -50,7 +50,6 @@ android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
     defaultConfig {
-        multiDexEnabled true
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 5
@@ -64,6 +63,10 @@ android {
         buildConfigField 'String', 'MIXPANEL_TOKEN', '"e46cbff0ba48b387cd070c3b38b49f2e"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
         buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
+    }
+
+    dexOptions {
+        jumboMode = true
     }
 
     signingConfigs {
@@ -100,7 +103,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', 'proguard-delectable.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
 
         /**
@@ -112,7 +114,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
     }
     productFlavors {
@@ -121,6 +122,7 @@ android {
          */
         vanilla {
             applicationId "com.delectable.mobile"
+            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
         /**
          * the staging product flavor really only gets used for QA/applause testing when we prepare a release branch
