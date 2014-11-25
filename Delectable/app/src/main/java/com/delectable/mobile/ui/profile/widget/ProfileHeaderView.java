@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -74,8 +75,6 @@ public class ProfileHeaderView extends RelativeLayout implements
         mViewPager.setAdapter(mAdapter);
         // Must set pager to indicator after pager has adapter
         mIndicator.setViewPager(mViewPager);
-        // Default is gone, unless we add bio view
-        mIndicator.setVisibility(View.GONE);
 
         mFollowText = context.getString(R.string.profile_follow);
         mFollowingText = context.getString(R.string.profile_following_cap);
@@ -130,7 +129,9 @@ public class ProfileHeaderView extends RelativeLayout implements
 
         setWineCount(numCaptures);
 
-        ImageLoaderUtil.loadImageIntoView(getContext(), imageUrl, getUserImageView());
+        ImageView userImageView = getUserImageView();
+        ImageLoaderUtil.loadImageIntoView(getContext(), imageUrl, userImageView);
+        userImageView.setVisibility(View.VISIBLE);
         setUserName(userName);
         setInfluencer(isInfluencer, influencerTitle);
         setFollowerCount(account.getFollowerCount());
@@ -207,11 +208,7 @@ public class ProfileHeaderView extends RelativeLayout implements
     }
 
     public void shouldShowFollowButton(boolean showFollowButton) {
-        if (showFollowButton) {
-            mFollowButton.setVisibility(View.VISIBLE);
-        } else {
-            mFollowButton.setVisibility(View.GONE);
-        }
+        mFollowButton.setVisibility(showFollowButton ? View.VISIBLE : View.GONE);
     }
 
     public void setActionListener(ProfileHeaderActionListener actionListener) {

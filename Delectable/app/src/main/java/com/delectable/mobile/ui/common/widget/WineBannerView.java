@@ -7,6 +7,7 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -78,6 +79,7 @@ public class WineBannerView extends RelativeLayout {
 
         View.inflate(context, R.layout.wine_banner_view, this);
         ButterKnife.inject(this);
+        setLayoutTransition(new LayoutTransition());
 
         //paint object to draw upside down triangle
         mPaint = new Paint();
@@ -156,8 +158,11 @@ public class WineBannerView extends RelativeLayout {
 
     public void updateViewWithData(String wineImageUrl, String producerName, String wineName) {
         ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
+        mWineImage.setVisibility(View.VISIBLE);
         mProducerName.setText(producerName.toLowerCase());
+        mProducerName.setVisibility(View.VISIBLE);
         mWineName.setText(wineName);
+        mWineName.setVisibility(View.VISIBLE);
     }
 
     public void updateVintage(String vintage) {

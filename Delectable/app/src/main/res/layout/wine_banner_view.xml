@@ -12,6 +12,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:background="@color/d_light_gray"
+        android:visibility="invisible"
         android:scaleType="centerCrop" />
 
     <View
@@ -31,7 +32,7 @@
         android:paddingRight="@dimen/spacing_16"
         android:textColor="@android:color/white"
         android:textSize="19sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:fontName="whitney_medium_sc" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
@@ -45,7 +46,7 @@
         android:textColor="@android:color/white"
         android:textSize="19sp"
         android:lineSpacingMultiplier="1.2"
-        android:visibility="visible"
+        android:visibility="gone"
         app:fontName="whitney_book" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView

@@ -39,7 +39,7 @@
         android:gravity="center"
         android:textColor="@color/chestnut_to_white"
         android:textSize="@dimen/profile_follow_button_text_size"
-        android:visibility="invisible"
+        android:visibility="gone"
         custom:fontName="whitney_medium" />
 
     <View
