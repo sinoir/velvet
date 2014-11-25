@@ -71,7 +71,9 @@
         <item name="android:actionMenuTextColor">@color/d_white</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="Base.Theme.AppCompat.Light.Dialog"></style>
+    <style name="DelectableTheme.Dialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/d_chestnut</item>
+    </style>
 
     <style name="DelectableTheme.Dialog.LoadingCircle" parent="DelectableTheme.Dialog">
     <item name="android:windowIsFloating">false</item>
