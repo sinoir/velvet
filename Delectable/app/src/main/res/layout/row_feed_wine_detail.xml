@@ -20,6 +20,7 @@
         android:paddingBottom="@dimen/spacing_20"
         android:paddingLeft="@dimen/spacing_16"
         android:paddingRight="@dimen/spacing_16"
+        android:animateLayoutChanges="true"
         android:visibility="visible">
 
         <com.delectable.mobile.ui.common.widget.RatingTextView
@@ -126,7 +127,6 @@
                 android:src="@drawable/ab_profile_normal"
                 android:visibility="visible" />
 
-            <!-- TODO: Plus Image Button Icon -->
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/tagged_participants"
                 android:layout_width="wrap_content"
@@ -146,8 +146,9 @@
         <RelativeLayout
             android:id="@+id/collapsed_comments_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_16"
+            android:layout_height="48dp"
+            android:layout_marginTop="-16dp"
+            android:layout_marginBottom="2dp"
             android:layout_below="@id/tagged_participants_container"
             android:layout_centerVertical="true"
             android:orientation="vertical"
@@ -156,8 +157,8 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/likes_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="15 likes"
                 android:textColor="@color/medium_gray_to_dark_gray"
                 android:textSize="@dimen/text_size_medium"
@@ -166,9 +167,9 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/vertical_divider_likes"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_toRightOf="@id/likes_count"
-                android:gravity="center_vertical"
                 android:paddingLeft="@dimen/spacing_8"
                 android:paddingRight="@dimen/spacing_8"
                 android:text="@string/cap_feed_divider"
@@ -179,9 +180,9 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/comments_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_toRightOf="@id/vertical_divider_likes"
-                android:gravity="center_vertical"
                 android:text="14 comments"
                 android:textColor="@color/medium_gray_to_dark_gray"
                 android:textSize="@dimen/text_size_medium"
@@ -190,9 +191,9 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/vertical_divider_comments"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_toRightOf="@id/comments_count"
-                android:gravity="center_vertical"
                 android:paddingLeft="@dimen/spacing_8"
                 android:paddingRight="@dimen/spacing_8"
                 android:text="@string/cap_feed_divider"
@@ -203,8 +204,8 @@
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/rate_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_toRightOf="@id/vertical_divider_comments"
                 android:text="@string/cap_feed_add_your_rating"
                 android:textColor="@color/chestnut_to_chestnut_pressed"

@@ -29,7 +29,9 @@
     <RelativeLayout
         android:id="@+id/like_comment_count_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="-20dp"
+        android:layout_marginBottom="-14dp"
         android:gravity="center"
         android:layout_below="@+id/capture_comment_tagged_text"
         android:visibility="visible">
@@ -41,7 +43,7 @@
             android:gravity="center_vertical"
             android:text="15 likes"
             android:textColor="@color/medium_gray_to_dark_gray"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_medium"
             app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -54,7 +56,7 @@
             android:paddingRight="8dp"
             android:text="•"
             android:textColor="@color/d_light_gray"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_medium"
             app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -65,7 +67,7 @@
             android:gravity="center_vertical"
             android:text="14 comments"
             android:textColor="@color/medium_gray_to_dark_gray"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_medium"
             app:fontName="whitney_book" />
 
     </RelativeLayout>
