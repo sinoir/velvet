@@ -99,8 +99,10 @@
     <include
         android:id="@+id/add_rating_remove_text_container"
         layout="@layout/layout_minimal_capture_add_rating_remove_texts"
+        android:layout_marginTop="-8dp"
+        android:layout_marginBottom="-8dp"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="48dp"
         android:layout_below="@id/like_comment_buttons_container" />
 
     <ImageView
