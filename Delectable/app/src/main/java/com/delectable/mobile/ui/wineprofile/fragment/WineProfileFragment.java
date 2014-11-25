@@ -79,7 +79,7 @@ import butterknife.InjectView;
  * {@code baseWine} using the {@code baseWineId} provided.
  */
 public class WineProfileFragment extends BaseFragment implements
-        WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
+        WineBannerView.ActionsHandler, WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -114,6 +114,9 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Inject
     protected WineSourceModel mWineSourceModel;
+
+    @InjectView(R.id.wine_image)
+    protected View mWineImageView;
 
     @InjectView(R.id.wine_banner_view)
     protected WineBannerView mBanner;
@@ -151,10 +154,6 @@ public class WineProfileFragment extends BaseFragment implements
     protected Toolbar mToolbar;
 
     protected ListView mListView;
-
-    protected View mWineBanner;
-
-    protected View mWineImageView;
 
     protected int mStickyToolbarHeight;
 
@@ -308,6 +307,7 @@ public class WineProfileFragment extends BaseFragment implements
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
 
+        mBanner.setActionsHandler(this);
         updateBannerData();
         updateVarietyRegionRatingView(mBaseWine);
 
@@ -351,9 +351,6 @@ public class WineProfileFragment extends BaseFragment implements
 
         // empty state
         mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
-
-        mWineImageView = header.findViewById(R.id.wine_image);
-        mWineBanner = header.findViewById(R.id.wine_banner_view);
 
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);
@@ -637,7 +634,7 @@ public class WineProfileFragment extends BaseFragment implements
     private void onScrollChanged() {
         View v = mListView.getChildAt(0);
         int top = (v == null ? 0 : v.getTop());
-        int bannerHeight = mWineBanner.getHeight();
+        int bannerHeight = mBanner.getHeight();
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
         if (isHeaderVisible) {
@@ -830,6 +827,11 @@ public class WineProfileFragment extends BaseFragment implements
                 captureNote.getId());
         intent.setClass(getActivity(), CaptureDetailsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onVintageClick() {
+        showVintageDialog();
     }
 
     @Override
