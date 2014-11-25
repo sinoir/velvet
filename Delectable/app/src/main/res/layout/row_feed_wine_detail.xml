@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
+            android:layout_marginBottom="@dimen/spacing_8"
             android:clickable="true"
             android:gravity="center_vertical">
 
@@ -42,43 +43,46 @@
                 android:layout_width="@dimen/small_profile_image_size"
                 android:layout_height="@dimen/small_profile_image_size"
                 android:layout_marginRight="@dimen/spacing_12"
-                android:layout_marginBottom="@dimen/spacing_8"
                 android:src="@drawable/ab_profile_normal" />
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/user_name"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/profile_image"
-                android:text="-"
-                android:textColor="@color/d_black"
-                android:textSize="@dimen/cap_feed_comment_text_size"
-                app:fontName="whitney_medium" />
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/profile_image">
 
-            <ImageView
-                android:id="@+id/influencer_badge"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_alignBottom="@id/user_name"
-                android:layout_alignTop="@id/user_name"
-                android:layout_toRightOf="@+id/user_name"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/ic_find_expert_pressed"
-                android:visibility="gone" />
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/d_black"
+                    android:textSize="@dimen/cap_feed_comment_text_size"
+                    app:fontName="whitney_medium" />
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
-                android:id="@+id/influencer_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/user_name"
-                android:layout_toRightOf="@id/profile_image"
-                android:ellipsize="marquee"
-                android:lines="1"
-                android:text="User Title"
-                android:textColor="@color/d_dark_gray"
-                android:textSize="@dimen/text_size_small"
-                android:visibility="gone"
-                app:fontName="whitney_book" />
+                <ImageView
+                    android:id="@+id/influencer_badge"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignBottom="@id/user_name"
+                    android:layout_alignTop="@id/user_name"
+                    android:layout_toRightOf="@+id/user_name"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/ic_find_expert_pressed"
+                    android:visibility="gone" />
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/influencer_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/user_name"
+                    android:ellipsize="marquee"
+                    android:lines="1"
+                    android:textColor="@color/d_dark_gray"
+                    android:textSize="@dimen/text_size_small"
+                    android:visibility="gone"
+                    app:fontName="whitney_book" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
