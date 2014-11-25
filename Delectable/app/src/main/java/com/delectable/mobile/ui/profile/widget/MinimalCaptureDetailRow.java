@@ -251,7 +251,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
                 captureName = getResources().getString(R.string.user_captures_check_back);
                 break;
         }
-        if (vintage != null && !vintage.equals("NV")) {
+        if (vintage != null && !vintage.equals("NV") && !vintage.equals("--")) {
             captureName += " " + vintage;
         }
         String captureImageUrl = mCaptureDetails.getPhoto().getBestThumb();
@@ -418,6 +418,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         //hide like and comment buttons if viewing own user profile
         int visibility = mIsViewingOwnCaptures ? View.GONE : View.VISIBLE;
         mLikeCommentButtonsContainer.setVisibility(visibility);
+
+        // set like button state
+        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(mSelectedUserId);
+        mLikeButton.setSelected(userLikesCapture);
 
         //setup likes/comments counts
         int likes = mCaptureDetails.getLikesCount();
