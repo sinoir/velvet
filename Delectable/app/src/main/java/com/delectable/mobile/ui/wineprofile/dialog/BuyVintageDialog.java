@@ -16,7 +16,6 @@ import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ChooseVintageDialog extends BaseEventBusDialogFragment
+public class BuyVintageDialog extends BaseEventBusDialogFragment
         implements WinePriceView.WinePriceViewActionsCallback {
 
     public static final String EXTRAS_RESULT_WINE_ID = "EXTRAS_RESULT_WINE_ID";
@@ -43,7 +42,7 @@ public class ChooseVintageDialog extends BaseEventBusDialogFragment
 
     private static final String BASE_WINE_ID = "BASE_WINE_ID";
 
-    private static final String TAG = ChooseVintageDialog.class.getSimpleName();
+    private static final String TAG = BuyVintageDialog.class.getSimpleName();
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -71,8 +70,8 @@ public class ChooseVintageDialog extends BaseEventBusDialogFragment
 
     private ArrayList<VintageWineInfo> mVintageWineInfos;
 
-    public static ChooseVintageDialog newInstance(String baseWineId) {
-        ChooseVintageDialog f = new ChooseVintageDialog();
+    public static BuyVintageDialog newInstance(String baseWineId) {
+        BuyVintageDialog f = new BuyVintageDialog();
         Bundle args = new Bundle();
         args.putString(BASE_WINE_ID, baseWineId);
         f.setArguments(args);

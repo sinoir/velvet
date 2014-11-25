@@ -17,7 +17,7 @@ import butterknife.InjectView;
  * A representation of the {@link VintageWineInfo} View Model, this is the row for the listview that
  * appears in the Choose Vintage dialog.
  */
-public class ChooseVintageDialogRow extends RelativeLayout {
+public class BuyVintageDialogRow extends RelativeLayout {
 
     private static final int NO_AVG_RATING = -1;
 
@@ -30,18 +30,18 @@ public class ChooseVintageDialogRow extends RelativeLayout {
     @InjectView(R.id.price_view)
     protected WinePriceView mWinePriceView;
 
-    public ChooseVintageDialogRow(Context context) {
+    public BuyVintageDialogRow(Context context) {
         this(context, null);
     }
 
-    public ChooseVintageDialogRow(Context context, AttributeSet attrs) {
+    public BuyVintageDialogRow(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ChooseVintageDialogRow(Context context, AttributeSet attrs, int defStyle) {
+    public BuyVintageDialogRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        View.inflate(context, R.layout.row_dialog_choose_vintage, this);
+        View.inflate(context, R.layout.row_dialog_buy_vintage, this);
 
         ButterKnife.inject(this);
     }

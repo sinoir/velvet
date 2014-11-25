@@ -27,7 +27,7 @@ import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
-import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
 import com.delectable.mobile.ui.wineprofile.dialog.Over21Dialog;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
@@ -415,10 +415,10 @@ public class WineProfileFragment extends BaseFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CHOOSE_VINTAGE_DIALOG) {
-            String wineId = data.getStringExtra(ChooseVintageDialog.EXTRAS_RESULT_WINE_ID);
-            if (resultCode == ChooseVintageDialog.RESULT_SWITCH_VINTAGE) {
+            String wineId = data.getStringExtra(BuyVintageDialog.EXTRAS_RESULT_WINE_ID);
+            if (resultCode == BuyVintageDialog.RESULT_SWITCH_VINTAGE) {
                 changeVintage(wineId);
-            } else if (resultCode == ChooseVintageDialog.RESULT_PURCHASE_WINE) {
+            } else if (resultCode == BuyVintageDialog.RESULT_PURCHASE_WINE) {
                 startWinePurchaseFlow(wineId);
             }
         }
@@ -804,7 +804,7 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void showVintageDialog() {
-        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWineId);
+        BuyVintageDialog dialog = BuyVintageDialog.newInstance(mBaseWineId);
         dialog.setTargetFragment(WineProfileFragment.this,
                 REQUEST_CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
         dialog.show(getFragmentManager(), "dialog");
