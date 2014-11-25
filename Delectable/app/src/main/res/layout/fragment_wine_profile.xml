@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/d_white">
 
-<ListView
+    <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

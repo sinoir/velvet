@@ -9,7 +9,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:visibility="invisible"
         android:src="@drawable/no_photo" />
 
     <RelativeLayout
@@ -22,6 +23,7 @@
         android:layout_marginLeft="@dimen/spacing_16"
         android:layout_marginRight="@dimen/spacing_16"
         android:layout_centerHorizontal="true"
+        android:animateLayoutChanges="true"
         android:clickable="true">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -31,6 +33,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:visibility="gone"
             android:textColor="@color/d_big_stone"
             android:textSize="@dimen/text_size_large"
             app:fontName="whitney_medium" />
@@ -49,25 +52,30 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/count_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/user_name_container"
+        android:animateLayoutChanges="true"
         android:gravity="center">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/capture_wine_count"
             style="@style/UserProfileCountTexts"
+            android:visibility="gone"
             android:layout_centerVertical="true" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/followers_count"
             style="@style/UserProfileCountTexts"
+            android:visibility="gone"
             android:layout_toRightOf="@id/capture_wine_count"
             android:paddingLeft="@dimen/profile_horizontal_text_spacing" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/following_count"
             style="@style/UserProfileCountTexts"
+            android:visibility="gone"
             android:layout_toRightOf="@id/followers_count"
             android:paddingLeft="@dimen/profile_horizontal_text_spacing" />
 

@@ -176,7 +176,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     public void discardCaptureClicked(CaptureDetails capture) {
         mTempCaptureForAction = capture;
         showConfirmationNoTitle(getString(R.string.remove_this_wine_from_your_list),
-                getString(R.string.remove),
+                getString(R.string.minimal_capture_remove),
                 null, REQUEST_DELETE_CONFIRMATION);
     }
 

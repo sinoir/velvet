@@ -5,7 +5,7 @@
     <style name="DelectableBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
-        <item name="colorPrimaryDark">@color/status_bar</item>
+        <item name="colorPrimaryDark">@color/d_suva_gray</item>
         <item name="colorAccent">@color/d_chestnut</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
@@ -71,7 +71,7 @@
         <item name="android:actionMenuTextColor">@color/d_white</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="@style/DelectableTheme"></style>
+    <style name="DelectableTheme.Dialog" parent="Base.Theme.AppCompat.Light.Dialog"></style>
 
     <style name="DelectableTheme.Dialog.LoadingCircle" parent="DelectableTheme.Dialog">
     <item name="android:windowIsFloating">false</item>
@@ -204,8 +204,8 @@
     </style>
 
     <!-- Settings Screen -->
-    <style name="SettingsBaseTextStyle">
-        <item name="android:textColor">@color/d_black</item>
+    <style name="SettingsBaseTextStyle" parent="Base.TextAppearance.AppCompat">
+    <item name="android:textColor">@color/d_black</item>
         <item name="android:textColorHint">@color/d_dark_gray</item>
         <item name="android:textSize">@dimen/settings_text_size</item>
         <item name="android:paddingBottom">@dimen/settings_text_bottom_padding</item>
