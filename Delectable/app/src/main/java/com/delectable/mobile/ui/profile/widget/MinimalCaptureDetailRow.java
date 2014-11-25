@@ -59,6 +59,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.likes_count)
     protected FontTextView mLikesCount;
 
+    @InjectView(R.id.vertical_divider_likes)
+    protected View mLikesDivider;
+
     @InjectView(R.id.comments_count)
     protected FontTextView mCommentsCount;
 
@@ -421,8 +424,11 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         int comments = mCaptureDetails.getComments().size();
         mLikesCount.setText(
                 getResources().getQuantityString(R.plurals.likes_count, likes, likes));
+        mLikesCount.setVisibility(likes > 0 ? View.VISIBLE : View.GONE);
         mCommentsCount.setText(
                 getResources().getQuantityString(R.plurals.comments_count, comments, comments));
+        mCommentsCount.setVisibility(comments > 0 ? View.VISIBLE : View.GONE);
+        mLikesDivider.setVisibility((likes > 0 && comments > 0) ? View.VISIBLE : View.GONE);
 
         if (!mIsViewingOwnCaptures) { //looking at someone else's captures
             //always show this even when there are no likes/comments so user can click like/comment button and not have view jump
