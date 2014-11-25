@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/producer_name"
         android:layout_toRightOf="@+id/wine_image"
+        android:layout_marginBottom="@dimen/spacing_16"
         android:ellipsize="end"
         android:maxLines="2"
         android:layout_marginRight="@dimen/search_wine_horizontal_spacing"

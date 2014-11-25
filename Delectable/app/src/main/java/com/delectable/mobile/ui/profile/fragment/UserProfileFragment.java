@@ -87,20 +87,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
-    @InjectView(R.id.empty_state_layout)
-    protected View mEmptyStateLayout;
+    protected View mEmptyViewFooter;
 
-    @InjectView(R.id.progress_bar)
     protected ContentLoadingProgressBar mProgressBar;
 
-    @InjectView(R.id.empty_view_header)
-    protected ProfileHeaderView mEmptyStateHeader;
-
-    /**
-     * In the layout, this covers the loading circle complete when it's set to visible, so there's
-     * no need to hide the loading circle.
-     */
-    @InjectView(R.id.nothing_to_display_textview)
     protected FontTextView mNoCapturesTextView;
 
     @InjectView(R.id.camera_button)
@@ -176,11 +166,13 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
                 .inflate(R.layout.profile_header_impl, mListView, false);
         mProfileHeaderView.setActionListener(this);
 
-        mEmptyStateHeader.setActionListener(this);
+        mEmptyViewFooter = inflater.inflate(R.layout.row_empty_view, mListView, false);
+        mProgressBar = (ContentLoadingProgressBar) mEmptyViewFooter.findViewById(R.id.progress_bar);
+        mNoCapturesTextView = (FontTextView) mEmptyViewFooter
+                .findViewById(R.id.nothing_to_display_textview);
 
         mListView.addHeaderView(mProfileHeaderView);
-        // empty view does not work with list header, thus it's duplicated in the empty layout
-        mListView.setEmptyView(mEmptyStateLayout);
+        mListView.addFooterView(mEmptyViewFooter);
         mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
         mListView.setAdapter(mAdapter);
 
@@ -364,10 +356,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mFetching = false;
         mProgressBar.hide();
 
-        if (mAdapter.getItems().isEmpty()) {
-            mNoCapturesTextView.setVisibility(View.VISIBLE);
-        }
-
         if (!event.isSuccessful()) {
             showToastError(event.getErrorMessage());
             return;
@@ -380,6 +368,13 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
         //if cacheListing is null, means there are no updates
         //we don't let mFollowerListing get assigned null
+
+        if (mAdapter.isEmpty()) { // header and footer count for one each
+            mNoCapturesTextView.setVisibility(View.VISIBLE);
+        } else {
+            mListView.removeHeaderView(mEmptyViewFooter);
+        }
+
     }
 
     @Override
@@ -392,7 +387,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
             return;
         }
         mProfileHeaderView.setDataToView(account);
-        mEmptyStateHeader.setDataToView(account);
 
         boolean isSelf = account.isUserRelationshipTypeSelf();
         String user = account.getFname() != null ? account.getFname() : "This user";
