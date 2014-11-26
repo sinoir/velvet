@@ -24,7 +24,6 @@ import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
-import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
@@ -72,8 +71,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-//TODO paginate capturenotes listview? go to another screen?
 
 /**
  * Inits request for full {@link BaseWine} information and {@link CaptureNote CaptureNotes} for that
@@ -128,6 +125,12 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.price_view)
     protected WinePriceView mWinePriceView;
 
+    @InjectView(R.id.ratings_all_years_container)
+    protected View mRatingsContainer;
+
+    @InjectView(R.id.varietal_region_container)
+    protected View mVarietalRegionContainer;
+
     @InjectView(R.id.varietal_container)
     protected View mVarietalContainer;
 
@@ -163,9 +166,9 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected FloatingActionButton mCameraButton;
 
-    private MutableForegroundColorSpan mAlphaSpan;
+//    private MutableForegroundColorSpan mAlphaSpan;
 
-    private SpannableString mTitle;
+//    private SpannableString mTitle;
 
     private CaptureNotesAdapter mAdapter = new CaptureNotesAdapter(this, this);
 
@@ -469,13 +472,11 @@ public class WineProfileFragment extends BaseFragment implements
 
         if (mBaseWine.getId().equalsIgnoreCase(wineId)) {
             //first cover case where basewine is selected
-            Log.d(TAG, "baseWine chosen");
             mType = Type.BASE_WINE;
             updateRatingsView(mBaseWine);
             //change back to default wineProfile to show pricing for it
             mSelectedWineVintage = mBaseWine.getDefaultWineProfile();
         } else {
-            Log.d(TAG, "wineProfile chosen");
             //if wineId is not basewine, then it must be a wineprofile
             mSelectedWineVintage = mBaseWine.getWineProfileByWineId(wineId);
             mType = Type.WINE_PROFILE;
@@ -755,6 +756,8 @@ public class WineProfileFragment extends BaseFragment implements
         String regionPath = baseWine.getRegionPathDisplayText(getActivity());
         mRegionPathTextView.setText(regionPath);
 
+        mVarietalRegionContainer.setVisibility(View.VISIBLE);
+
         updateRatingsView(baseWine);
 
         if (!mViewWineTracked) {
@@ -779,6 +782,8 @@ public class WineProfileFragment extends BaseFragment implements
                 .getQuantityString(R.plurals.wine_profile_pro_ratings_count, proCount, proCount);
         mAllRatingsCountTextView.setText(allRatingsCount);
         mProRatingsCountTextView.setText(proRatingsCount);
+
+        mRatingsContainer.setVisibility(View.VISIBLE);
     }
 
     /**

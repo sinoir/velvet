@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="600dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
 
     <com.delectable.mobile.ui.common.widget.WineBannerView
         android:id="@+id/wine_banner_view"
@@ -16,6 +17,7 @@
         android:id="@+id/ratings_all_years_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_profile_ratings_all_years_container_height"
+        android:visibility="gone"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
         android:paddingRight="@dimen/general_row_horizontal_spacing">
 
@@ -91,6 +93,7 @@
         android:layout_height="wrap_content"
         android:background="@color/d_white"
         android:orientation="vertical"
+        android:visibility="gone"
         android:paddingBottom="@dimen/wine_profile_varietal_region_container_vertical_spacing"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
         android:paddingRight="@dimen/general_row_horizontal_spacing"

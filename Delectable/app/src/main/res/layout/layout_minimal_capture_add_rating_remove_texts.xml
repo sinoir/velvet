@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="30dp"
+    android:layout_height="48dp"
     android:visibility="visible">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/add_rating_textview"
-        android:gravity="center_vertical|left"
+        android:gravity="center_vertical"
         android:text="@string/minimal_capture_remove"
         android:textColor="@color/medium_gray_to_dark_gray"
         android:textSize="@dimen/text_size_medium"
