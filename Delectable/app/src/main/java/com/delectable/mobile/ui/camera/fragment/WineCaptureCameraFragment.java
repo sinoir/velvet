@@ -5,6 +5,8 @@ import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.util.CameraUtil;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,13 +18,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
@@ -31,6 +38,12 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 
 public class WineCaptureCameraFragment extends CameraFragment {
+
+    private static enum State {
+        CAPTURE, CONFIRM, SUBMIT;
+    }
+
+    private int ANIMATION_TRANSLATION;
 
     public static final int SELECT_PHOTO = 100;
 
@@ -42,11 +55,17 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @InjectView(R.id.camera_container)
     protected View mCameraContainer;
 
+    @InjectView(R.id.preview_image)
+    protected ImageView mPreviewImage;
+
     @InjectView(R.id.camera_roll_button)
     protected View mCameraRollButton;
 
     @InjectView(R.id.capture_button)
     protected View mCaptureButton;
+
+    @InjectView(R.id.confirm_button)
+    protected View mConfirmButton;
 
     @InjectView(R.id.flash_button)
     protected Button mFlashButton;
@@ -54,12 +73,22 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @InjectView(R.id.close_button)
     protected View mCloseButton;
 
+    @InjectView(R.id.cancel_button)
+    protected View mCancelButton;
+
     private View mView;
+
+    private State mState = State.CAPTURE;
+
+    private Bitmap mCapturedImageBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        ANIMATION_TRANSLATION = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75,
+                getResources().getDisplayMetrics());
     }
 
     @Override
@@ -75,6 +104,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
         display.getSize(screenSize);
         RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
         mCameraContainer.setLayoutParams(parms);
+        FrameLayout.LayoutParams previewImageParms = new FrameLayout.LayoutParams(screenSize.x,
+                screenSize.x);
+        mPreviewImage.setLayoutParams(previewImageParms);
 
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
@@ -115,9 +147,166 @@ public class WineCaptureCameraFragment extends CameraFragment {
         takeJpegCroppedPicture(new PictureTakenCallback() {
             @Override
             public void onBitmapCaptured(Bitmap bitmap) {
-                launchOptionsScreen(bitmap);
+                onPictureTaken(bitmap);
             }
         });
+    }
+
+    private void onPictureTaken(Bitmap bitmap) {
+        mCapturedImageBitmap = bitmap;
+        mPreviewImage.setImageBitmap(bitmap);
+        animateFromCaptureToConfirm();
+    }
+
+    private void animateFromCaptureToConfirm() {
+        mState = State.CONFIRM;
+
+        mPreviewImage.setVisibility(View.VISIBLE);
+        mPreviewImage.animate()
+                .alpha(1)
+                .setDuration(400)
+                .setListener(null)
+                .start();
+
+        mCaptureButton.animate()
+                .alpha(0)
+                .rotation(180)
+                .setDuration(400)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mCaptureButton.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .start();
+
+        mConfirmButton.setVisibility(View.VISIBLE);
+        mConfirmButton.setRotation(-180);
+        mConfirmButton.animate()
+                .alpha(1)
+                .rotation(0)
+                .setDuration(400)
+                .setListener(null)
+                .start();
+
+        mFlashButton.animate()
+                .alpha(0)
+                .translationXBy(ANIMATION_TRANSLATION)
+                .setDuration(400)
+                .setInterpolator(new AccelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mFlashButton.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+
+        mCameraRollButton.animate()
+                .alpha(0)
+                .translationYBy(ANIMATION_TRANSLATION)
+                .setDuration(400)
+                .setInterpolator(new AccelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mCameraRollButton.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+
+        mCloseButton.animate()
+                .alpha(0)
+                .setDuration(400)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mCloseButton.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+
+        mCancelButton.setAlpha(0);
+        mCancelButton.setVisibility(View.VISIBLE);
+        mCancelButton.animate()
+                .alpha(1)
+                .setDuration(400)
+                .setListener(null)
+                .start();
+    }
+
+    private void animateFromConfirmToCapture() {
+        mState = State.CAPTURE;
+
+        mCameraPreview.startPreview();
+
+        mPreviewImage.animate()
+                .alpha(0)
+                .setDuration(400)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mPreviewImage.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+
+        mCaptureButton.setEnabled(true);
+        mCaptureButton.setVisibility(View.VISIBLE);
+        mCaptureButton.animate()
+                .alpha(1)
+                .rotation(0)
+                .setDuration(400)
+                .setListener(null)
+                .start();
+
+        mConfirmButton.animate()
+                .alpha(0)
+                .rotation(-180)
+                .setDuration(400)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mConfirmButton.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .start();
+
+        mFlashButton.setVisibility(View.VISIBLE);
+        mFlashButton.animate()
+                .alpha(1)
+                .translationX(0)
+                .setDuration(400)
+                .setInterpolator(new DecelerateInterpolator())
+                .setListener(null)
+                .start();
+
+        mCameraRollButton.setVisibility(View.VISIBLE);
+        mCameraRollButton.animate()
+                .alpha(1)
+                .translationY(0)
+                .setDuration(400)
+                .setInterpolator(new DecelerateInterpolator())
+                .setListener(null)
+                .start();
+
+        mCloseButton.setVisibility(View.VISIBLE);
+        mCloseButton.animate()
+                .alpha(1)
+                .setDuration(400)
+                .setListener(null)
+                .start();
+
+        mCancelButton.animate()
+                .alpha(0)
+                .setDuration(400)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mCancelButton.setVisibility(View.GONE);
+                    }
+                })
+                .start();
     }
 
     @OnTouch(R.id.camera_container)
@@ -135,6 +324,20 @@ public class WineCaptureCameraFragment extends CameraFragment {
         return true;
     }
 
+    @OnClick(R.id.cancel_button)
+    protected void cancelScan() {
+        if (mState == State.CONFIRM) {
+            animateFromConfirmToCapture();
+        }
+    }
+
+    @OnClick(R.id.confirm_button)
+    protected void confirmImage() {
+        WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
+                .newInstance(mCapturedImageBitmap);
+        launchNextFragment(fragment);
+    }
+
     @OnClick(R.id.flash_button)
     public void toggleFlashClicked() {
         toggleFlash();
@@ -147,11 +350,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
         String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
         mFlashButton.setText(flashText);
         return isFlashOn;
-    }
-
-    private void launchOptionsScreen(Bitmap imageData) {
-        WineCaptureConfirmFragment fragment = WineCaptureConfirmFragment.newInstance(imageData);
-        launchNextFragment(fragment);
     }
 
     @Override
@@ -186,11 +384,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected void onPostExecute(Bitmap selectedImage) {
                 super.onPostExecute(selectedImage);
                 if (selectedImage != null) {
-                    launchOptionsScreen(selectedImage);
+                    onPictureTaken(selectedImage);
                 } else {
                     showToastError("Failed to load image");
                 }
             }
         }.execute();
     }
+
 }
