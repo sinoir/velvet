@@ -2,14 +2,14 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.Identifier;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsRemoveIdentifierRequest;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.Identifier;
 import com.path.android.jobqueue.Params;
 
 import android.util.Log;
@@ -22,7 +22,7 @@ public class RemoveIdentifierJob extends BaseJob {
 
 
     public RemoveIdentifierJob(Identifier identifier) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
         mIdentifierId = identifier.getId();
     }
 
@@ -44,7 +44,6 @@ public class RemoveIdentifierJob extends BaseJob {
 
         //hold onto original state of account
         UserInfo.setTempAccount(account);
-
 
         //remove from list
         account.getIdentifiers().remove(identifier);

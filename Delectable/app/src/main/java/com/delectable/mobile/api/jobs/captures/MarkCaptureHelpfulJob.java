@@ -1,10 +1,10 @@
 package com.delectable.mobile.api.jobs.captures;
 
-import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.ActionRequest;
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
 import com.path.android.jobqueue.Params;
 
 public class MarkCaptureHelpfulJob extends BaseJob {
@@ -17,7 +17,7 @@ public class MarkCaptureHelpfulJob extends BaseJob {
 
 
     public MarkCaptureHelpfulJob(String captureId, boolean action) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
         mCaptureId = captureId;
         mAction = action;
     }

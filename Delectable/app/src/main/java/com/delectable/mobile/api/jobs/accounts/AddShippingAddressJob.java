@@ -23,7 +23,7 @@ public class AddShippingAddressJob extends BaseJob {
     private boolean mIsPrimary;
 
     public AddShippingAddressJob(BaseAddress address, boolean isPrimary) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mAddress = address;
         mIsPrimary = isPrimary;
     }

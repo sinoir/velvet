@@ -7,12 +7,8 @@ import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.BaseListingElement;
-import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.TransitionState;
 import com.path.android.jobqueue.Params;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -33,7 +29,7 @@ public class DeletePendingCaptureJob extends BaseJob {
     private String mCaptureId;
 
     public DeletePendingCaptureJob(String requestId, String accountId, String captureId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mRequestId = requestId;
         mAccountId = accountId;
         mCaptureId = captureId;

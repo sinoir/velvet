@@ -32,7 +32,7 @@ public class FetchAccountPrivateJob extends BaseJob {
      * user's Account private data.
      */
     public FetchAccountPrivateJob(String id) {
-        super(new Params(Priority.UX).requireNetwork());
+        super(new Params(Priority.UX.value()).requireNetwork());
         mAccountId = id;
     }
 

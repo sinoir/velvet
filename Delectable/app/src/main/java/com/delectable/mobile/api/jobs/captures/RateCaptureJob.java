@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesRateRequest;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.path.android.jobqueue.Params;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class RateCaptureJob extends BaseJob {
     private int mCaptureRating;
 
     public RateCaptureJob(String captureId, String userId, int captureRating) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
         mCaptureRating = captureRating;
         mUserId = userId;

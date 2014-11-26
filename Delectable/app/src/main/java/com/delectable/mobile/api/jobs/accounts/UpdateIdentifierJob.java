@@ -1,11 +1,11 @@
 package com.delectable.mobile.api.jobs.accounts;
 
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountsUpdateIdentifierRequest;
+import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.Identifier;
 import com.path.android.jobqueue.Params;
 
 public class UpdateIdentifierJob extends BaseJob {
@@ -19,7 +19,7 @@ public class UpdateIdentifierJob extends BaseJob {
     private String mUserCountryCode;
 
     public UpdateIdentifierJob(Identifier identifier, String string, String userCountryCode) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
         mIdentifierId = identifier.getId();
         mString = string;
         mUserCountryCode = userCountryCode;

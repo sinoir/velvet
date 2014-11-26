@@ -1,10 +1,20 @@
 package com.delectable.mobile.api.jobs;
 
-public class Priority {
+public enum Priority {
 
-    public static final int MIN = 1;
-    public static final int SYNC = 2;
-    public static final int PREFETCH = 3;
-    public static final int UX = 4; // user facing
+    MIN(1),
+    SYNC(2),
+    PREFETCH(3),
+    UX(4); // user facing
+
+    private int value;
+
+    Priority(int value) {
+        this.value = value;
+    }
+
+    public int value() {
+        return value;
+    }
 
 }
