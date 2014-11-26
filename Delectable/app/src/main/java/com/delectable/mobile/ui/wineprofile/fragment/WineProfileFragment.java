@@ -28,6 +28,7 @@ import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
+import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.dialog.Over21Dialog;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
 import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
@@ -43,6 +44,7 @@ import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -52,7 +54,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +80,8 @@ import butterknife.InjectView;
  * {@code baseWine} using the {@code baseWineId} provided.
  */
 public class WineProfileFragment extends BaseFragment implements
-        WineBannerView.ActionsHandler, WineProfileCommentUnitRow.ActionsHandler, InfiniteScrollAdapter.ActionsHandler {
+        WineBannerView.ActionsHandler, WineProfileCommentUnitRow.ActionsHandler,
+        InfiniteScrollAdapter.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -95,9 +97,11 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String VINTAGE_ID = "vintageId";
 
-    private static final int REQUEST_CHOOSE_VINTAGE_DIALOG = 1;
+    private static final int REQUEST_BUY_VINTAGE_DIALOG = 1;
 
     private static final int REQUEST_AGE_DIALOG = 2;
+
+    private static final int CHOOSE_VINTAGE_DIALOG = 3;
 
     private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
 
@@ -211,7 +215,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private boolean mFetching;
 
-
+    //region Initializers
     /**
      * @param wineProfile      used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
@@ -263,7 +267,9 @@ public class WineProfileFragment extends BaseFragment implements
         fragment.setArguments(args);
         return fragment;
     }
+    //endregion Initializers
 
+    //region LifeCycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -308,7 +314,9 @@ public class WineProfileFragment extends BaseFragment implements
         ButterKnife.inject(this, header);
 
         mBanner.setActionsHandler(this);
-        updateBannerData();
+        updateBannerView();
+        mBanner.updateVintage(getString(R.string.wine_profile_all_years));
+
         updateVarietyRegionRatingView(mBaseWine);
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -384,12 +392,12 @@ public class WineProfileFragment extends BaseFragment implements
 
             @Override
             public void onPriceClicked(VintageWineInfo wineInfo) {
-                showVintageDialog();
+                showBuyVintageDialog();
             }
 
             @Override
             public void onSoldOutClicked(VintageWineInfo wineInfo) {
-                showVintageDialog();
+                showBuyVintageDialog();
             }
         });
 
@@ -406,7 +414,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         if (mAdapter.getItems().isEmpty()) {
-            loadLocalData(Type.BASE_WINE, mBaseWineId);
+            loadCaptureNotesData(Type.BASE_WINE, mBaseWineId);
         }
 
         mAnalytics.trackViewWineProfile();
@@ -414,7 +422,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CHOOSE_VINTAGE_DIALOG) {
+        if (requestCode == REQUEST_BUY_VINTAGE_DIALOG) {
             String wineId = data.getStringExtra(BuyVintageDialog.EXTRAS_RESULT_WINE_ID);
             if (resultCode == BuyVintageDialog.RESULT_SWITCH_VINTAGE) {
                 changeVintage(wineId);
@@ -426,7 +434,23 @@ public class WineProfileFragment extends BaseFragment implements
         if (requestCode == REQUEST_AGE_DIALOG && resultCode == Over21Dialog.RESULT_OVER21) {
             startWinePurchaseFlow(mSelectedWineVintage.getId());
         }
+
+        if (requestCode == CHOOSE_VINTAGE_DIALOG && resultCode == Activity.RESULT_OK) {
+            Object wine = data.getParcelableExtra(ChooseVintageDialog.EXTRAS_RESULT_WINE);
+            //when All Years is selected from dialog
+            if (wine instanceof BaseWine) {
+                BaseWine baseWine = (BaseWine) wine;
+                changeVintage(baseWine.getId());
+            }
+            //when a vintage year is selected from the dialog
+            if (wine instanceof WineProfileSubProfile) {
+                WineProfileSubProfile wineProfile = (WineProfileSubProfile) wine;
+                changeVintage(wineProfile.getId());
+            }
+        }
     }
+    //endregion LifeCycle
+
 
     private void startWinePurchaseFlow(String wineId) {
         changeVintage(wineId);
@@ -438,24 +462,42 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     private void changeVintage(String wineId) {
+
         String mOldFetchingId = mFetchingId;
+        mFetchingId = wineId;
 
-        mSelectedWineVintage = mBaseWine.getWineProfileByWineId(wineId);
 
-        mType = Type.WINE_PROFILE;
-        updateRatingsView(mSelectedWineVintage);
-        mFetchingId = mSelectedWineVintage.getId();
-        loadPricingData();
+        if (mBaseWine.getId().equalsIgnoreCase(wineId)) {
+            //first cover case where basewine is selected
+            Log.d(TAG, "baseWine chosen");
+            mType = Type.BASE_WINE;
+            updateRatingsView(mBaseWine);
+            //change back to default wineProfile to show pricing for it
+            mSelectedWineVintage = mBaseWine.getDefaultWineProfile();
+        } else {
+            Log.d(TAG, "wineProfile chosen");
+            //if wineId is not basewine, then it must be a wineprofile
+            mSelectedWineVintage = mBaseWine.getWineProfileByWineId(wineId);
+            mType = Type.WINE_PROFILE;
+            updateRatingsView(mSelectedWineVintage);
+            loadPricingData();
+        }
+
 
         //only clear list if fetching id has changed
         if (!mOldFetchingId.equals(mFetchingId)) {
             mAdapter.getItems().clear();
 
             //first query cache to see if we have something on hand already
-            loadLocalData(mType, mFetchingId);
+            loadCaptureNotesData(mType, mFetchingId);
         }
         // Update the BannerView with new vintage
-        updateBannerData();
+        updateBannerView();
+
+        if (mType == Type.BASE_WINE) {
+            //manually set vintage display to all years
+            mBanner.updateVintage(getString(R.string.wine_profile_all_years));
+        }
     }
 
     //region Load Local Data
@@ -463,7 +505,7 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
      */
-    private void loadLocalData(final Type type, final String wineId) {
+    private void loadCaptureNotesData(final Type type, final String wineId) {
         mFetching = true;
         new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
             @Override
@@ -523,8 +565,7 @@ public class WineProfileFragment extends BaseFragment implements
         if (wineWithPrice != null) {
             mSelectedWineVintage = wineWithPrice;
         }
-
-        updatePriceView();
+        mWinePriceView.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
     }
     //endregion
 
@@ -722,13 +763,6 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    private void updatePriceView() {
-        if (mSelectedWineVintage == null) {
-            return;
-        }
-        mWinePriceView.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
-    }
-
     private void updateRatingsView(Ratingsable ratingsable) {
         //rating avg
         double allAvg = ratingsable.getRatingsSummary().getAllAvg();
@@ -751,35 +785,26 @@ public class WineProfileFragment extends BaseFragment implements
      * The WineBannerView can be set with different types of data depending from where this fragment
      * was spawned.
      */
-    private void updateBannerData() {
-        String wineTitle = null;
+    private void updateBannerView() {
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
-            wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
         } else if (mBaseWineMinimal != null) {
             //spawned from Search Wines or User Captures
             mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
-            wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
         } else if (mBaseWine != null) {
             //called after BaseWine is successfully fetched
             mBanner.updateData(mBaseWine, mCapturePhotoHash);
-            wineTitle = mBaseWine.getProducerName() + " " + mBaseWine.getName();
         }
 
         if (mSelectedWineVintage != null) {
             // When we select a new Vintage
             mBanner.updateVintage(mSelectedWineVintage.getVintage());
+        } else {
+            mBanner.updateVintage(getString(R.string.wine_profile_all_years));
         }
-
-        // TODO sticky toolbar ?
-        // update actionbar title
-//        if (wineTitle != null) {
-//            mTitle = new SpannableString(wineTitle);
-//            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            setActionBarSubtitle(mTitle);
-//        }
     }
+
 
     private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
         mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
@@ -788,25 +813,24 @@ public class WineProfileFragment extends BaseFragment implements
         mCaptureController.markCaptureHelpful(captureNote, markHelpful);
     }
 
-    /**
-     * Makes the rating display text where the rating is a bit bigger than the 10.
-     */
-    private CharSequence makeRatingDisplayText(String rating) {
-        SpannableString ss = new SpannableString(rating);
-        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
-        CharSequence displayText = TextUtils.concat(ss, "/10");
-        return displayText;
-    }
-
     @Override
     public void toggleHelpful(CaptureNote captureNote, boolean markHelpful) {
         markCaptureAsHelpful(captureNote, markHelpful);
     }
 
-    private void showVintageDialog() {
+    private void showChooseVintageDialog() {
+        if (mBaseWine == null) {
+            return;
+        }
+        ChooseVintageDialog dialog = ChooseVintageDialog.newInstance(mBaseWine);
+        dialog.setTargetFragment(this, CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), ChooseVintageDialog.TAG);
+    }
+
+    private void showBuyVintageDialog() {
         BuyVintageDialog dialog = BuyVintageDialog.newInstance(mBaseWineId);
         dialog.setTargetFragment(WineProfileFragment.this,
-                REQUEST_CHOOSE_VINTAGE_DIALOG); //callback goes to onActivityResult
+                REQUEST_BUY_VINTAGE_DIALOG); //callback goes to onActivityResult
         dialog.show(getFragmentManager(), "dialog");
     }
 
@@ -831,7 +855,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public void onVintageClick() {
-        showVintageDialog();
+        showChooseVintageDialog();
     }
 
     @Override
