@@ -74,7 +74,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
     protected View mCloseButton;
 
     @InjectView(R.id.cancel_button)
-    protected View mCancelButton;
+    protected View mRedoButton;
 
     private View mView;
 
@@ -191,7 +191,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
         mFlashButton.animate()
                 .alpha(0)
-                .translationXBy(ANIMATION_TRANSLATION)
+                .translationY(-ANIMATION_TRANSLATION)
                 .setDuration(400)
                 .setInterpolator(new AccelerateInterpolator())
                 .setListener(new AnimatorListenerAdapter() {
@@ -204,7 +204,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
         mCameraRollButton.animate()
                 .alpha(0)
-                .translationYBy(ANIMATION_TRANSLATION)
+                .translationX(ANIMATION_TRANSLATION)
+                .rotation(180)
                 .setDuration(400)
                 .setInterpolator(new AccelerateInterpolator())
                 .setListener(new AnimatorListenerAdapter() {
@@ -217,6 +218,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
         mCloseButton.animate()
                 .alpha(0)
+                .rotation(180)
                 .setDuration(400)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -226,10 +228,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
                 })
                 .start();
 
-        mCancelButton.setAlpha(0);
-        mCancelButton.setVisibility(View.VISIBLE);
-        mCancelButton.animate()
+        mRedoButton.setAlpha(0);
+        mRedoButton.setRotation(-180);
+        mRedoButton.setVisibility(View.VISIBLE);
+        mRedoButton.animate()
                 .alpha(1)
+                .rotation(0)
                 .setDuration(400)
                 .setListener(null)
                 .start();
@@ -275,7 +279,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mFlashButton.setVisibility(View.VISIBLE);
         mFlashButton.animate()
                 .alpha(1)
-                .translationX(0)
+                .translationY(0)
                 .setDuration(400)
                 .setInterpolator(new DecelerateInterpolator())
                 .setListener(null)
@@ -284,7 +288,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mCameraRollButton.setVisibility(View.VISIBLE);
         mCameraRollButton.animate()
                 .alpha(1)
-                .translationY(0)
+                .translationX(0)
+                .rotation(0)
                 .setDuration(400)
                 .setInterpolator(new DecelerateInterpolator())
                 .setListener(null)
@@ -293,17 +298,19 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mCloseButton.setVisibility(View.VISIBLE);
         mCloseButton.animate()
                 .alpha(1)
+                .rotation(0)
                 .setDuration(400)
                 .setListener(null)
                 .start();
 
-        mCancelButton.animate()
+        mRedoButton.animate()
                 .alpha(0)
+                .rotation(-180)
                 .setDuration(400)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mCancelButton.setVisibility(View.GONE);
+                        mRedoButton.setVisibility(View.GONE);
                     }
                 })
                 .start();
