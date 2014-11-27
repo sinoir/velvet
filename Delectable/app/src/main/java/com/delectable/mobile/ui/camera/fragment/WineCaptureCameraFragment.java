@@ -3,10 +3,9 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,15 +17,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -42,8 +38,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
     private static enum State {
         CAPTURE, CONFIRM, SUBMIT;
     }
-
-    private int ANIMATION_TRANSLATION;
 
     public static final int SELECT_PHOTO = 100;
 
@@ -78,17 +72,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     private View mView;
 
-    private State mState = State.CAPTURE;
-
     private Bitmap mCapturedImageBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        ANIMATION_TRANSLATION = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75,
-                getResources().getDisplayMetrics());
     }
 
     @Override
@@ -159,161 +148,29 @@ public class WineCaptureCameraFragment extends CameraFragment {
     }
 
     private void animateFromCaptureToConfirm() {
-        mState = State.CONFIRM;
+        Animate.fadeIn(mPreviewImage);
 
-        mPreviewImage.setVisibility(View.VISIBLE);
-        mPreviewImage.animate()
-                .alpha(1)
-                .setDuration(400)
-                .setListener(null)
-                .start();
+        Animate.crossfadeRotate(mCaptureButton, mConfirmButton);
 
-        mCaptureButton.animate()
-                .alpha(0)
-                .rotation(180)
-                .setDuration(400)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mCaptureButton.setVisibility(View.INVISIBLE);
-                    }
-                })
-                .start();
+        Animate.pushOutUp(mFlashButton);
 
-        mConfirmButton.setVisibility(View.VISIBLE);
-        mConfirmButton.setRotation(-180);
-        mConfirmButton.animate()
-                .alpha(1)
-                .rotation(0)
-                .setDuration(400)
-                .setListener(null)
-                .start();
+        Animate.rollOutRight(mCameraRollButton);
 
-        mFlashButton.animate()
-                .alpha(0)
-                .translationY(-ANIMATION_TRANSLATION)
-                .setDuration(400)
-                .setInterpolator(new AccelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mFlashButton.setVisibility(View.GONE);
-                    }
-                })
-                .start();
-
-        mCameraRollButton.animate()
-                .alpha(0)
-                .translationX(ANIMATION_TRANSLATION)
-                .rotation(180)
-                .setDuration(400)
-                .setInterpolator(new AccelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mCameraRollButton.setVisibility(View.GONE);
-                    }
-                })
-                .start();
-
-        mCloseButton.animate()
-                .alpha(0)
-                .rotation(180)
-                .setDuration(400)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mCloseButton.setVisibility(View.GONE);
-                    }
-                })
-                .start();
-
-        mRedoButton.setAlpha(0);
-        mRedoButton.setRotation(-180);
-        mRedoButton.setVisibility(View.VISIBLE);
-        mRedoButton.animate()
-                .alpha(1)
-                .rotation(0)
-                .setDuration(400)
-                .setListener(null)
-                .start();
+        Animate.crossfadeRotate(mCloseButton, mRedoButton);
     }
 
     private void animateFromConfirmToCapture() {
-        mState = State.CAPTURE;
-
         mCameraPreview.startPreview();
-
-        mPreviewImage.animate()
-                .alpha(0)
-                .setDuration(400)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mPreviewImage.setVisibility(View.GONE);
-                    }
-                })
-                .start();
+        Animate.fadeOut(mPreviewImage);
 
         mCaptureButton.setEnabled(true);
-        mCaptureButton.setVisibility(View.VISIBLE);
-        mCaptureButton.animate()
-                .alpha(1)
-                .rotation(0)
-                .setDuration(400)
-                .setListener(null)
-                .start();
+        Animate.crossfadeRotate(mCaptureButton, mConfirmButton, true);
 
-        mConfirmButton.animate()
-                .alpha(0)
-                .rotation(-180)
-                .setDuration(400)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mConfirmButton.setVisibility(View.INVISIBLE);
-                    }
-                })
-                .start();
+        Animate.pushOutUp(mFlashButton, true);
 
-        mFlashButton.setVisibility(View.VISIBLE);
-        mFlashButton.animate()
-                .alpha(1)
-                .translationY(0)
-                .setDuration(400)
-                .setInterpolator(new DecelerateInterpolator())
-                .setListener(null)
-                .start();
+        Animate.rollOutRight(mCameraRollButton, true);
 
-        mCameraRollButton.setVisibility(View.VISIBLE);
-        mCameraRollButton.animate()
-                .alpha(1)
-                .translationX(0)
-                .rotation(0)
-                .setDuration(400)
-                .setInterpolator(new DecelerateInterpolator())
-                .setListener(null)
-                .start();
-
-        mCloseButton.setVisibility(View.VISIBLE);
-        mCloseButton.animate()
-                .alpha(1)
-                .rotation(0)
-                .setDuration(400)
-                .setListener(null)
-                .start();
-
-        mRedoButton.animate()
-                .alpha(0)
-                .rotation(-180)
-                .setDuration(400)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mRedoButton.setVisibility(View.GONE);
-                    }
-                })
-                .start();
+        Animate.crossfadeRotate(mCloseButton, mRedoButton, true);
     }
 
     @OnTouch(R.id.camera_container)
@@ -333,9 +190,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnClick(R.id.cancel_button)
     protected void cancelScan() {
-        if (mState == State.CONFIRM) {
-            animateFromConfirmToCapture();
-        }
+        animateFromConfirmToCapture();
     }
 
     @OnClick(R.id.confirm_button)
