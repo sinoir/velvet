@@ -184,7 +184,7 @@ public class WineBannerView extends RelativeLayout {
         mWineName.setVisibility(View.VISIBLE);
     }
 
-    public void updateVintage(String vintage) {
+    public void updateVintage(CharSequence vintage) {
         mWineVintage.setVisibility(View.VISIBLE);
         mWineVintage.setText(vintage);
     }

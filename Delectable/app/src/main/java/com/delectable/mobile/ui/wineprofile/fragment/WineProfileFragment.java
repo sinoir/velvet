@@ -53,6 +53,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,6 +186,9 @@ public class WineProfileFragment extends BaseFragment implements
 
     private BaseWine mBaseWine;
 
+    private CharSequence mAllYearsText;
+
+
     /**
      * Keep track of whether we're fetching for baseWine or wineProfile capture notes.
      */
@@ -305,7 +310,17 @@ public class WineProfileFragment extends BaseFragment implements
         mFetchingId = mBaseWineId;
 
         mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
+
+        //last character in the all years text is a v, this just makes that v bold
+        String text = getString(R.string.wine_profile_all_years);
+        SpannableString span = new SpannableString(text);
+        final StyleSpan boldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+        final RelativeSizeSpan sizeSpan = new RelativeSizeSpan(1.1f);
+        span.setSpan(boldSpan, text.length()-1, text.length(), 0);
+        span.setSpan(sizeSpan, text.length()-1, text.length(), 0);
+        mAllYearsText = span;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -318,7 +333,7 @@ public class WineProfileFragment extends BaseFragment implements
 
         mBanner.setActionsHandler(this);
         updateBannerView();
-        mBanner.updateVintage(getString(R.string.wine_profile_all_years));
+        mBanner.updateVintage(mAllYearsText);
 
         updateVarietyRegionRatingView(mBaseWine);
 
@@ -497,7 +512,7 @@ public class WineProfileFragment extends BaseFragment implements
 
         if (mType == Type.BASE_WINE) {
             //manually set vintage display to all years
-            mBanner.updateVintage(getString(R.string.wine_profile_all_years));
+            mBanner.updateVintage(mAllYearsText);
         }
     }
 
@@ -806,7 +821,7 @@ public class WineProfileFragment extends BaseFragment implements
             // When we select a new Vintage
             mBanner.updateVintage(mSelectedWineVintage.getVintage());
         } else {
-            mBanner.updateVintage(getString(R.string.wine_profile_all_years));
+            mBanner.updateVintage(mAllYearsText);
         }
     }
 

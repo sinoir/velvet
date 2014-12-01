@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d_white_80op">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="300dp"
+    android:background="@color/d_white"
     android:orientation="vertical">
 
     <include layout="@layout/wine_purchase_dialog_header" />
@@ -19,3 +24,4 @@
         android:layout_height="wrap_content" />
 
 </LinearLayout>
+    </FrameLayout>

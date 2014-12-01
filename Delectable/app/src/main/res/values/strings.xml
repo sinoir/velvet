@@ -250,7 +250,8 @@
         <item quantity="one">1 PRO RATING</item>
         <item quantity="other">%d PRO RATINGS</item>
     </plurals>
-    <string name="wine_profile_all_years">All years</string>
+    <!--TODO need asset for down arrow-->
+    <string name="wine_profile_all_years">All years  v</string>
     <string name="wine_profile_check_price">Check price</string>
     <string name="wine_profile_sold_out">Sold out</string>
     <string name="choose_vintage_dialog_title">Choose vintage</string>
