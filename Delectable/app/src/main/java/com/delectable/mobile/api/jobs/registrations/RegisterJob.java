@@ -31,7 +31,7 @@ public class RegisterJob extends BaseJob {
     private String mLname;
 
     public RegisterJob(String email, String password, String fname, String lname) {
-        super(new Params(Priority.UX));
+        super(new Params(Priority.UX.value()));
         mEmail = email;
         mPassword = password;
         mFname = fname;

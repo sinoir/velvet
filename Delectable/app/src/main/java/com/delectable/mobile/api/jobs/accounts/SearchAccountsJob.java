@@ -2,8 +2,8 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.endpointmodels.SearchRequest;
+import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.events.accounts.SearchAccountsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
@@ -28,7 +28,7 @@ public class SearchAccountsJob extends BaseJob {
      * @param limit  How many items to retrieve at once.
      */
     public SearchAccountsJob(String q, int offset, int limit) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mQ = q;
         mOffset = offset;
         mLimit = limit;

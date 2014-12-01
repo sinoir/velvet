@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.camera.fragment;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
 
 import android.content.Context;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
@@ -31,6 +34,10 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 
 public class WineCaptureCameraFragment extends CameraFragment {
+
+    private static enum State {
+        CAPTURE, CONFIRM, SUBMIT;
+    }
 
     public static final int SELECT_PHOTO = 100;
 
@@ -42,11 +49,17 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @InjectView(R.id.camera_container)
     protected View mCameraContainer;
 
+    @InjectView(R.id.preview_image)
+    protected ImageView mPreviewImage;
+
     @InjectView(R.id.camera_roll_button)
     protected View mCameraRollButton;
 
     @InjectView(R.id.capture_button)
     protected View mCaptureButton;
+
+    @InjectView(R.id.confirm_button)
+    protected View mConfirmButton;
 
     @InjectView(R.id.flash_button)
     protected Button mFlashButton;
@@ -54,7 +67,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @InjectView(R.id.close_button)
     protected View mCloseButton;
 
+    @InjectView(R.id.cancel_button)
+    protected View mRedoButton;
+
     private View mView;
+
+    private Bitmap mCapturedImageBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +93,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
         display.getSize(screenSize);
         RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
         mCameraContainer.setLayoutParams(parms);
+        FrameLayout.LayoutParams previewImageParms = new FrameLayout.LayoutParams(screenSize.x,
+                screenSize.x);
+        mPreviewImage.setLayoutParams(previewImageParms);
 
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
@@ -115,9 +136,41 @@ public class WineCaptureCameraFragment extends CameraFragment {
         takeJpegCroppedPicture(new PictureTakenCallback() {
             @Override
             public void onBitmapCaptured(Bitmap bitmap) {
-                launchOptionsScreen(bitmap);
+                onPictureTaken(bitmap);
             }
         });
+    }
+
+    private void onPictureTaken(Bitmap bitmap) {
+        mCapturedImageBitmap = bitmap;
+        mPreviewImage.setImageBitmap(bitmap);
+        animateFromCaptureToConfirm();
+    }
+
+    private void animateFromCaptureToConfirm() {
+        Animate.fadeIn(mPreviewImage);
+
+        Animate.crossfadeRotate(mCaptureButton, mConfirmButton);
+
+        Animate.pushOutUp(mFlashButton);
+
+        Animate.rollOutRight(mCameraRollButton);
+
+        Animate.crossfadeRotate(mCloseButton, mRedoButton);
+    }
+
+    private void animateFromConfirmToCapture() {
+        mCameraPreview.startPreview();
+        Animate.fadeOut(mPreviewImage);
+
+        mCaptureButton.setEnabled(true);
+        Animate.crossfadeRotate(mCaptureButton, mConfirmButton, true);
+
+        Animate.pushOutUp(mFlashButton, true);
+
+        Animate.rollOutRight(mCameraRollButton, true);
+
+        Animate.crossfadeRotate(mCloseButton, mRedoButton, true);
     }
 
     @OnTouch(R.id.camera_container)
@@ -135,6 +188,18 @@ public class WineCaptureCameraFragment extends CameraFragment {
         return true;
     }
 
+    @OnClick(R.id.cancel_button)
+    protected void cancelScan() {
+        animateFromConfirmToCapture();
+    }
+
+    @OnClick(R.id.confirm_button)
+    protected void confirmImage() {
+        WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
+                .newInstance(mCapturedImageBitmap);
+        launchNextFragment(fragment);
+    }
+
     @OnClick(R.id.flash_button)
     public void toggleFlashClicked() {
         toggleFlash();
@@ -147,11 +212,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
         String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
         mFlashButton.setText(flashText);
         return isFlashOn;
-    }
-
-    private void launchOptionsScreen(Bitmap imageData) {
-        WineCaptureConfirmFragment fragment = WineCaptureConfirmFragment.newInstance(imageData);
-        launchNextFragment(fragment);
     }
 
     @Override
@@ -186,11 +246,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected void onPostExecute(Bitmap selectedImage) {
                 super.onPostExecute(selectedImage);
                 if (selectedImage != null) {
-                    launchOptionsScreen(selectedImage);
+                    onPictureTaken(selectedImage);
                 } else {
                     showToastError("Failed to load image");
                 }
             }
         }.execute();
     }
+
 }

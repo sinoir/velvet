@@ -1,13 +1,13 @@
 package com.delectable.mobile.api.jobs.accounts;
 
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsAssociateTwitterRequest;
 import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountPrivateResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsAssociateTwitterRequest;
+import com.delectable.mobile.api.models.Account;
 import com.path.android.jobqueue.Params;
 
 public class AssociateTwitterJob extends BaseJob {
@@ -25,7 +25,7 @@ public class AssociateTwitterJob extends BaseJob {
 
     public AssociateTwitterJob(long twitterId, String token, String tokenSecret,
             String screenName) {
-        super(new Params(Priority.UX).requireNetwork());
+        super(new Params(Priority.UX.value()).requireNetwork());
 
         mTwitterId = twitterId;
         mToken = token;
