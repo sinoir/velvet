@@ -61,8 +61,6 @@
     <dimen name="version_upgrade_dialog_height">215dp</dimen>
     <dimen name="version_upgrade_dialog_horizontal_spacing">20dp</dimen>
     <dimen name="version_upgrade_dialog_vertical_spacing">20dp</dimen>
-    <dimen name="version_upgrade_dialog_header_height">60dp</dimen>
-    <dimen name="version_upgrade_dialog_title_text_size">22sp</dimen>
 
 
     <!-- Signup/Login-->
@@ -104,9 +102,7 @@
     <dimen name="reset_password_dialog_height">215dp</dimen>
     <dimen name="reset_password_dialog_horizontal_spacing">20dp</dimen>
     <dimen name="reset_password_dialog_vertical_spacing">30dp</dimen>
-    <dimen name="reset_password_dialog_title_text_size">22sp</dimen>
     <dimen name="reset_password_dialog_action_text_size">20sp</dimen>
-    <dimen name="reset_password_dialog_header_height">60dp</dimen>
 
 
     <!-- User Profile Dimens -->
@@ -174,15 +170,6 @@
     <dimen name="wine_profile_ratings_count_text_size">12sp</dimen>
     <dimen name="wine_profile_ratings_texts_horizontal_spacing">25dp</dimen>
     <dimen name="wine_profile_all_years_text_size">16sp</dimen>
-
-    <!-- Choose Vintage Dialog -->
-    <dimen name="choose_vintage_dialog_header_height">60dp</dimen>
-    <dimen name="choose_vintage_dialog_title_text_size">22sp</dimen>
-    <dimen name="choose_vintage_dialog_header_divider_height">1px</dimen>
-    <dimen name="choose_vintage_dialog_year_text_size">16sp</dimen>
-    <dimen name="choose_vintage_dialog_ratings_count_text_size">14sp</dimen>
-    <dimen name="choose_vintage_dialog_text_horizontal_spacing">5dp</dimen>
-    <dimen name="choose_vintage_dialog_rating_text_size">16sp</dimen>
 
     <!-- Wine Banner -->
     <dimen name="wine_banner_triangle_width">14dp</dimen>

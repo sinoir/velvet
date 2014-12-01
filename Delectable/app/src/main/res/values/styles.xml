@@ -200,7 +200,7 @@
 
     <style name="ResetPasswordDialogActionText">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/reset_password_dialog_header_height</item>
+        <item name="android:layout_height">@dimen/dialog_header_height</item>
         <item name="android:textSize">@dimen/reset_password_dialog_action_text_size</item>
         <item name="fontName">whitney_medium_sc</item>
     </style>
