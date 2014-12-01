@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!-- made for a RelativeLayout -->
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- made for a RelativeLayout -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -31,10 +33,11 @@
     <!--this rating textview has a defined width so that the ratings count is always perfectly right aligned-->
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/rating"
-        android:layout_width="@dimen/choose_vintage_dialog_rating_textview_width"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dp"
+        android:ems="2"
         android:gravity="center_vertical|right"
         android:singleLine="true"
         android:text="9.8"
