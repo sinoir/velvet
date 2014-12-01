@@ -296,7 +296,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccount().getId())) {
+        if (!mUserId.equals(event.getAccountId())) {
             return;
         }
 
