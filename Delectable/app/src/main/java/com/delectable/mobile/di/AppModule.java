@@ -112,7 +112,7 @@ import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.NotificationsFragment;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
-import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
+import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
@@ -166,7 +166,7 @@ import de.greenrobot.event.EventBus;
                 // Dialogs
                 BaseDialogFragment.class,
                 BaseEventBusDialogFragment.class,
-                ChooseVintageDialog.class,
+                BuyVintageDialog.class,
                 ResetPasswordDialog.class,
                 AddShippingAddressDialog.class,
                 AddPaymentMethodDialog.class,

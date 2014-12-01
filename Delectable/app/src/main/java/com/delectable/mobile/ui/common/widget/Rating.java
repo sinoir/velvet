@@ -2,12 +2,22 @@ package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
 
+import android.content.Context;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+
+import java.text.DecimalFormat;
+
 public enum Rating {
     EXQUISITE(30.0d, 9.0d, 0.75d, R.color.d_rating_exquisite, R.drawable.ic_ratingbar_best),
     GOOD(20.0d, 8.0d, 0.5d, R.color.d_rating_good, R.drawable.ic_ratingbar_good),
     OK(10.0d, 7.0d, 0.25d, R.color.d_rating_ok, R.drawable.ic_ratingbar_mediocre),
     BAD(0.0d, 6.0d, 0d, R.color.d_rating_bad, R.drawable.ic_ratingbar_terrible),
     NO_RATING(-1.0d, -1.0d, -1.0d, R.color.d_light_gray, R.color.transparent);
+
+    private static final int NO_AVG_RATING = -1;
+
+    private static final DecimalFormat ONE_DECIMAL_SPACE = new DecimalFormat("0.0");
 
     private double mStartValueOfFourty;
 
@@ -17,11 +27,10 @@ public enum Rating {
 
     private int mColorRes;
 
-
-
     private int mHappyFaceRes;
 
-    private Rating(double startValue40, double startValue10, double startPercent, int colorRes, int happyFaceRes) {
+    private Rating(double startValue40, double startValue10, double startPercent, int colorRes,
+            int happyFaceRes) {
         mStartValueOfFourty = startValue40;
         mStartValueOfTen = startValue10;
         mStartPercent = startPercent;
@@ -94,6 +103,36 @@ public enum Rating {
             return ratingOf40;
         }
         return (ratingOf40 + 60.0f) / 10.0f;
+    }
+
+    /**
+     * Returns a colored rating of 10 for the rating of 40 provided.
+     */
+    public static CharSequence forDisplay(Context context, double ratingOf40) {
+        //handling a no rating case, show a dash
+        if (ratingOf40 == NO_AVG_RATING) {
+            String dash = "-";
+            SpannableString span = new SpannableString(dash);
+            ForegroundColorSpan GRAY_COLOR = new ForegroundColorSpan(
+                    context.getResources().getColor(R.color.d_medium_gray));
+            span.setSpan(GRAY_COLOR, 0, dash.length(), 0);
+            return span;
+        }
+
+        double ratingOf10 = Rating.getRatingOfTenFrom40(ratingOf40);
+        String ratingStr = ONE_DECIMAL_SPACE.format(ratingOf10);
+        //10.0 always displays as 10
+        if (ratingStr.equals("10.0")) {
+            ratingStr = "10";
+        }
+        Rating ratingItem = Rating.valueForRatingOfFourty(ratingOf40);
+
+        ForegroundColorSpan COLOR = new ForegroundColorSpan(
+                context.getResources().getColor(ratingItem.getColorRes()));
+
+        SpannableString ratingSpan = new SpannableString(ratingStr);
+        ratingSpan.setSpan(COLOR, 0, ratingStr.length(), 0);
+        return ratingSpan;
     }
 
 }

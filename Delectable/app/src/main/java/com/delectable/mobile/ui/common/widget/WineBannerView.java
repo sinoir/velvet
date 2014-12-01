@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * This view has a picture of the wine capture, as well as the producer and wine name in the bottom
@@ -32,6 +33,11 @@ import butterknife.InjectView;
 public class WineBannerView extends RelativeLayout {
 
     private static final String TAG = WineBannerView.class.getSimpleName();
+
+
+    public interface ActionsHandler {
+        void onVintageClick();
+    }
 
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
@@ -53,6 +59,8 @@ public class WineBannerView extends RelativeLayout {
     private int mTriangleCenterPosition;
 
     private Paint mPaint;
+
+    private ActionsHandler mActionsHandler;
 
     public WineBannerView(Context context) {
         this(context, null);
@@ -88,6 +96,18 @@ public class WineBannerView extends RelativeLayout {
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setAntiAlias(true);
     }
+
+    public void setActionsHandler(ActionsHandler handler) {
+        mActionsHandler = handler;
+    }
+
+    @OnClick(R.id.wine_vintage)
+    protected void onVintageClick() {
+        if (mActionsHandler != null) {
+            mActionsHandler.onVintageClick();
+        }
+    }
+
 
     /**
      * Will include the vintage with the wine name in the view as well.
@@ -164,7 +184,7 @@ public class WineBannerView extends RelativeLayout {
         mWineName.setVisibility(View.VISIBLE);
     }
 
-    public void updateVintage(String vintage) {
+    public void updateVintage(CharSequence vintage) {
         mWineVintage.setVisibility(View.VISIBLE);
         mWineVintage.setText(vintage);
     }

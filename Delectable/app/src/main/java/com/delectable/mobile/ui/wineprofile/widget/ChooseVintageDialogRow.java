@@ -1,8 +1,9 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
-import com.delectable.mobile.util.TextUtil;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.WineProfileSubProfile;
+import com.delectable.mobile.ui.common.widget.Rating;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -14,21 +15,19 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * A representation of the {@link VintageWineInfo} View Model, this is the row for the listview that
- * appears in the Choose Vintage dialog.
+ * A representation of {@link WineProfileSubProfile}, this is the row for the listview that appears
+ * in the {@link com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog ChooseVintageDialog}.
  */
 public class ChooseVintageDialogRow extends RelativeLayout {
-
-    private static final int NO_AVG_RATING = -1;
 
     @InjectView(R.id.year)
     protected TextView mYear;
 
+    @InjectView(R.id.ratings_count)
+    protected TextView mRatingsCount;
+
     @InjectView(R.id.rating)
     protected TextView mRating;
-
-    @InjectView(R.id.price_view)
-    protected WinePriceView mWinePriceView;
 
     public ChooseVintageDialogRow(Context context) {
         this(context, null);
@@ -42,35 +41,39 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         super(context, attrs, defStyle);
 
         View.inflate(context, R.layout.row_dialog_choose_vintage, this);
-
         ButterKnife.inject(this);
     }
 
-    private void updateData(String year, double rating) {
+    public void updateData(String year, int ratingsCount, double rating) {
         mYear.setText(year);
-
-        //rating
-        if (rating == NO_AVG_RATING) { //handling a no rating case, show a dash
-            mRating.setText("-");
-            mRating.setTextColor(getResources().getColor(R.color.d_medium_gray));
-        } else {
-            mRating.setText(TextUtil.makeRatingDisplayText(getContext(), rating));
-        }
+        String ratingCount = getResources()
+                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
+                        ratingsCount);
+        mRatingsCount.setText(ratingCount);
+        mRating.setText(Rating.forDisplay(getContext(), rating));
     }
 
     /**
-     * Convenience method that calls {@link #updateData(String, double)}, used to update the data
-     * for a normal row.
+     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
+     * data for a normal row.
      */
-    public void updateData(VintageWineInfo wineInfo) {
-        String year = wineInfo.getYear();
-        double rating = wineInfo.getRating();
+    public void updateData(WineProfileSubProfile wineProfile) {
+        String year = wineProfile.getVintage();
+        int reviewCount = wineProfile.getRatingsSummary().getAllCount();
+        double rating = wineProfile.getRatingsSummary().getAllAvg();
 
-        updateData(year, rating);
-        mWinePriceView.updateWithPriceInfo(wineInfo);
+        updateData(year, reviewCount, rating);
     }
 
-    public void setWinePriceActionCallback(WinePriceView.WinePriceViewActionsCallback callback) {
-        mWinePriceView.setActionsCallback(callback);
+    /**
+     * Convenience method that calls {@link #updateData(String, int, double)}, used to update the
+     * data for the all years row.
+     */
+    public void updateData(BaseWine baseWine) {
+        String year = getResources().getString(R.string.choose_vintage_dialog_all_years);
+        int reviewCount = baseWine.getRatingsSummary().getAllCount();
+        double rating = baseWine.getRatingsSummary().getAllAvg();
+
+        updateData(year, reviewCount, rating);
     }
 }
