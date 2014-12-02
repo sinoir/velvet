@@ -108,8 +108,10 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
         // set wine banner height to match screen width
         Point screenSize = ViewUtil.getDisplayDimensions();
-        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x,
-                screenSize.x);
+        RelativeLayout.LayoutParams parms = (RelativeLayout.LayoutParams) mWineBanner
+                .getLayoutParams();
+        parms.height = screenSize.x;
+        parms.width = screenSize.x;
         mWineBanner.setLayoutParams(parms);
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
