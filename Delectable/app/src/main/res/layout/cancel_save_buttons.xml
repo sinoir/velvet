@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/cancel"
         android:textColor="@color/d_medium_gray"
-        android:textSize="@dimen/choose_vintage_dialog_title_text_size"
+        android:textSize="@dimen/dialog_title_text_size"
         app:fontName="whitney_medium_sc" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
@@ -23,6 +23,6 @@
         android:gravity="center"
         android:text="@string/save"
         android:textColor="@color/d_chestnut"
-        android:textSize="@dimen/choose_vintage_dialog_title_text_size"
+        android:textSize="@dimen/dialog_title_text_size"
         app:fontName="whitney_medium_sc" />
 </merge>

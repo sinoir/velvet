@@ -37,7 +37,7 @@
                 android:text=""
                 app:fontName="whitney_medium"
                 android:textColor="@color/d_light_green"
-                android:textSize="@dimen/wine_profile_rating_text_size" />
+                android:textSize="18sp" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/all_ratings_count"
@@ -66,7 +66,7 @@
                 android:text=""
                 app:fontName="whitney_medium"
                 android:textColor="@color/d_light_green"
-                android:textSize="@dimen/wine_profile_rating_text_size" />
+                android:textSize="18sp" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
                 android:id="@+id/pro_ratings_count"

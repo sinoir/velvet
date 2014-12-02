@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- made for a RelativeLayout -->
-
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -14,9 +13,11 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="@dimen/general_text_horizontal_spacing"
+        android:ems="2"
         android:gravity="center_vertical"
+        android:text="1998"
         android:textColor="@color/d_dark_gray"
-        android:textSize="@dimen/choose_vintage_dialog_year_text_size"
+        android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
@@ -27,8 +28,9 @@
         android:layout_toRightOf="@+id/year"
         android:gravity="center_vertical"
         android:singleLine="true"
+        android:text="9.1"
         android:textColor="@color/d_light_green"
-        android:textSize="@dimen/wine_profile_rating_text_size"
+        android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium" />
 
     <com.delectable.mobile.ui.wineprofile.widget.WinePriceView
@@ -37,5 +39,4 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical" />
-
 </merge>

@@ -11,7 +11,7 @@
         android:layout_height="@dimen/dialog_header_footer_height"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
-        android:textSize="@dimen/choose_vintage_dialog_title_text_size"
+        android:textSize="@dimen/dialog_title_text_size"
         app:fontName="whitney_book" />
 
     <View

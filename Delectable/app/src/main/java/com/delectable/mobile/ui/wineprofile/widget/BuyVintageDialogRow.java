@@ -1,8 +1,8 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
-import com.delectable.mobile.util.TextUtil;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -54,7 +54,7 @@ public class BuyVintageDialogRow extends RelativeLayout {
             mRating.setText("-");
             mRating.setTextColor(getResources().getColor(R.color.d_medium_gray));
         } else {
-            mRating.setText(TextUtil.makeRatingDisplayText(getContext(), rating));
+            mRating.setText(Rating.forDisplay(getContext(), rating));
         }
     }
 

@@ -15,7 +15,7 @@
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/choose_vintage_dialog_header_divider_height"
+        android:layout_height="1px"
         android:background="@color/d_medium_gray" />
 
     <ListView

@@ -1,7 +1,6 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.App;
-import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.endpointmodels.ActionRequest;
@@ -21,23 +20,19 @@ public class LikeCaptureJob extends BaseJob {
     private static final String TAG = LikeCaptureJob.class.getSimpleName();
 
     @Inject
-    CaptureDetailsModel mCapturesModel;
-
-    @Inject
-    AccountModel mAccountModel;
+    protected CaptureDetailsModel mCapturesModel;
 
     private String mCaptureId;
-
-    private String mUserId;
 
     private AccountMinimal mUserAccount;
 
     private boolean mIsLiked;
 
-    public LikeCaptureJob(String captureId, String userId, boolean isLiked) {
+    private boolean mCancelJob;
+
+    public LikeCaptureJob(String captureId, boolean isLiked) {
         super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
-        mUserId = userId;
         mIsLiked = isLiked;
     }
 
@@ -46,14 +41,24 @@ public class LikeCaptureJob extends BaseJob {
         //toggle like in model
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
         mUserAccount = UserInfo.getAccountPrivate(App.getInstance());
-        cachedCapture.toggleUserLikesCapture(mUserAccount);
-        mCapturesModel.saveCaptureDetails(cachedCapture);
-        getEventBus().post(new LikedCaptureEvent(true, mCaptureId));
+        boolean valueToggled = cachedCapture.toggleUserLikesCapture(mUserAccount, mIsLiked);
+        if (valueToggled) {
+            mCapturesModel.saveCaptureDetails(cachedCapture);
+            getEventBus().post(new LikedCaptureEvent(true, mCaptureId));
+        } else {
+            //cancel job because the value wasn't changed, no need to ping server
+            //optimization for when user clicks like button repeatedly, and the queue ends up having redundant requests
+            mCancelJob = true;
+        }
+
     }
 
     @Override
     public void onRun() throws Throwable {
         super.onRun();
+        if (mCancelJob) {
+            return;
+        }
         String endpoint = "/captures/like";
 
         ActionRequest request = new ActionRequest(mCaptureId, mIsLiked);
@@ -72,7 +77,7 @@ public class LikeCaptureJob extends BaseJob {
 
         //if fail, then we need to revert the like back to the original
         CaptureDetails cachedCapture = mCapturesModel.getCapture(mCaptureId);
-        cachedCapture.toggleUserLikesCapture(mUserAccount);
+        cachedCapture.toggleUserLikesCapture(mUserAccount, !mIsLiked);
         mCapturesModel.saveCaptureDetails(cachedCapture);
         getEventBus().post(new LikedCaptureEvent(getErrorMessage(), mCaptureId, getErrorCode()));
     }

@@ -37,8 +37,8 @@ public class CaptureController {
                 new EditCaptureCommentJob(captureId, commentId, captureComment));
     }
 
-    public void toggleLikeCapture(String captureId, String userId, boolean userLikesCapture) {
-        mJobManager.addJobInBackground(new LikeCaptureJob(captureId, userId, userLikesCapture));
+    public void toggleLikeCapture(String captureId, boolean userLikesCapture) {
+        mJobManager.addJobInBackground(new LikeCaptureJob(captureId, userLikesCapture));
     }
 
     public void rateCapture(String captureId, String userId, int rating) {
