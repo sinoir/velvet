@@ -31,7 +31,7 @@ public class LikeCaptureJob extends BaseJob {
     private boolean mCancelJob;
 
     public LikeCaptureJob(String captureId, boolean isLiked) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
         mIsLiked = isLiked;
     }

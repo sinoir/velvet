@@ -27,7 +27,7 @@ public class LoginFacebookJob extends BaseJob {
     private double mFacebookTokenExpiration;
 
     public LoginFacebookJob(String facebookToken, double facebookTokenExpiration) {
-        super(new Params(Priority.UX));
+        super(new Params(Priority.UX.value()));
         mFacebookToken = facebookToken;
         mFacebookTokenExpiration = facebookTokenExpiration;
     }

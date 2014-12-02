@@ -2,8 +2,8 @@ package com.delectable.mobile.api.jobs.basewines;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.endpointmodels.SearchRequest;
+import com.delectable.mobile.api.endpointmodels.SearchResponse;
 import com.delectable.mobile.api.events.basewines.SearchWinesEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
@@ -29,7 +29,7 @@ public class SearchWinesJob extends BaseJob {
     private int mLimit;
 
     public SearchWinesJob(String q, int offset, int limit) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mQ = q;
         mOffset = offset;
         mLimit = limit;

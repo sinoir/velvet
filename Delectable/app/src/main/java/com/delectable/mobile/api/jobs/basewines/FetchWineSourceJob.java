@@ -30,7 +30,7 @@ public class FetchWineSourceJob extends BaseJob {
      * @param state  - Optional State, if null, will use State from User Account or CA
      */
     public FetchWineSourceJob(String wineId, String state) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mWineId = wineId;
 
         mState = state;

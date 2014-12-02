@@ -22,13 +22,13 @@ public class RemovePaymentMethodJob extends BaseJob {
     private ArrayList<String> mPaymentMethodIds;
 
     public RemovePaymentMethodJob(String paymentId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mPaymentMethodIds = new ArrayList<String>();
         mPaymentMethodIds.add(paymentId);
     }
 
     public RemovePaymentMethodJob(ArrayList<String> paymentIds) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mPaymentMethodIds = paymentIds;
     }
 

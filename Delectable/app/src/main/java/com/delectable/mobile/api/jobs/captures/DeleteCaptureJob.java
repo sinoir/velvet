@@ -1,11 +1,11 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
-import com.delectable.mobile.api.events.captures.DeletedCaptureEvent;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.ActionRequest;
 import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.events.captures.DeletedCaptureEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ public class DeleteCaptureJob extends BaseJob {
     private String mCaptureId;
 
     public DeleteCaptureJob(String captureId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
     }
 

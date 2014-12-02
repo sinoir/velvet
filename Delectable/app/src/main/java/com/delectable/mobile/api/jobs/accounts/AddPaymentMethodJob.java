@@ -23,7 +23,7 @@ public class AddPaymentMethodJob extends BaseJob {
     private PaymentMethod mPaymentMethod;
 
     public AddPaymentMethodJob(PaymentMethod paymentMethod, boolean isPrimary) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mIsPrimary = isPrimary;
         mPaymentMethod = paymentMethod;
     }
