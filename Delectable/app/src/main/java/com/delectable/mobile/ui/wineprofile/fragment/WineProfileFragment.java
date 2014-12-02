@@ -51,10 +51,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -311,14 +308,7 @@ public class WineProfileFragment extends BaseFragment implements
 
         mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
 
-        //last character in the all years text is a v, this just makes that v bold
-        String text = getString(R.string.wine_profile_all_years);
-        SpannableString span = new SpannableString(text);
-        final StyleSpan boldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
-        final RelativeSizeSpan sizeSpan = new RelativeSizeSpan(1.1f);
-        span.setSpan(boldSpan, text.length()-1, text.length(), 0);
-        span.setSpan(sizeSpan, text.length()-1, text.length(), 0);
-        mAllYearsText = span;
+        mAllYearsText = getString(R.string.wine_profile_all_years);
     }
 
 
