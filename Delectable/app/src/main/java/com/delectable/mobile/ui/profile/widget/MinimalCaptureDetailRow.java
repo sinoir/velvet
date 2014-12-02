@@ -420,7 +420,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
         // set like button state
-        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(mSelectedUserId);
+        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(UserInfo.getUserId(getContext()));
         mLikeButton.setSelected(userLikesCapture);
 
         //setup likes/comments counts
@@ -475,9 +475,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     @OnClick(R.id.like_button)
-    protected void onLikeClick() {
+    protected void onLikeClick(View view) {
+        view.setSelected(!view.isSelected());
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureDetails);
+            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureDetails, view.isSelected());
         }
     }
 

@@ -596,7 +596,8 @@ public class CaptureDetailsView extends RelativeLayout {
         mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionsHandler.toggleLikeForCapture(mCaptureData);
+                v.setSelected(!v.isSelected());
+                mActionsHandler.toggleLikeForCapture(mCaptureData, v.isSelected());
             }
         });
 
@@ -622,7 +623,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void rateAndCommentForCapture(CaptureDetails capture);
 
-        public void toggleLikeForCapture(CaptureDetails capture);
+        public void toggleLikeForCapture(CaptureDetails capture, boolean liked);
 
         public void launchWineProfile(CaptureDetails capture);
 

@@ -1,7 +1,5 @@
 package com.delectable.mobile.api.models;
 
-import com.delectable.mobile.R;
-
 import java.util.ArrayList;
 
 public class CaptureDetails extends CaptureMinimal {
@@ -98,24 +96,47 @@ public class CaptureDetails extends CaptureMinimal {
         return likesCapture;
     }
 
-    //TODO this method should take the isLiked value as well bc wierd syncing issues may occur
-    public void toggleUserLikesCapture(AccountMinimal userAccount) {
-        boolean userLikedCapture = false;
-        if (liking_participants != null) {
-            for (AccountMinimal account : liking_participants) {
-                if (account.getId().equals(userAccount.getId())) {
-                    userLikedCapture = true;
-                    liking_participants.remove(account);
-                    break;
-                }
+    /**
+     * @return Returns {@code true} if the value was toggled, {@code false} if the value was not toggled because it was already set to that value.
+     */
+    public boolean toggleUserLikesCapture(AccountMinimal userAccount, boolean isLiked) {
+        //initialize array if for some reason it's null
+        if (liking_participants == null) {
+            liking_participants = new ArrayList<AccountMinimal>();
+        }
+
+        //first see if account id already exists inside array
+        final int NOT_INSIDE = -1;
+        int position = NOT_INSIDE;
+        boolean isCurrentlyLiking = false;
+
+        for (int i = 0; i < liking_participants.size(); i++) {
+            AccountMinimal account = liking_participants.get(i);
+            if (account.getId().equals(userAccount.getId())) {
+                position = i;
+                isCurrentlyLiking = true;
+                break;
             }
         }
-        if (!userLikedCapture) {
-            if (liking_participants == null) {
-                liking_participants = new ArrayList<AccountMinimal>();
+
+        //toggled like on
+        if (isLiked) {
+            if (!isCurrentlyLiking) {
+                liking_participants.add(userAccount);
+                return true;
+            } else {
+                return false; //nothing changed, return false
             }
-            liking_participants.add(userAccount);
         }
+
+        //toggled like off
+        if (isCurrentlyLiking) {
+            liking_participants.remove(position);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public int getNumberTaggedParticipants() {
