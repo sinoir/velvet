@@ -220,7 +220,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 //        Animate.fadeOut(mProgressBar);
         Animate.fadeOut(mCameraContainer);
 //        Animate.slideOutDown(mButtonsContainer, 600);
-        Animate.fadeOut(mButtonsContainer, 200);
+        Animate.fadeOut(mButtonsContainer, 400);
     }
 
     @OnTouch(R.id.camera_container)
