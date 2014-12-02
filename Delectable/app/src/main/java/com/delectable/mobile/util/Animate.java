@@ -163,8 +163,8 @@ public class Animate {
     public static void fadeOut(final View view, long startDelay) {
         view.animate()
                 .alpha(0)
-                .setDuration(MEDIUM)
-                .setStartDelay(0)
+                .setDuration(LONG)
+                .setStartDelay(startDelay)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
