@@ -9,7 +9,9 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.ViewUtil;
 
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import javax.inject.Inject;
@@ -102,6 +105,12 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
 
         mWineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
         mWineImageView = mWineBanner.findViewById(R.id.wine_image);
+
+        // set wine banner height to match screen width
+        Point screenSize = ViewUtil.getDisplayDimensions();
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x,
+                screenSize.x);
+        mWineBanner.setLayoutParams(parms);
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);

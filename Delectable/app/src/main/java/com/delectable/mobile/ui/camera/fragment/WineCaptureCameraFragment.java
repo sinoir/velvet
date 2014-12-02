@@ -15,8 +15,8 @@ import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
+import com.delectable.mobile.util.ViewUtil;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -28,12 +28,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -128,10 +126,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
         ButterKnife.inject(this, mView);
 
         // set camera container height to match screen width
-        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point screenSize = new Point();
-        display.getSize(screenSize);
+        Point screenSize = ViewUtil.getDisplayDimensions();
         RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
         mCameraContainer.setLayoutParams(parms);
         FrameLayout.LayoutParams previewImageParms = new FrameLayout.LayoutParams(screenSize.x,
@@ -281,7 +276,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
             mWineScanController
                     .createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
-//            mLoadingDialog.dismiss();
             Animate.fadeOut(mProgressBar);
             handleEventErrorMessage(event);
         }
@@ -298,7 +292,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
 //            mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
         } else {
 ////            mIsPostingCapture = false;
-////            mLoadingDialog.dismiss();
             handleEventErrorMessage(event);
         }
     }
@@ -319,7 +312,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
             handleEventErrorMessage(event);
         }
 //        mIsPostingCapture = false;
-//        mLoadingDialog.dismiss();
     }
 
     private void handleEventErrorMessage(BaseEvent event) {

@@ -38,12 +38,14 @@ import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.delectable.mobile.util.TextUtil;
+import com.delectable.mobile.util.ViewUtil;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -61,6 +63,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -313,6 +316,12 @@ public class WineProfileFragment extends BaseFragment implements
         //prepare header view
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
+
+        // set wine banner height to match screen width
+        Point screenSize = ViewUtil.getDisplayDimensions();
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(screenSize.x,
+                screenSize.x);
+        mBanner.setLayoutParams(parms);
 
         updateBannerData();
         updateVarietyRegionRatingView(mBaseWine);
