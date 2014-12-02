@@ -48,6 +48,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -90,7 +91,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String BASE_WINE_MINIMAL = "baseWineMinimal";
 
-    private static final String BASE_WINE_ID = "baseWineId";
+    protected static final String BASE_WINE_ID = "baseWineId";
 
     private static final String VINTAGE_ID = "vintageId";
 
@@ -177,7 +178,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private PhotoHash mCapturePhotoHash;
 
-    private String mBaseWineId;
+    protected String mBaseWineId;
 
     private String mVintageId;
 
@@ -191,12 +192,12 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * The id that we're fetching captureNotes with. Can be a baseWineId or a wineProfileId.
      */
-    private String mFetchingId;
+    protected String mFetchingId;
 
     /**
      * If this is not null, then it means this fragment was spawned from Search Wines.
      */
-    private BaseWineMinimal mBaseWineMinimal;
+    protected BaseWineMinimal mBaseWineMinimal;
 
 
     private Listing<CaptureNote, String> mCaptureNoteListing;
@@ -226,7 +227,7 @@ public class WineProfileFragment extends BaseFragment implements
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
-            PhotoHash capturePhotoHash) {
+            @Nullable PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(WINE_PROFILE, wineProfile);
@@ -243,7 +244,7 @@ public class WineProfileFragment extends BaseFragment implements
      */
     //used for Search Wines and User Profiles
     public static WineProfileFragment newInstance(BaseWineMinimal baseWine,
-            PhotoHash capturePhotoHash) {
+            @Nullable PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(BASE_WINE_MINIMAL, baseWine);
@@ -261,7 +262,7 @@ public class WineProfileFragment extends BaseFragment implements
      * @param baseWineId required
      * @param vintageId  optional
      */
-    public static WineProfileFragment newInstance(String baseWineId, String vintageId) {
+    public static WineProfileFragment newInstance(String baseWineId, @Nullable String vintageId) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putString(BASE_WINE_ID, baseWineId);
@@ -405,16 +406,18 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        if (mBaseWine == null) {
+        if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
         }
 
-        if (mAdapter.getItems().isEmpty()) {
+        if (mBaseWineId != null && mAdapter.getItems().isEmpty()) {
             loadLocalData(Type.BASE_WINE, mBaseWineId);
         }
 
-        mAnalytics.trackViewWineProfile();
+        if (mBaseWineId != null) {
+            mAnalytics.trackViewWineProfile();
+        }
     }
 
     @Override
@@ -469,6 +472,9 @@ public class WineProfileFragment extends BaseFragment implements
      * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
      */
     private void loadLocalData(final Type type, final String wineId) {
+        if (wineId == null) {
+            return;
+        }
         mFetching = true;
         new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
             @Override
@@ -535,7 +541,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     //region EventBus Events
     public void onEventMainThread(UpdatedBaseWineEvent event) {
-        if (!mBaseWineId.equals(event.getBaseWineId())) {
+        if (mBaseWineId != null && !mBaseWineId.equals(event.getBaseWineId())) {
             return;
         }
 
@@ -623,6 +629,9 @@ public class WineProfileFragment extends BaseFragment implements
      */
     private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote, String> listing,
             Boolean isPullToRefresh) {
+        if (id == null) {
+            return;
+        }
         mFetching = true;
         if (idType == Type.BASE_WINE) {
             mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, listing, null,
@@ -760,14 +769,14 @@ public class WineProfileFragment extends BaseFragment implements
      * The WineBannerView can be set with different types of data depending from where this fragment
      * was spawned.
      */
-    private void updateBannerData() {
+    protected void updateBannerData() {
         String wineTitle = null;
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
             wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
         } else if (mBaseWineMinimal != null) {
-            //spawned from Search Wines or User Captures
+            //spawned from Search Wines or User Captures or Instant Flow
             mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
             wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
         } else if (mBaseWine != null) {

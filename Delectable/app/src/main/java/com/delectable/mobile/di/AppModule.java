@@ -87,6 +87,7 @@ import com.delectable.mobile.api.net.NetworkClient;
 import com.delectable.mobile.api.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
+import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
 import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
@@ -115,6 +116,7 @@ import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
+import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
@@ -155,11 +157,13 @@ import de.greenrobot.event.EventBus;
                 FollowTwitterFriendsTabFragment.class,
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
+                WineCaptureCameraFragment.class,
                 WineCaptureSubmitFragment.class,
                 RateCaptureFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
+                WineProfileInstantFragment.class,
                 TaggedPeopleFragment.class,
                 WineCheckoutFragment.class,
                 ConfirmationDialogFragment.class,

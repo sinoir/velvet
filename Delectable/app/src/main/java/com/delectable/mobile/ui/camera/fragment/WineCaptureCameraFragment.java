@@ -1,8 +1,18 @@
 package com.delectable.mobile.ui.camera.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.WineScanController;
+import com.delectable.mobile.api.events.BaseEvent;
+import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
+import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
+import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.LabelScan;
+import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
+import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
 
@@ -16,6 +26,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -27,6 +38,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,14 +58,20 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     private static final String TAG = WineCaptureCameraFragment.class.getSimpleName();
 
-    @InjectView(R.id.camera_preview)
-    protected CameraView mCameraPreview;
+    @InjectView(R.id.wine_profile_container)
+    protected View mWineProfileContainer;
 
     @InjectView(R.id.camera_container)
     protected View mCameraContainer;
 
+    @InjectView(R.id.camera_preview)
+    protected CameraView mCameraPreview;
+
     @InjectView(R.id.preview_image)
     protected ImageView mPreviewImage;
+
+    @InjectView(R.id.action_buttons_container)
+    protected View mButtonsContainer;
 
     @InjectView(R.id.camera_roll_button)
     protected View mCameraRollButton;
@@ -70,14 +91,34 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @InjectView(R.id.cancel_button)
     protected View mRedoButton;
 
+    @InjectView(R.id.progress_bar)
+    protected View mProgressBar;
+
     private View mView;
 
+    @Inject
+    protected WineScanController mWineScanController;
+
+    private WineProfileInstantFragment mWineProfileFragment;
+
     private Bitmap mCapturedImageBitmap;
+
+    private boolean mIsIdentifying = false;
+
+    private LabelScan mLabelScanResult;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
         setHasOptionsMenu(true);
+
+        // Preload wine profile fragment
+        mWineProfileFragment = WineProfileInstantFragment.newInstance(null);
+        getFragmentManager().beginTransaction()
+                .add(R.id.wine_profile_container, mWineProfileFragment)
+                .setTransition(FragmentTransaction.TRANSIT_NONE)
+                .commit();
     }
 
     @Override
@@ -166,11 +207,25 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mCaptureButton.setEnabled(true);
         Animate.crossfadeRotate(mCaptureButton, mConfirmButton, true);
 
-        Animate.pushOutUp(mFlashButton, true);
+        Animate.pushInDown(mFlashButton);
 
-        Animate.rollOutRight(mCameraRollButton, true);
+        Animate.rollInRight(mCameraRollButton);
 
         Animate.crossfadeRotate(mCloseButton, mRedoButton, true);
+    }
+
+    private void animateFromConfirmToIdentify() {
+        Animate.rotateOut(mConfirmButton);
+        Animate.fadeIn(mProgressBar);
+        Animate.rotateOut(mRedoButton);
+    }
+
+    private void animateFromIdentifyToWineProfile() {
+        mWineProfileContainer.setVisibility(View.VISIBLE);
+//        Animate.fadeOut(mProgressBar);
+        Animate.fadeOut(mCameraContainer, 400);
+//        Animate.slideOutDown(mButtonsContainer, 600);
+        Animate.fadeOut(mButtonsContainer, 400);
     }
 
     @OnTouch(R.id.camera_container)
@@ -195,9 +250,84 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnClick(R.id.confirm_button)
     protected void confirmImage() {
-        WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
-                .newInstance(mCapturedImageBitmap);
-        launchNextFragment(fragment);
+        if (mIsIdentifying) {
+            return;
+        }
+        mIsIdentifying = true;
+
+        animateFromConfirmToIdentify();
+        mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
+//        WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
+//                .newInstance(mCapturedImageBitmap);
+//        launchNextFragment(fragment);
+    }
+
+    public void onEventMainThread(IdentifyLabelScanEvent event) {
+        if (event.isSuccessful()) {
+            mLabelScanResult = event.getLabelScan();
+            // Instant match
+            if (mLabelScanResult != null) {
+                List<BaseWine> matches = mLabelScanResult.getBaseWineMatches();
+                if (matches != null && !matches.isEmpty()) {
+                    BaseWine firstMatch = matches.get(0);
+                    Log.d(TAG, "@@@@@@@@@@@@@@@@@ instantMatch: " + firstMatch.toString());
+                    // load wine profile into container
+                    // FIXME PhotoHash from capture after pending capture is created?
+                    mWineProfileFragment.init(firstMatch);
+                    animateFromIdentifyToWineProfile();
+                }
+            }
+            // Create pending capture
+            mWineScanController
+                    .createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
+        } else {
+//            mLoadingDialog.dismiss();
+            Animate.fadeOut(mProgressBar);
+            handleEventErrorMessage(event);
+        }
+        mIsIdentifying = false;
+        // TODO error handling UI
+    }
+
+    public void onEventMainThread(CreatedPendingCaptureEvent event) {
+        if (event.isSuccessful()) {
+//            mCaptureRequest = new AddCaptureFromPendingCaptureRequest(
+//                    event.getPendingCapture().getId());
+//            updateCaptureRequestWithFormData();
+//            Log.i(TAG, "Adding Request: " + mCaptureRequest);
+//            mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
+        } else {
+////            mIsPostingCapture = false;
+////            mLoadingDialog.dismiss();
+            handleEventErrorMessage(event);
+        }
+    }
+
+    public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
+        if (event.isSuccessful()) {
+//            launchCurrentUserProfile();
+//            if (mShareTwitterButton.isChecked()) {
+//                String tweet = event.getCaptureDetails().getTweet();
+//                String shortUrl = event.getCaptureDetails().getShortShareUrl();
+//                TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
+//            }
+//            if (mShareInstagramButton.isChecked()) {
+//                InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
+//                        mCommentEditText.getText().toString());
+//            }
+        } else {
+            handleEventErrorMessage(event);
+        }
+//        mIsPostingCapture = false;
+//        mLoadingDialog.dismiss();
+    }
+
+    private void handleEventErrorMessage(BaseEvent event) {
+        if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
+            showToastError(R.string.error_capture_wine_no_network);
+        } else {
+            showToastError(event.getErrorMessage());
+        }
     }
 
     @OnClick(R.id.flash_button)
