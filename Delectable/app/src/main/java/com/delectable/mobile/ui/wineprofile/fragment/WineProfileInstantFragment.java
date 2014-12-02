@@ -6,6 +6,7 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MenuItem;
 
 public class WineProfileInstantFragment extends WineProfileFragment {
 
@@ -29,6 +30,15 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         mBaseWineMinimal = baseWine;
         updateBannerData(previewImage);
         onResume();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+//            case R.id.action_rate:
+//                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
