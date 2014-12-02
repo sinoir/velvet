@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.wineprofile.fragment;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -19,10 +20,14 @@ public class WineProfileInstantFragment extends WineProfileFragment {
     }
 
     public void init(BaseWineMinimal baseWine) {
+        init(baseWine, null);
+    }
+
+    public void init(BaseWineMinimal baseWine, Bitmap previewImage) {
         getArguments().putString(BASE_WINE_ID, baseWine.getId());
         mFetchingId = mBaseWineId = baseWine.getId();
         mBaseWineMinimal = baseWine;
-        updateBannerData();
+        updateBannerData(previewImage);
         onResume();
     }
 

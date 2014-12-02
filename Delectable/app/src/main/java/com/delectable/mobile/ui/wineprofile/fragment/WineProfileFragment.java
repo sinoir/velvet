@@ -44,6 +44,7 @@ import com.melnykov.fab.FloatingActionButton;
 import org.apache.commons.lang3.StringUtils;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
@@ -774,11 +775,15 @@ public class WineProfileFragment extends BaseFragment implements
         mRatingsContainer.setVisibility(View.VISIBLE);
     }
 
+    protected void updateBannerData() {
+        updateBannerData(null);
+    }
+
     /**
      * The WineBannerView can be set with different types of data depending from where this fragment
      * was spawned.
      */
-    protected void updateBannerData() {
+    protected void updateBannerData(Bitmap previewImage) {
         String wineTitle = null;
         if (mWineProfile != null) {
             //spawned from Feed Fragment
@@ -786,7 +791,11 @@ public class WineProfileFragment extends BaseFragment implements
             wineTitle = mWineProfile.getProducerName() + " " + mWineProfile.getName();
         } else if (mBaseWineMinimal != null) {
             //spawned from Search Wines or User Captures or Instant Flow
-            mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
+            if (previewImage != null) {
+                mBanner.updateData(mBaseWineMinimal, previewImage);
+            } else {
+                mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
+            }
             wineTitle = mBaseWineMinimal.getProducerName() + " " + mBaseWineMinimal.getName();
         } else if (mBaseWine != null) {
             //called after BaseWine is successfully fetched

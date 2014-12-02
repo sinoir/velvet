@@ -9,6 +9,7 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -155,8 +156,22 @@ public class WineBannerView extends RelativeLayout {
         updateViewWithData(wineImageUrl, producerName, wineName);
     }
 
+    public void updateData(BaseWineMinimal baseWine, Bitmap previewImage) {
+        if (baseWine != null) {
+            updateViewWithPreviewData(previewImage, baseWine.getProducerName(), baseWine.getName());
+        }
+    }
+
+    public void updateViewWithPreviewData(Bitmap previewImage, String producerName,
+            String wineName) {
+        mWineImage.setImageBitmap(previewImage);
+        updateViewWithData(null, producerName, wineName);
+    }
+
     public void updateViewWithData(String wineImageUrl, String producerName, String wineName) {
-        ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
+        if (wineImageUrl != null) {
+            ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
+        }
         mProducerName.setText(producerName.toLowerCase());
         mProducerName.setVisibility(View.VISIBLE);
         mWineName.setText(wineName);

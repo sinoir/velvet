@@ -268,7 +268,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
                     Log.d(TAG, "@@@@@@@@@@@@@@@@@ instantMatch: " + firstMatch.toString());
                     // load wine profile into container
                     // FIXME PhotoHash from capture after pending capture is created?
-                    mWineProfileFragment.init(firstMatch);
+                    mWineProfileFragment.init(firstMatch, mCapturedImageBitmap);
                     animateFromIdentifyToWineProfile();
                 }
             }
