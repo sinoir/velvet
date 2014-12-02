@@ -4,6 +4,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -24,7 +25,6 @@ public class ConfirmationNoTitleDialog extends DialogFragment {
     private static final String POSITIVE_LABEL = "POSITIVE_LABEL";
 
     private static final String NEGATIVE_LABEL = "NEGATIVE_LABEL";
-
 
     @InjectView(R.id.message)
     protected FontTextView mMessageTextView;
@@ -85,11 +85,11 @@ public class ConfirmationNoTitleDialog extends DialogFragment {
         ButterKnife.inject(this, view);
 
         mMessageTextView.setText(mMessage);
-        if (mPositiveButtonLabel != null && !mPositiveButtonLabel.trim().equals("")) {
-            mPositiveTextView.setText(mPositiveButtonLabel);
+        if (mPositiveButtonLabel != null) {
+            mPositiveTextView.setText(mPositiveButtonLabel.toLowerCase());
         }
-        if (mNegativeButtonLabel != null && !mNegativeButtonLabel.trim().equals("")) {
-            mNegativeTextView.setText(mNegativeButtonLabel);
+        if (mNegativeButtonLabel != null) {
+            mNegativeTextView.setText(mNegativeButtonLabel.toLowerCase());
         }
         return view;
     }
@@ -97,10 +97,6 @@ public class ConfirmationNoTitleDialog extends DialogFragment {
 
     @OnClick(R.id.negative_text)
     protected void onNegativeTextClick() {
-        if (getTargetFragment() != null) {
-            getTargetFragment()
-                    .onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
-        }
         dismiss();
     }
 
@@ -113,6 +109,12 @@ public class ConfirmationNoTitleDialog extends DialogFragment {
         dismiss();
     }
 
-
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        if (getTargetFragment() != null) {
+            getTargetFragment()
+                    .onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
+        }
+    }
 }
 

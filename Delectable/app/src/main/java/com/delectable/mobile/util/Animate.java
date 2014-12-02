@@ -35,9 +35,8 @@ public class Animate {
 
     public static void slideOutDown(final View view, long startDelay) {
         view.animate()
-//                .alpha(0)
                 .translationY(view.getMeasuredHeight())
-                .setDuration(LONG)
+                .setDuration(MEDIUM)
                 .setStartDelay(startDelay)
                 .setInterpolator(ACCELERATE)
                 .setListener(new AnimatorListenerAdapter() {

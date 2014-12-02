@@ -270,6 +270,7 @@
     </plurals>
 
     <!-- Wine Capture Flow Screens-->
+    <string name="capture_instant_failed">Looks like a tricky one! A wine expert from Delectable will try to identify this wine manually and add it to your profile.</string>
     <string name="capture_submit_title">Comment &amp; Rate</string>
     <string name="capture_submit_leave_comment_hint">Write a comment or taste note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>

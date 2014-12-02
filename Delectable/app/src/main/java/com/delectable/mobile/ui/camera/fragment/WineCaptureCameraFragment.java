@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.camera.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
@@ -12,6 +13,7 @@ import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
@@ -48,11 +50,9 @@ import butterknife.OnTouch;
 
 public class WineCaptureCameraFragment extends CameraFragment {
 
-    private static enum State {
-        CAPTURE, CONFIRM, SUBMIT;
-    }
+    public static final int REQUEST_SELECT_PHOTO = 100;
 
-    public static final int SELECT_PHOTO = 100;
+    public static final int REQUEST_INSTANT_FAILED = 200;
 
     private static final String TAG = WineCaptureCameraFragment.class.getSimpleName();
 
@@ -162,7 +162,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
     protected void launchCameraRoll() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        startActivityForResult(intent, SELECT_PHOTO);
+        startActivityForResult(intent, REQUEST_SELECT_PHOTO);
     }
 
     @OnClick(R.id.capture_button)
@@ -219,18 +219,17 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mWineProfileContainer.setVisibility(View.VISIBLE);
 //        Animate.fadeOut(mProgressBar);
         Animate.fadeOut(mCameraContainer);
-//        Animate.slideOutDown(mButtonsContainer, 600);
+//        Animate.slideOutDown(mButtonsContainer, 400);
         Animate.fadeOut(mButtonsContainer, 400);
     }
 
-    @OnTouch(R.id.camera_container)
+    @OnTouch(R.id.camera_preview)
     protected boolean focusCamera(View view, MotionEvent event) {
         // TODO: Display Focus icon
         try {
             PointF pointToFocusOn = new PointF(event.getX(), event.getY());
             RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
                     mCameraPreview.getHeight());
-            // TODO: Figure out why we get RuntimeException when running on some phones
             focusOnPoint(pointToFocusOn, bounds);
         } catch (Exception ex) {
             Log.wtf(TAG, "Failed to Focus", ex);
@@ -249,12 +248,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
             return;
         }
         mIsIdentifying = true;
-
         animateFromConfirmToIdentify();
         mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
-//        WineCaptureSubmitFragment fragment = WineCaptureSubmitFragment
-//                .newInstance(mCapturedImageBitmap);
-//        launchNextFragment(fragment);
     }
 
     public void onEventMainThread(IdentifyLabelScanEvent event) {
@@ -265,22 +260,33 @@ public class WineCaptureCameraFragment extends CameraFragment {
                 List<BaseWine> matches = mLabelScanResult.getBaseWineMatches();
                 if (matches != null && !matches.isEmpty()) {
                     BaseWine firstMatch = matches.get(0);
-                    Log.d(TAG, "@@@@@@@@@@@@@@@@@ instantMatch: " + firstMatch.toString());
-                    // load wine profile into container
-                    // FIXME PhotoHash from capture after pending capture is created?
+                    // Load wine profile into container
                     mWineProfileFragment.init(firstMatch, mCapturedImageBitmap);
                     animateFromIdentifyToWineProfile();
+                } else {
+                    // Instant failed
+                    onInstantFailed();
                 }
             }
             // Create pending capture
             mWineScanController
                     .createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
+            // Request error
             Animate.fadeOut(mProgressBar);
             handleEventErrorMessage(event);
+            getActivity().finish();
         }
         mIsIdentifying = false;
-        // TODO error handling UI
+    }
+
+    public void onInstantFailed() {
+        Animate.fadeOut(mProgressBar);
+        showConfirmationNoTitle(
+                getString(R.string.capture_instant_failed),
+                getString(R.string.ok),
+                "",
+                REQUEST_INSTANT_FAILED);
     }
 
     public void onEventMainThread(CreatedPendingCaptureEvent event) {
@@ -322,6 +328,24 @@ public class WineCaptureCameraFragment extends CameraFragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SELECT_PHOTO && resultCode == getActivity().RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            loadGalleryImage(selectedImageUri);
+        } else if (requestCode == REQUEST_INSTANT_FAILED) {
+            // Show user profile
+            Intent intent = new Intent();
+            intent.putExtra(UserProfileActivity.PARAMS_USER_ID,
+                    UserInfo.getUserId(App.getInstance()));
+            intent.setClass(getActivity(), UserProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            getActivity().finish();
+        }
+    }
+
     @OnClick(R.id.flash_button)
     public void toggleFlashClicked() {
         toggleFlash();
@@ -334,15 +358,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
         String flashText = isFlashOn ? getString(R.string.flash_on) : getString(R.string.flash_off);
         mFlashButton.setText(flashText);
         return isFlashOn;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_PHOTO && resultCode == getActivity().RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            loadGalleryImage(selectedImageUri);
-        }
     }
 
     private void loadGalleryImage(final Uri selectedImageUri) {
