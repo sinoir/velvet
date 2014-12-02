@@ -299,7 +299,7 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
             mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
             if (mShareTwitterButton.isChecked()) {
-                mCaptureRequest.setUserTw(comment);
+                mCaptureRequest.setUserTw(UserInfo.getAccountPrivate(getActivity()).getTwScreenName());
             }
         }
 
