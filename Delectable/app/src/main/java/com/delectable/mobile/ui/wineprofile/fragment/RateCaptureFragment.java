@@ -12,6 +12,7 @@ import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
@@ -26,6 +27,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,6 +101,10 @@ public class RateCaptureFragment extends BaseFragment {
     @Inject
     protected WineScanController mWineScanController;
 
+    protected View mActionView;
+
+    protected FontTextView mRateButton;
+
     private Account mUserAccount;
 
     private String mPendingCaptureId;
@@ -140,7 +146,10 @@ public class RateCaptureFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setActionBarTitle(getString(R.string.capture_submit_title));
+        setActionBarSubtitle((String) null);
         enableBackButton(true);
+        getActionBar().show();
     }
 
     @Override
@@ -148,6 +157,9 @@ public class RateCaptureFragment extends BaseFragment {
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
+        mActionView = inflater.inflate(R.layout.action_menu_button, null, false);
+        mRateButton = (FontTextView) mActionView.findViewById(R.id.action_button);
+
         ButterKnife.inject(this, view);
 
         setupRatingSeekBar();
@@ -162,20 +174,27 @@ public class RateCaptureFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // TODO customize the post button
         inflater.inflate(R.menu.capture_menu, menu);
+        MenuItem postItem = menu.findItem(R.id.post);
+        mRateButton.setText(getString(R.string.capture_rate));
+        mRateButton.setEnabled(true);
+        mRateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommentEditText.clearFocus();
+                hideKeyboard();
+                rateCapture();
+            }
+        });
+        MenuItemCompat.setActionView(postItem, mActionView);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                getActivity().onBackPressed();
-                return true;
-            case R.id.post:
-                mCommentEditText.clearFocus();
-                hideKeyboard();
-                rateCapture();
+//                getActivity().onBackPressed();
+                launchUserProfile(true);
                 return true;
         }
         return super.onOptionsItemSelected(item);

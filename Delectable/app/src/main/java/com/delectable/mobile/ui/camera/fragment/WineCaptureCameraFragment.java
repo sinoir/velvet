@@ -2,18 +2,14 @@ package com.delectable.mobile.ui.camera.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.events.BaseEvent;
-import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
-import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
@@ -104,6 +100,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
     private boolean mIsIdentifying = false;
 
     private LabelScan mLabelScanResult;
+
+    private String mPendingCaptureId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -225,11 +223,14 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnTouch(R.id.camera_preview)
     protected boolean focusCamera(View view, MotionEvent event) {
-        // TODO: Display Focus icon
+        if (mPreviewImage.getVisibility() == View.VISIBLE) {
+            return true;
+        }
         try {
             PointF pointToFocusOn = new PointF(event.getX(), event.getY());
             RectF bounds = new RectF(0, 0, mCameraPreview.getWidth(),
                     mCameraPreview.getHeight());
+            // TODO: Display Focus icon
             focusOnPoint(pointToFocusOn, bounds);
         } catch (Exception ex) {
             Log.wtf(TAG, "Failed to Focus", ex);
@@ -268,7 +269,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
                     onInstantFailed();
                 }
             }
-            // Create pending capture
+            // Create pending capture, WineProfileInstantFragment will listen for events
             mWineScanController
                     .createPendingCapture(mCapturedImageBitmap, mLabelScanResult.getId());
         } else {
@@ -289,37 +290,6 @@ public class WineCaptureCameraFragment extends CameraFragment {
                 REQUEST_INSTANT_FAILED);
     }
 
-    public void onEventMainThread(CreatedPendingCaptureEvent event) {
-        if (event.isSuccessful()) {
-//            mCaptureRequest = new AddCaptureFromPendingCaptureRequest(
-//                    event.getPendingCapture().getId());
-//            updateCaptureRequestWithFormData();
-//            Log.i(TAG, "Adding Request: " + mCaptureRequest);
-//            mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
-        } else {
-////            mIsPostingCapture = false;
-            handleEventErrorMessage(event);
-        }
-    }
-
-    public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
-        if (event.isSuccessful()) {
-//            launchCurrentUserProfile();
-//            if (mShareTwitterButton.isChecked()) {
-//                String tweet = event.getCaptureDetails().getTweet();
-//                String shortUrl = event.getCaptureDetails().getShortShareUrl();
-//                TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
-//            }
-//            if (mShareInstagramButton.isChecked()) {
-//                InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
-//                        mCommentEditText.getText().toString());
-//            }
-        } else {
-            handleEventErrorMessage(event);
-        }
-//        mIsPostingCapture = false;
-    }
-
     private void handleEventErrorMessage(BaseEvent event) {
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(R.string.error_capture_wine_no_network);
@@ -335,14 +305,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             Uri selectedImageUri = data.getData();
             loadGalleryImage(selectedImageUri);
         } else if (requestCode == REQUEST_INSTANT_FAILED) {
-            // Show user profile
-            Intent intent = new Intent();
-            intent.putExtra(UserProfileActivity.PARAMS_USER_ID,
-                    UserInfo.getUserId(App.getInstance()));
-            intent.setClass(getActivity(), UserProfileActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
-            getActivity().finish();
+            launchUserProfile(true);
         }
     }
 

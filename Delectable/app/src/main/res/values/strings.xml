@@ -275,7 +275,8 @@
     <string name="capture_submit_leave_comment_hint">Write a comment or taste note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
     <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
-    <string name="capture_submit_post">Post</string>
+    <string name="capture_submit_post">post</string>
+    <string name="capture_rate">rate</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
 
     <!--Capture Flow: Tag Friends -->

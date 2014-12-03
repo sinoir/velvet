@@ -6,14 +6,10 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,14 +58,7 @@ public class WineCaptureActivity extends BaseActivity implements GoogleApiClient
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // go to user profile
-                Intent intent = new Intent();
-                intent.putExtra(UserProfileActivity.PARAMS_USER_ID,
-                        UserInfo.getUserId(App.getInstance()));
-                intent.setClass(this, UserProfileActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-                finish();
+                launchUserProfile(true);
                 return true;
         }
         return super.onOptionsItemSelected(item);
