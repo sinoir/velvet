@@ -351,11 +351,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
-        if (mActivityRecipientListing != null) {
+        if (event.getListing() != null) {
+            Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
             mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
             mActivityFeedAdapter.notifyDataSetChanged();
         }
+
+        //TODO make emptyview, show here
+        //mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
     }
 
     //endregion
