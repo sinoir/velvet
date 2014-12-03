@@ -69,6 +69,22 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
 
         mEmptyTextButtonView.setVisibility(View.VISIBLE);
         if (event.isSuccessful()) {
+            //remove own account from list if it exists
+            int position = -1;
+            boolean foundOwnAccount = false;
+            for (int i = 0; i < event.getAccounts().size(); i++) {
+                AccountMinimal account = event.getAccounts().get(i);
+                if (account.isUserRelationshipTypeSelf()) {
+                    position = i;
+                    foundOwnAccount = true;
+                    break;
+                }
+            }
+            if (foundOwnAccount) {
+                event.getAccounts().remove(position);
+            }
+
+
             Collections.sort(event.getAccounts(), new AccountMinimal.FullNameComparator());
             Collections.sort(event.getContacts(), new TaggeeContact.FullNameComparator());
             mAdapter.setAccounts(event.getAccounts());
