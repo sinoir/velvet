@@ -120,11 +120,7 @@ public enum Rating {
         }
 
         double ratingOf10 = Rating.getRatingOfTenFrom40(ratingOf40);
-        String ratingStr = ONE_DECIMAL_SPACE.format(ratingOf10);
-        //10.0 always displays as 10
-        if (ratingStr.equals("10.0")) {
-            ratingStr = "10";
-        }
+        String ratingStr = formatOf10Rating(ratingOf10);
         Rating ratingItem = Rating.valueForRatingOfFourty(ratingOf40);
 
         ForegroundColorSpan COLOR = new ForegroundColorSpan(
@@ -133,6 +129,15 @@ public enum Rating {
         SpannableString ratingSpan = new SpannableString(ratingStr);
         ratingSpan.setSpan(COLOR, 0, ratingStr.length(), 0);
         return ratingSpan;
+    }
+
+    public static String formatOf10Rating(double ratingOf10) {
+        String ratingStr = ONE_DECIMAL_SPACE.format(ratingOf10);
+        //10.0 always displays as 10
+        if (ratingStr.equals("10.0")) {
+            ratingStr = "10";
+        }
+        return ratingStr;
     }
 
 }

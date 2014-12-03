@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -203,6 +204,7 @@ public class TagPeopleFragment extends BaseFragment {
         for (AccountMinimal account : event.getAccounts()) {
             mDelectaFriends.add(new TaggeeContact(account));
         }
+        Collections.sort(mDelectaFriends, new TaggeeContact.FullNameComparator());
         mAdapter.notifyDataSetChanged();
         updateSelectedFriends();
     }

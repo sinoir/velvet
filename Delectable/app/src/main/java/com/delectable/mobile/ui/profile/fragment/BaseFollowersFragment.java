@@ -21,12 +21,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -177,6 +178,7 @@ public abstract class BaseFollowersFragment extends BaseFragment
 
         if (event.getListing() != null) {
             mFollowerListing = event.getListing();
+            Collections.sort(mFollowerListing.getUpdates(), new AccountMinimal.FullNameComparator());
             mAdapter.setItems(mFollowerListing.getUpdates());
             mAdapter.notifyDataSetChanged();
         }
