@@ -260,9 +260,10 @@ public class WineCaptureCameraFragment extends CameraFragment {
             if (mLabelScanResult != null) {
                 List<BaseWine> matches = mLabelScanResult.getBaseWineMatches();
                 if (matches != null && !matches.isEmpty()) {
-                    BaseWine firstMatch = matches.get(0);
                     // Load wine profile into container
-                    mWineProfileFragment.init(firstMatch, mCapturedImageBitmap);
+                    mWineProfileFragment.init(matches, mCapturedImageBitmap);
+                    // TODO release camera here? trying to avoid animation stutter
+//                    releaseCameraAndPreview();
                     animateFromIdentifyToWineProfile();
                 } else {
                     // Instant failed

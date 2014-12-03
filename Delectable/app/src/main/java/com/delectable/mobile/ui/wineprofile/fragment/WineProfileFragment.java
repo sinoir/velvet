@@ -162,7 +162,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected ListView mListView;
 
-    protected View mWineBanner;
+    protected WineBannerView mWineBanner;
 
     protected View mWineImageView;
 
@@ -366,7 +366,7 @@ public class WineProfileFragment extends BaseFragment implements
                 });
 
         mWineImageView = header.findViewById(R.id.wine_image);
-        mWineBanner = header.findViewById(R.id.wine_banner_view);
+        mWineBanner = (WineBannerView) header.findViewById(R.id.wine_banner_view);
 
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);

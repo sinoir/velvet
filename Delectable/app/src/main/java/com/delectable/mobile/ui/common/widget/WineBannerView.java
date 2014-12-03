@@ -5,6 +5,7 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
@@ -31,6 +32,11 @@ import butterknife.InjectView;
  */
 public class WineBannerView extends RelativeLayout {
 
+    public static interface WineBannerClickListener {
+
+        public void onEditBaseWineClicked();
+    }
+
     private static final String TAG = WineBannerView.class.getSimpleName();
 
     @InjectView(R.id.wine_image)
@@ -38,6 +44,9 @@ public class WineBannerView extends RelativeLayout {
 
     @InjectView(R.id.gradient_backdrop)
     protected View mGradientView;
+
+    @InjectView(R.id.edit_base_wine)
+    protected View mEditBaseWine;
 
     @InjectView(R.id.producer_name)
     protected TextView mProducerName;
@@ -47,6 +56,8 @@ public class WineBannerView extends RelativeLayout {
 
     @InjectView(R.id.wine_vintage)
     protected TextView mWineVintage;
+
+    private WineBannerClickListener mListener;
 
     boolean mShowTriangleMask;
 
@@ -81,12 +92,25 @@ public class WineBannerView extends RelativeLayout {
         ButterKnife.inject(this);
         setLayoutTransition(null);
 
+        mEditBaseWine.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onEditBaseWineClicked();
+                }
+            }
+        });
+
         //paint object to draw upside down triangle
         mPaint = new Paint();
         mPaint.setStrokeWidth(0);
         mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setAntiAlias(true);
+    }
+
+    public void setWineBannerClickListener(WineBannerClickListener listener) {
+        mListener = listener;
     }
 
     /**
@@ -165,6 +189,7 @@ public class WineBannerView extends RelativeLayout {
     public void updateViewWithPreviewData(Bitmap previewImage, String producerName,
             String wineName) {
         mWineImage.setImageBitmap(previewImage);
+        Animate.grow(mEditBaseWine, 1000);
         updateViewWithData(null, producerName, wineName);
     }
 

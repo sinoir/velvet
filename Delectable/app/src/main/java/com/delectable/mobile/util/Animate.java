@@ -9,25 +9,32 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 
 /**
  * Convenience API for animating views into different states.
  */
 public class Animate {
 
-    private static final int SHORT = 200;
+    public static final int SHORT = 200;
 
-    private static final int MEDIUM = 400;
+    public static final int MEDIUM = 400;
 
-    private static final int LONG = 600;
+    public static final int LONG = 600;
 
-    private static final int TRANSLATION = (int) TypedValue
+    public static final int TRANSLATION = (int) TypedValue
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75,
+                    App.getInstance().getResources().getDisplayMetrics());
+
+    public static final int TRANSLATION_SMALL = (int) TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42,
                     App.getInstance().getResources().getDisplayMetrics());
 
     private static final Interpolator ACCELERATE = new AccelerateInterpolator();
 
     private static final Interpolator DECELERATE = new DecelerateInterpolator();
+
+    private static final Interpolator OVERSHOOT = new OvershootInterpolator();
 
     public static void slideOutDown(final View view) {
         slideOutDown(view, 0);
@@ -51,7 +58,6 @@ public class Animate {
     public static void slideInUp(final View view) {
         view.setVisibility(View.VISIBLE);
         view.animate()
-//                .alpha(1)
                 .translationY(0)
                 .setDuration(LONG)
                 .setInterpolator(DECELERATE)
@@ -79,6 +85,32 @@ public class Animate {
         view.animate()
                 .alpha(1)
                 .translationY(0)
+                .setDuration(MEDIUM)
+                .setInterpolator(DECELERATE)
+                .setListener(null)
+                .start();
+    }
+
+    public static void pushOutRight(final View view) {
+        view.animate()
+                .alpha(0)
+                .translationX(TRANSLATION)
+                .setDuration(MEDIUM)
+                .setInterpolator(ACCELERATE)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        view.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
+
+    public static void pushInLeft(final View view) {
+        view.setVisibility(View.VISIBLE);
+        view.animate()
+                .alpha(1)
+                .translationX(0)
                 .setDuration(MEDIUM)
                 .setInterpolator(DECELERATE)
                 .setListener(null)
@@ -237,6 +269,25 @@ public class Animate {
                         view.setVisibility(View.INVISIBLE);
                     }
                 })
+                .start();
+    }
+
+    public static void grow(final View view) {
+        grow(view, 0);
+    }
+
+    public static void grow(final View view, long startDelay) {
+        view.setScaleX(0);
+        view.setScaleY(0);
+        view.setVisibility(View.VISIBLE);
+        view.animate()
+                .alpha(1)
+                .scaleX(1)
+                .scaleY(1)
+                .setDuration(LONG)
+                .setStartDelay(startDelay)
+                .setInterpolator(OVERSHOOT)
+                .setListener(null)
                 .start();
     }
 
