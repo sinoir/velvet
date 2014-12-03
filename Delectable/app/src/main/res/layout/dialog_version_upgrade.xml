@@ -12,13 +12,13 @@
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/version_upgrade_dialog_header_height"
+        android:layout_height="@dimen/dialog_header_height"
         android:layout_marginBottom="@dimen/version_upgrade_dialog_vertical_spacing"
         android:layout_marginTop="@dimen/version_upgrade_dialog_vertical_spacing"
         android:gravity="center_vertical|left"
         android:text="@string/version_upgrade_your_app_out_of_date"
         android:textColor="@color/d_dark_gray"
-        android:textSize="@dimen/version_upgrade_dialog_title_text_size"
+        android:textSize="@dimen/dialog_title_text_size"
         app:fontName="whitney_book" />
 
     <RelativeLayout

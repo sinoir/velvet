@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * This view has a picture of the wine capture, as well as the producer and wine name in the bottom
@@ -32,12 +33,13 @@ import butterknife.InjectView;
  */
 public class WineBannerView extends RelativeLayout {
 
-    public static interface WineBannerClickListener {
+    private static final String TAG = WineBannerView.class.getSimpleName();
 
+
+    public interface ActionsHandler {
+        public void onVintageClick();
         public void onEditBaseWineClicked();
     }
-
-    private static final String TAG = WineBannerView.class.getSimpleName();
 
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
@@ -57,13 +59,13 @@ public class WineBannerView extends RelativeLayout {
     @InjectView(R.id.wine_vintage)
     protected TextView mWineVintage;
 
-    private WineBannerClickListener mListener;
-
     boolean mShowTriangleMask;
 
     private int mTriangleCenterPosition;
 
     private Paint mPaint;
+
+    private ActionsHandler mActionsHandler;
 
     public WineBannerView(Context context) {
         this(context, null);
@@ -95,8 +97,8 @@ public class WineBannerView extends RelativeLayout {
         mEditBaseWine.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mListener != null) {
-                    mListener.onEditBaseWineClicked();
+                if (mActionsHandler != null) {
+                    mActionsHandler.onEditBaseWineClicked();
                 }
             }
         });
@@ -109,8 +111,15 @@ public class WineBannerView extends RelativeLayout {
         mPaint.setAntiAlias(true);
     }
 
-    public void setWineBannerClickListener(WineBannerClickListener listener) {
-        mListener = listener;
+    public void setActionsHandler(ActionsHandler handler) {
+        mActionsHandler = handler;
+    }
+
+    @OnClick(R.id.wine_vintage)
+    protected void onVintageClick() {
+        if (mActionsHandler != null) {
+            mActionsHandler.onVintageClick();
+        }
     }
 
     /**
@@ -203,7 +212,7 @@ public class WineBannerView extends RelativeLayout {
         mWineName.setVisibility(View.VISIBLE);
     }
 
-    public void updateVintage(String vintage) {
+    public void updateVintage(CharSequence vintage) {
         mWineVintage.setVisibility(View.VISIBLE);
         mWineVintage.setText(vintage);
     }
@@ -290,6 +299,5 @@ public class WineBannerView extends RelativeLayout {
 
         canvas.drawPath(path, mPaint);
     }
-
 
 }

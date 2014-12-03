@@ -12,7 +12,7 @@
         android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
         android:layout_marginTop="28dp"
         android:text="@string/over21dialog_title"
-        android:textSize="@dimen/choose_vintage_dialog_title_text_size"
+        android:textSize="@dimen/dialog_title_text_size"
         app:fontName="whitney_book" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView

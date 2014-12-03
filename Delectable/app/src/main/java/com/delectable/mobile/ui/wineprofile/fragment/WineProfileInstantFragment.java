@@ -39,15 +39,6 @@ public class WineProfileInstantFragment extends WineProfileFragment {
 
     private List<BaseWine> mMatches;
 
-    private WineBannerView.WineBannerClickListener mWineBannerClickListener
-            = new WineBannerView.WineBannerClickListener() {
-        @Override
-        public void onEditBaseWineClicked() {
-            // TODO open dialog with matches
-            Toast.makeText(getActivity(), "EDIT_BASE_WINE clicked", Toast.LENGTH_SHORT).show();
-        }
-    };
-
     public static WineProfileInstantFragment newInstance(@Nullable BaseWine baseWine) {
         WineProfileInstantFragment fragment = new WineProfileInstantFragment();
         Bundle args = new Bundle();
@@ -67,8 +58,7 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         mFetchingId = mBaseWineId = matches.get(0).getId();
         mBaseWineMinimal = matches.get(0);
         mMatches = matches;
-        updateBannerData(previewImage);
-        mWineBanner.setWineBannerClickListener(mWineBannerClickListener);
+        updateBannerView(previewImage);
         onResume();
     }
 
@@ -126,6 +116,12 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         }
         mRateButton.setEnabled(false);
 //        Animate.pushOutRight(mRateButton);
+    }
+
+    @Override
+    public void onEditBaseWineClicked() {
+        // TODO open dialog with matches
+        Toast.makeText(getActivity(), "EDIT_BASE_WINE clicked", Toast.LENGTH_SHORT).show();
     }
 
 }
