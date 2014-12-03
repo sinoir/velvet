@@ -18,6 +18,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import butterknife.OnClick;
  * left hand corner. Used in the Wine Profile screen, Wine Capture screen, and also in the Follower
  * Feed screen.
  */
-public class WineBannerView extends RelativeLayout {
+public class WineBannerView extends FrameLayout {
 
     private static final String TAG = WineBannerView.class.getSimpleName();
 
@@ -46,6 +47,9 @@ public class WineBannerView extends RelativeLayout {
 
     @InjectView(R.id.gradient_backdrop)
     protected View mGradientView;
+
+    @InjectView(R.id.wine_banner_container)
+    protected View mContainer;
 
     @InjectView(R.id.edit_base_wine)
     protected View mEditBaseWine;
@@ -68,6 +72,13 @@ public class WineBannerView extends RelativeLayout {
     private int mTriangleCenterPosition;
 
     private Paint mPaint;
+
+    int mTriangleWidth = getResources()
+            .getDimensionPixelOffset(R.dimen.wine_banner_triangle_width);
+
+    int mTriangleHeight = getResources()
+            .getDimensionPixelOffset(R.dimen.wine_banner_triangle_height);
+
 
     private ActionsHandler mActionsHandler;
 
@@ -97,6 +108,15 @@ public class WineBannerView extends RelativeLayout {
         View.inflate(context, R.layout.wine_banner_view, this);
         ButterKnife.inject(this);
         setLayoutTransition(null);
+
+        if (mShowTriangleMask) {
+            // increase bottom margin of wine banner
+            FrameLayout.LayoutParams parms = (FrameLayout.LayoutParams) mContainer
+                    .getLayoutParams();
+            parms.setMargins(parms.leftMargin, parms.topMargin, parms.rightMargin,
+                    parms.bottomMargin + mTriangleHeight);
+            mContainer.setLayoutParams(parms);
+        }
 
         mEditBaseWine.setOnClickListener(new OnClickListener() {
             @Override
@@ -226,7 +246,8 @@ public class WineBannerView extends RelativeLayout {
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
         // Halve the height of the backdrop view
-        RelativeLayout.LayoutParams layoutParams = (LayoutParams) mGradientView.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mGradientView
+                .getLayoutParams();
         layoutParams.height = height / 2;
         mGradientView.setLayoutParams(layoutParams);
 
@@ -244,12 +265,7 @@ public class WineBannerView extends RelativeLayout {
     //TODO will need to adjust the bottom bounds of this view by the height of our triangle 
     private void drawTriangle(Canvas canvas) {
 
-        int triangleWidth = getResources()
-                .getDimensionPixelOffset(R.dimen.wine_banner_triangle_width);
-        int triangleHeight = getResources()
-                .getDimensionPixelOffset(R.dimen.wine_banner_triangle_height);
-
-        int yTopBoundary = canvas.getHeight() - triangleHeight;
+        int yTopBoundary = canvas.getHeight() - mTriangleHeight;
         int yBottomBoundary = canvas.getHeight();
 
         //left edge corners
@@ -260,13 +276,13 @@ public class WineBannerView extends RelativeLayout {
         int yTopLeftCorner = yTopBoundary;
 
         //triangle corners
-        int xTriangleLeft = mTriangleCenterPosition - triangleWidth / 2;
+        int xTriangleLeft = mTriangleCenterPosition - mTriangleWidth / 2;
         int yTriangleLeft = yTopBoundary;
 
-        int xTriangleBottom = xTriangleLeft + triangleWidth / 2;
+        int xTriangleBottom = xTriangleLeft + mTriangleWidth / 2;
         int yTriangleBottom = yBottomBoundary;
 
-        int xTriangleRight = xTriangleBottom + triangleWidth / 2;
+        int xTriangleRight = xTriangleBottom + mTriangleWidth / 2;
         int yTriangleRight = yTopBoundary;
 
         //right edge corners
