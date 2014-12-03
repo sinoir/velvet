@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout -->
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- made for RelativeLayout -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -37,28 +39,43 @@
         android:id="@+id/wine_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/wine_vintage"
+        android:layout_above="@+id/wine_vintage_container"
         android:layout_alignParentLeft="true"
+        android:lineSpacingMultiplier="1.2"
         android:paddingLeft="@dimen/spacing_16"
         android:paddingRight="@dimen/spacing_16"
         android:textColor="@android:color/white"
         android:textSize="19sp"
-        android:lineSpacingMultiplier="1.2"
         app:fontName="whitney_book" />
 
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/wine_vintage"
+    <RelativeLayout
+        android:id="@+id/wine_vintage_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:paddingBottom="6dp"
-        android:paddingLeft="@dimen/spacing_16"
-        android:paddingRight="@dimen/spacing_16"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
         android:visibility="invisible"
-        app:fontName="whitney_book" />
+        android:paddingBottom="6dp">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/wine_vintage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/spacing_16"
+            android:paddingRight="@dimen/spacing_8"
+            android:text="All years"
+            android:textColor="@color/white_to_gray"
+            android:textSize="16sp"
+            app:fontName="whitney_book" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/wine_vintage"
+            android:layout_alignTop="@id/wine_vintage"
+            android:layout_toRightOf="@+id/wine_vintage"
+            android:src="@drawable/temp_down_arrow" />
+    </RelativeLayout>
 </merge>
 
 

@@ -550,8 +550,8 @@ public class CaptureDetailsView extends RelativeLayout {
                 if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
                             mActionsHandler, participant.getId());
-                    commentRow.setNameCommentWithRating(participant.getFullName(), firstCommentText,
-                            rating);
+                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
+                    commentRow.setNameAndComment(participant.getFullName(), firstCommentText);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
                             layoutParams);
                     numDisplayedComments++;
@@ -559,8 +559,9 @@ public class CaptureDetailsView extends RelativeLayout {
                 for (int i = (firstIndex + 1); i < comments.size(); i++) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
                             mActionsHandler, participant.getId());
-                    commentRow.setNameCommentWithRating(participant.getFullName(),
-                            comments.get(i).getComment(), -1);
+                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
+                    commentRow.setNameAndComment(participant.getFullName(),
+                            comments.get(i).getComment());
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
                             layoutParams);
                     numDisplayedComments++;

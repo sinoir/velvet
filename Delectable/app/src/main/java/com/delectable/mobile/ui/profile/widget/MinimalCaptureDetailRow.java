@@ -425,7 +425,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
         //setup likes/comments counts
         int likes = mCaptureDetails.getLikesCount();
-        int comments = mCaptureDetails.getComments().size();
+        int comments = mCaptureDetails.getCommentsCount();
         mLikesCount.setText(
                 getResources().getQuantityString(R.plurals.likes_count, likes, likes));
         mLikesCount.setVisibility(likes > 0 ? View.VISIBLE : View.GONE);
