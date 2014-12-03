@@ -69,8 +69,8 @@ public enum USStates {
             return null;
         }
         for (int i = 0; i < values().length; i++) {
-            if (state.equalsIgnoreCase(values()[i].getStateName()) ||
-                    state.equalsIgnoreCase(values()[i].getStateAbbreviation())) {
+            if (state.trim().equalsIgnoreCase(values()[i].getStateName()) ||
+                    state.trim().equalsIgnoreCase(values()[i].getStateAbbreviation())) {
                 return values()[i];
             }
         }
