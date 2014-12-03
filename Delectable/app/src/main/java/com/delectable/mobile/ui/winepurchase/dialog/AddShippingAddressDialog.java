@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.winepurchase.dialog;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.ShippingAddressModel;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedShippingAddressEvent;
@@ -18,7 +19,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +136,7 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
             mDialogTitle.setText(R.string.shippingaddress_edit_title);
             loadExistingShippingAddress();
         } else {
+            updateFormWithUserData();
             mDialogTitle.setText(R.string.shippingaddress_add_title);
         }
 
@@ -169,11 +170,12 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         if (mExistingShippingAddress == null) {
             return;
         }
-        String fName = mExistingShippingAddress.getFname();
-        String lName = mExistingShippingAddress.getFname() == null ? ""
+        String fullName = mExistingShippingAddress.getFname();
+        fullName += mExistingShippingAddress.getFname() == null ? ""
                 : " " + mExistingShippingAddress.getFname();
 
-        mName.setText(fName + lName);
+        mName.setText(fullName);
+        mName.setSelection(fullName.length());
         mAddress1.setText(mExistingShippingAddress.getAddr1());
         mAddress2.setText(mExistingShippingAddress.getAddr2());
         mCity.setText(mExistingShippingAddress.getCity());
@@ -182,6 +184,22 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
 
         USStates selectedState = USStates
                 .stateByNameOrAbbreviation(mExistingShippingAddress.getState());
+        if (selectedState != null) {
+            mState.setSelection(selectedState.ordinal());
+        }
+    }
+
+
+    private void updateFormWithUserData() {
+        if (UserInfo.getAccountPrivate(App.getInstance()) == null) {
+            return;
+        }
+        String fullName = UserInfo.getAccountPrivate(App.getInstance()).getFullName();
+        String state = UserInfo.getAccountPrivate(App.getInstance()).getSourcingState();
+
+        mName.setText(fullName);
+        mName.setSelection(fullName.length());
+        USStates selectedState = USStates.stateByNameOrAbbreviation(state);
         if (selectedState != null) {
             mState.setSelection(selectedState.ordinal());
         }
