@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -198,4 +199,12 @@ public class AccountSearch implements Parcelable, IDable {
             return new AccountSearch[size];
         }
     };
+
+    public static class FullNameComparator implements Comparator<AccountSearch> {
+
+        @Override
+        public int compare(AccountSearch lhs, AccountSearch rhs) {
+            return lhs.getFullName().compareToIgnoreCase(rhs.getFullName());
+        }
+    }
 }

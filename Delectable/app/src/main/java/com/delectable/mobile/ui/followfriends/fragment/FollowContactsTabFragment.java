@@ -3,10 +3,9 @@ package com.delectable.mobile.ui.followfriends.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.AccountController;
-import com.delectable.mobile.api.endpointmodels.BaseRequest;
-import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.events.accounts.FetchedAccountsFromContactsEvent;
-import com.delectable.mobile.api.models.IDable;
+import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.ui.followfriends.widget.BaseAccountsMinimalAdapter;
 import com.delectable.mobile.ui.followfriends.widget.ContactsAdapter;
 
@@ -14,9 +13,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -71,6 +69,8 @@ public class FollowContactsTabFragment extends BaseFollowFriendsTabFragment {
 
         mEmptyTextButtonView.setVisibility(View.VISIBLE);
         if (event.isSuccessful()) {
+            Collections.sort(event.getAccounts(), new AccountMinimal.FullNameComparator());
+            Collections.sort(event.getContacts(), new TaggeeContact.FullNameComparator());
             mAdapter.setAccounts(event.getAccounts());
             mAdapter.setContacts(event.getContacts());
             mAdapter.notifyDataSetChanged();

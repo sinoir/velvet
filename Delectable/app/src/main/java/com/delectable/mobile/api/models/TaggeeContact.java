@@ -271,7 +271,7 @@ public class TaggeeContact implements Parcelable, Serializable {
 
         @Override
         public int compare(TaggeeContact lhs, TaggeeContact rhs) {
-            return lhs.getFullName().compareTo(rhs.getFullName());
+            return lhs.getFullName().compareToIgnoreCase(rhs.getFullName());
         }
     }
 }
