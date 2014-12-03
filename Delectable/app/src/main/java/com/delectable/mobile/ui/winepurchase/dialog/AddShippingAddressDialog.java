@@ -11,19 +11,26 @@ import com.delectable.mobile.api.models.ShippingAddress;
 import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.USStates;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -63,7 +70,7 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     protected EditText mCity;
 
     @InjectView(R.id.state)
-    protected EditText mState;
+    protected Spinner mState;
 
     @InjectView(R.id.zip_code)
     protected EditText mZipCode;
@@ -80,6 +87,8 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     private String mShippingAddressId;
 
     private ShippingAddress mExistingShippingAddress;
+
+    private ArrayAdapter<String> mStateAdapter;
 
     public static AddShippingAddressDialog newInstance() {
         AddShippingAddressDialog f = new AddShippingAddressDialog();
@@ -121,6 +130,8 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         View view = inflater.inflate(R.layout.dialog_add_shipping_address, container, false);
         ButterKnife.inject(this, view);
 
+        setupStateSpinner();
+
         if (mShippingAddressId != null) {
             mDialogTitle.setText(R.string.shippingaddress_edit_title);
             loadExistingShippingAddress();
@@ -143,6 +154,17 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     }
 
     //region Update UI methods
+    private void setupStateSpinner() {
+        List<String> stateNames = new ArrayList<String>();
+        for (int i = 0; i < USStates.values().length; i++) {
+            stateNames.add(USStates.values()[i].getStateName());
+        }
+        mStateAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.fonted_spinner_item, stateNames);
+        mStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mState.setAdapter(mStateAdapter);
+    }
+
     private void updateFormWithExistingAddress() {
         if (mExistingShippingAddress == null) {
             return;
@@ -155,18 +177,25 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         mAddress1.setText(mExistingShippingAddress.getAddr1());
         mAddress2.setText(mExistingShippingAddress.getAddr2());
         mCity.setText(mExistingShippingAddress.getCity());
-        mState.setText(mExistingShippingAddress.getState());
         mZipCode.setText(mExistingShippingAddress.getZip());
         mPhoneNumber.setText(mExistingShippingAddress.getPhone());
+
+        USStates selectedState = USStates
+                .stateByNameOrAbbreviation(mExistingShippingAddress.getState());
+        if (selectedState != null) {
+            mState.setSelection(selectedState.ordinal());
+        }
     }
     //endregion
 
     //region Helpers
     private boolean isFormValid() {
+        boolean isStateValid = mState.getSelectedItem() != null &&
+                getSelectedState() != null;
         if (isFieldEmpty(mName) ||
                 isFieldEmpty(mAddress1) ||
                 isFieldEmpty(mCity) ||
-                isFieldEmpty(mState) ||
+                !isStateValid ||
                 isFieldEmpty(mZipCode)) {
             return false;
         }
@@ -189,15 +218,19 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         address.setAddr1(mAddress1.getText().toString());
         address.setAddr2(mAddress2.getText().toString());
         address.setCity(mCity.getText().toString());
-        address.setState(mState.getText().toString());
         address.setZip(mZipCode.getText().toString());
         address.setPhone(mPhoneNumber.getText().toString());
 
+        address.setState(getSelectedState().getStateAbbreviation());
         if (mExistingShippingAddress != null) {
             address.setId(mExistingShippingAddress.getId());
         }
 
         return address;
+    }
+
+    private USStates getSelectedState() {
+        return USStates.stateByNameOrAbbreviation((String) mState.getSelectedItem());
     }
     //endregion
 
