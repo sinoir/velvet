@@ -74,8 +74,6 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         if (args != null) {
             mCaptureId = args.getString(sArgsCaptureId);
         }
-
-        mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
     }
 
     @Override
@@ -113,6 +111,9 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         parms.height = screenSize.x;
         parms.width = screenSize.x;
         mWineBanner.setLayoutParams(parms);
+
+        // set toolbar height to half the banner height for scroll offset
+        mStickyToolbarHeight = screenSize.x / 2;
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);

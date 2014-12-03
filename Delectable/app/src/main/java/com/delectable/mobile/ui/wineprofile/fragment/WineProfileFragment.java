@@ -314,8 +314,6 @@ public class WineProfileFragment extends BaseFragment implements
         //ensured that baseWineId is populated, set as our fetchingId
         mFetchingId = mBaseWineId;
 
-        mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
-
         //last character in the all years text is a v, this just makes that v bold
         String text = getString(R.string.wine_profile_all_years);
         SpannableString span = new SpannableString(text);
@@ -332,7 +330,7 @@ public class WineProfileFragment extends BaseFragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
-        //prepare header view
+        // prepare header view
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
 
@@ -347,6 +345,9 @@ public class WineProfileFragment extends BaseFragment implements
         mBanner.updateVintage(mAllYearsText);
 
         updateVarietyRegionRatingView(mBaseWine);
+
+        // set toolbar height to half the banner height for scroll offset
+        mStickyToolbarHeight = screenSize.x / 2;
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
