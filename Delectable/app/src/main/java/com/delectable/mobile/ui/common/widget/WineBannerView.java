@@ -110,12 +110,9 @@ public class WineBannerView extends FrameLayout {
         setLayoutTransition(null);
 
         if (mShowTriangleMask) {
-            // increase bottom margin of wine banner
-            FrameLayout.LayoutParams parms = (FrameLayout.LayoutParams) mContainer
-                    .getLayoutParams();
-            parms.setMargins(parms.leftMargin, parms.topMargin, parms.rightMargin,
-                    parms.bottomMargin + mTriangleHeight);
-            mContainer.setLayoutParams(parms);
+            // increase bottom padding of wine banner by triangle height
+            mContainer.setPadding(mContainer.getPaddingLeft(), mContainer.getPaddingTop(),
+                    mContainer.getPaddingRight(), mContainer.getPaddingBottom() + mTriangleHeight);
         }
 
         mEditBaseWine.setOnClickListener(new OnClickListener() {

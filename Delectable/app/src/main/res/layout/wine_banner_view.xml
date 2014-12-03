@@ -25,9 +25,10 @@
         android:id="@+id/wine_banner_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/spacing_16">
+        android:clipToPadding="false"
+        android:padding="@dimen/spacing_16">
 
-        <ImageView
+    <ImageView
             android:id="@+id/edit_base_wine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
