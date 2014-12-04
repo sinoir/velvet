@@ -172,7 +172,7 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         }
         String fullName = mExistingShippingAddress.getFname();
         fullName += mExistingShippingAddress.getFname() == null ? ""
-                : " " + mExistingShippingAddress.getFname();
+                : " " + mExistingShippingAddress.getLname();
 
         mName.setText(fullName);
         mName.setSelection(fullName.length());
