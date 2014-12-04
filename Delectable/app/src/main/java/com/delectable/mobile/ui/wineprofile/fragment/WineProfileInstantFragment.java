@@ -138,7 +138,9 @@ public class WineProfileInstantFragment extends WineProfileFragment {
 
     public void onEventMainThread(SetBaseWineEvent event) {
         if (event.isSuccessful() && mPendingCaptureId.equals(event.getPendingCaptureId())) {
-            Log.d(TAG, "changed base_wine_id to " + event.getBaseWineId());
+            Log.d(TAG,
+                    "changed base_wine_id for pending capture " + mPendingCaptureId + " to " + event
+                            .getBaseWineId());
         } else {
             handleEventErrorMessage(event);
         }
@@ -197,7 +199,7 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         mFetchingId = mBaseWineId = baseWine.getId();
         mBaseWineMinimal = baseWine;
         updateBannerView(mPreviewImage);
-        loadLocalBaseWineData(); //load from model to show something first
+        loadLocalBaseWineData(true); //load from model to show something first
         mBaseWineController.fetchBaseWine(mBaseWineId);
         loadCaptureNotesData(Type.BASE_WINE, mBaseWineId);
         // sync with backend
@@ -205,7 +207,8 @@ public class WineProfileInstantFragment extends WineProfileFragment {
             mPendingCapturesController
                     .setBaseWineId(mPendingCaptureId, mBaseWineId);
             mNeedToSetBaseWineId = false;
-            Log.d(TAG, "setting base_wine_id to" + mBaseWineId);
+            Log.d(TAG, "setting base_wine_id for pending capture " + mPendingCaptureId + " to"
+                    + mBaseWineId);
         } else {
             mNeedToSetBaseWineId = true;
         }

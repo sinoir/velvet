@@ -218,8 +218,11 @@ public class WineBannerView extends FrameLayout {
 
     public void updateViewWithPreviewData(Bitmap previewImage, String producerName,
             String wineName) {
-        mWineImage.setImageBitmap(previewImage);
-        Animate.grow(mEditBaseWine, 1000);
+        if (mWineImage.getDrawable() == null) {
+            mWineImage.setImageBitmap(previewImage);
+            // prevent edit button from animating after changing base wine
+            Animate.grow(mEditBaseWine, 1000);
+        }
         updateViewWithData(null, producerName, wineName);
     }
 

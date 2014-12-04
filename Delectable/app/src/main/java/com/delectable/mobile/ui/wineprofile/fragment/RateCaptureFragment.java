@@ -261,6 +261,7 @@ public class RateCaptureFragment extends BaseFragment {
 
 
     public void rateCapture() {
+        mRateButton.setEnabled(false);
         mCaptureRequest = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
         updateCaptureRequestWithFormData(mCaptureRequest);
         mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
@@ -311,15 +312,18 @@ public class RateCaptureFragment extends BaseFragment {
             String shortUrl = event.getCaptureDetails().getShortShareUrl();
             TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
         }
-        getActivity().finish();
+
         //TODO instagram stuff
 //        if (mShareInstagramButton.isChecked()) {
 //            InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
 //                    mCommentEditText.getText().toString());
 //        }
+
+        launchUserProfile(true);
     }
 
     private void handleEventErrorMessage(BaseEvent event) {
+        mRateButton.setEnabled(true);
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(R.string.error_capture_wine_no_network);
         } else {

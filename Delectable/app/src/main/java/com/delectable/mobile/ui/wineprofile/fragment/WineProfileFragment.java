@@ -559,6 +559,10 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     protected void loadLocalBaseWineData() {
+        loadLocalBaseWineData(false);
+    }
+
+    protected void loadLocalBaseWineData(boolean baseWineHasChanged) {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
         if (mBaseWine == null) {
@@ -570,7 +574,7 @@ public class WineProfileFragment extends BaseFragment implements
             mCapturePhotoHash = mBaseWine.getPhoto();
         }
 
-        if (mSelectedWineVintage == null) {
+        if (mSelectedWineVintage == null || baseWineHasChanged) {
             mSelectedWineVintage = mBaseWine.getDefaultWineProfile();
         }
         loadPricingData();
