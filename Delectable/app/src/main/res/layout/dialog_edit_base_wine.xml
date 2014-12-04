@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="380dp"
+    android:background="@color/d_white"
+    android:orientation="vertical">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/producer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_16"
+        android:gravity="center"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="@dimen/text_size_large"
+        android:text="@string/capture_edit_base_wine_title"
+        app:fontName="whitney_book" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/d_light_gray" />
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:footerDividersEnabled="false"
+        android:divider="@color/d_light_gray" />
+
+</LinearLayout>

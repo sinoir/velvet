@@ -1,20 +1,26 @@
 package com.delectable.mobile.ui.wineprofile.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.PendingCapturesController;
 import com.delectable.mobile.api.events.BaseEvent;
+import com.delectable.mobile.api.events.pendingcaptures.SetBaseWineEvent;
 import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
 import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.widget.FontTextView;
-import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.EditBaseWineDialog;
 import com.delectable.mobile.util.Animate;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +29,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class WineProfileInstantFragment extends WineProfileFragment {
 
@@ -31,13 +39,24 @@ public class WineProfileInstantFragment extends WineProfileFragment {
 
     protected static final String PENDING_CAPTURE_ID = "pendingCaptureId";
 
+    private static final int EDIT_BASE_WINE_DIALOG = 400;
+
+    @Inject
+    public PendingCapturesController mPendingCapturesController;
+
     private View mActionView;
 
     private FontTextView mRateButton;
 
     private String mPendingCaptureId;
 
-    private List<BaseWine> mMatches;
+    private Bitmap mPreviewImage;
+
+    private ArrayList<BaseWine> mMatches;
+
+    private boolean mNeedToFlagAsIncorrect = false;
+
+    private boolean mNeedToSetBaseWineId = false;
 
     public static WineProfileInstantFragment newInstance(@Nullable BaseWine baseWine) {
         WineProfileInstantFragment fragment = new WineProfileInstantFragment();
@@ -49,15 +68,16 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         return fragment;
     }
 
-    public void init(List<BaseWine> matches) {
+    public void init(ArrayList<BaseWine> matches) {
         init(matches, null);
     }
 
-    public void init(List<BaseWine> matches, Bitmap previewImage) {
+    public void init(ArrayList<BaseWine> matches, Bitmap previewImage) {
         getArguments().putString(BASE_WINE_ID, matches.get(0).getId());
         mFetchingId = mBaseWineId = matches.get(0).getId();
         mBaseWineMinimal = matches.get(0);
         mMatches = matches;
+        mPreviewImage = previewImage;
         updateBannerView(previewImage);
         onResume();
     }
@@ -102,7 +122,23 @@ public class WineProfileInstantFragment extends WineProfileFragment {
                 getArguments().putString(PENDING_CAPTURE_ID, mPendingCaptureId);
                 mRateButton.setEnabled(true);
                 Animate.pushInLeft(mRateButton);
+
+                if (mNeedToFlagAsIncorrect) {
+                    mCaptureController.flagCapture(mPendingCaptureId);
+                    mNeedToFlagAsIncorrect = false;
+                }
+                if (mNeedToSetBaseWineId) {
+                    setBaseWine(mBaseWineMinimal);
+                }
             }
+        } else {
+            handleEventErrorMessage(event);
+        }
+    }
+
+    public void onEventMainThread(SetBaseWineEvent event) {
+        if (event.isSuccessful() && mPendingCaptureId.equals(event.getPendingCaptureId())) {
+            Log.d(TAG, "changed base_wine_id to " + event.getBaseWineId());
         } else {
             handleEventErrorMessage(event);
         }
@@ -120,8 +156,58 @@ public class WineProfileInstantFragment extends WineProfileFragment {
 
     @Override
     public void onEditBaseWineClicked() {
-        // TODO open dialog with matches
-        Toast.makeText(getActivity(), "EDIT_BASE_WINE clicked", Toast.LENGTH_SHORT).show();
+        showEditBaseWineDialog();
     }
 
+    private void showEditBaseWineDialog() {
+        EditBaseWineDialog dialog = EditBaseWineDialog.newInstance(mMatches);
+        dialog.setTargetFragment(this, EDIT_BASE_WINE_DIALOG); //callback goes to onActivityResult
+        dialog.show(getFragmentManager(), EditBaseWineDialog.TAG);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (EDIT_BASE_WINE_DIALOG == requestCode && resultCode == Activity.RESULT_OK) {
+            // TODO get data from new base wine and update pending capture id locally and on server
+            if (data.getExtras() != null) {
+                Parcelable p = data.getExtras()
+                        .getParcelable(EditBaseWineDialog.EXTRAS_RESULT_WINE);
+                if (p == null) {
+                    // clicked footer, report incorrect wine
+                    if (mPendingCaptureId != null) {
+                        mCaptureController.flagCapture(mPendingCaptureId);
+                        mNeedToFlagAsIncorrect = false;
+                    } else {
+                        // remember that we need to flag as incorrect once pending capture comes in
+                        mNeedToFlagAsIncorrect = true;
+                    }
+                    Toast.makeText(getActivity(), R.string.capture_edit_base_wine_report_confirm,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    BaseWine baseWine = (BaseWine) p;
+                    setBaseWine(baseWine);
+                }
+            }
+        }
+    }
+
+    private void setBaseWine(BaseWineMinimal baseWine) {
+        // refresh wine profile
+        mFetchingId = mBaseWineId = baseWine.getId();
+        mBaseWineMinimal = baseWine;
+        updateBannerView(mPreviewImage);
+        loadLocalBaseWineData(); //load from model to show something first
+        mBaseWineController.fetchBaseWine(mBaseWineId);
+        loadCaptureNotesData(Type.BASE_WINE, mBaseWineId);
+        // sync with backend
+        if (mPendingCaptureId != null) {
+            mPendingCapturesController
+                    .setBaseWineId(mPendingCaptureId, mBaseWineId);
+            mNeedToSetBaseWineId = false;
+            Log.d(TAG, "setting base_wine_id to" + mBaseWineId);
+        } else {
+            mNeedToSetBaseWineId = true;
+        }
+    }
 }

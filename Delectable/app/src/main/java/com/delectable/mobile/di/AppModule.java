@@ -73,6 +73,7 @@ import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.api.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.api.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.api.jobs.pendingcaptures.DeletePendingCaptureJob;
+import com.delectable.mobile.api.jobs.pendingcaptures.SetBaseWineJob;
 import com.delectable.mobile.api.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.api.jobs.registrations.LoginJob;
 import com.delectable.mobile.api.jobs.registrations.RegisterJob;
@@ -210,6 +211,7 @@ import de.greenrobot.event.EventBus;
                 DeleteCaptureJob.class,
                 FlagCaptureJob.class,
                 DeletePendingCaptureJob.class,
+                SetBaseWineJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 FetchFacebookSuggestionsJob.class,
                 FetchTwitterSuggestionsJob.class,

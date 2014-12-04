@@ -279,6 +279,9 @@
     <string name="capture_submit_post">post</string>
     <string name="capture_rate">rate</string>
     <string name="capture_edit">edit</string>
+    <string name="capture_edit_base_wine_title">Choose the correct wine</string>
+    <string name="capture_edit_base_wine_report">Not the right wine?\nRequest expert review!</string>
+    <string name="capture_edit_base_wine_report_confirm">An expert will correct your wine shortly!</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
 
     <!--Capture Flow: Tag Friends -->

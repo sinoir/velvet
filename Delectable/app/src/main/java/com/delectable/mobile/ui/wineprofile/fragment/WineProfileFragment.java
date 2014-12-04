@@ -86,8 +86,6 @@ public class WineProfileFragment extends BaseFragment implements
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
-    private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
-
     private static final String WINE_PROFILE = "wineProfile";
 
     private static final String PHOTO_HASH = "photoHash";
@@ -525,7 +523,7 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
      */
-    private void loadCaptureNotesData(final Type type, final String wineId) {
+    protected void loadCaptureNotesData(final Type type, final String wineId) {
         if (wineId == null) {
             return;
         }
@@ -560,7 +558,7 @@ public class WineProfileFragment extends BaseFragment implements
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void loadLocalBaseWineData() {
+    protected void loadLocalBaseWineData() {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
         if (mBaseWine == null) {
@@ -934,7 +932,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    private static enum Type {
+    protected static enum Type {
         BASE_WINE, WINE_PROFILE;
     }
 }

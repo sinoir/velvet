@@ -35,7 +35,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -125,7 +125,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
         // set camera container height to match screen width
         Point screenSize = ViewUtil.getDisplayDimensions();
-        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x, screenSize.x);
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x,
+                screenSize.x);
         mCameraContainer.setLayoutParams(parms);
         FrameLayout.LayoutParams previewImageParms = new FrameLayout.LayoutParams(screenSize.x,
                 screenSize.x);
@@ -258,7 +259,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             mLabelScanResult = event.getLabelScan();
             // Instant match
             if (mLabelScanResult != null) {
-                List<BaseWine> matches = mLabelScanResult.getBaseWineMatches();
+                ArrayList<BaseWine> matches = mLabelScanResult.getBaseWineMatches();
                 if (matches != null && !matches.isEmpty()) {
                     // Load wine profile into container
                     mWineProfileFragment.init(matches, mCapturedImageBitmap);
@@ -335,7 +336,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
             protected Bitmap doInBackground(Void... params) {
                 Bitmap selectedImage = null;
                 try {
-                    selectedImage = CameraUtil.loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PENDING);
+                    selectedImage = CameraUtil
+                            .loadBitmapFromUri(selectedImageUri, CameraUtil.MAX_SIZE_PENDING);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to open image", e);

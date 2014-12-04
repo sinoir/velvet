@@ -291,4 +291,45 @@ public class Animate {
                 .start();
     }
 
+    public static void shrink(final View view) {
+        shrink(view, 0);
+    }
+
+    public static void shrink(final View view, long startDelay) {
+        view.animate()
+                .alpha(0)
+                .scaleX(0)
+                .scaleY(0)
+                .setDuration(LONG)
+                .setStartDelay(startDelay)
+                .setInterpolator(OVERSHOOT)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        view.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
+
+    public static void shrinkAndGrow(final View view) {
+        shrinkAndGrow(view, 0);
+    }
+
+    public static void shrinkAndGrow(final View view, final long startDelay) {
+        view.animate()
+                .alpha(0)
+                .scaleX(0)
+                .scaleY(0)
+                .setDuration(LONG)
+                .setStartDelay(startDelay)
+                .setInterpolator(OVERSHOOT)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        Animate.grow(view);
+                    }
+                })
+                .start();
+    }
 }
