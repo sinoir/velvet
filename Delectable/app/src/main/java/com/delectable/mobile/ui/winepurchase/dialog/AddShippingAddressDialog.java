@@ -36,6 +36,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnFocusChange;
 
 public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler {
@@ -206,25 +207,72 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     }
     //endregion
 
-    //region Helpers
+    //region Form Validators
     private boolean isFormValid() {
-        boolean isStateValid = mState.getSelectedItem() != null &&
-                getSelectedState() != null;
-        if (isFieldEmpty(mName) ||
-                isFieldEmpty(mAddress1) ||
-                isFieldEmpty(mCity) ||
-                !isStateValid ||
-                isFieldEmpty(mZipCode)) {
-            return false;
-        }
-
-        return true;
+        return validateNameField(true) &&
+                validateAddress1Field(true) &&
+                validateCityField(true) &&
+                (mState.getSelectedItem() != null && getSelectedState() != null) &&
+                validateZipCode(true);
     }
 
     private boolean isFieldEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
     }
 
+    private boolean validateNameField(boolean requestFocus) {
+        boolean isValid = true;
+        if (isFieldEmpty(mName)) {
+            mName.setError("Name is Required");
+            isValid = false;
+            if (requestFocus) {
+                requestFocusWithCursorAtEnd(mName);
+            }
+        }
+        return isValid;
+    }
+
+    private boolean validateAddress1Field(boolean requestFocus) {
+        boolean isValid = true;
+        if (isFieldEmpty(mAddress1)) {
+            mAddress1.setError("Address is Required");
+            isValid = false;
+            if (requestFocus) {
+                requestFocusWithCursorAtEnd(mAddress1);
+            }
+        }
+        return isValid;
+    }
+
+    private boolean validateCityField(boolean requestFocus) {
+        boolean isValid = true;
+        if (isFieldEmpty(mCity)) {
+            mCity.setError("City is Required");
+            isValid = false;
+            if (requestFocus) {
+                requestFocusWithCursorAtEnd(mCity);
+            }
+        }
+        return isValid;
+    }
+
+    private boolean validateZipCode(boolean requestFocus) {
+        boolean isValid = true;
+        if (isFieldEmpty(mZipCode)) {
+            mZipCode.setError("ZIP code is required");
+            isValid = false;
+        } else if (mZipCode.getText().length() < 5) {
+            mZipCode.setError("ZIP code is invalid");
+            isValid = false;
+        }
+        if (!isValid && requestFocus) {
+            requestFocusWithCursorAtEnd(mZipCode);
+        }
+        return isValid;
+    }
+    //endregion
+
+    //region Helpers
     private ShippingAddress buildAddress() {
         ShippingAddress address = new ShippingAddress();
         String[] name = NameUtil.getSplitName(mName.getText().toString());
@@ -250,6 +298,18 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     private USStates getSelectedState() {
         return USStates.stateByNameOrAbbreviation((String) mState.getSelectedItem());
     }
+
+    /**
+     * Requests focus on a field if it doesn't has focus, and adds cursor to end of line
+     *
+     * Used for form validations when user clicks save and a field is invalid
+     */
+    private void requestFocusWithCursorAtEnd(EditText field) {
+        if (!field.hasFocus()) {
+            field.requestFocus();
+            field.setSelection(field.getText().toString().length());
+        }
+    }
     //endregion
 
     //region Saving/Loading
@@ -269,6 +329,36 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         updateFormWithExistingAddress();
     }
 
+    //endregion
+
+    //region onTextChanged
+    @OnFocusChange(value = R.id.name)
+    protected void onFocusChangedForName(boolean focused) {
+        if (!focused) {
+            validateNameField(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.address1)
+    protected void onFocusChangedForAddress1(boolean focused) {
+        if (!focused) {
+            validateAddress1Field(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.city)
+    protected void onFocusChangedForCity(boolean focused) {
+        if (!focused) {
+            validateCityField(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.zip_code)
+    protected void onFocusChangedForZipCode(boolean focused) {
+        if (!focused) {
+            validateZipCode(false);
+        }
+    }
     //endregion
 
     //region onClicks
