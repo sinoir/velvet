@@ -397,7 +397,7 @@ public class WineProfileFragment extends BaseFragment implements
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchWineCapture();
+                onCameraButtonClicked();
             }
         });
 
@@ -471,6 +471,9 @@ public class WineProfileFragment extends BaseFragment implements
     }
     //endregion LifeCycle
 
+    protected void onCameraButtonClicked() {
+        launchWineCapture();
+    }
 
     private void startWinePurchaseFlow(String wineId) {
         changeVintage(wineId);

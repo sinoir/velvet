@@ -161,6 +161,13 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         showEditBaseWineDialog();
     }
 
+    @Override
+    protected void onCameraButtonClicked() {
+        launchWineCapture();
+        // finish activity to prevent infinite back stack
+        getActivity().finish();
+    }
+
     private void showEditBaseWineDialog() {
         EditBaseWineDialog dialog = EditBaseWineDialog.newInstance(mMatches);
         dialog.setTargetFragment(this, EDIT_BASE_WINE_DIALOG); //callback goes to onActivityResult
