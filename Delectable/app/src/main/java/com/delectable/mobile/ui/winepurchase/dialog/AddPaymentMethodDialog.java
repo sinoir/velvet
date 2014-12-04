@@ -13,6 +13,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -36,6 +41,8 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
     private static final String TAG = AddPaymentMethodDialog.class.getSimpleName();
 
     private static final String ARGS_PAYMENT_METHOD_ID = "ARGS_PAYMENT_METHOD_ID";
+
+    private static final int MAX_YEAR_DIFF = 30;
 
     @Inject
     protected AccountController mAccountController;
@@ -67,6 +74,8 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
     @InjectView(R.id.action_buttons)
     protected CancelSaveButtons mActionButtons;
 
+    private int mCurrent2DigitYear;
+
     public static AddPaymentMethodDialog newInstance() {
         AddPaymentMethodDialog f = new AddPaymentMethodDialog();
         Bundle args = new Bundle();
@@ -78,6 +87,8 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+
+        buildCurrent2DigitYear();
     }
 
     @NonNull
@@ -98,6 +109,81 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
 
         mActionButtons.setActionsHandler(this);
 
+        mName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateNameField();
+            }
+        });
+
+        mCreditCardNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateCreditCardField();
+            }
+        });
+
+        mExpirationYear.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateYearField();
+            }
+        });
+
+        mExpirationMonth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateMonthField();
+            }
+        });
+
+        mCVC.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateCVCField();
+            }
+        });
+
         return view;
     }
 
@@ -110,21 +196,106 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         dismiss();
     }
 
-    //region Helpers
+    //region Form Validators
     private boolean isFormValid() {
-        if (isFieldEmpty(mName) ||
-                isFieldEmpty(mCreditCardNumber) ||
-                isFieldEmpty(mExpirationMonth) ||
-                isFieldEmpty(mExpirationYear) ||
-                isFieldEmpty(mCVC)) {
-            return false;
-        }
-
-        return true;
+        return validateNameField() &&
+                validateCreditCardField() &&
+                validateMonthField() &&
+                validateYearField() &&
+                validateCVCField();
     }
 
     private boolean isFieldEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
+    }
+
+    private boolean validateNameField() {
+        boolean isValid = true;
+        if (isFieldEmpty(mName)) {
+            mName.setError("Name is Required");
+            isValid = false;
+            requestFocusWithCursorAtEnd(mName);
+        }
+        return isValid;
+    }
+
+    private boolean validateCreditCardField() {
+        boolean isValid = true;
+        if (isFieldEmpty(mCreditCardNumber)) {
+            mCreditCardNumber.setError("Credit Card Number is Required");
+            isValid = false;
+            requestFocusWithCursorAtEnd(mCreditCardNumber);
+        }
+        return isValid;
+    }
+
+    private boolean validateYearField() {
+        boolean isValid = true;
+        String yearText = mExpirationYear.getText().toString();
+        int yearInt = 0;
+        int maxYearsOut = mCurrent2DigitYear + MAX_YEAR_DIFF;
+        try {
+            yearInt = Integer.valueOf(yearText);
+        } catch (NumberFormatException ex) {
+            // no-op, month int will be 0 and fail as invalid month
+        }
+
+        if (yearInt == 0) {
+            mExpirationYear.setError("Year is Required");
+            isValid = false;
+            requestFocusWithCursorAtEnd(mExpirationYear);
+        } else if (yearInt < mCurrent2DigitYear || yearInt > maxYearsOut) {
+            mExpirationYear.setError("Year is Invalid");
+            requestFocusWithCursorAtEnd(mExpirationYear);
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean validateMonthField() {
+        boolean isValid = true;
+        String monthText = mExpirationMonth.getText().toString();
+        int monthInt = 0;
+        try {
+            monthInt = Integer.valueOf(monthText);
+        } catch (NumberFormatException ex) {
+            // no-op, month int will be 0 and fail as invalid month
+        }
+
+        if (monthInt == 0) {
+            mExpirationMonth.setError("Month is Required");
+            requestFocusWithCursorAtEnd(mExpirationMonth);
+            isValid = false;
+        } else if (monthInt > 12) {
+            requestFocusWithCursorAtEnd(mExpirationMonth);
+            mExpirationMonth.setError("Month is Invalid");
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean validateCVCField() {
+        boolean isValid = true;
+        if (isFieldEmpty(mCVC)) {
+            mCVC.setError("CVC is Required");
+            requestFocusWithCursorAtEnd(mCVC);
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    //endregion
+
+    //region Helpers
+
+    /**
+     * Builds 2 digit year from Date Formatter.  We call this once in onCreate, so we don't call
+     * this every time user enters data inside the year field
+     */
+    private void buildCurrent2DigitYear() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy"); // Just the year, with 2 digits
+        String formattedDate = sdf.format(Calendar.getInstance().getTime());
+        mCurrent2DigitYear = Integer.valueOf(formattedDate);
     }
 
     private PaymentMethod buildPaymentMethod() {
@@ -141,6 +312,18 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         paymentMethod.setCvc(mCVC.getText().toString());
 
         return paymentMethod;
+    }
+
+    /**
+     * Requests focus on a field if it doesn't has focus, and adds cursor to end of line
+     *
+     * Used for form validations when user clicks save and a field is invalid
+     */
+    private void requestFocusWithCursorAtEnd(EditText field) {
+        if (!field.hasFocus()) {
+            field.requestFocus();
+            field.setSelection(field.getText().toString().length());
+        }
     }
     //endregion
 
