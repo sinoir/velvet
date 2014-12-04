@@ -11,6 +11,8 @@
         android:id="@+id/tab_layout"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height" />
+        android:layout_height="@dimen/tab_height"
+        android:elevation="@dimen/tab_elevation" />
+    <!-- TODO backport shadow for pre v21 -->
 
 </FrameLayout>

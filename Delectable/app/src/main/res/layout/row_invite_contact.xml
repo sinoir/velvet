@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout-->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/follow_contact_row_height">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
+        android:paddingTop="@dimen/spacing_8"
+        android:paddingBottom="@dimen/spacing_8"
         android:layout_toLeftOf="@+id/follow_button"
+        android:layout_centerVertical="true"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:singleLine="true"
@@ -20,15 +23,17 @@
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/invite_button"
-        android:layout_width="@dimen/follow_friends_invite_btn_width"
-        android:layout_height="@dimen/follow_friends_invite_btn_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
-        android:layout_marginRight="@dimen/follow_friends_horizontal_spacing"
-        android:background="@drawable/btn_social_signin_up_bg"
-        android:gravity="center"
+        android:paddingLeft="@dimen/spacing_16"
+        android:paddingRight="@dimen/spacing_16"
+        android:paddingTop="@dimen/spacing_8"
+        android:paddingBottom="11dp"
+        android:layout_gravity="center"
         android:text="@string/follow_friends_invite"
-        android:textColor="@color/d_medium_gray"
-        app:fontName="whitney_medium" />
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/chestnut_to_chestnut_pressed"
+        app:fontName="whitney_medium_sc" />
 </merge>

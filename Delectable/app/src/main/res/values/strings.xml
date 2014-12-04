@@ -301,7 +301,7 @@
     <string name="follow_friends_invite_to_delectable">invite to delectable</string>
     <string name="follow_friends_facebook">facebook</string>
     <string name="follow_friends_twitter">twitter</string>
-    <string name="follow_friends_invite">Invite</string>
+    <string name="follow_friends_invite">invite</string>
     <string name="follow_friends_no_friends_connected">None of your friends have their accounts connected to Delectable!</string>
     <string name="follow_friends_error_retrieving_friends">Sorry, we had trouble retrieving your friend list, please try again later!</string>
 

@@ -18,6 +18,7 @@
     <dimen name="tiny_profile_image_size">28dp</dimen>
     <dimen name="cap_feed_comment_text_size">16sp</dimen>
     <dimen name="tab_height">48dp</dimen>
+    <dimen name="tab_elevation">4dp</dimen>
     <dimen name="general_icon_size">32dp</dimen>
     <dimen name="circle_pager_indicator_padding">20dp</dimen>
     <dimen name="circle_pager_indicator_radius">4dp</dimen>
