@@ -22,6 +22,7 @@ import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
@@ -237,6 +238,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
             // first run of the app starts with the nav drawer open
             UserInfo.markWelcomeDone();
             mDrawerLayout.openDrawer(Gravity.START);
+
+            FacebookEventUtil.logFirstAppUse(getActivity());
         }
     }
 

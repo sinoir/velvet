@@ -11,6 +11,7 @@ import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.LabelScan;
+import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
@@ -20,6 +21,7 @@ import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.InstagramUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.twitter.sdk.android.core.Callback;
@@ -130,6 +132,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
     private boolean mIsPostingCapture;
 
     private LoadingCircleDialog mLoadingDialog;
+
+    private PendingCapture mPendingCapture;
 
     public WineCaptureSubmitFragment() {
     }
@@ -299,7 +303,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
             mCaptureRequest.setShareFb(mShareFacebookButton.isChecked());
             mCaptureRequest.setShareTw(mShareTwitterButton.isChecked());
             if (mShareTwitterButton.isChecked()) {
-                mCaptureRequest.setUserTw(UserInfo.getAccountPrivate(getActivity()).getTwScreenName());
+                mCaptureRequest
+                        .setUserTw(UserInfo.getAccountPrivate(getActivity()).getTwScreenName());
             }
         }
 
@@ -341,8 +346,9 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     public void onEventMainThread(CreatedPendingCaptureEvent event) {
         if (event.isSuccessful()) {
+            mPendingCapture = event.getPendingCapture();
             mCaptureRequest = new AddCaptureFromPendingCaptureRequest(
-                    event.getPendingCapture().getId());
+                    mPendingCapture.getId());
             updateCaptureRequestWithFormData();
             Log.i(TAG, "Adding Request: " + mCaptureRequest);
             mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
@@ -355,6 +361,8 @@ public class WineCaptureSubmitFragment extends BaseFragment {
 
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
         if (event.isSuccessful()) {
+            FacebookEventUtil.logRateEvent(getActivity(), mPendingCapture);
+
             launchCurrentUserProfile();
             if (mShareTwitterButton.isChecked()) {
                 String tweet = event.getCaptureDetails().getTweet();

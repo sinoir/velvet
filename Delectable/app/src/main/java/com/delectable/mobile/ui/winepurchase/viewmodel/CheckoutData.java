@@ -37,6 +37,10 @@ public class CheckoutData {
         return mWineProfileMinimal.getName();
     }
 
+    public String getVintage() {
+        return mWineProfileMinimal.getVintage();
+    }
+
     public ShippingAddress getSelectedShippingAddress() {
         return mSelectedShippingAddress;
     }
