@@ -29,11 +29,21 @@ public class CheckoutData {
     }
 
     //region Getters/Setters
+    public boolean isWineProfileLoaded() {
+        return mWineProfileMinimal != null;
+    }
+
     public String getProducerName() {
+        if (mWineProfileMinimal == null) {
+            return "";
+        }
         return mWineProfileMinimal.getProducerName();
     }
 
     public String getWineName() {
+        if (mWineProfileMinimal == null) {
+            return "";
+        }
         return mWineProfileMinimal.getName();
     }
 
@@ -100,14 +110,23 @@ public class CheckoutData {
     }
 
     public String getTotalPriceText() {
+        if (mCurrentPrice == null) {
+            return "-";
+        }
         return mCurrentPrice.getTotal();
     }
 
     public String getShippingPriceText() {
+        if (mCurrentPrice == null) {
+            return "-";
+        }
         return mCurrentPrice.getShipping();
     }
 
     public String getTaxPriceText() {
+        if (mCurrentPrice == null) {
+            return "-";
+        }
         return mCurrentPrice.getTax();
     }
     //endregion
@@ -177,6 +196,9 @@ public class CheckoutData {
     }
 
     public String getMarketingMessage() {
+        if (mPurchaseOffer == null) {
+            return null;
+        }
         return mPurchaseOffer.getMarketingMessage();
     }
 

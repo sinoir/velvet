@@ -212,7 +212,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void updateMarketingMessage() {
-        if (mData.getMarketingMessage() == null) {
+        if (mData == null || mData.getMarketingMessage() == null) {
             mMarketingMessage.setText("");
             mMarketingMessage.setVisibility(View.GONE);
         } else {
@@ -222,7 +222,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void updateWineDetails() {
-        if (mData == null) {
+        if (mData == null || !mData.isWineProfileLoaded()) {
             return;
         }
 
@@ -331,6 +331,10 @@ public class WineCheckoutFragment extends BaseFragment {
 
     //region Load Local Data
     private void loadWineAndPricingData() {
+        // Don't update UI data if purchase offer is null, this is required.
+        if (mWineSourceModel.getPurchaseOffer(mVintageId) == null) {
+            return;
+        }
         mData.updateWithData(mWineSourceModel.getPurchaseOffer(mVintageId),
                 mWineSourceModel.getMinWineWithPrice(mVintageId));
 
