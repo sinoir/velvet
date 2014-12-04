@@ -13,8 +13,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnTextChanged;
 
 public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler {
@@ -108,81 +107,6 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         ButterKnife.inject(this, view);
 
         mActionButtons.setActionsHandler(this);
-
-        mName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateNameField();
-            }
-        });
-
-        mCreditCardNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateCreditCardField();
-            }
-        });
-
-        mExpirationYear.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateYearField();
-            }
-        });
-
-        mExpirationMonth.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateMonthField();
-            }
-        });
-
-        mCVC.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateCVCField();
-            }
-        });
 
         return view;
     }
@@ -331,6 +255,37 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
     private void savePaymentMethod() {
         PaymentMethod paymentMethod = buildPaymentMethod();
         mAccountController.addPaymentMethod(paymentMethod, true);
+    }
+    //endregion
+
+    //region onTextChanged
+    @OnTextChanged(value = R.id.name, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    protected void onAfterTextChangedForName() {
+        validateNameField();
+    }
+
+    @OnTextChanged(value = R.id.credit_card_number,
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    protected void onAfterTextChangedForCCNum() {
+        validateCreditCardField();
+    }
+
+    @OnTextChanged(value = R.id.expiration_month,
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    protected void onAfterTextChangedForMonth() {
+        validateMonthField();
+    }
+
+    @OnTextChanged(value = R.id.expiration_year,
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    protected void onAfterTextChangedForYear() {
+        validateYearField();
+    }
+
+    @OnTextChanged(value = R.id.cvc,
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    protected void onAfterTextChangedForCVC() {
+        validateCVCField();
     }
     //endregion
 
