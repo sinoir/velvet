@@ -17,10 +17,8 @@
 
     <View
         android:id="@+id/header_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/dialog_title"
-        android:background="@color/d_dark_gray" />
+        style="@style/VerticalDivider"
+        android:layout_below="@+id/dialog_title" />
 
     <ScrollView
         android:id="@+id/form_container"
@@ -98,10 +96,8 @@
                 android:inputType="phone" />
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="20dp"
-                android:background="@color/d_dark_gray" />
+                style="@style/VerticalDivider"
+                android:layout_marginTop="20dp" />
 
             <com.delectable.mobile.ui.common.widget.CancelSaveButtons
                 android:id="@+id/action_buttons"

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/d_white_80op">
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="300dp"
@@ -14,14 +9,12 @@
 
     <View
         android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/d_medium_gray" />
+        style="@style/VerticalDivider" />
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle.NoDivider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 </LinearLayout>
-    </FrameLayout>

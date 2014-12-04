@@ -7,6 +7,12 @@
     android:background="@color/d_white">
 
     <FrameLayout
+        android:id="@+id/wine_profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
+    <FrameLayout
         android:id="@+id/camera_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_capture_preview_height"
@@ -93,6 +99,16 @@
             android:layout_marginRight="@dimen/spacing_48"
             android:background="@null"
             android:src="@drawable/btn_shutter" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            android:alpha="0" />
 
         <ImageButton
             android:id="@+id/confirm_button"

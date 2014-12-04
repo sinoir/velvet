@@ -257,8 +257,8 @@
     <string name="choose_vintage_dialog_title">Choose vintage</string>
     <string name="choose_vintage_dialog_all_years">All years</string>
     <plurals name="choose_vintage_dialog_ratings_count">
-        <item quantity="one">(1 rating)</item>
-        <item quantity="other">(%d ratings)</item>
+        <item quantity="one">1 rating</item>
+        <item quantity="other">%d ratings</item>
     </plurals>
 
     <!-- TODO consult w bjorn: Beers have no vintage, "NV vintage" is unsightly-->
@@ -271,11 +271,17 @@
     </plurals>
 
     <!-- Wine Capture Flow Screens-->
+    <string name="capture_instant_failed">Looks like a tricky one! A wine expert from Delectable will try to identify this wine manually and add it to your profile.</string>
     <string name="capture_submit_title">Comment &amp; Rate</string>
-    <string name="capture_submit_leave_comment_hint">Write a comment or taste note...</string>
+    <string name="capture_submit_leave_comment_hint">Write a comment or tasting note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
     <string name="capture_submit_drinking_with_who_text">Who are you drinking with?</string>
-    <string name="capture_submit_post">Post</string>
+    <string name="capture_submit_post">post</string>
+    <string name="capture_rate">rate</string>
+    <string name="capture_edit">edit</string>
+    <string name="capture_edit_base_wine_title">Choose the correct wine</string>
+    <string name="capture_edit_base_wine_report">Not the right wine?\nRequest expert review!</string>
+    <string name="capture_edit_base_wine_report_confirm">An expert will correct your wine shortly!</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
 
     <!--Capture Flow: Tag Friends -->
@@ -295,7 +301,7 @@
     <string name="follow_friends_invite_to_delectable">invite to delectable</string>
     <string name="follow_friends_facebook">facebook</string>
     <string name="follow_friends_twitter">twitter</string>
-    <string name="follow_friends_invite">Invite</string>
+    <string name="follow_friends_invite">invite</string>
     <string name="follow_friends_no_friends_connected">None of your friends have their accounts connected to Delectable!</string>
     <string name="follow_friends_error_retrieving_friends">Sorry, we had trouble retrieving your friend list, please try again later!</string>
 

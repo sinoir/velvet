@@ -73,6 +73,7 @@ import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.api.jobs.foursquare.SearchFoursquareVenuesJob;
 import com.delectable.mobile.api.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.api.jobs.pendingcaptures.DeletePendingCaptureJob;
+import com.delectable.mobile.api.jobs.pendingcaptures.SetBaseWineJob;
 import com.delectable.mobile.api.jobs.registrations.LoginFacebookJob;
 import com.delectable.mobile.api.jobs.registrations.LoginJob;
 import com.delectable.mobile.api.jobs.registrations.RegisterJob;
@@ -87,7 +88,7 @@ import com.delectable.mobile.api.net.NetworkClient;
 import com.delectable.mobile.api.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
-import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
+import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
@@ -115,6 +116,7 @@ import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
+import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
@@ -155,11 +157,12 @@ import de.greenrobot.event.EventBus;
                 FollowTwitterFriendsTabFragment.class,
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
-                WineCaptureSubmitFragment.class,
+                WineCaptureCameraFragment.class,
                 RateCaptureFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
                 WineProfileFragment.class,
+                WineProfileInstantFragment.class,
                 TaggedPeopleFragment.class,
                 WineCheckoutFragment.class,
                 ConfirmationDialogFragment.class,
@@ -206,6 +209,7 @@ import de.greenrobot.event.EventBus;
                 DeleteCaptureJob.class,
                 FlagCaptureJob.class,
                 DeletePendingCaptureJob.class,
+                SetBaseWineJob.class,
                 FetchInfluencerSuggestionsJob.class,
                 FetchFacebookSuggestionsJob.class,
                 FetchTwitterSuggestionsJob.class,

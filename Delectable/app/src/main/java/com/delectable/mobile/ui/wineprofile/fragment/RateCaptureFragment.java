@@ -12,6 +12,7 @@ import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
@@ -26,6 +27,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +49,6 @@ import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-//TODO copied and pasted a new class here instead of a base class for this and WineCaptureSubmit because when we get instant capture flow in here, WineCaptureSubmit will change dramatically or get deleted
 public class RateCaptureFragment extends BaseFragment {
 
     private static final String TAG = RateCaptureFragment.class.getSimpleName();
@@ -99,6 +100,10 @@ public class RateCaptureFragment extends BaseFragment {
     @Inject
     protected WineScanController mWineScanController;
 
+    protected View mActionView;
+
+    protected FontTextView mRateButton;
+
     private Account mUserAccount;
 
     private String mPendingCaptureId;
@@ -140,7 +145,10 @@ public class RateCaptureFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setActionBarTitle(getString(R.string.capture_submit_title));
+        setActionBarSubtitle((String) null);
         enableBackButton(true);
+        getActionBar().show();
     }
 
     @Override
@@ -148,6 +156,9 @@ public class RateCaptureFragment extends BaseFragment {
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
+        mActionView = inflater.inflate(R.layout.action_menu_button, null, false);
+        mRateButton = (FontTextView) mActionView.findViewById(R.id.action_button);
+
         ButterKnife.inject(this, view);
 
         setupRatingSeekBar();
@@ -162,8 +173,19 @@ public class RateCaptureFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // TODO customize the post button
         inflater.inflate(R.menu.capture_menu, menu);
+        MenuItem postItem = menu.findItem(R.id.post);
+        mRateButton.setText(getString(R.string.capture_rate));
+        mRateButton.setEnabled(true);
+        mRateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommentEditText.clearFocus();
+                hideKeyboard();
+                rateCapture();
+            }
+        });
+        MenuItemCompat.setActionView(postItem, mActionView);
     }
 
     @Override
@@ -171,11 +193,6 @@ public class RateCaptureFragment extends BaseFragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().onBackPressed();
-                return true;
-            case R.id.post:
-                mCommentEditText.clearFocus();
-                hideKeyboard();
-                rateCapture();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -242,6 +259,7 @@ public class RateCaptureFragment extends BaseFragment {
 
 
     public void rateCapture() {
+        mRateButton.setEnabled(false);
         mCaptureRequest = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
         updateCaptureRequestWithFormData(mCaptureRequest);
         mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
@@ -292,15 +310,18 @@ public class RateCaptureFragment extends BaseFragment {
             String shortUrl = event.getCaptureDetails().getShortShareUrl();
             TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
         }
-        getActivity().finish();
+
         //TODO instagram stuff
 //        if (mShareInstagramButton.isChecked()) {
 //            InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
 //                    mCommentEditText.getText().toString());
 //        }
+
+        launchUserProfile(true);
     }
 
     private void handleEventErrorMessage(BaseEvent event) {
+        mRateButton.setEnabled(true);
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(R.string.error_capture_wine_no_network);
         } else {

@@ -20,8 +20,8 @@
         android:paddingBottom="@dimen/spacing_20"
         android:paddingLeft="@dimen/spacing_16"
         android:paddingRight="@dimen/spacing_16"
-        android:animateLayoutChanges="true"
         android:visibility="visible">
+        <!--android:animateLayoutChanges="true"-->
 
         <com.delectable.mobile.ui.common.widget.RatingTextView
             android:id="@+id/capturer_rating"

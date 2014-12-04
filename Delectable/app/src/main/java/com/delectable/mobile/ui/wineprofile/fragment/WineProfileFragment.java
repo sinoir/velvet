@@ -39,17 +39,21 @@ import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.ViewUtil;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.StringUtils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -60,6 +64,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -81,15 +86,13 @@ public class WineProfileFragment extends BaseFragment implements
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
-    private static final int ACTIONBAR_TRANSITION_ANIM_DURATION = 300;
-
     private static final String WINE_PROFILE = "wineProfile";
 
     private static final String PHOTO_HASH = "photoHash";
 
     private static final String BASE_WINE_MINIMAL = "baseWineMinimal";
 
-    private static final String BASE_WINE_ID = "baseWineId";
+    protected static final String BASE_WINE_ID = "baseWineId";
 
     private static final String VINTAGE_ID = "vintageId";
 
@@ -177,7 +180,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private PhotoHash mCapturePhotoHash;
 
-    private String mBaseWineId;
+    protected String mBaseWineId;
 
     private String mVintageId;
 
@@ -194,12 +197,12 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * The id that we're fetching captureNotes with. Can be a baseWineId or a wineProfileId.
      */
-    private String mFetchingId;
+    protected String mFetchingId;
 
     /**
      * If this is not null, then it means this fragment was spawned from Search Wines.
      */
-    private BaseWineMinimal mBaseWineMinimal;
+    protected BaseWineMinimal mBaseWineMinimal;
 
 
     private Listing<CaptureNote, String> mCaptureNoteListing;
@@ -229,7 +232,7 @@ public class WineProfileFragment extends BaseFragment implements
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
-            PhotoHash capturePhotoHash) {
+            @Nullable PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(WINE_PROFILE, wineProfile);
@@ -246,7 +249,7 @@ public class WineProfileFragment extends BaseFragment implements
      */
     //used for Search Wines and User Profiles
     public static WineProfileFragment newInstance(BaseWineMinimal baseWine,
-            PhotoHash capturePhotoHash) {
+            @Nullable PhotoHash capturePhotoHash) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(BASE_WINE_MINIMAL, baseWine);
@@ -264,7 +267,7 @@ public class WineProfileFragment extends BaseFragment implements
      * @param baseWineId required
      * @param vintageId  optional
      */
-    public static WineProfileFragment newInstance(String baseWineId, String vintageId) {
+    public static WineProfileFragment newInstance(String baseWineId, @Nullable String vintageId) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putString(BASE_WINE_ID, baseWineId);
@@ -306,8 +309,6 @@ public class WineProfileFragment extends BaseFragment implements
         //ensured that baseWineId is populated, set as our fetchingId
         mFetchingId = mBaseWineId;
 
-        mStickyToolbarHeight = getResources().getDimensionPixelSize(R.dimen.sticky_toolbar_height);
-
         mAllYearsText = getString(R.string.wine_profile_all_years);
     }
 
@@ -317,15 +318,24 @@ public class WineProfileFragment extends BaseFragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
-        //prepare header view
+        // prepare header view
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
+
+        // set wine banner height to match screen width
+        Point screenSize = ViewUtil.getDisplayDimensions();
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(screenSize.x,
+                screenSize.x);
+        mBanner.setLayoutParams(parms);
 
         mBanner.setActionsHandler(this);
         updateBannerView();
         mBanner.updateVintage(mAllYearsText);
 
         updateVarietyRegionRatingView(mBaseWine);
+
+        // set toolbar height to half the banner height for scroll offset
+        mStickyToolbarHeight = screenSize.x / 2;
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
@@ -387,7 +397,7 @@ public class WineProfileFragment extends BaseFragment implements
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchWineCapture();
+                onCameraButtonClicked();
             }
         });
 
@@ -416,16 +426,18 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        if (mBaseWine == null) {
+        if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
         }
 
-        if (mAdapter.getItems().isEmpty()) {
+        if (mBaseWineId != null && mAdapter.getItems().isEmpty()) {
             loadCaptureNotesData(Type.BASE_WINE, mBaseWineId);
         }
 
-        mAnalytics.trackViewWineProfile();
+        if (mBaseWineId != null) {
+            mAnalytics.trackViewWineProfile();
+        }
     }
 
     @Override
@@ -459,6 +471,9 @@ public class WineProfileFragment extends BaseFragment implements
     }
     //endregion LifeCycle
 
+    protected void onCameraButtonClicked() {
+        launchWineCapture();
+    }
 
     private void startWinePurchaseFlow(String wineId) {
         changeVintage(wineId);
@@ -511,7 +526,10 @@ public class WineProfileFragment extends BaseFragment implements
     /**
      * @param wineId baseWineId (for all wines) or wineProfileId (for specific vintage)
      */
-    private void loadCaptureNotesData(final Type type, final String wineId) {
+    protected void loadCaptureNotesData(final Type type, final String wineId) {
+        if (wineId == null) {
+            return;
+        }
         mFetching = true;
         new SafeAsyncTask<Listing<CaptureNote, String>>(this) {
             @Override
@@ -543,7 +561,11 @@ public class WineProfileFragment extends BaseFragment implements
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void loadLocalBaseWineData() {
+    protected void loadLocalBaseWineData() {
+        loadLocalBaseWineData(false);
+    }
+
+    protected void loadLocalBaseWineData(boolean baseWineHasChanged) {
         //retrieve full base wine information
         mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
         if (mBaseWine == null) {
@@ -555,7 +577,7 @@ public class WineProfileFragment extends BaseFragment implements
             mCapturePhotoHash = mBaseWine.getPhoto();
         }
 
-        if (mSelectedWineVintage == null) {
+        if (mSelectedWineVintage == null || baseWineHasChanged) {
             mSelectedWineVintage = mBaseWine.getDefaultWineProfile();
         }
         loadPricingData();
@@ -577,7 +599,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     //region EventBus Events
     public void onEventMainThread(UpdatedBaseWineEvent event) {
-        if (!mBaseWineId.equals(event.getBaseWineId())) {
+        if (mBaseWineId != null && !mBaseWineId.equals(event.getBaseWineId())) {
             return;
         }
 
@@ -665,6 +687,9 @@ public class WineProfileFragment extends BaseFragment implements
      */
     private void fetchCaptureNotes(Type idType, String id, Listing<CaptureNote, String> listing,
             Boolean isPullToRefresh) {
+        if (id == null) {
+            return;
+        }
         mFetching = true;
         if (idType == Type.BASE_WINE) {
             mCaptureController.fetchCaptureNotes(BASE_WINE_NOTES_REQ, id, null, listing, null,
@@ -794,17 +819,25 @@ public class WineProfileFragment extends BaseFragment implements
         mRatingsContainer.setVisibility(View.VISIBLE);
     }
 
+    protected void updateBannerView() {
+        updateBannerView(null);
+    }
+
     /**
      * The WineBannerView can be set with different types of data depending from where this fragment
      * was spawned.
      */
-    private void updateBannerView() {
+    protected void updateBannerView(Bitmap previewImage) {
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
         } else if (mBaseWineMinimal != null) {
-            //spawned from Search Wines or User Captures
-            mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
+            //spawned from Search Wines, User Captures or Instant Flow
+            if (previewImage != null) {
+                mBanner.updateData(mBaseWineMinimal, previewImage);
+            } else {
+                mBanner.updateData(mBaseWineMinimal, mCapturePhotoHash);
+            }
         } else if (mBaseWine != null) {
             //called after BaseWine is successfully fetched
             mBanner.updateData(mBaseWine, mCapturePhotoHash);
@@ -817,7 +850,6 @@ public class WineProfileFragment extends BaseFragment implements
             mBanner.updateVintage(mAllYearsText);
         }
     }
-
 
     private void markCaptureAsHelpful(CaptureNote captureNote, boolean markHelpful) {
         mCaptureNotesExpectingUpdate.put(captureNote.getId(), captureNote);
@@ -872,6 +904,11 @@ public class WineProfileFragment extends BaseFragment implements
     }
 
     @Override
+    public void onEditBaseWineClicked() {
+        // Override in WineProfileInstantFragment
+    }
+
+    @Override
     public void launchUserProfile(String userAccountId) {
         Intent intent = new Intent();
         intent.putExtra(UserProfileActivity.PARAMS_USER_ID, userAccountId);
@@ -902,7 +939,7 @@ public class WineProfileFragment extends BaseFragment implements
         }
     }
 
-    private static enum Type {
+    protected static enum Type {
         BASE_WINE, WINE_PROFILE;
     }
 }

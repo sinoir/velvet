@@ -5,11 +5,12 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,6 +18,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,13 +32,14 @@ import butterknife.OnClick;
  * left hand corner. Used in the Wine Profile screen, Wine Capture screen, and also in the Follower
  * Feed screen.
  */
-public class WineBannerView extends RelativeLayout {
+public class WineBannerView extends FrameLayout {
 
     private static final String TAG = WineBannerView.class.getSimpleName();
 
 
     public interface ActionsHandler {
-        void onVintageClick();
+        public void onVintageClick();
+        public void onEditBaseWineClicked();
     }
 
     @InjectView(R.id.wine_image)
@@ -44,6 +47,12 @@ public class WineBannerView extends RelativeLayout {
 
     @InjectView(R.id.gradient_backdrop)
     protected View mGradientView;
+
+    @InjectView(R.id.wine_banner_container)
+    protected View mContainer;
+
+    @InjectView(R.id.edit_base_wine)
+    protected View mEditBaseWine;
 
     @InjectView(R.id.producer_name)
     protected TextView mProducerName;
@@ -63,6 +72,13 @@ public class WineBannerView extends RelativeLayout {
     private int mTriangleCenterPosition;
 
     private Paint mPaint;
+
+    int mTriangleWidth = getResources()
+            .getDimensionPixelOffset(R.dimen.wine_banner_triangle_width);
+
+    int mTriangleHeight = getResources()
+            .getDimensionPixelOffset(R.dimen.wine_banner_triangle_height);
+
 
     private ActionsHandler mActionsHandler;
 
@@ -91,7 +107,22 @@ public class WineBannerView extends RelativeLayout {
 
         View.inflate(context, R.layout.wine_banner_view, this);
         ButterKnife.inject(this);
-        setLayoutTransition(new LayoutTransition());
+        setLayoutTransition(null);
+
+        if (mShowTriangleMask) {
+            // increase bottom padding of wine banner by triangle height
+            mContainer.setPadding(mContainer.getPaddingLeft(), mContainer.getPaddingTop(),
+                    mContainer.getPaddingRight(), mContainer.getPaddingBottom() + mTriangleHeight);
+        }
+
+        mEditBaseWine.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mActionsHandler != null) {
+                    mActionsHandler.onEditBaseWineClicked();
+                }
+            }
+        });
 
         //paint object to draw upside down triangle
         mPaint = new Paint();
@@ -111,7 +142,6 @@ public class WineBannerView extends RelativeLayout {
             mActionsHandler.onVintageClick();
         }
     }
-
 
     /**
      * Will include the vintage with the wine name in the view as well.
@@ -180,8 +210,26 @@ public class WineBannerView extends RelativeLayout {
         updateViewWithData(wineImageUrl, producerName, wineName);
     }
 
+    public void updateData(BaseWineMinimal baseWine, Bitmap previewImage) {
+        if (baseWine != null) {
+            updateViewWithPreviewData(previewImage, baseWine.getProducerName(), baseWine.getName());
+        }
+    }
+
+    public void updateViewWithPreviewData(Bitmap previewImage, String producerName,
+            String wineName) {
+        if (mWineImage.getDrawable() == null) {
+            mWineImage.setImageBitmap(previewImage);
+            // prevent edit button from animating after changing base wine
+            Animate.grow(mEditBaseWine, 1000);
+        }
+        updateViewWithData(null, producerName, wineName);
+    }
+
     public void updateViewWithData(String wineImageUrl, String producerName, String wineName) {
-        ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
+        if (wineImageUrl != null) {
+            ImageLoaderUtil.loadImageIntoView(getContext(), wineImageUrl, mWineImage);
+        }
         mProducerName.setText(producerName.toLowerCase());
         mProducerName.setVisibility(View.VISIBLE);
         mWineName.setText(wineName);
@@ -198,7 +246,8 @@ public class WineBannerView extends RelativeLayout {
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
         // Halve the height of the backdrop view
-        RelativeLayout.LayoutParams layoutParams = (LayoutParams) mGradientView.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mGradientView
+                .getLayoutParams();
         layoutParams.height = height / 2;
         mGradientView.setLayoutParams(layoutParams);
 
@@ -216,12 +265,7 @@ public class WineBannerView extends RelativeLayout {
     //TODO will need to adjust the bottom bounds of this view by the height of our triangle 
     private void drawTriangle(Canvas canvas) {
 
-        int triangleWidth = getResources()
-                .getDimensionPixelOffset(R.dimen.wine_banner_triangle_width);
-        int triangleHeight = getResources()
-                .getDimensionPixelOffset(R.dimen.wine_banner_triangle_height);
-
-        int yTopBoundary = canvas.getHeight() - triangleHeight;
+        int yTopBoundary = canvas.getHeight() - mTriangleHeight;
         int yBottomBoundary = canvas.getHeight();
 
         //left edge corners
@@ -232,13 +276,13 @@ public class WineBannerView extends RelativeLayout {
         int yTopLeftCorner = yTopBoundary;
 
         //triangle corners
-        int xTriangleLeft = mTriangleCenterPosition - triangleWidth / 2;
+        int xTriangleLeft = mTriangleCenterPosition - mTriangleWidth / 2;
         int yTriangleLeft = yTopBoundary;
 
-        int xTriangleBottom = xTriangleLeft + triangleWidth / 2;
+        int xTriangleBottom = xTriangleLeft + mTriangleWidth / 2;
         int yTriangleBottom = yBottomBoundary;
 
-        int xTriangleRight = xTriangleBottom + triangleWidth / 2;
+        int xTriangleRight = xTriangleBottom + mTriangleWidth / 2;
         int yTriangleRight = yTopBoundary;
 
         //right edge corners
@@ -275,6 +319,5 @@ public class WineBannerView extends RelativeLayout {
 
         canvas.drawPath(path, mPaint);
     }
-
 
 }

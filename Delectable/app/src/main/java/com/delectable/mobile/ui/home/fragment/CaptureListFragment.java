@@ -230,6 +230,10 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         if (mAdapter.getItems().isEmpty()) {
             loadLocalData();
         }
+        if (!mCameraButton.isShown()) {
+            mCameraButton.hide(false);
+            mCameraButton.show(true);
+        }
     }
 
     private void loadLocalData() {

@@ -6,13 +6,14 @@
     android:layout_height="@dimen/reset_password_dialog_height"
     android:background="@color/d_white"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/reset_password_dialog_horizontal_spacing"
-    android:paddingRight="@dimen/reset_password_dialog_horizontal_spacing">
+    android:paddingLeft="@dimen/spacing_24"
+    android:paddingRight="@dimen/spacing_24"
+    android:paddingTop="@dimen/spacing_24">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/message"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dialog_header_height"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical|left"
         android:text="@string/reset_password_dialog_title"
         android:textColor="@color/d_dark_gray"
@@ -20,6 +21,7 @@
         app:fontName="whitney_book" />
 
     <RelativeLayout
+        android:layout_marginTop="@dimen/spacing_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

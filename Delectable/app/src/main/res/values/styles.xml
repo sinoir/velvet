@@ -81,10 +81,19 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
     </style>
 
+    <style name="ListViewStyle">
+        <item name="android:dividerHeight">0.5dp</item>
+        <item name="android:divider">@color/d_light_gray</item>
+    </style>
+
+    <style name="ListViewStyle.NoDivider" parent="ListViewStyle">
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
     <!-- Divider drawn horizontally, dividing vertical items -->
     <style name="VerticalDivider">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/d_light_gray</item>
     </style>
 
@@ -330,10 +339,10 @@
         <item name="android:background">@drawable/btn_login_done</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingBottom">4dp</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
-        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
         <item name="android:textColor">@color/d_white</item>
         <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_medium</item>
