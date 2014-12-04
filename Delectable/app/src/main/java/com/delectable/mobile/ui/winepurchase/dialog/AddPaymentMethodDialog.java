@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnTextChanged;
+import butterknife.OnFocusChange;
 
 public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler {
@@ -122,38 +122,42 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
 
     //region Form Validators
     private boolean isFormValid() {
-        return validateNameField() &&
-                validateCreditCardField() &&
-                validateMonthField() &&
-                validateYearField() &&
-                validateCVCField();
+        return validateNameField(true) &&
+                validateCreditCardField(true) &&
+                validateMonthField(true) &&
+                validateYearField(true) &&
+                validateCVCField(true);
     }
 
     private boolean isFieldEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
     }
 
-    private boolean validateNameField() {
+    private boolean validateNameField(boolean requestFocus) {
         boolean isValid = true;
         if (isFieldEmpty(mName)) {
             mName.setError("Name is Required");
             isValid = false;
-            requestFocusWithCursorAtEnd(mName);
+            if (requestFocus) {
+                requestFocusWithCursorAtEnd(mName);
+            }
         }
         return isValid;
     }
 
-    private boolean validateCreditCardField() {
+    private boolean validateCreditCardField(boolean requestFocus) {
         boolean isValid = true;
         if (isFieldEmpty(mCreditCardNumber)) {
             mCreditCardNumber.setError("Credit Card Number is Required");
             isValid = false;
-            requestFocusWithCursorAtEnd(mCreditCardNumber);
+            if (requestFocus) {
+                requestFocusWithCursorAtEnd(mCreditCardNumber);
+            }
         }
         return isValid;
     }
 
-    private boolean validateYearField() {
+    private boolean validateYearField(boolean requestFocus) {
         boolean isValid = true;
         String yearText = mExpirationYear.getText().toString();
         int yearInt = 0;
@@ -167,16 +171,17 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
         if (yearInt == 0) {
             mExpirationYear.setError("Year is Required");
             isValid = false;
-            requestFocusWithCursorAtEnd(mExpirationYear);
         } else if (yearInt < mCurrent2DigitYear || yearInt > maxYearsOut) {
             mExpirationYear.setError("Year is Invalid");
-            requestFocusWithCursorAtEnd(mExpirationYear);
             isValid = false;
+        }
+        if (!isValid && requestFocus) {
+            requestFocusWithCursorAtEnd(mExpirationYear);
         }
         return isValid;
     }
 
-    private boolean validateMonthField() {
+    private boolean validateMonthField(boolean requestFocus) {
         boolean isValid = true;
         String monthText = mExpirationMonth.getText().toString();
         int monthInt = 0;
@@ -188,21 +193,25 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
 
         if (monthInt == 0) {
             mExpirationMonth.setError("Month is Required");
-            requestFocusWithCursorAtEnd(mExpirationMonth);
             isValid = false;
         } else if (monthInt > 12) {
-            requestFocusWithCursorAtEnd(mExpirationMonth);
             mExpirationMonth.setError("Month is Invalid");
             isValid = false;
         }
+        if (!isValid && requestFocus) {
+            requestFocusWithCursorAtEnd(mExpirationMonth);
+        }
+
         return isValid;
     }
 
-    private boolean validateCVCField() {
+    private boolean validateCVCField(boolean requestFocus) {
         boolean isValid = true;
         if (isFieldEmpty(mCVC)) {
             mCVC.setError("CVC is Required");
-            requestFocusWithCursorAtEnd(mCVC);
+            if (requestFocus) {
+                requestFocusWithCursorAtEnd(mCVC);
+            }
             isValid = false;
         }
         return isValid;
@@ -259,33 +268,39 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
     //endregion
 
     //region onTextChanged
-    @OnTextChanged(value = R.id.name, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void onAfterTextChangedForName() {
-        validateNameField();
+    @OnFocusChange(value = R.id.name)
+    protected void onFocusChangedForName(boolean focused) {
+        if (!focused) {
+            validateNameField(false);
+        }
     }
 
-    @OnTextChanged(value = R.id.credit_card_number,
-            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void onAfterTextChangedForCCNum() {
-        validateCreditCardField();
+    @OnFocusChange(value = R.id.credit_card_number)
+    protected void onFocusChangedForCCNum(boolean focused) {
+        if (!focused) {
+            validateCreditCardField(false);
+        }
     }
 
-    @OnTextChanged(value = R.id.expiration_month,
-            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void onAfterTextChangedForMonth() {
-        validateMonthField();
+    @OnFocusChange(value = R.id.expiration_month)
+    protected void onFocusChangedForMonth(boolean focused) {
+        if (!focused) {
+            validateMonthField(false);
+        }
     }
 
-    @OnTextChanged(value = R.id.expiration_year,
-            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void onAfterTextChangedForYear() {
-        validateYearField();
+    @OnFocusChange(value = R.id.expiration_year)
+    protected void onFocusChangedForYear(boolean focused) {
+        if (!focused) {
+            validateYearField(false);
+        }
     }
 
-    @OnTextChanged(value = R.id.cvc,
-            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void onAfterTextChangedForCVC() {
-        validateCVCField();
+    @OnFocusChange(value = R.id.cvc)
+    protected void onFocusChangedForCVC(boolean focused) {
+        if (!focused) {
+            validateCVCField(false);
+        }
     }
     //endregion
 
