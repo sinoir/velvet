@@ -340,10 +340,8 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
     }
 
     protected void launchUserProfile(boolean clearBackStack) {
-        Intent intent = new Intent();
-        intent.putExtra(UserProfileActivity.PARAMS_USER_ID,
-                UserInfo.getUserId(App.getInstance()));
-        intent.setClass(getActivity(), UserProfileActivity.class);
+        Intent intent = UserProfileActivity
+                .newIntent(getActivity(), UserInfo.getUserId(App.getInstance()));
         if (clearBackStack) {
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         }
