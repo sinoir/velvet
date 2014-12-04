@@ -59,11 +59,12 @@ public class CheckoutData {
         if (mSelectedShippingAddress == null) {
             return "";
         }
-        String addr2 = mSelectedShippingAddress.getAddr2() == null ? ""
+        String address = mSelectedShippingAddress.getAddr1();
+        address += mSelectedShippingAddress.getAddr2() == null ? ""
                 : " " + mSelectedShippingAddress.getAddr2();
-        return mSelectedShippingAddress.getAddr1() + addr2 +
+        return address.trim() +
                 ", " + mSelectedShippingAddress.getCity()
-                + "," + mSelectedShippingAddress.getState();
+                + ", " + mSelectedShippingAddress.getState();
     }
 
     public String getShippingState() {
