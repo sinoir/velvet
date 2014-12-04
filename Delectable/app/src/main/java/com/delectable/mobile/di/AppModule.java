@@ -89,7 +89,6 @@ import com.delectable.mobile.api.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
 import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
-import com.delectable.mobile.ui.camera.fragment.WineCaptureSubmitFragment;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
@@ -159,7 +158,6 @@ import de.greenrobot.event.EventBus;
                 TagPeopleFragment.class,
                 FoursquareVenueSelectionFragment.class,
                 WineCaptureCameraFragment.class,
-                WineCaptureSubmitFragment.class,
                 RateCaptureFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
