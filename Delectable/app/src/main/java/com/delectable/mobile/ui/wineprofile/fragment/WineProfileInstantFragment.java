@@ -105,7 +105,6 @@ public class WineProfileInstantFragment extends WineProfileFragment {
                 // open rate & comment screen
                 Intent intent = RateCaptureActivity.newIntent(getActivity(), mPendingCaptureId);
                 startActivity(intent);
-                getActivity().finish();
             }
         });
         // TODO always show rate button once offline capture is working

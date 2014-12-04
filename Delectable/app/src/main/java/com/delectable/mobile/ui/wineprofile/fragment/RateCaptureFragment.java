@@ -49,7 +49,6 @@ import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-//TODO copied and pasted a new class here instead of a base class for this and WineCaptureSubmit because when we get instant capture flow in here, WineCaptureSubmit will change dramatically or get deleted
 public class RateCaptureFragment extends BaseFragment {
 
     private static final String TAG = RateCaptureFragment.class.getSimpleName();
@@ -193,8 +192,7 @@ public class RateCaptureFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-//                getActivity().onBackPressed();
-                launchUserProfile(true);
+                getActivity().onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
