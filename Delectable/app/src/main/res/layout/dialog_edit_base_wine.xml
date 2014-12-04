@@ -19,16 +19,13 @@
 
     <View
         android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/d_light_gray" />
+        style="@style/VerticalDivider" />
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:footerDividersEnabled="true"
-        android:divider="@color/d_light_gray"
-        android:dividerHeight="1px" />
+        android:footerDividersEnabled="true" />
 
 </LinearLayout>

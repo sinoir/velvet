@@ -16,27 +16,22 @@
 
     <View
         android:id="@+id/header_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/dialog_title"
-        android:background="@color/d_dark_gray" />
+        style="@style/VerticalDivider"
+        android:layout_below="@+id/dialog_title" />
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle.NoDivider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/action_buttons"
         android:layout_below="@id/header_divider"
-        android:choiceMode="singleChoice"
-        android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:choiceMode="singleChoice" />
 
     <View
         android:id="@+id/footer_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/action_buttons"
-        android:background="@color/d_dark_gray" />
+        style="@style/VerticalDivider"
+        android:layout_above="@+id/action_buttons" />
 
     <com.delectable.mobile.ui.common.widget.CancelSaveButtons
         android:id="@+id/action_buttons"

@@ -218,8 +218,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mWineProfileContainer.setVisibility(View.VISIBLE);
 //        Animate.fadeOut(mProgressBar);
         Animate.fadeOut(mCameraContainer);
-//        Animate.slideOutDown(mButtonsContainer, 400);
-        Animate.fadeOut(mButtonsContainer, 400);
+//        Animate.slideOutDown(mButtonsContainer, 600);
+        Animate.fadeOut(mButtonsContainer, 600);
     }
 
     @OnTouch(R.id.camera_preview)
