@@ -40,11 +40,11 @@ public class CheckoutData {
         return mWineProfileMinimal.getProducerName();
     }
 
-    public String getWineName() {
+    public String getWineNameWithVintage() {
         if (mWineProfileMinimal == null) {
             return "";
         }
-        return mWineProfileMinimal.getName();
+        return mWineProfileMinimal.getName() + " " + mWineProfileMinimal.getVintage();
     }
 
     public ShippingAddress getSelectedShippingAddress() {
