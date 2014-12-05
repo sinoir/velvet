@@ -1,7 +1,7 @@
 package com.delectable.mobile.util;
 
+import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
-import com.delectable.mobile.api.models.PendingCapture;
 import com.facebook.AppEventsConstants;
 import com.facebook.AppEventsLogger;
 
@@ -29,18 +29,18 @@ public class FacebookEventUtil {
         logger.logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
     }
 
-    public static void logRateEvent(Context context, PendingCapture pendingCapture) {
+    public static void logRateEvent(Context context, CaptureDetails capture) {
         AppEventsLogger logger = AppEventsLogger.newLogger(context);
         String wineName = "";
-        CaptureState captureState = CaptureState.getState(pendingCapture);
+        CaptureState captureState = CaptureState.getState(capture);
         if (captureState == CaptureState.UNVERIFIED) {
-            wineName = pendingCapture.getBaseWine().getProducerName() + " " +
-                    pendingCapture.getBaseWine().getName();
+            wineName = capture.getBaseWine().getProducerName() + " " +
+                    capture.getBaseWine().getName();
         }
         if (captureState == CaptureState.IDENTIFIED) {
-            wineName = pendingCapture.getWineProfile().getProducerName() + " " +
-                    pendingCapture.getWineProfile().getName() + " " +
-                    pendingCapture.getWineProfile().getVintage();
+            wineName = capture.getWineProfile().getProducerName() + " " +
+                    capture.getWineProfile().getName() + " " +
+                    capture.getWineProfile().getVintage();
         }
         //if unidentified or impossibled, we just pass in the empty string
 
