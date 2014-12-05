@@ -20,7 +20,7 @@ public class SetPrimaryShippingAddressJob extends BaseJob {
     private String mAddressId;
 
     public SetPrimaryShippingAddressJob(String addressId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mAddressId = addressId;
     }
 

@@ -1,7 +1,10 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 
@@ -184,6 +187,20 @@ public abstract class BaseActivity extends ActionBarActivity
         launchNavIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(launchNavIntent);
         super.finish();
+    }
+
+    protected void launchUserProfile(boolean clearBackStack) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID,
+                UserInfo.getUserId(App.getInstance()));
+        intent.setClass(this, UserProfileActivity.class);
+        if (clearBackStack) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }
+        startActivity(intent);
+        if (clearBackStack) {
+            finish();
+        }
     }
 
     public void replaceWithFragment(BaseFragment fragment, boolean addToBackstack) {

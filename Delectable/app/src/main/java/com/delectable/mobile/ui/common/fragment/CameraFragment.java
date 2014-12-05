@@ -80,7 +80,7 @@ public class CameraFragment extends BaseFragment {
         }
     }
 
-    private void releaseCameraAndPreview() {
+    protected void releaseCameraAndPreview() {
         mCameraView.udpateCamera(null, 0);
         if (mCamera != null) {
             mCamera.release();

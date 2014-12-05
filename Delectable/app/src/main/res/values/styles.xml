@@ -71,7 +71,9 @@
         <item name="android:actionMenuTextColor">@color/d_white</item>
     </style>
 
-    <style name="DelectableTheme.Dialog" parent="Base.Theme.AppCompat.Light.Dialog"></style>
+    <style name="DelectableTheme.Dialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/d_chestnut</item>
+    </style>
 
     <style name="DelectableTheme.Dialog.LoadingCircle" parent="DelectableTheme.Dialog">
     <item name="android:windowIsFloating">false</item>
@@ -79,10 +81,19 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
     </style>
 
+    <style name="ListViewStyle">
+        <item name="android:dividerHeight">0.5dp</item>
+        <item name="android:divider">@color/d_light_gray</item>
+    </style>
+
+    <style name="ListViewStyle.NoDivider" parent="ListViewStyle">
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
     <!-- Divider drawn horizontally, dividing vertical items -->
     <style name="VerticalDivider">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/d_light_gray</item>
     </style>
 
@@ -143,13 +154,14 @@
     <style name="SignUpIn_fieldLabel">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">2dp</item>
         <item name="android:textColor">@color/d_dark_gray</item>
         <item name="android:textSize">@dimen/signup_in_field_label_text_size</item>
         <item name="fontName">whitney_book_sc</item>
     </style>
 
-    <style name="SignUpIn_field">
-        <item name="android:singleLine">true</item>
+    <style name="SignUpIn_field" parent="Widget.AppCompat.EditText">
+    <item name="android:singleLine">true</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/signup_in_field_text_size</item>
@@ -198,7 +210,7 @@
 
     <style name="ResetPasswordDialogActionText">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/reset_password_dialog_header_height</item>
+        <item name="android:layout_height">@dimen/dialog_header_height</item>
         <item name="android:textSize">@dimen/reset_password_dialog_action_text_size</item>
         <item name="fontName">whitney_medium_sc</item>
     </style>
@@ -328,10 +340,10 @@
         <item name="android:background">@drawable/btn_login_done</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingBottom">4dp</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
-        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
         <item name="android:textColor">@color/d_white</item>
         <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_medium</item>
@@ -379,11 +391,11 @@
     </style>
 
     <style name="CheckoutShippingAddRemoveButton">
-        <item name="android:layout_width">@dimen/button_height</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/dark_gray_to_chestnut</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">28sp</item>
         <item name="fontName">whitney_medium_sc</item>
     </style>
 
@@ -392,7 +404,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginLeft">@dimen/checkout_info_left_margin</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_book</item>
     </style>
 
@@ -401,7 +413,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="fontName">whitney_book</item>
     </style>
 

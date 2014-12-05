@@ -18,6 +18,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ConfirmationDialogFragment;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
+import com.delectable.mobile.util.FacebookEventUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -155,6 +156,9 @@ public class WineCheckoutFragment extends BaseFragment {
 
         updateNumBottles();
 
+        // Show Loader to prevent user from clicking anywhere before we really load data.
+        showLoader();
+
         return view;
     }
 
@@ -212,7 +216,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void updateMarketingMessage() {
-        if (mData.getMarketingMessage() == null) {
+        if (mData == null || mData.getMarketingMessage() == null) {
             mMarketingMessage.setText("");
             mMarketingMessage.setVisibility(View.GONE);
         } else {
@@ -222,12 +226,12 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void updateWineDetails() {
-        if (mData == null) {
+        if (mData == null || !mData.isWineProfileLoaded()) {
             return;
         }
 
         mProducerName.setText(mData.getProducerName().toLowerCase());
-        mWineName.setText(mData.getWineName());
+        mWineName.setText(mData.getWineNameWithVintage());
         String pricePerBottleText = getString(R.string.winecheckout_per_bottle,
                 mData.getPerBottleText());
         mPerBottlePriceText.setText(pricePerBottleText);
@@ -331,6 +335,10 @@ public class WineCheckoutFragment extends BaseFragment {
 
     //region Load Local Data
     private void loadWineAndPricingData() {
+        // Don't update UI data if purchase offer is null, this is required.
+        if (mWineSourceModel.getPurchaseOffer(mVintageId) == null) {
+            return;
+        }
         mData.updateWithData(mWineSourceModel.getPurchaseOffer(mVintageId),
                 mWineSourceModel.getMinWineWithPrice(mVintageId));
 
@@ -377,6 +385,7 @@ public class WineCheckoutFragment extends BaseFragment {
         hideLoader();
 
         if (event.isSuccessful()) {
+            FacebookEventUtil.logPurchase(getActivity(), mData.getQuantity(), mData.getTotalPriceText());
             showConfirmation();
         } else {
             handleError(event.getErrorCode(), event.getErrorMessage());
@@ -384,16 +393,20 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     public void onEventMainThread(FetchedWineSourceEvent event) {
-        hideLoader();
         if (!mVintageId.equalsIgnoreCase(event.getWineId())) {
             return;
         }
+        hideLoader();
 
         if (!event.isSuccessful()) {
             handleError(event.getErrorCode(), event.getErrorMessage());
+            return;
         }
 
         loadWineAndPricingData();
+        String wineName = mData.getProducerName() + " " +
+                mData.getWineNameWithVintage();
+        FacebookEventUtil.logPurchasePageVisit(getActivity(), wineName);
     }
 
     public void onEventMainThread(FetchedShippingAddressesEvent event) {

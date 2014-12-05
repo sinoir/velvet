@@ -1,10 +1,10 @@
 package com.delectable.mobile.api.jobs.registrations;
 
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.endpointmodels.registrations.ResetPasswordRequest;
-import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.events.registrations.ResetPasswordEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.jobs.Priority;
 import com.path.android.jobqueue.Params;
 
 
@@ -15,7 +15,7 @@ public class ResetPasswordJob extends BaseJob {
     private String mEmail;
 
     public ResetPasswordJob(String email) {
-        super(new Params(Priority.UX));
+        super(new Params(Priority.UX.value()));
         mEmail = email;
     }
 

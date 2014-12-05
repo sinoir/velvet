@@ -49,7 +49,7 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
      */
     public BaseFetchListingJob(String requestId, String context, String dataItemId,
             Listing<T, D> listing, Boolean isPullToRefresh) {
-        super(new Params(Priority.PREFETCH).requireNetwork());
+        super(new Params(Priority.PREFETCH.value()).requireNetwork());
         mRequestId = requestId;
         mContext = context;
         mDataItemId = dataItemId;
@@ -63,7 +63,7 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
 
     public BaseFetchListingJob(String requestId, String dataItemId,
             Listing<T, D> listing, Boolean isPullToRefresh) {
-        super(new Params(Priority.PREFETCH).requireNetwork());
+        super(new Params(Priority.PREFETCH.value()).requireNetwork());
         mRequestId = requestId;
         mDataItemId = dataItemId;
         if (listing != null) {
@@ -76,7 +76,7 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
 
     public BaseFetchListingJob(String requestId, String context, String dataItemId, String etag,
             String before, String after, Boolean isPullToRefresh) {
-        super(new Params(Priority.PREFETCH).requireNetwork());
+        super(new Params(Priority.PREFETCH.value()).requireNetwork());
         mRequestId = requestId;
         mContext = context;
         mDataItemId = dataItemId;
@@ -93,7 +93,7 @@ public abstract class BaseFetchListingJob<T extends IDable, D> extends BaseJob {
      * @param requestId Used to keep track of how it w
      */
     public BaseFetchListingJob(String requestId, String dataItemId) {
-        super(new Params(Priority.PREFETCH).requireNetwork());
+        super(new Params(Priority.PREFETCH.value()).requireNetwork());
         mRequestId = requestId;
         mDataItemId = dataItemId;
     }

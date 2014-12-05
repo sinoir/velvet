@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
-import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContextRequest;
+import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.CaptureDetails;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -21,7 +21,7 @@ public class FetchCaptureDetailsJob extends BaseJob {
     private String mCaptureId;
 
     public FetchCaptureDetailsJob(String captureId) {
-        super(new Params(Priority.UX).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork());
         mCaptureId = captureId;
     }
 

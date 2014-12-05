@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- made for a RelativeLayout -->
-
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/general_row_height"
-    android:layout_margin="@dimen/general_row_horizontal_spacing">
+    android:layout_height="48dp"
+    android:layout_margin="16dp">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="@dimen/general_text_horizontal_spacing"
-        android:gravity="center_vertical"
-        android:textColor="@color/d_dark_gray"
-        android:textSize="@dimen/choose_vintage_dialog_year_text_size"
+        android:gravity="center"
+        android:text="2012"
+        android:textColor="@color/d_black"
+        android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium" />
 
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/ratings_count"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@+id/rating"
+        android:gravity="center_vertical"
+        android:text="(8 ratings)"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/text_size_small"
+        app:fontName="whitney_medium" />
+
+    <!--this rating textview has a defined width so that the ratings count is always perfectly right aligned-->
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/general_text_horizontal_spacing"
-        android:layout_toRightOf="@+id/year"
-        android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textColor="@color/d_light_green"
-        android:textSize="@dimen/wine_profile_rating_text_size"
-        app:fontName="whitney_medium" />
-
-    <com.delectable.mobile.ui.wineprofile.widget.WinePriceView
-        android:id="@+id/price_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:gravity="center_vertical" />
-
+        android:layout_marginLeft="5dp"
+        android:ems="2"
+        android:gravity="center_vertical|right"
+        android:singleLine="true"
+        android:text="9.8"
+        android:textColor="@color/d_rating_exquisite"
+        android:textSize="@dimen/text_size_medium"
+        app:fontName="whitney_medium" />
 </merge>

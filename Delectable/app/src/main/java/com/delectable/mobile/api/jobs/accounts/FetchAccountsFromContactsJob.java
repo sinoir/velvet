@@ -1,13 +1,13 @@
 package com.delectable.mobile.api.jobs.accounts;
 
+import com.delectable.mobile.api.cache.DeviceContactsModel;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountsContactListSuggestionsRequest;
 import com.delectable.mobile.api.events.accounts.FetchedAccountsFromContactsEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.TaggeeContact;
-import com.delectable.mobile.api.cache.DeviceContactsModel;
-import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class FetchAccountsFromContactsJob extends BaseJob {
     DeviceContactsModel mDeviceContactsModel;
 
     public FetchAccountsFromContactsJob() {
-        super(new Params(Priority.UX).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork().persist());
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
@@ -237,6 +238,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
             // first run of the app starts with the nav drawer open
             UserInfo.markWelcomeDone();
             mDrawerLayout.openDrawer(Gravity.START);
+
+            FacebookEventUtil.logFirstAppUse(getActivity());
         }
     }
 
@@ -296,7 +299,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccount().getId())) {
+        if (!mUserId.equals(event.getAccountId())) {
             return;
         }
 
@@ -351,9 +354,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
-        mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
-        mActivityFeedAdapter.notifyDataSetChanged();
+        if (event.getListing() != null) {
+            Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
+            mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
+            mActivityFeedAdapter.notifyDataSetChanged();
+        }
+
+        //TODO make emptyview, show here
+        //mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
     }
 
     //endregion

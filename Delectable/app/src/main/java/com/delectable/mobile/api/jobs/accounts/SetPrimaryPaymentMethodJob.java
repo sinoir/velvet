@@ -20,7 +20,7 @@ public class SetPrimaryPaymentMethodJob extends BaseJob {
     private String mPaymentId;
 
     public SetPrimaryPaymentMethodJob(String paymentId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mPaymentId = paymentId;
     }
 

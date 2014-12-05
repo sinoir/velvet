@@ -550,8 +550,8 @@ public class CaptureDetailsView extends RelativeLayout {
                 if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
                             mActionsHandler, participant.getId());
-                    commentRow.setNameCommentWithRating(participant.getFullName(), firstCommentText,
-                            rating);
+                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
+                    commentRow.setNameAndComment(participant.getFullName(), firstCommentText);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
                             layoutParams);
                     numDisplayedComments++;
@@ -559,8 +559,9 @@ public class CaptureDetailsView extends RelativeLayout {
                 for (int i = (firstIndex + 1); i < comments.size(); i++) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
                             mActionsHandler, participant.getId());
-                    commentRow.setNameCommentWithRating(participant.getFullName(),
-                            comments.get(i).getComment(), -1);
+                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
+                    commentRow.setNameAndComment(participant.getFullName(),
+                            comments.get(i).getComment());
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
                             layoutParams);
                     numDisplayedComments++;
@@ -596,7 +597,8 @@ public class CaptureDetailsView extends RelativeLayout {
         mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionsHandler.toggleLikeForCapture(mCaptureData);
+                v.setSelected(!v.isSelected());
+                mActionsHandler.toggleLikeForCapture(mCaptureData, v.isSelected());
             }
         });
 
@@ -622,7 +624,7 @@ public class CaptureDetailsView extends RelativeLayout {
 
         public void rateAndCommentForCapture(CaptureDetails capture);
 
-        public void toggleLikeForCapture(CaptureDetails capture);
+        public void toggleLikeForCapture(CaptureDetails capture, boolean liked);
 
         public void launchWineProfile(CaptureDetails capture);
 

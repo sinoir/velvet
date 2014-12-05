@@ -25,7 +25,7 @@ public class PurchaseWineJob extends BaseJob {
 
     public PurchaseWineJob(String wineId, String purchaseOfferId, String paymentMethodId,
             String shippingAddressId, int quantity, String additionalComments) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mWineId = wineId;
         mPurchaseOfferId = purchaseOfferId;
         mPaymentMethodId = paymentMethodId;

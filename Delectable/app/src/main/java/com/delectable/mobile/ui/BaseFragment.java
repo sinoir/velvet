@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
@@ -12,6 +13,7 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.registration.activity.LoginActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.CrashlyticsUtil;
@@ -335,6 +337,18 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
     public void launchWineCapture() {
         Intent launchIntent = new Intent(getActivity(), WineCaptureActivity.class);
         startActivity(launchIntent);
+    }
+
+    protected void launchUserProfile(boolean clearBackStack) {
+        Intent intent = UserProfileActivity
+                .newIntent(getActivity(), UserInfo.getUserId(App.getInstance()));
+        if (clearBackStack) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }
+        startActivity(intent);
+        if (clearBackStack) {
+            getActivity().finish();
+        }
     }
 
 }

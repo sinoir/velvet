@@ -3,6 +3,7 @@ package com.delectable.mobile.ui.winepurchase.dialog;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.ShippingAddressModel;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedShippingAddressEvent;
@@ -11,6 +12,7 @@ import com.delectable.mobile.api.models.ShippingAddress;
 import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.USStates;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,14 +23,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnFocusChange;
 
 public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         implements CancelSaveButtons.ActionsHandler {
@@ -63,7 +71,7 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     protected EditText mCity;
 
     @InjectView(R.id.state)
-    protected EditText mState;
+    protected Spinner mState;
 
     @InjectView(R.id.zip_code)
     protected EditText mZipCode;
@@ -80,6 +88,8 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     private String mShippingAddressId;
 
     private ShippingAddress mExistingShippingAddress;
+
+    private ArrayAdapter<String> mStateAdapter;
 
     public static AddShippingAddressDialog newInstance() {
         AddShippingAddressDialog f = new AddShippingAddressDialog();
@@ -121,10 +131,13 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         View view = inflater.inflate(R.layout.dialog_add_shipping_address, container, false);
         ButterKnife.inject(this, view);
 
+        setupStateSpinner();
+
         if (mShippingAddressId != null) {
             mDialogTitle.setText(R.string.shippingaddress_edit_title);
             loadExistingShippingAddress();
         } else {
+            updateFormWithUserData();
             mDialogTitle.setText(R.string.shippingaddress_add_title);
         }
 
@@ -143,41 +156,128 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     }
 
     //region Update UI methods
+    private void setupStateSpinner() {
+        List<String> stateNames = new ArrayList<String>();
+        for (int i = 0; i < USStates.values().length; i++) {
+            stateNames.add(USStates.values()[i].getStateName());
+        }
+        mStateAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.fonted_spinner_item, stateNames);
+        mStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mState.setAdapter(mStateAdapter);
+    }
+
     private void updateFormWithExistingAddress() {
         if (mExistingShippingAddress == null) {
             return;
         }
-        String fName = mExistingShippingAddress.getFname();
-        String lName = mExistingShippingAddress.getFname() == null ? ""
-                : " " + mExistingShippingAddress.getFname();
+        String fullName = mExistingShippingAddress.getFname();
+        fullName += mExistingShippingAddress.getFname() == null ? ""
+                : " " + mExistingShippingAddress.getLname();
 
-        mName.setText(fName + lName);
+        mName.setText(fullName);
+        mName.setSelection(fullName.length());
         mAddress1.setText(mExistingShippingAddress.getAddr1());
         mAddress2.setText(mExistingShippingAddress.getAddr2());
         mCity.setText(mExistingShippingAddress.getCity());
-        mState.setText(mExistingShippingAddress.getState());
         mZipCode.setText(mExistingShippingAddress.getZip());
         mPhoneNumber.setText(mExistingShippingAddress.getPhone());
+
+        USStates selectedState = USStates
+                .stateByNameOrAbbreviation(mExistingShippingAddress.getState());
+        if (selectedState != null) {
+            mState.setSelection(selectedState.ordinal());
+        }
+    }
+
+
+    private void updateFormWithUserData() {
+        if (UserInfo.getAccountPrivate(App.getInstance()) == null) {
+            return;
+        }
+        String fullName = UserInfo.getAccountPrivate(App.getInstance()).getFullName();
+        String state = UserInfo.getAccountPrivate(App.getInstance()).getSourcingState();
+
+        mName.setText(fullName);
+        mName.setSelection(fullName.length());
+        USStates selectedState = USStates.stateByNameOrAbbreviation(state);
+        if (selectedState != null) {
+            mState.setSelection(selectedState.ordinal());
+        }
     }
     //endregion
 
-    //region Helpers
+    //region Form Validators
     private boolean isFormValid() {
-        if (isFieldEmpty(mName) ||
-                isFieldEmpty(mAddress1) ||
-                isFieldEmpty(mCity) ||
-                isFieldEmpty(mState) ||
-                isFieldEmpty(mZipCode)) {
-            return false;
-        }
-
-        return true;
+        return validateNameField(true) &&
+                validateAddress1Field(true) &&
+                validateCityField(true) &&
+                (mState.getSelectedItem() != null && getSelectedState() != null) &&
+                validateZipCode(true);
     }
 
     private boolean isFieldEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
     }
 
+    private boolean validateNameField(boolean requestFocus) {
+        return validateRequiredField(mName, requestFocus);
+    }
+
+    private boolean validateAddress1Field(boolean requestFocus) {
+        return validateRequiredField(mAddress1, requestFocus);
+    }
+
+    private boolean validateCityField(boolean requestFocus) {
+        return validateRequiredField(mCity, requestFocus);
+    }
+
+    private boolean validateZipCode(boolean requestFocus) {
+        boolean isValid = validateRequiredField(mZipCode, requestFocus);
+        // If it's not empty when checking if it's required, check if the field is "valid"
+        if (isValid && mZipCode.getText().length() < 5) {
+            showFieldError(mZipCode, requestFocus, getString(R.string.shippingaddress_zipcode));
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean validateRequiredField(EditText fieldName, boolean requestFocus) {
+        if (isFieldEmpty(fieldName)) {
+            showFieldError(fieldName, requestFocus, null);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Helper to show Error on a field and request focus
+     *
+     * Sets to "This field is requried" if the invalidFieldName is null, otherwise "FieldName is
+     * invalid"
+     *
+     * Handles the possibility of showing error on Required fields, or fields that are invalid with
+     * the proper field name
+     *
+     * @param field            - Field that's invalid
+     * @param requestFocus     - Request focus after checking invalid field
+     * @param invalidFieldName - (Optional) If not Null, the field will show "FieldName is invalid"
+     */
+    private void showFieldError(EditText field, boolean requestFocus,
+            String invalidFieldName) {
+        if (invalidFieldName == null) {
+            field.setError(getString(R.string.required_field));
+        } else {
+            field.setError(getString(R.string.invalid_field, invalidFieldName));
+        }
+
+        if (requestFocus) {
+            requestFocusWithCursorAtEnd(field);
+        }
+    }
+    //endregion
+
+    //region Helpers
     private ShippingAddress buildAddress() {
         ShippingAddress address = new ShippingAddress();
         String[] name = NameUtil.getSplitName(mName.getText().toString());
@@ -189,15 +289,31 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         address.setAddr1(mAddress1.getText().toString());
         address.setAddr2(mAddress2.getText().toString());
         address.setCity(mCity.getText().toString());
-        address.setState(mState.getText().toString());
         address.setZip(mZipCode.getText().toString());
         address.setPhone(mPhoneNumber.getText().toString());
 
+        address.setState(getSelectedState().getStateAbbreviation());
         if (mExistingShippingAddress != null) {
             address.setId(mExistingShippingAddress.getId());
         }
 
         return address;
+    }
+
+    private USStates getSelectedState() {
+        return USStates.stateByNameOrAbbreviation((String) mState.getSelectedItem());
+    }
+
+    /**
+     * Requests focus on a field if it doesn't has focus, and adds cursor to end of line
+     *
+     * Used for form validations when user clicks save and a field is invalid
+     */
+    private void requestFocusWithCursorAtEnd(EditText field) {
+        if (!field.hasFocus()) {
+            field.requestFocus();
+            field.setSelection(field.getText().toString().length());
+        }
     }
     //endregion
 
@@ -218,6 +334,36 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         updateFormWithExistingAddress();
     }
 
+    //endregion
+
+    //region onTextChanged
+    @OnFocusChange(value = R.id.name)
+    protected void onFocusChangedForName(boolean focused) {
+        if (!focused) {
+            validateNameField(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.address1)
+    protected void onFocusChangedForAddress1(boolean focused) {
+        if (!focused) {
+            validateAddress1Field(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.city)
+    protected void onFocusChangedForCity(boolean focused) {
+        if (!focused) {
+            validateCityField(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.zip_code)
+    protected void onFocusChangedForZipCode(boolean focused) {
+        if (!focused) {
+            validateZipCode(false);
+        }
+    }
     //endregion
 
     //region onClicks

@@ -1,10 +1,10 @@
 package com.delectable.mobile.api.jobs.accounts;
 
+import com.delectable.mobile.api.endpointmodels.BaseRequest;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.delectable.mobile.api.events.accounts.FetchFriendSuggestionsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.BaseRequest;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
 import com.path.android.jobqueue.Params;
 
 /**
@@ -21,7 +21,7 @@ public abstract class BaseFetchFriendSuggestionsJob extends BaseJob {
      * @param id The id that will be passed onto the Event upon completion of the job.
      */
     protected BaseFetchFriendSuggestionsJob(String id) {
-        super(new Params(Priority.SYNC).requireNetwork());
+        super(new Params(Priority.SYNC.value()).requireNetwork());
         mId = id;
     }
 

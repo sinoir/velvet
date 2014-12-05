@@ -8,6 +8,7 @@ import com.delectable.mobile.api.endpointmodels.wineprofiles.WineProfilesSourceR
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.util.USStates;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -30,18 +31,24 @@ public class FetchWineSourceJob extends BaseJob {
      * @param state  - Optional State, if null, will use State from User Account or CA
      */
     public FetchWineSourceJob(String wineId, String state) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mWineId = wineId;
 
-        mState = state;
+        USStates selectedState = USStates.stateByNameOrAbbreviation(state);
 
-        if (UserInfo.getAccountPrivate(App.getInstance()) != null && mState == null) {
-            mState = UserInfo.getAccountPrivate(App.getInstance()).getSourcingState();
+        // If we haven't passed up the optional State, use the Users default saved shipping state
+        if (UserInfo.getAccountPrivate(App.getInstance()) != null && selectedState == null) {
+            String savedShippingState = UserInfo.getAccountPrivate(App.getInstance())
+                    .getSourcingState();
+            selectedState = USStates.stateByNameOrAbbreviation(savedShippingState);
         }
-        // Default State is California if user hasn't set Sourcing State yet
-        if (mState == null) {
-            mState = "CA";
+
+        // If user hasn't Specified a state yet in their account, nor passed up a state, use CA by default.
+        if (selectedState == null) {
+            selectedState = USStates.CA;
         }
+
+        mState = selectedState.getStateAbbreviation();
     }
 
     @Override

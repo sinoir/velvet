@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="300dp"
+    android:background="@color/d_white"
     android:orientation="vertical">
 
     <include layout="@layout/wine_purchase_dialog_header" />
 
     <View
         android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/choose_vintage_dialog_header_divider_height"
-        android:background="@color/d_medium_gray" />
+        style="@style/VerticalDivider" />
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle.NoDivider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

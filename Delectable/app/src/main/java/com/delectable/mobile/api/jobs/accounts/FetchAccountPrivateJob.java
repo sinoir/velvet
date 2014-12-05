@@ -9,7 +9,10 @@ import com.delectable.mobile.api.events.accounts.UpdatedCaptureFeedsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.path.android.jobqueue.Params;
+
+import java.util.List;
 
 public class FetchAccountPrivateJob extends BaseJob {
 
@@ -29,7 +32,7 @@ public class FetchAccountPrivateJob extends BaseJob {
      * user's Account private data.
      */
     public FetchAccountPrivateJob(String id) {
-        super(new Params(Priority.UX).requireNetwork());
+        super(new Params(Priority.UX.value()).requireNetwork());
         mAccountId = id;
     }
 
@@ -48,8 +51,11 @@ public class FetchAccountPrivateJob extends BaseJob {
         mEventBus.post(new UpdatedAccountEvent(account));
 
         //save capture feeds
-        UserInfo.setCaptureFeeds(account.getCaptureFeeds());
-        mEventBus.post(new UpdatedCaptureFeedsEvent(account.getCaptureFeeds()));
+        List<CaptureFeed> oldFeeds = UserInfo.getCaptureFeeds();
+        if (account.getCaptureFeeds() != null && !account.getCaptureFeeds().equals(oldFeeds)) {
+            UserInfo.setCaptureFeeds(account.getCaptureFeeds());
+            mEventBus.post(new UpdatedCaptureFeedsEvent(account.getCaptureFeeds(), oldFeeds));
+        }
 
     }
 

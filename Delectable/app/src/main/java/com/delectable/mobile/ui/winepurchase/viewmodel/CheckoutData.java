@@ -29,12 +29,26 @@ public class CheckoutData {
     }
 
     //region Getters/Setters
+    public boolean isWineProfileLoaded() {
+        return mWineProfileMinimal != null;
+    }
+
     public String getProducerName() {
+        if (mWineProfileMinimal == null) {
+            return "";
+        }
         return mWineProfileMinimal.getProducerName();
     }
 
-    public String getWineName() {
-        return mWineProfileMinimal.getName();
+    public String getWineNameWithVintage() {
+        if (mWineProfileMinimal == null) {
+            return "";
+        }
+        return mWineProfileMinimal.getName() + " " + mWineProfileMinimal.getVintage();
+    }
+
+    public String getVintage() {
+        return mWineProfileMinimal.getVintage();
     }
 
     public ShippingAddress getSelectedShippingAddress() {
@@ -49,11 +63,12 @@ public class CheckoutData {
         if (mSelectedShippingAddress == null) {
             return "";
         }
-        String addr2 = mSelectedShippingAddress.getAddr2() == null ? ""
+        String address = mSelectedShippingAddress.getAddr1();
+        address += mSelectedShippingAddress.getAddr2() == null ? ""
                 : " " + mSelectedShippingAddress.getAddr2();
-        return mSelectedShippingAddress.getAddr1() + addr2 +
+        return address.trim() +
                 ", " + mSelectedShippingAddress.getCity()
-                + "," + mSelectedShippingAddress.getState();
+                + ", " + mSelectedShippingAddress.getState();
     }
 
     public String getShippingState() {
@@ -100,14 +115,23 @@ public class CheckoutData {
     }
 
     public String getTotalPriceText() {
+        if (mCurrentPrice == null) {
+            return "-";
+        }
         return mCurrentPrice.getTotal();
     }
 
     public String getShippingPriceText() {
+        if (mCurrentPrice == null) {
+            return "-";
+        }
         return mCurrentPrice.getShipping();
     }
 
     public String getTaxPriceText() {
+        if (mCurrentPrice == null) {
+            return "-";
+        }
         return mCurrentPrice.getTax();
     }
     //endregion
@@ -177,6 +201,9 @@ public class CheckoutData {
     }
 
     public String getMarketingMessage() {
+        if (mPurchaseOffer == null) {
+            return null;
+        }
         return mPurchaseOffer.getMarketingMessage();
     }
 
