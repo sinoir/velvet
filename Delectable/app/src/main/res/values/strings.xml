@@ -407,6 +407,8 @@
     <string name="paymentmethod_add_title">Add a payment method</string>
     <string name="paymentmethod_choose_title">Choose payment method</string>
     <string name="paymentmethod_add_another">Add another payment method</string>
+    <string name="paymentmethod_year_field_name">Year</string>
+    <string name="paymentmethod_month_field_name">Month</string>
 
     <!-- Order Confirmation -->
     <string name="order_confirmation_thanks">Thanks for your order!</string>
@@ -416,5 +418,9 @@
 
     <!-- Checkout Errors -->
     <string name="checkout_no_internet">An internet connection is required</string>
+
+    <!-- General Form Errors -->
+    <string name="required_field">This field is required</string>
+    <string name="invalid_field">%s is invalid</string>
 
 </resources>

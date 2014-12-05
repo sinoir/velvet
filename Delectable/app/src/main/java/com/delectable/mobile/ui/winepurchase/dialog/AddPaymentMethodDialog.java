@@ -134,31 +134,17 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
     }
 
     private boolean validateNameField(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mName)) {
-            mName.setError("Name is Required");
-            isValid = false;
-            if (requestFocus) {
-                requestFocusWithCursorAtEnd(mName);
-            }
-        }
-        return isValid;
+        return validateRequiredField(mName, requestFocus);
     }
 
     private boolean validateCreditCardField(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mCreditCardNumber)) {
-            mCreditCardNumber.setError("Credit Card Number is Required");
-            isValid = false;
-            if (requestFocus) {
-                requestFocusWithCursorAtEnd(mCreditCardNumber);
-            }
-        }
-        return isValid;
+        // TODO: Verify CC is valid, use some 3rd party library someday?
+        return validateRequiredField(mCreditCardNumber, requestFocus);
     }
 
     private boolean validateYearField(boolean requestFocus) {
-        boolean isValid = true;
+        boolean isValid = validateRequiredField(mExpirationYear, requestFocus);
+
         String yearText = mExpirationYear.getText().toString();
         int yearInt = 0;
         int maxYearsOut = mCurrent2DigitYear + MAX_YEAR_DIFF;
@@ -168,21 +154,17 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
             // no-op, month int will be 0 and fail as invalid month
         }
 
-        if (yearInt == 0) {
-            mExpirationYear.setError("Year is Required");
+        // If it's not empty, check if Year is Valid
+        if (isValid && (yearInt < mCurrent2DigitYear || yearInt > maxYearsOut)) {
+            showFieldError(mExpirationYear, requestFocus,
+                    getString(R.string.paymentmethod_year_field_name));
             isValid = false;
-        } else if (yearInt < mCurrent2DigitYear || yearInt > maxYearsOut) {
-            mExpirationYear.setError("Year is Invalid");
-            isValid = false;
-        }
-        if (!isValid && requestFocus) {
-            requestFocusWithCursorAtEnd(mExpirationYear);
         }
         return isValid;
     }
 
     private boolean validateMonthField(boolean requestFocus) {
-        boolean isValid = true;
+        boolean isValid = validateRequiredField(mExpirationMonth, requestFocus);
         String monthText = mExpirationMonth.getText().toString();
         int monthInt = 0;
         try {
@@ -191,32 +173,52 @@ public class AddPaymentMethodDialog extends BaseEventBusDialogFragment
             // no-op, month int will be 0 and fail as invalid month
         }
 
-        if (monthInt == 0) {
-            mExpirationMonth.setError("Month is Required");
+        if (isValid && (monthInt <= 0 || monthInt > 12)) {
+            showFieldError(mExpirationMonth, requestFocus,
+                    getString(R.string.paymentmethod_month_field_name));
             isValid = false;
-        } else if (monthInt > 12) {
-            mExpirationMonth.setError("Month is Invalid");
-            isValid = false;
-        }
-        if (!isValid && requestFocus) {
-            requestFocusWithCursorAtEnd(mExpirationMonth);
         }
 
         return isValid;
     }
 
     private boolean validateCVCField(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mCVC)) {
-            mCVC.setError("CVC is Required");
-            if (requestFocus) {
-                requestFocusWithCursorAtEnd(mCVC);
-            }
-            isValid = false;
-        }
-        return isValid;
+        return validateRequiredField(mCVC, requestFocus);
     }
 
+    private boolean validateRequiredField(EditText fieldName, boolean requestFocus) {
+        if (isFieldEmpty(fieldName)) {
+            showFieldError(fieldName, requestFocus, null);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Helper to show Error on a field and request focus
+     *
+     * Sets to "This field is requried" if the invalidFieldName is null, otherwise "FieldName is
+     * invalid"
+     *
+     * Handles the possibility of showing error on Required fields, or fields that are invalid with
+     * the proper field name
+     *
+     * @param field            - Field that's invalid
+     * @param requestFocus     - Request focus after checking invalid field
+     * @param invalidFieldName - (Optional) If not Null, the field will show "FieldName is invalid"
+     */
+    private void showFieldError(EditText field, boolean requestFocus,
+            String invalidFieldName) {
+        if (invalidFieldName == null) {
+            field.setError(getString(R.string.required_field));
+        } else {
+            field.setError(getString(R.string.invalid_field, invalidFieldName));
+        }
+
+        if (requestFocus) {
+            requestFocusWithCursorAtEnd(field);
+        }
+    }
     //endregion
 
     //region Helpers

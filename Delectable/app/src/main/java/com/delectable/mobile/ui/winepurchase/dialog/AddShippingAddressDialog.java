@@ -221,54 +221,59 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     }
 
     private boolean validateNameField(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mName)) {
-            mName.setError("Name is Required");
-            isValid = false;
-            if (requestFocus) {
-                requestFocusWithCursorAtEnd(mName);
-            }
-        }
-        return isValid;
+        return validateRequiredField(mName, requestFocus);
     }
 
     private boolean validateAddress1Field(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mAddress1)) {
-            mAddress1.setError("Address is Required");
-            isValid = false;
-            if (requestFocus) {
-                requestFocusWithCursorAtEnd(mAddress1);
-            }
-        }
-        return isValid;
+        return validateRequiredField(mAddress1, requestFocus);
     }
 
     private boolean validateCityField(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mCity)) {
-            mCity.setError("City is Required");
+        return validateRequiredField(mCity, requestFocus);
+    }
+
+    private boolean validateZipCode(boolean requestFocus) {
+        boolean isValid = validateRequiredField(mZipCode, requestFocus);
+        // If it's not empty when checking if it's required, check if the field is "valid"
+        if (isValid && mZipCode.getText().length() < 5) {
+            showFieldError(mZipCode, requestFocus, getString(R.string.shippingaddress_zipcode));
             isValid = false;
-            if (requestFocus) {
-                requestFocusWithCursorAtEnd(mCity);
-            }
         }
         return isValid;
     }
 
-    private boolean validateZipCode(boolean requestFocus) {
-        boolean isValid = true;
-        if (isFieldEmpty(mZipCode)) {
-            mZipCode.setError("ZIP code is required");
-            isValid = false;
-        } else if (mZipCode.getText().length() < 5) {
-            mZipCode.setError("ZIP code is invalid");
-            isValid = false;
+    private boolean validateRequiredField(EditText fieldName, boolean requestFocus) {
+        if (isFieldEmpty(fieldName)) {
+            showFieldError(fieldName, requestFocus, null);
+            return false;
         }
-        if (!isValid && requestFocus) {
-            requestFocusWithCursorAtEnd(mZipCode);
+        return true;
+    }
+
+    /**
+     * Helper to show Error on a field and request focus
+     *
+     * Sets to "This field is requried" if the invalidFieldName is null, otherwise "FieldName is
+     * invalid"
+     *
+     * Handles the possibility of showing error on Required fields, or fields that are invalid with
+     * the proper field name
+     *
+     * @param field            - Field that's invalid
+     * @param requestFocus     - Request focus after checking invalid field
+     * @param invalidFieldName - (Optional) If not Null, the field will show "FieldName is invalid"
+     */
+    private void showFieldError(EditText field, boolean requestFocus,
+            String invalidFieldName) {
+        if (invalidFieldName == null) {
+            field.setError(getString(R.string.required_field));
+        } else {
+            field.setError(getString(R.string.invalid_field, invalidFieldName));
         }
-        return isValid;
+
+        if (requestFocus) {
+            requestFocusWithCursorAtEnd(field);
+        }
     }
     //endregion
 
