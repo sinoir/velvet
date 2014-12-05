@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_white">
+    android:background="@color/d_white"
+    android:animateLayoutChanges="true">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
                 android:paddingTop="22dp"
                 android:textColor="@color/d_dark_gray"
                 android:textSize="17sp"
+                android:lineSpacingMultiplier="1.2"
                 app:fontName="whitney_medium_sc" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
@@ -36,6 +38,7 @@
                 android:layout_marginRight="@dimen/general_row_horizontal_spacing"
                 android:textColor="@color/d_black"
                 android:textSize="17sp"
+                android:lineSpacingMultiplier="1.2"
                 app:fontName="whitney_book" />
 
             <com.delectable.mobile.ui.common.widget.FontTextView
@@ -86,8 +89,8 @@
                 android:id="@+id/payment_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
-                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="@dimen/spacing_16"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:background="@drawable/bg_bottom_border"
                 android:paddingRight="@dimen/general_row_horizontal_spacing">
 
@@ -126,8 +129,8 @@
                 android:id="@+id/quantity_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
-                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="@dimen/spacing_16"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:background="@drawable/bg_bottom_border"
                 android:paddingRight="@dimen/general_row_horizontal_spacing">
 
@@ -193,12 +196,14 @@
             <RelativeLayout
                 android:id="@+id/shipping_container"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-                android:layout_marginTop="20dp"
-                android:paddingRight="@dimen/general_row_horizontal_spacing">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/spacing_4"
+                android:paddingBottom="@dimen/spacing_4"
+                android:layout_marginLeft="@dimen/spacing_16"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:paddingRight="@dimen/spacing_16">
 
-                <com.delectable.mobile.ui.common.widget.FontTextView
+            <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/CheckoutPricingLabel"
                     android:text="@string/winecheckout_shipping_label" />
 
@@ -212,11 +217,13 @@
             <RelativeLayout
                 android:id="@+id/tax_container"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-                android:paddingRight="@dimen/general_row_horizontal_spacing">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/spacing_4"
+                android:paddingBottom="@dimen/spacing_4"
+                android:layout_marginLeft="@dimen/spacing_16"
+                android:paddingRight="@dimen/spacing_16">
 
-                <com.delectable.mobile.ui.common.widget.FontTextView
+            <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/CheckoutPricingLabel"
                     android:text="@string/winecheckout_tax_label" />
 
@@ -230,9 +237,12 @@
             <RelativeLayout
                 android:id="@+id/total_price_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-                android:paddingRight="@dimen/general_row_horizontal_spacing">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/spacing_4"
+                android:paddingBottom="@dimen/spacing_4"
+                android:layout_marginBottom="@dimen/spacing_16"
+                android:layout_marginLeft="@dimen/spacing_16"
+                android:paddingRight="@dimen/spacing_16">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/CheckoutPricingLabel"
@@ -243,16 +253,18 @@
                     style="@style/CheckoutPricingAmount"
                     android:text="-"
                     android:textColor="@color/d_black"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     app:fontName="whitney_medium" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/confirm_button"
                 style="@style/ButtonLargeDChestNutBg"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:padding="@dimen/spacing_12"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="@dimen/spacing_16"
                 android:gravity="center">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
@@ -264,7 +276,7 @@
                     android:gravity="center"
                     android:text="@string/winecheckout_confirm_pay"
                     android:textColor="@color/d_white"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     app:fontName="whitney_medium" />
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
