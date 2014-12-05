@@ -155,6 +155,9 @@ public class WineCheckoutFragment extends BaseFragment {
 
         updateNumBottles();
 
+        // Show Loader to prevent user from clicking anywhere before we really load data.
+        showLoader();
+
         return view;
     }
 
@@ -388,10 +391,10 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     public void onEventMainThread(FetchedWineSourceEvent event) {
-        hideLoader();
         if (!mVintageId.equalsIgnoreCase(event.getWineId())) {
             return;
         }
+        hideLoader();
 
         if (!event.isSuccessful()) {
             handleError(event.getErrorCode(), event.getErrorMessage());
