@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/d_dark_gray"
         android:textSize="17sp"
+        android:lineSpacingMultiplier="1.2"
         app:fontName="whitney_medium_sc" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
@@ -24,5 +25,6 @@
         android:layout_below="@+id/producer_name"
         android:textColor="@color/d_black"
         android:textSize="17sp"
+        android:lineSpacingMultiplier="1.2"
         app:fontName="whitney_book" />
 </RelativeLayout>
