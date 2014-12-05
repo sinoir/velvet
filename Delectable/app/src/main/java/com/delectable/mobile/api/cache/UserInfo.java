@@ -113,6 +113,14 @@ public class UserInfo {
         return prefs.getString(PROPERTY_SESSION_KEY, null);
     }
 
+    public static String getUserId() {
+        return getUserId(App.getInstance());
+    }
+
+    /**
+     * Should switch over to use {@link #getUserId()} instead.
+     */
+    @Deprecated
     public static String getUserId(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(PROPERTY_USER_ID, null);

@@ -10,10 +10,8 @@ import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
@@ -186,11 +184,6 @@ public class SettingsFragment extends BaseFragment {
      */
     private Identifier mPhoneIdentifier;
 
-    /**
-     * Used to keep track of which photo to send to S3 after provisioning
-     */
-    private Bitmap mPhoto;
-
     private UiLifecycleHelper mFacebookUiHelper;
 
     private boolean mUpdatingViaDoneClick = false;
@@ -236,7 +229,8 @@ public class SettingsFragment extends BaseFragment {
         return view;
     }
 
-    @OnEditorAction({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    @OnEditorAction(
+            {R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
     protected boolean onKeyboardDoneAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             EditText editText = (EditText) v;
@@ -250,7 +244,8 @@ public class SettingsFragment extends BaseFragment {
         return false;
     }
 
-    @OnFocusChange({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    @OnFocusChange(
+            {R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
     protected void onFocusLoss(View v, boolean hasFocus) {
         if (!hasFocus) {
             EditText editText = (EditText) v;
@@ -468,7 +463,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     /**
-     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
      */
     private void facebookifyProfilePhoto() {
         mAccountController.facebookifyProfilePhoto();
@@ -477,24 +472,10 @@ public class SettingsFragment extends BaseFragment {
     //endregion
 
     /**
-     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
      */
     private void updateProfilePicture(Bitmap photo) {
-        mPhoto = photo;
         mAccountController.updateProfilePhoto(photo);
-    }
-
-    /**
-     * The callback for {@link #facebookifyProfilePhoto()}
-     */
-    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
-        if (event.isSuccessful()) {
-            PhotoHash photoHash = event.getPhoto();
-            mUserAccount.setPhoto(photoHash);
-            updateUI();
-            return;
-        }
-        showToastError(event.getErrorMessage());
     }
 
     //region Profile Updates

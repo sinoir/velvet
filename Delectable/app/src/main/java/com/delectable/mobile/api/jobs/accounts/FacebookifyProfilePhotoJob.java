@@ -1,10 +1,12 @@
 package com.delectable.mobile.api.jobs.accounts;
 
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.delectable.mobile.api.endpointmodels.accounts.PhotoHashResponse;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.Account;
 import com.path.android.jobqueue.Params;
 
 public class FacebookifyProfilePhotoJob extends BaseJob {
@@ -12,7 +14,7 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
     private static final String TAG = FacebookifyProfilePhotoJob.class.getSimpleName();
 
     public FacebookifyProfilePhotoJob() {
-        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
+        super(new Params(Priority.SYNC.value()));
     }
 
     @Override
@@ -22,12 +24,13 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
         PhotoHashResponse response = getNetworkClient()
                 .post(endpoint, request,
                         PhotoHashResponse.class);
-        getEventBus()
-                .post(new UpdatedProfilePhotoEvent(response.getPayload().getPhoto()));
+        Account account = UserInfo.getAccountPrivate();
+        account.setPhoto(response.getPayload().getPhoto());
+        mEventBus.post(new UpdatedAccountEvent(account));
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new UpdatedProfilePhotoEvent(TAG + " " + getErrorMessage()));
+        mEventBus.post(new UpdatedAccountEvent(UserInfo.getUserId(), TAG + " " + getErrorMessage()));
     }
 }

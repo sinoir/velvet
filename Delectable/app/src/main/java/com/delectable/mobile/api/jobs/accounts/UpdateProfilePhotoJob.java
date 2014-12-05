@@ -1,9 +1,12 @@
 package com.delectable.mobile.api.jobs.accounts;
 
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.endpointmodels.accounts.PhotoHashResponse;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
+import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
+import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.jobs.scanwinelabel.BasePhotoUploadJob;
+import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.util.CameraUtil;
 
@@ -16,7 +19,7 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
     private static final String TAG = UpdateProfilePhotoJob.class.getSimpleName();
 
     public UpdateProfilePhotoJob(Bitmap bitmap) {
-        super(bitmap);
+        super(bitmap, Priority.UX);
     }
 
     @Override
@@ -27,12 +30,15 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
         PhotoUploadRequest request = new PhotoUploadRequest(provision);
         PhotoHashResponse response = getNetworkClient()
                 .post(endpoint, request, PhotoHashResponse.class);
-        getEventBus().post(new UpdatedProfilePhotoEvent(response.getPayload().getPhoto()));
+        Account account = UserInfo.getAccountPrivate();
+        account.setPhoto(response.getPayload().getPhoto());
+        UserInfo.setAccountPrivate(account);
+        mEventBus.post(new UpdatedAccountEvent(account));
     }
 
     @Override
     protected void onCancel() {
-        getEventBus().post(new UpdatedProfilePhotoEvent(TAG + " " + getErrorMessage()));
+        mEventBus.post(new UpdatedAccountEvent(UserInfo.getUserId(), TAG + " " + getErrorMessage()));
     }
 
     @Override
