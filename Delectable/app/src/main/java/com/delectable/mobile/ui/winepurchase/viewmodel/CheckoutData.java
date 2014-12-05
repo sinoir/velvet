@@ -222,5 +222,16 @@ public class CheckoutData {
     public String getShippingAddressId() {
         return mSelectedShippingAddress.getId();
     }
+
+    public double getTotalPriceValue() {
+        double price = 0.0;
+        String priceText = getTotalPriceText().replace("$", "");
+        try {
+            price = Double.valueOf(priceText);
+        } catch (NumberFormatException ex) {
+            // no-op, issue with price?
+        }
+        return price;
+    }
     //endregion
 }
