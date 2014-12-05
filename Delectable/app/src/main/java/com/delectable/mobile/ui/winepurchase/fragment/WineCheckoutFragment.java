@@ -405,8 +405,7 @@ public class WineCheckoutFragment extends BaseFragment {
 
         loadWineAndPricingData();
         String wineName = mData.getProducerName() + " " +
-                mData.getWineName() + " " +
-                mData.getVintage();
+                mData.getWineNameWithVintage();
         FacebookEventUtil.logPurchasePageVisit(getActivity(), wineName);
     }
 
