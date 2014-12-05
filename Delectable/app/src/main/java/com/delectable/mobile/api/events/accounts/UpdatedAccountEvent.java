@@ -12,10 +12,21 @@ public class UpdatedAccountEvent extends BaseEvent {
      */
     private String mAccountId;
 
+    private String mRequestId = "";
+
+    public UpdatedAccountEvent(String requestId, Account account) {
+        this(account);
+        mRequestId = requestId;
+    }
+
     public UpdatedAccountEvent(Account account) {
         super(true);
         mAccount = account;
         mAccountId = account.getId();
+    }
+    public UpdatedAccountEvent(String requestId, String accountId, String errorMessage) {
+        this(accountId, errorMessage);
+        mRequestId = requestId;
     }
 
     public UpdatedAccountEvent(String accountId, String errorMessage) {
@@ -29,5 +40,9 @@ public class UpdatedAccountEvent extends BaseEvent {
 
     public String getAccountId() {
         return mAccountId;
+    }
+
+    public String getRequestId() {
+        return mRequestId;
     }
 }
