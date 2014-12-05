@@ -62,8 +62,7 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
         mSearchView.setOnQueryTextListener(this);
 
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.requestFocus();
+        mSearchView.setIconified(false);
 
         if (mCurrentQuery != null && !mCurrentQuery.isEmpty()) {
             mSearchView.setQuery(mCurrentQuery, false);

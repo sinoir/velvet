@@ -11,9 +11,11 @@ import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -88,6 +90,10 @@ public class NavActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.nav_action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -98,11 +104,11 @@ public class NavActivity extends BaseActivity
         BaseFragment fragment = null;
         switch (position) {
 //            case NavHeader.NAV_PROFILE:
-                //fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
-                //mTitle = "";
-                //mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
-                // TODO always launch user profiles as fragments to allow access to nav drawer?
-                // launching as new activity from within NavigationDrawerFragment to prevent double action bar issue
+            //fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
+            //mTitle = "";
+            //mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
+            // TODO always launch user profiles as fragments to allow access to nav drawer?
+            // launching as new activity from within NavigationDrawerFragment to prevent double action bar issue
 //                return;
             //break;
             case NavHeader.NAV_DISCOVER:

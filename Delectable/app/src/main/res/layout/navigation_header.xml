@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/spacing_8"
-    android:background="@color/d_suva_gray">
+    android:background="@color/d_big_stone">
     <!--android:background="@drawable/bg_nav_drawer">-->
 
     <RelativeLayout

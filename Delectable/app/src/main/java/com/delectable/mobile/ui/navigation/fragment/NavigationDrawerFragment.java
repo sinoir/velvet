@@ -35,6 +35,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +128,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.nav_menu, menu);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
     }
@@ -206,7 +214,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
                 if (!isAdded()) {
                     return;
                 }
-
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
