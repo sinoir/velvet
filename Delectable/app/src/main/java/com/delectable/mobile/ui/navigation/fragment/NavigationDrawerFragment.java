@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -231,6 +232,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
         // When the user runs the app for the first time, we want to land them with the
         // navigation drawer open. But just the first time.
         if (!UserInfo.isWelcomeDone()) {
@@ -374,19 +377,13 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
         mNavHeader.setWineCount(mUserAccount.getCaptureCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
-        mNavHeader.setUserBio(mUserAccount.getBio());
         ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
                 mNavHeader.getUserImageView());
     }
 
     @Override
     public void navHeaderUserImageClicked() {
-        Intent intent = new Intent();
-        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
-        intent.setClass(getActivity(), UserProfileActivity.class);
-        startActivity(intent);
-//        navItemSelected(NavHeader.NAV_PROFILE);
-//        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
+        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
     public void onEventMainThread(NavigationEvent event) {

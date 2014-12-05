@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/d_white">
+    android:layout_marginBottom="@dimen/spacing_8"
+    android:background="@color/d_suva_gray">
+    <!--android:background="@drawable/bg_nav_drawer">-->
 
     <RelativeLayout
         android:id="@+id/navigation_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_off_white_to_light_opacity">
+        android:layout_height="wrap_content">
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
             android:layout_width="@dimen/navigation_user_profile_image_size"
             android:layout_height="@dimen/navigation_user_profile_image_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:src="@drawable/no_photo" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -28,6 +29,7 @@
             android:layout_alignTop="@id/profile_image1"
             android:layout_marginTop="@dimen/navigation_username_margins"
             android:layout_toRightOf="@id/profile_image1"
+            android:textColor="@color/d_white"
             android:textSize="@dimen/navigation_user_name_text_size"
             app:fontName="whitney_book" />
 
@@ -35,83 +37,47 @@
             android:id="@+id/wine_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/d_medium_gray"
-            android:textSize="@dimen/navigation_header_detail_text_size"
-            app:fontName="whitney_book"
             android:layout_below="@id/nav_user_name"
             android:layout_marginBottom="16dp"
-            android:layout_toRightOf="@+id/profile_image1" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/user_bio_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_image1"
-            android:layout_marginBottom="@dimen/navigation_bio_margins"
-            android:layout_marginLeft="@dimen/navigation_bio_margins"
-            android:layout_marginRight="@dimen/navigation_bio_margins"
+            android:layout_toRightOf="@+id/profile_image1"
+            android:textColor="@color/d_white"
             android:textSize="@dimen/navigation_header_detail_text_size"
             app:fontName="whitney_book" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/user_bio_text"
-            android:background="@color/d_light_gray" />
-
     </RelativeLayout>
-
 
     <LinearLayout
         android:id="@+id/navigation_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/navigation_profile"
-        android:layout_marginTop="@dimen/spacing_8"
-        android:layout_marginBottom="@dimen/spacing_8"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/spacing_8"
+        android:paddingTop="@dimen/spacing_8">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/navigation_home"
+            android:id="@+id/navigation_discover"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_home"
-            android:text="@string/navigation_home" />
+            android:text="@string/navigation_item_discover" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/navigation_your_wines"
+            style="@style/NavigationItem"
+            android:drawableLeft="@drawable/ic_nav_drawer_profile"
+            android:text="@string/navigation_item_your_wines" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_find_friends"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_friends"
-            android:text="@string/navigation_find_friends" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/navigation_search"
-            style="@style/NavigationItem"
-            android:drawableLeft="@drawable/ic_nav_drawer_search"
-            android:text="@string/navigation_search" />
+            android:text="@string/navigation_item_find_friends" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_settings"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_settings"
-            android:text="@string/navigation_settings" />
+            android:text="@string/navigation_item_settings" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/vertical_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/navigation_items"
-        android:background="@color/d_light_gray" />
-
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/header_title"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/vertical_divider"
-        android:layout_marginLeft="@dimen/spacing_16"
-        android:gravity="center_vertical"
-        android:text="@string/navigation_recent_activity_header"
-        android:textColor="@color/d_medium_gray"
-        app:fontName="whitney_medium_sc" />
-</merge>
+</RelativeLayout>

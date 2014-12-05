@@ -21,7 +21,7 @@
     <color name="d_soft_amber_25op">#40dbc5b0</color>
 
     <!-- Primary -->
-    <color name="status_bar">#bebebe</color>
+    <color name="nav_selector">@color/d_black_30op</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>
@@ -64,4 +64,5 @@
 
     <!-- Transparent Blacks -->
     <color name="d_black_10op">#1A000000</color>
+    <color name="d_black_30op">#4D000000</color>
 </resources>
