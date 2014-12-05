@@ -80,9 +80,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_8"
                 android:layout_alignBottom="@id/wine_vintage"
-                android:layout_alignTop="@id/wine_vintage"
+                android:layout_marginBottom="1dp"
                 android:layout_toRightOf="@+id/wine_vintage"
-                android:src="@drawable/temp_down_arrow" />
+                android:src="@drawable/ic_vintage_arrow" />
 
         </RelativeLayout>
 
