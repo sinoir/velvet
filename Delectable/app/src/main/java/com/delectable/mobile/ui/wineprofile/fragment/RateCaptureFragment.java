@@ -16,6 +16,7 @@ import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.InstagramUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.twitter.sdk.android.core.Callback;
@@ -304,6 +305,8 @@ public class RateCaptureFragment extends BaseFragment {
             handleEventErrorMessage(event);
             return;
         }
+
+        FacebookEventUtil.logRateEvent(getActivity(), event.getCaptureDetails());
 
         if (mShareTwitterButton.isChecked()) {
             String tweet = event.getCaptureDetails().getTweet();

@@ -125,7 +125,7 @@ android {
             buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
         /**
-         * the staging product flavor really only gets used for QA/applause testing when we prepare a release branch
+         * the qa product flavor really only gets used for QA/applause testing when we prepare a release branch
          * meant to be paired with prerelease and release builds
          */
         qa {
@@ -133,7 +133,7 @@ android {
             buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
         }
         /**
-         * For QA and meant to be the exact same as the staging flavor, except that it lets you pick your environment.
+         * For QA and meant to be the exact same as the qa flavor, except that it lets you pick your environment.
          */
         superQa {
             applicationId "com.delectable.mobile.qa"

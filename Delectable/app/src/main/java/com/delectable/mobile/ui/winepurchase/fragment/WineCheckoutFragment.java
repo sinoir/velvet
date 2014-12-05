@@ -18,6 +18,7 @@ import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ConfirmationDialogFragment;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
+import com.delectable.mobile.util.FacebookEventUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -377,6 +378,7 @@ public class WineCheckoutFragment extends BaseFragment {
         hideLoader();
 
         if (event.isSuccessful()) {
+            FacebookEventUtil.logPurchase(getActivity(), mData.getQuantity(), mData.getTotalPriceText());
             showConfirmation();
         } else {
             handleError(event.getErrorCode(), event.getErrorMessage());
@@ -391,9 +393,14 @@ public class WineCheckoutFragment extends BaseFragment {
 
         if (!event.isSuccessful()) {
             handleError(event.getErrorCode(), event.getErrorMessage());
+            return;
         }
 
         loadWineAndPricingData();
+        String wineName = mData.getProducerName() + " " +
+                mData.getWineName() + " " +
+                mData.getVintage();
+        FacebookEventUtil.logPurchasePageVisit(getActivity(), wineName);
     }
 
     public void onEventMainThread(FetchedShippingAddressesEvent event) {

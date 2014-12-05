@@ -2,8 +2,10 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.HelperUtil;
 import com.delectable.mobile.util.NameUtil;
 
@@ -104,6 +106,12 @@ public class SignUpFragment extends BaseSignUpInFragment {
         String lName = name[NameUtil.LAST_NAME];
 
         mRegistrationController.register(email, password, fName, lName);
+    }
+
+    @Override
+    public void onEventMainThread(LoginRegisterEvent registerEvent) {
+        super.onEventMainThread(registerEvent);
+        FacebookEventUtil.logRegistration(getActivity());
     }
 
     @Override
