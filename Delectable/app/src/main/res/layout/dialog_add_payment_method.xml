@@ -52,14 +52,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="5">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginLeft="@dimen/dialog_horizontal_spacing"
                     android:layout_marginRight="@dimen/dialog_horizontal_spacing"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:background="@drawable/bg_bottom_border">
 
                     <com.delectable.mobile.ui.common.widget.FontEditText
@@ -97,6 +98,7 @@
                         android:hint="YY"
                         android:imeOptions="actionNext"
                         android:inputType="number"
+                        android:maxLength="2"
                         android:nextFocusForward="@+id/cvc"
                         android:paddingLeft="@dimen/dialog_horizontal_spacing" />
 
@@ -105,7 +107,7 @@
                 <com.delectable.mobile.ui.common.widget.FontEditText
                     android:id="@+id/cvc"
                     style="@style/CheckoutEditText"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:hint="@string/paymentmethod_cvc"
                     android:inputType="number" />
             </LinearLayout>

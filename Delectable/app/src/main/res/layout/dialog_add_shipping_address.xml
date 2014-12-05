@@ -69,14 +69,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.delectable.mobile.ui.common.widget.FontEditText
+                <Spinner
                     android:id="@+id/state"
-                    style="@style/CheckoutEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="@dimen/dialog_horizontal_spacing"
+                    android:layout_marginRight="@dimen/dialog_horizontal_spacing"
                     android:layout_weight="1"
-                    android:hint="@string/shippingaddress_state"
-                    android:imeOptions="actionNext"
-                    android:nextFocusForward="@+id/zip_code"
-                    android:singleLine="true" />
+                    android:background="@drawable/bg_bottom_border"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="0dp" />
 
                 <com.delectable.mobile.ui.common.widget.FontEditText
                     android:id="@+id/zip_code"
@@ -85,6 +87,7 @@
                     android:hint="@string/shippingaddress_zipcode"
                     android:imeOptions="actionNext"
                     android:inputType="number"
+                    android:maxLength="5"
                     android:nextFocusForward="@+id/phone_number"
                     android:singleLine="true" />
             </LinearLayout>
