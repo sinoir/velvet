@@ -13,6 +13,7 @@ import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 public class WineCaptureActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -51,6 +52,16 @@ public class WineCaptureActivity extends BaseActivity implements GoogleApiClient
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                launchUserProfile(true);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public Location getLastLocation() {

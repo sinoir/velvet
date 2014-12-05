@@ -129,6 +129,8 @@ public class CameraUtil {
                 matrix,
                 true);
 
+        bitmap.recycle();
+
         return finalBitmap;
     }
 

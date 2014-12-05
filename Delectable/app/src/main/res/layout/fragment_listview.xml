@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ListView
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_white"
-    android:divider="@color/d_light_gray"
-    android:dividerHeight="1dp" />
+    android:background="@color/d_white" />

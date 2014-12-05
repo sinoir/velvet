@@ -7,12 +7,11 @@
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:background="@color/d_white"
-        android:divider="@color/d_light_gray"
-        android:dividerHeight="1dp" />
+        android:background="@color/d_white" />
 
     <!--TODO test on android L, this is using negative margin to make the progress bar appear more compact -->
     <ProgressBar

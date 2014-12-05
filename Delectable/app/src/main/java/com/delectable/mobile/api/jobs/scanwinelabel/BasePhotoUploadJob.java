@@ -56,6 +56,9 @@ public abstract class BasePhotoUploadJob extends BaseJob {
 
     public abstract String getProvisionEndpoint();
 
-    public abstract byte[] compressImage(Bitmap bitmap);
+    /**
+     * @param bitmap Do not modify this bitmap since it will be used in other places as well
+     */
+    public abstract byte[] compressImage(final Bitmap bitmap);
 
 }

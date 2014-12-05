@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- made for RelativeLayout -->
+<!-- made for FrameLayout -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -11,8 +11,6 @@
         android:id="@+id/wine_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
         android:background="@color/d_light_gray"
         android:scaleType="centerCrop" />
 
@@ -20,62 +18,76 @@
         android:id="@+id/gradient_backdrop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:background="@drawable/bg_wine_banner_gradient" />
 
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/producer_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/wine_name"
-        android:layout_alignParentLeft="true"
-        android:paddingLeft="@dimen/spacing_16"
-        android:paddingRight="@dimen/spacing_16"
-        android:textColor="@android:color/white"
-        android:textSize="19sp"
-        app:fontName="whitney_medium_sc" />
-
-    <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/wine_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/wine_vintage_container"
-        android:layout_alignParentLeft="true"
-        android:lineSpacingMultiplier="1.2"
-        android:paddingLeft="@dimen/spacing_16"
-        android:paddingRight="@dimen/spacing_16"
-        android:textColor="@android:color/white"
-        android:textSize="19sp"
-        app:fontName="whitney_book" />
-
     <RelativeLayout
-        android:id="@+id/wine_vintage_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:visibility="invisible"
-        android:paddingBottom="6dp">
+        android:id="@+id/wine_banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="@dimen/spacing_16">
+
+    <ImageView
+            android:id="@+id/edit_base_wine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/producer_name"
+            android:layout_marginBottom="@dimen/spacing_4"
+            android:alpha="0"
+            android:clickable="true"
+            android:src="@drawable/btn_edit"
+            android:visibility="gone" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
-            android:id="@+id/wine_vintage"
+            android:id="@+id/producer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/spacing_16"
-            android:paddingRight="@dimen/spacing_8"
-            android:text="All years"
-            android:textColor="@color/white_to_gray"
-            android:textSize="16sp"
+            android:layout_above="@+id/wine_name"
+            android:textColor="@android:color/white"
+            android:textSize="19sp"
+            app:fontName="whitney_medium_sc" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/wine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/wine_vintage_container"
+            android:lineSpacingMultiplier="1.2"
+            android:layout_alignWithParentIfMissing="true"
+            android:textColor="@android:color/white"
+            android:textSize="19sp"
             app:fontName="whitney_book" />
 
-        <ImageView
+        <RelativeLayout
+            android:id="@+id/wine_vintage_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/wine_vintage"
-            android:layout_alignTop="@id/wine_vintage"
-            android:layout_toRightOf="@+id/wine_vintage"
-            android:src="@drawable/temp_down_arrow" />
+            android:layout_alignParentBottom="true"
+            android:visibility="gone">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/wine_vintage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All years"
+                android:textColor="@color/white_to_gray"
+                android:textSize="16sp"
+                app:fontName="whitney_book" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_8"
+                android:layout_alignBottom="@id/wine_vintage"
+                android:layout_alignTop="@id/wine_vintage"
+                android:layout_toRightOf="@+id/wine_vintage"
+                android:src="@drawable/temp_down_arrow" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
+
 </merge>
 
 

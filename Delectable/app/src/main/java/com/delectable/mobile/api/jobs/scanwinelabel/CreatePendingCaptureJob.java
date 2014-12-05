@@ -55,7 +55,7 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
     }
 
     @Override
-    public byte[] compressImage(Bitmap bitmap) {
+    public byte[] compressImage(final Bitmap bitmap) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY, os);
         return os.toByteArray();

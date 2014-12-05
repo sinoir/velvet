@@ -62,7 +62,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     }
 
     @Override
-    public byte[] compressImage(Bitmap bitmap) {
+    public byte[] compressImage(final Bitmap bitmap) {
 
         // scale
         Matrix matrix = new Matrix();
@@ -81,6 +81,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
         // compress
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         finalBitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY_INSTANT, os);
+        finalBitmap.recycle();
         return os.toByteArray();
     }
 

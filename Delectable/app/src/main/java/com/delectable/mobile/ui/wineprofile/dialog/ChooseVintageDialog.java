@@ -66,7 +66,9 @@ public class ChooseVintageDialog extends BaseDialogFragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
         ButterKnife.inject(this, view);
-        mProducerName.setText(mBaseWine.getProducerName());
+        if (mBaseWine.getProducerName() != null) {
+            mProducerName.setText(mBaseWine.getProducerName().toLowerCase());
+        }
         mWineName.setText(mBaseWine.getName());
         mListView.setAdapter(mAdapter);
         return view;
