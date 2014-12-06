@@ -19,7 +19,6 @@ import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -390,7 +389,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void navHeaderUserImageClicked() {
-        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
+        // TODO maybe launch settings so people can change their profile? or separate profile change from settings
+//        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
     public void onEventMainThread(NavigationEvent event) {

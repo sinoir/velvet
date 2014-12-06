@@ -2,7 +2,6 @@ package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.events.NavigationEvent;
@@ -10,7 +9,7 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
+import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
 import com.delectable.mobile.ui.search.activity.SearchActivity;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
@@ -117,9 +116,10 @@ public class NavActivity extends BaseActivity
                 mTitle = null;
                 break;
             case NavHeader.NAV_YOUR_WINES:
-                startActivity(
-                        UserProfileActivity.newIntent(this, UserInfo.getUserId(App.getInstance())));
-                //mTitle = getResources().getString(R.string.app_name);
+                fragment = new YourWinesFragment(); // extends UserProfileF
+//                startActivity(
+//                        UserProfileActivity.newIntent(this, UserInfo.getUserId(App.getInstance())));
+                mTitle = getResources().getString(R.string.navigation_your_wines);
                 break;
             case NavHeader.NAV_FIND_FRIENDS:
                 fragment = new FollowFriendsFragment();

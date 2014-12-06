@@ -33,12 +33,10 @@ import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
+import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -46,6 +44,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -54,7 +53,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -71,7 +69,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private static final String TAG = UserProfileFragment.class.getSimpleName();
 
-    private static final String USER_ID = "USER_ID";
+    protected static final String USER_ID = "USER_ID";
 
     private static final String CAPTURES_REQ = TAG + "_captures_req";
 
@@ -95,6 +93,9 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @InjectView(R.id.camera_button)
     protected FloatingActionButton mCameraButton;
+
+    @InjectView(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     private MutableForegroundColorSpan mAlphaSpan;
 
@@ -123,7 +124,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     private PendingCapture mCaptureToDelete;
 
-
     public UserProfileFragment() {
     }
 
@@ -149,8 +149,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        enableBackButton(true);
-        getActionBarToolbar().setBackgroundColor(Color.TRANSPARENT);
+        if (!isFragmentEmbedded()) {
+            enableBackButton(true);
+            getActionBarToolbar().setBackgroundColor(Color.TRANSPARENT);
+        }
     }
 
     @Override
@@ -183,13 +185,14 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         final FloatingActionButton.FabOnScrollListener fabOnScrollListener
                 = new FloatingActionButton.FabOnScrollListener() {
 
-            boolean isTitleVisible = false;
+//            boolean isTitleVisible = false;
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                     int totalItemCount) {
                 super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-
+                onScrollChanged();
+                /*
                 // decide if user name should be shown / transparent actionbar
                 if (mListView != null && mListView.getChildCount() > 1) {
 
@@ -234,6 +237,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
                 hideableActionBarScrollListener
                         .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+
+                */
             }
         };
         mCameraButton.attachToListView(mListView, fabOnScrollListener);
@@ -245,6 +250,29 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         });
 
         return view;
+    }
+
+    protected void onScrollChanged() {
+        if (isFragmentEmbedded()) {
+            return;
+        }
+
+        View v = mListView.getChildAt(0);
+        int top = (v == null ? 0 : v.getTop());
+        int headerHeight = mProfileHeaderView.getHeight();
+        boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
+
+        if (isHeaderVisible) {
+            // drag toolbar off the screen when reaching the bottom of the header
+            int toolbarHeight = mToolbar.getHeight();
+            int toolbarDragOffset = 0;
+            int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
+            mToolbar.setTranslationY(toolbarTranslation);
+        }
+    }
+
+    protected boolean isFragmentEmbedded() {
+        return false;
     }
 
     @Override
@@ -402,7 +430,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 //                ? getString(R.string.you)
 //                : mUserAccount.getFullName());
         mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setActionBarSubtitle(mTitle);
+//        setActionBarSubtitle(mTitle);
     }
 
     @Override
