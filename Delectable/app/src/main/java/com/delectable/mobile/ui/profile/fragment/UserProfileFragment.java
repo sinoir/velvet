@@ -27,6 +27,7 @@ import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
 import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
+import com.delectable.mobile.ui.profile.widget.MinimalCaptureDetailRow;
 import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
@@ -56,6 +57,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -174,6 +176,17 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mListView.addHeaderView(mProfileHeaderView);
         mListView.addFooterView(mEmptyViewFooter);
         mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+                if (view instanceof MinimalCaptureDetailRow) {
+                    ((MinimalCaptureDetailRow) view).onOverflowClick();
+                    return true;
+                }
+                return false;
+            }
+        });
         mListView.setAdapter(mAdapter);
 
         final HideableActionBarScrollListener hideableActionBarScrollListener
