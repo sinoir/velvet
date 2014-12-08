@@ -271,6 +271,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         boolean isOwnProfile = UserInfo.isLoggedInUser(getActivity(), mUserId);
         mAnalytics.trackViewUserProfile(
                 isOwnProfile ? AnalyticsUtil.USER_PROFILE_OWN : AnalyticsUtil.USER_PROFILE_OTHERS);
+
+        if (!mAdapter.isEmpty()) {
+            mListView.removeFooterView(mEmptyViewFooter);
+        }
     }
 
     @Override
