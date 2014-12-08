@@ -9,10 +9,12 @@ import com.delectable.mobile.ui.followfriends.fragment.FollowFriendsFragment;
 import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.search.fragment.SearchFragment;
+import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -40,7 +42,7 @@ public class NavActivity extends BaseActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    private int mCurrentSelectedNavItem = NavHeader.NAV_HOME;
+    private int mCurrentSelectedNavItem = NavHeader.NAV_DISCOVER;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -87,6 +89,10 @@ public class NavActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.nav_action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -96,33 +102,35 @@ public class NavActivity extends BaseActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         BaseFragment fragment = null;
         switch (position) {
-            case NavHeader.NAV_PROFILE:
-                //fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
-                //mTitle = "";
-                //mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
-                // TODO always launch user profiles as fragments to allow access to nav drawer?
-                // launching as new activity from within NavigationDrawerFragment to prevent double action bar issue
-                return;
+//            case NavHeader.NAV_PROFILE:
+            //fragment = UserProfileFragment.newInstance(UserInfo.getUserId(this));
+            //mTitle = "";
+            //mCurrentSelectedNavItem = NavHeader.NAV_PROFILE;
+            // TODO always launch user profiles as fragments to allow access to nav drawer?
+            // launching as new activity from within NavigationDrawerFragment to prevent double action bar issue
+//                return;
             //break;
-            case NavHeader.NAV_HOME:
+            case NavHeader.NAV_DISCOVER:
                 fragment = new HomeFragment();
                 //mTitle = getResources().getString(R.string.app_name);
                 mTitle = null;
                 break;
+            case NavHeader.NAV_YOUR_WINES:
+                fragment = new YourWinesFragment(); // extends UserProfileF
+//                startActivity(
+//                        UserProfileActivity.newIntent(this, UserInfo.getUserId(App.getInstance())));
+                mTitle = getResources().getString(R.string.navigation_your_wines);
+                break;
             case NavHeader.NAV_FIND_FRIENDS:
                 fragment = new FollowFriendsFragment();
                 mTitle = getResources().getString(R.string.navigation_find_friends);
-                break;
-            case NavHeader.NAV_SEARCH:
-                fragment = new SearchFragment();
-                mTitle = getResources().getString(R.string.search_title);
                 break;
             case NavHeader.NAV_SETTINGS:
                 fragment = new SettingsFragment();
                 mTitle = getResources().getString(R.string.settings_title);
                 break;
             default:
-                mCurrentSelectedNavItem = NavHeader.NAV_HOME;
+                mCurrentSelectedNavItem = NavHeader.NAV_DISCOVER;
         }
         if (fragment != null) {
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -149,11 +157,11 @@ public class NavActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        if (NavHeader.NAV_HOME == mCurrentSelectedNavItem) {
+        if (NavHeader.NAV_DISCOVER == mCurrentSelectedNavItem) {
             super.onBackPressed();
         } else {
             // navigate to home fragment
-            mEventBus.post(new NavigationEvent(NavHeader.NAV_HOME));
+            mEventBus.post(new NavigationEvent(NavHeader.NAV_DISCOVER));
         }
     }
 }

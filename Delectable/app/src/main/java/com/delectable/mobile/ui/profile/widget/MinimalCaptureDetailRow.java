@@ -504,7 +504,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     @OnClick(R.id.overflow_button)
-    protected void onOverflowClick() {
+    public void onOverflowClick() {
         if (mCaptureDetailsActionsHandler != null) {
             mPopupMenu.show();
         }

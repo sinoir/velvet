@@ -19,7 +19,6 @@ import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
-import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.FacebookEventUtil;
@@ -30,11 +29,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +128,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.nav_menu, menu);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
     }
@@ -206,7 +214,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
                 if (!isAdded()) {
                     return;
                 }
-
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -231,6 +238,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         // When the user runs the app for the first time, we want to land them with the
         // navigation drawer open. But just the first time.
@@ -377,19 +386,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
         mNavHeader.setWineCount(mUserAccount.getCaptureCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
-        mNavHeader.setUserBio(mUserAccount.getBio());
         ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
                 mNavHeader.getUserImageView());
     }
 
     @Override
     public void navHeaderUserImageClicked() {
-        Intent intent = new Intent();
-        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
-        intent.setClass(getActivity(), UserProfileActivity.class);
-        startActivity(intent);
-//        navItemSelected(NavHeader.NAV_PROFILE);
-//        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
+        // TODO maybe launch settings so people can change their profile? or separate profile change from settings
+//        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
     public void onEventMainThread(NavigationEvent event) {

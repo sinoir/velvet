@@ -53,7 +53,7 @@ android {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 5
-        versionName '1.2 rc1'
+        versionName '1.2 rc2'
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'

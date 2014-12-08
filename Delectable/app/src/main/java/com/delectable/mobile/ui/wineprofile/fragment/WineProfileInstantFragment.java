@@ -54,8 +54,6 @@ public class WineProfileInstantFragment extends WineProfileFragment {
 
     private ArrayList<BaseWine> mMatches;
 
-    private boolean mNeedToFlagAsIncorrect = false;
-
     private boolean mNeedToSetBaseWineId = false;
 
     public static WineProfileInstantFragment newInstance(@Nullable BaseWine baseWine) {
@@ -122,10 +120,6 @@ public class WineProfileInstantFragment extends WineProfileFragment {
                 mRateButton.setEnabled(true);
                 Animate.pushInLeft(mRateButton);
 
-                if (mNeedToFlagAsIncorrect) {
-                    mCaptureController.flagCapture(mPendingCaptureId);
-                    mNeedToFlagAsIncorrect = false;
-                }
                 if (mNeedToSetBaseWineId) {
                     setBaseWine(mBaseWineMinimal);
                 }
@@ -182,14 +176,7 @@ public class WineProfileInstantFragment extends WineProfileFragment {
                 Parcelable p = data.getExtras()
                         .getParcelable(EditBaseWineDialog.EXTRAS_RESULT_WINE);
                 if (p == null) {
-                    // clicked footer, report incorrect wine
-                    if (mPendingCaptureId != null) {
-                        mCaptureController.flagCapture(mPendingCaptureId);
-                        mNeedToFlagAsIncorrect = false;
-                    } else {
-                        // remember that we need to flag as incorrect once pending capture comes in
-                        mNeedToFlagAsIncorrect = true;
-                    }
+                    // clicked footer, placebo report incorrect wine
                     Toast.makeText(getActivity(), R.string.capture_edit_base_wine_report_confirm,
                             Toast.LENGTH_SHORT).show();
                 } else {
