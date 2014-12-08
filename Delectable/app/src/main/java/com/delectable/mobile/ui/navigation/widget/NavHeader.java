@@ -22,9 +22,9 @@ public class NavHeader extends RelativeLayout {
     // These must reflec the order of the mNavigationItems and onNavigationItemClicked id orders
     public static final int NAV_PROFILE = -1;
 
-    public static final int NAV_HOME = 0;
+    public static final int NAV_DISCOVER = 0;
 
-    public static final int NAV_SEARCH = 1;
+    public static final int NAV_YOUR_WINES = 1;
 
     public static final int NAV_FIND_FRIENDS = 2;
 
@@ -41,10 +41,8 @@ public class NavHeader extends RelativeLayout {
     @InjectView(R.id.wine_count)
     TextView mWineCountTextView;
 
-    @InjectView(R.id.user_bio_text)
-    TextView mUserBioTextView;
-
-    @InjectViews({R.id.navigation_home, R.id.navigation_search, R.id.navigation_find_friends,
+    @InjectViews(
+            {R.id.navigation_discover, R.id.navigation_your_wines, R.id.navigation_find_friends,
             R.id.navigation_settings})
     List<View> mNavigationItems;
 
@@ -74,7 +72,7 @@ public class NavHeader extends RelativeLayout {
         }
     }
 
-    @OnClick({R.id.navigation_home, R.id.navigation_search, R.id.navigation_find_friends,
+    @OnClick({R.id.navigation_discover, R.id.navigation_your_wines, R.id.navigation_find_friends,
             R.id.navigation_settings})
     void onNavigationClicked(View navItem) {
         toggleViewSelection(navItem);
@@ -115,15 +113,6 @@ public class NavHeader extends RelativeLayout {
 
     public void setUserName(String userName) {
         mUserNameTextView.setText(userName);
-    }
-
-    public void setUserBio(String bio) {
-        if (bio == null || bio.trim().equals("")) {
-            mUserBioTextView.setVisibility(View.GONE);
-        } else {
-            mUserBioTextView.setVisibility(View.VISIBLE);
-        }
-        mUserBioTextView.setText(bio);
     }
 
     public void setWineCount(int wineCount) {

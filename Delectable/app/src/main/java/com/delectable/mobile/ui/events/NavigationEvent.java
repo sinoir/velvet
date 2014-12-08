@@ -14,7 +14,7 @@ public class NavigationEvent {
     }
 
     public NavigationEvent() {
-        this(NavHeader.NAV_HOME);
+        this(NavHeader.NAV_DISCOVER);
     }
 
 }
