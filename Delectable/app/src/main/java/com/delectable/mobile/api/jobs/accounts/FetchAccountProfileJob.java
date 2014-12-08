@@ -4,7 +4,7 @@ import com.delectable.mobile.api.cache.AccountModel;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountContext;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountProfileResponse;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountsContextRequest;
-import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
+import com.delectable.mobile.api.events.accounts.FetchedAccountProfileEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.AccountProfile;
@@ -53,12 +53,12 @@ public class FetchAccountProfileJob extends BaseJob {
         if (!response.isETagMatch()) {
             AccountProfile account = response.getPayload().getAccount();
             mAccountModel.saveAccount(account);
-            mEventBus.post(new UpdatedAccountProfileEvent(account));
+            mEventBus.post(new FetchedAccountProfileEvent(account));
         }
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new UpdatedAccountProfileEvent(mAccountId, getErrorMessage()));
+        mEventBus.post(new FetchedAccountProfileEvent(mAccountId, getErrorMessage()));
     }
 }

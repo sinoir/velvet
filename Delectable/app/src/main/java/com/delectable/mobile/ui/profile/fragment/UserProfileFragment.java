@@ -9,8 +9,8 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.PendingCapturesController;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.accounts.FetchedAccountProfileEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedAccountProfileEvent;
 import com.delectable.mobile.api.events.pendingcaptures.DeletedPendingCaptureEvent;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.models.BaseListingElement;
@@ -361,7 +361,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         }
     }
 
-    public void onEventMainThread(UpdatedAccountProfileEvent event) {
+    public void onEventMainThread(FetchedAccountProfileEvent event) {
 
         if (!mUserId.equals(event.getAccount().getId())) {
             return;
