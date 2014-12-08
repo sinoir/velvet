@@ -30,8 +30,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -82,15 +80,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
         super.onCreate(savedInstanceState);
         CrashlyticsUtil.log(TAG + ".onCreate");
         setHasOptionsMenu(true);
-    }
-
-    /**
-     * subclasses should call super on this method in order to ensure that the actionbar doesn't
-     * have any menu item artifacts from other fragemnts.
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
     }
 
     @Override

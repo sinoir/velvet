@@ -56,8 +56,7 @@ public class FacebookEventUtil {
         logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, parameters);
     }
 
-    public static void logPurchase(Context context, int quantity, String price) {
-        double priceDouble = Double.valueOf(price);
+    public static void logPurchase(Context context, int quantity, double priceDouble) {
         AppEventsLogger logger = AppEventsLogger.newLogger(context);
         Bundle parameters = new Bundle();
         parameters.putInt(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, quantity);

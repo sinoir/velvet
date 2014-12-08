@@ -105,6 +105,7 @@ import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowersFragment;
 import com.delectable.mobile.ui.profile.fragment.FollowingFragment;
 import com.delectable.mobile.ui.profile.fragment.UserProfileFragment;
+import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
@@ -144,6 +145,7 @@ import de.greenrobot.event.EventBus;
                 NavigationDrawerFragment.class,
                 HomeFragment.class,
                 UserProfileFragment.class,
+                YourWinesFragment.class,
                 FollowersFragment.class,
                 CaptureListFragment.class,
                 FollowingFragment.class,

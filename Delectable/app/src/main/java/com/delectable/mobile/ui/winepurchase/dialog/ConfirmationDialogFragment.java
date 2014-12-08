@@ -3,12 +3,15 @@ package com.delectable.mobile.ui.winepurchase.dialog;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
+import com.delectable.mobile.ui.common.widget.TouchableSpan;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,19 +55,35 @@ public class ConfirmationDialogFragment extends BaseDialogFragment {
      * Adds the Email with proper color / click state
      */
     private void formatConfirmText() {
-        String confirmationEmail = getString(R.string.order_confirmation_email);
+        final String confirmationEmail = getString(R.string.order_confirmation_email);
         String confirmationTextWithEmail = getString(R.string.order_confirmation_text,
                 confirmationEmail);
         int startPos = confirmationTextWithEmail.indexOf(confirmationEmail);
         int endPos = startPos + confirmationEmail.length();
-        Log.d(TAG, "Start Position: " + startPos);
-        Log.d(TAG, "End Position: " + endPos);
+        mConfirmTextView.setMovementMethod(LinkMovementMethod.getInstance());
         Spannable spannableString = new SpannableString(confirmationTextWithEmail);
-        spannableString.setSpan(
-                new ForegroundColorSpan(getResources().getColor(R.color.d_chestnut)), startPos,
-                endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        mConfirmTextView.setText(spannableString);
+        spannableString.setSpan(
+                new ForegroundColorSpan(getResources().getColor(R.color.d_chestnut)),
+                startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableString.setSpan(
+                new TouchableSpan(getResources().getColor(R.color.d_chestnut_pressed)) {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, "Email Clicked? ");
+                        Intent send = new Intent(Intent.ACTION_SENDTO);
+                        String uriText = "mailto:" + Uri.encode(confirmationEmail);
+                        Uri uri = Uri.parse(uriText);
+
+                        send.setData(uri);
+                        startActivity(Intent.createChooser(send,
+                                getString(R.string.settings_contact_email_intent_dialog_title)));
+                    }
+                },
+                startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        mConfirmTextView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 
     @OnClick(R.id.ok_button)

@@ -385,7 +385,7 @@ public class WineCheckoutFragment extends BaseFragment {
         hideLoader();
 
         if (event.isSuccessful()) {
-            FacebookEventUtil.logPurchase(getActivity(), mData.getQuantity(), mData.getTotalPriceText());
+            FacebookEventUtil.logPurchase(getActivity(), mData.getQuantity(), mData.getTotalPriceValue());
             showConfirmation();
         } else {
             handleError(event.getErrorCode(), event.getErrorMessage());
