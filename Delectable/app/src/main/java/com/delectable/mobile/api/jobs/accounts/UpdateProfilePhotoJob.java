@@ -18,7 +18,7 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
 
     private static final String TAG = UpdateProfilePhotoJob.class.getSimpleName();
 
-    public UpdateProfilePhotoJob(Bitmap bitmap) {
+    public UpdateProfilePhotoJob(String requestId, Bitmap bitmap) {
         super(bitmap, Priority.UX);
     }
 
@@ -33,12 +33,13 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
         Account account = UserInfo.getAccountPrivate();
         account.setPhoto(response.getPayload().getPhoto());
         UserInfo.setAccountPrivate(account);
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new UpdatedAccountEvent(UserInfo.getUserId(), TAG + " " + getErrorMessage()));
+        Account account = UserInfo.getAccountPrivate();
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account, TAG + " " + getErrorMessage()));
     }
 
     @Override

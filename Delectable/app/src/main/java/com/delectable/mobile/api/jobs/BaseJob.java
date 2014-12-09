@@ -15,6 +15,8 @@ import de.greenrobot.event.EventBus;
 
 public class BaseJob extends Job {
 
+    private String TAG = this.getClass().getSimpleName();
+
     private static final int RETRY_LIMIT = 3;
 
     @Inject
@@ -26,11 +28,17 @@ public class BaseJob extends Job {
     @Inject
     protected AnalyticsUtil mAnalytics;
 
+    protected String mRequestId;
+
     private String mErrorMessage;
 
     private ErrorUtil mErrorCode;
 
-    private String TAG = this.getClass().getSimpleName();
+
+    protected BaseJob(String requestId, Params params) {
+        super(params);
+        mRequestId = requestId;
+    }
 
     protected BaseJob(Params params) {
         super(params);
@@ -67,6 +75,10 @@ public class BaseJob extends Job {
     @Override
     protected int getRetryLimit() {
         return RETRY_LIMIT;
+    }
+
+    public String getRequestId() {
+        return mRequestId;
     }
 
     public String getErrorMessage() {

@@ -54,6 +54,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private static final String ACTIVITY_FEED_REQ = TAG + "_activity_feed";
 
+    private static final String FETCH_ACCOUNT = TAG + "_fetch_account";
+
     /**
      * Remember the position of the selected item.
      */
@@ -143,7 +145,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
         // Must update / sync private account on Resume, for sycning issues.
         // TODO: Need to create 1 object for private / public, otherwise we require special syncing code for the duplciate data, which doesn't exist.
-        mAccountController.fetchAccountPrivate(mUserId);
+        mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
         updateUIWithData();
         loadActivityFeed();
     }
@@ -296,24 +298,23 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     //region EventBus events
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+        //no need to filter by request id, this listens to all events
+
+        mUserAccount = event.getAccount();
+        updateUIWithData();
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
             return;
         }
-
-        if (event.isSuccessful()) {
-            mUserAccount = event.getAccount();
-            updateUIWithData();
-
-            // Update Push notification stuff after user logs in / updates account.
-            // TODO: Put this somewhere else that makes more sense..
-            try {
-                App.getInstance().updateKahunaAttributes();
-            } catch (Exception ex) {
-                Log.wtf(TAG, "Kahuna Failed", ex);
-            }
-            return;
+        
+        // Update Push notification stuff after user logs in / updates account.
+        // TODO: Put this somewhere else that makes more sense..
+        try {
+            App.getInstance().updateKahunaAttributes();
+        } catch (Exception ex) {
+            Log.wtf(TAG, "Kahuna Failed", ex);
         }
-        showToastError(event.getErrorMessage());
     }
 
     public void onEventMainThread(UpdatedProfileEvent event) {

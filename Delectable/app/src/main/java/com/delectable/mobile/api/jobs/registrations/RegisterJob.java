@@ -30,8 +30,8 @@ public class RegisterJob extends BaseJob {
 
     private String mLname;
 
-    public RegisterJob(String email, String password, String fname, String lname) {
-        super(new Params(Priority.UX.value()));
+    public RegisterJob(String requestId, String email, String password, String fname, String lname) {
+        super(requestId, new Params(Priority.UX.value()));
         mEmail = email;
         mPassword = password;
         mFname = fname;
@@ -60,7 +60,7 @@ public class RegisterJob extends BaseJob {
         CrashlyticsUtil.onSignIn(account.getFullName(), account.getEmail(), account.getId(),
                 sessionKey);
 
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
         mEventBus.post(new LoginRegisterEvent(true));
 
         KahunaUtil.trackSignUp("email", account.getFname(), account.getLname(),

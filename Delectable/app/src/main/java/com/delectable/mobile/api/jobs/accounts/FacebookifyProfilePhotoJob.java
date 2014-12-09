@@ -13,8 +13,8 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
 
     private static final String TAG = FacebookifyProfilePhotoJob.class.getSimpleName();
 
-    public FacebookifyProfilePhotoJob() {
-        super(new Params(Priority.SYNC.value()));
+    public FacebookifyProfilePhotoJob(String requestId) {
+        super(requestId, new Params(Priority.SYNC.value()));
     }
 
     @Override
@@ -26,11 +26,12 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
                         PhotoHashResponse.class);
         Account account = UserInfo.getAccountPrivate();
         account.setPhoto(response.getPayload().getPhoto());
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new UpdatedAccountEvent(UserInfo.getUserId(), TAG + " " + getErrorMessage()));
+        Account account = UserInfo.getAccountPrivate();
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account, TAG + " " + getErrorMessage()));
     }
 }

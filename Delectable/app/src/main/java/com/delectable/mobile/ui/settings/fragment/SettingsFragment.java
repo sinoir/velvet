@@ -56,6 +56,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.inject.Inject;
 
@@ -109,8 +110,9 @@ public class SettingsFragment extends BaseFragment {
             mUserAccount.setTwTokenSecret(twitterInfo.tokenSecret);
             updateUI();
 
-            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token,
-                    twitterInfo.tokenSecret, twitterInfo.screenName);
+            mAccountController
+                    .associateTwitter(ASSOCIATE_TWITTER, twitterInfo.twitterId, twitterInfo.token,
+                            twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override
@@ -129,6 +131,33 @@ public class SettingsFragment extends BaseFragment {
     private static final int DISCONNECT_TWITTER = 2;
 
     private static final int DISCONNECT_FACEBOOK = 3;
+
+    private static final String UDPATE_PROFILE_PICTURE = TAG + "_UDPATE_PROFILE_PICTURE";
+
+    private static final String UDPATE_PROFILE = TAG + "_UDPATE_PROFILE";
+
+    private static final String REMOVE_IDENTIFIER = TAG + "_REMOVE_IDENTIFIER";
+
+    private static final String FACEBOOK_CONNECT = TAG + "_FACEBOOK_CONNECT";
+
+    private static final String FACEBOOKIFY_PROFILE_PHOTO = TAG + "_FACEBOOKIFY_PROFILE_PHOTO";
+
+    private static final String ASSOCIATE_TWITTER = TAG + "_ASSOCIATE_TWITTER";
+
+    private static final String FETCH_ACCOUNT = TAG + "_FETCH_ACCOUNT";
+
+    //so that we can figure out whether the updatedAccountEvent was from a request that we initialized
+    private static final HashSet<String> REQUEST_KEYS = new HashSet<String>();
+
+    static {
+        REQUEST_KEYS.add(UDPATE_PROFILE_PICTURE);
+        REQUEST_KEYS.add(UDPATE_PROFILE);
+        REQUEST_KEYS.add(REMOVE_IDENTIFIER);
+        REQUEST_KEYS.add(FACEBOOK_CONNECT);
+        REQUEST_KEYS.add(FACEBOOKIFY_PROFILE_PHOTO);
+        REQUEST_KEYS.add(ASSOCIATE_TWITTER);
+        REQUEST_KEYS.add(FETCH_ACCOUNT);
+    }
 
     @Inject
     AccountController mAccountController;
@@ -269,7 +298,7 @@ public class SettingsFragment extends BaseFragment {
         updateUI();
 
         //fetch most recent account private from API
-        mAccountController.fetchAccountPrivate(mUserId);
+        mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
     }
 
     @Override
@@ -449,24 +478,23 @@ public class SettingsFragment extends BaseFragment {
 
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccount().getId())) {
+        if (!REQUEST_KEYS.contains(event.getRequestId())) {
             return;
         }
 
-        if (event.isSuccessful()) {
-            mUserAccount = event.getAccount();
-            updateUI();
-            return;
-        }
-        showToastError(event.getErrorMessage());
+        mUserAccount = event.getAccount();
+        updateUI();
 
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
     }
 
     /**
      * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
      */
     private void facebookifyProfilePhoto() {
-        mAccountController.facebookifyProfilePhoto();
+        mAccountController.facebookifyProfilePhoto(FACEBOOKIFY_PROFILE_PHOTO);
     }
 
     //endregion
@@ -475,7 +503,7 @@ public class SettingsFragment extends BaseFragment {
      * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
      */
     private void updateProfilePicture(Bitmap photo) {
-        mAccountController.updateProfilePhoto(photo);
+        mAccountController.updateProfilePhoto(UDPATE_PROFILE_PICTURE, photo);
     }
 
     //region Profile Updates
@@ -495,7 +523,7 @@ public class SettingsFragment extends BaseFragment {
         String url = mWebsiteField.getText().toString();
         String bio = mShortBioField.getText().toString();
 
-        mAccountController.updateProfile(fName, lName, url, bio);
+        mAccountController.updateProfile(UDPATE_PROFILE, fName, lName, url, bio);
         return;
     }
 
@@ -590,7 +618,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void removeIdentifier(Identifier identifier) {
-        mAccountController.removeIdentifier(identifier);
+        mAccountController.removeIdentifier(REMOVE_IDENTIFIER, identifier);
     }
 
     public void onEventMainThread(UpdatedIdentifiersListingEvent event) {
@@ -673,7 +701,7 @@ public class SettingsFragment extends BaseFragment {
 
     public void facebookConnect() {
         Session session = Session.getActiveSession();
-        mAccountController.associateFacebook(session.getAccessToken(),
+        mAccountController.associateFacebook(FACEBOOK_CONNECT, session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
     }
 

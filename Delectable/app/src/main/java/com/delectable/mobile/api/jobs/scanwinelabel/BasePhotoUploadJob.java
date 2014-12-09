@@ -22,6 +22,11 @@ public abstract class BasePhotoUploadJob extends BaseJob {
 
     private Bitmap mBitmap;
 
+    public BasePhotoUploadJob(String requestId, Bitmap image, Priority priority) {
+        super(requestId, new Params(priority.value()));
+        mBitmap = image;
+    }
+
     public BasePhotoUploadJob(Bitmap image, Priority priority) {
         super(new Params(priority.value()));
         mBitmap = image;
