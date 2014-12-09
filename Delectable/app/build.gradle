@@ -175,6 +175,7 @@ dependencies {
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
     compile 'com.melnykov:floatingactionbutton:1.0.6'
+    compile 'com.pnikosis:materialish-progress:1.2'
     compile 'com.mixpanel.android:mixpanel-android:4.4.1@aar'
     // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {

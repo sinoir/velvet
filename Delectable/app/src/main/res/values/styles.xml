@@ -97,6 +97,35 @@
         <item name="android:background">@color/d_light_gray</item>
     </style>
 
+    <style name="ProgressBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="circleRadius">93dp</item>
+        <item name="barWidth">8dp</item>
+        <item name="barColor">@color/d_chestnut</item>
+    </style>
+
+    <style name="ProgressBar.Indeterminate" parent="ProgressBar">
+        <item name="progressIndeterminate">true</item>
+    </style>
+
+    <style name="delectabutton_large">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:background">@drawable/btn_large</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="type">large</item>
+    </style>
+
+    <style name="delectabutton_facebook">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:background">@drawable/btn_facebook</item>
+        <item name="android:textColor">@color/com_facebook_blue</item>
+        <item name="android:icon">@drawable/ic_fb</item>
+        <item name="type">large</item>
+    </style>
+
     <!-- Navigation Item Styles -->
     <style name="NavigationItem">
         <item name="android:layout_width">match_parent</item>

@@ -22,6 +22,7 @@ import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.common.widget.ContentLoadingProgressWheel;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
@@ -45,11 +46,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,7 +90,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     protected View mEmptyViewFooter;
 
-    protected ContentLoadingProgressBar mProgressBar;
+    protected ContentLoadingProgressWheel mProgressBar;
 
     protected FontTextView mNoCapturesTextView;
 
@@ -173,7 +172,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mProfileHeaderView.setActionListener(this);
 
         mEmptyViewFooter = inflater.inflate(R.layout.row_empty_view, mListView, false);
-        mProgressBar = (ContentLoadingProgressBar) mEmptyViewFooter.findViewById(R.id.progress_bar);
+        mProgressBar = (ContentLoadingProgressWheel) mEmptyViewFooter
+                .findViewById(R.id.progress_bar);
         mNoCapturesTextView = (FontTextView) mEmptyViewFooter
                 .findViewById(R.id.nothing_to_display_textview);
 
@@ -275,8 +275,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
         // elevate toolbar on embedded wine profile
-        Log.d(TAG, "top: " + top + " / headerHeight: " + headerHeight + " / visible: "
-                + isHeaderVisible);
         Animate.elevate(mToolbar,
                 (isHeaderVisible && -top < headerHeight - toolbarHeight) ? 0 : Animate.ELEVATION);
 

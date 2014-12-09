@@ -5,6 +5,7 @@
         <attr name="triangleCenterPosition" format="dimension" />
         <attr name="showTriangleMask" format="boolean" />
     </declare-styleable>
+
     <declare-styleable name="FontTextView">
         <!-- This is mapped directly to FontTextView.Font. If changes are made here, they should be
         made in the Font enum as well-->
@@ -26,5 +27,15 @@
             <enum name="whitney_semibold_ital" value="14" />
             <enum name="whitney_semibold_sc" value="15" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Delectabutton">
+        <attr name="type" format="enum">
+            <enum name="large" value="0" />
+        </attr>
+        <attr name="android:icon" />
+        <attr name="android:text" />
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
     </declare-styleable>
 </resources>
