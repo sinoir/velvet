@@ -19,7 +19,7 @@ public class UpdateProfilePhotoJob extends BasePhotoUploadJob {
     private static final String TAG = UpdateProfilePhotoJob.class.getSimpleName();
 
     public UpdateProfilePhotoJob(String requestId, Bitmap bitmap) {
-        super(bitmap, Priority.UX);
+        super(requestId, bitmap, Priority.UX);
     }
 
     @Override

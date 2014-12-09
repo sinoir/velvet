@@ -776,7 +776,7 @@ public class SettingsFragment extends BaseFragment {
     //endregion
 
     private void updateUI() {
-        updateUI(false);
+        updateUI(true);
     }
 
     /**

@@ -26,6 +26,7 @@ public class FacebookifyProfilePhotoJob extends BaseJob {
                         PhotoHashResponse.class);
         Account account = UserInfo.getAccountPrivate();
         account.setPhoto(response.getPayload().getPhoto());
+        UserInfo.setAccountPrivate(account);
         mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
     }
 
