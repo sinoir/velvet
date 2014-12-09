@@ -22,6 +22,9 @@ public class SignInFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignInFragment.class.getSimpleName();
 
+    private static final String LOGIN_JOB = "LOGIN_JOB";
+
+
     /**
      * Sets whether the done button is enabled or not depending on whether the fields are all filled
      * out.
@@ -85,7 +88,7 @@ public class SignInFragment extends BaseSignUpInFragment {
         String email = getEmailField().getText().toString().trim();
         String password = getPasswordField().getText().toString().trim();
 
-        mRegistrationController.login(email, password);
+        mRegistrationController.login(LOGIN_JOB, email, password);
     }
 
     @OnClick(R.id.forgot_textview)

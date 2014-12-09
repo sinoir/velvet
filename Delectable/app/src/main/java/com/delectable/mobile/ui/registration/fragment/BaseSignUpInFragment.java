@@ -60,6 +60,8 @@ public abstract class BaseSignUpInFragment extends BaseFragment
 
     private static final int LOADER_EMAIL_AUTOCOMPLETE = 0;
 
+    private static final String FACEBOOK_LOGIN_EVENT = "FACEBOOK_LOGIN_EVENT";
+
     //not making this TAG static in order to get the concrete class'name to show up in Logs
     private final String TAG = this.getClass().getSimpleName();
 
@@ -377,7 +379,7 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         mLoadingDialog.show(getFragmentManager(), LoadingCircleDialog.TAG);
 
         Session session = Session.getActiveSession();
-        mRegistrationController.facebookLogin(session.getAccessToken(),
+        mRegistrationController.facebookLogin(FACEBOOK_LOGIN_EVENT, session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
     }
 

@@ -23,6 +23,7 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
 
     private static final String TAG = FollowTwitterFriendsTabFragment.class.getSimpleName();
 
+    public static final String ASSOCIATE_TWITTER = TAG + "_ASSOCIATE_TWITTER";
 
     private TwitterLoginButton mHiddenTwitterButton;
 
@@ -81,7 +82,7 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
             mEmptyTextButtonView.setVisibility(View.INVISIBLE); //hiding this will show loading circle
 
             TwitterUtil.TwitterInfo twitterInfo = TwitterUtil.getTwitterInfo(twitterSessionResult);
-            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token, twitterInfo.tokenSecret, twitterInfo.screenName);
+            mAccountController.associateTwitter(ASSOCIATE_TWITTER, twitterInfo.twitterId, twitterInfo.token, twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override

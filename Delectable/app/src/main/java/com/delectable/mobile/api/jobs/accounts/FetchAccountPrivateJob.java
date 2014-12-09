@@ -23,16 +23,16 @@ public class FetchAccountPrivateJob extends BaseJob {
     /**
      * Fetch own private account.
      */
-    public FetchAccountPrivateJob() {
-        this(null); //passing in no id fetches own account
+    public FetchAccountPrivateJob(String requestId) {
+        this(requestId, null); //passing in no id fetches own account
     }
 
     /**
      * Explicitly search for Account private with id. Shouldn't be possible to search for another
      * user's Account private data.
      */
-    public FetchAccountPrivateJob(String id) {
-        super(new Params(Priority.UX.value()).requireNetwork());
+    public FetchAccountPrivateJob(String requestId, String id) {
+        super(requestId, new Params(Priority.UX.value()).requireNetwork());
         mAccountId = id;
     }
 
@@ -48,7 +48,7 @@ public class FetchAccountPrivateJob extends BaseJob {
 
         //cache to shared prefs
         UserInfo.setAccountPrivate(account);
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
 
         //save capture feeds
         List<CaptureFeed> oldFeeds = UserInfo.getCaptureFeeds();
@@ -61,6 +61,7 @@ public class FetchAccountPrivateJob extends BaseJob {
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new UpdatedAccountEvent(mAccountId, getErrorMessage()));
+        Account account = UserInfo.getAccountPrivate();
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account, getErrorMessage()));
     }
 }

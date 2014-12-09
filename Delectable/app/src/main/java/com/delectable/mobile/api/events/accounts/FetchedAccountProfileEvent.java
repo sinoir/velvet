@@ -3,7 +3,7 @@ package com.delectable.mobile.api.events.accounts;
 import com.delectable.mobile.api.models.AccountProfile;
 import com.delectable.mobile.api.events.BaseEvent;
 
-public class UpdatedAccountProfileEvent extends BaseEvent {
+public class FetchedAccountProfileEvent extends BaseEvent {
 
     private AccountProfile mAccount;
 
@@ -12,13 +12,13 @@ public class UpdatedAccountProfileEvent extends BaseEvent {
      */
     private String mAccountId;
 
-    public UpdatedAccountProfileEvent(AccountProfile account) {
+    public FetchedAccountProfileEvent(AccountProfile account) {
         super(true);
         mAccount = account;
         mAccountId = account.getId();
     }
 
-    public UpdatedAccountProfileEvent(String accountId, String errorMessage) {
+    public FetchedAccountProfileEvent(String accountId, String errorMessage) {
         super(errorMessage);
         mAccountId = accountId;
     }

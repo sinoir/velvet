@@ -18,8 +18,8 @@ public class AssociateFacebookJob extends BaseJob {
 
     private double mFacebookTokenExpiration;
 
-    public AssociateFacebookJob(String facebookToken, double facebookTokenExpiration) {
-        super(new Params(Priority.UX.value()).requireNetwork());
+    public AssociateFacebookJob(String requestId, String facebookToken, double facebookTokenExpiration) {
+        super(requestId, new Params(Priority.UX.value()).requireNetwork());
         mFacebookToken = facebookToken;
         mFacebookTokenExpiration = facebookTokenExpiration;
     }
@@ -36,7 +36,7 @@ public class AssociateFacebookJob extends BaseJob {
         Account account = response.getPayload().getAccount();
         UserInfo.setAccountPrivate(account);
         mEventBus.post(new AssociateFacebookEvent(account));
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
     }
 
     @Override

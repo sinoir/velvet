@@ -21,8 +21,8 @@ public class RemoveIdentifierJob extends BaseJob {
     private String mIdentifierId;
 
 
-    public RemoveIdentifierJob(Identifier identifier) {
-        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
+    public RemoveIdentifierJob(String requestId, Identifier identifier) {
+        super(requestId, new Params(Priority.SYNC.value()).requireNetwork().persist());
         mIdentifierId = identifier.getId();
     }
 
@@ -65,7 +65,7 @@ public class RemoveIdentifierJob extends BaseJob {
 
         UserInfo.setAccountPrivate(account);
 
-        UpdatedAccountEvent event = new UpdatedAccountEvent(account);
+        UpdatedAccountEvent event = new UpdatedAccountEvent(mRequestId, account);
         mEventBus.post(event);
     }
 
@@ -84,7 +84,7 @@ public class RemoveIdentifierJob extends BaseJob {
         UserInfo.setAccountPrivate(account);
         UserInfo.clearTempAccount();
 
-        UpdatedAccountEvent event = new UpdatedAccountEvent(account);
+        UpdatedAccountEvent event = new UpdatedAccountEvent(mRequestId, account);
         mEventBus.post(event);
     }
 
@@ -94,7 +94,7 @@ public class RemoveIdentifierJob extends BaseJob {
         Account account = UserInfo.getTempAccountPrivate();
         UserInfo.setAccountPrivate(account);
         UserInfo.clearTempAccount();
-        UpdatedAccountEvent event = new UpdatedAccountEvent(account);
+        UpdatedAccountEvent event = new UpdatedAccountEvent(mRequestId, account, TAG + " " + getErrorMessage());
         mEventBus.post(event);
         mEventBus.post(new UpdatedIdentifiersListingEvent(TAG + " " + getErrorMessage()));
     }

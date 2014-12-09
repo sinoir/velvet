@@ -3,31 +3,38 @@ package com.delectable.mobile.api.events.accounts;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.models.Account;
 
+/**
+ * Lets subscribers know jwhen the signed in user's account details have been updated.
+ */
 public class UpdatedAccountEvent extends BaseEvent {
 
     private Account mAccount;
 
-    /**
-     * The event broadcasts with only the account id if there was an error.
-     */
-    private String mAccountId;
+    private String mRequestId = "";
 
-    public UpdatedAccountEvent(Account account) {
+    /**
+     * Success event.
+     */
+    public UpdatedAccountEvent(String requestId, Account account) {
         super(true);
+        mRequestId = requestId;
         mAccount = account;
-        mAccountId = account.getId();
     }
 
-    public UpdatedAccountEvent(String accountId, String errorMessage) {
+    /**
+     * Fail event.
+     */
+    public UpdatedAccountEvent(String requestId, Account account, String errorMessage) {
         super(errorMessage);
-        mAccountId = accountId;
+        mAccount = account;
+        mRequestId = requestId;
     }
 
     public Account getAccount() {
         return mAccount;
     }
 
-    public String getAccountId() {
-        return mAccountId;
+    public String getRequestId() {
+        return mRequestId;
     }
 }

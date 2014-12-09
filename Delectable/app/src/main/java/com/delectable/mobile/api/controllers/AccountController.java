@@ -61,8 +61,8 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchAccountProfileJob(id));
     }
 
-    public void fetchAccountPrivate(String id) {
-        mJobManager.addJobInBackground(new FetchAccountPrivateJob(id));
+    public void fetchAccountPrivate(String requestId) {
+        mJobManager.addJobInBackground(new FetchAccountPrivateJob(requestId));
     }
 
     public void fetchActivityFeed(String requestId, String before, String after,
@@ -141,16 +141,16 @@ public class AccountController {
     }
 
     //region Settings Screen
-    public void facebookifyProfilePhoto() {
-        mJobManager.addJobInBackground(new FacebookifyProfilePhotoJob());
+    public void facebookifyProfilePhoto(String requestId) {
+        mJobManager.addJobInBackground(new FacebookifyProfilePhotoJob(requestId));
     }
 
-    public void updateProfilePhoto(Bitmap bitmap) {
-        mJobManager.addJobInBackground(new UpdateProfilePhotoJob(bitmap));
+    public void updateProfilePhoto(String requestId, Bitmap bitmap) {
+        mJobManager.addJobInBackground(new UpdateProfilePhotoJob(requestId, bitmap));
     }
 
-    public void updateProfile(String fname, String lname, String url, String bio) {
-        mJobManager.addJobInBackground(new UpdateProfileJob(fname, lname, url, bio));
+    public void updateProfile(String requestId, String fname, String lname, String url, String bio) {
+        mJobManager.addJobInBackground(new UpdateProfileJob(requestId, fname, lname, url, bio));
     }
 
     public void updateSetting(AccountConfig.Key key, boolean setting) {
@@ -165,19 +165,19 @@ public class AccountController {
         mJobManager.addJobInBackground(new UpdateIdentifierJob(identifier, string, null));
     }
 
-    public void removeIdentifier(Identifier identifier) {
-        mJobManager.addJobInBackground(new RemoveIdentifierJob(identifier));
+    public void removeIdentifier(String requestId, Identifier identifier) {
+        mJobManager.addJobInBackground(new RemoveIdentifierJob(requestId, identifier));
     }
 
-    public void associateFacebook(String facebookToken, double facebookTokenExpiration) {
+    public void associateFacebook(String requestId, String facebookToken, double facebookTokenExpiration) {
         mJobManager.addJobInBackground(
-                new AssociateFacebookJob(facebookToken, facebookTokenExpiration));
+                new AssociateFacebookJob(requestId, facebookToken, facebookTokenExpiration));
     }
 
-    public void associateTwitter(long twitterId, String token, String tokenSecret,
+    public void associateTwitter(String requestId, long twitterId, String token, String tokenSecret,
             String screenName) {
         mJobManager.addJobInBackground(
-                new AssociateTwitterJob(twitterId, token, tokenSecret, screenName));
+                new AssociateTwitterJob(requestId, twitterId, token, tokenSecret, screenName));
     }
     //endregion
 

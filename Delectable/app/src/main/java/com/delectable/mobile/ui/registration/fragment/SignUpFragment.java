@@ -23,6 +23,8 @@ public class SignUpFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignUpFragment.class.getSimpleName();
 
+    private static final String REGISTER_EVENT = "REGISTER_EVENT";
+
     /**
      * Sets whether the done button is enabled or not depending on whether the fields are all filled
      * out.
@@ -105,7 +107,7 @@ public class SignUpFragment extends BaseSignUpInFragment {
         String fName = name[NameUtil.FIRST_NAME];
         String lName = name[NameUtil.LAST_NAME];
 
-        mRegistrationController.register(email, password, fName, lName);
+        mRegistrationController.register(REGISTER_EVENT, email, password, fName, lName);
     }
 
     @Override
