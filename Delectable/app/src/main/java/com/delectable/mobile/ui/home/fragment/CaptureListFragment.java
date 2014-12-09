@@ -165,7 +165,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             Delectabutton emptyViewButton = (Delectabutton) emptyViewContainer
                     .findViewById(R.id.search_friends_button);
             emptyViewButton.setIconDrawable(
-                    getResources().getDrawable(R.drawable.ic_nav_drawer_friends_normal));
+                    getResources().getDrawable(R.drawable.ic_find_people_normal));
             emptyViewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

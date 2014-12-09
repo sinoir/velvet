@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -28,6 +29,10 @@ public class Animate {
 
     public static final int TRANSLATION_SMALL = (int) TypedValue
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42,
+                    App.getInstance().getResources().getDisplayMetrics());
+
+    public static final float ELEVATION = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                     App.getInstance().getResources().getDisplayMetrics());
 
     private static final Interpolator ACCELERATE = new AccelerateInterpolator();
@@ -332,4 +337,28 @@ public class Animate {
                 })
                 .start();
     }
+
+    public static void elevate(final View view) {
+        elevate(view, ELEVATION, 0);
+    }
+
+    public static void elevate(final View view, final long startDelay) {
+        elevate(view, ELEVATION, startDelay);
+    }
+
+    public static void elevate(final View view, final float elevation) {
+        elevate(view, elevation, 0);
+    }
+
+    public static void elevate(final View view, final float elevation, final long startDelay) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.animate()
+                    .z(elevation)
+                    .setDuration(MEDIUM)
+                    .setStartDelay(startDelay)
+                    .setListener(null)
+                    .start();
+        }
+    }
+
 }

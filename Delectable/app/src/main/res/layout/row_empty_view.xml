@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/empty_state_layout"
     android:visibility="visible"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.ContentLoadingProgressBar
+    <com.delectable.mobile.ui.common.widget.ContentLoadingProgressWheel
         android:id="@+id/progress_bar"
-        style="?attr/android:progressBarStyle"
+        style="@style/ProgressBar.Indeterminate"
+        app:circleRadius="48dp"
+        app:barWidth="4dp"
         android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/general_row_height"
         android:layout_marginTop="@dimen/spacing_16" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView

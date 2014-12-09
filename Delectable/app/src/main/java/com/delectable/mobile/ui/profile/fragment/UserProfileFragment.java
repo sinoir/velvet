@@ -22,6 +22,7 @@ import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.common.widget.ContentLoadingProgressWheel;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
@@ -33,6 +34,7 @@ import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -44,7 +46,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -89,7 +90,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     protected View mEmptyViewFooter;
 
-    protected ContentLoadingProgressBar mProgressBar;
+    protected ContentLoadingProgressWheel mProgressBar;
 
     protected FontTextView mNoCapturesTextView;
 
@@ -171,7 +172,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mProfileHeaderView.setActionListener(this);
 
         mEmptyViewFooter = inflater.inflate(R.layout.row_empty_view, mListView, false);
-        mProgressBar = (ContentLoadingProgressBar) mEmptyViewFooter.findViewById(R.id.progress_bar);
+        mProgressBar = (ContentLoadingProgressWheel) mEmptyViewFooter
+                .findViewById(R.id.progress_bar);
         mNoCapturesTextView = (FontTextView) mEmptyViewFooter
                 .findViewById(R.id.nothing_to_display_textview);
 
@@ -266,18 +268,18 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     protected void onScrollChanged() {
-        if (isFragmentEmbedded()) {
-            return;
-        }
-
         View v = mListView.getChildAt(0);
         int top = (v == null ? 0 : v.getTop());
+        int toolbarHeight = mToolbar.getHeight();
         int headerHeight = mProfileHeaderView.getHeight();
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
-        if (isHeaderVisible) {
+        // elevate toolbar on embedded wine profile
+        Animate.elevate(mToolbar,
+                (isHeaderVisible && -top < headerHeight - toolbarHeight) ? 0 : Animate.ELEVATION);
+
+        if (isHeaderVisible && !isFragmentEmbedded()) {
             // drag toolbar off the screen when reaching the bottom of the header
-            int toolbarHeight = mToolbar.getHeight();
             int toolbarDragOffset = 0;
             int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
             mToolbar.setTranslationY(toolbarTranslation);
