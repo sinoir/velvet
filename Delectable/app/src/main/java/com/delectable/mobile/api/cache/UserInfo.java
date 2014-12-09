@@ -113,6 +113,14 @@ public class UserInfo {
         return prefs.getString(PROPERTY_SESSION_KEY, null);
     }
 
+    public static String getUserId() {
+        return getUserId(App.getInstance());
+    }
+
+    /**
+     * Should switch over to use {@link #getUserId()} instead.
+     */
+    @Deprecated
     public static String getUserId(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(PROPERTY_USER_ID, null);
@@ -122,7 +130,7 @@ public class UserInfo {
         return userId != null && userId.equals(getUserId(context));
     }
 
-        public static String getUserName(Context context) {
+    public static String getUserName(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String name = prefs.getString(PROPERTY_USER_NAME, null);
         //this check is necessary this method was created after 1.0 release, their user name might not have been
@@ -158,6 +166,14 @@ public class UserInfo {
         return null;
     }
 
+    public static Account getAccountPrivate() {
+        return getAccountPrivate(App.getInstance());
+    }
+
+    /**
+     * Should switch over to use {@link #getAccountPrivate()} instead.
+     */
+    @Deprecated
     public static Account getAccountPrivate(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String jsonString = prefs.getString(PROPERTY_ACCOUNT_PRIVATE, null);
@@ -236,7 +252,7 @@ public class UserInfo {
                 Context.MODE_PRIVATE);
         return prefs.getBoolean(PROPERTY_USER_OVER_21, false);
     }
-    
+
     public static boolean isWelcomeDone() {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);

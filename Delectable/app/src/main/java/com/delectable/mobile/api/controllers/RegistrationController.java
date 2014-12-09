@@ -20,17 +20,17 @@ public class RegistrationController {
     @Inject
     AnalyticsUtil mAnalytics;
 
-    public void register(String email, String password, String fname, String lname) {
-        mJobManager.addJobInBackground(new RegisterJob(email, password, fname, lname));
+    public void register(String requestId, String email, String password, String fname, String lname) {
+        mJobManager.addJobInBackground(new RegisterJob(requestId, email, password, fname, lname));
     }
 
-    public void login(String email, String password) {
-        mJobManager.addJobInBackground(new LoginJob(email, password));
+    public void login(String requestId, String email, String password) {
+        mJobManager.addJobInBackground(new LoginJob(requestId, email, password));
     }
 
-    public void facebookLogin(String facebookToken, double facebookTokenExpiration) {
+    public void facebookLogin(String requestId, String facebookToken, double facebookTokenExpiration) {
         mJobManager
-                .addJobInBackground(new LoginFacebookJob(facebookToken, facebookTokenExpiration));
+                .addJobInBackground(new LoginFacebookJob(requestId, facebookToken, facebookTokenExpiration));
     }
 
     public void resetPassword(String email) {

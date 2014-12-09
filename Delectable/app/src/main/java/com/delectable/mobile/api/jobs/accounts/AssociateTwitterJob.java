@@ -23,9 +23,9 @@ public class AssociateTwitterJob extends BaseJob {
     private final String mScreenName;
 
 
-    public AssociateTwitterJob(long twitterId, String token, String tokenSecret,
+    public AssociateTwitterJob(String requestId, long twitterId, String token, String tokenSecret,
             String screenName) {
-        super(new Params(Priority.UX.value()).requireNetwork());
+        super(requestId, new Params(Priority.UX.value()).requireNetwork());
 
         mTwitterId = twitterId;
         mToken = token;
@@ -45,7 +45,7 @@ public class AssociateTwitterJob extends BaseJob {
         Account account = response.getPayload().getAccount();
         UserInfo.setAccountPrivate(account);
         mEventBus.post(new AssociateTwitterEvent(account));
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
     }
 
     @Override

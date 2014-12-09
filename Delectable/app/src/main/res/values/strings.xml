@@ -335,6 +335,7 @@
     <string name="settings_notifications">Notifications</string>
     <string name="settings_about">about</string>
     <string name="settings_feedback">Send us feedback</string>
+    <string name="settings_rate_delectable">Rate Delectable</string>
     <string name="settings_terms_of_use">Terms of use</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_sign_out">Sign out</string>

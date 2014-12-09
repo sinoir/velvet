@@ -26,8 +26,8 @@ public class LoginFacebookJob extends BaseJob {
 
     private double mFacebookTokenExpiration;
 
-    public LoginFacebookJob(String facebookToken, double facebookTokenExpiration) {
-        super(new Params(Priority.UX.value()));
+    public LoginFacebookJob(String requestId, String facebookToken, double facebookTokenExpiration) {
+        super(requestId, new Params(Priority.UX.value()));
         mFacebookToken = facebookToken;
         mFacebookTokenExpiration = facebookTokenExpiration;
     }
@@ -53,7 +53,7 @@ public class LoginFacebookJob extends BaseJob {
         CrashlyticsUtil
                 .onSignIn(account.getFullName(), account.getEmail(), account.getId(), sessionKey);
 
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
         mEventBus.post(new LoginRegisterEvent(true));
 
         if (newUser) {

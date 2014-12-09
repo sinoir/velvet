@@ -7,12 +7,9 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
 import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
@@ -55,6 +52,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private static final int NAVDRAWER_LAUNCH_DELAY = 250;
 
     private static final String ACTIVITY_FEED_REQ = TAG + "_activity_feed";
+
+    private static final String FETCH_ACCOUNT = TAG + "_fetch_account";
 
     /**
      * Remember the position of the selected item.
@@ -145,7 +144,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
         // Must update / sync private account on Resume, for sycning issues.
         // TODO: Need to create 1 object for private / public, otherwise we require special syncing code for the duplciate data, which doesn't exist.
-        mAccountController.fetchAccountPrivate(mUserId);
+        mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
         updateUIWithData();
         loadActivityFeed();
     }
@@ -297,42 +296,23 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     //region EventBus events
-    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
-        if (event.isSuccessful()) {
-            PhotoHash photoHash = event.getPhoto();
-            mUserAccount.setPhoto(photoHash);
-            updateUIWithData();
-            return;
-        }
-        showToastError(event.getErrorMessage());
-    }
-
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccountId())) {
+        //no need to filter by request id, this listens to all events
+
+        mUserAccount = event.getAccount();
+        updateUIWithData();
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
             return;
         }
 
-        if (event.isSuccessful()) {
-            mUserAccount = event.getAccount();
-            updateUIWithData();
-
-            // Update Push notification stuff after user logs in / updates account.
-            // TODO: Put this somewhere else that makes more sense..
-            try {
-                App.getInstance().updateKahunaAttributes();
-            } catch (Exception ex) {
-                Log.wtf(TAG, "Kahuna Failed", ex);
-            }
-            return;
-        }
-        showToastError(event.getErrorMessage());
-    }
-
-    public void onEventMainThread(UpdatedProfileEvent event) {
-        if (event.isSuccessful()) {
-            // Reload Data
-            mUserAccount = UserInfo.getAccountPrivate(getActivity());
-            updateUIWithData();
+        // Update Push notification stuff after user logs in / updates account.
+        // TODO: Put this somewhere else that makes more sense..
+        try {
+            App.getInstance().updateKahunaAttributes();
+        } catch (Exception ex) {
+            Log.wtf(TAG, "Kahuna Failed", ex);
         }
     }
 
