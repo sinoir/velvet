@@ -217,6 +217,11 @@ public class SettingsFragment extends BaseFragment {
 
     private boolean mUpdatingViaDoneClick = false;
 
+    /**
+     * Flag that helps us stop fetchAccount from executing if we're returning to this scsreen from a select photo action.
+     */
+    private boolean mResumedFromSelectPhotoAction = false;
+
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
@@ -295,10 +300,15 @@ public class SettingsFragment extends BaseFragment {
         if (mUserAccount == null) {
             mUserAccount = UserInfo.getAccountPrivate(getActivity());
         }
-        updateUI();
+        boolean refreshPhoto = !mResumedFromSelectPhotoAction;
+        updateUI(refreshPhoto);
 
-        //fetch most recent account private from API
-        mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
+        if (!mResumedFromSelectPhotoAction) {
+            //fetch most recent account private from API
+            mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
+            mResumedFromSelectPhotoAction = false;
+        }
+
     }
 
     @Override
@@ -389,6 +399,7 @@ public class SettingsFragment extends BaseFragment {
 
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
+            mResumedFromSelectPhotoAction = true;
             updateProfileImageWithUri(selectedImageUri);
         }
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -800,10 +811,14 @@ public class SettingsFragment extends BaseFragment {
 
     //endregion
 
+    private void updateUI() {
+        updateUI(false);
+    }
+
     /**
      * Updates the UI with the current {@link #mUserAccount} object.
      */
-    private void updateUI() {
+    private void updateUI(boolean refreshPhoto) {
 
         if (mUserAccount == null) {
             return;
@@ -815,9 +830,10 @@ public class SettingsFragment extends BaseFragment {
         }
 
         //profile info
-        ImageLoaderUtil
-                .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
-                        mProfileImage);
+        if (refreshPhoto) {
+            ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
+                    mProfileImage);
+        }
         mNameField.setText(mUserAccount.getFullName());
         mShortBioField.setText(mUserAccount.getBio());
         mWebsiteField.setText(mUserAccount.getUrl());
