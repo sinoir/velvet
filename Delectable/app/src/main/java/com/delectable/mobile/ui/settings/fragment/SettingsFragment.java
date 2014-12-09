@@ -22,6 +22,7 @@ import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.FontEnum;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.SettingsUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -717,12 +718,16 @@ public class SettingsFragment extends BaseFragment {
     }
 
     @OnClick({R.id.send_feedback,
+            R.id.rate_delectable,
             R.id.terms_of_use,
             R.id.sign_out})
     void onAboutRowClick(View v) {
         switch (v.getId()) {
             case R.id.send_feedback:
                 launchEmailFeedback();
+                break;
+            case R.id.rate_delectable:
+                SettingsUtil.launchPlaystoreListing(getActivity());
                 break;
             case R.id.terms_of_use:
                 String url = getString(R.string.terms_url);

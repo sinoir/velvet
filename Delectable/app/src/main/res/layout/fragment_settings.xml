@@ -145,6 +145,13 @@
         <View style="@style/SettingsAboutCategoryDivider" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/rate_delectable"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_rate_delectable" />
+
+        <View style="@style/SettingsAboutCategoryDivider" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/terms_of_use"
             style="@style/SettingsAboutCategoryRow"
             android:text="@string/settings_terms_of_use" />
