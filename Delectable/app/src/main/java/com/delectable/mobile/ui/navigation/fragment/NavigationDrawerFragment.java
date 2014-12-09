@@ -7,7 +7,6 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.Listing;
@@ -307,21 +306,13 @@ public class NavigationDrawerFragment extends BaseFragment implements
             showToastError(event.getErrorMessage());
             return;
         }
-        
+
         // Update Push notification stuff after user logs in / updates account.
         // TODO: Put this somewhere else that makes more sense..
         try {
             App.getInstance().updateKahunaAttributes();
         } catch (Exception ex) {
             Log.wtf(TAG, "Kahuna Failed", ex);
-        }
-    }
-
-    public void onEventMainThread(UpdatedProfileEvent event) {
-        if (event.isSuccessful()) {
-            // Reload Data
-            mUserAccount = UserInfo.getAccountPrivate(getActivity());
-            updateUIWithData();
         }
     }
 

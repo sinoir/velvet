@@ -9,7 +9,6 @@ import com.delectable.mobile.api.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.ui.BaseFragment;
@@ -42,7 +41,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -52,9 +50,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -218,7 +214,8 @@ public class SettingsFragment extends BaseFragment {
     private boolean mUpdatingViaDoneClick = false;
 
     /**
-     * Flag that helps us stop fetchAccount from executing if we're returning to this scsreen from a select photo action.
+     * Flag that helps us stop fetchAccount from executing if we're returning to this scsreen from a
+     * select photo action.
      */
     private boolean mResumedFromSelectPhotoAction = false;
 
@@ -467,26 +464,6 @@ public class SettingsFragment extends BaseFragment {
 
     //region Setting Profile Photo Endpoints
 
-    /**
-     * @return Returns null if the image couldn't be retrieved.
-     */
-    private Bitmap getImage(Uri selectedImage) {
-        try {
-            if (getActivity() == null) {
-                return null;
-            }
-            // TODO: Background thread here?
-            Bitmap bm = MediaStore.Images.Media
-                    .getBitmap(getActivity().getContentResolver(), selectedImage);
-            return bm;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Failed to open image", e);
-            Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-    }
-
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
         if (!REQUEST_KEYS.contains(event.getRequestId())) {
@@ -508,7 +485,7 @@ public class SettingsFragment extends BaseFragment {
         mAccountController.facebookifyProfilePhoto(FACEBOOKIFY_PROFILE_PHOTO);
     }
 
-    //endregion
+    //endregion Events
 
     /**
      * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
@@ -535,7 +512,6 @@ public class SettingsFragment extends BaseFragment {
         String bio = mShortBioField.getText().toString();
 
         mAccountController.updateProfile(UDPATE_PROFILE, fName, lName, url, bio);
-        return;
     }
 
     private boolean validatePhoneNumber(String phoneNumber) {
@@ -556,18 +532,6 @@ public class SettingsFragment extends BaseFragment {
             return false;
         }
         return true;
-    }
-
-    public void onEventMainThread(UpdatedProfileEvent event) {
-        if (event.isSuccessful()) {
-            mUserAccount.setFname(event.getFname());
-            mUserAccount.setLname(event.getLname());
-            mUserAccount.setUrl(event.getUrl());
-            mUserAccount.setBio(event.getBio());
-        } else {
-            showToastError(event.getErrorMessage());
-        }
-        updateUI(); //ui reverts back to original state if error
     }
 
     private void modifyPhone(String number) {
