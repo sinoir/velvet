@@ -10,9 +10,10 @@
     <RelativeLayout
         android:id="@+id/navigation_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_nav_drawer_item">
 
-        <com.delectable.mobile.ui.common.widget.CircleImageView
+    <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
             android:layout_width="@dimen/navigation_user_profile_image_size"
             android:layout_height="@dimen/navigation_user_profile_image_size"

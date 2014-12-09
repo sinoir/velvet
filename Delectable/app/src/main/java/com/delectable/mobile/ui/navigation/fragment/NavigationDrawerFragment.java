@@ -16,6 +16,7 @@ import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.ActivityFeedRow;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
 import com.delectable.mobile.util.FacebookEventUtil;
@@ -372,8 +373,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void navHeaderUserImageClicked() {
-        // TODO maybe launch settings so people can change their profile? or separate profile change from settings
-//        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
+        // TODO launch user profile with taste profile as the default page, "your wines" brings you to the wine list
+        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
     public void onEventMainThread(NavigationEvent event) {
