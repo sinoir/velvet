@@ -33,6 +33,7 @@ import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -48,6 +49,7 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -266,18 +268,20 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     }
 
     protected void onScrollChanged() {
-        if (isFragmentEmbedded()) {
-            return;
-        }
-
         View v = mListView.getChildAt(0);
         int top = (v == null ? 0 : v.getTop());
+        int toolbarHeight = mToolbar.getHeight();
         int headerHeight = mProfileHeaderView.getHeight();
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
-        if (isHeaderVisible) {
+        // elevate toolbar on embedded wine profile
+        Log.d(TAG, "top: " + top + " / headerHeight: " + headerHeight + " / visible: "
+                + isHeaderVisible);
+        Animate.elevate(mToolbar,
+                (isHeaderVisible && -top < headerHeight - toolbarHeight) ? 0 : Animate.ELEVATION);
+
+        if (isHeaderVisible && !isFragmentEmbedded()) {
             // drag toolbar off the screen when reaching the bottom of the header
-            int toolbarHeight = mToolbar.getHeight();
             int toolbarDragOffset = 0;
             int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
             mToolbar.setTranslationY(toolbarTranslation);
