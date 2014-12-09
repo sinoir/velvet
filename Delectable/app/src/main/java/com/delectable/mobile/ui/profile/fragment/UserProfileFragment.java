@@ -175,8 +175,8 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         mNoCapturesTextView = (FontTextView) mEmptyViewFooter
                 .findViewById(R.id.nothing_to_display_textview);
 
-        mListView.addHeaderView(mProfileHeaderView);
-        mListView.addFooterView(mEmptyViewFooter);
+        mListView.addHeaderView(mProfileHeaderView, null, false);
+        mListView.addFooterView(mEmptyViewFooter, null, false);
         mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
