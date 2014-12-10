@@ -86,9 +86,9 @@ public abstract class BaseSearchTabFragment extends BaseFragment
                 .inflate(R.layout.fragment_search_wines_people, container, false);
         ButterKnife.inject(this, layout);
 
+        mListView.setEmptyView(mEmptyStateTextView);
         mListView.setAdapter(getAdapter());
         mListView.setOnItemClickListener(this);
-        mListView.setEmptyView(mEmptyStateTextView);
 
         return layout;
     }

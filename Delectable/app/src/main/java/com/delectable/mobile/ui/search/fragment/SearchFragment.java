@@ -3,8 +3,8 @@ package com.delectable.mobile.ui.search.fragment;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
-import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
+import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -21,40 +21,32 @@ public class SearchFragment extends BaseFragment {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
-    private SlidingPagerAdapter mTabsAdapter;
+    private SlidingTabAdapter mTabsAdapter;
 
-
-    @InjectView(R.id.tabstrip)
-    protected SlidingPagerTabStrip mTabStrip;
+    @InjectView(R.id.tab_layout)
+    protected SlidingTabLayout mTabLayout;
 
     @InjectView(R.id.pager)
     protected ViewPager mViewPager;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //set up tab icons and fragments
-        SlidingPagerAdapter.SlidingPagerItem wines = new SlidingPagerAdapter.SlidingPagerItem(
+        SlidingTabAdapter.SlidingTabItem wines = new SlidingTabAdapter.SlidingTabItem(
                 new SearchWinesTabFragment(),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
                 getString(R.string.search_wines));
-        SlidingPagerAdapter.SlidingPagerItem people = new SlidingPagerAdapter.SlidingPagerItem(
+        SlidingTabAdapter.SlidingTabItem people = new SlidingTabAdapter.SlidingTabItem(
                 new SearchPeopleTabFragment(),
-                R.color.d_off_white,
-                R.color.d_chestnut,
-                R.color.dark_gray_to_chestnut,
                 getString(R.string.search_people));
 
-        ArrayList<SlidingPagerAdapter.SlidingPagerItem>
-                tabItems = new ArrayList<SlidingPagerAdapter.SlidingPagerItem>();
+        ArrayList<SlidingTabAdapter.SlidingTabItem>
+                tabItems = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
         tabItems.add(wines);
         tabItems.add(people);
 
-        mTabsAdapter = new SlidingPagerAdapter(getFragmentManager(), tabItems);
+        mTabsAdapter = new SlidingTabAdapter(getFragmentManager(), tabItems);
     }
 
     @Override
@@ -63,8 +55,11 @@ public class SearchFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.inject(this, rootView);
 
+        mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
+
         mViewPager.setAdapter(mTabsAdapter);
-        mTabStrip.setViewPager(mViewPager);
+        mTabLayout.setViewPager(mViewPager);
 
         return rootView;
     }
