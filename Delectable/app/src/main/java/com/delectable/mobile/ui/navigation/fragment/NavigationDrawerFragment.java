@@ -78,6 +78,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private View mFragmentContainerView;
 
+    private ListView mDrawerListView;
+
+    private View mEmptyView;
+
     private ActivityFeedAdapter mActivityFeedAdapter = new ActivityFeedAdapter(this);
 
     private NavHeader mNavHeader;
@@ -114,14 +118,17 @@ public class NavigationDrawerFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
-        ListView drawerListView = (ListView) view;
+        mDrawerListView = (ListView) view;
 
         mNavHeader = new NavHeader(getActivity());
-        drawerListView.addHeaderView(mNavHeader, null, false);
+        mDrawerListView.addHeaderView(mNavHeader, null, false);
         mNavHeader.setActionListener(this);
 
-        drawerListView.setOnItemClickListener(this);
-        drawerListView.setAdapter(mActivityFeedAdapter);
+        mEmptyView = inflater.inflate(R.layout.navigation_empty_view, mDrawerListView, false);
+        mDrawerListView.addFooterView(mEmptyView);
+
+        mDrawerListView.setOnItemClickListener(this);
+        mDrawerListView.setAdapter(mActivityFeedAdapter);
         mNavHeader.setCurrentSelectedNavItem(mCurrentSelectedNavItem);
 
         return view;
@@ -141,6 +148,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
+
+        if (!mActivityFeedAdapter.isEmpty()) {
+            mDrawerListView.removeFooterView(mEmptyView);
+        }
 
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
         // Must update / sync private account on Resume, for sycning issues.
@@ -348,6 +359,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
             Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
             mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
             mActivityFeedAdapter.notifyDataSetChanged();
+            if (!mActivityFeedAdapter.isEmpty()) {
+                mDrawerListView.removeFooterView(mEmptyView);
+            }
+
         }
 
         //TODO make emptyview, show here
