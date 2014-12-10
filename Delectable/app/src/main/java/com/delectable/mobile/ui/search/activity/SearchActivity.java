@@ -12,7 +12,7 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toolbar_fragment_container);
+        setContentView(R.layout.activity_flat_toolbar_fragment_container);
 
         if (savedInstanceState == null) {
             SearchFragment fragment = new SearchFragment();

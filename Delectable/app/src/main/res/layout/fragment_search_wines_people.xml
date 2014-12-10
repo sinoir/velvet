@@ -10,6 +10,7 @@
         style="@style/ListViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/tab_height"
         android:layout_alignParentTop="true"
         android:background="@color/d_white" />
 

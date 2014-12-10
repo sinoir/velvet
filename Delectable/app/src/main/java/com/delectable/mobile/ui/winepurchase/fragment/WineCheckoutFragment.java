@@ -238,6 +238,11 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void updateNumBottles() {
+        if (mData.getQuantity() == -1) {
+            mQuantityAmountText.setVisibility(View.INVISIBLE);
+        } else {
+            mQuantityAmountText.setVisibility(View.VISIBLE);
+        }
         String numBottlesText = getResources()
                 .getQuantityString(R.plurals.winecheckout_num_bottles, mData.getQuantity(),
                         mData.getQuantity());
@@ -385,7 +390,8 @@ public class WineCheckoutFragment extends BaseFragment {
         hideLoader();
 
         if (event.isSuccessful()) {
-            FacebookEventUtil.logPurchase(getActivity(), mData.getQuantity(), mData.getTotalPriceValue());
+            FacebookEventUtil
+                    .logPurchase(getActivity(), mData.getQuantity(), mData.getTotalPriceValue());
             showConfirmation();
         } else {
             handleError(event.getErrorCode(), event.getErrorMessage());
