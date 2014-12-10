@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -190,7 +191,6 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         }
     }
 
-
     private void updateFormWithUserData() {
         if (UserInfo.getAccountPrivate(App.getInstance()) == null) {
             return;
@@ -204,6 +204,9 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         if (selectedState != null) {
             mState.setSelection(selectedState.ordinal());
         }
+
+        String formattedNumber = PhoneNumberUtils.formatNumber(UserInfo.getAccountPrivate().getPhoneIdentifier().getString());
+        mPhoneNumber.setText(formattedNumber);
     }
     //endregion
 
@@ -213,7 +216,8 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
                 validateAddress1Field(true) &&
                 validateCityField(true) &&
                 (mState.getSelectedItem() != null && getSelectedState() != null) &&
-                validateZipCode(true);
+                validateZipCode(true) &&
+                validatePhoneNumber(true);
     }
 
     private boolean isFieldEmpty(EditText editText) {
@@ -238,6 +242,20 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
         if (isValid && mZipCode.getText().length() < 5) {
             showFieldError(mZipCode, requestFocus, getString(R.string.shippingaddress_zipcode));
             isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean validatePhoneNumber(boolean requestFocus) {
+        boolean isValid = validateRequiredField(mPhoneNumber, requestFocus);
+        String phoneNumberDigits = mPhoneNumber.getText().toString().replace("-","");
+        String formattedNumber = PhoneNumberUtils.formatNumber(phoneNumberDigits);
+        // If it's not empty when checking if it's required, check if the field is "valid"
+        if (isValid && formattedNumber == null) {
+            showFieldError(mPhoneNumber, requestFocus, getString(R.string.shippingaddress_phone_number));
+            isValid = false;
+        } else {
+            mPhoneNumber.setText(formattedNumber);
         }
         return isValid;
     }
@@ -362,6 +380,13 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     protected void onFocusChangedForZipCode(boolean focused) {
         if (!focused) {
             validateZipCode(false);
+        }
+    }
+
+    @OnFocusChange(value = R.id.phone_number)
+    protected void onFocusChangedForPhoneNumber(boolean focused) {
+        if (!focused) {
+            validatePhoneNumber(false);
         }
     }
     //endregion

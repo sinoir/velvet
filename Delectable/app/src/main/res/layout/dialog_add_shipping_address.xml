@@ -99,7 +99,8 @@
                 android:id="@+id/phone_number"
                 style="@style/CheckoutEditText"
                 android:hint="@string/shippingaddress_phone_number"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:maxLength="20" />
 
             <View
                 style="@style/VerticalDivider"
