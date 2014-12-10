@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/d_white">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/dialog_title"
@@ -77,8 +78,8 @@
                     android:layout_marginLeft="@dimen/dialog_horizontal_spacing"
                     android:layout_marginRight="@dimen/dialog_horizontal_spacing"
                     android:layout_weight="2"
-                    android:dropDownWidth="180dp"
                     android:background="@drawable/bg_bottom_border"
+                    android:dropDownWidth="180dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="0dp" />
 
