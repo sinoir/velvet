@@ -12,6 +12,20 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true" />
 
+    <RelativeLayout
+        android:id="@+id/sticky_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="true">
+
+        <ImageView
+            android:id="@+id/sticky_toolbar_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/cap_feed_row_wine_banner_height"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/ToolbarStyle.Translucent" />
