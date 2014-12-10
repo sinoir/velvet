@@ -19,7 +19,7 @@ public class CheckoutData {
 
     private PaymentMethod mSelectedPaymentMethod;
 
-    private int mQuantity = 1;
+    private int mQuantity = -1;
 
     private int mMinNumBottles = 1;
 
@@ -149,12 +149,15 @@ public class CheckoutData {
 
         mMinNumBottles = mPurchaseOffer.getMinQuant();
         mMaxNumBottles = mPurchaseOffer.getMaxQuant();
-        mQuantity = mPurchaseOffer.getDefaultQuant();
+        // Don't reset Quantity if data changed:
+        if (mQuantity == -1) {
+            mQuantity = mPurchaseOffer.getDefaultQuant();
+        }
         updatePricingData();
     }
 
     public void addBottle() {
-        if (mQuantity == mMaxNumBottles) {
+        if (mQuantity == mMaxNumBottles || mPurchaseOffer == null) {
             return;
         }
         mQuantity++;
@@ -162,7 +165,7 @@ public class CheckoutData {
     }
 
     public void removeBottle() {
-        if (mQuantity == mMinNumBottles) {
+        if (mQuantity == mMinNumBottles || mPurchaseOffer == null) {
             return;
         }
         mQuantity--;
