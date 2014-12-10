@@ -205,7 +205,8 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
             mState.setSelection(selectedState.ordinal());
         }
 
-        String formattedNumber = PhoneNumberUtils.formatNumber(UserInfo.getAccountPrivate().getPhoneIdentifier().getString());
+        String formattedNumber = PhoneNumberUtils
+                .formatNumber(UserInfo.getAccountPrivate().getPhoneIdentifier().getString());
         mPhoneNumber.setText(formattedNumber);
     }
     //endregion
@@ -225,7 +226,18 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
     }
 
     private boolean validateNameField(boolean requestFocus) {
-        return validateRequiredField(mName, requestFocus);
+        boolean isValid = validateRequiredField(mName, requestFocus);
+        if (isValid) {
+            String[] name = mName.getText().toString().trim().split(" ");
+            if (name.length == 1) {
+                mName.setError(getString(R.string.shippingaddress_required_lastname));
+                isValid = false;
+                if (requestFocus) {
+                    requestFocusWithCursorAtEnd(mName);
+                }
+            }
+        }
+        return isValid;
     }
 
     private boolean validateAddress1Field(boolean requestFocus) {
@@ -248,11 +260,12 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
 
     private boolean validatePhoneNumber(boolean requestFocus) {
         boolean isValid = validateRequiredField(mPhoneNumber, requestFocus);
-        String phoneNumberDigits = mPhoneNumber.getText().toString().replace("-","");
+        String phoneNumberDigits = mPhoneNumber.getText().toString().replace("-", "");
         String formattedNumber = PhoneNumberUtils.formatNumber(phoneNumberDigits);
         // If it's not empty when checking if it's required, check if the field is "valid"
         if (isValid && formattedNumber == null) {
-            showFieldError(mPhoneNumber, requestFocus, getString(R.string.shippingaddress_phone_number));
+            showFieldError(mPhoneNumber, requestFocus,
+                    getString(R.string.shippingaddress_phone_number));
             isValid = false;
         } else {
             mPhoneNumber.setText(formattedNumber);
