@@ -34,6 +34,7 @@
         android:layout_marginBottom="-14dp"
         android:gravity="center"
         android:layout_below="@+id/capture_comment_tagged_text"
+        android:animateLayoutChanges="true"
         android:visibility="visible">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
