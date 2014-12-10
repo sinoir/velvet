@@ -355,7 +355,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         position--; //offset for header
         BaseListingElement item = mAdapter.getItem(position);
         if (item instanceof CaptureDetails) {
-            launchWineProfile((CaptureDetails) item);
+            launchCaptureDetails((CaptureDetails) item);
             return;
         }
         if (item instanceof PendingCapture) {
