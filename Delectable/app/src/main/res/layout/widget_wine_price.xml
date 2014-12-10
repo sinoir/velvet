@@ -9,6 +9,7 @@
         style="@style/ProgressBar.Indeterminate"
         app:circleRadius="32dp"
         app:barWidth="4dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"

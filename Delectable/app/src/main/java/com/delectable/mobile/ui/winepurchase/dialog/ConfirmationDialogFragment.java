@@ -4,6 +4,7 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 import com.delectable.mobile.ui.common.widget.TouchableSpan;
+import com.delectable.mobile.util.Animate;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,6 +28,9 @@ public class ConfirmationDialogFragment extends BaseDialogFragment {
 
     private static final String TAG = ConfirmationDialogFragment.class.getSimpleName();
 
+    @InjectView(R.id.confirmation_icon)
+    protected View mConfirmIcon;
+
     @InjectView(R.id.confirm_text)
     protected TextView mConfirmTextView;
 
@@ -49,6 +53,12 @@ public class ConfirmationDialogFragment extends BaseDialogFragment {
 
         formatConfirmText();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Animate.grow(mConfirmIcon, 400);
     }
 
     /**

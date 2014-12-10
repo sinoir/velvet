@@ -32,6 +32,14 @@
             android:layout_height="match_parent"
             android:visibility="invisible">
 
+            <ImageView
+                android:id="@+id/empty_view_following_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:src="@drawable/feed_background" />
+
             <LinearLayout
                 android:id="@+id/empty_view_following"
                 android:visibility="gone"
@@ -65,6 +73,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/empty_view_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:src="@drawable/feed_background" />
 
             <LinearLayout
                 android:id="@+id/empty_view"
