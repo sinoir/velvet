@@ -29,7 +29,7 @@ public class HomeFragment extends BaseFragment {
     /**
      * Used with the ViewPager in order to cache a certain amount of pages
      */
-    public static final int PREFETCH_FEED_COUNT = 5;
+    public static final int PREFETCH_FEED_COUNT = 6;
 
     private View mView;
 
