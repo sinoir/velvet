@@ -393,8 +393,8 @@
     <style name="PurchaseWineCheckPrice">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/chestnut_to_chestnut_pressed</item>
         <item name="android:textSize">16sp</item>
@@ -404,8 +404,8 @@
     <style name="PurchaseWineSoldOut">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/medium_gray_to_dark_gray</item>
         <item name="android:textSize">16sp</item>
@@ -424,6 +424,8 @@
 
     <style name="CheckoutAddStuffText" parent="PurchaseWineCheckPrice">
         <item name="fontName">whitney_book</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
     </style>
 
     <style name="CheckoutShippingAddRemoveButton">
