@@ -154,7 +154,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnClick(R.id.close_button)
     public void closeCamera() {
-        getActivity().finish();
+        mView.post(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().finish();
+            }
+        });
     }
 
     @OnClick(R.id.camera_roll_button)
@@ -278,7 +283,12 @@ public class WineCaptureCameraFragment extends CameraFragment {
             // Request error
             Animate.fadeOut(mProgressBar);
             handleEventErrorMessage(event);
-            getActivity().finish();
+            mView.post(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().finish();
+                }
+            });
         }
         mIsIdentifying = false;
     }
