@@ -413,7 +413,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     private void updateButtonDisplay() {
         // default, views below comment are gone
         mAddRatingRemoveTextContainer.setVisibility(View.GONE);
-        mCountTextsContainer.setVisibility(View.GONE);
+//        mCountTextsContainer.setVisibility(View.GONE);
 
         //hide like and comment buttons if viewing own user profile
         int visibility = mIsViewingOwnCaptures ? View.GONE : View.VISIBLE;
@@ -434,9 +434,14 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mCommentsCount.setVisibility(comments > 0 ? View.VISIBLE : View.GONE);
         mLikesDivider.setVisibility((likes > 0 && comments > 0) ? View.VISIBLE : View.GONE);
 
+        mCountTextsContainer.setVisibility(
+                (likes > 0 || comments > 0)
+                        ? View.VISIBLE
+                        : View.GONE);
+
         if (!mIsViewingOwnCaptures) { //looking at someone else's captures
             //always show this even when there are no likes/comments so user can click like/comment button and not have view jump
-            mCountTextsContainer.setVisibility(View.VISIBLE);
+//            mCountTextsContainer.setVisibility(View.VISIBLE);
             return;
         }
 
