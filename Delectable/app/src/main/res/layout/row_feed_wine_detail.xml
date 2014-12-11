@@ -261,6 +261,18 @@
                 android:orientation="vertical"
                 android:visibility="gone" />
 
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/rate_button_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-16dp"
+                android:paddingTop="@dimen/spacing_12"
+                android:paddingBottom="@dimen/spacing_16"
+                android:text="@string/cap_feed_add_your_rating"
+                android:textColor="@color/chestnut_to_chestnut_pressed"
+                android:textSize="@dimen/text_size_medium"
+                app:fontName="whitney_book" />
+
         </LinearLayout>
 
         <RelativeLayout
