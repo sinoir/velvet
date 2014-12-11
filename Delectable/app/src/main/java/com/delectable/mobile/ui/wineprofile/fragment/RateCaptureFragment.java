@@ -2,12 +2,14 @@ package com.delectable.mobile.ui.wineprofile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
@@ -19,7 +21,10 @@ import com.delectable.mobile.ui.events.PassedBitmapEvent;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.InstagramUtil;
+import com.delectable.mobile.util.SafeAsyncTask;
 import com.delectable.mobile.util.TwitterUtil;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -28,6 +33,8 @@ import com.twitter.sdk.android.core.models.Tweet;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -121,9 +128,6 @@ public class RateCaptureFragment extends BaseFragment {
 
     private String mFoursquareId;
 
-    private AddCaptureFromPendingCaptureRequest mCaptureRequest;
-
-
     public RateCaptureFragment() {
     }
 
@@ -144,10 +148,20 @@ public class RateCaptureFragment extends BaseFragment {
         if (args != null) {
             mPendingCaptureId = args.getString(PENDING_CAPTURE);
         }
+        
+        //event to pass in bitmap (from wineprofileinstantfragment)
         PassedBitmapEvent event = mEventBus.getStickyEvent(PassedBitmapEvent.class);
         if (event != null) {
             mEventBus.removeStickyEvent(event);
             mCaptureImage = event.getBitmap();
+        }
+        //event to pass in pendingCapture object
+        RateCaptureEvent rateCaptureEvent =  mEventBus.getStickyEvent(RateCaptureEvent.class);
+        if (rateCaptureEvent != null) {
+            mEventBus.removeStickyEvent(rateCaptureEvent);
+            PendingCapture pendingCapture = rateCaptureEvent.getPendingCapture();
+            //download bitmap with picasso in preparation for instagram upload
+            Picasso.with(getActivity()).load(pendingCapture.getPhoto().getMediumPlus()).into(target);
         }
 
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
@@ -237,6 +251,26 @@ public class RateCaptureFragment extends BaseFragment {
         }
     }
 
+    private Target target = new Target() {
+        final String myTag = TAG + ".PicassoBitmapDownload";
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Log.d(myTag, "onBitmapLoaded");
+            mCaptureImage = bitmap;
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            Log.d(myTag, "onBitmapFailed");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.d(myTag, "onPrepareLoad");
+
+        }
+    };
+
     private void updateWithFriendsUI() {
         if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
             mDrinkingWithWhoButton.setText(getResources()
@@ -271,9 +305,9 @@ public class RateCaptureFragment extends BaseFragment {
 
     public void rateCapture() {
         mRateButton.setEnabled(false);
-        mCaptureRequest = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
-        updateCaptureRequestWithFormData(mCaptureRequest);
-        mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
+        AddCaptureFromPendingCaptureRequest captureRequest = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
+        updateCaptureRequestWithFormData(captureRequest);
+        mWineScanController.addCaptureFromPendingCapture(captureRequest);
     }
 
     private void updateCaptureRequestWithFormData(AddCaptureFromPendingCaptureRequest request) {
@@ -328,6 +362,11 @@ public class RateCaptureFragment extends BaseFragment {
         //perhaps even better: open my wines instead
         launchUserProfile(true);
 
+        if (mFetchingBitmapForInstagram) {
+            Log.d(TAG, "still fetching bitmap for instagram");
+        } else {
+            Log.d(TAG, "done fetching bitmap for instagram");
+        }
 
         //TODO when rating from user captures list, captureImage will be null, need to download
         if (mShareInstagramButton.isChecked() && mCaptureImage != null) {
@@ -404,6 +443,22 @@ public class RateCaptureFragment extends BaseFragment {
             mShareFacebookButton.setChecked(false);
             mShareTwitterButton.setChecked(false);
             mShareInstagramButton.setChecked(false);
+        }
+    }
+
+    /**
+     * Event to pass a PendingCapture into this fragment.
+     */
+    public static class RateCaptureEvent {
+
+        private PendingCapture mPendingCapture;
+
+        public RateCaptureEvent(PendingCapture pendingCapture) {
+            mPendingCapture = pendingCapture;
+        }
+
+        public PendingCapture getPendingCapture() {
+            return mPendingCapture;
         }
     }
 }
