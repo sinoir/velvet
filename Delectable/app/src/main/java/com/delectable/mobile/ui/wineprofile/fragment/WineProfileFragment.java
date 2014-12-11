@@ -110,7 +110,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String WINE_PROFILE_NOTES_REQ = "wine_profile_notes_req";
 
-    private static final int STICKY_TOOLBAR_BLUR_RADIUS = 25;
+    private static final int STICKY_TOOLBAR_BLUR_RADIUS = 18;
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -754,8 +754,8 @@ public class WineProfileFragment extends BaseFragment implements
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
             // elevate sticky toolbar once it docks
-            Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
-            Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
+            Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+            Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
 
             // drag toolbar off the screen when reaching the bottom of the header
 //            int toolbarDragOffset = bannerHeight - mToolbarScrollOffset;
