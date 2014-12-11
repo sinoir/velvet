@@ -908,8 +908,8 @@ public class WineProfileFragment extends BaseFragment implements
                         }
                     });
         } else if (mCapturePhotoHash != null) {
-            ImageLoaderUtil.loadImageIntoView(getActivity(), mCapturePhotoHash.get450Plus(),
-                    mStickyToolbarBackground);
+            ImageLoaderUtil.loadBlurredImageIntoView(getActivity(), mCapturePhotoHash.get450Plus(),
+                    mStickyToolbarBackground, STICKY_TOOLBAR_BLUR_RADIUS);
         }
     }
 
