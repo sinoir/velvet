@@ -1,6 +1,7 @@
 package com.delectable.mobile.util;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.ui.BaseFragment;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
@@ -16,6 +17,7 @@ import android.graphics.RectF;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -139,9 +141,21 @@ public class CameraUtil {
         return finalBitmap;
     }
 
-    public static void blurImageAsync(Bitmap source, int radius, Runnable onBlurFinishedRunnable) {
-        // TODO async task
-        blurImage(source, radius);
+    public static void blurImageAsync(final Bitmap source, final int radius,
+            final BaseFragment context, final SafeAsyncTask.Callback<Bitmap> callback) {
+        new SafeAsyncTask<Bitmap>(context) {
+            @Override
+            protected Bitmap safeDoInBackground(Void[] params) {
+                return blurImage(source, radius);
+            }
+
+            @Override
+            protected void safeOnPostExecute(Bitmap result) {
+                if (callback != null) {
+                    callback.onResult(result);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static Bitmap blurImage(Bitmap source, int radius) {

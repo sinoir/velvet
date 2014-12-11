@@ -872,7 +872,7 @@ public class WineProfileFragment extends BaseFragment implements
      * The WineBannerView can be set with different types of data depending from where this fragment
      * was spawned.
      */
-    protected void updateBannerView(Bitmap previewImage) {
+    protected void updateBannerView(final Bitmap previewImage) {
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
@@ -895,12 +895,18 @@ public class WineProfileFragment extends BaseFragment implements
             mBanner.updateVintage(mAllYearsText);
         }
 
-        // sticky toolbar
+        // sticky toolbar background image
         if (previewImage != null) {
-            // TODO async! use unblurred image first, then replace once blur task finished
-            Bitmap blurredImage = CameraUtil.blurImage(previewImage, STICKY_TOOLBAR_BLUR_RADIUS);
-            mStickyToolbarBackground
-                    .setImageBitmap(blurredImage != null ? blurredImage : previewImage);
+            mStickyToolbarBackground.setImageBitmap(previewImage);
+            CameraUtil.blurImageAsync(previewImage,
+                    STICKY_TOOLBAR_BLUR_RADIUS, this, new SafeAsyncTask.Callback<Bitmap>() {
+                        @Override
+                        public void onResult(Bitmap bitmap) {
+                            if (bitmap != null) {
+                                mStickyToolbarBackground.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
         } else if (mCapturePhotoHash != null) {
             ImageLoaderUtil.loadImageIntoView(getActivity(), mCapturePhotoHash.get450Plus(),
                     mStickyToolbarBackground);
