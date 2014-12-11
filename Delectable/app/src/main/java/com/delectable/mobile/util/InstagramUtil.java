@@ -26,6 +26,9 @@ public class InstagramUtil {
     }
 
     public static void shareBitmapInInstagram(Activity activity, Bitmap bitmap, String caption) {
+        if (bitmap == null) {
+            return;
+        }
         String url = MediaStore.Images.Media
                 .insertImage(activity.getContentResolver(), bitmap, "DelectableCapture",
                         caption);
