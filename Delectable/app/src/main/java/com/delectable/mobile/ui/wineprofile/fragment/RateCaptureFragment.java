@@ -16,7 +16,6 @@ import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
-import com.delectable.mobile.ui.events.PassedBitmapEvent;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.InstagramUtil;
@@ -364,12 +363,6 @@ public class RateCaptureFragment extends BaseFragment {
         //TODO can come to this screen from wineProfileInstant or from userProfile, if coming from WPInstant, need to finish this activity before launching userProfile
         //perhaps even better: open my wines instead
         launchUserProfile(true);
-
-        if (mFetchingBitmapForInstagram) {
-            Log.d(TAG, "still fetching bitmap for instagram");
-        } else {
-            Log.d(TAG, "done fetching bitmap for instagram");
-        }
 
         //TODO when rating from user captures list, captureImage will be null, need to download
         if (mShareInstagramButton.isChecked() && mCaptureImage != null) {
