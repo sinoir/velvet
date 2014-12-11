@@ -2,7 +2,6 @@ package com.delectable.mobile.ui.wineprofile.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
@@ -21,7 +20,6 @@ import com.delectable.mobile.ui.events.PassedBitmapEvent;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
 import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.InstagramUtil;
-import com.delectable.mobile.util.SafeAsyncTask;
 import com.delectable.mobile.util.TwitterUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -34,7 +32,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -148,23 +145,27 @@ public class RateCaptureFragment extends BaseFragment {
         if (args != null) {
             mPendingCaptureId = args.getString(PENDING_CAPTURE);
         }
-        
-        //event to pass in bitmap (from wineprofileinstantfragment)
-        PassedBitmapEvent event = mEventBus.getStickyEvent(PassedBitmapEvent.class);
-        if (event != null) {
-            mEventBus.removeStickyEvent(event);
-            mCaptureImage = event.getBitmap();
-        }
-        //event to pass in pendingCapture object
-        RateCaptureEvent rateCaptureEvent =  mEventBus.getStickyEvent(RateCaptureEvent.class);
-        if (rateCaptureEvent != null) {
-            mEventBus.removeStickyEvent(rateCaptureEvent);
-            PendingCapture pendingCapture = rateCaptureEvent.getPendingCapture();
-            //download bitmap with picasso in preparation for instagram upload
-            Picasso.with(getActivity()).load(pendingCapture.getPhoto().getMediumPlus()).into(target);
-        }
 
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
+
+        //event for handling incoming params
+        RateCaptureInitEvent rateCaptureEvent = mEventBus
+                .getStickyEvent(RateCaptureInitEvent.class);
+        if (rateCaptureEvent == null) {
+            return;
+        }
+
+        mEventBus.removeStickyEvent(rateCaptureEvent);
+
+        //bitmap exists, we're good to go
+        if (rateCaptureEvent.getCaptureImage() != null) {
+            mCaptureImage = rateCaptureEvent.getCaptureImage();
+            return;
+        }
+
+        //no bitmap,  have to use pendingCapture object to download bitmap in preparation for instagram share
+        PendingCapture pendingCapture = rateCaptureEvent.getPendingCapture();
+        Picasso.with(getActivity()).load(pendingCapture.getPhoto().getMediumPlus()).into(target);
     }
 
     @Override
@@ -253,6 +254,7 @@ public class RateCaptureFragment extends BaseFragment {
 
     private Target target = new Target() {
         final String myTag = TAG + ".PicassoBitmapDownload";
+
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             Log.d(myTag, "onBitmapLoaded");
@@ -305,7 +307,8 @@ public class RateCaptureFragment extends BaseFragment {
 
     public void rateCapture() {
         mRateButton.setEnabled(false);
-        AddCaptureFromPendingCaptureRequest captureRequest = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
+        AddCaptureFromPendingCaptureRequest captureRequest
+                = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
         updateCaptureRequestWithFormData(captureRequest);
         mWineScanController.addCaptureFromPendingCapture(captureRequest);
     }
@@ -447,18 +450,36 @@ public class RateCaptureFragment extends BaseFragment {
     }
 
     /**
-     * Event to pass a PendingCapture into this fragment.
+     * This fragment can be initialized with either a pendingCapture or bitmap of the capture.
      */
-    public static class RateCaptureEvent {
+    public static class RateCaptureInitEvent {
 
         private PendingCapture mPendingCapture;
 
-        public RateCaptureEvent(PendingCapture pendingCapture) {
+        private Bitmap mCaptureImage;
+
+        /**
+         * When coming from UserProfileFragment, this fragment gets initialized with a
+         * pendingCapture.
+         */
+        public RateCaptureInitEvent(PendingCapture pendingCapture) {
             mPendingCapture = pendingCapture;
+        }
+
+        /**
+         * When coming from WineProfileInstantFragment, this fragment gets initialized with a
+         * Bitmap.
+         */
+        public RateCaptureInitEvent(Bitmap bitmap) {
+            mCaptureImage = bitmap;
         }
 
         public PendingCapture getPendingCapture() {
             return mPendingCapture;
+        }
+
+        public Bitmap getCaptureImage() {
+            return mCaptureImage;
         }
     }
 }

@@ -9,7 +9,6 @@ import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.widget.FontTextView;
-import com.delectable.mobile.ui.events.PassedBitmapEvent;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.dialog.EditBaseWineDialog;
 import com.delectable.mobile.util.Animate;
@@ -33,8 +32,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
-
-import de.greenrobot.event.EventBus;
 
 public class WineProfileInstantFragment extends WineProfileFragment {
 
@@ -104,7 +101,7 @@ public class WineProfileInstantFragment extends WineProfileFragment {
             @Override
             public void onClick(View view) {
                 // open rate & comment screen
-                mEventBus.postSticky(new PassedBitmapEvent(mPreviewImage));
+                mEventBus.postSticky(new RateCaptureFragment.RateCaptureInitEvent(mPreviewImage));
                 Intent intent = RateCaptureActivity.newIntent(getActivity(), mPendingCaptureId);
                 startActivity(intent);
             }

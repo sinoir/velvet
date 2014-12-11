@@ -607,7 +607,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void addRatingAndComment(PendingCapture capture) {
-        mEventBus.postSticky(new RateCaptureFragment.RateCaptureEvent(capture));
+        mEventBus.postSticky(new RateCaptureFragment.RateCaptureInitEvent(capture));
         Intent intent = RateCaptureActivity.newIntent(getActivity(), capture.getId());
         startActivity(intent);
     }
