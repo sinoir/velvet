@@ -9,16 +9,17 @@
         android:id="@+id/comment_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="40dp"
         android:text="COMMENT"
         android:textColor="@color/d_dark_gray"
         android:lineSpacingMultiplier="1.2"
         android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_book" />
+    <!--android:layout_marginRight="40dp"-->
 
     <com.delectable.mobile.ui.common.widget.RatingTextView
         android:id="@+id/comment_rating"
         style="@style/RatingTextView"
+        android:visibility="gone"
         android:layout_marginBottom="@dimen/spacing_4"
         android:layout_alignParentRight="true" />
 

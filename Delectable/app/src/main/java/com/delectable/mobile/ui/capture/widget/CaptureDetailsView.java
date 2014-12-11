@@ -105,6 +105,9 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.rate_button)
     protected View mRateButton;
 
+    @InjectView(R.id.rate_button_details)
+    protected View mRateButtonDetails;
+
     @InjectView(R.id.comment_button)
     protected View mCommentButton;
 
@@ -440,12 +443,11 @@ public class CaptureDetailsView extends RelativeLayout {
         boolean isCurrentUserTaggedInCapture = mCaptureData.isUserTagged(currentUserId);
         boolean userHasRatedCapture = mCaptureData.getRatingForId(currentUserId) > -1;
 
-        // Only show Tap for rating if user hasn't rated already, and is tagged in capture
-        if ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture) {
-            mRateButton.setVisibility(View.VISIBLE);
-        } else {
-            mRateButton.setVisibility(View.GONE);
-        }
+        // Only show rating CTA if user hasn't rated already, and is tagged in capture
+        mRateButton.setVisibility(
+                ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture)
+                        ? View.VISIBLE
+                        : View.GONE);
 
         // Vertical dividers
         mLikesDivider.setVisibility(
@@ -572,6 +574,19 @@ public class CaptureDetailsView extends RelativeLayout {
             mParticipantsCommentsRatingsContainer.setVisibility(View.GONE);
             mLikesCommentsDivider.setVisibility(View.GONE);
         }
+
+        // Rating button
+        String currentUserId = UserInfo.getUserId(mContext);
+        boolean isCurrentUserCapture = mCaptureData.getCapturerParticipant().getId()
+                .equalsIgnoreCase(currentUserId);
+        boolean isCurrentUserTaggedInCapture = mCaptureData.isUserTagged(currentUserId);
+        boolean userHasRatedCapture = mCaptureData.getRatingForId(currentUserId) > -1;
+
+        // Only show rating CTA if user hasn't rated already, and is tagged in capture
+        mRateButtonDetails.setVisibility(
+                ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture)
+                        ? View.VISIBLE
+                        : View.GONE);
     }
 
     private void setupActionButtonStates() {
@@ -581,6 +596,13 @@ public class CaptureDetailsView extends RelativeLayout {
         mLikeButton.setSelected(userLikesCapture);
 
         mRateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionsHandler.rateAndCommentForCapture(mCaptureData);
+            }
+        });
+
+        mRateButtonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mActionsHandler.rateAndCommentForCapture(mCaptureData);
