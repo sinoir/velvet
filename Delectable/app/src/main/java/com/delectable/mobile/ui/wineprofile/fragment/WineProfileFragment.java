@@ -739,8 +739,9 @@ public class WineProfileFragment extends BaseFragment implements
             int toolbarHeight = mToolbar.getHeight();
 
             // sticky toolbar
+            int minTranslation = -mStickyToolbarHeight + toolbarHeight;
             int stickyToolbarTranslation = MathUtil
-                    .clamp(top, -mStickyToolbarHeight + toolbarHeight, 0);
+                    .clamp(top, minTranslation, 0);
             mStickyToolbar.setTranslationY(stickyToolbarTranslation);
             float alphaRatio = MathUtil
                     .clamp(stickyToolbarTranslation / (float) (-mStickyToolbarHeight
@@ -753,21 +754,18 @@ public class WineProfileFragment extends BaseFragment implements
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
             // elevate sticky toolbar once it docks
-            Animate.elevate(mToolbar, top < stickyToolbarTranslation ? Animate.ELEVATION : 0);
-            Animate.elevate(mStickyToolbar, top < stickyToolbarTranslation ? Animate.ELEVATION : 0);
-
-//            Log.d(TAG, "####### top=" + top + " / stickyTranslation=" + stickyToolbarTranslation
-//                    + " / stickyHeight=" + mStickyToolbarHeight + " / toolbarHeight=" + toolbarHeight + " / alpha=" + stickyToolbarAlpha);
+            Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
+            Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
 
             // drag toolbar off the screen when reaching the bottom of the header
 //            int toolbarDragOffset = bannerHeight - mToolbarScrollOffset;
 //            int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
 //            mToolbar.setTranslationY(toolbarTranslation);
 
-//            Log.d(TAG, "####### toolBarTranslation=" + toolbarTranslation);
-            //showOrHideActionBar((top < toolbarDragOffset) ? false : true);
+//            Log.d(TAG, "####### top=" + top + " / stickyTranslation=" + stickyToolbarTranslation
+//                    + " / stickyHeight=" + mStickyToolbarHeight + " / toolbarHeight=" + toolbarHeight + " / alpha=" + stickyToolbarAlpha);
 
-            // TODO sticky toolbar
+            // animated spannables
 //            // title
 //            ObjectAnimator titleAnimator = new ObjectAnimator()
 //                    .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
