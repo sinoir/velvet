@@ -3,7 +3,6 @@ package com.delectable.mobile.ui.common.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
-import com.delectable.mobile.ui.profile.widget.CaptureSimpleItemRow;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,14 @@ import android.view.ViewGroup;
 public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails> {
 
     public enum RowType {
-        SIMPLE, DETAIL;
+        DETAIL, PURCHASE;
     }
 
     private CaptureDetailsView.CaptureActionsHandler mCaptureActionsHandler;
 
     private String mAccountId;
 
-    private RowType mRowType = RowType.SIMPLE;
+    private RowType mRowType = RowType.DETAIL;
 
     public CaptureDetailsAdapter(CaptureDetailsView.CaptureActionsHandler captureActionsHandler,
             ActionsHandler actionsHandler, String accountId) {
@@ -33,8 +32,8 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         super.getView(position, convertView, parent);
         View row;
         switch (mRowType) {
-            case SIMPLE:
-                row = getSimpleCaptureRow(position, convertView, parent);
+            case PURCHASE:
+                row = getPurchaseCaptureRow(position, convertView, parent);
                 break;
             case DETAIL:
             default:
@@ -44,18 +43,18 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         return row;
     }
 
-    public View getSimpleCaptureRow(int position, View convertView, ViewGroup parent) {
+    public View getPurchaseCaptureRow(int position, View convertView, ViewGroup parent) {
 
-        CaptureSimpleItemRow rowView = (CaptureSimpleItemRow) convertView;
+        CaptureDetailsView rowView = (CaptureDetailsView) convertView;
 
         if (rowView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            rowView = (CaptureSimpleItemRow) inflater.inflate(R.layout.row_simple_wine_detail_impl,
+            rowView = (CaptureDetailsView) inflater.inflate(R.layout.row_feed_wine_detail_impl,
                     parent, false);
             rowView.setActionsHandler(mCaptureActionsHandler);
         }
         CaptureDetails capture = mItems.get(position);
-        rowView.updateData(capture, mAccountId);
+        rowView.updateData(capture, false, true);
         return rowView;
     }
 

@@ -128,7 +128,9 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mBannerBackgroundColor = getArguments().getInt(LIST_BANNER_BACKGROUND_COLOR);
         mBannerTextColor = getArguments().getInt(LIST_BANNER_TEXT_COLOR);
         mAdapter = new CaptureDetailsAdapter(this, this, accountId);
-        mAdapter.setRowType(CaptureDetailsAdapter.RowType.DETAIL);
+        mAdapter.setRowType("following".equalsIgnoreCase(mTitle)
+                ? CaptureDetailsAdapter.RowType.DETAIL
+                : CaptureDetailsAdapter.RowType.PURCHASE);
     }
 
     @Override

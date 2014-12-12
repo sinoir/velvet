@@ -100,6 +100,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String VINTAGE_ID = "vintageId";
 
+    private static final String LAUNCH_WITH_PURCHASE_FLOW = "launchWithPurchaseFlow";
+
     private static final int REQUEST_BUY_VINTAGE_DIALOG = 1;
 
     private static final int REQUEST_AGE_DIALOG = 2;
@@ -235,7 +237,15 @@ public class WineProfileFragment extends BaseFragment implements
 
     private boolean mFetching;
 
+    private boolean mLaunchWithCaptureDetails;
+
     //region Initializers
+
+    public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
+            @Nullable PhotoHash capturePhotoHash) {
+        return newInstance(wineProfile, capturePhotoHash, false);
+    }
+
     /**
      * @param wineProfile      used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
@@ -244,11 +254,12 @@ public class WineProfileFragment extends BaseFragment implements
      */
     //TODO would be cleaner if CaptureDetail was passed in here, but it doesn't implement parcelable yet
     public static WineProfileFragment newInstance(WineProfileMinimal wineProfile,
-            @Nullable PhotoHash capturePhotoHash) {
+            @Nullable PhotoHash capturePhotoHash, boolean launchWithPurchaseFlow) {
         WineProfileFragment fragment = new WineProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable(WINE_PROFILE, wineProfile);
         args.putParcelable(PHOTO_HASH, capturePhotoHash);
+        args.putBoolean(LAUNCH_WITH_PURCHASE_FLOW, launchWithPurchaseFlow);
         fragment.setArguments(args);
         return fragment;
     }
@@ -299,6 +310,7 @@ public class WineProfileFragment extends BaseFragment implements
             //spawned from Feed Fragment
             mWineProfile = args.getParcelable(WINE_PROFILE);
             mCapturePhotoHash = args.getParcelable(PHOTO_HASH);
+            mLaunchWithCaptureDetails = args.getBoolean(LAUNCH_WITH_PURCHASE_FLOW, false);
 
             //spawned from Search or User Captures
             mBaseWineMinimal = args.getParcelable(BASE_WINE_MINIMAL);
@@ -514,7 +526,6 @@ public class WineProfileFragment extends BaseFragment implements
         String mOldFetchingId = mFetchingId;
         mFetchingId = wineId;
 
-
         if (mBaseWine.getId().equalsIgnoreCase(wineId)) {
             //first cover case where basewine is selected
             mType = Type.BASE_WINE;
@@ -528,7 +539,6 @@ public class WineProfileFragment extends BaseFragment implements
             updateRatingsView(mSelectedWineVintage);
             loadPricingData();
         }
-
 
         //only clear list if fetching id has changed
         if (!mOldFetchingId.equals(mFetchingId)) {
@@ -630,6 +640,9 @@ public class WineProfileFragment extends BaseFragment implements
 
         if (event.isSuccessful()) {
             loadLocalBaseWineData();
+            if (mLaunchWithCaptureDetails) {
+                showBuyVintageDialog();
+            }
         } else {
             showToastError(event.getErrorMessage());
         }

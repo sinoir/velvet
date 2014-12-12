@@ -135,6 +135,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
+    public void launchPurchaseFlow(CaptureDetails capture) {
+        Intent intent = WineProfileActivity.newIntent(getActivity(), capture.getWineProfile(),
+                capture.getPhoto(), true);
+        startActivity(intent);
+    }
+
+    @Override
     public void launchCaptureDetails(CaptureDetails capture) {
         Intent intent = new Intent();
         intent.putExtra(CaptureDetailsActivity.PARAMS_CAPTURE_ID,
