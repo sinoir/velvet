@@ -12,6 +12,8 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true" />
 
+    <include layout="@layout/sticky_toolbar" />
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/ToolbarStyle.Translucent" />

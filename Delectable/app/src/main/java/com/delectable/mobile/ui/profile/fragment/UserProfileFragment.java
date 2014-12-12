@@ -33,6 +33,7 @@ import com.delectable.mobile.ui.profile.widget.MinimalPendingCaptureRow;
 import com.delectable.mobile.ui.profile.widget.ProfileHeaderView;
 import com.delectable.mobile.ui.wineprofile.activity.RateCaptureActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
@@ -355,7 +356,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         position--; //offset for header
         BaseListingElement item = mAdapter.getItem(position);
         if (item instanceof CaptureDetails) {
-            launchWineProfile((CaptureDetails) item);
+            launchCaptureDetails((CaptureDetails) item);
             return;
         }
         if (item instanceof PendingCapture) {
@@ -606,6 +607,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     @Override
     public void addRatingAndComment(PendingCapture capture) {
+        mEventBus.postSticky(new RateCaptureFragment.RateCaptureInitEvent(capture));
         Intent intent = RateCaptureActivity.newIntent(getActivity(), capture.getId());
         startActivity(intent);
     }

@@ -1,12 +1,17 @@
 package com.delectable.mobile.util;
 
 
-import android.os.AsyncTask;
-
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.LifecycleListener;
 
+import android.os.AsyncTask;
+
 abstract public class SafeAsyncTask<Result> extends AsyncTask<Void, Void, Result> implements LifecycleListener {
+
+    public static interface Callback<Result> {
+
+        public void onResult(Result result);
+    }
 
     private BaseFragment lifecycleProvider;
     private Throwable runException;

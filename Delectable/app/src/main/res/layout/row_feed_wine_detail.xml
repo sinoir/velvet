@@ -261,6 +261,18 @@
                 android:orientation="vertical"
                 android:visibility="gone" />
 
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/rate_button_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-16dp"
+                android:paddingTop="@dimen/spacing_12"
+                android:paddingBottom="@dimen/spacing_16"
+                android:text="@string/cap_feed_add_your_rating"
+                android:textColor="@color/chestnut_to_chestnut_pressed"
+                android:textSize="@dimen/text_size_medium"
+                app:fontName="whitney_book" />
+
         </LinearLayout>
 
         <RelativeLayout
@@ -285,7 +297,6 @@
                 android:layout_toRightOf="@id/like_button"
                 android:background="@drawable/btn_comment" />
 
-            <!-- TODO: Implement Overflow action when we get details on what should be listed -->
             <ImageButton
                 android:id="@+id/menu_button"
                 android:layout_width="wrap_content"
@@ -294,6 +305,15 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/btn_options"
                 android:visibility="visible" />
+
+            <com.delectable.mobile.ui.wineprofile.widget.WinePriceView
+                android:id="@+id/price_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:gravity="center_vertical" />
 
         </RelativeLayout>
     </RelativeLayout>

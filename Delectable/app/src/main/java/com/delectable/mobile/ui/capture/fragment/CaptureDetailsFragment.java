@@ -191,4 +191,10 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
             loadLocalData();
         }
     }
+
+    @Override
+    public void deleteCapture(CaptureDetails capture) {
+        super.deleteCapture(capture);
+        getActivity().finish();
+    }
 }

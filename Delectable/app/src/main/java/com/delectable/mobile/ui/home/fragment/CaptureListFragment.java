@@ -13,6 +13,7 @@ import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
 import com.melnykov.fab.FloatingActionButton;
@@ -63,6 +64,8 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     protected FloatingActionButton mCameraButton;
 
     protected View mEmptyView;
+
+    protected View mEmptyViewBackground;
 
     @Inject
     protected CaptureListingModel mCaptureListingModel;
@@ -125,7 +128,9 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mBannerBackgroundColor = getArguments().getInt(LIST_BANNER_BACKGROUND_COLOR);
         mBannerTextColor = getArguments().getInt(LIST_BANNER_TEXT_COLOR);
         mAdapter = new CaptureDetailsAdapter(this, this, accountId);
-        mAdapter.setRowType(CaptureDetailsAdapter.RowType.DETAIL);
+        mAdapter.setRowType("following".equalsIgnoreCase(mTitle)
+                ? CaptureDetailsAdapter.RowType.DETAIL
+                : CaptureDetailsAdapter.RowType.PURCHASE);
     }
 
     @Override
@@ -161,6 +166,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         // empty state
         if (mTitle.equalsIgnoreCase("following")) {
             View emptyViewContainer = view.findViewById(R.id.empty_view_following_container);
+            mEmptyViewBackground = emptyViewContainer.findViewById(R.id.empty_view_following_logo);
             mEmptyView = emptyViewContainer.findViewById(R.id.empty_view_following);
             Delectabutton emptyViewButton = (Delectabutton) emptyViewContainer
                     .findViewById(R.id.search_friends_button);
@@ -175,6 +181,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             mListView.setEmptyView(emptyViewContainer);
         } else {
             View emptyViewContainer = view.findViewById(R.id.empty_view_container);
+            mEmptyViewBackground = emptyViewContainer.findViewById(R.id.empty_view_logo);
             mEmptyView = emptyViewContainer.findViewById(R.id.empty_view);
             mListView.setEmptyView(emptyViewContainer);
         }
@@ -323,6 +330,9 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         //we don't let mFollowerListing get assigned null
 
         boolean showEmptyView = mAdapter.isEmpty();
+        if (showEmptyView) {
+            Animate.fadeOut(mEmptyViewBackground);
+        }
         mEmptyView.setAlpha(showEmptyView ? 0 : 1);
         mEmptyView.setVisibility(showEmptyView ? View.VISIBLE : View.GONE);
         mEmptyView.animate().alpha(showEmptyView ? 1 : 0)

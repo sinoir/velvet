@@ -397,6 +397,7 @@
 
     <!-- Add Shipping Address Dialog -->
     <string name="shippingaddress_first_lastname">First and last name</string>
+    <string name="shippingaddress_required_lastname">Last name is required</string>
     <string name="shippingaddress_line1">Address line 1</string>
     <string name="shippingaddress_line2">Address line 2</string>
     <string name="shippingaddress_city">City</string>

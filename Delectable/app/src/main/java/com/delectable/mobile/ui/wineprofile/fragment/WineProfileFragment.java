@@ -35,7 +35,10 @@ import com.delectable.mobile.ui.wineprofile.widget.CaptureNotesAdapter;
 import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
+import com.delectable.mobile.util.Animate;
+import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
+import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
@@ -66,6 +69,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -105,6 +109,8 @@ public class WineProfileFragment extends BaseFragment implements
     private static final String BASE_WINE_NOTES_REQ = "base_wine_notes_req";
 
     private static final String WINE_PROFILE_NOTES_REQ = "wine_profile_notes_req";
+
+    private static final int STICKY_TOOLBAR_BLUR_RADIUS = 18;
 
     @Inject
     protected BaseWineController mBaseWineController;
@@ -160,11 +166,17 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
 
+    protected View mStickyToolbar;
+
+    protected ImageView mStickyToolbarBackground;
+
     protected Toolbar mToolbar;
 
     protected ListView mListView;
 
     protected int mStickyToolbarHeight;
+
+    protected int mToolbarScrollOffset;
 
     protected FloatingActionButton mCameraButton;
 
@@ -324,19 +336,26 @@ public class WineProfileFragment extends BaseFragment implements
 
         // set wine banner height to match screen width
         Point screenSize = ViewUtil.getDisplayDimensions();
+        mStickyToolbarHeight = screenSize.x;
+
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(screenSize.x,
                 screenSize.x);
         mBanner.setLayoutParams(parms);
 
-        mBanner.setActionsHandler(this);
-        updateBannerView();
-        mBanner.updateVintage(mAllYearsText);
+        // sticky toolbar
+        mStickyToolbar = (RelativeLayout) view.findViewById(R.id.sticky_toolbar);
+        ViewGroup.LayoutParams stickyToolbarParms = mStickyToolbar.getLayoutParams();
+        stickyToolbarParms.height = mStickyToolbarHeight;
+        mStickyToolbar.setLayoutParams(stickyToolbarParms);
 
-        updateVarietyRegionRatingView(mBaseWine);
+        mStickyToolbarBackground = (ImageView) view.findViewById(R.id.sticky_toolbar_bg);
+        ViewGroup.LayoutParams stickyToolbarBackgroundParms = mStickyToolbarBackground
+                .getLayoutParams();
+        stickyToolbarBackgroundParms.height = screenSize.x;
+        mStickyToolbarBackground.setLayoutParams(stickyToolbarBackgroundParms);
 
-        // set toolbar height to half the banner height for scroll offset
-        mStickyToolbarHeight = screenSize.x / 2;
-
+        // set toolbar scroll offset to half the banner height
+        mToolbarScrollOffset = mStickyToolbarHeight / 2;
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
         getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -348,6 +367,12 @@ public class WineProfileFragment extends BaseFragment implements
 //            mTitle.setSpan(mAlphaSpan, 0, mTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
 //        }
+
+        mBanner.setActionsHandler(this);
+        updateBannerView();
+        mBanner.updateVintage(mAllYearsText);
+
+        updateVarietyRegionRatingView(mBaseWine);
 
         mListView = (ListView) view.findViewById(R.id.list_view);
         mListView.addHeaderView(header, null, false);
@@ -489,7 +514,6 @@ public class WineProfileFragment extends BaseFragment implements
         String mOldFetchingId = mFetchingId;
         mFetchingId = wineId;
 
-
         if (mBaseWine.getId().equalsIgnoreCase(wineId)) {
             //first cover case where basewine is selected
             mType = Type.BASE_WINE;
@@ -503,7 +527,6 @@ public class WineProfileFragment extends BaseFragment implements
             updateRatingsView(mSelectedWineVintage);
             loadPricingData();
         }
-
 
         //only clear list if fetching id has changed
         if (!mOldFetchingId.equals(mFetchingId)) {
@@ -710,19 +733,37 @@ public class WineProfileFragment extends BaseFragment implements
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
         if (isHeaderVisible) {
+
+            int toolbarHeight = mToolbar.getHeight();
+
+            // sticky toolbar
+            int minTranslation = -mStickyToolbarHeight + toolbarHeight;
+            int stickyToolbarTranslation = MathUtil
+                    .clamp(top, minTranslation, 0);
+            mStickyToolbar.setTranslationY(stickyToolbarTranslation);
+            float alphaRatio = MathUtil
+                    .clamp(stickyToolbarTranslation / (float) (-mStickyToolbarHeight
+                            + toolbarHeight), 0f, 1f);
+            float stickyToolbarAlpha = MathUtil.clamp(4f * alphaRatio - 2f, 0f, 1f);
+            mStickyToolbar.setAlpha(stickyToolbarAlpha);
+
             // parallax effect on wine image
-            mWineImageView.setTranslationY(-top / 2f);
+            mWineImageView.setTranslationY(-stickyToolbarTranslation / 2f);
+            mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
+
+            // elevate sticky toolbar once it docks
+            Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+            Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
 
             // drag toolbar off the screen when reaching the bottom of the header
-            int toolbarHeight = mToolbar.getHeight();
-            int toolbarDragOffset = bannerHeight - mStickyToolbarHeight;
-            int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
-            mToolbar.setTranslationY(toolbarTranslation);
+//            int toolbarDragOffset = bannerHeight - mToolbarScrollOffset;
+//            int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
+//            mToolbar.setTranslationY(toolbarTranslation);
 
-//            Log.d(TAG, "####### toolBarTranslation=" + toolbarTranslation);
-            //showOrHideActionBar((top < toolbarDragOffset) ? false : true);
+//            Log.d(TAG, "####### top=" + top + " / stickyTranslation=" + stickyToolbarTranslation
+//                    + " / stickyHeight=" + mStickyToolbarHeight + " / toolbarHeight=" + toolbarHeight + " / alpha=" + stickyToolbarAlpha);
 
-            // TODO sticky toolbar
+            // animated spannables
 //            // title
 //            ObjectAnimator titleAnimator = new ObjectAnimator()
 //                    .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
@@ -827,7 +868,7 @@ public class WineProfileFragment extends BaseFragment implements
      * The WineBannerView can be set with different types of data depending from where this fragment
      * was spawned.
      */
-    protected void updateBannerView(Bitmap previewImage) {
+    protected void updateBannerView(final Bitmap previewImage) {
         if (mWineProfile != null) {
             //spawned from Feed Fragment
             mBanner.updateData(mWineProfile, mCapturePhotoHash, false);
@@ -848,6 +889,23 @@ public class WineProfileFragment extends BaseFragment implements
             mBanner.updateVintage(mSelectedWineVintage.getVintage());
         } else {
             mBanner.updateVintage(mAllYearsText);
+        }
+
+        // sticky toolbar background image
+        if (previewImage != null) {
+            mStickyToolbarBackground.setImageBitmap(previewImage);
+            CameraUtil.blurImageAsync(previewImage,
+                    STICKY_TOOLBAR_BLUR_RADIUS, this, new SafeAsyncTask.Callback<Bitmap>() {
+                        @Override
+                        public void onResult(Bitmap bitmap) {
+                            if (bitmap != null) {
+                                mStickyToolbarBackground.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
+        } else if (mCapturePhotoHash != null) {
+            ImageLoaderUtil.loadBlurredImageIntoView(getActivity(), mCapturePhotoHash.get450Plus(),
+                    mStickyToolbarBackground, STICKY_TOOLBAR_BLUR_RADIUS);
         }
     }
 

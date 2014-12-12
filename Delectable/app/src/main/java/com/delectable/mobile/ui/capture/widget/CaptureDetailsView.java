@@ -10,6 +10,8 @@ import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
+import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
+import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
@@ -105,6 +107,9 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.rate_button)
     protected View mRateButton;
 
+    @InjectView(R.id.rate_button_details)
+    protected View mRateButtonDetails;
+
     @InjectView(R.id.comment_button)
     protected View mCommentButton;
 
@@ -114,19 +119,27 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.menu_button)
     protected View mMenuButton;
 
+    @InjectView(R.id.price_view)
+    protected WinePriceView mPriceButton;
+
     private Context mContext;
 
     private boolean mIsShowingComments = false;
 
-    private CaptureDetails mCaptureData;
+    private boolean mShowPurchase = false;
+
+    private CaptureDetails mCaptureDetails;
 
     private CaptureActionsHandler mActionsHandler;
 
     private PopupMenu mPopupMenu;
 
     private MenuItem mMenuActionRecommend;
+
     private MenuItem mMenuActionEdit;
+
     private MenuItem mMenuActionFlag;
+
     private MenuItem mMenuActionRemove;
 
     public CaptureDetailsView(Context context) {
@@ -149,16 +162,16 @@ public class CaptureDetailsView extends RelativeLayout {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.capture_action_recommend:
-                        mActionsHandler.shareCapture(mCaptureData);
+                        mActionsHandler.shareCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_edit:
-                        mActionsHandler.editCapture(mCaptureData);
+                        mActionsHandler.editCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_flag:
-                        mActionsHandler.flagCapture(mCaptureData);
+                        mActionsHandler.flagCapture(mCaptureDetails);
                         return true;
                     case R.id.capture_action_remove:
-                        mActionsHandler.discardCaptureClicked(mCaptureData);
+                        mActionsHandler.discardCaptureClicked(mCaptureDetails);
                         return true;
                 }
                 return false;
@@ -172,15 +185,42 @@ public class CaptureDetailsView extends RelativeLayout {
         mMenuActionEdit = mPopupMenu.getMenu().findItem(R.id.capture_action_edit);
         mMenuActionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
         mMenuActionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
+
+        mPriceButton.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
+            @Override
+            public void onPriceCheckClicked(VintageWineInfo wineInfo) {
+//                fetchWineSource();
+//                mPriceButton.showLoading();
+                mActionsHandler.launchPurchaseFlow(mCaptureDetails);
+            }
+
+            @Override
+            public void onPriceClicked(VintageWineInfo wineInfo) {
+//                showBuyVintageDialog();
+                mActionsHandler.launchPurchaseFlow(mCaptureDetails);
+            }
+
+            @Override
+            public void onSoldOutClicked(VintageWineInfo wineInfo) {
+//                showBuyVintageDialog();
+                mActionsHandler.launchPurchaseFlow(mCaptureDetails);
+            }
+        });
     }
 
-    public void updateData(CaptureDetails captureData, boolean showComments) {
+    public void updateData(CaptureDetails captureDetails, boolean showComments,
+            boolean showPurchase) {
+        mShowPurchase = showPurchase;
+        updateData(captureDetails, showComments);
+    }
+
+    public void updateData(CaptureDetails captureDetails, boolean showComments) {
         mIsShowingComments = showComments;
-        updateData(captureData);
+        updateData(captureDetails);
     }
 
-    public void updateData(CaptureDetails captureData) {
-        mCaptureData = captureData;
+    public void updateData(CaptureDetails captureDetails) {
+        mCaptureDetails = captureDetails;
         setupTopWineDetails();
         setupUserCommentsRating();
         setupTaggedParticipants();
@@ -188,6 +228,9 @@ public class CaptureDetailsView extends RelativeLayout {
             setupExpandedComments();
         } else {
             setupCollapsedComments();
+        }
+        if (mShowPurchase) {
+            mPriceButton.updateWithPriceInfo(new VintageWineInfo(captureDetails.getWineProfile()));
         }
         setupActionButtonStates();
         setupPopUpMenu();
@@ -205,9 +248,9 @@ public class CaptureDetailsView extends RelativeLayout {
         mMenuActionFlag.setVisible(true);
         mMenuActionRemove.setVisible(true);
 
-        boolean isOwnCapture = mCaptureData.getCapturerParticipant().getId()
+        boolean isOwnCapture = mCaptureDetails.getCapturerParticipant().getId()
                 .equals(UserInfo.getUserId(mContext));
-        CaptureState captureState = CaptureState.getState(mCaptureData);
+        CaptureState captureState = CaptureState.getState(mCaptureDetails);
         boolean isUnidentified =
                 captureState == CaptureState.UNIDENTIFIED
                         || captureState == CaptureState.IMPOSSIBLED;
@@ -223,19 +266,19 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupTopWineDetails() {
-        String wineImageUrl = mCaptureData.getPhoto().get450Plus();
+        String wineImageUrl = mCaptureDetails.getPhoto().get450Plus();
         if (wineImageUrl == null) {
-            wineImageUrl = mCaptureData.getPhoto().getUrl();
+            wineImageUrl = mCaptureDetails.getPhoto().getUrl();
         }
-        String producerName = mCaptureData.getDisplayTitle();
-        String wineName = mCaptureData.getDisplayDescription();
+        String producerName = mCaptureDetails.getDisplayTitle();
+        String wineName = mCaptureDetails.getDisplayDescription();
 
-        mWineBannerView.updateData(mCaptureData);
+        mWineBannerView.updateData(mCaptureDetails);
 
         mWineBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionsHandler.launchWineProfile(mCaptureData);
+                mActionsHandler.launchWineProfile(mCaptureDetails);
             }
         });
     }
@@ -243,8 +286,8 @@ public class CaptureDetailsView extends RelativeLayout {
     private void setupTaggedParticipants() {
         // TODO: Combine data from other participants objects
         final ArrayList<AccountMinimal> taggedParticipants =
-                mCaptureData.getRegisteredParticipants() != null
-                        ? mCaptureData.getRegisteredParticipants()
+                mCaptureDetails.getRegisteredParticipants() != null
+                        ? mCaptureDetails.getRegisteredParticipants()
                         : new ArrayList<AccountMinimal>();
 
         boolean hasCaptureParticipants = taggedParticipants.size() > 0;
@@ -295,7 +338,7 @@ public class CaptureDetailsView extends RelativeLayout {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mActionsHandler.launchTaggedUsersListing(mCaptureData.getId());
+                            mActionsHandler.launchTaggedUsersListing(mCaptureDetails.getId());
                         }
                     }
             );
@@ -304,40 +347,41 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private void setupUserCommentsRating() {
         String profileImageUrl = getThumbnailParticipantPhotoFromAccount(
-                mCaptureData.getCapturerParticipant());
+                mCaptureDetails.getCapturerParticipant());
         String userName = "";
         String userComment = "";
         String captureTimeLocation = "";
         String userAccountId = "";
 
         // Signed in User comments
-        if (mCaptureData.getCapturerParticipant() != null) {
-            userName = mCaptureData.getCapturerParticipant().getFullName();
-            userAccountId = mCaptureData.getCapturerParticipant().getId();
+        if (mCaptureDetails.getCapturerParticipant() != null) {
+            userName = mCaptureDetails.getCapturerParticipant().getFullName();
+            userAccountId = mCaptureDetails.getCapturerParticipant().getId();
         }
 
         // Display the first user comment on top
-        ArrayList<CaptureComment> userCaptureComments = mCaptureData
+        ArrayList<CaptureComment> userCaptureComments = mCaptureDetails
                 .getCommentsForUserId(userAccountId);
         if (userCaptureComments.size() > 0) {
             userComment = userCaptureComments.get(0).getComment();
         }
 
-        String time = DateHelperUtil.getPrettyTimePastOnly(mCaptureData.getCreatedAtDate());
+        String time = DateHelperUtil.getPrettyTimePastOnly(mCaptureDetails.getCreatedAtDate());
 
         if (!userComment.isEmpty()) {
             captureTimeLocation =
-                    (mCaptureData.getLocationName() != null && !mCaptureData.getLocationName()
+                    (mCaptureDetails.getLocationName() != null && !mCaptureDetails.getLocationName()
                             .isEmpty())
                             ? getResources().getString(R.string.cap_feed_at_location_time,
-                            mCaptureData.getLocationName(), time)
+                            mCaptureDetails.getLocationName(), time)
                             : getResources().getString(R.string.cap_feed_at_time, time);
         } else {
             captureTimeLocation =
-                    (mCaptureData.getLocationName() != null && !mCaptureData.getLocationName()
+                    (mCaptureDetails.getLocationName() != null && !mCaptureDetails.getLocationName()
                             .isEmpty())
                             ? getResources()
-                            .getString(R.string.cap_feed_no_comment, mCaptureData.getLocationName(),
+                            .getString(R.string.cap_feed_no_comment,
+                                    mCaptureDetails.getLocationName(),
                                     time)
                             : getResources()
                                     .getString(R.string.cap_feed_no_comment_no_location, time);
@@ -366,9 +410,9 @@ public class CaptureDetailsView extends RelativeLayout {
 
         mUserName.setText(userName);
 
-        if (mCaptureData.getCapturerParticipant().isInfluencer()) {
+        if (mCaptureDetails.getCapturerParticipant().isInfluencer()) {
             mInfluencerBadge.setVisibility(View.VISIBLE);
-            String influencerTitle = mCaptureData.getCapturerParticipant()
+            String influencerTitle = mCaptureDetails.getCapturerParticipant()
                     .getInfluencerTitlesString();
             if (!influencerTitle.trim().isEmpty()) {
                 mInfluencerTitle.setText(influencerTitle);
@@ -381,8 +425,8 @@ public class CaptureDetailsView extends RelativeLayout {
             mInfluencerTitle.setVisibility(View.GONE);
         }
 
-        int rating = mCaptureData.getRatingForId(userAccountId);
-        if (rating > -1) {
+        int rating = mCaptureDetails.getRatingForId(userAccountId);
+        if (rating > -1 && !mShowPurchase) {
             mCapturerRating.setVisibility(View.VISIBLE);
             mCapturerRating.setRatingOf40(rating);
         } else {
@@ -399,12 +443,12 @@ public class CaptureDetailsView extends RelativeLayout {
         OnClickListener expandLikesAndCommentsClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActionsHandler.launchCaptureDetails(mCaptureData);
+                mActionsHandler.launchCaptureDetails(mCaptureDetails);
             }
         };
 
         // Likes
-        int numLikes = mCaptureData.getLikesCount();
+        int numLikes = mCaptureDetails.getLikesCount();
         if (numLikes > 0) {
             mLikesCount.setVisibility(View.VISIBLE);
             String likesCountText = mContext.getResources()
@@ -414,7 +458,7 @@ public class CaptureDetailsView extends RelativeLayout {
                 @Override
                 public void onClick(View view) {
                     // launch activity with liking people
-                    mActionsHandler.launchLikingUsersListing(mCaptureData);
+                    mActionsHandler.launchLikingUsersListing(mCaptureDetails);
                 }
             });
         } else {
@@ -422,7 +466,7 @@ public class CaptureDetailsView extends RelativeLayout {
         }
 
         // Comments
-        int numComments = mCaptureData.getCommentsCount();
+        int numComments = mCaptureDetails.getCommentsCount();
         if (numComments > 0) {
             mCommentsCount.setVisibility(View.VISIBLE);
             String commentsCountText = mContext.getResources()
@@ -435,17 +479,16 @@ public class CaptureDetailsView extends RelativeLayout {
 
         // Rating button
         String currentUserId = UserInfo.getUserId(mContext);
-        boolean isCurrentUserCapture = mCaptureData.getCapturerParticipant().getId()
+        boolean isCurrentUserCapture = mCaptureDetails.getCapturerParticipant().getId()
                 .equalsIgnoreCase(currentUserId);
-        boolean isCurrentUserTaggedInCapture = mCaptureData.isUserTagged(currentUserId);
-        boolean userHasRatedCapture = mCaptureData.getRatingForId(currentUserId) > -1;
+        boolean isCurrentUserTaggedInCapture = mCaptureDetails.isUserTagged(currentUserId);
+        boolean userHasRatedCapture = mCaptureDetails.getRatingForId(currentUserId) > -1;
 
-        // Only show Tap for rating if user hasn't rated already, and is tagged in capture
-        if ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture) {
-            mRateButton.setVisibility(View.VISIBLE);
-        } else {
-            mRateButton.setVisibility(View.GONE);
-        }
+        // Only show rating CTA if user hasn't rated already, and is tagged in capture
+        mRateButton.setVisibility(
+                ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture)
+                        ? View.VISIBLE
+                        : View.GONE);
 
         // Vertical dividers
         mLikesDivider.setVisibility(
@@ -479,21 +522,21 @@ public class CaptureDetailsView extends RelativeLayout {
         mParticipantsLikesDivider.setVisibility(View.VISIBLE);
         mLikesCommentsDivider.setVisibility(View.VISIBLE);
         String likeText = "";
-        int numLikes = mCaptureData.getLikesCount();
+        int numLikes = mCaptureDetails.getLikesCount();
         if (numLikes == 0) {
             mLikesText.setVisibility(View.GONE);
             mParticipantsLikesDivider.setVisibility(View.GONE);
         } else if (numLikes == 1) {
             likeText = getResources().getString(R.string.cap_feed_like_text_one,
-                    mCaptureData.getLikingParticipants().get(0).getFname());
+                    mCaptureDetails.getLikingParticipants().get(0).getFname());
         } else if (numLikes == 2) {
             likeText = getResources().getString(R.string.cap_feed_like_text_two,
-                    mCaptureData.getLikingParticipants().get(0).getFname(),
-                    mCaptureData.getLikingParticipants().get(1).getFname());
+                    mCaptureDetails.getLikingParticipants().get(0).getFname(),
+                    mCaptureDetails.getLikingParticipants().get(1).getFname());
         } else if (numLikes >= 3) {
             likeText = getResources().getString(R.string.cap_feed_like_text_more,
-                    mCaptureData.getLikingParticipants().get(0).getFname(),
-                    mCaptureData.getLikingParticipants().get(1).getFname(),
+                    mCaptureDetails.getLikingParticipants().get(0).getFname(),
+                    mCaptureDetails.getLikingParticipants().get(1).getFname(),
                     numLikes - 2);
         }
 
@@ -516,7 +559,7 @@ public class CaptureDetailsView extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 // launch activity with liking people
-                mActionsHandler.launchLikingUsersListing(mCaptureData);
+                mActionsHandler.launchLikingUsersListing(mCaptureDetails);
             }
         });
 
@@ -528,16 +571,16 @@ public class CaptureDetailsView extends RelativeLayout {
 
         // TODO: Finalize Test out with feed with participants.
         // TODO: Show multiple comments for user
-        AccountMinimal capturingAccount = mCaptureData.getCapturerParticipant();
-        ArrayList<AccountMinimal> participants = mCaptureData.getCommentingParticipants();
+        AccountMinimal capturingAccount = mCaptureDetails.getCapturerParticipant();
+        ArrayList<AccountMinimal> participants = mCaptureDetails.getCommentingParticipants();
         int numDisplayedComments = 0;
         if (participants != null) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.VISIBLE);
             for (AccountMinimal participant : participants) {
-                ArrayList<CaptureComment> comments = mCaptureData.getCommentsForUserId(
+                ArrayList<CaptureComment> comments = mCaptureDetails.getCommentsForUserId(
                         participant.getId());
                 int firstIndex = 0;
-                int rating = mCaptureData.getRatingForId(participant.getId());
+                int rating = mCaptureDetails.getRatingForId(participant.getId());
                 // Skip first user comment by the user who captured, otherwise it will show as duplicate
                 if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
                     firstIndex = 1;
@@ -572,25 +615,45 @@ public class CaptureDetailsView extends RelativeLayout {
             mParticipantsCommentsRatingsContainer.setVisibility(View.GONE);
             mLikesCommentsDivider.setVisibility(View.GONE);
         }
+
+        // Rating button
+        String currentUserId = UserInfo.getUserId(mContext);
+        boolean isCurrentUserCapture = mCaptureDetails.getCapturerParticipant().getId()
+                .equalsIgnoreCase(currentUserId);
+        boolean isCurrentUserTaggedInCapture = mCaptureDetails.isUserTagged(currentUserId);
+        boolean userHasRatedCapture = mCaptureDetails.getRatingForId(currentUserId) > -1;
+
+        // Only show rating CTA if user hasn't rated already, and is tagged in capture
+        mRateButtonDetails.setVisibility(
+                ((isCurrentUserCapture || isCurrentUserTaggedInCapture) && !userHasRatedCapture)
+                        ? View.VISIBLE
+                        : View.GONE);
     }
 
     private void setupActionButtonStates() {
         String currentUserId = UserInfo.getUserId(mContext);
-        boolean userLikesCapture = mCaptureData.doesUserLikeCapture(currentUserId);
+        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(currentUserId);
 
         mLikeButton.setSelected(userLikesCapture);
 
         mRateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionsHandler.rateAndCommentForCapture(mCaptureData);
+                mActionsHandler.rateAndCommentForCapture(mCaptureDetails);
+            }
+        });
+
+        mRateButtonDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionsHandler.rateAndCommentForCapture(mCaptureDetails);
             }
         });
 
         mCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionsHandler.writeCommentForCapture(mCaptureData);
+                mActionsHandler.writeCommentForCapture(mCaptureDetails);
             }
         });
 
@@ -598,7 +661,7 @@ public class CaptureDetailsView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
-                mActionsHandler.toggleLikeForCapture(mCaptureData, v.isSelected());
+                mActionsHandler.toggleLikeForCapture(mCaptureDetails, v.isSelected());
             }
         });
 
@@ -608,6 +671,9 @@ public class CaptureDetailsView extends RelativeLayout {
                 mPopupMenu.show();
             }
         });
+
+        mMenuButton.setVisibility(mShowPurchase ? View.GONE : View.VISIBLE);
+        mPriceButton.setVisibility(mShowPurchase ? View.VISIBLE : View.GONE);
     }
 
     private String getThumbnailParticipantPhotoFromAccount(AccountMinimal account) {
@@ -627,6 +693,8 @@ public class CaptureDetailsView extends RelativeLayout {
         public void toggleLikeForCapture(CaptureDetails capture, boolean liked);
 
         public void launchWineProfile(CaptureDetails capture);
+
+        public void launchPurchaseFlow(CaptureDetails capture);
 
         public void launchCaptureDetails(CaptureDetails captures);
 
