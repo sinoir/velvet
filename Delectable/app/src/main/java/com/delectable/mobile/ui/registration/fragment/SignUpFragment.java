@@ -2,8 +2,10 @@ package com.delectable.mobile.ui.registration.fragment;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.events.registrations.LoginRegisterEvent;
 import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.registration.dialog.LoadingCircleDialog;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.HelperUtil;
 import com.delectable.mobile.util.NameUtil;
 
@@ -20,6 +22,8 @@ import butterknife.OnClick;
 public class SignUpFragment extends BaseSignUpInFragment {
 
     private static final String TAG = SignUpFragment.class.getSimpleName();
+
+    private static final String REGISTER_EVENT = "REGISTER_EVENT";
 
     /**
      * Sets whether the done button is enabled or not depending on whether the fields are all filled
@@ -103,7 +107,13 @@ public class SignUpFragment extends BaseSignUpInFragment {
         String fName = name[NameUtil.FIRST_NAME];
         String lName = name[NameUtil.LAST_NAME];
 
-        mRegistrationController.register(email, password, fName, lName);
+        mRegistrationController.register(REGISTER_EVENT, email, password, fName, lName);
+    }
+
+    @Override
+    public void onEventMainThread(LoginRegisterEvent registerEvent) {
+        super.onEventMainThread(registerEvent);
+        FacebookEventUtil.logRegistration(getActivity());
     }
 
     @Override

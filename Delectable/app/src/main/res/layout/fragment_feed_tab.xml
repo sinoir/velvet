@@ -1,0 +1,111 @@
+<com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout
+    android:id="@+id/swipe_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/d_white"
+    tools:context="com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true">
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
+            android:clipToPadding="false"
+            android:animateLayoutChanges="true"
+            android:background="@color/d_white"
+            android:divider="@null"
+            android:headerDividersEnabled="false"
+            android:footerDividersEnabled="false"
+            android:listSelector="@android:color/white" />
+
+        <FrameLayout
+            android:id="@+id/empty_view_following_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/empty_view_following_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:src="@drawable/feed_background" />
+
+            <LinearLayout
+                android:id="@+id/empty_view_following"
+                android:visibility="gone"
+                android:alpha="0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/d_white"
+                android:padding="@dimen/spacing_32"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    android:id="@+id/empty_text_view"
+                    style="@style/TextEmptyState"
+                    android:visibility="visible"
+                    android:text="@string/empty_following_feed"
+                    android:paddingBottom="@dimen/spacing_32" />
+
+                <com.delectable.mobile.ui.common.widget.Delectabutton
+                    android:id="@+id/search_friends_button"
+                    style="@style/delectabutton_large"
+                    android:visibility="visible"
+                    app:icon="@drawable/ic_find_people_normal"
+                    android:text="@string/empty_following_feed_button" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/empty_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/empty_view_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:src="@drawable/feed_background" />
+
+            <LinearLayout
+                android:id="@+id/empty_view"
+                android:visibility="gone"
+                android:alpha="0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/d_white"
+                android:padding="@dimen/spacing_32"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.delectable.mobile.ui.common.widget.FontTextView
+                    style="@style/TextEmptyState"
+                    android:text="@string/empty_feed" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/camera_button"
+            style="@style/FloatingCameraButton" />
+
+    </FrameLayout>
+
+</com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout>

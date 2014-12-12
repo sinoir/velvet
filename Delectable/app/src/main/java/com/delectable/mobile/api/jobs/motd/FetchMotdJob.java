@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.motd;
 
 import com.delectable.mobile.BuildConfig;
-import com.delectable.mobile.api.models.Motd;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.endpointmodels.MotdResponse;
 import com.delectable.mobile.api.events.motd.FetchedMotdEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.MotdResponse;
+import com.delectable.mobile.api.models.Motd;
 import com.delectable.mobile.api.net.MotdNetworkClient;
 import com.path.android.jobqueue.Params;
 
@@ -29,7 +29,7 @@ public class FetchMotdJob extends BaseJob {
     private String mDeviceId;
 
     public FetchMotdJob(String sessionKey, String deviceId) {
-        super(new Params(Priority.UX).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork().persist());
         mSessionKey = sessionKey;
         mDeviceId = deviceId;
     }

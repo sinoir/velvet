@@ -2,8 +2,8 @@ package com.delectable.mobile.api.jobs.builddatecheck;
 
 import com.delectable.mobile.BuildConfig;
 import com.delectable.mobile.api.events.builddatecheck.BuildDateCheckedEvent;
-import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.net.MotdNetworkClient;
 import com.path.android.jobqueue.Params;
 import com.squareup.okhttp.OkHttpClient;
@@ -25,7 +25,7 @@ public class FetchVersionPropsJob extends BaseJob {
     private String mDeviceId;
 
     public FetchVersionPropsJob() {
-        super(new Params(Priority.UX).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork().persist());
     }
 
     @Override

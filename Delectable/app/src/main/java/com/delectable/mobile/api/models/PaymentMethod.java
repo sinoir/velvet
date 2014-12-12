@@ -39,6 +39,29 @@ public class PaymentMethod {
         this.cvc = cvc;
     }
 
+    //region CC Type Helpers
+
+    public boolean isAmex() {
+        return isType("American Express");
+    }
+
+    public boolean isDiscover() {
+        return isType("discover");
+    }
+
+    public boolean isMastercard() {
+        return isType("mastercard");
+    }
+
+    public boolean isVisa() {
+        return isType("visa");
+    }
+
+    private boolean isType(String ccType) {
+        return ccType.equalsIgnoreCase(type);
+    }
+    //endregion
+
     public String getId() {
         return id;
     }
@@ -124,5 +147,61 @@ public class PaymentMethod {
                 ", exp_year='" + exp_year + '\'' +
                 ", cvc='" + cvc + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        PaymentMethod that = (PaymentMethod) o;
+
+        if (primary != that.primary) {
+            return false;
+        }
+        if (cvc != null ? !cvc.equals(that.cvc) : that.cvc != null) {
+            return false;
+        }
+        if (exp_month != null ? !exp_month.equals(that.exp_month) : that.exp_month != null) {
+            return false;
+        }
+        if (exp_year != null ? !exp_year.equals(that.exp_year) : that.exp_year != null) {
+            return false;
+        }
+        if (expiration != null ? !expiration.equals(that.expiration) : that.expiration != null) {
+            return false;
+        }
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (last_four != null ? !last_four.equals(that.last_four) : that.last_four != null) {
+            return false;
+        }
+        if (number != null ? !number.equals(that.number) : that.number != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(that.type) : that.type != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (primary ? 1 : 0);
+        result = 31 * result + (last_four != null ? last_four.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (expiration != null ? expiration.hashCode() : 0);
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (exp_month != null ? exp_month.hashCode() : 0);
+        result = 31 * result + (exp_year != null ? exp_year.hashCode() : 0);
+        result = 31 * result + (cvc != null ? cvc.hashCode() : 0);
+        return result;
     }
 }

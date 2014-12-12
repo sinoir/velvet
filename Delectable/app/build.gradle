@@ -38,6 +38,13 @@ def versionProps = new Properties()
 versionProps['BUILD_DATE'] = build_date_var
 versionProps.store(propFile.newWriter(), null);
 
+//constants
+def BOOLEAN = "boolean"
+def TRUE = "true"
+def FALSE = "false"
+def REPORT_CRASHES = "REPORT_CRASHES"
+def SHOW_ENV_PICKER = "SHOW_ENV_PICKER"
+
 
 android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
@@ -45,8 +52,8 @@ android {
     defaultConfig {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
-        versionCode 5
-        versionName '1.1.1'
+        versionCode 6
+        versionName '1.2'
         testApplicationId 'com.delectable.mobile.tests'
         // API Keys (same for both release and debug)
         buildConfigField 'String', 'KAHUNA_SECRET', '"fffde0bdadbd44c9b3ae78e5ca2d981e"'
@@ -55,6 +62,11 @@ android {
         buildConfigField 'String', 'TWITTER_SECRET', '"EVTtbtBOZFY9YMlV6GlkbUbiZwi7n62cfJSEfb5x9hI"'
         buildConfigField 'String', 'MIXPANEL_TOKEN', '"e46cbff0ba48b387cd070c3b38b49f2e"'
         buildConfigField 'long', "BUILD_DATE", build_date_var + "L"
+        buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
+    }
+
+    dexOptions {
+        jumboMode = true
     }
 
     signingConfigs {
@@ -74,27 +86,59 @@ android {
     }
 
     buildTypes {
-        //constants
-        def BOOLEAN = "boolean"
-        def TRUE = "true"
-        def FALSE = "false"
-        def REPORT_CRASHES = "REPORT_CRASHES"
-
         debug {
             debuggable true
             signingConfig signingConfigs.debug
             buildConfigField BOOLEAN, REPORT_CRASHES, FALSE
+            buildConfigField BOOLEAN, SHOW_ENV_PICKER, TRUE
         }
 
+        /**
+         * prerelease is a buildType meant for QA. It's almost the same as release, except that
+         * Delectable classes are unobfucsated for easy debugging of QA feedback
+         */
+        prerelease {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', 'proguard-delectable.txt', '../proguard-com.twitter.sdk.android.txt'
+            signingConfig signingConfigs.release
+            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
+        }
+
+        /**
+         * Used for final round of QA releases and prod releases.
+         */
         release {
             debuggable false
-            runProguard true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', '../proguard-com.twitter.sdk.android.txt'
             signingConfig signingConfigs.release
             buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
         }
     }
     productFlavors {
+        /**
+         * Default flavor, used for debug builds or paired with the release buildType for true releases.
+         */
+        vanilla {
+            applicationId "com.delectable.mobile"
+            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
+        }
+        /**
+         * the qa product flavor really only gets used for QA/applause testing when we prepare a release branch
+         * meant to be paired with prerelease and release builds
+         */
+        qa {
+            applicationId "com.delectable.mobile.qa"
+            buildConfigField BOOLEAN, SHOW_ENV_PICKER, FALSE
+        }
+        /**
+         * For QA and meant to be the exact same as the qa flavor, except that it lets you pick your environment.
+         */
+        superQa {
+            applicationId "com.delectable.mobile.qa"
+            buildConfigField BOOLEAN, SHOW_ENV_PICKER, TRUE
+        }
     }
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
@@ -109,8 +153,8 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'junit:junit:4.10@jar'
-    compile 'com.android.support:support-v4:21.+'
-    compile "com.android.support:appcompat-v7:21.0.+"
+    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.apache.commons:commons-lang3:3.1@jar'
     compile 'com.squareup.picasso:picasso:2.3.3'
@@ -118,26 +162,25 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okio:okio:1.0.0'
     compile 'org.ocpsoft.prettytime:prettytime:3.0.2.Final@jar'
-    compile project(':facebook')
+    compile('com.facebook.android:facebook-android-sdk:3.21.0')
     compile project(':viewPagerIndicator')
     compile 'com.jakewharton:butterknife:6.0.0'
     //need to keep dagger at 1.1.0 (at least until dagger 2.0 comes out, bc proguard doesn't work with 1.2.2)
     compile 'com.squareup.dagger:dagger:1.1.0'
     compile 'com.squareup.dagger:dagger-compiler:1.1.0'
-    compile 'de.greenrobot:eventbus:2.2.1'
+    compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.path:android-priority-jobqueue:1.1.2'
     compile 'com.google.android.gms:play-services:6.1.+'
-    compile files('libs/kahuna_489.jar')
+    compile files('libs/kahuna_510.jar')
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
     compile 'com.melnykov:floatingactionbutton:1.0.6'
-    compile "com.mixpanel.android:mixpanel-android:4.4.1@aar"
-
+    compile 'com.pnikosis:materialish-progress:1.2'
+    compile 'com.mixpanel.android:mixpanel-android:4.4.1@aar'
     // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {
         transitive = true
     }
-
     // Twitter Kit
     compile('com.twitter.sdk.android:twitter:1.0.1@aar') {
         transitive = true

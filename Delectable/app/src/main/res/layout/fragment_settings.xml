@@ -17,10 +17,10 @@
 
         <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image"
-            android:layout_width="@dimen/settings_profile_image_height"
-            android:layout_height="@dimen/settings_profile_image_height"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/settings_view_horizontal_padding"
+            android:layout_marginBottom="@dimen/spacing_16"
             android:src="@drawable/no_photo" />
 
         <EditText
@@ -141,6 +141,13 @@
             android:id="@+id/send_feedback"
             style="@style/SettingsAboutCategoryRow"
             android:text="@string/settings_feedback" />
+
+        <View style="@style/SettingsAboutCategoryDivider" />
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/rate_delectable"
+            style="@style/SettingsAboutCategoryRow"
+            android:text="@string/settings_rate_delectable" />
 
         <View style="@style/SettingsAboutCategoryDivider" />
 

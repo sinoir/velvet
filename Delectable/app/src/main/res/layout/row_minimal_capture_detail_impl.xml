@@ -3,6 +3,6 @@
 <com.delectable.mobile.ui.profile.widget.MinimalCaptureDetailRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:padding="16dp"
+    android:clipToPadding="false"
     android:descendantFocusability="blocksDescendants"
-    android:layout_height="wrap_content">
-</com.delectable.mobile.ui.profile.widget.MinimalCaptureDetailRow>
+    android:layout_height="wrap_content" />

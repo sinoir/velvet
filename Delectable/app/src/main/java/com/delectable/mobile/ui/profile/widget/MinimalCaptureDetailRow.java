@@ -59,6 +59,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.likes_count)
     protected FontTextView mLikesCount;
 
+    @InjectView(R.id.vertical_divider_likes)
+    protected View mLikesDivider;
+
     @InjectView(R.id.comments_count)
     protected FontTextView mCommentsCount;
 
@@ -248,7 +251,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
                 captureName = getResources().getString(R.string.user_captures_check_back);
                 break;
         }
-        if (vintage != null && !vintage.equals("NV")) {
+        if (vintage != null && !vintage.equals("NV") && !vintage.equals("--")) {
             captureName += " " + vintage;
         }
         String captureImageUrl = mCaptureDetails.getPhoto().getBestThumb();
@@ -410,23 +413,35 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     private void updateButtonDisplay() {
         // default, views below comment are gone
         mAddRatingRemoveTextContainer.setVisibility(View.GONE);
-        mCountTextsContainer.setVisibility(View.GONE);
+//        mCountTextsContainer.setVisibility(View.GONE);
 
         //hide like and comment buttons if viewing own user profile
         int visibility = mIsViewingOwnCaptures ? View.GONE : View.VISIBLE;
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
+        // set like button state
+        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(UserInfo.getUserId(getContext()));
+        mLikeButton.setSelected(userLikesCapture);
+
         //setup likes/comments counts
         int likes = mCaptureDetails.getLikesCount();
-        int comments = mCaptureDetails.getComments().size();
+        int comments = mCaptureDetails.getCommentsCount();
         mLikesCount.setText(
                 getResources().getQuantityString(R.plurals.likes_count, likes, likes));
+        mLikesCount.setVisibility(likes > 0 ? View.VISIBLE : View.GONE);
         mCommentsCount.setText(
                 getResources().getQuantityString(R.plurals.comments_count, comments, comments));
+        mCommentsCount.setVisibility(comments > 0 ? View.VISIBLE : View.GONE);
+        mLikesDivider.setVisibility((likes > 0 && comments > 0) ? View.VISIBLE : View.GONE);
+
+        mCountTextsContainer.setVisibility(
+                (likes > 0 || comments > 0)
+                        ? View.VISIBLE
+                        : View.GONE);
 
         if (!mIsViewingOwnCaptures) { //looking at someone else's captures
             //always show this even when there are no likes/comments so user can click like/comment button and not have view jump
-            mCountTextsContainer.setVisibility(View.VISIBLE);
+//            mCountTextsContainer.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -465,9 +480,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     @OnClick(R.id.like_button)
-    protected void onLikeClick() {
+    protected void onLikeClick(View view) {
+        view.setSelected(!view.isSelected());
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureDetails);
+            mCaptureDetailsActionsHandler.toggleLikeForCapture(mCaptureDetails, view.isSelected());
         }
     }
 
@@ -493,7 +509,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     }
 
     @OnClick(R.id.overflow_button)
-    protected void onOverflowClick() {
+    public void onOverflowClick() {
         if (mCaptureDetailsActionsHandler != null) {
             mPopupMenu.show();
         }

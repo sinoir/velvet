@@ -1,7 +1,6 @@
 package com.delectable.mobile.api.models;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LabelScan {
 
@@ -13,7 +12,7 @@ public class LabelScan {
         return id;
     }
 
-    public List<BaseWine> getBaseWineMatches() {
+    public ArrayList<BaseWine> getBaseWineMatches() {
         if (matches == null) {
             return null;
         }

@@ -1,10 +1,10 @@
 package com.delectable.mobile.api.jobs.scanwinelabel;
 
+import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
+import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
-import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPendingCaptureRequest;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
@@ -19,7 +19,7 @@ public class AddCaptureFromPendingCaptureJob extends BaseJob {
     private AddCaptureFromPendingCaptureRequest mRequest;
 
     public AddCaptureFromPendingCaptureJob(AddCaptureFromPendingCaptureRequest request) {
-        super(new Params(Priority.SYNC).persist());
+        super(new Params(Priority.SYNC.value()).persist());
         // TODO: Possibly Save the request and then load the request from a cache to perform "async" requests?
         mRequest = request;
     }

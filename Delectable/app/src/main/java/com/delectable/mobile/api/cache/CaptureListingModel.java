@@ -25,6 +25,8 @@ public class CaptureListingModel {
 
     private static final String TYPE_FOLLOW_FEED = KEY_PREFIX + "followfeed_" + VERSION;
 
+    private static final String TYPE_CAPTURE_LIST = KEY_PREFIX + "list_" + VERSION;
+
     /**
      * static final Map used as a singleton for caching.
      */
@@ -66,11 +68,19 @@ public class CaptureListingModel {
         return getCachedCaptures(TYPE_FOLLOW_FEED);
     }
 
+    public void saveCaptureList(String listKey, Listing<CaptureDetails, String> listing) {
+        saveListing(TYPE_CAPTURE_LIST + listKey, listing);
+    }
+
+    public Listing<CaptureDetails, String> getCaptureList(String listKey) {
+        return getCachedCaptures(TYPE_CAPTURE_LIST + listKey);
+    }
+
     public static void clear() {
         mMap.clear();
     }
 
-    private void saveListing(String key, Listing<CaptureDetails, String> listing) {
+    private synchronized void saveListing(String key, Listing<CaptureDetails, String> listing) {
 
         CacheListing<CaptureDetails> cacheListing = new CacheListing<CaptureDetails>(listing);
         mMap.put(key, cacheListing);

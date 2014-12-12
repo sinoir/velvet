@@ -25,6 +25,9 @@ public class MinimalPendingCaptureRow extends RelativeLayout {
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
 
+    @InjectView(R.id.private_indicator)
+    protected View mPrivateIndicator;
+
     @InjectView(R.id.producer_name)
     protected FontTextView mProducerName;
 
@@ -62,6 +65,7 @@ public class MinimalPendingCaptureRow extends RelativeLayout {
         ButterKnife.inject(this);
 
         mRating.setVisibility(View.GONE);
+        mPrivateIndicator.setVisibility(View.VISIBLE);
     }
 
     public void updateData(PendingCapture capture) {

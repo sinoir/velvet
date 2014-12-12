@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/search_wine_row_height">
+    android:layout_height="wrap_content">
 
     <!--TODO placeholder image for wine? -->
     <ImageView
@@ -19,8 +19,10 @@
         android:id="@+id/producer_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/wine_image"
+        android:layout_alignTop="@id/wine_image"
         android:layout_toRightOf="@+id/wine_image"
+        android:layout_marginTop="-5dp"
+        android:layout_marginBottom="-2dp"
         android:ellipsize="end"
         android:layout_marginRight="@dimen/search_wine_horizontal_spacing"
         android:singleLine="true"
@@ -35,9 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/producer_name"
         android:layout_toRightOf="@+id/wine_image"
+        android:layout_marginBottom="@dimen/spacing_16"
         android:ellipsize="end"
         android:maxLines="2"
         android:layout_marginRight="@dimen/search_wine_horizontal_spacing"
+        android:lineSpacingMultiplier="1.2"
         android:text="Sauvignon Blanc 2012"
         android:textColor="@color/d_black"
         android:textSize="@dimen/search_wine_text_size"

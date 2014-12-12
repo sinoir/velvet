@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/d_white">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_header_footer_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:text="@string/paymentmethod_add_title"
+        android:textSize="@dimen/dialog_title_text_size"
+        app:fontName="whitney_book" />
+
+    <View
+        android:id="@+id/header_divider"
+        style="@style/VerticalDivider"
+        android:layout_below="@+id/dialog_title" />
+
+    <ScrollView
+        android:id="@+id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_divider">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/name"
+                style="@style/CheckoutEditText"
+                android:hint="@string/paymentmethod_name"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/credit_card_number"
+                android:singleLine="true" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/credit_card_number"
+                style="@style/CheckoutEditText"
+                android:hint="@string/paymentmethod_card_number"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
+                android:nextFocusForward="@+id/expiration_month"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="@dimen/dialog_horizontal_spacing"
+                    android:layout_marginRight="@dimen/dialog_horizontal_spacing"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_bottom_border">
+
+                    <com.delectable.mobile.ui.common.widget.FontEditText
+                        android:id="@+id/expiration_month"
+                        style="@style/CheckoutEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:background="@null"
+                        android:hint="MM"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:nextFocusForward="@+id/expiration_year"
+                        android:paddingRight="@dimen/dialog_horizontal_spacing" />
+
+                    <com.delectable.mobile.ui.common.widget.FontTextView
+                        android:id="@+id/slash"
+                        style="@style/CheckoutEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_toRightOf="@id/expiration_month"
+                        android:background="@null"
+                        android:text="/" />
+
+                    <com.delectable.mobile.ui.common.widget.FontEditText
+                        android:id="@+id/expiration_year"
+                        style="@style/CheckoutEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_toRightOf="@id/slash"
+                        android:background="@null"
+                        android:hint="YY"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:nextFocusForward="@+id/cvc"
+                        android:paddingLeft="@dimen/dialog_horizontal_spacing" />
+
+                </RelativeLayout>
+
+                <com.delectable.mobile.ui.common.widget.FontEditText
+                    android:id="@+id/cvc"
+                    style="@style/CheckoutEditText"
+                    android:layout_weight="3"
+                    android:hint="@string/paymentmethod_cvc"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <View
+                style="@style/VerticalDivider"
+                android:layout_marginTop="20dp" />
+
+            <com.delectable.mobile.ui.common.widget.CancelSaveButtons
+                android:id="@+id/action_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_header_footer_height" />
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/form_container"
+        android:layout_alignTop="@+id/dialog_title"
+        android:background="#88000000"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</RelativeLayout>

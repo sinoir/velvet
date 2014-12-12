@@ -1,11 +1,11 @@
 package com.delectable.mobile.api.jobs.foursquare;
 
 import com.delectable.mobile.Config;
-import com.delectable.mobile.api.events.foursquare.SearchedFoursquareVenuesEvent;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenueItem;
 import com.delectable.mobile.api.endpointmodels.foursquare.FoursquareVenuesSearchResponse;
+import com.delectable.mobile.api.events.foursquare.SearchedFoursquareVenuesEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.net.FoursquareNetworkClient;
 import com.path.android.jobqueue.Params;
 
@@ -24,7 +24,7 @@ public class SearchFoursquareVenuesJob extends BaseJob {
     private String mLatLon;
 
     public SearchFoursquareVenuesJob(String latLon) {
-        super(new Params(Priority.UX).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork().persist());
         mLatLon = latLon;
     }
 

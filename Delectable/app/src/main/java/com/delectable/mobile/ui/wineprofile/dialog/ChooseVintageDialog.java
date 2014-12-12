@@ -1,51 +1,49 @@
 package com.delectable.mobile.ui.wineprofile.dialog;
 
-import com.delectable.mobile.App;
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.BaseWineModel;
-import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
-import com.delectable.mobile.ui.wineprofile.widget.WineProfilesAdapter;
+import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
+import com.delectable.mobile.ui.wineprofile.widget.WineProfilesVintageAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import javax.inject.Inject;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 
-import de.greenrobot.event.EventBus;
+public class ChooseVintageDialog extends BaseDialogFragment {
 
-public class ChooseVintageDialog extends DialogFragment {
+    public static final String TAG = ChooseVintageDialog.class.getSimpleName();
 
-    public static final String WINE = "WINE";
+    public static final String EXTRAS_RESULT_WINE = "EXTRAS_RESULT_WINE";
 
-    private static final String BASE_WINE_ID = "BASE_WINE_ID";
+    private static final String BASE_WINE = "BASE_WINE";
 
-    private static final String TAG = ChooseVintageDialog.class.getSimpleName();
+    @InjectView(R.id.producer_name)
+    protected TextView mProducerName;
 
-    @Inject
-    protected EventBus mEventBus;
+    @InjectView(R.id.wine_name)
+    protected TextView mWineName;
 
-    @Inject
-    protected BaseWineModel mBaseWineModel;
+    @InjectView(R.id.list_view)
+    protected ListView mListView;
 
-    private WineProfilesAdapter mAdapter = new WineProfilesAdapter();
+    private WineProfilesVintageAdapter mAdapter = new WineProfilesVintageAdapter();
 
     private BaseWine mBaseWine;
 
-    private String mBaseWineId;
-
-    public static ChooseVintageDialog newInstance(String baseWineId) {
+    public static ChooseVintageDialog newInstance(BaseWine baseWine) {
         ChooseVintageDialog f = new ChooseVintageDialog();
         Bundle args = new Bundle();
-        args.putString(BASE_WINE_ID, baseWineId);
+        args.putParcelable(BASE_WINE, baseWine);
         f.setArguments(args);
         return f;
     }
@@ -53,75 +51,41 @@ public class ChooseVintageDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.injectMembers(this);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
-        if (getArguments() != null) {
-            mBaseWineId = getArguments().getString(BASE_WINE_ID);
+        if (getArguments() == null) {
+            throw new RuntimeException(TAG + "needs to be instantiated with a BaseWine");
         }
+        mBaseWine = getArguments().getParcelable(BASE_WINE);
+        if (mBaseWine == null) {
+            dismiss();
+        }
+        mAdapter.setBaseWine(mBaseWine);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_listview, container, false);
-        TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(R.string.choose_vintage_dialog_title);
-        ListView listview = (ListView) view.findViewById(R.id.list_view);
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //call back to implementing class
-                Intent intent = new Intent();
-                intent.putExtra(WINE,
-                        mAdapter.getItem(position)); //can be a BaseWine or WineProfile
-                getTargetFragment()
-                        .onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
-                dismiss();
-            }
-        });
-
-        loadBaseWineData();
-
+        View view = inflater.inflate(R.layout.dialog_choose_vintage, container, false);
+        ButterKnife.inject(this, view);
+        if (mBaseWine.getProducerName() != null) {
+            mProducerName.setText(mBaseWine.getProducerName().toLowerCase());
+        }
+        mWineName.setText(mBaseWine.getName());
+        mListView.setAdapter(mAdapter);
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            mEventBus.register(this);
-        } catch (Throwable t) {
-            // no-op
+    @OnItemClick(R.id.list_view)
+    public void onItemClick(int position) {
+        //call back to implementing class
+        Parcelable wine = mAdapter.getItem(position);
+        Intent intent = new Intent();
+        intent.putExtra(EXTRAS_RESULT_WINE, wine);
+        if (getTargetFragment() != null) {
+            getTargetFragment().onActivityResult(
+                    getTargetRequestCode(),
+                    Activity.RESULT_OK,
+                    intent);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            mEventBus.unregister(this);
-        } catch (Throwable t) {
-        }
-    }
-
-    private void loadBaseWineData() {
-        //retrieve full base wine information
-        mBaseWine = mBaseWineModel.getBaseWine(mBaseWineId);
-        if (mBaseWine == null) {
-            return;
-        }
-        mAdapter.setBaseWine(mBaseWine);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    public void onEventMainThread(UpdatedBaseWineEvent event) {
-        if (!mBaseWineId.equals(event.getBaseWineId())) {
-            return;
-        }
-
-        if (event.isSuccessful()) {
-            loadBaseWineData();
-        }
+        dismiss();
     }
 }

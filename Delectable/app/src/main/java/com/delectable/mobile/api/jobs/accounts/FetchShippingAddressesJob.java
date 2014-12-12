@@ -18,7 +18,7 @@ public class FetchShippingAddressesJob extends BaseJob {
     protected ShippingAddressModel mShippingAddressModel;
 
     public FetchShippingAddressesJob() {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
     }
 
     @Override

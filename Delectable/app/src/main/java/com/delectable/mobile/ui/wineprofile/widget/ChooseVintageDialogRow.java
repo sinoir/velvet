@@ -3,28 +3,31 @@ package com.delectable.mobile.ui.wineprofile.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
-import com.delectable.mobile.util.TextUtil;
+import com.delectable.mobile.ui.common.widget.Rating;
 
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
- * A representation of the {@link WineProfileSubProfile} model, this is the row for the listview
- * that appears in the Choose Vintage dialog.
+ * A representation of {@link WineProfileSubProfile}, this is the row for the listview that appears
+ * in the {@link com.delectable.mobile.ui.wineprofile.dialog.ChooseVintageDialog ChooseVintageDialog}.
  */
 public class ChooseVintageDialogRow extends RelativeLayout {
 
-    private final TextView mYear;
+    @InjectView(R.id.year)
+    protected TextView mYear;
 
-    private final TextView mRatingsCount;
+    @InjectView(R.id.ratings_count)
+    protected TextView mRatingsCount;
 
-    private final TextView mRating;
+    @InjectView(R.id.rating)
+    protected TextView mRating;
 
     public ChooseVintageDialogRow(Context context) {
         this(context, null);
@@ -38,18 +41,16 @@ public class ChooseVintageDialogRow extends RelativeLayout {
         super(context, attrs, defStyle);
 
         View.inflate(context, R.layout.row_dialog_choose_vintage, this);
-
-        mYear = (TextView) findViewById(R.id.year);
-        mRatingsCount = (TextView) findViewById(R.id.ratings_count);
-        mRating = (TextView) findViewById(R.id.rating);
+        ButterKnife.inject(this);
     }
 
     public void updateData(String year, int ratingsCount, double rating) {
         mYear.setText(year);
-        String ratingCount = getResources().getQuantityString(
-                R.plurals.choose_vintage_dialog_ratings_count, ratingsCount, ratingsCount);
+        String ratingCount = getResources()
+                .getQuantityString(R.plurals.choose_vintage_dialog_ratings_count, ratingsCount,
+                        ratingsCount);
         mRatingsCount.setText(ratingCount);
-        mRating.setText(TextUtil.makeRatingDisplayText(getContext(), rating));
+        mRating.setText(Rating.forDisplay(getContext(), rating));
     }
 
     /**
@@ -75,17 +76,4 @@ public class ChooseVintageDialogRow extends RelativeLayout {
 
         updateData(year, reviewCount, rating);
     }
-
-    //TODO should abstract this, copied directly from WineProfileFragment. Make textview subclass perhaps with a setter for the ratings
-
-    /**
-     * Makes the rating display text where the rating is a bit bigger than the 10.
-     */
-    private CharSequence makeRatingDisplayText(String rating) {
-        SpannableString ss = new SpannableString(rating);
-        ss.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), 0); // set size
-        CharSequence displayText = TextUtils.concat(ss, "/10");
-        return displayText;
-    }
-
 }

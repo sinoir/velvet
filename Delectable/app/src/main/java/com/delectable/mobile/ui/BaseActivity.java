@@ -1,27 +1,20 @@
 package com.delectable.mobile.ui;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
+import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
 import com.kahuna.sdk.KahunaAnalytics;
 
 import android.content.Intent;
-import android.location.Location;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -33,9 +26,9 @@ import java.util.List;
 public abstract class BaseActivity extends ActionBarActivity
         implements HideableActionBar {
 
-    private static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
+    protected static final int ACTIONBAR_HIDE_ANIM_DURATION = 300;
 
-    private static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
+    protected static final int ACTIONBAR_SHOW_ANIM_DURATION = 200;
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -196,20 +189,33 @@ public abstract class BaseActivity extends ActionBarActivity
         super.finish();
     }
 
-    public void replaceWithFragment(BaseFragment fragment) {
+    protected void launchUserProfile(boolean clearBackStack) {
+        Intent intent = new Intent();
+        intent.putExtra(UserProfileActivity.PARAMS_USER_ID,
+                UserInfo.getUserId(App.getInstance()));
+        intent.setClass(this, UserProfileActivity.class);
+        if (clearBackStack) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }
+        startActivity(intent);
+        if (clearBackStack) {
+            finish();
+        }
+    }
+
+    public void replaceWithFragment(BaseFragment fragment, boolean addToBackstack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(
-                R.anim.fade_in, R.anim.fade_out,
-                R.anim.fade_in, R.anim.fade_out);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
         //replace() and addToBackStack() need to use the same tag name, or else we won't be able to retrieve
         //the fragment from the backstack in onActivityResult
         String fragmentName = fragment.getClass().getSimpleName();
         transaction.replace(R.id.container, fragment, fragmentName);
-        transaction.addToBackStack(fragmentName);
+        if (addToBackstack) {
+            transaction.addToBackStack(fragmentName);
+        }
 
         transaction.commit();
     }
-
 }

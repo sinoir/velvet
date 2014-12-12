@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.models;
 
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -104,7 +104,7 @@ public class AccountSearch implements Parcelable, IDable {
      * @return Returns influencer titles in a comma delimited String.
      */
     public String getInfluencerTitlesString() {
-        return StringUtils.join(influencer_titles, ",");
+        return TextUtils.join(", ", influencer_titles);
     }
 
     public String getContext() {
@@ -198,4 +198,12 @@ public class AccountSearch implements Parcelable, IDable {
             return new AccountSearch[size];
         }
     };
+
+    public static class FullNameComparator implements Comparator<AccountSearch> {
+
+        @Override
+        public int compare(AccountSearch lhs, AccountSearch rhs) {
+            return lhs.getFullName().compareToIgnoreCase(rhs.getFullName());
+        }
+    }
 }

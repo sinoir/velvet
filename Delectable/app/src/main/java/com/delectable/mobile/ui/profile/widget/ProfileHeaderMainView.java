@@ -57,6 +57,7 @@ public class ProfileHeaderMainView extends RelativeLayout {
 
     public void setUserName(String userName) {
         mUserNameTextView.setText(userName);
+        mUserNameTextView.setVisibility(View.VISIBLE);
     }
 
     public void setInfluencer(boolean isInfluencer) {
@@ -67,18 +68,21 @@ public class ProfileHeaderMainView extends RelativeLayout {
         String wineCountText = getResources()
                 .getQuantityString(R.plurals.wine_count, wineCount, wineCount);
         mCaptureWineCountTextView.setText(wineCountText);
+        mCaptureWineCountTextView.setVisibility(View.VISIBLE);
     }
 
     public void setFollowerCount(int followerCount) {
         String followerCountText = getResources().getQuantityString(R.plurals.followers_count,
                 followerCount, followerCount);
         mFollowerCountTextView.setText(followerCountText);
+        mFollowerCountTextView.setVisibility(View.VISIBLE);
     }
 
     public void setFollowingCount(int followingCount) {
         String followingCountText = getResources().getString(R.string.following_count,
                 followingCount);
         mFollowingCountTextView.setText(followingCountText);
+        mFollowingCountTextView.setVisibility(View.VISIBLE);
     }
 
     public TextView getUserNameTextView() {

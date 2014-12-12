@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
-import java.text.DecimalFormat;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -29,8 +27,6 @@ public class NumericRatingSeekBar extends RelativeLayout {
 
         public void onRatingsChanged(int rating);
     }
-
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
 
     private static final int HAPPY_FACE_TRANSLATION = 50;
 
@@ -68,10 +64,8 @@ public class NumericRatingSeekBar extends RelativeLayout {
         mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {
-                rating++; //offset to make rating scale is 6.1-10 instead of 6.0-9.9
-
                 double ratingOf10 = Rating.getRatingOfTenFrom40(rating);
-                String ratingStr = DECIMAL_FORMAT.format(ratingOf10);
+                String ratingStr = Rating.formatOf10Rating(ratingOf10);
                 mScoreTextView.setText(ratingStr);
 
                 Rating ratingItem = Rating.valueForRatingOfTen(ratingOf10);

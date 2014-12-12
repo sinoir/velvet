@@ -11,47 +11,15 @@
         android:id="@id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/d_white"
         android:headerDividersEnabled="false"
-        android:visibility="gone"
+        android:footerDividersEnabled="false"
+        android:animateLayoutChanges="true"
         tools:context="com.delectable.mobile.ui.profile.fragment.UserProfileFragment" />
-    <!--android:animateLayoutChanges="true"-->
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/empty_state_layout"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.delectable.mobile.ui.profile.widget.ProfileHeaderView
-            android:id="@+id/empty_view_header"
-            android:layout_width="match_parent"
-            android:layout_height="356dp"
-            android:background="@color/d_off_white" />
-
-        <android.support.v4.widget.ContentLoadingProgressBar
-            android:id="@+id/progress_bar"
-            style="?attr/android:progressBarStyle"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/general_row_height"
-            android:layout_below="@id/empty_view_header"
-            android:layout_marginTop="@dimen/spacing_16" />
-
-        <com.delectable.mobile.ui.common.widget.FontTextView
-            style="@style/TextEmptyState"
-            android:id="@+id/nothing_to_display_textview"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/empty_view_header"
-            android:background="@color/d_white"
-            android:padding="@dimen/spacing_32"
-            android:gravity="center" />
-    </RelativeLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/ToolbarStyle.Floating" />
+        style="@style/ToolbarStyle" />
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/camera_button"

@@ -6,32 +6,34 @@
     android:layout_height="wrap_content">
 
     <com.delectable.mobile.ui.common.widget.CircleImageView
-        android:id="@+id/left_iamge"
+        android:id="@+id/left_image"
         android:layout_width="@dimen/general_icon_size"
         android:layout_height="@dimen/general_icon_size"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
-        android:layout_marginTop="@dimen/cap_list_row_horizontal_spacing"
-        android:paddingTop="@dimen/recent_activity_top_padding"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginBottom="@dimen/spacing_8"
         android:src="@drawable/no_photo" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginTop="@dimen/spacing_8"
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:layout_toLeftOf="@+id/right_image"
-        android:layout_toRightOf="@+id/left_iamge"
+        android:layout_toRightOf="@+id/left_image"
         android:textColor="@color/d_black"
         android:textSize="@dimen/text_size_small"
+        android:lineSpacingMultiplier="1.2"
         app:fontName="whitney_book" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/time_ago"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_8"
         android:layout_alignLeft="@+id/text"
         android:layout_below="@+id/text"
         android:textColor="@color/d_medium_gray"
@@ -46,14 +48,5 @@
         android:layout_alignTop="@+id/text"
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:src="@drawable/no_photo" />
-
-    <View
-        android:id="@+id/vertical_divider1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignLeft="@+id/text"
-        android:layout_below="@+id/time_ago"
-        android:layout_marginTop="@dimen/cap_list_row_horizontal_spacing"
-        android:background="@color/d_light_gray" />
 
 </merge>

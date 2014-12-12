@@ -2,13 +2,10 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.delectable.mobile.api.cache.PaymentMethodModel;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
-import com.delectable.mobile.api.endpointmodels.accounts.AddPaymentMethodRequest;
 import com.delectable.mobile.api.endpointmodels.accounts.PaymentMethodResponse;
-import com.delectable.mobile.api.events.accounts.AddedPaymentMethodEvent;
 import com.delectable.mobile.api.events.accounts.FetchedPaymentMethodsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.PaymentMethod;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -21,7 +18,7 @@ public class FetchPaymentMethodJob extends BaseJob {
     protected PaymentMethodModel mPaymentMethodModel;
 
     public FetchPaymentMethodJob() {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
     }
 
     @Override

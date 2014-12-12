@@ -45,6 +45,8 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
     protected abstract BaseAdapter getAdapter();
 
+    protected String mCurrentQuery;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +60,12 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         inflater.inflate(R.menu.search_menu, menu);
 
         mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
-        mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setOnQueryTextListener(this);
 
-        if (!getAdapter().isEmpty()) {
-            mSearchView.clearFocus();
+        mSearchView.setIconified(false);
+
+        if (mCurrentQuery != null && !mCurrentQuery.isEmpty()) {
+            mSearchView.setQuery(mCurrentQuery, false);
         }
     }
 
@@ -83,9 +86,9 @@ public abstract class BaseSearchTabFragment extends BaseFragment
                 .inflate(R.layout.fragment_search_wines_people, container, false);
         ButterKnife.inject(this, layout);
 
+        mListView.setEmptyView(mEmptyStateTextView);
         mListView.setAdapter(getAdapter());
         mListView.setOnItemClickListener(this);
-        mListView.setEmptyView(mEmptyStateTextView);
 
         return layout;
     }
@@ -96,9 +99,16 @@ public abstract class BaseSearchTabFragment extends BaseFragment
      */
     @Override
     public boolean onQueryTextSubmit(String query) {
+        mCurrentQuery = query;
         mSearchView.clearFocus(); //hides keyboard
         return false;
     }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mSearchView != null) {
+            mSearchView.clearFocus(); //hides keyboard
+        }
+    }
 }

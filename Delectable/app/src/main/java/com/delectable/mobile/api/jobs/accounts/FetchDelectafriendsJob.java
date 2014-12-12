@@ -1,10 +1,10 @@
 package com.delectable.mobile.api.jobs.accounts;
 
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.events.accounts.FetchedDelectafriendsEvent;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.delectable.mobile.api.endpointmodels.accounts.AccountMinimalListResponse;
+import com.delectable.mobile.api.events.accounts.FetchedDelectafriendsEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
 import com.path.android.jobqueue.Params;
 
 public class FetchDelectafriendsJob extends BaseJob {
@@ -12,7 +12,7 @@ public class FetchDelectafriendsJob extends BaseJob {
     private static final String TAG = FetchDelectafriendsJob.class.getSimpleName();
 
     public FetchDelectafriendsJob() {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
     }
 
     @Override

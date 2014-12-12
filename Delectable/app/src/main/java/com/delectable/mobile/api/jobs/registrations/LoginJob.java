@@ -24,8 +24,8 @@ public class LoginJob extends BaseJob {
     private String mPassword;
 
 
-    public LoginJob(String email, String password) {
-        super(new Params(Priority.UX));
+    public LoginJob(String requestId, String email, String password) {
+        super(requestId, new Params(Priority.UX.value()));
         mEmail = email;
         mPassword = password;
     }
@@ -52,7 +52,7 @@ public class LoginJob extends BaseJob {
         CrashlyticsUtil.onSignIn(account.getFullName(), account.getEmail(), account.getId(),
                 sessionKey);
 
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
         mEventBus.post(new LoginRegisterEvent(true));
 
         KahunaUtil.trackLogin(account.getId(), account.getEmail());

@@ -14,7 +14,7 @@ public class FlagCaptureJob extends BaseJob {
     private String mCaptureId;
 
     public FlagCaptureJob(String captureId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
     }
 

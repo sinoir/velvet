@@ -2,6 +2,7 @@ package com.delectable.mobile.api.cache;
 
 import com.delectable.mobile.api.models.ShippingAddress;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,6 +57,14 @@ public class ShippingAddressModel {
             }
         }
         return null;
+    }
+
+    public List<ShippingAddress> getAllShippingAddresses() {
+        ArrayList<ShippingAddress> addresses = new ArrayList<ShippingAddress>();
+        for (ShippingAddress shippingAddress : mData.values()) {
+            addresses.add(shippingAddress);
+        }
+        return addresses;
     }
 
     public void removeShippingAddress(String id) {

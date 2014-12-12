@@ -1,5 +1,6 @@
 package com.delectable.mobile.api.jobs.scanwinelabel;
 
+import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureRequest;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.CreatePendingCaptureResponse;
 import com.delectable.mobile.api.events.scanwinelabel.CreatedPendingCaptureEvent;
@@ -11,9 +12,14 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 
+import javax.inject.Inject;
+
 public class CreatePendingCaptureJob extends BasePhotoUploadJob {
 
     private static final String TAG = CreatePendingCaptureJob.class.getSimpleName();
+
+    @Inject
+    PendingCapturesModel mPendingCapturesModel;
 
     private String mLabelScanId;
 
@@ -40,6 +46,9 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
                 CreatePendingCaptureResponse.class);
 
         Log.d(TAG, "Created Pending Capture: " + response.getPendingCapture());
+        if (response.getPendingCapture() != null) {
+            mPendingCapturesModel.saveCapture(response.getPendingCapture());
+        }
         getEventBus().post(new CreatedPendingCaptureEvent(response.getPendingCapture()));
     }
 
@@ -55,7 +64,7 @@ public class CreatePendingCaptureJob extends BasePhotoUploadJob {
     }
 
     @Override
-    public byte[] compressImage(Bitmap bitmap) {
+    public byte[] compressImage(final Bitmap bitmap) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY, os);
         return os.toByteArray();

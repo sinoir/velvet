@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+        android:layout_marginTop="28dp"
+        android:text="@string/over21dialog_title"
+        android:textSize="@dimen/dialog_title_text_size"
+        app:fontName="whitney_book" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+        android:layout_marginTop="14dp"
+        android:text="@string/over21dialog_note"
+        android:textSize="14sp"
+        app:fontName="whitney_book" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/over21_button"
+        style="@style/ButtonLargeDChestNutBg"
+        android:layout_marginTop="14dp"
+        android:text="@string/over21dialog_over21" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/under21_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/general_row_horizontal_spacing"
+        android:layout_marginTop="14dp"
+        android:gravity="center_horizontal"
+        android:text="@string/over21dialog_under21"
+        android:textSize="14sp"
+        app:fontName="whitney_book" />
+
+</LinearLayout>

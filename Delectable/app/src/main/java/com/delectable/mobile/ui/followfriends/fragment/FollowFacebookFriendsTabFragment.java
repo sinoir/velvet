@@ -21,6 +21,8 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
 
     private static final String TAG = FollowFacebookFriendsTabFragment.class.getSimpleName();
 
+    public static final String FACEBOOK_CONNECT = TAG + "_FACEBOOK_CONNECT";
+
     private LoginButton mHiddenFacebookLoginButton;
 
     private UiLifecycleHelper mFacebookUiHelper;
@@ -143,7 +145,7 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
     public void facebookConnect() {
         mEmptyTextButtonView.setVisibility(View.INVISIBLE); //show spinner
         Session session = Session.getActiveSession();
-        mAccountController.associateFacebook(session.getAccessToken(),
+        mAccountController.associateFacebook(FACEBOOK_CONNECT, session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
     }
 

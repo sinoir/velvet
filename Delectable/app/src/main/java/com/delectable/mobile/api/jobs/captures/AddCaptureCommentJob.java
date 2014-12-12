@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesCommentRequest;
 import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.endpointmodels.captures.CaptureDetailsResponse;
 import com.delectable.mobile.util.KahunaUtil;
 import com.path.android.jobqueue.Params;
 
@@ -24,7 +24,7 @@ public class AddCaptureCommentJob extends BaseJob {
     private String mCaptureComment;
 
     public AddCaptureCommentJob(String captureId, String captureComment) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
         mCaptureComment = captureComment;
     }
@@ -40,7 +40,7 @@ public class AddCaptureCommentJob extends BaseJob {
         String endpoint = "/captures/comment";
 
         //don't run job if comment doesn't exist
-        if (mCaptureComment==null || mCaptureComment.trim().isEmpty()) {
+        if (mCaptureComment == null || mCaptureComment.trim().isEmpty()) {
             mEventBus.post(new AddCaptureCommentEvent(false, mCaptureId));
             return;
         }

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/d_white">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_header_footer_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/general_row_horizontal_spacing"
+        android:text="@string/shippingaddress_add_title"
+        android:textSize="@dimen/dialog_title_text_size"
+        app:fontName="whitney_book" />
+
+    <View
+        android:id="@+id/header_divider"
+        style="@style/VerticalDivider"
+        android:layout_below="@+id/dialog_title" />
+
+    <ScrollView
+        android:id="@+id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_divider">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/name"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_first_lastname"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/address1"
+                android:singleLine="true" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/address1"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_line1"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/address2"
+                android:singleLine="true" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/address2"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_line2"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/city"
+                android:singleLine="true" />
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/city"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_city"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/state"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <Spinner
+                    android:id="@+id/state"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="@dimen/dialog_horizontal_spacing"
+                    android:layout_marginRight="@dimen/dialog_horizontal_spacing"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_bottom_border"
+                    android:dropDownWidth="180dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="0dp" />
+
+                <com.delectable.mobile.ui.common.widget.FontEditText
+                    android:id="@+id/zip_code"
+                    style="@style/CheckoutEditText"
+                    android:layout_weight="3"
+                    android:hint="@string/shippingaddress_zipcode"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:nextFocusForward="@+id/phone_number"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <com.delectable.mobile.ui.common.widget.FontEditText
+                android:id="@+id/phone_number"
+                style="@style/CheckoutEditText"
+                android:hint="@string/shippingaddress_phone_number"
+                android:inputType="phone"
+                android:maxLength="20" />
+
+            <View
+                style="@style/VerticalDivider"
+                android:layout_marginTop="20dp" />
+
+            <com.delectable.mobile.ui.common.widget.CancelSaveButtons
+                android:id="@+id/action_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_header_footer_height" />
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/form_container"
+        android:layout_alignTop="@+id/dialog_title"
+        android:background="#88000000"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</RelativeLayout>

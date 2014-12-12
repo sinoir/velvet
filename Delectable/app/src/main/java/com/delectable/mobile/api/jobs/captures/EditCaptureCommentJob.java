@@ -1,13 +1,13 @@
 package com.delectable.mobile.api.jobs.captures;
 
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.delectable.mobile.api.endpointmodels.captures.CapturesEditCommentRequest;
 import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.CaptureComment;
 import com.delectable.mobile.api.models.CaptureDetails;
-import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.BaseResponse;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class EditCaptureCommentJob extends BaseJob {
     private String mCaptureComment;
 
     public EditCaptureCommentJob(String captureId, String commentId, String captureComment) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
         mCommentId = commentId;
         mCaptureComment = captureComment;

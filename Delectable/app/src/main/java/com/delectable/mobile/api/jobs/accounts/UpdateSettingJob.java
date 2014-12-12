@@ -1,11 +1,11 @@
 package com.delectable.mobile.api.jobs.accounts;
 
-import com.delectable.mobile.api.models.AccountConfig;
+import com.delectable.mobile.api.endpointmodels.BaseResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsUpdateSettingRequest;
 import com.delectable.mobile.api.events.accounts.UpdatedSettingEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.endpointmodels.BaseResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsUpdateSettingRequest;
+import com.delectable.mobile.api.models.AccountConfig;
 import com.path.android.jobqueue.Params;
 
 public class UpdateSettingJob extends BaseJob {
@@ -17,7 +17,7 @@ public class UpdateSettingJob extends BaseJob {
     private boolean mSetting;
 
     public UpdateSettingJob(AccountConfig.Key key, boolean setting) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+        super(new Params(Priority.SYNC.value()).requireNetwork().persist());
         mKey = key;
         mSetting = setting;
     }

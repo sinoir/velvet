@@ -34,6 +34,8 @@ public class Account extends AccountProfile {
 
     private String tw_token_secret;
 
+    private List<CaptureFeed> capture_feeds;
+
     public AccountConfig getAccountConfig() {
         return account_config;
     }
@@ -231,6 +233,14 @@ public class Account extends AccountProfile {
         this.tw_token_secret = tw_token_secret;
     }
 
+    public List<CaptureFeed> getCaptureFeeds() {
+        return capture_feeds;
+    }
+
+    public void setCaptureFeeds(List<CaptureFeed> feeds) {
+        capture_feeds = feeds;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -264,6 +274,7 @@ public class Account extends AccountProfile {
                 ", tutorial_state=" + tutorial_state +
                 ", shipping_addresses=" + shipping_addresses +
                 ", identifiers=" + identifiers +
+                ", capture_feeds=" + capture_feeds +
                 ", local_notifs=" + local_notifs +
                 '}';
     }

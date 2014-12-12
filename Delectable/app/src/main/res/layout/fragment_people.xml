@@ -2,7 +2,7 @@
 
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_view"
+    style="@style/ListViewStyle.NoDivider"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:divider="@null" />
+    android:layout_alignParentTop="true" />

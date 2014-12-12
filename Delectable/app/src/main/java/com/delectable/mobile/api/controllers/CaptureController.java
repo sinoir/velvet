@@ -1,12 +1,11 @@
 package com.delectable.mobile.api.controllers;
 
-import com.delectable.mobile.api.endpointmodels.captures.CapturesContext;
 import com.delectable.mobile.api.jobs.captures.AddCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.DeleteCaptureJob;
 import com.delectable.mobile.api.jobs.captures.EditCaptureCommentJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureDetailsJob;
+import com.delectable.mobile.api.jobs.captures.FetchCaptureListJob;
 import com.delectable.mobile.api.jobs.captures.FetchCaptureNotesJob;
-import com.delectable.mobile.api.jobs.captures.FetchTrendingCapturesJob;
 import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
 import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
@@ -36,8 +35,8 @@ public class CaptureController {
                 new EditCaptureCommentJob(captureId, commentId, captureComment));
     }
 
-    public void toggleLikeCapture(String captureId, String userId, boolean userLikesCapture) {
-        mJobManager.addJobInBackground(new LikeCaptureJob(captureId, userId, userLikesCapture));
+    public void toggleLikeCapture(String captureId, boolean userLikesCapture) {
+        mJobManager.addJobInBackground(new LikeCaptureJob(captureId, userLikesCapture));
     }
 
     public void rateCapture(String captureId, String userId, int rating) {
@@ -49,7 +48,8 @@ public class CaptureController {
     }
 
     public void fetchCaptureNotes(String requestId, String baseWineId, String wineProfileId,
-            Listing<CaptureNote, String> listing, String includeCaptureNote, Boolean isPullToRefresh) {
+            Listing<CaptureNote, String> listing, String includeCaptureNote,
+            Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
                 new FetchCaptureNotesJob(requestId, baseWineId, wineProfileId, listing,
                         includeCaptureNote, isPullToRefresh));
@@ -61,15 +61,15 @@ public class CaptureController {
 
     /**
      * @param requestId       Unique identifier for Event callback.
-     * @param context         Context type for capture
+     * @param listKey         List identifier
      * @param listing         The previous ListingResponse if paginating. Pass in {@code null} if
      *                        making a fresh request.
      * @param isPullToRefresh true if user invoke this call via a pull to refresh.
      */
-    public void fetchTrendingCaptures(String requestId, CapturesContext context,
+    public void fetchCaptureList(String requestId, String listKey,
             Listing<CaptureDetails, String> listing, Boolean isPullToRefresh) {
         mJobManager.addJobInBackground(
-                new FetchTrendingCapturesJob(requestId, context, listing, isPullToRefresh));
+                new FetchCaptureListJob(requestId, listKey, listing, isPullToRefresh));
     }
 
     public void flagCapture(String captureId) {

@@ -32,6 +32,8 @@ public class Listing<T extends IDable, D> {
 
     protected String context;
 
+    protected FeedParams feed_params;
+
     public Listing() {
 
     }
@@ -160,6 +162,13 @@ public class Listing<T extends IDable, D> {
         this.context = context;
     }
 
+    public FeedParams getFeedParams() {
+        return feed_params;
+    }
+
+    public void setFeedParams(FeedParams feed_params) {
+        this.feed_params = feed_params;
+    }
 
     /**
      * Clears the before, after, updates, and deletes lists. Used when saving a Listing to cache, so
@@ -273,6 +282,7 @@ public class Listing<T extends IDable, D> {
                 ", more=" + more +
                 ", e_tag='" + e_tag + '\'' +
                 ", context='" + context + '\'' +
+                ", feed_params='" + feed_params + '\'' +
                 '}';
     }
 }

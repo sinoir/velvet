@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/producer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="17sp"
+        android:lineSpacingMultiplier="1.2"
+        app:fontName="whitney_medium_sc" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/wine_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/producer_name"
+        android:textColor="@color/d_black"
+        android:textSize="17sp"
+        android:lineSpacingMultiplier="1.2"
+        app:fontName="whitney_book" />
+</RelativeLayout>
