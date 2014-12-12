@@ -101,6 +101,7 @@ public class WineProfileInstantFragment extends WineProfileFragment {
             @Override
             public void onClick(View view) {
                 // open rate & comment screen
+                mEventBus.postSticky(new RateCaptureFragment.RateCaptureInitEvent(mPreviewImage));
                 Intent intent = RateCaptureActivity.newIntent(getActivity(), mPendingCaptureId);
                 startActivity(intent);
             }
