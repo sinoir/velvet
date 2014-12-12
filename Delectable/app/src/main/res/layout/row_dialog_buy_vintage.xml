@@ -12,27 +12,29 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="@dimen/spacing_48"
-        android:layout_marginTop="@dimen/spacing_16"
-        android:layout_marginBottom="@dimen/spacing_16"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginBottom="@dimen/spacing_8"
         android:ems="2"
         android:gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:text="1998"
         android:textColor="@color/d_dark_gray"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:fontName="whitney_medium" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/spacing_16"
-        android:layout_marginBottom="@dimen/spacing_16"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginBottom="@dimen/spacing_8"
         android:layout_toRightOf="@+id/year"
         android:gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:singleLine="true"
         android:text="9.1"
         android:textColor="@color/d_light_green"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:fontName="whitney_medium" />
 
     <com.delectable.mobile.ui.wineprofile.widget.WinePriceView
@@ -40,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
+        android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_marginTop="@dimen/spacing_4"
         android:layout_marginBottom="@dimen/spacing_4" />

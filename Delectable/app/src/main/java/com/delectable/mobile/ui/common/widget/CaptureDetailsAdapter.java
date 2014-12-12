@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails> {
 
     public enum RowType {
-        SIMPLE, DETAIL;
+        SIMPLE, DETAIL, PURCHASE;
     }
 
     private CaptureDetailsView.CaptureActionsHandler mCaptureActionsHandler;
@@ -33,8 +33,12 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         super.getView(position, convertView, parent);
         View row;
         switch (mRowType) {
+            // TODO remove unused SIMPLE row type
             case SIMPLE:
                 row = getSimpleCaptureRow(position, convertView, parent);
+                break;
+            case PURCHASE:
+                row = getPurchaseCaptureRow(position, convertView, parent);
                 break;
             case DETAIL:
             default:
@@ -56,6 +60,21 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         }
         CaptureDetails capture = mItems.get(position);
         rowView.updateData(capture, mAccountId);
+        return rowView;
+    }
+
+    public View getPurchaseCaptureRow(int position, View convertView, ViewGroup parent) {
+
+        CaptureDetailsView rowView = (CaptureDetailsView) convertView;
+
+        if (rowView == null) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            rowView = (CaptureDetailsView) inflater.inflate(R.layout.row_feed_wine_detail_impl,
+                    parent, false);
+            rowView.setActionsHandler(mCaptureActionsHandler);
+        }
+        CaptureDetails capture = mItems.get(position);
+        rowView.updateData(capture, false, true);
         return rowView;
     }
 

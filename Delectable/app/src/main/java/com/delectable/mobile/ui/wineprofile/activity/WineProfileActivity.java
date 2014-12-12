@@ -21,6 +21,8 @@ public class WineProfileActivity extends BaseActivity {
 
     private static final String PARAMS_BASE_WINE_MINIMAL = "PARAMS_BASE_WINE_MINIMAL";
 
+    private static final String PARAMS_LAUNCH_PURCHASE_FLOW = "PARAMS_LAUNCH_PURCHASE_FLOW";
+
     //Deep Link keys
     private static final String DEEP_BASE_WINE_ID = "base_wine_id";
 
@@ -37,14 +39,25 @@ public class WineProfileActivity extends BaseActivity {
 
     private String mVintageId;
 
+    private boolean mLaunchWithPurchaseFlow;
+
     /**
      * see {@link WineProfileFragment#newInstance(WineProfileMinimal, PhotoHash)}
      */
     public static Intent newIntent(Context packageContext, WineProfileMinimal wineProfile,
             PhotoHash capturePhotoHash) {
+        return newIntent(packageContext, wineProfile, capturePhotoHash, false);
+    }
+
+    /**
+     * see {@link WineProfileFragment#newInstance(WineProfileMinimal, PhotoHash)}
+     */
+    public static Intent newIntent(Context packageContext, WineProfileMinimal wineProfile,
+            PhotoHash capturePhotoHash, boolean launchWithPurchaseFlow) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_WINE_PROFILE, wineProfile);
         intent.putExtra(PARAMS_CAPTURE_PHOTO_HASH, (Parcelable) capturePhotoHash);
+        intent.putExtra(PARAMS_LAUNCH_PURCHASE_FLOW, launchWithPurchaseFlow);
         intent.setClass(packageContext, WineProfileActivity.class);
         return intent;
     }
@@ -52,7 +65,8 @@ public class WineProfileActivity extends BaseActivity {
     /**
      * see {@link WineProfileFragment#newInstance(BaseWineMinimal, PhotoHash)}
      */
-    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine, PhotoHash capturePhotoHash) {
+    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine,
+            PhotoHash capturePhotoHash) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
         intent.putExtra(PARAMS_CAPTURE_PHOTO_HASH, (Parcelable) capturePhotoHash);
@@ -81,6 +95,7 @@ public class WineProfileActivity extends BaseActivity {
             mCapturePhotoHash = args.getParcelable(PARAMS_CAPTURE_PHOTO_HASH);
 
             mBaseWineMinimal = args.getParcelable(PARAMS_BASE_WINE_MINIMAL);
+            mLaunchWithPurchaseFlow = args.getBoolean(PARAMS_LAUNCH_PURCHASE_FLOW, false);
 
             //from deep links
             mBaseWineId = args.getString(DEEP_BASE_WINE_ID);
@@ -93,11 +108,12 @@ public class WineProfileActivity extends BaseActivity {
 
             if (mWineProfile != null) {
                 //spawned from a Feed Fragment
-                fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
+                fragment = WineProfileFragment
+                        .newInstance(mWineProfile, mCapturePhotoHash, mLaunchWithPurchaseFlow);
             } else if (mBaseWineMinimal != null) {
                 //spawned from search fragment
                 fragment = WineProfileFragment.newInstance(mBaseWineMinimal, mCapturePhotoHash);
-            } else if (mBaseWineId != null || mVintageId !=null) {
+            } else if (mBaseWineId != null || mVintageId != null) {
                 //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }
