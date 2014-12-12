@@ -193,8 +193,6 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
                 .newInstance(message, positiveText, negativeText);
         dialog.setTargetFragment(this, requestCode);
         dialog.show(getFragmentManager(), dialog.getClass().getSimpleName());
-        //TODO remove this setCancelable to debug why dismissing remove Wine dialog keeps showing up when clicking mincapture row and coming back
-        dialog.setCancelable(false);
     }
 
     protected BaseActivity getBaseActivity() {

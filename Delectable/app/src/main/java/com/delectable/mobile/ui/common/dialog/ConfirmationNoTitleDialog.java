@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,6 +98,10 @@ public class ConfirmationNoTitleDialog extends DialogFragment {
 
     @OnClick(R.id.negative_text)
     protected void onNegativeTextClick() {
+        if (getTargetFragment() != null) {
+            getTargetFragment()
+                    .onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
+        }
         dismiss();
     }
 
@@ -110,11 +115,14 @@ public class ConfirmationNoTitleDialog extends DialogFragment {
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onCancel(DialogInterface dialog) {
+        //need to provide custom onCancel because default implementation doesn't seem to call dismiss internally,
+        //so if we come back to the target fragment on the backstack, it shows us that dialog again.
         if (getTargetFragment() != null) {
             getTargetFragment()
                     .onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
         }
+        dismiss();
     }
 }
 
