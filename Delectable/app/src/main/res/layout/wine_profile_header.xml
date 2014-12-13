@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="600dp"
-    android:orientation="vertical"
     android:animateLayoutChanges="true">
 
     <com.delectable.mobile.ui.common.widget.WineBannerView
         android:id="@+id/wine_banner_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cap_feed_row_wine_banner_height"
+        android:layout_alignParentTop="true"
         android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/ratings_all_years_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_profile_ratings_all_years_container_height"
+        android:layout_below="@id/wine_banner_view"
         android:visibility="gone"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
         android:paddingRight="@dimen/general_row_horizontal_spacing">
@@ -91,6 +92,7 @@
         android:id="@+id/varietal_region_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ratings_all_years_container"
         android:background="@color/d_white"
         android:orientation="vertical"
         android:visibility="gone"
@@ -160,4 +162,4 @@
         android:text="@string/empty_wine_profile"
         android:visibility="gone" />
 
-</LinearLayout>
+</RelativeLayout>

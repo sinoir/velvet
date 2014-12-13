@@ -71,7 +71,6 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -177,6 +176,8 @@ public class WineProfileFragment extends BaseFragment implements
     protected Toolbar mToolbar;
 
     protected ListView mListView;
+
+    protected View mToolbarContrast;
 
     protected int mStickyToolbarHeight;
 
@@ -351,7 +352,7 @@ public class WineProfileFragment extends BaseFragment implements
         Point screenSize = ViewUtil.getDisplayDimensions();
         mStickyToolbarHeight = screenSize.x;
 
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(screenSize.x,
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x,
                 screenSize.x);
         mBanner.setLayoutParams(parms);
 
@@ -386,6 +387,8 @@ public class WineProfileFragment extends BaseFragment implements
         mBanner.updateVintage(mAllYearsText);
 
         updateVarietyRegionRatingView(mBaseWine);
+
+        mToolbarContrast = view.findViewById(R.id.toolbar_contrast);
 
         mListView = (ListView) view.findViewById(R.id.list_view);
         mListView.addHeaderView(header, null, false);
@@ -498,6 +501,8 @@ public class WineProfileFragment extends BaseFragment implements
         if (mBaseWineId != null) {
             mAnalytics.trackViewWineProfile();
         }
+
+        Animate.fadeIn(mToolbarContrast, 300);
     }
 
     @Override
@@ -789,6 +794,7 @@ public class WineProfileFragment extends BaseFragment implements
 
             // elevate sticky toolbar once it docks
             Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+            Animate.elevate(mToolbarContrast, top < minTranslation ? Animate.ELEVATION : 0);
             Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
 
             // drag toolbar off the screen when reaching the bottom of the header

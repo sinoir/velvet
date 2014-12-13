@@ -36,7 +36,7 @@
     </style>
 
     <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
-        <item name="android:background">@drawable/bg_toolbar_gradient</item>
+        <item name="android:background">@color/transparent</item>
         <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
