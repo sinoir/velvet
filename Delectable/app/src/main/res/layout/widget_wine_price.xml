@@ -10,7 +10,7 @@
     <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/loading"
         style="@style/ProgressBar.Indeterminate"
-        app:circleRadius="32dp"
+        app:circleRadius="24dp"
         app:barWidth="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

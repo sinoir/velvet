@@ -247,6 +247,7 @@ public class WineProfileFragment extends BaseFragment implements
     private boolean mIsToolbarBuyButtonVisible = false;
 
     //region Initializers
+
     /**
      * @param wineProfile      used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
@@ -415,9 +416,6 @@ public class WineProfileFragment extends BaseFragment implements
                         }
                     }
                 });
-
-        // empty state
-        mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
 
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);

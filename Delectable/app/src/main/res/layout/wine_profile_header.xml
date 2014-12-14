@@ -156,6 +156,7 @@
         style="@style/TextEmptyState"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/varietal_region_container"
         android:background="@android:color/white"
         android:gravity="center"
         android:padding="@dimen/spacing_32"
