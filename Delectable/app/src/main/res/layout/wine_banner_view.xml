@@ -29,15 +29,15 @@
         android:padding="@dimen/spacing_16">
 
     <ImageView
-            android:id="@+id/edit_base_wine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/producer_name"
-            android:layout_marginBottom="@dimen/spacing_4"
-            android:alpha="0"
-            android:clickable="true"
-            android:src="@drawable/btn_edit"
-            android:visibility="gone" />
+        android:id="@+id/edit_base_wine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/producer_name"
+        android:layout_marginBottom="@dimen/spacing_4"
+        android:alpha="0"
+        android:clickable="true"
+        android:src="@drawable/btn_edit"
+        android:visibility="gone" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/producer_name"
