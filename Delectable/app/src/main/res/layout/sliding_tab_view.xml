@@ -6,20 +6,20 @@
     android:layout_weight="1">
 
 <com.delectable.mobile.ui.common.widget.FontTextView
-        android:id="@+id/sliding_tab_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/spacing_4"
-        android:paddingBottom="@dimen/spacing_8"
-        android:paddingLeft="@dimen/spacing_16"
-        android:paddingRight="@dimen/spacing_16"
-        android:layout_centerVertical="true"
+    android:id="@+id/sliding_tab_textview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/spacing_4"
+    android:paddingBottom="@dimen/spacing_8"
+    android:paddingLeft="@dimen/spacing_16"
+    android:paddingRight="@dimen/spacing_16"
+    android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
-        android:textColor="@color/edward_to_chestnut"
-        android:textSize="18sp"
-        android:text="ZINFANDEL"
-        app:fontName="whitney_medium_sc"
-        android:gravity="center" />
+    android:textColor="@color/edward_to_chestnut"
+    android:textSize="18sp"
+    android:text="ZINFANDEL"
+    app:fontName="whitney_medium_sc"
+    android:gravity="center" />
 
     <ImageView
         android:id="@+id/sliding_tab_update_indicator"
