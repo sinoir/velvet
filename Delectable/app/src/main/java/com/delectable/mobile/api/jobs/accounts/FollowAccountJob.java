@@ -40,7 +40,7 @@ public class FollowAccountJob extends BaseJob {
     private int mLoggedInUserOriginalFollowingCount;
 
     public FollowAccountJob(String id, boolean follow) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mAccountId = id;
         mIsFollowing = follow;
     }
@@ -73,7 +73,8 @@ public class FollowAccountJob extends BaseJob {
 
         AccountProfile loggedIdUserAccount = mAccountModel.getAccount(loggedInUser.getId());
         if (loggedIdUserAccount != null) {
-            loggedIdUserAccount.setFollowingCount(mLoggedInUserOriginalFollowingCount + countChange);
+            loggedIdUserAccount
+                    .setFollowingCount(mLoggedInUserOriginalFollowingCount + countChange);
             mAccountModel.saveAccount(loggedIdUserAccount);
         }
     }
@@ -103,7 +104,7 @@ public class FollowAccountJob extends BaseJob {
     protected void onCancel() {
         //revert back to original state
         AccountProfile accountToFollow = mAccountModel.getAccount(mAccountId);
-        if (accountToFollow!=null) {
+        if (accountToFollow != null) {
             accountToFollow.setFollowerCount(mOriginalFollowerCount);
             accountToFollow.setCurrentUserRelationship(mOriginalUserRelationship);
             mAccountModel.saveAccount(accountToFollow);

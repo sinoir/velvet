@@ -9,18 +9,28 @@ public class UpdatedCaptureFeedsEvent extends BaseEvent {
 
     private List<CaptureFeed> mCaptureFeeds;
 
-    public UpdatedCaptureFeedsEvent(List<CaptureFeed> captureFeeds) {
+    private List<CaptureFeed> mOldCaptureFeeds;
+
+    public UpdatedCaptureFeedsEvent(List<CaptureFeed> captureFeeds,
+            List<CaptureFeed> oldCaptureFeeds) {
         super(true);
         mCaptureFeeds = captureFeeds;
+        mOldCaptureFeeds = oldCaptureFeeds;
     }
 
-    public UpdatedCaptureFeedsEvent(List<CaptureFeed> captureFeeds, String errorMessage) {
+    public UpdatedCaptureFeedsEvent(List<CaptureFeed> captureFeeds,
+            List<CaptureFeed> oldCaptureFeeds, String errorMessage) {
         super(errorMessage);
         mCaptureFeeds = captureFeeds;
+        mOldCaptureFeeds = oldCaptureFeeds;
     }
 
     public List<CaptureFeed> getCaptureFeeds() {
         return mCaptureFeeds;
+    }
+
+    public List<CaptureFeed> getOldCaptureFeeds() {
+        return mOldCaptureFeeds;
     }
 
 }

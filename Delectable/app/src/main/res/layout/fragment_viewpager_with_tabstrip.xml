@@ -1,22 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/d_white"
-        android:visibility="gone"
-        android:orientation="vertical">
-
-        <View
-            android:id="@+id/tab_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/d_light_gray"
-            android:visibility="gone" />
-
-    </LinearLayout>
+    android:layout_height="match_parent"
+    android:background="@color/d_white">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -27,6 +12,7 @@
         android:id="@+id/tabstrip"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height" />
+        android:layout_height="@dimen/tab_height"
+        android:elevation="@dimen/tab_elevation" />
 
 </FrameLayout>

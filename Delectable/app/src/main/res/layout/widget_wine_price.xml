@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
+    android:minWidth="64dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:layout_height="wrap_content">
 
-    <ProgressBar
+    <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        style="@style/ProgressBar.Indeterminate"
+        app:circleRadius="24dp"
+        app:barWidth="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="visible" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/sold_out"
+        android:layout_width="match_parent"
         style="@style/PurchaseWineSoldOut"
+        android:layout_gravity="center"
         android:text="@string/wine_profile_sold_out"
         android:visibility="gone" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/check_price_button"
         style="@style/PurchaseWineCheckPrice"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:text="@string/wine_profile_check_price"
         android:visibility="gone" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/price_button"
         style="@style/ButtonDChestNutBG"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:text="$10"
         android:textAllCaps="true"
         android:visibility="gone" />
 
-</RelativeLayout>
+</FrameLayout>

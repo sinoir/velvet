@@ -34,6 +34,7 @@
         android:layout_marginBottom="-14dp"
         android:gravity="center"
         android:layout_below="@+id/capture_comment_tagged_text"
+        android:animateLayoutChanges="true"
         android:visibility="visible">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -41,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:text="15 likes"
             android:textColor="@color/medium_gray_to_dark_gray"
             android:textSize="@dimen/text_size_medium"
@@ -52,6 +54,7 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/likes_count"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="•"
@@ -65,6 +68,7 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/vertical_divider_likes"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:text="14 comments"
             android:textColor="@color/medium_gray_to_dark_gray"
             android:textSize="@dimen/text_size_medium"

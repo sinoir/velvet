@@ -6,12 +6,13 @@
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle.NoDivider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize"
+        android:paddingBottom="@dimen/spacing_8"
         android:clipToPadding="false"
-        android:background="@color/d_white"
-        android:divider="@null" />
+        android:background="@color/d_white" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/empty_state_layout"

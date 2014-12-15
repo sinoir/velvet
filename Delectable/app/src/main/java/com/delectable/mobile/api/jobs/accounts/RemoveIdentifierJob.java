@@ -2,14 +2,14 @@ package com.delectable.mobile.api.jobs.accounts;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.api.cache.UserInfo;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.Identifier;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
+import com.delectable.mobile.api.endpointmodels.accounts.AccountsRemoveIdentifierRequest;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsIdentifiersListingResponse;
-import com.delectable.mobile.api.endpointmodels.accounts.AccountsRemoveIdentifierRequest;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.Identifier;
 import com.path.android.jobqueue.Params;
 
 import android.util.Log;
@@ -21,8 +21,8 @@ public class RemoveIdentifierJob extends BaseJob {
     private String mIdentifierId;
 
 
-    public RemoveIdentifierJob(Identifier identifier) {
-        super(new Params(Priority.SYNC).requireNetwork().persist());
+    public RemoveIdentifierJob(String requestId, Identifier identifier) {
+        super(requestId, new Params(Priority.SYNC.value()).requireNetwork().persist());
         mIdentifierId = identifier.getId();
     }
 
@@ -45,7 +45,6 @@ public class RemoveIdentifierJob extends BaseJob {
         //hold onto original state of account
         UserInfo.setTempAccount(account);
 
-
         //remove from list
         account.getIdentifiers().remove(identifier);
 
@@ -66,7 +65,7 @@ public class RemoveIdentifierJob extends BaseJob {
 
         UserInfo.setAccountPrivate(account);
 
-        UpdatedAccountEvent event = new UpdatedAccountEvent(account);
+        UpdatedAccountEvent event = new UpdatedAccountEvent(mRequestId, account);
         mEventBus.post(event);
     }
 
@@ -85,7 +84,7 @@ public class RemoveIdentifierJob extends BaseJob {
         UserInfo.setAccountPrivate(account);
         UserInfo.clearTempAccount();
 
-        UpdatedAccountEvent event = new UpdatedAccountEvent(account);
+        UpdatedAccountEvent event = new UpdatedAccountEvent(mRequestId, account);
         mEventBus.post(event);
     }
 
@@ -95,7 +94,7 @@ public class RemoveIdentifierJob extends BaseJob {
         Account account = UserInfo.getTempAccountPrivate();
         UserInfo.setAccountPrivate(account);
         UserInfo.clearTempAccount();
-        UpdatedAccountEvent event = new UpdatedAccountEvent(account);
+        UpdatedAccountEvent event = new UpdatedAccountEvent(mRequestId, account, TAG + " " + getErrorMessage());
         mEventBus.post(event);
         mEventBus.post(new UpdatedIdentifiersListingEvent(TAG + " " + getErrorMessage()));
     }

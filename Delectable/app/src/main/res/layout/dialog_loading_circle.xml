@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     android:background="@color/transparent">
 
-    <ProgressBar
+    <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        style="@style/ProgressBar.Indeterminate"
         android:layout_gravity="center"
         android:background="@color/transparent"
         android:visibility="visible" />

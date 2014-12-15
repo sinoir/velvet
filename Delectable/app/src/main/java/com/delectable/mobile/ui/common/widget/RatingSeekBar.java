@@ -78,6 +78,8 @@ public class RatingSeekBar extends SeekBar implements SeekBar.OnSeekBarChangeLis
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        progress++; //offset to make rating scale is 6.1-10 instead of 6.0-9.9
+
         if (fromUser || mShowColors) {
             mRatingPercent = progress / 40.0f;
             updateRatingBarColors();

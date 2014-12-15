@@ -9,7 +9,10 @@ import com.delectable.mobile.api.events.accounts.UpdatedCaptureFeedsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.path.android.jobqueue.Params;
+
+import java.util.List;
 
 public class FetchAccountPrivateJob extends BaseJob {
 
@@ -20,16 +23,16 @@ public class FetchAccountPrivateJob extends BaseJob {
     /**
      * Fetch own private account.
      */
-    public FetchAccountPrivateJob() {
-        this(null); //passing in no id fetches own account
+    public FetchAccountPrivateJob(String requestId) {
+        this(requestId, null); //passing in no id fetches own account
     }
 
     /**
      * Explicitly search for Account private with id. Shouldn't be possible to search for another
      * user's Account private data.
      */
-    public FetchAccountPrivateJob(String id) {
-        super(new Params(Priority.UX).requireNetwork());
+    public FetchAccountPrivateJob(String requestId, String id) {
+        super(requestId, new Params(Priority.UX.value()).requireNetwork());
         mAccountId = id;
     }
 
@@ -45,16 +48,20 @@ public class FetchAccountPrivateJob extends BaseJob {
 
         //cache to shared prefs
         UserInfo.setAccountPrivate(account);
-        mEventBus.post(new UpdatedAccountEvent(account));
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account));
 
         //save capture feeds
-        UserInfo.setCaptureFeeds(account.getCaptureFeeds());
-        mEventBus.post(new UpdatedCaptureFeedsEvent(account.getCaptureFeeds()));
+        List<CaptureFeed> oldFeeds = UserInfo.getCaptureFeeds();
+        if (account.getCaptureFeeds() != null && !account.getCaptureFeeds().equals(oldFeeds)) {
+            UserInfo.setCaptureFeeds(account.getCaptureFeeds());
+            mEventBus.post(new UpdatedCaptureFeedsEvent(account.getCaptureFeeds(), oldFeeds));
+        }
 
     }
 
     @Override
     protected void onCancel() {
-        mEventBus.post(new UpdatedAccountEvent(mAccountId, getErrorMessage()));
+        Account account = UserInfo.getAccountPrivate();
+        mEventBus.post(new UpdatedAccountEvent(mRequestId, account, getErrorMessage()));
     }
 }

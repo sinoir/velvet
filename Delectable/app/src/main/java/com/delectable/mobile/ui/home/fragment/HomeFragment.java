@@ -29,7 +29,7 @@ public class HomeFragment extends BaseFragment {
     /**
      * Used with the ViewPager in order to cache a certain amount of pages
      */
-    public static final int PREFETCH_FEED_COUNT = 5;
+    public static final int PREFETCH_FEED_COUNT = 6;
 
     private View mView;
 
@@ -60,14 +60,15 @@ public class HomeFragment extends BaseFragment {
         mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
         mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
 
-        populateFeedTabs(UserInfo.getCaptureFeeds());
+        List<CaptureFeed> captureFeeds = UserInfo.getCaptureFeeds();
+        populateFeedTabs(captureFeeds, captureFeeds);
 
         return mView;
     }
 
-    private void populateFeedTabs(List<CaptureFeed> captureFeeds) {
+    private void populateFeedTabs(List<CaptureFeed> captureFeeds,
+            List<CaptureFeed> oldCaptureFeeds) {
         String currentUserId = UserInfo.getUserId(getActivity());
-        List<CaptureFeed> storedCaptureFeeds = UserInfo.getCaptureFeeds();
         List<SlidingTabAdapter.SlidingTabItem> tabItems
                 = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
 
@@ -94,13 +95,13 @@ public class HomeFragment extends BaseFragment {
                 }
 
                 // add feed to tabs
+                boolean isNewFeed = oldCaptureFeeds != null && !oldCaptureFeeds.contains(feed);
                 tabItems.add(new SlidingTabAdapter.SlidingTabItem(
                         CaptureListFragment
                                 .newInstance(currentUserId, feed.getKey(), feed.getTitle(),
                                         feed.getBanner(), backgroundColor, textColor),
                         feed.getTitle().toLowerCase(),
-                        (storedCaptureFeeds != null && storedCaptureFeeds.contains(feed)) ? false
-                                : true // TODO update indicator
+                        isNewFeed
                 ));
             }
         }
@@ -119,11 +120,7 @@ public class HomeFragment extends BaseFragment {
     public void onEventMainThread(UpdatedCaptureFeedsEvent event) {
         if (event.isSuccessful()) {
             if (event.getCaptureFeeds() != null && !event.getCaptureFeeds().equals(mCaptureFeeds)) {
-//                Log.d("HomeFragment",
-//                        "############## populating feed tabs after feeds have changed");
-//                Log.d("HomeFragment", "############## old list: " + mCaptureFeeds);
-//                Log.d("HomeFragment", "############## new list: " + event.getCaptureFeeds());
-                populateFeedTabs(event.getCaptureFeeds());
+                populateFeedTabs(event.getCaptureFeeds(), event.getOldCaptureFeeds());
             }
         }
     }

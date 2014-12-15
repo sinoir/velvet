@@ -7,6 +7,12 @@
     android:background="@color/d_white">
 
     <FrameLayout
+        android:id="@+id/wine_profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
+    <FrameLayout
         android:id="@+id/camera_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_capture_preview_height"
@@ -17,6 +23,16 @@
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/preview_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/wine_capture_preview_height"
+            android:layout_alignParentTop="true"
+            android:alpha="0"
+            android:visibility="invisible"
+            android:background="@color/d_chestnut" />
+
     </FrameLayout>
 
     <Button
@@ -63,6 +79,18 @@
             android:src="@drawable/btn_capture_close" />
 
         <ImageButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/capture_button"
+            android:layout_alignTop="@+id/capture_button"
+            android:layout_toLeftOf="@+id/capture_button"
+            android:background="@null"
+            android:alpha="0"
+            android:visibility="gone"
+            android:src="@drawable/btn_capture_back" />
+
+        <ImageButton
             android:id="@+id/capture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,6 +99,26 @@
             android:layout_marginRight="@dimen/spacing_48"
             android:background="@null"
             android:src="@drawable/btn_shutter" />
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progress_bar"
+            style="@style/ProgressBar.Indeterminate"
+            app:circleRadius="93dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:alpha="0" />
+
+        <ImageButton
+            android:id="@+id/confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/wine_capture_button_horizontal_spacing"
+            android:layout_marginRight="@dimen/wine_capture_button_horizontal_spacing"
+            android:background="@null"
+            android:alpha="0"
+            android:visibility="gone"
+            android:src="@drawable/btn_confirm" />
 
         <ImageButton
             android:id="@+id/camera_roll_button"

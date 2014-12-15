@@ -62,8 +62,7 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
         mSearchView.setOnQueryTextListener(this);
 
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.requestFocus();
+        mSearchView.setIconified(false);
 
         if (mCurrentQuery != null && !mCurrentQuery.isEmpty()) {
             mSearchView.setQuery(mCurrentQuery, false);
@@ -87,9 +86,9 @@ public abstract class BaseSearchTabFragment extends BaseFragment
                 .inflate(R.layout.fragment_search_wines_people, container, false);
         ButterKnife.inject(this, layout);
 
+        mListView.setEmptyView(mEmptyStateTextView);
         mListView.setAdapter(getAdapter());
         mListView.setOnItemClickListener(this);
-        mListView.setEmptyView(mEmptyStateTextView);
 
         return layout;
     }

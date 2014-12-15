@@ -1,12 +1,12 @@
 package com.delectable.mobile.api.jobs.basewines;
 
-import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
-import com.delectable.mobile.api.jobs.Priority;
-import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.cache.BaseWineModel;
-import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.endpointmodels.ActionRequest;
 import com.delectable.mobile.api.endpointmodels.basewines.BaseWineResponse;
+import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
+import com.delectable.mobile.api.jobs.BaseJob;
+import com.delectable.mobile.api.jobs.Priority;
+import com.delectable.mobile.api.models.BaseWine;
 import com.path.android.jobqueue.Params;
 
 import javax.inject.Inject;
@@ -19,7 +19,7 @@ public class FetchBaseWineJob extends BaseJob {
     private String mBaseWineId;
 
     public FetchBaseWineJob(String baseWineId) {
-        super(new Params(Priority.UX).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork().persist());
         mBaseWineId = baseWineId;
     }
 

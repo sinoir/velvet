@@ -7,12 +7,9 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.Listing;
-import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ActivityFeedAdapter;
 import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
@@ -22,6 +19,7 @@ import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.DeepLink;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.app.Activity;
@@ -29,11 +27,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private static final int NAVDRAWER_LAUNCH_DELAY = 250;
 
     private static final String ACTIVITY_FEED_REQ = TAG + "_activity_feed";
+
+    private static final String FETCH_ACCOUNT = TAG + "_fetch_account";
 
     /**
      * Remember the position of the selected item.
@@ -74,6 +77,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private DrawerLayout mDrawerLayout;
 
     private View mFragmentContainerView;
+
+    private ListView mDrawerListView;
+
+    private View mEmptyView;
 
     private ActivityFeedAdapter mActivityFeedAdapter = new ActivityFeedAdapter(this);
 
@@ -111,17 +118,26 @@ public class NavigationDrawerFragment extends BaseFragment implements
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // This may seem redundant, but doing it this way prevents annoying crashes when refactoring and forgetting to change the return type
-        ListView drawerListView = (ListView) view;
+        mDrawerListView = (ListView) view;
 
         mNavHeader = new NavHeader(getActivity());
-        drawerListView.addHeaderView(mNavHeader, null, false);
+        mDrawerListView.addHeaderView(mNavHeader, null, false);
         mNavHeader.setActionListener(this);
 
-        drawerListView.setOnItemClickListener(this);
-        drawerListView.setAdapter(mActivityFeedAdapter);
+        mEmptyView = inflater.inflate(R.layout.navigation_empty_view, mDrawerListView, false);
+        mDrawerListView.addFooterView(mEmptyView);
+
+        mDrawerListView.setOnItemClickListener(this);
+        mDrawerListView.setAdapter(mActivityFeedAdapter);
         mNavHeader.setCurrentSelectedNavItem(mCurrentSelectedNavItem);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.nav_menu, menu);
     }
 
     @Override
@@ -133,10 +149,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
+        if (!mActivityFeedAdapter.isEmpty()) {
+            mDrawerListView.removeFooterView(mEmptyView);
+        }
+
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
         // Must update / sync private account on Resume, for sycning issues.
         // TODO: Need to create 1 object for private / public, otherwise we require special syncing code for the duplciate data, which doesn't exist.
-        mAccountController.fetchAccountPrivate(mUserId);
+        mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
         updateUIWithData();
         loadActivityFeed();
     }
@@ -205,7 +225,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
                 if (!isAdded()) {
                     return;
                 }
-
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -231,12 +250,16 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
         // When the user runs the app for the first time, we want to land them with the
         // navigation drawer open. But just the first time.
         if (!UserInfo.isWelcomeDone()) {
             // first run of the app starts with the nav drawer open
             UserInfo.markWelcomeDone();
             mDrawerLayout.openDrawer(Gravity.START);
+
+            FacebookEventUtil.logFirstAppUse(getActivity());
         }
     }
 
@@ -285,42 +308,23 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     //region EventBus events
-    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
-        if (event.isSuccessful()) {
-            PhotoHash photoHash = event.getPhoto();
-            mUserAccount.setPhoto(photoHash);
-            updateUIWithData();
-            return;
-        }
-        showToastError(event.getErrorMessage());
-    }
-
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccount().getId())) {
+        //no need to filter by request id, this listens to all events
+
+        mUserAccount = event.getAccount();
+        updateUIWithData();
+
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
             return;
         }
 
-        if (event.isSuccessful()) {
-            mUserAccount = event.getAccount();
-            updateUIWithData();
-
-            // Update Push notification stuff after user logs in / updates account.
-            // TODO: Put this somewhere else that makes more sense..
-            try {
-                App.getInstance().updateKahunaAttributes();
-            } catch (Exception ex) {
-                Log.wtf(TAG, "Kahuna Failed", ex);
-            }
-            return;
-        }
-        showToastError(event.getErrorMessage());
-    }
-
-    public void onEventMainThread(UpdatedProfileEvent event) {
-        if (event.isSuccessful()) {
-            // Reload Data
-            mUserAccount = UserInfo.getAccountPrivate(getActivity());
-            updateUIWithData();
+        // Update Push notification stuff after user logs in / updates account.
+        // TODO: Put this somewhere else that makes more sense..
+        try {
+            App.getInstance().updateKahunaAttributes();
+        } catch (Exception ex) {
+            Log.wtf(TAG, "Kahuna Failed", ex);
         }
     }
 
@@ -351,9 +355,19 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         //TODO optimized to use etag
-        Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
-        mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
-        mActivityFeedAdapter.notifyDataSetChanged();
+        if (event.getListing() != null) {
+            Listing<ActivityFeedItem, String> mActivityRecipientListing = event.getListing();
+            mActivityFeedAdapter.setItems(mActivityRecipientListing.getUpdates());
+            mActivityFeedAdapter.notifyDataSetChanged();
+            if (!mActivityFeedAdapter.isEmpty()) {
+                mDrawerListView.removeFooterView(mEmptyView);
+            }
+
+        }
+
+        //TODO make emptyview, show here
+        //mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+
     }
 
     //endregion
@@ -368,19 +382,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
         mNavHeader.setWineCount(mUserAccount.getCaptureCount());
         mNavHeader.setUserName(mUserAccount.getFullName());
-        mNavHeader.setUserBio(mUserAccount.getBio());
         ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
                 mNavHeader.getUserImageView());
     }
 
     @Override
     public void navHeaderUserImageClicked() {
-        Intent intent = new Intent();
-        intent.putExtra(UserProfileActivity.PARAMS_USER_ID, mUserId);
-        intent.setClass(getActivity(), UserProfileActivity.class);
-        startActivity(intent);
-//        navItemSelected(NavHeader.NAV_PROFILE);
-//        mNavHeader.setCurrentSelectedNavItem(NavHeader.NAV_PROFILE);
+        // TODO launch user profile with taste profile as the default page, "your wines" brings you to the wine list
+        startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
     public void onEventMainThread(NavigationEvent event) {

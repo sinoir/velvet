@@ -20,7 +20,7 @@ public class ActivityFeedRow extends RelativeLayout {
 
     private static final String TAG = ActivityFeedRow.class.getSimpleName();
 
-    @InjectView(R.id.left_iamge)
+    @InjectView(R.id.left_image)
     protected CircleImageView mLeftImage;
 
     @InjectView(R.id.text)

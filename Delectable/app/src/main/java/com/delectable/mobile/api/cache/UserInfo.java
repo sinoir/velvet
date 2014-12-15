@@ -10,7 +10,14 @@ import com.delectable.mobile.api.models.Motd;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class UserInfo {
@@ -38,6 +45,8 @@ public class UserInfo {
     private static final String PROPERTY_USER_OVER_21 = "propertyUserOver21";
 
     private static final String PROPERTY_WELCOME_DONE = "welcomeDone";
+
+    private static final Gson gson = new Gson();
 
     public static void onSignIn(String userId, String fullName, String email, String sessionKey,
             String sessionToken) {
@@ -72,7 +81,6 @@ public class UserInfo {
     public static void setMotd(Motd motd) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
-        Gson gson = new Gson();
         String jsonString = gson.toJson(motd);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_MOTD, jsonString);
@@ -82,7 +90,6 @@ public class UserInfo {
     public static void setAccountPrivate(Account account) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
-        Gson gson = new Gson();
         String jsonString = gson.toJson(account);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_ACCOUNT_PRIVATE, jsonString);
@@ -90,13 +97,23 @@ public class UserInfo {
     }
 
     public static void setCaptureFeeds(List<CaptureFeed> captureFeeds) {
-        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
-                Context.MODE_PRIVATE);
-        Gson gson = new Gson();
+//        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+//                Context.MODE_PRIVATE);
+//        String jsonString = gson.toJson(captureFeeds);
+//        SharedPreferences.Editor editor = prefs.edit();
+//        editor.putString(PROPERTY_CAPTURE_FEEDS, jsonString);
+//        editor.commit();
         String jsonString = gson.toJson(captureFeeds);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_CAPTURE_FEEDS, jsonString);
-        editor.commit();
+        FileOutputStream os = null;
+        try {
+            os = App.getInstance().openFileOutput(PROPERTY_CAPTURE_FEEDS, Context.MODE_PRIVATE);
+            os.write(jsonString.getBytes());
+            os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean isSignedIn(Context context) {
@@ -113,6 +130,14 @@ public class UserInfo {
         return prefs.getString(PROPERTY_SESSION_KEY, null);
     }
 
+    public static String getUserId() {
+        return getUserId(App.getInstance());
+    }
+
+    /**
+     * Should switch over to use {@link #getUserId()} instead.
+     */
+    @Deprecated
     public static String getUserId(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         return prefs.getString(PROPERTY_USER_ID, null);
@@ -122,7 +147,7 @@ public class UserInfo {
         return userId != null && userId.equals(getUserId(context));
     }
 
-        public static String getUserName(Context context) {
+    public static String getUserName(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String name = prefs.getString(PROPERTY_USER_NAME, null);
         //this check is necessary this method was created after 1.0 release, their user name might not have been
@@ -151,18 +176,24 @@ public class UserInfo {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String jsonString = prefs.getString(PROPERTY_MOTD, null);
         if (jsonString != null) {
-            Gson gson = new Gson();
             Motd motd = gson.fromJson(jsonString, Motd.class);
             return motd;
         }
         return null;
     }
 
+    public static Account getAccountPrivate() {
+        return getAccountPrivate(App.getInstance());
+    }
+
+    /**
+     * Should switch over to use {@link #getAccountPrivate()} instead.
+     */
+    @Deprecated
     public static Account getAccountPrivate(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String jsonString = prefs.getString(PROPERTY_ACCOUNT_PRIVATE, null);
         if (jsonString != null) {
-            Gson gson = new Gson();
             Account account = gson.fromJson(jsonString, Account.class);
             return account;
         }
@@ -170,11 +201,38 @@ public class UserInfo {
     }
 
     public static List<CaptureFeed> getCaptureFeeds() {
-        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
-                Context.MODE_PRIVATE);
-        String jsonString = prefs.getString(PROPERTY_CAPTURE_FEEDS, null);
+//        SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
+//                Context.MODE_PRIVATE);
+//        String jsonString = prefs.getString(PROPERTY_CAPTURE_FEEDS, null);
+//        if (jsonString != null) {
+//            List<CaptureFeed> captureFeeds = gson
+//                    .fromJson(jsonString, new TypeToken<List<CaptureFeed>>() {
+//                    }.getType());
+//            return captureFeeds;
+//        }
+//        return null;
+        String jsonString = null;
+        BufferedReader reader = null;
+        FileInputStream is = null;
+        try {
+            is = App.getInstance().openFileInput(PROPERTY_CAPTURE_FEEDS);
+            reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+            reader.close();
+            is.close();
+            jsonString = sb.toString();
+            Log.d("UserInfo", jsonString);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (jsonString != null) {
-            Gson gson = new Gson();
             List<CaptureFeed> captureFeeds = gson
                     .fromJson(jsonString, new TypeToken<List<CaptureFeed>>() {
                     }.getType());
@@ -193,7 +251,6 @@ public class UserInfo {
     public static void setTempAccount(Account account) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);
-        Gson gson = new Gson();
         String jsonString = gson.toJson(account);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_ACCOUNT_PRIVATE_TEMP, jsonString);
@@ -205,7 +262,6 @@ public class UserInfo {
                 .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         String jsonString = prefs.getString(PROPERTY_ACCOUNT_PRIVATE_TEMP, null);
         if (jsonString != null) {
-            Gson gson = new Gson();
             Account account = gson.fromJson(jsonString, Account.class);
             return account;
         }
@@ -236,7 +292,7 @@ public class UserInfo {
                 Context.MODE_PRIVATE);
         return prefs.getBoolean(PROPERTY_USER_OVER_21, false);
     }
-    
+
     public static boolean isWelcomeDone() {
         SharedPreferences prefs = App.getInstance().getSharedPreferences(PREFERENCES,
                 Context.MODE_PRIVATE);

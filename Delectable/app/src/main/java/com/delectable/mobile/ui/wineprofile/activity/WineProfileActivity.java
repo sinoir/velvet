@@ -52,7 +52,8 @@ public class WineProfileActivity extends BaseActivity {
     /**
      * see {@link WineProfileFragment#newInstance(BaseWineMinimal, PhotoHash)}
      */
-    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine, PhotoHash capturePhotoHash) {
+    public static Intent newIntent(Context packageContext, BaseWineMinimal baseWine,
+            PhotoHash capturePhotoHash) {
         Intent intent = new Intent();
         intent.putExtra(PARAMS_BASE_WINE_MINIMAL, baseWine);
         intent.putExtra(PARAMS_CAPTURE_PHOTO_HASH, (Parcelable) capturePhotoHash);
@@ -93,11 +94,12 @@ public class WineProfileActivity extends BaseActivity {
 
             if (mWineProfile != null) {
                 //spawned from a Feed Fragment
-                fragment = WineProfileFragment.newInstance(mWineProfile, mCapturePhotoHash);
+                fragment = WineProfileFragment
+                        .newInstance(mWineProfile, mCapturePhotoHash);
             } else if (mBaseWineMinimal != null) {
                 //spawned from search fragment
                 fragment = WineProfileFragment.newInstance(mBaseWineMinimal, mCapturePhotoHash);
-            } else if (mBaseWineId != null || mVintageId !=null) {
+            } else if (mBaseWineId != null || mVintageId != null) {
                 //spawned from deep link
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }

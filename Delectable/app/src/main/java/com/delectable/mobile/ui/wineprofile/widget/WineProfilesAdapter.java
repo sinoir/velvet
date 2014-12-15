@@ -50,11 +50,11 @@ public class WineProfilesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ChooseVintageDialogRow row = (ChooseVintageDialogRow) convertView;
+        BuyVintageDialogRow row = (BuyVintageDialogRow) convertView;
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            row = (ChooseVintageDialogRow) inflater
-                    .inflate(R.layout.row_dialog_choose_vintage_with_sizing, parent, false);
+            row = (BuyVintageDialogRow) inflater
+                    .inflate(R.layout.row_dialog_buy_vintage_impl, parent, false);
             row.setWinePriceActionCallback(mWinePriceViewActionsCallback);
         }
         row.updateData(getItem(position));

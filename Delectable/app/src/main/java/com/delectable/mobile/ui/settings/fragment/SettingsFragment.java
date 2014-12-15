@@ -9,11 +9,8 @@ import com.delectable.mobile.api.events.accounts.AssociateFacebookEvent;
 import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedIdentifiersListingEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfileEvent;
-import com.delectable.mobile.api.events.accounts.UpdatedProfilePhotoEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.Identifier;
-import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
@@ -25,6 +22,7 @@ import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.FontEnum;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.NameUtil;
+import com.delectable.mobile.util.SettingsUtil;
 import com.delectable.mobile.util.TwitterUtil;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -44,7 +42,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,10 +51,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.inject.Inject;
 
@@ -111,8 +107,9 @@ public class SettingsFragment extends BaseFragment {
             mUserAccount.setTwTokenSecret(twitterInfo.tokenSecret);
             updateUI();
 
-            mAccountController.associateTwitter(twitterInfo.twitterId, twitterInfo.token,
-                    twitterInfo.tokenSecret, twitterInfo.screenName);
+            mAccountController
+                    .associateTwitter(ASSOCIATE_TWITTER, twitterInfo.twitterId, twitterInfo.token,
+                            twitterInfo.tokenSecret, twitterInfo.screenName);
         }
 
         @Override
@@ -131,6 +128,33 @@ public class SettingsFragment extends BaseFragment {
     private static final int DISCONNECT_TWITTER = 2;
 
     private static final int DISCONNECT_FACEBOOK = 3;
+
+    private static final String UDPATE_PROFILE_PICTURE = TAG + "_UDPATE_PROFILE_PICTURE";
+
+    private static final String UDPATE_PROFILE = TAG + "_UDPATE_PROFILE";
+
+    private static final String REMOVE_IDENTIFIER = TAG + "_REMOVE_IDENTIFIER";
+
+    private static final String FACEBOOK_CONNECT = TAG + "_FACEBOOK_CONNECT";
+
+    private static final String FACEBOOKIFY_PROFILE_PHOTO = TAG + "_FACEBOOKIFY_PROFILE_PHOTO";
+
+    private static final String ASSOCIATE_TWITTER = TAG + "_ASSOCIATE_TWITTER";
+
+    private static final String FETCH_ACCOUNT = TAG + "_FETCH_ACCOUNT";
+
+    //so that we can figure out whether the updatedAccountEvent was from a request that we initialized
+    private static final HashSet<String> REQUEST_KEYS = new HashSet<String>();
+
+    static {
+        REQUEST_KEYS.add(UDPATE_PROFILE_PICTURE);
+        REQUEST_KEYS.add(UDPATE_PROFILE);
+        REQUEST_KEYS.add(REMOVE_IDENTIFIER);
+        REQUEST_KEYS.add(FACEBOOK_CONNECT);
+        REQUEST_KEYS.add(FACEBOOKIFY_PROFILE_PHOTO);
+        REQUEST_KEYS.add(ASSOCIATE_TWITTER);
+        REQUEST_KEYS.add(FETCH_ACCOUNT);
+    }
 
     @Inject
     AccountController mAccountController;
@@ -186,14 +210,15 @@ public class SettingsFragment extends BaseFragment {
      */
     private Identifier mPhoneIdentifier;
 
-    /**
-     * Used to keep track of which photo to send to S3 after provisioning
-     */
-    private Bitmap mPhoto;
-
     private UiLifecycleHelper mFacebookUiHelper;
 
     private boolean mUpdatingViaDoneClick = false;
+
+    /**
+     * Flag that helps us stop fetchAccount from executing if we're returning to this scsreen from a
+     * select photo action.
+     */
+    private boolean mResumedFromSelectPhotoAction = false;
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -236,7 +261,8 @@ public class SettingsFragment extends BaseFragment {
         return view;
     }
 
-    @OnEditorAction({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    @OnEditorAction(
+            {R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
     protected boolean onKeyboardDoneAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             EditText editText = (EditText) v;
@@ -250,7 +276,8 @@ public class SettingsFragment extends BaseFragment {
         return false;
     }
 
-    @OnFocusChange({R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
+    @OnFocusChange(
+            {R.id.name, R.id.short_bio, R.id.website, R.id.email_value, R.id.phone_number_value})
     protected void onFocusLoss(View v, boolean hasFocus) {
         if (!hasFocus) {
             EditText editText = (EditText) v;
@@ -271,10 +298,15 @@ public class SettingsFragment extends BaseFragment {
         if (mUserAccount == null) {
             mUserAccount = UserInfo.getAccountPrivate(getActivity());
         }
-        updateUI();
+        boolean refreshPhoto = !mResumedFromSelectPhotoAction;
+        updateUI(refreshPhoto);
 
-        //fetch most recent account private from API
-        mAccountController.fetchAccountPrivate(mUserId);
+        if (!mResumedFromSelectPhotoAction) {
+            //fetch most recent account private from API
+            mAccountController.fetchAccountPrivate(FETCH_ACCOUNT);
+            mResumedFromSelectPhotoAction = false;
+        }
+
     }
 
     @Override
@@ -365,6 +397,7 @@ public class SettingsFragment extends BaseFragment {
 
         if (requestCode == SELECT_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
+            mResumedFromSelectPhotoAction = true;
             updateProfileImageWithUri(selectedImageUri);
         }
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -432,69 +465,34 @@ public class SettingsFragment extends BaseFragment {
 
     //region Setting Profile Photo Endpoints
 
-    /**
-     * @return Returns null if the image couldn't be retrieved.
-     */
-    private Bitmap getImage(Uri selectedImage) {
-        try {
-            if (getActivity() == null) {
-                return null;
-            }
-            // TODO: Background thread here?
-            Bitmap bm = MediaStore.Images.Media
-                    .getBitmap(getActivity().getContentResolver(), selectedImage);
-            return bm;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Failed to open image", e);
-            Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-    }
-
     //region Events
     public void onEventMainThread(UpdatedAccountEvent event) {
-        if (!mUserId.equals(event.getAccount().getId())) {
+        if (!REQUEST_KEYS.contains(event.getRequestId())) {
             return;
         }
 
-        if (event.isSuccessful()) {
-            mUserAccount = event.getAccount();
-            updateUI();
-            return;
-        }
-        showToastError(event.getErrorMessage());
+        mUserAccount = event.getAccount();
+        updateUI();
 
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
     }
 
     /**
-     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
      */
     private void facebookifyProfilePhoto() {
-        mAccountController.facebookifyProfilePhoto();
+        mAccountController.facebookifyProfilePhoto(FACEBOOKIFY_PROFILE_PHOTO);
     }
 
-    //endregion
+    //endregion Events
 
     /**
-     * Calls back to {@link #onEventMainThread(UpdatedProfilePhotoEvent)}
+     * Calls back to {@link #onEventMainThread(UpdatedAccountEvent)}
      */
     private void updateProfilePicture(Bitmap photo) {
-        mPhoto = photo;
-        mAccountController.updateProfilePhoto(photo);
-    }
-
-    /**
-     * The callback for {@link #facebookifyProfilePhoto()}
-     */
-    public void onEventMainThread(UpdatedProfilePhotoEvent event) {
-        if (event.isSuccessful()) {
-            PhotoHash photoHash = event.getPhoto();
-            mUserAccount.setPhoto(photoHash);
-            updateUI();
-            return;
-        }
-        showToastError(event.getErrorMessage());
+        mAccountController.updateProfilePhoto(UDPATE_PROFILE_PICTURE, photo);
     }
 
     //region Profile Updates
@@ -514,8 +512,7 @@ public class SettingsFragment extends BaseFragment {
         String url = mWebsiteField.getText().toString();
         String bio = mShortBioField.getText().toString();
 
-        mAccountController.updateProfile(fName, lName, url, bio);
-        return;
+        mAccountController.updateProfile(UDPATE_PROFILE, fName, lName, url, bio);
     }
 
     private boolean validatePhoneNumber(String phoneNumber) {
@@ -536,18 +533,6 @@ public class SettingsFragment extends BaseFragment {
             return false;
         }
         return true;
-    }
-
-    public void onEventMainThread(UpdatedProfileEvent event) {
-        if (event.isSuccessful()) {
-            mUserAccount.setFname(event.getFname());
-            mUserAccount.setLname(event.getLname());
-            mUserAccount.setUrl(event.getUrl());
-            mUserAccount.setBio(event.getBio());
-        } else {
-            showToastError(event.getErrorMessage());
-        }
-        updateUI(); //ui reverts back to original state if error
     }
 
     private void modifyPhone(String number) {
@@ -609,7 +594,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void removeIdentifier(Identifier identifier) {
-        mAccountController.removeIdentifier(identifier);
+        mAccountController.removeIdentifier(REMOVE_IDENTIFIER, identifier);
     }
 
     public void onEventMainThread(UpdatedIdentifiersListingEvent event) {
@@ -692,7 +677,7 @@ public class SettingsFragment extends BaseFragment {
 
     public void facebookConnect() {
         Session session = Session.getActiveSession();
-        mAccountController.associateFacebook(session.getAccessToken(),
+        mAccountController.associateFacebook(FACEBOOK_CONNECT, session.getAccessToken(),
                 DateHelperUtil.doubleFromDate(session.getExpirationDate()));
     }
 
@@ -733,12 +718,16 @@ public class SettingsFragment extends BaseFragment {
     }
 
     @OnClick({R.id.send_feedback,
+            R.id.rate_delectable,
             R.id.terms_of_use,
             R.id.sign_out})
     void onAboutRowClick(View v) {
         switch (v.getId()) {
             case R.id.send_feedback:
                 launchEmailFeedback();
+                break;
+            case R.id.rate_delectable:
+                SettingsUtil.launchPlaystoreListing(getActivity());
                 break;
             case R.id.terms_of_use:
                 String url = getString(R.string.terms_url);
@@ -791,10 +780,14 @@ public class SettingsFragment extends BaseFragment {
 
     //endregion
 
+    private void updateUI() {
+        updateUI(true);
+    }
+
     /**
      * Updates the UI with the current {@link #mUserAccount} object.
      */
-    private void updateUI() {
+    private void updateUI(boolean refreshPhoto) {
 
         if (mUserAccount == null) {
             return;
@@ -806,9 +799,10 @@ public class SettingsFragment extends BaseFragment {
         }
 
         //profile info
-        ImageLoaderUtil
-                .loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
-                        mProfileImage);
+        if (refreshPhoto) {
+            ImageLoaderUtil.loadImageIntoView(getActivity(), mUserAccount.getPhoto().getBestThumb(),
+                    mProfileImage);
+        }
         mNameField.setText(mUserAccount.getFullName());
         mShortBioField.setText(mUserAccount.getBio());
         mWebsiteField.setText(mUserAccount.getUrl());

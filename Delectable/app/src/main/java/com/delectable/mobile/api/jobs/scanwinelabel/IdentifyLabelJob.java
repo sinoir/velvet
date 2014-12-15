@@ -4,6 +4,7 @@ import com.delectable.mobile.api.cache.BaseWineModel;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.LabelScanResponse;
 import com.delectable.mobile.api.endpointmodels.scanwinelabels.PhotoUploadRequest;
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
+import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.ProvisionCapture;
 import com.delectable.mobile.util.CameraUtil;
@@ -26,7 +27,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     BaseWineModel mBaseWineModel;
 
     public IdentifyLabelJob(Bitmap bitmap) {
-        super(bitmap);
+        super(bitmap, Priority.UX);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
                 }
             }
         }
-        Log.d(TAG, "Scanneed label Payload: " + response.getLabelScan());
+        Log.d(TAG, "Scanned label payload: " + response.getLabelScan());
         getEventBus().post(new IdentifyLabelScanEvent(response.getLabelScan()));
         KahunaUtil.trackScanBottle(Calendar.getInstance().getTime());
     }
@@ -61,7 +62,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
     }
 
     @Override
-    public byte[] compressImage(Bitmap bitmap) {
+    public byte[] compressImage(final Bitmap bitmap) {
 
         // scale
         Matrix matrix = new Matrix();
@@ -80,6 +81,7 @@ public class IdentifyLabelJob extends BasePhotoUploadJob {
         // compress
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         finalBitmap.compress(Bitmap.CompressFormat.JPEG, CameraUtil.JPEG_QUALITY_INSTANT, os);
+        finalBitmap.recycle();
         return os.toByteArray();
     }
 

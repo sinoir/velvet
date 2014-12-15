@@ -6,11 +6,10 @@
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle.NoDivider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/d_white"
-        android:divider="@null"
-        android:dividerHeight="1dp" />
+        android:background="@color/d_white" />
 
     <include
         layout="@layout/layout_empty_state"

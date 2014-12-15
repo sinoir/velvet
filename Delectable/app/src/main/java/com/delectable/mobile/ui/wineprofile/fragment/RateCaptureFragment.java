@@ -8,15 +8,20 @@ import com.delectable.mobile.api.endpointmodels.scanwinelabels.AddCaptureFromPen
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.api.models.Account;
+import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
+import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import com.delectable.mobile.ui.common.widget.RatingSeekBar;
 import com.delectable.mobile.ui.tagpeople.fragment.TagPeopleFragment;
+import com.delectable.mobile.util.FacebookEventUtil;
 import com.delectable.mobile.util.InstagramUtil;
 import com.delectable.mobile.util.TwitterUtil;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -24,8 +29,11 @@ import com.twitter.sdk.android.core.models.Tweet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +55,6 @@ import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-//TODO copied and pasted a new class here instead of a base class for this and WineCaptureSubmit because when we get instant capture flow in here, WineCaptureSubmit will change dramatically or get deleted
 public class RateCaptureFragment extends BaseFragment {
 
     private static final String TAG = RateCaptureFragment.class.getSimpleName();
@@ -99,9 +106,15 @@ public class RateCaptureFragment extends BaseFragment {
     @Inject
     protected WineScanController mWineScanController;
 
+    protected View mActionView;
+
+    protected FontTextView mRateButton;
+
     private Account mUserAccount;
 
     private String mPendingCaptureId;
+
+    private Bitmap mCaptureImage;
 
     private int mCurrentRating = -1;
 
@@ -110,9 +123,6 @@ public class RateCaptureFragment extends BaseFragment {
     private String mLocationName;
 
     private String mFoursquareId;
-
-    private AddCaptureFromPendingCaptureRequest mCaptureRequest;
-
 
     public RateCaptureFragment() {
     }
@@ -134,13 +144,36 @@ public class RateCaptureFragment extends BaseFragment {
         if (args != null) {
             mPendingCaptureId = args.getString(PENDING_CAPTURE);
         }
+
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
+
+        //event for handling incoming params
+        RateCaptureInitEvent rateCaptureEvent = mEventBus
+                .getStickyEvent(RateCaptureInitEvent.class);
+        if (rateCaptureEvent == null) {
+            return;
+        }
+
+        mEventBus.removeStickyEvent(rateCaptureEvent);
+
+        //bitmap exists, we're good to go
+        if (rateCaptureEvent.getCaptureImage() != null) {
+            mCaptureImage = rateCaptureEvent.getCaptureImage();
+            return;
+        }
+
+        //no bitmap,  have to use pendingCapture object to download bitmap in preparation for instagram share
+        PendingCapture pendingCapture = rateCaptureEvent.getPendingCapture();
+        Picasso.with(getActivity()).load(pendingCapture.getPhoto().getMediumPlus()).into(target);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setActionBarTitle(getString(R.string.capture_submit_title));
+        setActionBarSubtitle((String) null);
         enableBackButton(true);
+        getActionBar().show();
     }
 
     @Override
@@ -148,6 +181,9 @@ public class RateCaptureFragment extends BaseFragment {
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
+        mActionView = inflater.inflate(R.layout.action_menu_button, null, false);
+        mRateButton = (FontTextView) mActionView.findViewById(R.id.action_button);
+
         ButterKnife.inject(this, view);
 
         setupRatingSeekBar();
@@ -162,8 +198,19 @@ public class RateCaptureFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // TODO customize the post button
         inflater.inflate(R.menu.capture_menu, menu);
+        MenuItem postItem = menu.findItem(R.id.post);
+        mRateButton.setText(getString(R.string.capture_rate));
+        mRateButton.setEnabled(true);
+        mRateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommentEditText.clearFocus();
+                hideKeyboard();
+                rateCapture();
+            }
+        });
+        MenuItemCompat.setActionView(postItem, mActionView);
     }
 
     @Override
@@ -171,11 +218,6 @@ public class RateCaptureFragment extends BaseFragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().onBackPressed();
-                return true;
-            case R.id.post:
-                mCommentEditText.clearFocus();
-                hideKeyboard();
-                rateCapture();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -208,6 +250,27 @@ public class RateCaptureFragment extends BaseFragment {
                 break;
         }
     }
+
+    private Target target = new Target() {
+        final String myTag = TAG + ".PicassoBitmapDownload";
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Log.d(myTag, "onBitmapLoaded");
+            mCaptureImage = bitmap;
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            Log.d(myTag, "onBitmapFailed");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.d(myTag, "onPrepareLoad");
+
+        }
+    };
 
     private void updateWithFriendsUI() {
         if (mTaggeeContacts != null && mTaggeeContacts.size() > 0) {
@@ -242,9 +305,11 @@ public class RateCaptureFragment extends BaseFragment {
 
 
     public void rateCapture() {
-        mCaptureRequest = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
-        updateCaptureRequestWithFormData(mCaptureRequest);
-        mWineScanController.addCaptureFromPendingCapture(mCaptureRequest);
+        mRateButton.setEnabled(false);
+        AddCaptureFromPendingCaptureRequest captureRequest
+                = new AddCaptureFromPendingCaptureRequest(mPendingCaptureId);
+        updateCaptureRequestWithFormData(captureRequest);
+        mWineScanController.addCaptureFromPendingCapture(captureRequest);
     }
 
     private void updateCaptureRequestWithFormData(AddCaptureFromPendingCaptureRequest request) {
@@ -287,20 +352,27 @@ public class RateCaptureFragment extends BaseFragment {
             return;
         }
 
+        FacebookEventUtil.logRateEvent(getActivity(), event.getCaptureDetails());
+
         if (mShareTwitterButton.isChecked()) {
             String tweet = event.getCaptureDetails().getTweet();
             String shortUrl = event.getCaptureDetails().getShortShareUrl();
             TwitterUtil.tweet(tweet + " " + shortUrl, TwitterCallback);
         }
-        getActivity().finish();
-        //TODO instagram stuff
-//        if (mShareInstagramButton.isChecked()) {
-//            InstagramUtil.shareBitmapInInstagram(getActivity(), mCapturedImageBitmap,
-//                    mCommentEditText.getText().toString());
-//        }
+
+        //TODO can come to this screen from wineProfileInstant or from userProfile, if coming from WPInstant, need to finish this activity before launching userProfile
+        //perhaps even better: open my wines instead
+        launchUserProfile(true);
+
+        //TODO when rating from user captures list, captureImage will be null, need to download
+        if (mShareInstagramButton.isChecked() && mCaptureImage != null) {
+            InstagramUtil.shareBitmapInInstagram(getActivity(), mCaptureImage,
+                    mCommentEditText.getText().toString());
+        }
     }
 
     private void handleEventErrorMessage(BaseEvent event) {
+        mRateButton.setEnabled(true);
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
             showToastError(R.string.error_capture_wine_no_network);
         } else {
@@ -367,6 +439,40 @@ public class RateCaptureFragment extends BaseFragment {
             mShareFacebookButton.setChecked(false);
             mShareTwitterButton.setChecked(false);
             mShareInstagramButton.setChecked(false);
+        }
+    }
+
+    /**
+     * This fragment can be initialized with either a pendingCapture or bitmap of the capture.
+     */
+    public static class RateCaptureInitEvent {
+
+        private PendingCapture mPendingCapture;
+
+        private Bitmap mCaptureImage;
+
+        /**
+         * When coming from UserProfileFragment, this fragment gets initialized with a
+         * pendingCapture.
+         */
+        public RateCaptureInitEvent(PendingCapture pendingCapture) {
+            mPendingCapture = pendingCapture;
+        }
+
+        /**
+         * When coming from WineProfileInstantFragment, this fragment gets initialized with a
+         * Bitmap.
+         */
+        public RateCaptureInitEvent(Bitmap bitmap) {
+            mCaptureImage = bitmap;
+        }
+
+        public PendingCapture getPendingCapture() {
+            return mPendingCapture;
+        }
+
+        public Bitmap getCaptureImage() {
+            return mCaptureImage;
         }
     }
 }

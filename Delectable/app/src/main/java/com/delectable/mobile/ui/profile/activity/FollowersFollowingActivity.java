@@ -74,7 +74,8 @@ public class FollowersFollowingActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finishDeepLinkActivity();
+//                finishDeepLinkActivity();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

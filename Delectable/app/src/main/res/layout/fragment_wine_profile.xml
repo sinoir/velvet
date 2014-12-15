@@ -7,9 +7,21 @@
 
     <ListView
         android:id="@+id/list_view"
+        style="@style/ListViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true" />
+
+    <include layout="@layout/sticky_toolbar" />
+
+    <ImageView
+        android:id="@+id/toolbar_contrast"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:src="@drawable/navigation_background"
+        android:alpha="0"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

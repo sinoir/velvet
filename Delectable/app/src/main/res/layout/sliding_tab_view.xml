@@ -14,7 +14,7 @@
         android:paddingRight="@dimen/spacing_16"
         android:layout_centerVertical="true"
         android:textColor="@color/edward_to_chestnut"
-        android:textSize="@dimen/text_size_large"
+        android:textSize="18sp"
         android:text="ZINFANDEL"
         app:fontName="whitney_medium_sc"
         android:gravity="center" />

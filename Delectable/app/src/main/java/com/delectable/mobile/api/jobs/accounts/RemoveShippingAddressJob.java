@@ -22,13 +22,13 @@ public class RemoveShippingAddressJob extends BaseJob {
     private ArrayList<String> mAddressIds;
 
     public RemoveShippingAddressJob(String addressId) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mAddressIds = new ArrayList<String>();
         mAddressIds.add(addressId);
     }
 
     public RemoveShippingAddressJob(ArrayList<String> addressIds) {
-        super(new Params(Priority.SYNC));
+        super(new Params(Priority.SYNC.value()));
         mAddressIds = addressIds;
     }
 

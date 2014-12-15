@@ -21,6 +21,8 @@ import com.delectable.mobile.ui.capture.activity.TaggedPeopleActivity;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.ui.wineprofile.dialog.Over21Dialog;
+import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -43,6 +45,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     private static final int REQUEST_COMMENT_CAPTURE = 300;
 
     private static final int REQUEST_FLAG_CONFIRMATION = 400;
+
+    private static final int REQUEST_AGE_DIALOG = 2;
+
+    private String mToBePurchasedWineId = null;
 
     @Inject
     protected CaptureController mCaptureController;
@@ -97,10 +103,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
     }
 
     @Override
-    public void toggleLikeForCapture(final CaptureDetails capture) {
-        final String userId = UserInfo.getUserId(getActivity());
-        boolean userLikesCapture = !capture.doesUserLikeCapture(userId);
-        mCaptureController.toggleLikeCapture(capture.getId(), userId, userLikesCapture);
+    public void toggleLikeForCapture(final CaptureDetails capture, boolean isLiked) {
+        mCaptureController.toggleLikeCapture(capture.getId(), isLiked);
     }
 
     private void sendComment(final CaptureDetails capture, String comment) {
@@ -134,6 +138,23 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                     capture.getPhoto());
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void launchPurchaseFlow(CaptureDetails capture) {
+        if (!UserInfo.isOver21()) {
+            mToBePurchasedWineId = capture.getWineProfile().getId();
+            Over21Dialog dialog = Over21Dialog.newInstance();
+            dialog.setTargetFragment(this, REQUEST_AGE_DIALOG);
+            dialog.show(getFragmentManager(), "dialog");
+        } else {
+            launchWineCheckout(capture.getWineProfile().getId());
+        }
+    }
+
+    private void launchWineCheckout(String wineId) {
+        Intent intent = WineCheckoutActivity.newIntent(getActivity(), wineId);
+        startActivity(intent);
     }
 
     @Override
@@ -287,6 +308,10 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
             }
             mTempUserComment = null;
             mTempCaptureForAction = null;
+        }
+
+        if (requestCode == REQUEST_AGE_DIALOG && resultCode == Over21Dialog.RESULT_OVER21) {
+            launchWineCheckout(mToBePurchasedWineId);
         }
     }
 
