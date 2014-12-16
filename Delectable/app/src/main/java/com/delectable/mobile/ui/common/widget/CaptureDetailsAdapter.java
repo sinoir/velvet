@@ -29,6 +29,8 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        // super updates position for infinite scroll adapter
+        super.getView(position, convertView, parent);
         return getCaptureRow(position, convertView, parent, mRowType);
     }
 
