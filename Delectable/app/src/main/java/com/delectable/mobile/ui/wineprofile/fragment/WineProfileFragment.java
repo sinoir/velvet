@@ -57,17 +57,20 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -174,11 +177,17 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected ListView mListView;
 
+    protected View mToolbarContrast;
+
     protected int mStickyToolbarHeight;
 
     protected int mToolbarScrollOffset;
 
     protected FloatingActionButton mCameraButton;
+
+    protected View mBuyActionView;
+
+    protected WinePriceView mToolbarBuyButton;
 
 //    private MutableForegroundColorSpan mAlphaSpan;
 
@@ -235,7 +244,10 @@ public class WineProfileFragment extends BaseFragment implements
 
     private boolean mFetching;
 
+    private boolean mIsToolbarBuyButtonVisible = false;
+
     //region Initializers
+
     /**
      * @param wineProfile      used to populate the producer and wine name.
      * @param capturePhotoHash used for the picture display. Usually, when a specific capture's
@@ -330,6 +342,9 @@ public class WineProfileFragment extends BaseFragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wine_profile, container, false);
 
+        mBuyActionView = inflater.inflate(R.layout.action_menu_buy, null, false);
+        mToolbarBuyButton = (WinePriceView) mBuyActionView.findViewById(R.id.buy_button);
+
         // prepare header view
         final View header = inflater.inflate(R.layout.wine_profile_header, null, false);
         ButterKnife.inject(this, header);
@@ -338,7 +353,7 @@ public class WineProfileFragment extends BaseFragment implements
         Point screenSize = ViewUtil.getDisplayDimensions();
         mStickyToolbarHeight = screenSize.x;
 
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(screenSize.x,
+        RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x,
                 screenSize.x);
         mBanner.setLayoutParams(parms);
 
@@ -374,6 +389,8 @@ public class WineProfileFragment extends BaseFragment implements
 
         updateVarietyRegionRatingView(mBaseWine);
 
+        mToolbarContrast = view.findViewById(R.id.toolbar_contrast);
+
         mListView = (ListView) view.findViewById(R.id.list_view);
         mListView.addHeaderView(header, null, false);
         mListView.setAdapter(mAdapter);
@@ -400,9 +417,6 @@ public class WineProfileFragment extends BaseFragment implements
                     }
                 });
 
-        // empty state
-        mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
-
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);
 
@@ -426,11 +440,14 @@ public class WineProfileFragment extends BaseFragment implements
             }
         });
 
-        mWinePriceView.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
+        WinePriceView.WinePriceViewActionsCallback winePriceViewActionsCallback
+                = new WinePriceView.WinePriceViewActionsCallback() {
+
             @Override
             public void onPriceCheckClicked(VintageWineInfo wineInfo) {
                 fetchWineSource();
                 mWinePriceView.showLoading();
+                mToolbarBuyButton.showLoading();
             }
 
             @Override
@@ -442,9 +459,28 @@ public class WineProfileFragment extends BaseFragment implements
             public void onSoldOutClicked(VintageWineInfo wineInfo) {
                 showBuyVintageDialog();
             }
-        });
+        };
+        mWinePriceView.setActionsCallback(winePriceViewActionsCallback);
+        mToolbarBuyButton.setActionsCallback(winePriceViewActionsCallback);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.wine_menu, menu);
+        MenuItem buyItem = menu.findItem(R.id.buy);
+        mToolbarBuyButton.setEnabled(true);
+        mToolbarBuyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBuyVintageDialog();
+            }
+        });
+//        mToolbarBuyButton.setTranslationX(Animate.TRANSLATION);
+//        mToolbarBuyButton.setAlpha(0);
+        MenuItemCompat.setActionView(buyItem, mBuyActionView);
     }
 
     @Override
@@ -463,6 +499,8 @@ public class WineProfileFragment extends BaseFragment implements
         if (mBaseWineId != null) {
             mAnalytics.trackViewWineProfile();
         }
+
+        Animate.fadeIn(mToolbarContrast, 300);
     }
 
     @Override
@@ -617,6 +655,7 @@ public class WineProfileFragment extends BaseFragment implements
             mSelectedWineVintage = wineWithPrice;
         }
         mWinePriceView.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
+        mToolbarBuyButton.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
     }
     //endregion
 
@@ -753,6 +792,7 @@ public class WineProfileFragment extends BaseFragment implements
 
             // elevate sticky toolbar once it docks
             Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+            Animate.elevate(mToolbarContrast, top < minTranslation ? Animate.ELEVATION : 0);
             Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
 
             // drag toolbar off the screen when reaching the bottom of the header
@@ -797,6 +837,19 @@ public class WineProfileFragment extends BaseFragment implements
 //                }
 //            });
 //            bgAnimator.start();
+
+            // hide purchase button on sticky header
+            if (mIsToolbarBuyButtonVisible) {
+                mIsToolbarBuyButtonVisible = false;
+                Animate.fadeOut(mToolbarBuyButton);
+            }
+
+        } else {
+            // show purchase button on sticky header
+            if (!mIsToolbarBuyButtonVisible) {
+                mIsToolbarBuyButtonVisible = true;
+                Animate.fadeIn(mToolbarBuyButton);
+            }
         }
     }
 

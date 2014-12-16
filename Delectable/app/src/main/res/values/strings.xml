@@ -256,6 +256,7 @@
     <string name="wine_profile_all_years">All years</string>
     <string name="wine_profile_check_price">Check price</string>
     <string name="wine_profile_sold_out">Sold out</string>
+    <string name="wine_profile_buy">Buy</string>
     <string name="choose_vintage_dialog_title">Choose vintage</string>
     <string name="choose_vintage_dialog_all_years">All years</string>
     <plurals name="choose_vintage_dialog_ratings_count">
@@ -285,6 +286,7 @@
     <string name="capture_edit_base_wine_report">Not the right wine?\nRequest expert review!</string>
     <string name="capture_edit_base_wine_report_confirm">An expert will correct your wine shortly!</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
+    <string name="capture_camera_hint_label_legible">Is the wine label legible?</string>
 
     <!--Capture Flow: Tag Friends -->
     <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>
