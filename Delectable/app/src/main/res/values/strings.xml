@@ -286,6 +286,7 @@
     <string name="capture_edit_base_wine_report">Not the right wine?\nRequest expert review!</string>
     <string name="capture_edit_base_wine_report_confirm">An expert will correct your wine shortly!</string>
     <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
+    <string name="capture_camera_hint_label_legible">Is the wine label legible?</string>
 
     <!--Capture Flow: Tag Friends -->
     <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>

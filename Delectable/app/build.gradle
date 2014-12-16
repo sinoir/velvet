@@ -94,19 +94,7 @@ android {
         }
 
         /**
-         * prerelease is a buildType meant for QA. It's almost the same as release, except that
-         * Delectable classes are unobfucsated for easy debugging of QA feedback
-         */
-        prerelease {
-            debuggable false
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt', 'proguard-delectable.txt', '../proguard-com.twitter.sdk.android.txt'
-            signingConfig signingConfigs.release
-            buildConfigField BOOLEAN, REPORT_CRASHES, TRUE
-        }
-
-        /**
-         * Used for final round of QA releases and prod releases.
+         * Used for QA releases and production releases.
          */
         release {
             debuggable false
@@ -118,7 +106,7 @@ android {
     }
     productFlavors {
         /**
-         * Default flavor, used for debug builds or paired with the release buildType for true releases.
+         * Default flavor, used for debug builds or paired with the release buildType for production releases.
          */
         vanilla {
             applicationId "com.delectable.mobile"
@@ -126,7 +114,6 @@ android {
         }
         /**
          * the qa product flavor really only gets used for QA/applause testing when we prepare a release branch
-         * meant to be paired with prerelease and release builds
          */
         qa {
             applicationId "com.delectable.mobile.qa"
@@ -179,11 +166,11 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.2'
     compile 'com.mixpanel.android:mixpanel-android:4.4.1@aar'
     // Crashlytics Kit
-    compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.1.0@aar') {
         transitive = true
     }
     // Twitter Kit
-    compile('com.twitter.sdk.android:twitter:1.0.1@aar') {
+    compile('com.twitter.sdk.android:twitter:1.1.0@aar') {
         transitive = true
     }
 }
