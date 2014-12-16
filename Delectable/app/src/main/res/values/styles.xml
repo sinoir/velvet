@@ -86,6 +86,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:dividerHeight">0.5dp</item>
         <item name="android:divider">@color/d_light_gray</item>
+        <item name="android:listSelector">@color/transparent</item>
     </style>
 
     <style name="ListViewStyle.NoDivider" parent="ListViewStyle">

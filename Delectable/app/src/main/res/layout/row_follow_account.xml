@@ -10,7 +10,7 @@
         android:layout_height="@dimen/follow_experts_profile_picture_width"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_margin="@dimen/follow_friends_horizontal_spacing"
+        android:layout_marginRight="@dimen/spacing_16"
         android:src="@drawable/no_photo" />
 
     <RelativeLayout
@@ -18,10 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/follow_button"
         android:layout_toRightOf="@+id/profile_image"
-        android:paddingTop="@dimen/spacing_8"
-        android:paddingBottom="@dimen/spacing_8"
         android:layout_centerVertical="true"
         android:gravity="center_vertical">
+        <!--android:paddingTop="@dimen/spacing_8"-->
+        <!--android:paddingBottom="@dimen/spacing_8"-->
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/name"
@@ -55,8 +55,8 @@
         android:layout_height="@dimen/follow_friends_follow_button_height"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/follow_friends_horizontal_spacing"
-        android:layout_marginRight="@dimen/follow_friends_horizontal_spacing"
         android:layout_centerVertical="true"
         android:background="@null"
         android:src="@drawable/btn_follow" />
+
 </merge>
