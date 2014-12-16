@@ -5,6 +5,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
@@ -42,6 +43,8 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
     private static final String LIST_KEY = "LIST_KEY";
 
+    private static final String LIST_TYPE = "LIST_TYPE";
+
     private static final String LIST_TITLE = "LIST_TITLE";
 
     private static final String LIST_BANNER = "LIST_BANNER";
@@ -78,6 +81,8 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
     protected String mListKey;
 
+    protected String mListType;
+
     protected String mTitle;
 
     protected String mBanner;
@@ -90,20 +95,23 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         // Required empty public constructor
     }
 
-    public static CaptureListFragment newInstance(String accountId, String listKey,
+    public static CaptureListFragment newInstance(String accountId, String listKey, String feedType,
             String listTitle, String banner, int bannerBackgroundColor, int bannerTextColor) {
         CaptureListFragment fragment = new CaptureListFragment();
-        Bundle args = bundleArgs(accountId, listKey, listTitle, banner, bannerBackgroundColor,
+        Bundle args = bundleArgs(accountId, listKey, feedType, listTitle, banner,
+                bannerBackgroundColor,
                 bannerTextColor);
         fragment.setArguments(args);
         return fragment;
     }
 
-    protected static Bundle bundleArgs(String accountId, String listKey, String listTitle,
+    protected static Bundle bundleArgs(String accountId, String listKey, String listType,
+            String listTitle,
             String banner, int bannerBackgroundColor, int bannerTextColor) {
         Bundle args = new Bundle();
         args.putString(ACCOUNT_ID, accountId);
         args.putString(LIST_KEY, listKey);
+        args.putString(LIST_TYPE, listType);
         args.putString(LIST_TITLE, listTitle);
         args.putString(LIST_BANNER, banner);
         args.putInt(LIST_BANNER_BACKGROUND_COLOR, bannerBackgroundColor);
@@ -122,15 +130,16 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
         String accountId = getArguments().getString(ACCOUNT_ID);
         mListKey = getArguments().getString(LIST_KEY);
+        mListType = getArguments().getString(LIST_TYPE);
         LIST_REQUEST += mListKey;
         mTitle = getArguments().getString(LIST_TITLE);
         mBanner = getArguments().getString(LIST_BANNER);
         mBannerBackgroundColor = getArguments().getInt(LIST_BANNER_BACKGROUND_COLOR);
         mBannerTextColor = getArguments().getInt(LIST_BANNER_TEXT_COLOR);
-        mAdapter = new CaptureDetailsAdapter(this, this, accountId);
-        mAdapter.setRowType("following".equalsIgnoreCase(mTitle)
-                ? CaptureDetailsAdapter.RowType.DETAIL
-                : CaptureDetailsAdapter.RowType.PURCHASE);
+        mAdapter = new CaptureDetailsAdapter(this, this);
+        mAdapter.setRowType(CaptureFeed.SOCIAL.equals(mListType)
+                ? CaptureDetailsAdapter.RowType.SOCIAL
+                : CaptureDetailsAdapter.RowType.COMMERCIAL);
     }
 
     @Override
