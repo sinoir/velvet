@@ -25,8 +25,8 @@
             android:hint="@string/capture_submit_leave_comment_hint"
             android:textColorHint="@color/d_medium_gray"
             android:textSize="@dimen/capture_submit_comment_text_size"
-            app:fontName="whitney_medium" />
-
+            android:lineSpacingMultiplier="1.2"
+            app:fontName="whitney_book" />
 
         <com.delectable.mobile.ui.common.widget.NumericRatingSeekBar
             android:id="@+id/score_rate_seek_bar"
