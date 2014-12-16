@@ -88,6 +88,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
     @InjectView(R.id.progress_bar)
     protected View mProgressBar;
 
+    @InjectView(R.id.hint_label_legible)
+    protected View mHintLabelLegible;
+
     private View mView;
 
     @Inject
@@ -189,34 +192,29 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     private void animateFromCaptureToConfirm() {
         Animate.fadeIn(mPreviewImage);
-
         Animate.crossfadeRotate(mCaptureButton, mConfirmButton);
-
         Animate.pushOutUp(mFlashButton);
-
         Animate.rollOutRight(mCameraRollButton);
-
         Animate.crossfadeRotate(mCloseButton, mRedoButton);
+        Animate.fadeIn(mHintLabelLegible, 3000);
     }
 
     private void animateFromConfirmToCapture() {
         mCameraPreview.startPreview();
         Animate.fadeOut(mPreviewImage);
-
         mCaptureButton.setEnabled(true);
         Animate.crossfadeRotate(mCaptureButton, mConfirmButton, true);
-
         Animate.pushInDown(mFlashButton);
-
         Animate.rollInRight(mCameraRollButton);
-
         Animate.crossfadeRotate(mCloseButton, mRedoButton, true);
+        Animate.fadeOut(mHintLabelLegible);
     }
 
     private void animateFromConfirmToIdentify() {
         Animate.rotateOut(mConfirmButton);
         Animate.fadeIn(mProgressBar);
         Animate.rotateOut(mRedoButton);
+        Animate.fadeOut(mHintLabelLegible);
     }
 
     private void animateFromIdentifyToWineProfile() {

@@ -59,13 +59,16 @@
         android:clickable="true">
 
         <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/hint_label_legible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/wine_capture_fill_frame_label_top_margin"
-            android:text="@string/capture_camera_fill_frame_label"
-            android:textColor="@color/d_white"
-            android:textSize="16sp"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:text="@string/capture_camera_hint_label_legible"
+            android:textColor="@color/d_medium_gray"
+            android:textSize="15sp"
+            android:alpha="0"
+            android:visibility="gone"
             app:fontName="whitney_book" />
 
         <ImageButton

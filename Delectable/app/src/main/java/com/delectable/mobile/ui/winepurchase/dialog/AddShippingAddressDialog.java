@@ -8,6 +8,7 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.accounts.AddedShippingAddressEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedShippingAddressEvent;
 import com.delectable.mobile.api.models.BaseAddress;
+import com.delectable.mobile.api.models.Identifier;
 import com.delectable.mobile.api.models.ShippingAddress;
 import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
 import com.delectable.mobile.ui.common.widget.CancelSaveButtons;
@@ -205,9 +206,11 @@ public class AddShippingAddressDialog extends BaseEventBusDialogFragment
             mState.setSelection(selectedState.ordinal());
         }
 
-        String formattedNumber = PhoneNumberUtils
-                .formatNumber(UserInfo.getAccountPrivate().getPhoneIdentifier().getString());
-        mPhoneNumber.setText(formattedNumber);
+        Identifier phoneIdentifier = UserInfo.getAccountPrivate().getPhoneIdentifier();
+        if (phoneIdentifier != null) {
+            String formattedNumber = PhoneNumberUtils.formatNumber(phoneIdentifier.getString());
+            mPhoneNumber.setText(formattedNumber);
+        }
     }
     //endregion
 

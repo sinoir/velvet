@@ -10,10 +10,10 @@
 
     <FrameLayout
         android:id="@+id/wine_image_container"
-        android:layout_width="@dimen/cap_list_row_image_size"
-        android:layout_height="@dimen/cap_list_row_image_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/spacing_16"
-        android:layout_marginBottom="@dimen/spacing_8"
+        android:paddingBottom="@dimen/spacing_8"
         android:layout_alignParentLeft="true">
 
         <ImageView

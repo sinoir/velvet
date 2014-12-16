@@ -1,2 +1,0 @@
-#including this proguard configuration will unobfuscate all Delectable classes. very useful for QA testing.
--keepnames !abstract class com.delectable.mobile.**

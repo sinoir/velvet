@@ -9,7 +9,6 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/spacing_8"
         android:visibility="invisible"
         android:src="@drawable/no_photo" />
 
@@ -18,10 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_image1"
-        android:layout_marginTop="@dimen/spacing_8"
-        android:layout_marginBottom="@dimen/spacing_8"
-        android:layout_marginLeft="@dimen/spacing_16"
-        android:layout_marginRight="@dimen/spacing_16"
+        android:paddingTop="@dimen/spacing_8"
+        android:paddingBottom="@dimen/spacing_8"
         android:layout_centerHorizontal="true"
         android:animateLayoutChanges="true"
         android:clickable="true">
@@ -62,8 +59,7 @@
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/capture_wine_count"
             style="@style/UserProfileCountTexts"
-            android:visibility="gone"
-            android:layout_centerVertical="true" />
+            android:visibility="gone" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/followers_count"
@@ -80,5 +76,10 @@
             android:paddingLeft="@dimen/profile_horizontal_text_spacing" />
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_8"
+        android:layout_below="@id/count_container" />
 
 </merge>

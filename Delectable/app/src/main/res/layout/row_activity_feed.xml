@@ -10,18 +10,13 @@
         android:layout_width="@dimen/general_icon_size"
         android:layout_height="@dimen/general_icon_size"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/cap_list_row_horizontal_spacing"
         android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
-        android:layout_marginTop="@dimen/spacing_8"
-        android:layout_marginBottom="@dimen/spacing_8"
         android:src="@drawable/no_photo" />
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_8"
-        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:layout_toLeftOf="@+id/right_image"
         android:layout_toRightOf="@+id/left_image"
         android:textColor="@color/d_black"
@@ -33,7 +28,6 @@
         android:id="@+id/time_ago"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_8"
         android:layout_alignLeft="@+id/text"
         android:layout_below="@+id/text"
         android:textColor="@color/d_medium_gray"
@@ -46,7 +40,6 @@
         android:layout_height="@dimen/recent_activity_right_image_size"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/text"
-        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
         android:src="@drawable/no_photo" />
 
 </merge>

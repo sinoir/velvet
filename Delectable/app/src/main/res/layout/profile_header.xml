@@ -9,7 +9,6 @@
     <com.delectable.mobile.ui.common.widget.WrapContentViewPager
         android:id="@+id/profile_header_viewpager"
         android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginBottom="@dimen/spacing_16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -17,10 +16,9 @@
         android:id="@+id/pager_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_8"
+        android:paddingBottom="@dimen/spacing_8"
         android:layout_below="@id/profile_header_viewpager"
-        android:paddingLeft="@dimen/circle_pager_indicator_padding"
-        android:paddingRight="@dimen/circle_pager_indicator_padding"
-        android:layout_marginBottom="@dimen/spacing_16"
         android:visibility="gone"
         custom:fillColor="@color/d_suva_gray"
         custom:pageColor="@color/d_light_gray"
@@ -32,20 +30,14 @@
         android:id="@+id/follow_button"
         android:layout_width="200dp"
         android:layout_height="48dp"
+        android:layout_marginTop="@dimen/spacing_8"
         android:layout_below="@id/pager_indicator"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
         android:background="@drawable/btn_follow_background"
         android:gravity="center"
         android:textColor="@color/chestnut_to_white"
         android:textSize="@dimen/profile_follow_button_text_size"
         android:visibility="gone"
         custom:fontName="whitney_medium" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/d_light_gray" />
 
 </merge>

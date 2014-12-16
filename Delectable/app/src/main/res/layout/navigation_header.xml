@@ -11,16 +11,14 @@
         android:id="@+id/navigation_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_16"
         android:background="@drawable/bg_nav_drawer_item">
 
     <com.delectable.mobile.ui.common.widget.CircleImageView
             android:id="@+id/profile_image1"
             android:layout_width="@dimen/navigation_user_profile_image_size"
             android:layout_height="@dimen/navigation_user_profile_image_size"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:src="@drawable/no_photo" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
@@ -39,7 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/nav_user_name"
-            android:layout_marginBottom="16dp"
             android:layout_toRightOf="@+id/profile_image1"
             android:textColor="@color/d_white"
             android:textSize="@dimen/navigation_header_detail_text_size"

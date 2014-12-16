@@ -36,7 +36,7 @@
     </style>
 
     <style name="ToolbarStyle.Translucent" parent="ToolbarStyle">
-        <item name="android:background">@drawable/bg_toolbar_gradient</item>
+        <item name="android:background">@color/transparent</item>
         <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
@@ -158,6 +158,7 @@
     <style name="UserProfileCountTexts">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/d_big_stone</item>
         <item name="android:textSize">@dimen/profile_counts_text_size</item>
         <item name="fontName">whitney_book</item>
@@ -466,17 +467,26 @@
 
     <style name="ActionMenuButton">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:padding">12dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:clickable">true</item>
-        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/d_white</item>
         <item name="android:background">@drawable/btn_login_done</item>
         <item name="fontName">whitney_medium_sc</item>
+    </style>
+
+    <style name="ActionMenuBuyButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
 
 </resources>
