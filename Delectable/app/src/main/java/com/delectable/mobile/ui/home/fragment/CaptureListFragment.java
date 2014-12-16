@@ -21,6 +21,7 @@ import com.melnykov.fab.FloatingActionButton;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,18 +150,20 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
         // list banner
         if (mBanner != null && !mBanner.isEmpty()) {
-            TextView bannerView = (TextView) inflater
-                    .inflate(R.layout.list_banner, mListView, false);
-            bannerView.setText(mBanner);
-            bannerView.setTextColor(mBannerTextColor);
-            bannerView.setBackgroundColor(mBannerBackgroundColor);
+            View bannerView = inflater.inflate(R.layout.list_banner, mListView, false);
+            TextView bannerText = (TextView) bannerView.findViewById(R.id.list_banner_text);
+            CardView bannerCard = (CardView) bannerView.findViewById(R.id.card);
+            bannerText.setText(mBanner);
+            bannerText.setTextColor(mBannerTextColor);
+            bannerCard.setCardBackgroundColor(mBannerBackgroundColor);
             mListView.addHeaderView(bannerView);
-            // adjust list padding on top, so list banner is not under tab bar
-            int topPadding = mListView.getPaddingTop() + getResources()
-                    .getDimensionPixelSize(R.dimen.tab_height);
-            mListView.setPadding(0, topPadding, 0, 0);
         }
 
+        // adjust list padding on top
+        int topPadding = mListView.getPaddingTop() + getResources()
+                .getDimensionPixelSize(R.dimen.tab_height) + getResources()
+                .getDimensionPixelSize(R.dimen.spacing_4);
+        mListView.setPadding(0, topPadding, 0, 0);
         mListView.setAdapter(mAdapter);
 
         // empty state
