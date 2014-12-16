@@ -4,6 +4,10 @@ import java.util.List;
 
 public class CaptureFeed {
 
+    public static final String SOCIAL = "social";
+
+    public static final String COMMERCIAL = "commercial";
+
     private String key;
 
     private String feed_type;

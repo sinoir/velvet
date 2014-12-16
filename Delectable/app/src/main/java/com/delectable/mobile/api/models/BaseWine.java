@@ -7,7 +7,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 public class BaseWine extends BaseWineMinimal implements Parcelable, Ratingsable {
@@ -125,7 +124,7 @@ public class BaseWine extends BaseWineMinimal implements Parcelable, Ratingsable
         }
         //regions.length==1 is already taken care of from original assignment
 
-        return c.getResources().getString(stringResource, regions);
+        return c.getResources().getString(stringResource, (Object[]) regions);
     }
 
     public void setRegionPath(ArrayList<RegionPath> region_path) {

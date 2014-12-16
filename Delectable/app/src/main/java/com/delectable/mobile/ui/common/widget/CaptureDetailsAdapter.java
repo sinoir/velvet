@@ -11,20 +11,17 @@ import android.view.ViewGroup;
 public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails> {
 
     public enum RowType {
-        DETAIL, PURCHASE;
+        SOCIAL, COMMERCIAL;
     }
 
     private CaptureDetailsView.CaptureActionsHandler mCaptureActionsHandler;
 
-    private String mAccountId;
-
-    private RowType mRowType = RowType.DETAIL;
+    private RowType mRowType = RowType.SOCIAL;
 
     public CaptureDetailsAdapter(CaptureDetailsView.CaptureActionsHandler captureActionsHandler,
-            ActionsHandler actionsHandler, String accountId) {
+            ActionsHandler actionsHandler) {
         super(actionsHandler);
         mCaptureActionsHandler = captureActionsHandler;
-        mAccountId = accountId;
     }
 
     @Override
@@ -32,18 +29,18 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         super.getView(position, convertView, parent);
         View row;
         switch (mRowType) {
-            case PURCHASE:
-                row = getPurchaseCaptureRow(position, convertView, parent);
+            case COMMERCIAL:
+                row = getCommercialCaptureRow(position, convertView, parent);
                 break;
-            case DETAIL:
+            case SOCIAL:
             default:
-                row = getDetailCaptureRow(position, convertView, parent);
+                row = getSocialCaptureRow(position, convertView, parent);
                 break;
         }
         return row;
     }
 
-    public View getPurchaseCaptureRow(int position, View convertView, ViewGroup parent) {
+    public View getCommercialCaptureRow(int position, View convertView, ViewGroup parent) {
 
         CaptureDetailsView rowView = (CaptureDetailsView) convertView;
 
@@ -58,7 +55,7 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         return rowView;
     }
 
-    public View getDetailCaptureRow(int position, View convertView, ViewGroup parent) {
+    public View getSocialCaptureRow(int position, View convertView, ViewGroup parent) {
 
         CaptureDetailsView rowView = (CaptureDetailsView) convertView;
 
@@ -71,10 +68,6 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
         CaptureDetails capture = mItems.get(position);
         rowView.updateData(capture);
         return rowView;
-    }
-
-    public void setAccountId(String accountId) {
-        mAccountId = accountId;
     }
 
     public void setRowType(RowType rowType) {
