@@ -180,7 +180,7 @@ public class RateCaptureFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_wine_capture_submit, container, false);
+        View view = inflater.inflate(R.layout.fragment_wine_capture_rate, container, false);
         mActionView = inflater.inflate(R.layout.action_menu_button, null, false);
         mRateButton = (FontTextView) mActionView.findViewById(R.id.action_button);
 

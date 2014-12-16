@@ -16,6 +16,12 @@
 #   public *;
 #}
 
+#prevent proguard from inlining methods, so that we get accurate stacktraces in crashlytics
+-optimizations !method/inlining/*
+
+#uncomment this to debug proguard's configuration
+#-printconfiguration proguard_configration.txt
+
 -keep public class * extends android.app.Application { *; }
 
 -keep public class com.delectable.mobile.di.AppModule { *; }
@@ -63,7 +69,7 @@
 -keep class **$$InjectAdapter
 -keep class **$$StaticInjection
 
-#TODO this may be too broad, perhaps scope down
+#uncomment this line to toggle off obfuscation for delectable classes. might be useful for debugging.
 #-keepnames !abstract class com.delectable.mobile.**
 
 -keepnames class dagger.Lazy

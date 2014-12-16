@@ -74,10 +74,8 @@ export GRADLE_OPTS=-Xmx2048m
 if [[ ${GIT_BRANCH_NO_PATH} == release ]];
 then
 	echo "assembling builds from release branch"
-	./gradlew assembleQaPrerelease
 	./gradlew assembleQaRelease
 	./gradlew assembleSuperQaRelease
-	prepareForS3 qa-prerelease
 	prepareForS3 qa-release
 	prepareForS3 superQa-release
 fi
