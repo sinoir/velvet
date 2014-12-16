@@ -69,7 +69,7 @@
 -keep class **$$InjectAdapter
 -keep class **$$StaticInjection
 
-#TODO this may be too broad, perhaps scope down
+#uncomment this line to toggle off obfuscation for delectable classes. might be useful for debugging.
 #-keepnames !abstract class com.delectable.mobile.**
 
 -keepnames class dagger.Lazy
