@@ -1,5 +1,6 @@
 package com.delectable.mobile.ui.common.widget;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
@@ -7,6 +8,8 @@ import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.ImageLoaderUtil;
+import com.delectable.mobile.util.ScrimUtil;
+import com.delectable.mobile.util.ViewUtil;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,7 +19,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -36,11 +42,13 @@ public class WineBannerView extends FrameLayout {
 
     private static final String TAG = WineBannerView.class.getSimpleName();
 
-
     public interface ActionsHandler {
         public void onVintageClick();
         public void onEditBaseWineClicked();
     }
+
+    private static final Drawable sGradientDrawable = ScrimUtil.makeCubicGradientScrimDrawable(
+            App.getInstance().getResources().getColor(R.color.d_black), 9, Gravity.BOTTOM);
 
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
@@ -109,6 +117,12 @@ public class WineBannerView extends FrameLayout {
         ButterKnife.inject(this);
         setLayoutTransition(null);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mGradientView.setBackground(sGradientDrawable);
+        } else {
+            mGradientView.setBackgroundDrawable(sGradientDrawable);
+        }
+
         if (mShowTriangleMask) {
             // increase bottom padding of wine banner by triangle height
             mContainer.setPadding(mContainer.getPaddingLeft(), mContainer.getPaddingTop(),
@@ -130,6 +144,22 @@ public class WineBannerView extends FrameLayout {
         mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setAntiAlias(true);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        // set wine banner height to match screen width
+        Point screenSize = ViewUtil.getDisplayDimensions();
+        RelativeLayout.LayoutParams parms = (RelativeLayout.LayoutParams) getLayoutParams();
+        parms.height = screenSize.x;
+        parms.width = screenSize.x;
+        setLayoutParams(parms);
+        FrameLayout.LayoutParams gradientParms = (FrameLayout.LayoutParams) mGradientView
+                .getLayoutParams();
+        gradientParms.height = screenSize.x;
+        gradientParms.width = screenSize.x;
+        mGradientView.setLayoutParams(gradientParms);
     }
 
     public void setActionsHandler(ActionsHandler handler) {
@@ -239,19 +269,6 @@ public class WineBannerView extends FrameLayout {
     public void updateVintage(CharSequence vintage) {
         mWineVintageContainer.setVisibility(View.VISIBLE);
         mWineVintage.setText(vintage);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-
-        // Halve the height of the backdrop view
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mGradientView
-                .getLayoutParams();
-        layoutParams.height = height / 2;
-        mGradientView.setLayoutParams(layoutParams);
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
