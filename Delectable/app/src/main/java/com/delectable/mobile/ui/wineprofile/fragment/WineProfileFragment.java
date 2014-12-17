@@ -23,6 +23,7 @@ import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
@@ -42,6 +43,7 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.ScrimUtil;
 import com.delectable.mobile.util.ViewUtil;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -52,6 +54,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -89,7 +92,7 @@ import butterknife.InjectView;
  */
 public class WineProfileFragment extends BaseFragment implements
         WineBannerView.ActionsHandler, WineProfileCommentUnitRow.ActionsHandler,
-        InfiniteScrollAdapter.ActionsHandler {
+        InfiniteScrollAdapter.ActionsHandler, DrawInsetsFrameLayout.OnInsetsCallback {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -169,9 +172,13 @@ public class WineProfileFragment extends BaseFragment implements
     @InjectView(R.id.empty_view_wine_profile)
     protected View mEmptyView;
 
+    protected View mElevationContainer;
+
     protected View mStickyToolbar;
 
     protected ImageView mStickyToolbarBackground;
+
+    protected View mStatusBarScrim;
 
     protected Toolbar mToolbar;
 
@@ -356,6 +363,15 @@ public class WineProfileFragment extends BaseFragment implements
         RelativeLayout.LayoutParams parms = new RelativeLayout.LayoutParams(screenSize.x,
                 screenSize.x);
         mBanner.setLayoutParams(parms);
+
+        mElevationContainer = view.findViewById(R.id.elevation_container);
+
+        mStatusBarScrim = view.findViewById(R.id.statusbar_scrim);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mStatusBarScrim.setBackground(ScrimUtil.STATUS_BAR_SCRIM);
+        } else {
+            mStatusBarScrim.setBackgroundDrawable(ScrimUtil.STATUS_BAR_SCRIM);
+        }
 
         // sticky toolbar
         mStickyToolbar = (RelativeLayout) view.findViewById(R.id.sticky_toolbar);
@@ -765,6 +781,21 @@ public class WineProfileFragment extends BaseFragment implements
     }
     //endregion
 
+    @Override
+    public void onInsetsChanged(Rect insets) {
+        // adjust toolbar padding when status bar is translucent
+        mToolbar.setPadding(
+                mToolbar.getPaddingLeft(),
+                insets.top,
+                mToolbar.getPaddingRight(),
+                mToolbar.getPaddingBottom());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // increase scrim height when status bar is translucent to compensate for additional padding
+            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
+        }
+    }
+
     private void onScrollChanged() {
         View v = mListView.getChildAt(0);
         int top = (v == null ? 0 : v.getTop());
@@ -791,9 +822,16 @@ public class WineProfileFragment extends BaseFragment implements
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
             // elevate sticky toolbar once it docks
-            Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
-            Animate.elevate(mToolbarContrast, top < minTranslation ? Animate.ELEVATION : 0);
-            Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+//                Animate.elevate(mStatusBarScrim, top < minTranslation ? Animate.ELEVATION : 0);
+//                Animate.elevate(mToolbarContrast, top < minTranslation ? Animate.ELEVATION : 0);
+                Animate.elevate(mElevationContainer, top < minTranslation ? Animate.ELEVATION : 0);
+//                Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+//                mToolbar.setTranslationZ(top < minTranslation ? Animate.ELEVATION : 0);
+//                mStatusBarScrim.setTranslationZ(top < minTranslation ? Animate.ELEVATION : 0);
+//                mToolbarContrast.setTranslationZ(top < minTranslation ? Animate.ELEVATION : 0);
+            }
 
             // drag toolbar off the screen when reaching the bottom of the header
 //            int toolbarDragOffset = bannerHeight - mToolbarScrollOffset;

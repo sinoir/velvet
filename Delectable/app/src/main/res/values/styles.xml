@@ -1,9 +1,11 @@
 <resources>
 
-    <style name="DelectableTheme" parent="DelectableBaseTheme" />
+    <style name="Theme.Delectable" parent="Theme.Delectable.Base" />
 
-    <style name="DelectableBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="Theme.Delectable.Translucent" parent="Theme.Delectable" />
+
+    <style name="Theme.Delectable.Base" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowContentOverlay">@null</item>
         <item name="colorPrimary">@color/d_off_white</item>
         <item name="colorPrimaryDark">@color/d_suva_gray</item>
         <item name="colorAccent">@color/d_chestnut</item>
@@ -20,6 +22,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:background">@drawable/tab_bg</item>
+        <item name="android:fitsSystemWindows">false</item>
         <item name="elevation">4dp</item>
         <!--<item name="android:background">?attr/colorPrimary</item>-->
         <item name="theme">@style/ToolbarTheme</item>

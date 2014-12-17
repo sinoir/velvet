@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/DelectableTheme">
+        android:theme="@style/Theme.Delectable">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -137,6 +137,7 @@
         <activity
             android:name="com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity"
             android:label=""
+            android:theme="@style/Theme.Delectable.Translucent"
             android:screenOrientation="portrait">
             <!--used to facilitate sythesizing a back stack for deep links-->
             <meta-data

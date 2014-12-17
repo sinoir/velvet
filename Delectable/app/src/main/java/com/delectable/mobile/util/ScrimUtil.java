@@ -15,6 +15,12 @@ import android.view.Gravity;
  */
 public class ScrimUtil {
 
+    public static final Drawable STATUS_BAR_SCRIM = makeCubicGradientScrimDrawable(
+            Color.argb(192, 0, 0, 0), 9, Gravity.TOP);
+
+    public static final Drawable WINE_BANNER_SCRIM = makeCubicGradientScrimDrawable(
+            Color.argb(192, 0, 0, 0), 9, Gravity.BOTTOM);
+
     private ScrimUtil() {
     }
 

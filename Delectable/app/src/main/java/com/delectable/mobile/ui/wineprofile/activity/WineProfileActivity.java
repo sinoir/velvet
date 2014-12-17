@@ -5,13 +5,16 @@ import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.ui.BaseActivity;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
+import android.view.View;
 
 public class WineProfileActivity extends BaseActivity {
 
@@ -26,6 +29,7 @@ public class WineProfileActivity extends BaseActivity {
 
     private static final String DEEP_BASE_VINTAGE_ID = "vintage_id";
 
+    private DrawInsetsFrameLayout mContainerView;
 
     private WineProfileMinimal mWineProfile;
 
@@ -75,7 +79,10 @@ public class WineProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_fragment_container_translucent);
+
+        mContainerView = (DrawInsetsFrameLayout) findViewById(R.id.container);
+
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
@@ -104,6 +111,12 @@ public class WineProfileActivity extends BaseActivity {
                 fragment = WineProfileFragment.newInstance(mBaseWineId, mVintageId);
             }
 
+            // propagate inset changes to fragment so it can adjust it's padding
+            if (fragment instanceof DrawInsetsFrameLayout.OnInsetsCallback) {
+                mContainerView
+                        .setOnInsetsCallback((DrawInsetsFrameLayout.OnInsetsCallback) fragment);
+            }
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)
                     .commit();
@@ -111,6 +124,16 @@ public class WineProfileActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // make status bar translucent on v19+
+        int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                ? (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+                : View.SYSTEM_UI_FLAG_VISIBLE;
+        mContainerView.setSystemUiVisibility(flags);
     }
 
     @Override
