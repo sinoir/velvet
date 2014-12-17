@@ -149,17 +149,20 @@
                     android:visibility="visible"
                     app:fontName="whitney_book" />
 
-                <com.delectable.mobile.ui.common.widget.FontTextView
+                <ImageView
                     android:id="@+id/plus_quantity"
-                    style="@style/CheckoutShippingAddRemoveButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="+" />
+                    android:src="@drawable/btn_plus" />
 
-                <com.delectable.mobile.ui.common.widget.FontTextView
+                <ImageView
                     android:id="@+id/minus_quantity"
-                    style="@style/CheckoutShippingAddRemoveButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_toLeftOf="@+id/plus_quantity"
-                    android:text="&#8211;" />
+                    android:layout_marginRight="@dimen/spacing_16"
+                    android:src="@drawable/btn_minus" />
             </RelativeLayout>
 
             <!-- TOOD: Make VISIBLE once Add Promo Code is implemented -->
