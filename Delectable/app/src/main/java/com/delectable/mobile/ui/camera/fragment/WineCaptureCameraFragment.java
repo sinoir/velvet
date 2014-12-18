@@ -50,6 +50,8 @@ import butterknife.OnTouch;
 public class WineCaptureCameraFragment extends CameraFragment implements
         DrawInsetsFrameLayout.OnInsetsCallback {
 
+    private static final String WINDOW_INSETS = "WINDOW_INSETS";
+
     public static final int REQUEST_SELECT_PHOTO = 100;
 
     public static final int REQUEST_INSTANT_FAILED = 200;
@@ -99,6 +101,8 @@ public class WineCaptureCameraFragment extends CameraFragment implements
 
     private View mStatusBarScrim;
 
+    protected Rect mInsets;
+
     @Inject
     protected WineScanController mWineScanController;
 
@@ -117,6 +121,10 @@ public class WineCaptureCameraFragment extends CameraFragment implements
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
         setHasOptionsMenu(true);
+
+        if (savedInstanceState != null) {
+            mInsets = savedInstanceState.getParcelable(WINDOW_INSETS);
+        }
 
         // Preload wine profile fragment
         mWineProfileFragment = WineProfileInstantFragment.newInstance(null);
@@ -160,6 +168,13 @@ public class WineCaptureCameraFragment extends CameraFragment implements
 
         // Re-enable the Capture Button
         mCaptureButton.setEnabled(true);
+        onApplyWindowInsets(mInsets);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(WINDOW_INSETS, mInsets);
     }
 
     @Override
@@ -171,9 +186,8 @@ public class WineCaptureCameraFragment extends CameraFragment implements
         if (insets == null) {
             return;
         }
-        mFlashButton
-                .setPadding(0, insets.top + getResources().getDimensionPixelSize(R.dimen.spacing_8),
-                        0, 0);
+        mInsets = new Rect(insets);
+        mFlashButton.setPadding(0, insets.top, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // increase scrim height when status bar is translucent to compensate for additional padding
