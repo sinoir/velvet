@@ -106,6 +106,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     private static final String VINTAGE_ID = "vintageId";
 
+    private static final String WINDOW_INSETS = "WINDOW_INSETS";
+
     private static final int REQUEST_BUY_VINTAGE_DIALOG = 1;
 
     private static final int REQUEST_AGE_DIALOG = 2;
@@ -343,6 +345,10 @@ public class WineProfileFragment extends BaseFragment implements
         mFetchingId = mBaseWineId;
 
         mAllYearsText = getString(R.string.wine_profile_all_years);
+
+        if (savedInstanceState != null) {
+            mInsets = savedInstanceState.getParcelable(WINDOW_INSETS);
+        }
     }
 
 
@@ -505,7 +511,7 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        adjustToStatusBarPadding(mInsets);
+        onApplyWindowInsets(mInsets);
 
         if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
@@ -521,6 +527,12 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         Animate.fadeIn(mToolbarContrast, 300);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(WINDOW_INSETS, mInsets);
     }
 
     @Override
@@ -787,14 +799,14 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public void onInsetsChanged(Rect insets) {
-        adjustToStatusBarPadding(insets);
+        onApplyWindowInsets(insets);
     }
 
-    private void adjustToStatusBarPadding(Rect insets) {
+    private void onApplyWindowInsets(Rect insets) {
         if (insets == null) {
             return;
         }
-        mInsets = insets;
+        mInsets = new Rect(insets);
         // adjust toolbar padding when status bar is translucent
         mToolbar.setPadding(0, insets.top, 0, 0);
         mToolbarContrast.setPadding(0, insets.top, 0, 0);
