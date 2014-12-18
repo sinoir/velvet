@@ -190,6 +190,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected int mToolbarScrollOffset;
 
+    protected Rect mInsets;
+
     protected FloatingActionButton mCameraButton;
 
     protected View mBuyActionView;
@@ -503,6 +505,8 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
+        adjustToStatusBarPadding(mInsets);
+
         if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
@@ -783,12 +787,17 @@ public class WineProfileFragment extends BaseFragment implements
 
     @Override
     public void onInsetsChanged(Rect insets) {
+        adjustToStatusBarPadding(insets);
+    }
+
+    private void adjustToStatusBarPadding(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+        mInsets = insets;
         // adjust toolbar padding when status bar is translucent
-        mToolbar.setPadding(
-                mToolbar.getPaddingLeft(),
-                insets.top,
-                mToolbar.getPaddingRight(),
-                mToolbar.getPaddingBottom());
+        mToolbar.setPadding(0, insets.top, 0, 0);
+        mToolbarContrast.setPadding(0, insets.top, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // increase scrim height when status bar is translucent to compensate for additional padding
