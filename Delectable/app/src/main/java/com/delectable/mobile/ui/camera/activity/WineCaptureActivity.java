@@ -24,6 +24,12 @@ public class WineCaptureActivity extends TranslucentStatusBarActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        showOrHideStatusBar(false);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

@@ -115,6 +115,12 @@
         <item name="progressIndeterminate">true</item>
     </style>
 
+    <style name="StatusBarScrim">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_gravity">top</item>
+    </style>
+
     <style name="delectabutton_large">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">70dp</item>

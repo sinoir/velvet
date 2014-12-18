@@ -165,19 +165,20 @@ public class WineCaptureCameraFragment extends CameraFragment implements
     @Override
     public void onInsetsChanged(Rect insets) {
         onApplyWindowInsets(insets);
-        // propagate to wine profile fragment
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // increase scrim height when status bar is translucent to compensate for additional padding
-            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
-        }
     }
 
     private void onApplyWindowInsets(Rect insets) {
         if (insets == null) {
             return;
         }
-        mFlashButton.setPadding(0, mFlashButton.getPaddingTop() + insets.top, 0, 0);
+        mFlashButton
+                .setPadding(0, insets.top + getResources().getDimensionPixelSize(R.dimen.spacing_8),
+                        0, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // increase scrim height when status bar is translucent to compensate for additional padding
+            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
+        }
     }
 
     @OnClick(R.id.close_button)
@@ -248,6 +249,9 @@ public class WineCaptureCameraFragment extends CameraFragment implements
         Animate.fadeOut(mCameraContainer);
 //        Animate.slideOutDown(mButtonsContainer, 600);
         Animate.fadeOut(mButtonsContainer, 600);
+
+        // show status bar
+        getBaseActivity().showOrHideStatusBar(true);
     }
 
     @OnTouch(R.id.camera_preview)
