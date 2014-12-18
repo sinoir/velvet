@@ -511,7 +511,7 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        onApplyWindowInsets(mInsets);
+//        onApplyWindowInsets(mInsets);
 
         if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
@@ -806,7 +806,7 @@ public class WineProfileFragment extends BaseFragment implements
         if (insets == null) {
             return;
         }
-        mInsets = new Rect(insets);
+//        mInsets = new Rect(insets);
         // adjust toolbar padding when status bar is translucent
         mToolbar.setPadding(0, insets.top, 0, 0);
         mToolbarContrast.setPadding(0, insets.top, 0, 0);

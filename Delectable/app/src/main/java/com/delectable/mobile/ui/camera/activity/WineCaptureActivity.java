@@ -1,13 +1,13 @@
 package com.delectable.mobile.ui.camera.activity;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
+import com.delectable.mobile.ui.common.activity.TranslucentStatusBarActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class WineCaptureActivity extends BaseActivity {
+public class WineCaptureActivity extends TranslucentStatusBarActivity {
 
     public static final String TAG = WineCaptureActivity.class.getSimpleName();
 
@@ -15,10 +15,10 @@ public class WineCaptureActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_toolbar_fragment_container);
         if (savedInstanceState == null) {
+            WineCaptureCameraFragment fragment = new WineCaptureCameraFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new WineCaptureCameraFragment())
+                    .add(R.id.container, fragment)
                     .commit();
         }
     }

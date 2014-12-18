@@ -33,6 +33,13 @@
             android:visibility="invisible"
             android:background="@color/d_chestnut" />
 
+        <View
+            android:id="@+id/statusbar_scrim"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:alpha="1"
+            android:layout_gravity="top" />
+
     </FrameLayout>
 
     <Button

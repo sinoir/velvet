@@ -11,6 +11,8 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 
 public class DrawInsetsFrameLayout extends FrameLayout {
 
@@ -26,7 +28,8 @@ public class DrawInsetsFrameLayout extends FrameLayout {
 
     private Rect mTempRect = new Rect();
 
-    private OnInsetsCallback mOnInsetsCallback;
+    private CopyOnWriteArrayList<OnInsetsCallback> mOnInsetsCallbacks
+            = new CopyOnWriteArrayList<OnInsetsCallback>();
 
     public DrawInsetsFrameLayout(Context context) {
         super(context);
@@ -91,8 +94,10 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         }
     }
 
-    public void setOnInsetsCallback(OnInsetsCallback onInsetsCallback) {
-        mOnInsetsCallback = onInsetsCallback;
+    public void addOnInsetsCallback(OnInsetsCallback onInsetsCallback) {
+        if (!mOnInsetsCallbacks.contains(onInsetsCallback)) {
+            mOnInsetsCallbacks.add(onInsetsCallback);
+        }
     }
 
     @Override
@@ -102,8 +107,8 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             postInvalidateOnAnimation();
         }
-        if (mOnInsetsCallback != null) {
-            mOnInsetsCallback.onInsetsChanged(insets);
+        for (OnInsetsCallback callback : mOnInsetsCallbacks) {
+            callback.onInsetsChanged(insets);
         }
         return true;
     }
