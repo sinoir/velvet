@@ -19,6 +19,7 @@ import android.content.Context;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -189,23 +190,24 @@ public class CaptureDetailsView extends RelativeLayout {
         mPriceButton.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
             @Override
             public void onPriceCheckClicked(VintageWineInfo wineInfo) {
-//                fetchWineSource();
-//                mPriceButton.showLoading();
-                mActionsHandler.launchPurchaseFlow(mCaptureDetails);
+                mPriceButton.showLoading();
+                mActionsHandler.checkPrice(mCaptureDetails, CaptureDetailsView.this);
             }
 
             @Override
             public void onPriceClicked(VintageWineInfo wineInfo) {
-//                showBuyVintageDialog();
                 mActionsHandler.launchPurchaseFlow(mCaptureDetails);
             }
 
             @Override
             public void onSoldOutClicked(VintageWineInfo wineInfo) {
-//                showBuyVintageDialog();
-                mActionsHandler.launchPurchaseFlow(mCaptureDetails);
+                //do nothing
             }
         });
+    }
+
+    public WinePriceView getPriceButton() {
+        return mPriceButton;
     }
 
     public void updateData(CaptureDetails captureDetails, boolean showComments,
@@ -229,9 +231,18 @@ public class CaptureDetailsView extends RelativeLayout {
         } else {
             setupCollapsedComments();
         }
+
+        //handle price button state
         if (mShowPurchase) {
             mPriceButton.updateWithPriceInfo(new VintageWineInfo(captureDetails.getWineProfile()));
+
+            //might be in the middle of price fetching, need to show spinner
+            if (mCaptureDetails.isTransacting() && CaptureDetails.TRANSACTION_KEY_PRICE
+                    .equals(mCaptureDetails.getTransactionKey())) {
+                mPriceButton.showLoading();
+            }
         }
+
         setupActionButtonStates();
         setupPopUpMenu();
         mCapturerCommentsContainer.setVisibility(View.VISIBLE);
@@ -693,6 +704,8 @@ public class CaptureDetailsView extends RelativeLayout {
         public void toggleLikeForCapture(CaptureDetails capture, boolean liked);
 
         public void launchWineProfile(CaptureDetails capture);
+
+        public void checkPrice(CaptureDetails capture, CaptureDetailsView view);
 
         public void launchPurchaseFlow(CaptureDetails capture);
 
