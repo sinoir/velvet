@@ -1,7 +1,13 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="DelectableTheme" parent="DelectableBaseTheme">
-        <item name="android:windowContentTransitions">true</item>
+    <style name="Theme.Delectable" parent="Theme.Delectable.Base">
+    <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="Theme.Delectable.Translucent" parent="Theme.Delectable">
+        <!--<item name="android:windowTranslucentStatus">false</item>-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
 </resources>

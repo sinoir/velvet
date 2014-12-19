@@ -14,10 +14,14 @@
 
     <include layout="@layout/sticky_toolbar" />
 
+    <View
+        android:id="@+id/statusbar_scrim"
+        style="@style/StatusBarScrim" />
+
     <ImageView
         android:id="@+id/toolbar_contrast"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/navigation_background"
         android:alpha="0"
         android:layout_alignParentTop="true"

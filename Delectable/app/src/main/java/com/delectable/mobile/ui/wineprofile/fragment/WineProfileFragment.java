@@ -23,6 +23,7 @@ import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
@@ -42,6 +43,7 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.ScrimUtil;
 import com.delectable.mobile.util.ViewUtil;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -52,6 +54,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -89,7 +92,7 @@ import butterknife.InjectView;
  */
 public class WineProfileFragment extends BaseFragment implements
         WineBannerView.ActionsHandler, WineProfileCommentUnitRow.ActionsHandler,
-        InfiniteScrollAdapter.ActionsHandler {
+        InfiniteScrollAdapter.ActionsHandler, DrawInsetsFrameLayout.OnInsetsCallback {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -102,6 +105,8 @@ public class WineProfileFragment extends BaseFragment implements
     protected static final String BASE_WINE_ID = "baseWineId";
 
     private static final String VINTAGE_ID = "vintageId";
+
+    private static final String WINDOW_INSETS = "WINDOW_INSETS";
 
     private static final int REQUEST_BUY_VINTAGE_DIALOG = 1;
 
@@ -173,6 +178,8 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected ImageView mStickyToolbarBackground;
 
+    protected View mStatusBarScrim;
+
     protected Toolbar mToolbar;
 
     protected ListView mListView;
@@ -181,7 +188,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected int mStickyToolbarHeight;
 
-    protected int mToolbarScrollOffset;
+    protected Rect mInsets;
 
     protected FloatingActionButton mCameraButton;
 
@@ -334,8 +341,11 @@ public class WineProfileFragment extends BaseFragment implements
         mFetchingId = mBaseWineId;
 
         mAllYearsText = getString(R.string.wine_profile_all_years);
-    }
 
+        if (savedInstanceState != null) {
+            mInsets = savedInstanceState.getParcelable(WINDOW_INSETS);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -357,6 +367,13 @@ public class WineProfileFragment extends BaseFragment implements
                 screenSize.x);
         mBanner.setLayoutParams(parms);
 
+        mStatusBarScrim = view.findViewById(R.id.statusbar_scrim);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mStatusBarScrim.setBackground(ScrimUtil.STATUS_BAR_SCRIM);
+        } else {
+            mStatusBarScrim.setBackgroundDrawable(ScrimUtil.STATUS_BAR_SCRIM);
+        }
+
         // sticky toolbar
         mStickyToolbar = (RelativeLayout) view.findViewById(R.id.sticky_toolbar);
         ViewGroup.LayoutParams stickyToolbarParms = mStickyToolbar.getLayoutParams();
@@ -369,8 +386,8 @@ public class WineProfileFragment extends BaseFragment implements
         stickyToolbarBackgroundParms.height = screenSize.x;
         mStickyToolbarBackground.setLayoutParams(stickyToolbarBackgroundParms);
 
-        // set toolbar scroll offset to half the banner height
-        mToolbarScrollOffset = mStickyToolbarHeight / 2;
+        mToolbarContrast = view.findViewById(R.id.toolbar_contrast);
+
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
         getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -383,13 +400,23 @@ public class WineProfileFragment extends BaseFragment implements
 //            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
 //        }
 
+        // disable shadow on stacked toolbar views and elevate them to appear on top of the sticky toolbar when it gets elevated
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mStatusBarScrim.setOutlineProvider(null);
+            mStatusBarScrim.setElevation(Animate.ELEVATION * 2);
+            mToolbar.setOutlineProvider(null);
+            mToolbar.setElevation(Animate.ELEVATION * 2);
+            mToolbarContrast.setOutlineProvider(null);
+            mToolbarContrast.setElevation(Animate.ELEVATION * 2);
+            mStickyToolbarBackground.setOutlineProvider(null);
+            mStickyToolbarBackground.setElevation(Animate.ELEVATION * 2);
+        }
+
         mBanner.setActionsHandler(this);
         updateBannerView();
         mBanner.updateVintage(mAllYearsText);
 
         updateVarietyRegionRatingView(mBaseWine);
-
-        mToolbarContrast = view.findViewById(R.id.toolbar_contrast);
 
         mListView = (ListView) view.findViewById(R.id.list_view);
         mListView.addHeaderView(header, null, false);
@@ -487,6 +514,8 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
+        onApplyWindowInsets(mInsets);
+
         if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
             mBaseWineController.fetchBaseWine(mBaseWineId);
@@ -501,6 +530,12 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         Animate.fadeIn(mToolbarContrast, 300);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(WINDOW_INSETS, mInsets);
     }
 
     @Override
@@ -765,6 +800,26 @@ public class WineProfileFragment extends BaseFragment implements
     }
     //endregion
 
+    @Override
+    public void onInsetsChanged(Rect insets) {
+        onApplyWindowInsets(insets);
+    }
+
+    private void onApplyWindowInsets(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+        mInsets = new Rect(insets);
+        // adjust toolbar padding when status bar is translucent
+        mToolbar.setPadding(0, insets.top, 0, 0);
+        mToolbarContrast.setPadding(0, insets.top, 0, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // increase scrim height when status bar is translucent to compensate for additional padding
+            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
+        }
+    }
+
     private void onScrollChanged() {
         View v = mListView.getChildAt(0);
         int top = (v == null ? 0 : v.getTop());
@@ -790,10 +845,11 @@ public class WineProfileFragment extends BaseFragment implements
             mWineImageView.setTranslationY(-stickyToolbarTranslation / 2f);
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
-            // elevate sticky toolbar once it docks
-            Animate.elevate(mToolbar, top < minTranslation ? Animate.ELEVATION : 0);
-            Animate.elevate(mToolbarContrast, top < minTranslation ? Animate.ELEVATION : 0);
-            Animate.elevate(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // elevate sticky toolbar once it docks
+                boolean elevate = top < minTranslation;
+                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION * 2 : 0);
+            }
 
             // drag toolbar off the screen when reaching the bottom of the header
 //            int toolbarDragOffset = bannerHeight - mToolbarScrollOffset;

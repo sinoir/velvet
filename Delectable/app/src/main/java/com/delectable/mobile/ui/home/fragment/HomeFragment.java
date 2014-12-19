@@ -6,7 +6,6 @@ import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.UpdatedCaptureFeedsEvent;
 import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 
@@ -113,7 +112,8 @@ public class HomeFragment extends BaseFragment {
         mViewPager.setOffscreenPageLimit(PREFETCH_FEED_COUNT);
         // TODO page margin does not work with the tab indicator
 //        mViewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.spacing_16));
-        mViewPager.setPageTransformer(false, new FeedPageTransformer());
+        // material design does not like page transformers!
+//        mViewPager.setPageTransformer(false, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
 
     }

@@ -10,20 +10,23 @@ import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
+import com.delectable.mobile.util.ScrimUtil;
 import com.delectable.mobile.util.ViewUtil;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +47,10 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class WineCaptureCameraFragment extends CameraFragment {
+public class WineCaptureCameraFragment extends CameraFragment implements
+        DrawInsetsFrameLayout.OnInsetsCallback {
+
+    private static final String WINDOW_INSETS = "WINDOW_INSETS";
 
     public static final int REQUEST_SELECT_PHOTO = 100;
 
@@ -93,6 +99,10 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     private View mView;
 
+    private View mStatusBarScrim;
+
+    protected Rect mInsets;
+
     @Inject
     protected WineScanController mWineScanController;
 
@@ -111,6 +121,10 @@ public class WineCaptureCameraFragment extends CameraFragment {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
         setHasOptionsMenu(true);
+
+        if (savedInstanceState != null) {
+            mInsets = savedInstanceState.getParcelable(WINDOW_INSETS);
+        }
 
         // Preload wine profile fragment
         mWineProfileFragment = WineProfileInstantFragment.newInstance(null);
@@ -138,6 +152,13 @@ public class WineCaptureCameraFragment extends CameraFragment {
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
 
+        mStatusBarScrim = mView.findViewById(R.id.statusbar_scrim);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mStatusBarScrim.setBackground(ScrimUtil.STATUS_BAR_SCRIM);
+        } else {
+            mStatusBarScrim.setBackgroundDrawable(ScrimUtil.STATUS_BAR_SCRIM);
+        }
+
         return mView;
     }
 
@@ -147,12 +168,31 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
         // Re-enable the Capture Button
         mCaptureButton.setEnabled(true);
+        onApplyWindowInsets(mInsets);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getActionBar().hide();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(WINDOW_INSETS, mInsets);
+    }
+
+    @Override
+    public void onInsetsChanged(Rect insets) {
+        onApplyWindowInsets(insets);
+    }
+
+    private void onApplyWindowInsets(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+        mInsets = new Rect(insets);
+        mFlashButton.setPadding(0, insets.top, 0, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // increase scrim height when status bar is translucent to compensate for additional padding
+            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
+        }
     }
 
     @OnClick(R.id.close_button)
@@ -223,6 +263,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
         Animate.fadeOut(mCameraContainer);
 //        Animate.slideOutDown(mButtonsContainer, 600);
         Animate.fadeOut(mButtonsContainer, 600);
+
+        // show status bar
+        getBaseActivity().showOrHideStatusBar(true);
     }
 
     @OnTouch(R.id.camera_preview)

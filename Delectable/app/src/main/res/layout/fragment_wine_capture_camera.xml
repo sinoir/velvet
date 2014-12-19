@@ -33,6 +33,10 @@
             android:visibility="invisible"
             android:background="@color/d_chestnut" />
 
+        <View
+            android:id="@+id/statusbar_scrim"
+            style="@style/StatusBarScrim" />
+
     </FrameLayout>
 
     <Button

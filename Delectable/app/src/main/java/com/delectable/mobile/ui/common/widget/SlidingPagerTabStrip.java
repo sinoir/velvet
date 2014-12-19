@@ -173,9 +173,10 @@ public class SlidingPagerTabStrip extends RelativeLayout {
     private void updateTabStyles() {
         for (int i = 0; i < mTabCount; i++) {
             View tabView = mTabsContainer.getChildAt(i);
-            //tabView.setBackgroundResource(mPagerAdapter.getBackgroundColor(i));
+//            tabView.setBackgroundResource(mPagerAdapter.getBackgroundColor(i));
             // TODO ignores background from individual tabs
-            tabView.setBackgroundResource(R.drawable.tab_bg);
+            tabView.setBackgroundColor(getResources().getColor(R.color.d_off_white));
+//            tabView.setBackgroundResource(R.drawable.tab_bg);
         }
     }
 

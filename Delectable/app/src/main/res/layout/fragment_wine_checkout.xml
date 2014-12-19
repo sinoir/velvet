@@ -128,15 +128,17 @@
             <RelativeLayout
                 android:id="@+id/quantity_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/button_height"
                 android:layout_marginLeft="@dimen/spacing_16"
                 android:layout_marginTop="@dimen/spacing_8"
                 android:background="@drawable/bg_bottom_border"
-                android:paddingRight="@dimen/general_row_horizontal_spacing">
+                android:paddingRight="@dimen/spacing_4">
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
                     android:id="@+id/quantity_label"
                     style="@style/CheckoutRowLabel"
+                    android:layout_centerVertical="true"
                     android:text="@string/winecheckout_quantity_label" />
 
                 <com.delectable.mobile.ui.common.widget.FontTextView
@@ -145,6 +147,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/checkout_info_left_margin"
                     android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
                     android:textSize="16sp"
                     android:visibility="visible"
                     app:fontName="whitney_book" />
@@ -154,6 +157,10 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:paddingLeft="@dimen/spacing_12"
+                    android:paddingRight="@dimen/spacing_12"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
                     android:src="@drawable/btn_plus" />
 
                 <ImageView
@@ -161,7 +168,10 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_toLeftOf="@+id/plus_quantity"
-                    android:layout_marginRight="@dimen/spacing_16"
+                    android:paddingLeft="@dimen/spacing_12"
+                    android:paddingRight="@dimen/spacing_12"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
                     android:src="@drawable/btn_minus" />
             </RelativeLayout>
 
