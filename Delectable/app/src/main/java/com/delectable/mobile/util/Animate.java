@@ -5,6 +5,7 @@ import com.delectable.mobile.App;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -358,6 +359,8 @@ public class Animate {
                     .setStartDelay(startDelay)
                     .setListener(null)
                     .start();
+        } else {
+            ViewCompat.setElevation(view, elevation);
         }
     }
 

@@ -12,31 +12,24 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true" />
 
-    <FrameLayout
-        android:id="@+id/elevation_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <include layout="@layout/sticky_toolbar" />
 
-        <include layout="@layout/sticky_toolbar" />
+    <View
+        android:id="@+id/statusbar_scrim"
+        style="@style/StatusBarScrim" />
 
-        <View
-            android:id="@+id/statusbar_scrim"
-            style="@style/StatusBarScrim" />
+    <ImageView
+        android:id="@+id/toolbar_contrast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/navigation_background"
+        android:alpha="0"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
 
-        <ImageView
-            android:id="@+id/toolbar_contrast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/navigation_background"
-            android:alpha="0"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true" />
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/ToolbarStyle.Translucent" />
-
-    </FrameLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle.Translucent" />
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/camera_button"
