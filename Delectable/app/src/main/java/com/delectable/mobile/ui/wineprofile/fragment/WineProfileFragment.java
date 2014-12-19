@@ -61,7 +61,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -401,12 +400,16 @@ public class WineProfileFragment extends BaseFragment implements
 //            getBaseActivity().getSupportActionBar().setSubtitle(mTitle);
 //        }
 
-        // disable shadow on stacked toolbar views
+        // disable shadow on stacked toolbar views and elevate them to appear on top of the sticky toolbar when it gets elevated
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mStatusBarScrim.setOutlineProvider(null);
+            mStatusBarScrim.setElevation(Animate.ELEVATION * 2);
             mToolbar.setOutlineProvider(null);
+            mToolbar.setElevation(Animate.ELEVATION * 2);
             mToolbarContrast.setOutlineProvider(null);
+            mToolbarContrast.setElevation(Animate.ELEVATION * 2);
             mStickyToolbarBackground.setOutlineProvider(null);
+            mStickyToolbarBackground.setElevation(Animate.ELEVATION * 2);
         }
 
         mBanner.setActionsHandler(this);
@@ -845,12 +848,6 @@ public class WineProfileFragment extends BaseFragment implements
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 // elevate sticky toolbar once it docks
                 boolean elevate = top < minTranslation;
-                // elevate views on top of the background (they won't cast a shadow)
-                ViewCompat.setElevation(mStatusBarScrim, elevate ? Animate.ELEVATION * 2 : 0);
-                ViewCompat.setElevation(mToolbarContrast, elevate ? Animate.ELEVATION * 2 : 0);
-                ViewCompat.setElevation(mToolbar, elevate ? Animate.ELEVATION * 2 : 0);
-                ViewCompat.setElevation(mStickyToolbarBackground,
-                        elevate ? Animate.ELEVATION * 2 : 0);
                 Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION * 2 : 0);
             }
 
