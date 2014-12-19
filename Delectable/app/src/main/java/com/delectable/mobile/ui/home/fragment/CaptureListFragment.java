@@ -5,6 +5,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.ui.HideOrShowFabEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureFeed;
@@ -16,12 +17,13 @@ import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout;
+import com.delectable.mobile.ui.common.widget.ObservableListView;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.HideableActionBarScrollListener;
+import com.delectable.mobile.util.OnListScrollListener;
 import com.delectable.mobile.util.SafeAsyncTask;
-import com.melnykov.fab.FloatingActionButton;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -67,10 +68,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     protected NestedSwipeRefreshLayout mRefreshContainer;
 
     @InjectView(R.id.list_view)
-    protected ListView mListView;
-
-    @InjectView(R.id.camera_button)
-    protected FloatingActionButton mCameraButton;
+    protected ObservableListView mListView;
 
     protected View mEmptyView;
 
@@ -212,33 +210,26 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             }
         });
 
-        // Setup Floating Camera Button
+        // action bar scroll listener
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);
+        mListView.addOnScrollListener(hideableActionBarScrollListener);
 
-        // Setup Floating Camera Button
-        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
-                = new FloatingActionButton.FabOnScrollListener() {
+        // analytics scroll listener
+        mListView.addOnScrollListener(new AbsListView.OnScrollListener() {
+            private int lastVisibleItem = -1;
 
-            int lastVisibleItem = -1;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                     int totalItemCount) {
-                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                hideableActionBarScrollListener
-                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
                 if (lastVisibleItem < firstVisibleItem) {
                     lastVisibleItem = firstVisibleItem;
                     mAnalytics.trackViewItemInFeed(getFeedName());
                 }
-            }
-        };
-        mCameraButton.attachToListView(mListView, fabOnScrollListener);
-        mCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchWineCapture();
             }
         });
 
@@ -254,10 +245,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         super.onResume();
         if (mAdapter.getItems().isEmpty()) {
             loadLocalData();
-        }
-        if (!mCameraButton.isShown()) {
-            mCameraButton.hide(false);
-            mCameraButton.show(true);
+            mEventBus.post(new HideOrShowFabEvent(true));
         }
     }
 
@@ -342,6 +330,20 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             mCapturesListing = event.getListing();
             mAdapter.setItems(mCapturesListing.getUpdates());
             mAdapter.notifyDataSetChanged();
+            // scroll listener for FAB after adapter is populated (otherwise there is an unwanted scroll event)
+            mListView.addOnScrollListener(
+                    new OnListScrollListener(new OnListScrollListener.OnScrollDirectionListener() {
+                        @Override
+                        public void onScrollUp() {
+                            mEventBus.post(new HideOrShowFabEvent(false));
+                        }
+
+                        @Override
+                        public void onScrollDown() {
+                            mEventBus.post(new HideOrShowFabEvent(true));
+                        }
+                    }));
+
             Log.d(TAG, "UpdatedListingEvent:capturesExist");
         }
         //if cacheListing is null, means there are no updates
@@ -434,11 +436,22 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            mAnalytics.trackSwitchFeed(mTitle);
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
+            // this fragment is fully visible (in ViewPager)
+            if (mAnalytics != null) {
+                mAnalytics.trackSwitchFeed(mTitle);
+            }
         }
     }
+
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser) {
+//            mAnalytics.trackSwitchFeed(mTitle);
+//        }
+//    }
 
 }

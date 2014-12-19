@@ -253,7 +253,7 @@ import de.greenrobot.event.EventBus;
                 RegistrationController.class,
                 FoursquareController.class,
                 WineScanController.class,
-                BaseWineController.class
+                BaseWineController.class,
         }
 )
 public class AppModule {
