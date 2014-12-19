@@ -1,6 +1,8 @@
 package com.delectable.mobile.ui.common.widget;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,10 +13,15 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
 
 
 public class DrawInsetsFrameLayout extends FrameLayout {
+
+    @Inject
+    public EventBus mEventBus;
 
     private Drawable mInsetBackground;
 
@@ -27,9 +34,6 @@ public class DrawInsetsFrameLayout extends FrameLayout {
     private Rect mInsets;
 
     private Rect mTempRect = new Rect();
-
-    private CopyOnWriteArrayList<OnInsetsCallback> mOnInsetsCallbacks
-            = new CopyOnWriteArrayList<OnInsetsCallback>();
 
     public DrawInsetsFrameLayout(Context context) {
         super(context);
@@ -47,6 +51,8 @@ public class DrawInsetsFrameLayout extends FrameLayout {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyle) {
+        App.injectMembers(this);
+
         final TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.DrawInsetsFrameLayout, defStyle, 0);
         assert a != null;
@@ -94,12 +100,6 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         }
     }
 
-    public void addOnInsetsCallback(OnInsetsCallback onInsetsCallback) {
-        if (!mOnInsetsCallbacks.contains(onInsetsCallback)) {
-            mOnInsetsCallbacks.add(onInsetsCallback);
-        }
-    }
-
     @Override
     protected boolean fitSystemWindows(Rect insets) {
         mInsets = new Rect(insets);
@@ -107,9 +107,7 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             postInvalidateOnAnimation();
         }
-        for (OnInsetsCallback callback : mOnInsetsCallbacks) {
-            callback.onInsetsChanged(insets);
-        }
+        mEventBus.postSticky(new InsetsChangedEvent(insets));
         return true;
     }
 
@@ -166,8 +164,4 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         }
     }
 
-    public static interface OnInsetsCallback {
-
-        public void onInsetsChanged(Rect insets);
-    }
 }
