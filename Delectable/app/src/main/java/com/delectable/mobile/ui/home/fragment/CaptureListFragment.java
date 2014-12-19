@@ -12,6 +12,7 @@ import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout;
+import com.delectable.mobile.ui.common.widget.ObservableListView;
 import com.delectable.mobile.ui.events.NavigationEvent;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.util.Animate;
@@ -28,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -61,7 +61,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     protected NestedSwipeRefreshLayout mRefreshContainer;
 
     @InjectView(R.id.list_view)
-    protected ListView mListView;
+    protected ObservableListView mListView;
 
     @InjectView(R.id.camera_button)
     protected FloatingActionButton mCameraButton;
@@ -203,29 +203,31 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             }
         });
 
-        // Setup Floating Camera Button
+        // action bar scroll listener
         final HideableActionBarScrollListener hideableActionBarScrollListener
                 = new HideableActionBarScrollListener(this);
+        mListView.addOnScrollListener(hideableActionBarScrollListener);
 
-        // Setup Floating Camera Button
-        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
-                = new FloatingActionButton.FabOnScrollListener() {
+        // analytics scroll listener
+        mListView.addOnScrollListener(new AbsListView.OnScrollListener() {
+            private int lastVisibleItem = -1;
 
-            int lastVisibleItem = -1;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                     int totalItemCount) {
-                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                hideableActionBarScrollListener
-                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
                 if (lastVisibleItem < firstVisibleItem) {
                     lastVisibleItem = firstVisibleItem;
                     mAnalytics.trackViewItemInFeed(getFeedName());
                 }
             }
-        };
-        mCameraButton.attachToListView(mListView, fabOnScrollListener);
+        });
+
+        // Setup Floating Camera Button
+        mCameraButton.attachToListView(mListView);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
