@@ -3,11 +3,15 @@ package com.delectable.mobile.ui.home.fragment;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureListingModel;
+import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
+import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.api.models.Listing;
+import com.delectable.mobile.api.models.TransitionState;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
 import com.delectable.mobile.ui.common.widget.Delectabutton;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
@@ -55,6 +59,8 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
     private static final String TAG = CaptureListFragment.class.getSimpleName();
 
+    private static final int NOT_FOUND = -1;
+
     private String LIST_REQUEST = TAG + "_list_req_";
 
     @InjectView(R.id.swipe_container)
@@ -69,6 +75,9 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     protected View mEmptyView;
 
     protected View mEmptyViewBackground;
+
+    @Inject
+    protected BaseWineController mBaseWineController;
 
     @Inject
     protected CaptureListingModel mCaptureListingModel;
@@ -349,6 +358,20 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     }
 
     @Override
+    public void checkPrice(CaptureDetails capture, CaptureDetailsView view) {
+
+        //fetch wine source
+        if (capture.getWineProfile()!=null) {
+
+            //immediate set these values for object on hand for immediate UI consumption, job will also set these in the model layer
+            capture.setTransacting(true);
+            capture.setTransitionState(TransitionState.UPDATING);
+            capture.setTransactionKey(CaptureDetails.TRANSACTION_KEY_PRICE);
+            mBaseWineController.fetchWineSource(capture.getId(), capture.getWineProfile().getId(), null);
+        }
+    }
+
+    @Override
     public void shouldLoadNextPage() {
         Log.d(TAG, "shouldLoadNextPage");
         if (mFetching) {
@@ -368,6 +391,36 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             fetchCaptures(mCapturesListing, false);
             Log.d(TAG, "shouldLoadNextPage:moreTrue");
         }
+    }
+
+    public void onEventMainThread(FetchedWineSourceEvent event) {
+        //TODO may need extra filter here to differentiate between fetch wine source event here and from wine profile
+
+        //we always provide capture id when call fetchWineSource from this fragment
+        if (event.getCaptureId() == null) {
+            return;
+        }
+        if (!event.isSuccessful()) {
+            showToastError(event.getErrorMessage());
+        }
+
+        //replace item
+        int position = NOT_FOUND;
+        boolean foundCapture = false;
+        for(int i = 0; i < mAdapter.getItems().size(); i++) {
+            CaptureDetails capture = mAdapter.getItems().get(i);
+            if (capture.getId().equals(event.getCaptureId())) {
+                position = i;
+                foundCapture = true;
+                break;
+            }
+        }
+        if (foundCapture) {
+            mAdapter.getItems().set(position, event.getCaptureDetails());
+        }
+
+        //finally, update listview display
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

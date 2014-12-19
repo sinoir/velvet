@@ -125,7 +125,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         mNavHeader.setActionListener(this);
 
         mEmptyView = inflater.inflate(R.layout.navigation_empty_view, mDrawerListView, false);
-        mDrawerListView.addFooterView(mEmptyView);
+        mDrawerListView.addFooterView(mEmptyView, null, false);
 
         mDrawerListView.setOnItemClickListener(this);
         mDrawerListView.setAdapter(mActivityFeedAdapter);

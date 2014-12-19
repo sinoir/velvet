@@ -12,4 +12,12 @@ public interface Transactable {
     public boolean isTransacting();
 
     public void setTransacting(boolean transacting);
+
+    public String getTransactionKey();
+
+    /**
+     * Used to identify what is changing inside the object that implements Transactable, for if
+     * there are multiple properties of that object that can be acted upon.
+     */
+    public void setTransactionKey(String key);
 }

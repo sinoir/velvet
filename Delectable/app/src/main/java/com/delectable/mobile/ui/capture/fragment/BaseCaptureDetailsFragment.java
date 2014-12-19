@@ -139,8 +139,12 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
             startActivity(intent);
         }
     }
-
     @Override
+    public void checkPrice(CaptureDetails capture, CaptureDetailsView view) {
+        //allow subclass to override and catch event
+    }
+
+        @Override
     public void launchPurchaseFlow(CaptureDetails capture) {
         if (!UserInfo.isOver21()) {
             mToBePurchasedWineId = capture.getWineProfile().getId();
