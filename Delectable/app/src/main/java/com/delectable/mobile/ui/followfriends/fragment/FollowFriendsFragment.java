@@ -72,6 +72,7 @@ public class FollowFriendsFragment extends BaseFragment {
 
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
+        mTabStrip.setBackgroundColor(getResources().getColor(R.color.d_off_white));
         return view;
     }
 }
