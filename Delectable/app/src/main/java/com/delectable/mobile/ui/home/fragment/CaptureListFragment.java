@@ -443,6 +443,14 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             if (mAnalytics != null) {
                 mAnalytics.trackSwitchFeed(mTitle);
             }
+
+            if (mAdapter != null && mAdapter.isEmpty()) {
+                // always reveal FAB and toolbar on empty feeds, because the user cannot scroll
+                mEventBus.post(new HideOrShowFabEvent(true));
+                if (getBaseActivity() != null) {
+                    getBaseActivity().showOrHideActionBar(true);
+                }
+            }
         }
     }
 
