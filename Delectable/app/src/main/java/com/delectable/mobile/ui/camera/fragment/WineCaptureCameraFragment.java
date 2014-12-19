@@ -14,7 +14,6 @@ import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
-import com.delectable.mobile.util.ScrimUtil;
 import com.delectable.mobile.util.ViewUtil;
 
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -99,8 +97,6 @@ public class WineCaptureCameraFragment extends CameraFragment implements
 
     private View mView;
 
-    private View mStatusBarScrim;
-
     protected Rect mInsets;
 
     @Inject
@@ -152,13 +148,6 @@ public class WineCaptureCameraFragment extends CameraFragment implements
         setupCameraSurface(mCameraPreview);
         mCameraPreview.setScaleToFitY(true);
 
-        mStatusBarScrim = mView.findViewById(R.id.statusbar_scrim);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mStatusBarScrim.setBackground(ScrimUtil.STATUS_BAR_SCRIM);
-        } else {
-            mStatusBarScrim.setBackgroundDrawable(ScrimUtil.STATUS_BAR_SCRIM);
-        }
-
         return mView;
     }
 
@@ -188,11 +177,6 @@ public class WineCaptureCameraFragment extends CameraFragment implements
         }
         mInsets = new Rect(insets);
         mFlashButton.setPadding(0, insets.top, 0, 0);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // increase scrim height when status bar is translucent to compensate for additional padding
-            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
-        }
     }
 
     @OnClick(R.id.close_button)
