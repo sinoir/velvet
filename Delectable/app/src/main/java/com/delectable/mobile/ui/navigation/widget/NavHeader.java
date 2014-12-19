@@ -2,8 +2,10 @@ package com.delectable.mobile.ui.navigation.widget;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +34,12 @@ public class NavHeader extends RelativeLayout {
 
     private static final String TAG = NavHeader.class.getSimpleName();
 
+    @InjectView(R.id.container)
+    DrawInsetsFrameLayout mContainerView;
+
+    @InjectView(R.id.nav_header_container)
+    View mNavHeaderContainer;
+
     @InjectView(R.id.profile_image1)
     CircleImageView mUserImageView;
 
@@ -50,6 +58,8 @@ public class NavHeader extends RelativeLayout {
 
     private View mCurrentSelectedNav;
 
+    protected Rect mInsets;
+
     public NavHeader(Context context) {
         this(context, null);
     }
@@ -61,8 +71,19 @@ public class NavHeader extends RelativeLayout {
     public NavHeader(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
+
         View.inflate(context, R.layout.navigation_header, this);
         ButterKnife.inject(this);
+    }
+
+    public void onApplyWindowInsets(Rect insets) {
+        Log.d(TAG, "$$$$$$$$$$$$$$ insets: " + insets.top);
+        if (insets == null) {
+            return;
+        }
+        mInsets = new Rect(insets);
+        // adjust toolbar padding when status bar is translucent
+        mNavHeaderContainer.setPadding(0, insets.top, 0, 0);
     }
 
     @OnClick({R.id.profile_image1, R.id.navigation_profile})

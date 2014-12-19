@@ -10,6 +10,7 @@ import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.captures.MarkedCaptureHelpfulEvent;
+import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 import com.delectable.mobile.api.events.wines.FetchedWineSourceEvent;
 import com.delectable.mobile.api.events.wines.UpdatedBaseWineEvent;
 import com.delectable.mobile.api.models.BaseWine;
@@ -23,7 +24,6 @@ import com.delectable.mobile.api.models.WineProfileMinimal;
 import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
-import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
@@ -92,7 +92,7 @@ import butterknife.InjectView;
  */
 public class WineProfileFragment extends BaseFragment implements
         WineBannerView.ActionsHandler, WineProfileCommentUnitRow.ActionsHandler,
-        InfiniteScrollAdapter.ActionsHandler, DrawInsetsFrameLayout.OnInsetsCallback {
+        InfiniteScrollAdapter.ActionsHandler {
 
     public static final String TAG = WineProfileFragment.class.getSimpleName();
 
@@ -105,8 +105,6 @@ public class WineProfileFragment extends BaseFragment implements
     protected static final String BASE_WINE_ID = "baseWineId";
 
     private static final String VINTAGE_ID = "vintageId";
-
-    private static final String WINDOW_INSETS = "WINDOW_INSETS";
 
     private static final int REQUEST_BUY_VINTAGE_DIALOG = 1;
 
@@ -187,8 +185,6 @@ public class WineProfileFragment extends BaseFragment implements
     protected View mToolbarContrast;
 
     protected int mStickyToolbarHeight;
-
-    protected Rect mInsets;
 
     protected FloatingActionButton mCameraButton;
 
@@ -341,10 +337,6 @@ public class WineProfileFragment extends BaseFragment implements
         mFetchingId = mBaseWineId;
 
         mAllYearsText = getString(R.string.wine_profile_all_years);
-
-        if (savedInstanceState != null) {
-            mInsets = savedInstanceState.getParcelable(WINDOW_INSETS);
-        }
     }
 
     @Override
@@ -514,7 +506,10 @@ public class WineProfileFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
 
-        onApplyWindowInsets(mInsets);
+        InsetsChangedEvent insetsEvent = mEventBus.getStickyEvent(InsetsChangedEvent.class);
+        if (insetsEvent != null) {
+            onApplyWindowInsets(insetsEvent.insets);
+        }
 
         if (mBaseWineId != null && mBaseWine == null) {
             loadLocalBaseWineData(); //load from model to show something first
@@ -530,12 +525,6 @@ public class WineProfileFragment extends BaseFragment implements
         }
 
         Animate.fadeIn(mToolbarContrast, 300);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(WINDOW_INSETS, mInsets);
     }
 
     @Override
@@ -771,6 +760,10 @@ public class WineProfileFragment extends BaseFragment implements
         //will reset following toggle button back to original setting if error
         mAdapter.notifyDataSetChanged();
     }
+
+    public void onEventMainThread(InsetsChangedEvent event) {
+        onApplyWindowInsets(event.insets);
+    }
     //endregion
 
     //region Fetch Remote Data
@@ -800,16 +793,10 @@ public class WineProfileFragment extends BaseFragment implements
     }
     //endregion
 
-    @Override
-    public void onInsetsChanged(Rect insets) {
-        onApplyWindowInsets(insets);
-    }
-
     private void onApplyWindowInsets(Rect insets) {
         if (insets == null) {
             return;
         }
-        mInsets = new Rect(insets);
         // adjust toolbar padding when status bar is translucent
         mToolbar.setPadding(0, insets.top, 0, 0);
         mToolbarContrast.setPadding(0, insets.top, 0, 0);
