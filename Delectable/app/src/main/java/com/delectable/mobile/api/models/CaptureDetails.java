@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class CaptureDetails extends CaptureMinimal {
 
+    /**
+     * Key used to indicate that the price of the WineProfile in this object is being acted upon.
+     */
+    public static String TRANSACTION_KEY_PRICE = "TRANSACTION_KEY_PRICE";
+
     private String transcription_error_message;
 
     private String location_name;

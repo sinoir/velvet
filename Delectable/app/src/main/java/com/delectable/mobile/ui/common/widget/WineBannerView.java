@@ -1,6 +1,5 @@
 package com.delectable.mobile.ui.common.widget;
 
-import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.CaptureDetails;
@@ -19,10 +18,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,9 +43,6 @@ public class WineBannerView extends FrameLayout {
         public void onVintageClick();
         public void onEditBaseWineClicked();
     }
-
-    private static final Drawable sGradientDrawable = ScrimUtil.makeCubicGradientScrimDrawable(
-            App.getInstance().getResources().getColor(R.color.d_black), 9, Gravity.BOTTOM);
 
     @InjectView(R.id.wine_image)
     protected ImageView mWineImage;
@@ -118,9 +112,9 @@ public class WineBannerView extends FrameLayout {
         setLayoutTransition(null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mGradientView.setBackground(sGradientDrawable);
+            mGradientView.setBackground(ScrimUtil.WINE_BANNER_SCRIM);
         } else {
-            mGradientView.setBackgroundDrawable(sGradientDrawable);
+            mGradientView.setBackgroundDrawable(ScrimUtil.WINE_BANNER_SCRIM);
         }
 
         if (mShowTriangleMask) {

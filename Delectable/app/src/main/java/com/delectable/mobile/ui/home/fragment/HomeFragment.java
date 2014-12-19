@@ -4,11 +4,12 @@ import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.UpdatedCaptureFeedsEvent;
+import com.delectable.mobile.api.events.ui.HideOrShowFabEvent;
 import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
-import com.delectable.mobile.ui.common.widget.FeedPageTransformer;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
+import com.melnykov.fab.FloatingActionButton;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,6 +38,9 @@ public class HomeFragment extends BaseFragment {
 
     private SlidingTabLayout mTabLayout;
 
+    protected FloatingActionButton mCameraButton;
+
+
     private SlidingTabAdapter mTabsAdapter;
 
     private List<CaptureFeed> mCaptureFeeds;
@@ -59,6 +63,14 @@ public class HomeFragment extends BaseFragment {
         mTabLayout = (SlidingTabLayout) mView.findViewById(R.id.tab_layout);
         mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
         mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
+
+        mCameraButton = (FloatingActionButton) mView.findViewById(R.id.camera_button);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
 
         List<CaptureFeed> captureFeeds = UserInfo.getCaptureFeeds();
         populateFeedTabs(captureFeeds, captureFeeds);
@@ -113,9 +125,27 @@ public class HomeFragment extends BaseFragment {
         mViewPager.setOffscreenPageLimit(PREFETCH_FEED_COUNT);
         // TODO page margin does not work with the tab indicator
 //        mViewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.spacing_16));
-        mViewPager.setPageTransformer(false, new FeedPageTransformer());
+        // material design does not like page transformers!
+//        mViewPager.setPageTransformer(false, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mCameraButton.isShown()) {
+            mCameraButton.hide(false);
+            mCameraButton.show(true);
+        }
+    }
+
+    public void onEventMainThread(HideOrShowFabEvent event) {
+        if (event.show) {
+            mCameraButton.show(true);
+        } else {
+            mCameraButton.hide(true);
+        }
     }
 
     public void onEventMainThread(UpdatedCaptureFeedsEvent event) {
