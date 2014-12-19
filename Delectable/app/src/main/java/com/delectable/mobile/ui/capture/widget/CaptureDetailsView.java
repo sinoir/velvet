@@ -187,6 +187,7 @@ public class CaptureDetailsView extends RelativeLayout {
         mMenuActionFlag = mPopupMenu.getMenu().findItem(R.id.capture_action_flag);
         mMenuActionRemove = mPopupMenu.getMenu().findItem(R.id.capture_action_remove);
 
+        mPriceButton.setSoldoutTextClicklable(false);
         mPriceButton.setActionsCallback(new WinePriceView.WinePriceViewActionsCallback() {
             @Override
             public void onPriceCheckClicked(VintageWineInfo wineInfo) {
