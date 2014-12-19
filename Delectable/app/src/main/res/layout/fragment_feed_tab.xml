@@ -102,10 +102,6 @@
             </LinearLayout>
         </FrameLayout>
 
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/camera_button"
-            style="@style/FloatingCameraButton" />
-
     </FrameLayout>
 
 </com.delectable.mobile.ui.common.widget.NestedSwipeRefreshLayout>
