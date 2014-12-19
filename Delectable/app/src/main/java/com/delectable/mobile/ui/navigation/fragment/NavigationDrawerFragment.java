@@ -7,7 +7,6 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.events.UpdatedListingEvent;
 import com.delectable.mobile.api.events.accounts.FollowAccountEvent;
 import com.delectable.mobile.api.events.accounts.UpdatedAccountEvent;
-import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.api.models.ActivityFeedItem;
 import com.delectable.mobile.api.models.Listing;
@@ -154,11 +153,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
             mDrawerListView.removeFooterView(mEmptyView);
         }
 
-        InsetsChangedEvent insetsEvent = mEventBus.getStickyEvent(InsetsChangedEvent.class);
-        if (insetsEvent != null) {
-            mNavHeader.onApplyWindowInsets(insetsEvent.insets);
-        }
-
         mUserAccount = UserInfo.getAccountPrivate(getActivity());
         // Must update / sync private account on Resume, for sycning issues.
         // TODO: Need to create 1 object for private / public, otherwise we require special syncing code for the duplciate data, which doesn't exist.
@@ -175,10 +169,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
-    }
-
-    public void onEventMainThread(InsetsChangedEvent event) {
-        mNavHeader.onApplyWindowInsets(event.insets);
     }
 
     @Override

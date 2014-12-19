@@ -37,6 +37,8 @@ public class NavActivity extends BaseActivity
     @Inject
     AnalyticsUtil mAnalytics;
 
+    private DrawerLayout mDrawerLayout;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -59,8 +61,9 @@ public class NavActivity extends BaseActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         // Set up the drawer.
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment
-                .setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+                .setUp(R.id.navigation_drawer, mDrawerLayout);
     }
 
     @Override

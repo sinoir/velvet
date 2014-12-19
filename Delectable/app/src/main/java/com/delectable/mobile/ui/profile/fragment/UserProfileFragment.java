@@ -50,7 +50,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -276,7 +275,6 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         int headerHeight = mProfileHeaderView.getHeight();
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
-        Log.d(TAG, "@@@@@@@@@@@@ top=" + top);
         // elevate toolbar on embedded wine profile
         Animate.elevate(mToolbar, (isHeaderVisible && top == 0) ? 0f : Animate.ELEVATION);
         // elevate once past profile header
