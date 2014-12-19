@@ -140,7 +140,7 @@ public abstract class BaseActivity extends ActionBarActivity
         } else {
             toolbar.animate()
                     .setDuration(ACTIONBAR_HIDE_ANIM_DURATION)
-                    .translationY(-toolbar.getBottom())
+                    .translationY(-toolbar.getHeight())
 //                    .alpha(0)
                     .setInterpolator(interpolator);
         }
