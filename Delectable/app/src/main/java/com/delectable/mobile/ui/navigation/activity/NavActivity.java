@@ -164,4 +164,5 @@ public class NavActivity extends BaseActivity
             mEventBus.post(new NavigationEvent(NavHeader.NAV_DISCOVER));
         }
     }
+
 }
