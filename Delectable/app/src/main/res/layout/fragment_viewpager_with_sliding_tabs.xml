@@ -15,4 +15,8 @@
         android:elevation="@dimen/tab_elevation" />
     <!-- TODO backport shadow for pre v21 -->
 
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/camera_button"
+        style="@style/FloatingCameraButton" />
+
 </FrameLayout>

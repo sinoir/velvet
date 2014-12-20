@@ -66,12 +66,6 @@ public class SearchPeopleTabFragment extends BaseSearchTabFragment
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        mSearchView.setQueryHint(getString(R.string.search_people_hint));
-    }
-
-    @Override
     public boolean onQueryTextSubmit(String query) {
         super.onQueryTextSubmit(query);
         mEndOfList = false; //new search query, reset this flag

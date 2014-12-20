@@ -77,6 +77,10 @@ public class WinePriceView extends RelativeLayout {
         mLoadingView.setVisibility(View.VISIBLE);
     }
 
+    public void setSoldoutTextClicklable(boolean clickable) {
+        mSoldOutView.setClickable(clickable);
+    }
+
     public void setActionsCallback(WinePriceViewActionsCallback actionsCallback) {
         mActionsCallback = actionsCallback;
     }

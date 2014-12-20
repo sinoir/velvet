@@ -11,20 +11,17 @@ import android.view.ViewGroup;
 public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails> {
 
     public enum RowType {
-        DETAIL, PURCHASE;
+        SOCIAL, COMMERCIAL;
     }
 
     private CaptureDetailsView.CaptureActionsHandler mCaptureActionsHandler;
 
-    private String mAccountId;
-
-    private RowType mRowType = RowType.DETAIL;
+    private RowType mRowType = RowType.SOCIAL;
 
     public CaptureDetailsAdapter(CaptureDetailsView.CaptureActionsHandler captureActionsHandler,
-            ActionsHandler actionsHandler, String accountId) {
+            ActionsHandler actionsHandler) {
         super(actionsHandler);
         mCaptureActionsHandler = captureActionsHandler;
-        mAccountId = accountId;
     }
 
     @Override
@@ -52,16 +49,15 @@ public class CaptureDetailsAdapter extends InfiniteScrollAdapter<CaptureDetails>
                     .findViewById(R.id.capture_details_view);
         }
         CaptureDetails capture = mItems.get(position);
-        if (RowType.DETAIL == rowType) {
-            captureDetailsRow.updateData(capture);
-        } else if (RowType.PURCHASE == rowType) {
-            captureDetailsRow.updateData(capture, false, true);
+        switch (rowType) {
+            case SOCIAL:
+                captureDetailsRow.updateData(capture);
+                break;
+            case COMMERCIAL:
+                captureDetailsRow.updateData(capture, false, true);
+                break;
         }
         return rowView;
-    }
-
-    public void setAccountId(String accountId) {
-        mAccountId = accountId;
     }
 
     public void setRowType(RowType rowType) {

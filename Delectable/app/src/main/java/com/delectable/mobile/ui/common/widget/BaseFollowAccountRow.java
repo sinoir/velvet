@@ -39,6 +39,9 @@ public class BaseFollowAccountRow extends RelativeLayout {
     public BaseFollowAccountRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         View.inflate(context, R.layout.row_follow_account, this);
+        int paddingTopBottom = getResources().getDimensionPixelSize(R.dimen.spacing_8);
+        int paddingLeftRight = getResources().getDimensionPixelSize(R.dimen.spacing_16);
+        setPadding(paddingLeftRight, paddingTopBottom, paddingLeftRight, paddingTopBottom);
         ButterKnife.inject(this);
     }
 

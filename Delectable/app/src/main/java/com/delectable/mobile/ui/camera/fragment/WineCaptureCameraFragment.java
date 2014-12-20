@@ -5,6 +5,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.controllers.WineScanController;
 import com.delectable.mobile.api.events.BaseEvent;
 import com.delectable.mobile.api.events.scanwinelabel.IdentifyLabelScanEvent;
+import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 import com.delectable.mobile.api.models.BaseWine;
 import com.delectable.mobile.api.models.LabelScan;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -19,11 +20,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,8 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 
 public class WineCaptureCameraFragment extends CameraFragment {
+
+    private static final String WINDOW_INSETS = "WINDOW_INSETS";
 
     public static final int REQUEST_SELECT_PHOTO = 100;
 
@@ -147,12 +150,18 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
         // Re-enable the Capture Button
         mCaptureButton.setEnabled(true);
+        InsetsChangedEvent insetsEvent = mEventBus.getStickyEvent(InsetsChangedEvent.class);
+        if (insetsEvent != null) {
+            onApplyWindowInsets(insetsEvent.insets);
+        }
+
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getActionBar().hide();
+    private void onApplyWindowInsets(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+        mFlashButton.setPadding(0, insets.top, 0, 0);
     }
 
     @OnClick(R.id.close_button)
@@ -223,6 +232,9 @@ public class WineCaptureCameraFragment extends CameraFragment {
         Animate.fadeOut(mCameraContainer);
 //        Animate.slideOutDown(mButtonsContainer, 600);
         Animate.fadeOut(mButtonsContainer, 600);
+
+        // show status bar
+        getBaseActivity().showOrHideStatusBar(true);
     }
 
     @OnTouch(R.id.camera_preview)
@@ -255,6 +267,10 @@ public class WineCaptureCameraFragment extends CameraFragment {
         mIsIdentifying = true;
         animateFromConfirmToIdentify();
         mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
+    }
+
+    public void onEventMainThread(InsetsChangedEvent event) {
+        onApplyWindowInsets(event.insets);
     }
 
     public void onEventMainThread(IdentifyLabelScanEvent event) {

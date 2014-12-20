@@ -5,7 +5,7 @@ import com.delectable.mobile.util.DateHelperUtil;
 import java.util.Comparator;
 import java.util.Date;
 
-public abstract class BaseListingElement implements IDable, Transactable{
+public abstract class BaseListingElement implements IDable, Transactable {
 
     /**
      * Sorts Elements by newest to oldest
@@ -37,6 +37,8 @@ public abstract class BaseListingElement implements IDable, Transactable{
 
     //used to determine whether or not this object is syncing with the api or not
     private boolean transacting;
+
+    private String transactionKey;
 
     public Date getCreatedAtDate() {
         return DateHelperUtil.dateFromDouble(created_at);
@@ -100,6 +102,16 @@ public abstract class BaseListingElement implements IDable, Transactable{
     @Override
     public void setTransacting(boolean transacting) {
         this.transacting = transacting;
+    }
+
+    @Override
+    public String getTransactionKey() {
+        return transactionKey;
+    }
+
+    @Override
+    public void setTransactionKey(String key) {
+        transactionKey = key;
     }
 
     @Override

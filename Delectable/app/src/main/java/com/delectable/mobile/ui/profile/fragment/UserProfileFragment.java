@@ -47,6 +47,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -276,8 +277,10 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
         boolean isHeaderVisible = mListView.getFirstVisiblePosition() == 0;
 
         // elevate toolbar on embedded wine profile
-        Animate.elevate(mToolbar,
-                (isHeaderVisible && -top < headerHeight - toolbarHeight) ? 0 : Animate.ELEVATION);
+        ViewCompat.setElevation(mToolbar, (isHeaderVisible && top == 0) ? 0f : Animate.ELEVATION);
+//        Animate.elevate(mToolbar, (isHeaderVisible && top == 0) ? 0f : Animate.ELEVATION);
+        // elevate once past profile header
+//        Animate.elevate(mToolbar, (isHeaderVisible && -top < headerHeight - toolbarHeight) ? 0 : Animate.ELEVATION);
 
         if (isHeaderVisible && !isFragmentEmbedded()) {
             // drag toolbar off the screen when reaching the bottom of the header
@@ -366,7 +369,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     public void onEventMainThread(FetchedAccountProfileEvent event) {
 
-        if (!mUserId.equals(event.getAccount().getId())) {
+        if (!mUserId.equals(event.getAccountId())) {
             return;
         }
 

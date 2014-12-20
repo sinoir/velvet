@@ -4,6 +4,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,9 @@ public class NavHeader extends RelativeLayout {
     public static final int NAV_SETTINGS = 3;
 
     private static final String TAG = NavHeader.class.getSimpleName();
+
+    @InjectView(R.id.nav_header_container)
+    View mNavHeaderContainer;
 
     @InjectView(R.id.profile_image1)
     CircleImageView mUserImageView;
@@ -61,8 +65,18 @@ public class NavHeader extends RelativeLayout {
     public NavHeader(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
+
         View.inflate(context, R.layout.navigation_header, this);
         ButterKnife.inject(this);
+        // add top padding to account for drawer behind status bar on v21+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int statusBarHeight = 0;
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            }
+            mNavHeaderContainer.setPadding(0, statusBarHeight, 0, 0);
+        }
     }
 
     @OnClick({R.id.profile_image1, R.id.navigation_profile})

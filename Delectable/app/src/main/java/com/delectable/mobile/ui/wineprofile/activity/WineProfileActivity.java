@@ -4,7 +4,8 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.BaseWineMinimal;
 import com.delectable.mobile.api.models.PhotoHash;
 import com.delectable.mobile.api.models.WineProfileMinimal;
-import com.delectable.mobile.ui.BaseActivity;
+import com.delectable.mobile.ui.common.activity.TranslucentStatusBarActivity;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 
 import android.content.Context;
@@ -13,7 +14,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
 
-public class WineProfileActivity extends BaseActivity {
+public class WineProfileActivity extends TranslucentStatusBarActivity {
 
     private static final String PARAMS_WINE_PROFILE = "PARAMS_WINE_PROFILE";
 
@@ -26,6 +27,7 @@ public class WineProfileActivity extends BaseActivity {
 
     private static final String DEEP_BASE_VINTAGE_ID = "vintage_id";
 
+    private DrawInsetsFrameLayout mContainerView;
 
     private WineProfileMinimal mWineProfile;
 
@@ -75,7 +77,7 @@ public class WineProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_container);
+
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mWineProfile = args.getParcelable(PARAMS_WINE_PROFILE);
