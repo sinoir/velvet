@@ -678,8 +678,10 @@ public class WineProfileFragment extends BaseFragment implements
         if (wineWithPrice != null) {
             mSelectedWineVintage = wineWithPrice;
         }
-        mWinePriceView.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
-        mToolbarBuyButton.updateWithPriceInfo(new VintageWineInfo(mSelectedWineVintage));
+        VintageWineInfo vintageWineInfo = new VintageWineInfo(mSelectedWineVintage);
+        mWinePriceView.updateWithPriceInfo(vintageWineInfo);
+        mToolbarBuyButton.updateWithPriceInfo(vintageWineInfo);
+        mBuyActionView.setVisibility(vintageWineInfo.hasPrice() ? View.VISIBLE : View.GONE);
     }
     //endregion
 
