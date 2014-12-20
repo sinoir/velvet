@@ -10,8 +10,9 @@
         android:layout_width="@dimen/general_icon_size"
         android:layout_height="@dimen/general_icon_size"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="@dimen/cap_list_row_horizontal_spacing"
+        android:layout_marginRight="@dimen/spacing_24"
         android:src="@drawable/no_photo" />
+    <!-- row padding + image width + right margin = 72dp (keyline for text in nav drawer) -->
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/text"

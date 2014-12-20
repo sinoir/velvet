@@ -25,7 +25,11 @@ public class BaseWineController {
      * Gets Price for Wine
      */
     public void fetchWineSource(String wineId, String state) {
-        mJobManager.addJobInBackground(new FetchWineSourceJob(wineId, state));
+        fetchWineSource(null, wineId, state);
+    }
+
+    public void fetchWineSource(String captureId, String wineId, String state) {
+        mJobManager.addJobInBackground(new FetchWineSourceJob(captureId, wineId, state));
     }
 
     public void purchaseWine(String wineId, String purchaseOfferId, String paymentMethodId,

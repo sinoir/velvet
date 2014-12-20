@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import javax.inject.Inject;
@@ -91,28 +90,14 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
                     @Override
                     public void onScrollChanged() {
                         CaptureDetailsFragment.this.onScrollChanged();
-//                        int scrollY = mScrollView.getScrollY();
-//                        float height = mWineBanner.getHeight();
-//                        // check if header is still visible
-//                        if (scrollY > height) {
-//                            return;
-//                        }
-//                        mWineImageView.setTranslationY(scrollY / 2f);
                     }
                 });
 
         mWineBanner = mCaptureDetailsView.findViewById(R.id.wine_banner);
         mWineImageView = mWineBanner.findViewById(R.id.wine_image);
 
-        // set wine banner height to match screen width
-        Point screenSize = ViewUtil.getDisplayDimensions();
-        RelativeLayout.LayoutParams parms = (RelativeLayout.LayoutParams) mWineBanner
-                .getLayoutParams();
-        parms.height = screenSize.x;
-        parms.width = screenSize.x;
-        mWineBanner.setLayoutParams(parms);
-
         // set toolbar height to half the banner height for scroll offset
+        Point screenSize = ViewUtil.getDisplayDimensions();
         mStickyToolbarHeight = screenSize.x / 2;
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);

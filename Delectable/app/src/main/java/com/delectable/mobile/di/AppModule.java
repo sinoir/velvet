@@ -93,6 +93,7 @@ import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
 import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
 import com.delectable.mobile.ui.common.dialog.BaseEventBusDialogFragment;
+import com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout;
 import com.delectable.mobile.ui.followfriends.fragment.FollowContactsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowExpertsTabFragment;
 import com.delectable.mobile.ui.followfriends.fragment.FollowFacebookFriendsTabFragment;
@@ -253,7 +254,9 @@ import de.greenrobot.event.EventBus;
                 RegistrationController.class,
                 FoursquareController.class,
                 WineScanController.class,
-                BaseWineController.class
+                BaseWineController.class,
+                // Other
+                DrawInsetsFrameLayout.class
         }
 )
 public class AppModule {
