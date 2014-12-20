@@ -47,8 +47,6 @@ import com.delectable.mobile.util.ScrimUtil;
 import com.delectable.mobile.util.ViewUtil;
 import com.melnykov.fab.FloatingActionButton;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -916,8 +914,7 @@ public class WineProfileFragment extends BaseFragment implements
             for (VarietalsHash varietal : baseWine.getVarietalComposition()) {
                 varietalNames.add(varietal.getName());
             }
-            TextUtils.join(", ", varietalNames);
-            String varietalDisplayText = StringUtils.join(varietalNames, ", ");
+            String varietalDisplayText = TextUtils.join(", ", varietalNames);
             mVarietalTextView.setText(varietalDisplayText);
         }
 
