@@ -6,12 +6,8 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,7 +28,6 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
     private static final String TAG = BaseSearchTabFragment.class.getSimpleName();
 
-    protected SearchView mSearchView;
 
     @InjectView(R.id.list_view)
     protected ListView mListView;
@@ -55,30 +50,6 @@ public abstract class BaseSearchTabFragment extends BaseFragment
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.search_menu, menu);
-
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
-        mSearchView.setOnQueryTextListener(this);
-
-        mSearchView.setIconified(false);
-
-        if (mCurrentQuery != null && !mCurrentQuery.isEmpty()) {
-            mSearchView.setQuery(mCurrentQuery, false);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Close Nav drawer if opened:
-        if (item.getItemId() == mSearchView.getId()) {
-            closeNavigationDrawer();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
@@ -93,6 +64,23 @@ public abstract class BaseSearchTabFragment extends BaseFragment
         return layout;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getParentSearchFragment().registerSearchListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getParentSearchFragment().deregisterSearchListener(this);
+    }
+
+    SearchFragment getParentSearchFragment() {
+        return (SearchFragment) getParentFragment();
+    }
+
+
     /**
      * Subclasses should call super on this method to ensure that the keyboard gets hidden when a
      * query is made.
@@ -100,15 +88,15 @@ public abstract class BaseSearchTabFragment extends BaseFragment
     @Override
     public boolean onQueryTextSubmit(String query) {
         mCurrentQuery = query;
-        mSearchView.clearFocus(); //hides keyboard
+        getParentSearchFragment().getSearchView().clearFocus(); //hides keyboard
         return false;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mSearchView != null) {
-            mSearchView.clearFocus(); //hides keyboard
+        if (getParentSearchFragment().getSearchView() != null) {
+            getParentSearchFragment().getSearchView().clearFocus(); //hides keyboard
         }
     }
 }
