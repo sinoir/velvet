@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.os.Build;
 import android.util.FloatMath;
 import android.view.Gravity;
 
@@ -44,7 +45,12 @@ public class ScrimUtil {
 
         for (int i = 0; i < numStops; i++) {
             float x = i * 1f / (numStops - 1);
-            float opacity = MathUtil.clamp(FloatMath.pow(x, 3), 0, 1);
+            float opacity;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                opacity = MathUtil.clamp(FloatMath.pow(x, 3), 0, 1);
+            } else {
+                opacity = (float) MathUtil.clamp(Math.pow(x, 3), 0, 1);
+            }
             stopColors[i] = Color.argb((int) (alpha * opacity), red, green, blue);
         }
 
