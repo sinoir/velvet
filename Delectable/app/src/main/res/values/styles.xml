@@ -2,6 +2,8 @@
 
     <style name="Theme.Delectable" parent="Theme.Delectable.Base" />
 
+    <style name="Theme.Delectable.NavDrawer" parent="Theme.Delectable" />
+
     <style name="Theme.Delectable.Translucent" parent="Theme.Delectable" />
 
     <style name="Theme.Delectable.Base" parent="@style/Theme.AppCompat.Light.NoActionBar">
