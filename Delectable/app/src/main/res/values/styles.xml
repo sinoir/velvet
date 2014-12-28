@@ -45,6 +45,15 @@
         <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
+    <style name="ToolbarTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">@dimen/abc_text_size_title_material_toolbar</item>
+        <item name="android:textColor">@color/d_big_stone</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
         <item name="android:textColorPrimary">@color/d_big_stone</item>
         <item name="android:textColorSecondary">@color/d_big_stone</item>

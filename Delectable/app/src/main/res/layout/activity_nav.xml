@@ -20,7 +20,13 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/ToolbarStyle.Flat" />
+            style="@style/ToolbarStyle.Flat">
+
+            <com.delectable.mobile.ui.common.widget.FontTextView
+                android:id="@+id/toolbar_title"
+                style="@style/ToolbarTitle" />
+
+        </android.support.v7.widget.Toolbar>
 
     </FrameLayout>
 

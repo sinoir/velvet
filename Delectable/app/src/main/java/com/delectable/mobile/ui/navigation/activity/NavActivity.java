@@ -21,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -51,6 +52,8 @@ public class NavActivity extends BaseActivity
      */
     private CharSequence mTitle = null;
 
+    private TextView mToolbarTitleView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,8 @@ public class NavActivity extends BaseActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment
                 .setUp(R.id.navigation_drawer, mDrawerLayout);
+
+        mToolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
     }
 
     @Override
@@ -146,13 +151,16 @@ public class NavActivity extends BaseActivity
 //        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setLogo(R.drawable.feed_logo);
+        actionBar.setTitle((String) null);
         if (mTitle != null || (mTitle != null && mTitle.length() == 0)) {
-            actionBar.setTitle(mTitle);
+            mToolbarTitleView.setText(mTitle);
+//            actionBar.setTitle(mTitle);
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setDisplayUseLogoEnabled(false);
         } else {
             actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setTitle((String) null);
+            mToolbarTitleView.setText(null);
+//            actionBar.setTitle((String) null);
             actionBar.setDisplayUseLogoEnabled(true);
         }
         actionBar.setSubtitle(null);
