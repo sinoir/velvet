@@ -141,12 +141,16 @@ public class NavActivity extends BaseActivity
                 mCurrentSelectedNavItem = NavHeader.NAV_DISCOVER;
         }
         if (fragment != null) {
+            restoreActionBar();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 //        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);

@@ -310,7 +310,13 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/ToolbarStyle.Floating" />
+        style="@style/ToolbarStyle">
+
+        <com.delectable.mobile.ui.common.widget.FontTextView
+            android:id="@+id/toolbar_title"
+            android:text="@string/winecheckout_title"
+            style="@style/ToolbarTitle" />
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/error_toolbar"
