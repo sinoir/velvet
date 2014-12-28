@@ -49,9 +49,6 @@ public class WineCheckoutActivity extends BaseActivity {
                     .add(R.id.container, fragment)
                     .commit();
         }
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         showOrHideActionBar(true);
     }
 
