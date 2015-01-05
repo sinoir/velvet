@@ -10,6 +10,8 @@ public class CaptureComment {
 
     String account_id;
 
+    CaptureCommentAttributes comment_attributes;
+
     public String getId() {
         return id;
     }
@@ -42,6 +44,14 @@ public class CaptureComment {
         this.account_id = account_id;
     }
 
+    public CaptureCommentAttributes getComment_attributes() {
+        return comment_attributes;
+    }
+
+    public void setComment_attributes(CaptureCommentAttributes comment_attributes) {
+        this.comment_attributes = comment_attributes;
+    }
+
     @Override
     public String toString() {
         return "CaptureComment{" +
@@ -49,6 +59,7 @@ public class CaptureComment {
                 ", created_at=" + created_at +
                 ", comment='" + comment + '\'' +
                 ", account_id='" + account_id + '\'' +
+                ", comment_attributes=" + comment_attributes +
                 '}';
     }
 }
