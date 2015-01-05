@@ -4,10 +4,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
+import com.delectable.mobile.ui.common.widget.HashtagMentionSpan;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
@@ -17,9 +19,10 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -157,6 +160,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
         View.inflate(context, R.layout.row_feed_wine_detail, this);
         ButterKnife.inject(this);
+
+        mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
 
         PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -398,13 +403,31 @@ public class CaptureDetailsView extends RelativeLayout {
                             : getResources()
                                     .getString(R.string.cap_feed_no_comment_no_location, time);
         }
+        // span for location and time
         SpannableString spannableString = SpannableString
                 .valueOf((!userComment.isEmpty())
                         ? (userComment + " " + captureTimeLocation)
                         : captureTimeLocation);
         spannableString
                 .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
-                        userComment.length(), spannableString.length(), 0);
+                        userComment.length(), spannableString.length(), Spanned.SPAN_COMPOSING);
+        // spans for hashtags and mentions
+        if (!userCaptureComments.isEmpty()) {
+            ArrayList<CaptureCommentAttributes> attributes = userCaptureComments.get(0)
+                    .getCommentAttributes();
+            if (attributes != null && !attributes.isEmpty()) {
+                for (CaptureCommentAttributes a : attributes) {
+                    int tagStart = a.getRange().get(0);
+                    int tagEnd = tagStart + a.getRange().get(1);
+                    String tag = spannableString.subSequence(tagStart, tagEnd).toString();
+                    spannableString.setSpan(
+                            new HashtagMentionSpan(tag, a.getLink(), a.getType()),
+                            tagStart, tagEnd,
+                            Spanned.SPAN_COMPOSING);
+                }
+            }
+        }
+        // set user comment text
         mUserComment.setText(spannableString, TextView.BufferType.SPANNABLE);
 
         ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, mProfileImage2);
@@ -599,14 +622,19 @@ public class CaptureDetailsView extends RelativeLayout {
                     // Don't duplicate ratings
                     rating = -1;
                 }
+                ArrayList<CaptureCommentAttributes> attributes = null;
                 String firstCommentText = comments.size() > firstIndex ? comments.get(firstIndex)
                         .getComment() : "";
                 // TODO : Figure out how to layout multiple comments with ratings?
                 if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
                             mActionsHandler, participant.getId());
+                    attributes = comments.size() > firstIndex
+                            ? comments.get(firstIndex).getCommentAttributes()
+                            : null;
                     //TODO simply not showing rating, might want to simplify CommentRatingRowView
-                    commentRow.setNameAndComment(participant.getFullName(), firstCommentText);
+                    commentRow.setNameAndComment(participant.getFullName(), firstCommentText,
+                            attributes);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
                             layoutParams);
                     numDisplayedComments++;
@@ -614,9 +642,10 @@ public class CaptureDetailsView extends RelativeLayout {
                 for (int i = (firstIndex + 1); i < comments.size(); i++) {
                     CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
                             mActionsHandler, participant.getId());
+                    attributes = comments.get(i).getCommentAttributes();
                     //TODO simply not showing rating, might want to simplify CommentRatingRowView
                     commentRow.setNameAndComment(participant.getFullName(),
-                            comments.get(i).getComment());
+                            comments.get(i).getComment(), attributes);
                     mParticipantsCommentsRatingsContainer.addView(commentRow,
                             layoutParams);
                     numDisplayedComments++;

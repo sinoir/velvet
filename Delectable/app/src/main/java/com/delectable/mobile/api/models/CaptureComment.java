@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import java.util.ArrayList;
+
 public class CaptureComment {
 
     String id;
@@ -10,7 +12,7 @@ public class CaptureComment {
 
     String account_id;
 
-    CaptureCommentAttributes comment_attributes;
+    ArrayList<CaptureCommentAttributes> comment_attributes;
 
     public String getId() {
         return id;
@@ -44,11 +46,11 @@ public class CaptureComment {
         this.account_id = account_id;
     }
 
-    public CaptureCommentAttributes getComment_attributes() {
+    public ArrayList<CaptureCommentAttributes> getCommentAttributes() {
         return comment_attributes;
     }
 
-    public void setComment_attributes(CaptureCommentAttributes comment_attributes) {
+    public void setCommentAttributes(ArrayList<CaptureCommentAttributes> comment_attributes) {
         this.comment_attributes = comment_attributes;
     }
 
