@@ -22,6 +22,8 @@ import java.util.ArrayList;
  */
 public class CommentRatingRowView extends RelativeLayout {
 
+    private Context mContext;
+
     private CaptureDetailsView.CaptureActionsHandler mActionsHandler;
 
     private FontTextView mNameCommentTextView;
@@ -33,6 +35,7 @@ public class CommentRatingRowView extends RelativeLayout {
     public CommentRatingRowView(Context context,
             CaptureDetailsView.CaptureActionsHandler actionsHandler, String userAccountId) {
         this(context);
+        mContext = context;
         mActionsHandler = actionsHandler;
         mUserAccountId = userAccountId;
     }
@@ -85,7 +88,7 @@ public class CommentRatingRowView extends RelativeLayout {
                 int tagEnd = tagStart + a.getRange().get(1);
                 String tag = spannableString.subSequence(tagStart, tagEnd).toString();
                 spannableString.setSpan(
-                        new HashtagMentionSpan(tag, a.getLink(), a.getType()),
+                        new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
                         tagStart, tagEnd,
                         Spanned.SPAN_COMPOSING);
             }

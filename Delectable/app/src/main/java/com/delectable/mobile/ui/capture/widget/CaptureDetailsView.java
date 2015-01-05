@@ -421,7 +421,7 @@ public class CaptureDetailsView extends RelativeLayout {
                     int tagEnd = tagStart + a.getRange().get(1);
                     String tag = spannableString.subSequence(tagStart, tagEnd).toString();
                     spannableString.setSpan(
-                            new HashtagMentionSpan(tag, a.getLink(), a.getType()),
+                            new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
                             tagStart, tagEnd,
                             Spanned.SPAN_COMPOSING);
                 }
