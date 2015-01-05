@@ -265,6 +265,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
             return;
         }
         mIsIdentifying = true;
+        releaseCameraAndPreview();
         animateFromConfirmToIdentify();
         mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
     }
