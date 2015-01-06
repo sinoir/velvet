@@ -9,10 +9,12 @@ import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -60,7 +62,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     private static final String PARAMS_IS_RATING = "PARAMS_IS_RATING";
 
-    @InjectView(R.id.title)
+    @InjectView(R.id.toolbar_title)
     protected TextView mTitle;
 
     @InjectView(R.id.post_button)
@@ -120,11 +122,29 @@ public class CaptureCommentRateFragment extends BaseFragment {
         return mView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        getActionBar().setTitle(null);
+//        ViewCompat.setElevation(getActionBarToolbar(), Animate.ELEVATION);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void updateRatingUI() {
         // Toggle display of rating if we're rating
         if (mIsRating) {
             mNumericRatingSeekBar.setVisibility(View.VISIBLE);
-            mTitle.setText(getActivity().getString(R.string.dialog_comment_rating_title));
+            mTitle.setText(getActivity().getString(R.string.capture_submit_title));
         } else {
             mNumericRatingSeekBar.setVisibility(View.GONE);
             mTitle.setText(getActivity().getString(R.string.dialog_comment_title));
@@ -176,11 +196,6 @@ public class CaptureCommentRateFragment extends BaseFragment {
         data.putExtra(DATA_RATING, mRating);
         getActivity().setResult(Activity.RESULT_OK, data);
         getActivity().finish();
-    }
-
-    @OnClick(R.id.cancel_button)
-    public void cancel() {
-        getActivity().onBackPressed();
     }
 
     private boolean emptyFieldExists() {
