@@ -4,10 +4,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.common.widget.HashtagMentionSpan;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -15,7 +17,9 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.MenuItem;
@@ -24,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -86,6 +92,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.overflow_button)
     protected ImageView mOverflowButton;
 
+    private Context mContext;
+
     private CaptureDetails mCaptureDetails;
 
     private String mSelectedUserId;
@@ -119,9 +127,13 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     public MinimalCaptureDetailRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        mContext = context;
+
         DARK_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_dark_gray));
         View.inflate(context, R.layout.row_minimal_capture_detail, this);
         ButterKnife.inject(this);
+
+        mCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
         PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -352,6 +364,22 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (userComment != null) {
             SpannableString span = new SpannableString(userComment);
             span.setSpan(DARK_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            // spans for hashtags and mentions
+            if (!capture.getComments().isEmpty()) {
+                ArrayList<CaptureCommentAttributes> attributes = capture.getComments().get(
+                        0).getCommentAttributes();
+                if (attributes != null && !attributes.isEmpty()) {
+                    for (CaptureCommentAttributes a : attributes) {
+                        int tagStart = a.getRange().get(0);
+                        int tagEnd = tagStart + a.getRange().get(1);
+                        String tag = userComment.subSequence(tagStart, tagEnd).toString();
+                        span.setSpan(
+                                new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
+                                tagStart, tagEnd,
+                                Spanned.SPAN_COMPOSING);
+                    }
+                }
+            }
             return TextUtils.concat(span, " — ", message);
         }
 
