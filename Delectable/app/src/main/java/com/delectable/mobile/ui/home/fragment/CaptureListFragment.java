@@ -179,7 +179,10 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
         // remove list padding when feed is in it's own activity
         if (CaptureFeed.CUSTOM.equals(mListType)) {
-            mListView.setPadding(mListView.getPaddingLeft(), getActionBarToolbar().getHeight(),
+            getActionBarToolbar()
+                    .measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            int toolbarHeight = getActionBarToolbar().getMeasuredHeight();
+            mListView.setPadding(mListView.getPaddingLeft(), toolbarHeight,
                     mListView.getPaddingRight(), mListView.getPaddingBottom());
         } else {
             // consider ActionBar and TabStrip height for top padding
