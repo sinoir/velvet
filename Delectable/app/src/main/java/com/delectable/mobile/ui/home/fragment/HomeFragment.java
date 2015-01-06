@@ -110,7 +110,7 @@ public class HomeFragment extends BaseFragment {
                 boolean isNewFeed = oldCaptureFeeds != null && !oldCaptureFeeds.contains(feed);
                 tabItems.add(new SlidingTabAdapter.SlidingTabItem(
                         CaptureListFragment
-                                .newInstance(currentUserId, feed.getKey(), feed.getFeedType(),
+                                .newInstance(feed.getKey(), feed.getFeedType(),
                                         feed.getTitle(),
                                         feed.getBanner(), backgroundColor, textColor),
                         feed.getTitle().toLowerCase(),

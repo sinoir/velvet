@@ -8,6 +8,8 @@ public class CaptureFeed {
 
     public static final String COMMERCIAL = "commercial";
 
+    public static final String CUSTOM = "custom";
+
     private String key;
 
     private String feed_type;
