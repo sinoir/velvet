@@ -1,20 +1,33 @@
 package com.delectable.mobile.ui.capture.activity;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.events.ui.HideOrShowFabEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.home.fragment.CaptureListFragment;
 import com.delectable.mobile.util.Animate;
+import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
 
 public class FeedActivity extends BaseActivity {
 
     private static final String TAG = FeedActivity.class.getSimpleName();
+
+    @Inject
+    public EventBus mEventBus;
+
+    protected FloatingActionButton mCameraButton;
 
     private String mListKey;
 
@@ -35,7 +48,8 @@ public class FeedActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toolbar_fragment_container);
+        App.injectMembers(this);
+        setContentView(R.layout.activity_feed);
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mListKey = args.getString(CaptureListFragment.LIST_KEY);
@@ -55,6 +69,38 @@ public class FeedActivity extends BaseActivity {
         TextView toolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
         toolbarTitleView.setText(mListTitle);
         ViewCompat.setElevation(getActionBarToolbar(), Animate.ELEVATION);
+
+        mCameraButton = (FloatingActionButton) findViewById(R.id.camera_button);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchWineCapture();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCameraButton.show(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            mEventBus.unregister(this);
+        } catch (Throwable t) {
+        }
     }
 
     @Override
@@ -65,5 +111,13 @@ public class FeedActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    public void onEventMainThread(HideOrShowFabEvent event) {
+        if (event.show) {
+            mCameraButton.show(true);
+        } else {
+            mCameraButton.hide(true);
+        }
     }
 }
