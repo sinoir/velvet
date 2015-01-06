@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui.capture.fragment;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -51,6 +54,8 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     private static final String PARAMS_COMMENT = "PARAMS_COMMENT";
 
+    private static final String PARAMS_COMMENT_ATTRIBUTES = "PARAMS_COMMENT_ATTRIBUTES";
+
     private static final String PARAMS_RATING = "PARAMS_RATING";
 
     private static final String PARAMS_IS_RATING = "PARAMS_IS_RATING";
@@ -71,15 +76,19 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     private String mComment;
 
+    private ArrayList<CaptureCommentAttributes> mCommentAttributes;
+
     private int mRating;
 
     private boolean mIsRating;
 
-    public static CaptureCommentRateFragment newInstance(String comment, int rating,
+    public static CaptureCommentRateFragment newInstance(String comment,
+            ArrayList<CaptureCommentAttributes> attributes, int rating,
             boolean isRating) {
         CaptureCommentRateFragment fragment = new CaptureCommentRateFragment();
         Bundle args = new Bundle();
         args.putString(PARAMS_COMMENT, comment);
+        args.putParcelableArrayList(PARAMS_COMMENT_ATTRIBUTES, attributes);
         args.putInt(PARAMS_RATING, rating);
         args.putBoolean(PARAMS_IS_RATING, isRating);
         fragment.setArguments(args);
@@ -93,6 +102,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
         Bundle args = getArguments();
         if (args != null) {
             mComment = args.getString(PARAMS_COMMENT);
+            mCommentAttributes = args.getParcelableArrayList(PARAMS_COMMENT_ATTRIBUTES);
             mRating = args.getInt(PARAMS_RATING);
             mIsRating = args.getBoolean(PARAMS_IS_RATING);
         }
@@ -162,6 +172,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
     public void postData() {
         Intent data = new Intent();
         data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString());
+        data.putExtra(DATA_COMMENT_ATTRIBUTES, mCommentAttributes);
         data.putExtra(DATA_RATING, mRating);
         getActivity().setResult(Activity.RESULT_OK, data);
         getActivity().finish();
