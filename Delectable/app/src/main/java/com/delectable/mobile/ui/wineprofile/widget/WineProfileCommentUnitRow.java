@@ -3,15 +3,19 @@ package com.delectable.mobile.ui.wineprofile.widget;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
+import com.delectable.mobile.ui.common.widget.HashtagMentionSpan;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.View;
@@ -19,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -56,6 +62,8 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
     @InjectView(R.id.helpful_button)
     protected ImageButton mHelpfulButton;
 
+    private Context mContext;
+
     private ActionsHandler mActionsHandler;
 
     private CaptureNote mCaptureNote;
@@ -71,9 +79,13 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
     public WineProfileCommentUnitRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        mContext = context;
+
         MEDIUM_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray));
         View.inflate(context, R.layout.row_wine_profile_comment_unit, this);
         ButterKnife.inject(this);
+
+        mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @OnClick({R.id.profile_image, R.id.capturer_container})
@@ -131,7 +143,7 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
 
         //capture comment
         CharSequence message;
-        if (captureNote.getNote() == null || captureNote.getNote().equals("")) {
+        if (captureNote.getNote() == null || captureNote.getNote().isEmpty()) {
             message = getResources()
                     .getString(R.string.wine_profile_empty_comment_message, capturer.getFname(),
                             captureNote.getVintage());
@@ -141,7 +153,21 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
                     .getString(R.string.wine_profile_vintage, captureNote.getVintage());
             SpannableString span = new SpannableString(vintage);
             span.setSpan(MEDIUM_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            message = TextUtils.concat(captureNote.getNote(), span);
+            SpannableString commentSpan = new SpannableString(captureNote.getNote());
+            // hashtag and mention spans
+            ArrayList<CaptureCommentAttributes> attributes = captureNote.getCommentAttributes();
+            if (attributes != null && !attributes.isEmpty()) {
+                for (CaptureCommentAttributes a : attributes) {
+                    int tagStart = a.getRange().get(0);
+                    int tagEnd = tagStart + a.getRange().get(1);
+                    String tag = captureNote.getNote().subSequence(tagStart, tagEnd).toString();
+                    commentSpan.setSpan(
+                            new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
+                            tagStart, tagEnd,
+                            Spanned.SPAN_COMPOSING);
+                }
+            }
+            message = TextUtils.concat(commentSpan, span);
         }
 
         mUserComment.setText(message);
