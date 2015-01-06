@@ -7,8 +7,11 @@ import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.path.android.jobqueue.Params;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -25,11 +28,15 @@ public class EditCaptureCommentJob extends BaseJob {
 
     private String mCaptureComment;
 
-    public EditCaptureCommentJob(String captureId, String commentId, String captureComment) {
+    private ArrayList<CaptureCommentAttributes> mCommentAttributes;
+
+    public EditCaptureCommentJob(String captureId, String commentId, String captureComment,
+            ArrayList<CaptureCommentAttributes> attributes) {
         super(new Params(Priority.SYNC.value()));
         mCaptureId = captureId;
         mCommentId = commentId;
         mCaptureComment = captureComment;
+        mCommentAttributes = attributes;
     }
 
     @Override
@@ -43,7 +50,7 @@ public class EditCaptureCommentJob extends BaseJob {
         String endpoint = "/captures/edit_comment";
 
         CapturesEditCommentRequest request = new CapturesEditCommentRequest(mCaptureId, mCommentId,
-                mCaptureComment);
+                mCaptureComment, mCommentAttributes);
 
         // Response has no payload, just "success"
         BaseResponse response = getNetworkClient().post(endpoint, request, BaseResponse.class);

@@ -26,6 +26,8 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     public static final String DATA_COMMENT = "DATA_COMMENT";
 
+    public static final String DATA_COMMENT_ATTRIBUTES = "DATA_COMMENT_ATTRIBUTES";
+
     public static final String DATA_RATING = "DATA_RATING";
 
     private static final String TAG = CaptureCommentRateFragment.class.getSimpleName();

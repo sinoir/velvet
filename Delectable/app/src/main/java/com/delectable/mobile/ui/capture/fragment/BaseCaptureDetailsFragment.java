@@ -10,6 +10,7 @@ import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -107,7 +108,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         mCaptureController.toggleLikeCapture(capture.getId(), isLiked);
     }
 
-    private void sendComment(final CaptureDetails capture, String comment) {
+    private void sendComment(final CaptureDetails capture, String comment,
+            ArrayList<CaptureCommentAttributes> attributes) {
         // TODO: Loader?
         if (comment != null && comment.trim().isEmpty()) {
             return; //do nothing if commment was empty
@@ -122,12 +124,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         capture.getComments().add(tempComment);
         dataSetChanged();
 
-        mCaptureController.addCommentToCapture(capture.getId(), comment);
+        mCaptureController.addCommentToCapture(capture.getId(), comment, attributes);
     }
 
-    private void editComment(CaptureDetails capture, final CaptureComment captureComment) {
+    private void editComment(CaptureDetails capture, final CaptureComment captureComment,
+            ArrayList<CaptureCommentAttributes> attributes) {
         mCaptureController.editCaptureComment(capture.getId(), captureComment.getId(),
-                captureComment.getComment());
+                captureComment.getComment(), attributes);
     }
 
     @Override
@@ -289,8 +292,11 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         if (requestCode == REQUEST_COMMENT_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
                 String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                ArrayList<CaptureCommentAttributes> commentAttributes = data
+                        .getParcelableArrayListExtra(
+                                CaptureCommentRateFragment.DATA_COMMENT);
                 Log.i(TAG, "Request Data Comment Text: " + commentText);
-                sendComment(mTempCaptureForAction, commentText);
+                sendComment(mTempCaptureForAction, commentText, commentAttributes);
             }
             mTempCaptureForAction = null;
         }
@@ -304,10 +310,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                 sendRating(mTempCaptureForAction, rating);
                 if (mTempUserComment != null && mTempUserComment.getId() != null) {
                     mTempUserComment.setComment(commentText);
-                    editComment(mTempCaptureForAction, mTempUserComment);
+                    editComment(mTempCaptureForAction, mTempUserComment,
+                            mTempUserComment.getCommentAttributes());
                     dataSetChanged();
                 } else {
-                    sendComment(mTempCaptureForAction, commentText);
+                    ArrayList<CaptureCommentAttributes> commentAttributes = data
+                            .getParcelableArrayListExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                    sendComment(mTempCaptureForAction, commentText, commentAttributes);
                 }
             }
             mTempUserComment = null;

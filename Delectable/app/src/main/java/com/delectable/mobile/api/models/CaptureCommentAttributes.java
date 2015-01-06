@@ -1,10 +1,13 @@
 package com.delectable.mobile.api.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
-public class CaptureCommentAttributes {
+public class CaptureCommentAttributes implements Parcelable {
 
     public static final String TYPE_HASHTAG = "hashtag";
 
@@ -89,5 +92,36 @@ public class CaptureCommentAttributes {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(type);
+        out.writeList(range);
+        out.writeString(id);
+        out.writeString(link);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static final Parcelable.Creator<CaptureCommentAttributes> CREATOR
+            = new Parcelable.Creator<CaptureCommentAttributes>() {
+        public CaptureCommentAttributes createFromParcel(Parcel in) {
+            return new CaptureCommentAttributes(in);
+        }
+
+        public CaptureCommentAttributes[] newArray(int size) {
+            return new CaptureCommentAttributes[size];
+        }
+    };
+
+    @SuppressWarnings("unchecked")
+    private CaptureCommentAttributes(Parcel in) {
+        type = in.readString();
+        range = in.readArrayList(Integer.class.getClassLoader());
+        id = in.readString();
+        link = in.readString();
     }
 }
