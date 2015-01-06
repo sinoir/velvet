@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class CaptureCommentAttributes {
@@ -41,11 +43,19 @@ public class CaptureCommentAttributes {
     }
 
     public String getLink() {
-        return link;
+        try {
+            return URLDecoder.decode(link, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return link;
+        }
     }
 
     public void setLink(String link) {
-        this.link = link;
+        try {
+            this.link = URLDecoder.decode(link, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            this.link = link;
+        }
     }
 
     @Override
