@@ -175,20 +175,20 @@ public class NavActivity extends BaseActivity
             return;
         }
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setLogo(R.drawable.feed_logo);
-        actionBar.setTitle((String) null);
+//        actionBar.setTitle((String) null);
+//        actionBar.setLogo(R.drawable.feed_logo);
         if (mTitle != null || (mTitle != null && mTitle.length() == 0)) {
             mToolbarTitleView.setText(mTitle);
 //            actionBar.setTitle(mTitle);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(false);
+//            actionBar.setDisplayShowTitleEnabled(true);
+//            actionBar.setDisplayUseLogoEnabled(false);
         } else {
-            actionBar.setDisplayShowTitleEnabled(false);
-            mToolbarTitleView.setText(null);
+//            actionBar.setDisplayShowTitleEnabled(false);
+            mToolbarTitleView.setText(getResources().getString(R.string.app_name));
 //            actionBar.setTitle((String) null);
-            actionBar.setDisplayUseLogoEnabled(true);
+//            actionBar.setDisplayUseLogoEnabled(true);
         }
         actionBar.setSubtitle(null);
     }

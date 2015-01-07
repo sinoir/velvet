@@ -45,7 +45,7 @@ public class SlidingPagerTabStrip extends RelativeLayout {
 
     private ViewPager.OnPageChangeListener mTabPageListener;
 
-    private int mIndicatorHeight = 4;
+    private int mIndicatorHeight = 2;
 
     private IndicatorView mIndicatorView;
 
