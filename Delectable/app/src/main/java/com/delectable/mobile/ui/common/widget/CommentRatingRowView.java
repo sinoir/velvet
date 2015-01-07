@@ -22,8 +22,6 @@ import java.util.ArrayList;
  */
 public class CommentRatingRowView extends RelativeLayout {
 
-    private Context mContext;
-
     private CaptureDetailsView.CaptureActionsHandler mActionsHandler;
 
     private FontTextView mNameCommentTextView;
@@ -35,7 +33,6 @@ public class CommentRatingRowView extends RelativeLayout {
     public CommentRatingRowView(Context context,
             CaptureDetailsView.CaptureActionsHandler actionsHandler, String userAccountId) {
         this(context);
-        mContext = context;
         mActionsHandler = actionsHandler;
         mUserAccountId = userAccountId;
     }
@@ -81,18 +78,8 @@ public class CommentRatingRowView extends RelativeLayout {
 //                            0,
 //                            name.length() + (comment.isEmpty() ? 0 : 1), 0);
         }
-        if (attributes != null && !attributes.isEmpty()) {
-            for (CaptureCommentAttributes a : attributes) {
-                int tagStart = a.getRange().get(0) + (text.length() - comment
-                        .length()); // offset for name in front of comment
-                int tagEnd = tagStart + a.getRange().get(1);
-                String tag = spannableString.subSequence(tagStart, tagEnd).toString();
-                spannableString.setSpan(
-                        new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
-                        tagStart, tagEnd,
-                        Spanned.SPAN_COMPOSING);
-            }
-        }
+        HashtagMentionSpan.applyHashtagAndMentionSpans(getContext(), spannableString, attributes,
+                text.length() - comment.length());
         mNameCommentTextView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 /*
