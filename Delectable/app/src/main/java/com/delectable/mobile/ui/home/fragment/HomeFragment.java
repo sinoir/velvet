@@ -40,7 +40,6 @@ public class HomeFragment extends BaseFragment {
 
     protected FloatingActionButton mCameraButton;
 
-
     private SlidingTabAdapter mTabsAdapter;
 
     private List<CaptureFeed> mCaptureFeeds;
@@ -135,7 +134,6 @@ public class HomeFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (!mCameraButton.isShown()) {
-            mCameraButton.hide(false);
             mCameraButton.show(true);
         }
     }

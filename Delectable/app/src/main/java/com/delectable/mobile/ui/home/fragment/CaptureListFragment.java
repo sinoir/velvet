@@ -178,16 +178,20 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mRefreshContainer.setListView(mListView);
         mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
 
-        // remove list padding when feed is in it's own activity
+        int topPadding = 0;
         if (CaptureFeed.CUSTOM.equals(mListType)) {
-            int topPadding = getResources().getDimensionPixelOffset(R.dimen.spacing_8);
-            mListView.setPadding(mListView.getPaddingLeft(), topPadding,
-                    mListView.getPaddingRight(), mListView.getPaddingBottom());
+            // simple list padding when feed is in it's own activity
+            topPadding = getResources().getDimensionPixelOffset(R.dimen.spacing_8);
+        } else {
+            // account for toolbar and tabbar height on embedded feed lists
+            topPadding = mListView.getPaddingTop() + getResources()
+                    .getDimensionPixelSize(R.dimen.tab_height) + getResources()
+                    .getDimensionPixelSize(R.dimen.spacing_4);
+            mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
+                    mListView.getPaddingTop() * 3);
         }
-
-        // consider ActionBar and TabStrip height for top padding
-        mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
-                mListView.getPaddingTop() * 3);
+        mListView.setPadding(mListView.getPaddingLeft(), topPadding,
+                mListView.getPaddingRight(), mListView.getPaddingBottom());
 
         // list banner
         if (mBanner != null && !mBanner.isEmpty()) {
@@ -200,11 +204,6 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             mListView.addHeaderView(bannerView);
         }
 
-        // adjust list padding on top
-        int topPadding = mListView.getPaddingTop() + getResources()
-                .getDimensionPixelSize(R.dimen.tab_height) + getResources()
-                .getDimensionPixelSize(R.dimen.spacing_4);
-        mListView.setPadding(0, topPadding, 0, 0);
         mListView.setAdapter(mAdapter);
 
         // empty state
