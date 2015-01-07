@@ -17,7 +17,6 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -92,8 +91,6 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @InjectView(R.id.overflow_button)
     protected ImageView mOverflowButton;
 
-    private Context mContext;
-
     private CaptureDetails mCaptureDetails;
 
     private String mSelectedUserId;
@@ -126,8 +123,6 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
 
     public MinimalCaptureDetailRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        mContext = context;
 
         DARK_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_dark_gray));
         View.inflate(context, R.layout.row_minimal_capture_detail, this);
@@ -365,21 +360,9 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
             SpannableString span = new SpannableString(userComment);
             span.setSpan(DARK_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             // spans for hashtags and mentions
-            if (!capture.getComments().isEmpty()) {
-                ArrayList<CaptureCommentAttributes> attributes = capture.getComments().get(
-                        0).getCommentAttributes();
-                if (attributes != null && !attributes.isEmpty()) {
-                    for (CaptureCommentAttributes a : attributes) {
-                        int tagStart = a.getRange().get(0);
-                        int tagEnd = tagStart + a.getRange().get(1);
-                        String tag = userComment.subSequence(tagStart, tagEnd).toString();
-                        span.setSpan(
-                                new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
-                                tagStart, tagEnd,
-                                Spanned.SPAN_COMPOSING);
-                    }
-                }
-            }
+            ArrayList<CaptureCommentAttributes> attributes = capture.getComments().get(
+                    0).getCommentAttributes();
+            HashtagMentionSpan.applyHashtagAndMentionSpans(getContext(), span, attributes);
             return TextUtils.concat(span, " — ", message);
         }
 

@@ -9,10 +9,14 @@ import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+
+import java.util.ArrayList;
 
 public class HashtagMentionSpan extends ClickableSpan {
 
@@ -67,6 +71,28 @@ public class HashtagMentionSpan extends ClickableSpan {
                     .newIntent(mContext, mKey);
             mContext.startActivity(intent);
             Log.d(TAG, mTag + " / id=" + mKey + " link=" + mLink);
+        }
+    }
+
+    public static void applyHashtagAndMentionSpans(Context context, Spannable span,
+            ArrayList<CaptureCommentAttributes> commentAttributes) {
+        applyHashtagAndMentionSpans(context, span, commentAttributes, 0);
+    }
+
+    public static void applyHashtagAndMentionSpans(Context context, Spannable span,
+            ArrayList<CaptureCommentAttributes> commentAttributes, int commentTextStartOffset) {
+        if (commentAttributes != null && !commentAttributes.isEmpty()) {
+            for (CaptureCommentAttributes a : commentAttributes) {
+                int tagStart = a.getRange().get(CaptureCommentAttributes.INDEX_RANGE_START)
+                        + commentTextStartOffset;
+                int tagEnd = tagStart + a.getRange()
+                        .get(CaptureCommentAttributes.INDEX_RANGE_LENGTH);
+                String tag = span.subSequence(tagStart, tagEnd).toString();
+                span.setSpan(
+                        new HashtagMentionSpan(context, tag, a.getLink(), a.getType()),
+                        tagStart, tagEnd,
+                        Spanned.SPAN_COMPOSING);
+            }
         }
     }
 

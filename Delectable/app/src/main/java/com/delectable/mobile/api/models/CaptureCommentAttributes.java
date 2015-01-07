@@ -10,6 +10,10 @@ public class CaptureCommentAttributes {
 
     public static final String TYPE_MENTION = "mention";
 
+    public static final int INDEX_RANGE_START = 0;
+
+    public static final int INDEX_RANGE_LENGTH = 1;
+
     String type;
 
     ArrayList<Integer> range;

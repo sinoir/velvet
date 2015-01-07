@@ -13,7 +13,6 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -62,8 +61,6 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
     @InjectView(R.id.helpful_button)
     protected ImageButton mHelpfulButton;
 
-    private Context mContext;
-
     private ActionsHandler mActionsHandler;
 
     private CaptureNote mCaptureNote;
@@ -78,8 +75,6 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
 
     public WineProfileCommentUnitRow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        mContext = context;
 
         MEDIUM_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray));
         View.inflate(context, R.layout.row_wine_profile_comment_unit, this);
@@ -156,17 +151,7 @@ public class WineProfileCommentUnitRow extends RelativeLayout {
             SpannableString commentSpan = new SpannableString(captureNote.getNote());
             // hashtag and mention spans
             ArrayList<CaptureCommentAttributes> attributes = captureNote.getCommentAttributes();
-            if (attributes != null && !attributes.isEmpty()) {
-                for (CaptureCommentAttributes a : attributes) {
-                    int tagStart = a.getRange().get(0);
-                    int tagEnd = tagStart + a.getRange().get(1);
-                    String tag = captureNote.getNote().subSequence(tagStart, tagEnd).toString();
-                    commentSpan.setSpan(
-                            new HashtagMentionSpan(mContext, tag, a.getLink(), a.getType()),
-                            tagStart, tagEnd,
-                            Spanned.SPAN_COMPOSING);
-                }
-            }
+            HashtagMentionSpan.applyHashtagAndMentionSpans(getContext(), commentSpan, attributes);
             message = TextUtils.concat(commentSpan, span);
         }
 
