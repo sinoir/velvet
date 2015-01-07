@@ -28,6 +28,7 @@
     <color name="titles">@color/d_white</color>
     <color name="toolbar_bg_gradient">#99000000</color>
     <color name="feed_background">#E8E8E8</color>
+    <color name="overlayed_status_bar">#324E63</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>

@@ -76,7 +76,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private DrawerLayout mDrawerLayout;
 
-    private View mFragmentContainerView;
+    private View mContainerView;
 
     private ListView mDrawerListView;
 
@@ -200,19 +200,19 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mContainerView);
     }
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(DrawerLayout drawerLayout) {
         mDrawerLayout = drawerLayout;
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primaryDark));
-        mFragmentContainerView = getActivity().findViewById(fragmentId);
+        mDrawerLayout
+                .setStatusBarBackgroundColor(getResources().getColor(R.color.overlayed_status_bar));
+        mContainerView = getActivity().findViewById(R.id.drawer_container);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
@@ -342,7 +342,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(NavigationDrawerCloseEvent event) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            mDrawerLayout.closeDrawer(mContainerView);
         }
     }
 
@@ -365,10 +365,11 @@ public class NavigationDrawerFragment extends BaseFragment implements
             }
 
         }
+    }
 
-        //TODO make emptyview, show here
-        //mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
-
+    public void onEventMainThread(NavigationEvent event) {
+        mNavHeader.setCurrentSelectedNavItem(event.itemPosition);
+        navItemSelected(event.itemPosition);
     }
 
     //endregion
@@ -393,17 +394,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
         startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
-    public void onEventMainThread(NavigationEvent event) {
-        mNavHeader.setCurrentSelectedNavItem(event.itemPosition);
-        navItemSelected(event.itemPosition);
-    }
-
     @Override
     public void navItemSelected(final int navItem) {
         boolean wasNavAlreadySelected = mCurrentSelectedNavItem == navItem;
         mCurrentSelectedNavItem = navItem;
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            mDrawerLayout.closeDrawer(mContainerView);
         }
         if (mCallbacks != null && !wasNavAlreadySelected) {
             mDrawerLayout.postDelayed(new Runnable() {

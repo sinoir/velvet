@@ -5,11 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
+    android:fitsSystemWindows="true"
     tools:context=".NavActivity">
 
     <FrameLayout
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,15 +29,21 @@
 
     </FrameLayout>
 
-    <!-- The drawer is given a fixed width in dp and extends the full height of
-         the container. -->
-    <fragment
-        android:id="@+id/navigation_drawer"
-        android:name="com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment"
-        android:layout_width="@dimen/navigation_drawer_width"
+    <com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout
+        android:id="@+id/drawer_container"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left|start"
-        android:fitsSystemWindows="true"
-        tools:layout="@layout/fragment_navigation_drawer" />
+        android:fitsSystemWindows="true">
+        <!--app:insetForeground="@color/d_white"-->
+
+        <fragment
+            android:id="@+id/navigation_drawer"
+            android:name="com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment"
+            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_navigation_drawer" />
+
+    </com.delectable.mobile.ui.common.widget.DrawInsetsFrameLayout>
 
 </android.support.v4.widget.DrawerLayout>
