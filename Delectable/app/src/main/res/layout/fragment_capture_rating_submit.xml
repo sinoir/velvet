@@ -26,18 +26,14 @@
     <!-- Comment And Rating -->
     <com.delectable.mobile.ui.common.widget.ChipsMultiAutoCompleteTextView
         android:id="@+id/comment_edit_text"
+        style="@style/CommentEditText"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_below="@+id/toolbar"
         android:layout_margin="@dimen/capture_submit_margins"
         android:layout_marginBottom="20dp"
-        android:background="@android:color/white"
         android:gravity="top"
-        android:hint="@string/dialog_comment_text_hint"
-        android:textColorHint="@color/d_medium_gray"
-        android:lineSpacingMultiplier="1.2"
-        android:textSize="@dimen/capture_submit_comment_text_size"
-        app:fontName="whitney_medium" />
+        android:hint="@string/dialog_comment_text_hint" />
 
     <com.delectable.mobile.ui.common.widget.NumericRatingSeekBar
         android:id="@+id/numeric_rate_seek_bar"

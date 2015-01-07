@@ -1,16 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/widget_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/widget_toolbar" />
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar" />
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/camera_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         style="@style/FloatingCameraButton" />
 
-</FrameLayout>
+</RelativeLayout>

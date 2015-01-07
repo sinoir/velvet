@@ -136,8 +136,18 @@ public class AccountController {
         mJobManager.addJobInBackground(new FetchAccountsFromContactsJob());
     }
 
+    /**
+     * Normal account search, with no weight on Delectafriends and follows.
+     */
     public void searchAccounts(String query, int offset, int limit) {
-        mJobManager.addJobInBackground(new SearchAccountsJob(query, offset, limit));
+        mJobManager.addJobInBackground(new SearchAccountsJob(query, offset, limit, false, null));
+    }
+
+    /**
+     * Account search where Delectafriends and follows will be scored more highly. Used for @mentions while composing.
+     */
+    public void searchAccountsContextually(String query, int offset, int limit, String captureId) {
+        mJobManager.addJobInBackground(new SearchAccountsJob(query, offset, limit, true, captureId));
     }
 
     //region Settings Screen
