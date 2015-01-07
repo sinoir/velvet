@@ -16,6 +16,7 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.controllers.FoursquareController;
+import com.delectable.mobile.api.controllers.HashtagsController;
 import com.delectable.mobile.api.controllers.MotdController;
 import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.api.controllers.VersionPropsFileController;
@@ -70,6 +71,7 @@ import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.api.jobs.foursquare.SearchFoursquareVenuesJob;
+import com.delectable.mobile.api.jobs.hashtags.SearchHashtagsJob;
 import com.delectable.mobile.api.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.api.jobs.pendingcaptures.DeletePendingCaptureJob;
 import com.delectable.mobile.api.jobs.pendingcaptures.SetBaseWineJob;
@@ -248,6 +250,7 @@ import de.greenrobot.event.EventBus;
                 SetPrimaryPaymentMethodJob.class,
                 RemovePaymentMethodJob.class,
                 PurchaseWineJob.class,
+                SearchHashtagsJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
@@ -257,6 +260,7 @@ import de.greenrobot.event.EventBus;
                 FoursquareController.class,
                 WineScanController.class,
                 BaseWineController.class,
+                HashtagsController.class,
                 // Other
                 DrawInsetsFrameLayout.class
         }
