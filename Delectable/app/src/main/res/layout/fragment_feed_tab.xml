@@ -20,7 +20,7 @@
             android:paddingTop="?attr/actionBarSize"
             android:clipToPadding="false"
             android:animateLayoutChanges="true"
-            android:background="@color/d_white"
+            android:background="@color/feed_background"
             android:divider="@null"
             android:headerDividersEnabled="false"
             android:footerDividersEnabled="false"
