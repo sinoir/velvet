@@ -4,10 +4,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.common.widget.HashtagMentionSpan;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -16,6 +18,7 @@ import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.MenuItem;
@@ -24,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -122,6 +127,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         DARK_GRAY_SPAN = new ForegroundColorSpan(getResources().getColor(R.color.d_dark_gray));
         View.inflate(context, R.layout.row_minimal_capture_detail, this);
         ButterKnife.inject(this);
+
+        mCommentText.setMovementMethod(LinkMovementMethod.getInstance());
 
         PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -352,6 +359,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (userComment != null) {
             SpannableString span = new SpannableString(userComment);
             span.setSpan(DARK_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            // spans for hashtags and mentions
+            ArrayList<CaptureCommentAttributes> attributes = capture.getComments().get(
+                    0).getCommentAttributes();
+            HashtagMentionSpan.applyHashtagAndMentionSpans(getContext(), span, attributes);
             return TextUtils.concat(span, " — ", message);
         }
 

@@ -44,13 +44,11 @@ import butterknife.InjectView;
 public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         InfiniteScrollAdapter.ActionsHandler {
 
-    private static final String ACCOUNT_ID = "ACCOUNT_ID";
+    public static final String LIST_KEY = "LIST_KEY";
 
-    private static final String LIST_KEY = "LIST_KEY";
+    public static final String LIST_TYPE = "LIST_TYPE";
 
-    private static final String LIST_TYPE = "LIST_TYPE";
-
-    private static final String LIST_TITLE = "LIST_TITLE";
+    public static final String LIST_TITLE = "LIST_TITLE";
 
     private static final String LIST_BANNER = "LIST_BANNER";
 
@@ -102,21 +100,42 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         // Required empty public constructor
     }
 
-    public static CaptureListFragment newInstance(String accountId, String listKey, String feedType,
+    /**
+     * For curated feeds (trending etc.)
+     */
+    public static CaptureListFragment newInstance(String listKey, String feedType,
             String listTitle, String banner, int bannerBackgroundColor, int bannerTextColor) {
         CaptureListFragment fragment = new CaptureListFragment();
-        Bundle args = bundleArgs(accountId, listKey, feedType, listTitle, banner,
+        Bundle args = bundleArgs(listKey, feedType, listTitle, banner,
                 bannerBackgroundColor,
                 bannerTextColor);
         fragment.setArguments(args);
         return fragment;
     }
 
-    protected static Bundle bundleArgs(String accountId, String listKey, String listType,
+    /**
+     * For custom feeds (hashtags etc.)
+     */
+    public static CaptureListFragment newInstance(String listKey, String listType,
+            String listTitle) {
+        CaptureListFragment fragment = new CaptureListFragment();
+        Bundle args = bundleArgs(listKey, listType, listTitle);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    protected static Bundle bundleArgs(String listKey, String listType, String listTitle) {
+        Bundle args = new Bundle();
+        args.putString(LIST_KEY, listKey);
+        args.putString(LIST_TYPE, listType);
+        args.putString(LIST_TITLE, listTitle);
+        return args;
+    }
+
+    protected static Bundle bundleArgs(String listKey, String listType,
             String listTitle,
             String banner, int bannerBackgroundColor, int bannerTextColor) {
         Bundle args = new Bundle();
-        args.putString(ACCOUNT_ID, accountId);
         args.putString(LIST_KEY, listKey);
         args.putString(LIST_TYPE, listType);
         args.putString(LIST_TITLE, listTitle);
@@ -135,7 +154,6 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             throw new IllegalArgumentException(TAG + " needs to be initialized with a list key");
         }
 
-        String accountId = getArguments().getString(ACCOUNT_ID);
         mListKey = getArguments().getString(LIST_KEY);
         mListType = getArguments().getString(LIST_TYPE);
         LIST_REQUEST += mListKey;
@@ -144,9 +162,9 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mBannerBackgroundColor = getArguments().getInt(LIST_BANNER_BACKGROUND_COLOR);
         mBannerTextColor = getArguments().getInt(LIST_BANNER_TEXT_COLOR);
         mAdapter = new CaptureDetailsAdapter(this, this);
-        mAdapter.setRowType(CaptureFeed.SOCIAL.equals(mListType)
-                ? CaptureDetailsAdapter.RowType.SOCIAL
-                : CaptureDetailsAdapter.RowType.COMMERCIAL);
+        mAdapter.setRowType(CaptureFeed.COMMERCIAL.equals(mListType)
+                ? CaptureDetailsAdapter.RowType.COMMERCIAL
+                : CaptureDetailsAdapter.RowType.SOCIAL);
     }
 
     @Override
@@ -159,9 +177,18 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mRefreshContainer.setListView(mListView);
         mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
 
-        // consider ActionBar and TabStrip height for top padding
-        mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
-                mListView.getPaddingTop() * 3);
+        // remove list padding when feed is in it's own activity
+        if (CaptureFeed.CUSTOM.equals(mListType)) {
+            getActionBarToolbar()
+                    .measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            int toolbarHeight = getActionBarToolbar().getMeasuredHeight();
+            mListView.setPadding(mListView.getPaddingLeft(), toolbarHeight,
+                    mListView.getPaddingRight(), mListView.getPaddingBottom());
+        } else {
+            // consider ActionBar and TabStrip height for top padding
+            mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
+                    mListView.getPaddingTop() * 3);
+        }
 
         // list banner
         if (mBanner != null && !mBanner.isEmpty()) {
@@ -210,10 +237,12 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
             }
         });
 
-        // action bar scroll listener
-        final HideableActionBarScrollListener hideableActionBarScrollListener
-                = new HideableActionBarScrollListener(this);
-        mListView.addOnScrollListener(hideableActionBarScrollListener);
+        // action bar scroll listener for embedded feeds
+        if (!CaptureFeed.CUSTOM.equals(mListType)) {
+            final HideableActionBarScrollListener hideableActionBarScrollListener
+                    = new HideableActionBarScrollListener(this);
+            mListView.addOnScrollListener(hideableActionBarScrollListener);
+        }
 
         // analytics scroll listener
         mListView.addOnScrollListener(new AbsListView.OnScrollListener() {

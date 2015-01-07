@@ -122,6 +122,16 @@
         </activity>
 
         <activity
+            android:name="com.delectable.mobile.ui.capture.activity.FeedActivity"
+            android:label=""
+            android:screenOrientation="portrait">
+            <!--used to facilitate sythesizing a back stack for deep links-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delectable.mobile.ui.navigation.activity.NavActivity" />
+        </activity>
+
+        <activity
             android:name="com.delectable.mobile.ui.capture.activity.LikingPeopleActivity"
             android:label=""
             android:screenOrientation="portrait" />

@@ -552,7 +552,7 @@ public class CameraUtil {
 
         // Make sure this is a JPEG
         String mimeType = App.getInstance().getContentResolver().getType(imageUri);
-        if (!mimeType.equalsIgnoreCase("image/jpeg")) {
+        if (!"image/jpeg".equalsIgnoreCase(mimeType)) {
             return 0;
         }
 

@@ -1,5 +1,7 @@
 package com.delectable.mobile.api.models;
 
+import java.util.ArrayList;
+
 public class CaptureComment {
 
     String id;
@@ -9,6 +11,8 @@ public class CaptureComment {
     String comment;
 
     String account_id;
+
+    ArrayList<CaptureCommentAttributes> comment_attributes;
 
     public String getId() {
         return id;
@@ -42,6 +46,14 @@ public class CaptureComment {
         this.account_id = account_id;
     }
 
+    public ArrayList<CaptureCommentAttributes> getCommentAttributes() {
+        return comment_attributes;
+    }
+
+    public void setCommentAttributes(ArrayList<CaptureCommentAttributes> comment_attributes) {
+        this.comment_attributes = comment_attributes;
+    }
+
     @Override
     public String toString() {
         return "CaptureComment{" +
@@ -49,6 +61,30 @@ public class CaptureComment {
                 ", created_at=" + created_at +
                 ", comment='" + comment + '\'' +
                 ", account_id='" + account_id + '\'' +
+                ", comment_attributes=" + comment_attributes +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CaptureComment that = (CaptureComment) o;
+
+        if (!id.equals(that.id)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

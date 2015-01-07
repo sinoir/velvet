@@ -3,6 +3,7 @@ package com.delectable.mobile.ui;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.util.CrashlyticsUtil;
@@ -215,6 +216,11 @@ public abstract class BaseActivity extends ActionBarActivity
         if (clearBackStack) {
             finish();
         }
+    }
+
+    public void launchWineCapture() {
+        Intent launchIntent = new Intent(this, WineCaptureActivity.class);
+        startActivity(launchIntent);
     }
 
     public void replaceWithFragment(BaseFragment fragment, boolean addToBackstack) {
