@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_white"
     tools:context="com.delectable.mobile.ui.home.fragment.FollowFeedTabFragment">
 
     <FrameLayout
@@ -90,7 +89,7 @@
                 android:alpha="0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/d_white"
+                android:background="@color/feed_background"
                 android:padding="@dimen/spacing_32"
                 android:gravity="center"
                 android:orientation="vertical">

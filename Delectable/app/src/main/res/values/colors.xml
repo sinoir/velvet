@@ -4,10 +4,6 @@
     <!-- colors based on style guide from here:
     https://quip.com/MyqKAYPFRbJt -->
 
-    <color name="transparent">#00000000</color>
-    <color name="feed_background">#E8E8E8</color>
-
-
     <!-- Brand Colors -->
     <color name="d_chestnut">#cd595a</color>
     <color name="d_big_stone">#334858</color>
@@ -23,6 +19,7 @@
     <color name="d_soft_amber_25op">#40dbc5b0</color>
 
     <!-- Primary -->
+    <color name="transparent">#00000000</color>
     <color name="nav_selector">@color/d_black_30op</color>
     <color name="primary">@color/d_big_stone</color>
     <color name="primaryDark">@color/d_big_stone_dark</color>
@@ -30,6 +27,7 @@
     <color name="accentDark">@color/d_black_60op</color>
     <color name="titles">@color/d_white</color>
     <color name="toolbar_bg_gradient">#99000000</color>
+    <color name="feed_background">#E8E8E8</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>
