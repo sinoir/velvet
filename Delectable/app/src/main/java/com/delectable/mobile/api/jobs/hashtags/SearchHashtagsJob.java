@@ -3,7 +3,7 @@ package com.delectable.mobile.api.jobs.hashtags;
 import com.google.gson.reflect.TypeToken;
 
 import com.delectable.mobile.api.endpointmodels.SearchResponse;
-import com.delectable.mobile.api.endpointmodels.hashtags.HashtagSearchRequest;
+import com.delectable.mobile.api.endpointmodels.hashtags.SearchHashtagsRequest;
 import com.delectable.mobile.api.events.hashtags.SearchHashtagsEvent;
 import com.delectable.mobile.api.jobs.BaseJob;
 import com.delectable.mobile.api.jobs.Priority;
@@ -61,7 +61,7 @@ public class SearchHashtagsJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         String endpoint = "/hashtags/search";
-        HashtagSearchRequest request = new HashtagSearchRequest(mQ, mOffset, mLimit);
+        SearchHashtagsRequest request = new SearchHashtagsRequest(mQ, mOffset, mLimit);
         Type type = new TypeToken<SearchResponse<HashtagResult>>() {
         }.getType();
         SearchResponse<HashtagResult> response = mNetworkClient.post(endpoint, request, type);

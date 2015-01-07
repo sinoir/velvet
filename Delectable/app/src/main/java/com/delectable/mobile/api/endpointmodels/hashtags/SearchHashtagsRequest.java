@@ -3,11 +3,11 @@ package com.delectable.mobile.api.endpointmodels.hashtags;
 import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.delectable.mobile.api.endpointmodels.SearchRequest;
 
-public class HashtagSearchRequest extends BaseRequest {
+public class SearchHashtagsRequest extends BaseRequest {
 
     private Payload payload;
 
-    public HashtagSearchRequest(String q, int offset, int limit) {
+    public SearchHashtagsRequest(String q, int offset, int limit) {
         this.payload = new Payload(q, offset, limit);
     }
 
