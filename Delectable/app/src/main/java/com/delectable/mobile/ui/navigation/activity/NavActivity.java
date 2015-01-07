@@ -120,7 +120,7 @@ public class NavActivity extends BaseActivity
             //break;
             case NavHeader.NAV_DISCOVER:
                 fragment = new HomeFragment();
-                //mTitle = getResources().getString(R.string.app_name);
+                mTitle = getResources().getString(R.string.app_name);
                 mTitle = null;
                 break;
             case NavHeader.NAV_YOUR_WINES:
