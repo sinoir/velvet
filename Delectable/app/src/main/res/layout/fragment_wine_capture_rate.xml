@@ -15,18 +15,14 @@
 
         <com.delectable.mobile.ui.common.widget.FontEditText
             android:id="@+id/comment_edit_text"
+            style="@style/CommentEditText"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_margin="@dimen/capture_submit_margins"
             android:layout_marginBottom="20dp"
-            android:background="@android:color/white"
             android:gravity="top"
-            android:hint="@string/capture_submit_leave_comment_hint"
-            android:textColorHint="@color/d_medium_gray"
-            android:textSize="@dimen/capture_submit_comment_text_size"
-            android:lineSpacingMultiplier="1.2"
-            app:fontName="whitney_book" />
+            android:hint="@string/capture_submit_leave_comment_hint" />
 
         <com.delectable.mobile.ui.common.widget.NumericRatingSeekBar
             android:id="@+id/score_rate_seek_bar"

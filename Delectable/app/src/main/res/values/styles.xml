@@ -23,6 +23,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:layout_gravity">top</item>
         <!--<item name="android:background">?attr/colorPrimary</item>-->
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:fitsSystemWindows">false</item>
@@ -212,6 +213,16 @@
 
     <style name="WineCaptureDividers" parent="VerticalDivider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
+    </style>
+
+    <style name="CommentEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/d_white</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="android:textColorHint">@color/d_medium_gray</item>
+        <item name="fontName">whitney_book</item>
     </style>
 
 
