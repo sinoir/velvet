@@ -172,7 +172,7 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textColor">@color/selectable_text_on_primary</item>
+        <item name="android:textColor">@color/d_white</item>
         <item name="fontName">whitney_medium_sc</item>
     </style>
 
