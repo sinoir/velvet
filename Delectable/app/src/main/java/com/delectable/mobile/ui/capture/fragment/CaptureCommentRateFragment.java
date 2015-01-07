@@ -4,6 +4,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.ChipsMultiAutoCompleteTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
 
 import android.app.Activity;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            Log.d(TAG, "Text Change Count: " + count);
+//            Log.d(TAG, "Text Change Count: " + count);
             togglePostButton();
         }
 
@@ -69,7 +70,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
     protected View mPostButton;
 
     @InjectView(R.id.comment_edit_text)
-    protected EditText mCommentEditText;
+    protected ChipsMultiAutoCompleteTextView mCommentEditText;
 
     @InjectView(R.id.numeric_rate_seek_bar)
     protected NumericRatingSeekBar mNumericRatingSeekBar;
@@ -115,6 +116,11 @@ public class CaptureCommentRateFragment extends BaseFragment {
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_capture_rating_submit, container, false);
         ButterKnife.inject(this, mView);
+
+        mCommentEditText.setRawInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         updateRatingUI();
         updateCommentTextUI();

@@ -24,7 +24,7 @@
     </android.support.v7.widget.Toolbar>
 
     <!-- Comment And Rating -->
-    <com.delectable.mobile.ui.common.widget.FontEditText
+    <com.delectable.mobile.ui.common.widget.ChipsMultiAutoCompleteTextView
         android:id="@+id/comment_edit_text"
         android:layout_width="match_parent"
         android:layout_height="100dp"
