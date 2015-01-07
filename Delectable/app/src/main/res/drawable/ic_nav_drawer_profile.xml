@@ -2,6 +2,10 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:drawable="@drawable/ic_nav_drawer_profile_pressed" android:state_selected="true" />
+    <item android:drawable="@drawable/ic_nav_drawer_profile_pressed" android:state_pressed="true" />
+    <item android:drawable="@drawable/ic_nav_drawer_profile_pressed" android:state_activated="true" />
+    <item android:drawable="@drawable/ic_nav_drawer_profile_pressed" android:state_focused="true" />
     <item android:drawable="@drawable/ic_nav_drawer_profile_normal" />
 
 </selector>

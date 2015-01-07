@@ -26,11 +26,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -251,7 +254,13 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ViewCompat.setElevation(mContainerView, TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
+                            getResources().getDisplayMetrics()));
+        } else {
+            mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        }
 
         // When the user runs the app for the first time, we want to land them with the
         // navigation drawer open. But just the first time.

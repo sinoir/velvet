@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/nav_user_name"
             android:layout_toRightOf="@+id/profile_image1"
-            android:textColor="@color/d_white"
+            android:textColor="@color/accentDark"
             android:textSize="@dimen/navigation_header_detail_text_size"
             app:fontName="whitney_book" />
 
