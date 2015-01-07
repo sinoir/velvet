@@ -28,6 +28,7 @@ import com.delectable.mobile.util.SafeAsyncTask;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -177,31 +178,30 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mRefreshContainer.setListView(mListView);
         mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
 
-        // remove list padding when feed is in it's own activity
+        int topPadding = 0;
         if (CaptureFeed.CUSTOM.equals(mListType)) {
-            getActionBarToolbar()
-                    .measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            int toolbarHeight = getActionBarToolbar().getMeasuredHeight();
-            mListView.setPadding(mListView.getPaddingLeft(), toolbarHeight,
-                    mListView.getPaddingRight(), mListView.getPaddingBottom());
+            // simple list padding when feed is in it's own activity
+            topPadding = getResources().getDimensionPixelOffset(R.dimen.spacing_8);
         } else {
-            // consider ActionBar and TabStrip height for top padding
+            // account for toolbar and tabbar height on embedded feed lists
+            topPadding = mListView.getPaddingTop() + getResources()
+                    .getDimensionPixelSize(R.dimen.tab_height) + getResources()
+                    .getDimensionPixelSize(R.dimen.spacing_4);
             mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
                     mListView.getPaddingTop() * 3);
         }
+        mListView.setPadding(mListView.getPaddingLeft(), topPadding,
+                mListView.getPaddingRight(), mListView.getPaddingBottom());
 
         // list banner
         if (mBanner != null && !mBanner.isEmpty()) {
-            TextView bannerView = (TextView) inflater
-                    .inflate(R.layout.list_banner, mListView, false);
-            bannerView.setText(mBanner);
-            bannerView.setTextColor(mBannerTextColor);
-            bannerView.setBackgroundColor(mBannerBackgroundColor);
+            View bannerView = inflater.inflate(R.layout.list_banner, mListView, false);
+            TextView bannerText = (TextView) bannerView.findViewById(R.id.list_banner_text);
+            CardView bannerCard = (CardView) bannerView.findViewById(R.id.card);
+            bannerText.setText(mBanner);
+            bannerText.setTextColor(mBannerTextColor);
+            bannerCard.setCardBackgroundColor(mBannerBackgroundColor);
             mListView.addHeaderView(bannerView);
-            // adjust list padding on top, so list banner is not under tab bar
-            int topPadding = mListView.getPaddingTop() + getResources()
-                    .getDimensionPixelSize(R.dimen.tab_height);
-            mListView.setPadding(0, topPadding, 0, 0);
         }
 
         mListView.setAdapter(mAdapter);

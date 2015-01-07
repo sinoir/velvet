@@ -4,5 +4,5 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/spacing_8"
     android:paddingBottom="@dimen/spacing_16"
-    android:background="@drawable/tab_bg"
+    android:background="@color/primary"
     android:animateLayoutChanges="true" />

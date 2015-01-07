@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.events.NavigationEvent;
@@ -15,6 +16,7 @@ import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -65,15 +67,36 @@ public class NavActivity extends BaseActivity
 
         // Set up the drawer.
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationDrawerFragment
-                .setUp(R.id.navigation_drawer, mDrawerLayout);
+        mNavigationDrawerFragment.setUp(mDrawerLayout);
 
         mToolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            mEventBus.unregister(this);
+        } catch (Throwable t) {
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        InsetsChangedEvent insetsEvent = mEventBus.getStickyEvent(InsetsChangedEvent.class);
+        if (insetsEvent != null) {
+            onApplyWindowInsets(insetsEvent.insets);
+        }
         restoreActionBar();
     }
 
@@ -120,7 +143,7 @@ public class NavActivity extends BaseActivity
             //break;
             case NavHeader.NAV_DISCOVER:
                 fragment = new HomeFragment();
-                //mTitle = getResources().getString(R.string.app_name);
+                mTitle = getResources().getString(R.string.app_name);
                 mTitle = null;
                 break;
             case NavHeader.NAV_YOUR_WINES:
@@ -152,20 +175,20 @@ public class NavActivity extends BaseActivity
             return;
         }
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setLogo(R.drawable.feed_logo);
-        actionBar.setTitle((String) null);
+//        actionBar.setTitle((String) null);
+//        actionBar.setLogo(R.drawable.feed_logo);
         if (mTitle != null || (mTitle != null && mTitle.length() == 0)) {
             mToolbarTitleView.setText(mTitle);
 //            actionBar.setTitle(mTitle);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(false);
+//            actionBar.setDisplayShowTitleEnabled(true);
+//            actionBar.setDisplayUseLogoEnabled(false);
         } else {
-            actionBar.setDisplayShowTitleEnabled(false);
-            mToolbarTitleView.setText(null);
+//            actionBar.setDisplayShowTitleEnabled(false);
+            mToolbarTitleView.setText(getResources().getString(R.string.app_name));
 //            actionBar.setTitle((String) null);
-            actionBar.setDisplayUseLogoEnabled(true);
+//            actionBar.setDisplayUseLogoEnabled(true);
         }
         actionBar.setSubtitle(null);
     }
@@ -178,6 +201,19 @@ public class NavActivity extends BaseActivity
             // navigate to home fragment
             mEventBus.post(new NavigationEvent(NavHeader.NAV_DISCOVER));
         }
+    }
+
+    public void onEventMainThread(InsetsChangedEvent event) {
+        onApplyWindowInsets(event.insets);
+    }
+
+    private void onApplyWindowInsets(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+//        // adjust toolbar padding when status bar is translucent
+//        mToolbar.setPadding(0, insets.top, 0, 0);
+//        mToolbarContrast.setPadding(0, insets.top, 0, 0);
     }
 
 }

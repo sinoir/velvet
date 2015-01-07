@@ -8,23 +8,24 @@
 
     <style name="Theme.Delectable.Base" parent="@style/Theme.AppCompat.Light.NoActionBar">
     <item name="android:windowContentOverlay">@null</item>
-        <item name="colorPrimary">@color/d_off_white</item>
-        <item name="colorPrimaryDark">@color/d_suva_gray</item>
-        <item name="colorAccent">@color/d_chestnut</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">false</item>
-        <item name="color">@color/d_big_stone</item>
+        <item name="color">@color/accentDark</item>
     </style>
 
     <style name="ToolbarStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:layout_gravity">top</item>
         <!--<item name="android:background">?attr/colorPrimary</item>-->
-        <item name="android:background">@drawable/tab_bg</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:fitsSystemWindows">false</item>
         <item name="elevation">4dp</item>
         <item name="theme">@style/ToolbarTheme</item>
@@ -50,14 +51,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">left</item>
         <item name="android:textSize">@dimen/abc_text_size_title_material_toolbar</item>
-        <item name="android:textColor">@color/d_big_stone</item>
+        <item name="android:textColor">@color/titles</item>
         <item name="fontName">whitney_medium</item>
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:textColorPrimary">@color/d_big_stone</item>
-        <item name="android:textColorSecondary">@color/d_big_stone</item>
-        <item name="android:actionMenuTextColor">@color/d_big_stone</item>
+        <item name="android:textColorPrimary">@color/titles</item>
+        <item name="android:textColorSecondary">@color/accentDark</item>
+        <item name="android:actionMenuTextColor">@color/accentDark</item>
     </style>
 
     <style name="ToolbarStyle.Error" parent="ToolbarStyle">
@@ -132,6 +133,17 @@
         <item name="android:layout_gravity">top</item>
     </style>
 
+    <style name="CardViewStyle" parent="CardView.Light">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardBackgroundColor">@color/d_white</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
     <style name="delectabutton_large">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">70dp</item>
@@ -180,7 +192,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textColor">@color/d_big_stone</item>
+        <item name="android:textColor">@color/d_white</item>
         <item name="android:textSize">@dimen/profile_counts_text_size</item>
         <item name="fontName">whitney_book</item>
     </style>
@@ -201,6 +213,16 @@
 
     <style name="WineCaptureDividers" parent="VerticalDivider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
+    </style>
+
+    <style name="CommentEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/d_white</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="android:textColorHint">@color/d_medium_gray</item>
+        <item name="fontName">whitney_book</item>
     </style>
 
 
