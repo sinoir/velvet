@@ -11,8 +11,6 @@ import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
@@ -37,8 +35,6 @@ import android.widget.FilterQueryProvider;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
-import java.io.InputStream;
-
 /**
  * Inspired by https://gist.github.com/pskink/5fe9c0bb4677c1debc5e
  */
@@ -52,8 +48,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     private int mSpanHeight;
 
     private int mPadding;
-
-    private Drawable mDefaultUser;
 
     public ChipsMultiAutoCompleteTextView(Context context) {
         super(context);
@@ -82,9 +76,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         }
 
         Resources res = getResources();
-        mDefaultUser = res.getDrawable(R.drawable.ic_avatar);
         DisplayMetrics metrics = res.getDisplayMetrics();
-        mSpanHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, metrics);
+        mSpanHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
         mPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics);
 
         setTokenizer(new HashtagMentionTokenizer());
@@ -94,6 +87,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
         String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
         int[] to = {android.R.id.text1};
+        // TODO custom row layout that allows for user images
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
                 android.R.layout.simple_dropdown_item_1line, null, from, to);
 
@@ -103,7 +97,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
                 TextView tv = (TextView) v;
                 int nameIdx = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                 int emailIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
-                tv.setText(c.getString(nameIdx) + " " + c.getString(emailIdx));
+                tv.setText(c.getString(nameIdx) + " (" + c.getString(emailIdx) + ")");
                 return true;
             }
         };
@@ -143,7 +137,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         ChipSpan[] chips = e.getSpans(0, e.length(), ChipSpan.class);
         for (ChipSpan chipSpan : chips) {
             if (chipSpan.isSelected()) {
-                MenuItem item = menu.add("Delete Selected Chips");
+                MenuItem item = menu.add(getResources().getString(R.string.delete));
                 item.setOnMenuItemClickListener(this);
                 break;
             }
@@ -202,16 +196,11 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
         private boolean selected;
 
-        private Drawable drawable;
-
         public ChipSpan(String name, String email, long contactId) {
             this.name = name;
             this.email = email;
             Uri contactUri = ContentUris
                     .withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-            InputStream stream = ContactsContract.Contacts
-                    .openContactPhotoInputStream(getContext().getContentResolver(), contactUri);
-            drawable = stream != null ? new BitmapDrawable(stream) : mDefaultUser;
         }
 
         public void toggleSelection() {
@@ -225,7 +214,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         @Override
         public int getSize(Paint paint, CharSequence text, int start, int end,
                 Paint.FontMetricsInt fm) {
-            length = (int) paint.measureText(name) + mSpanHeight + 3 * mPadding;
+            length = (int) paint.measureText(name);// + mSpanHeight + 3 * mPadding;
             if (fm != null) {
                 fm.ascent = -mSpanHeight;
                 fm.descent = 0;
@@ -239,18 +228,14 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         @Override
         public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top,
                 int y, int bottom, Paint paint) {
-            x += 2;
-            paint.setColor(0xffcccccc);
-            canvas.drawRect(x, top, x + length, bottom, paint);
-            paint.setColor(0xff000000);
+//            x += 2;
+//            paint.setColor(0xffcccccc);
+//            canvas.drawRect(x, top, x + length, bottom, paint);
+            paint.setColor(HashtagMentionSpan.HASHTAG_COLOR);
             canvas.drawText(name, x + mPadding, y, paint);
 
-            int right = (int) x + length - mPadding;
-            drawable.setBounds(right - mSpanHeight, top, right, bottom);
-            drawable.draw(canvas);
-
             if (selected) {
-                paint.setColor(0x66ff0000);
+                paint.setColor(0x33ff0000);
                 canvas.drawRect(x, top, x + length, bottom, paint);
             }
         }
@@ -282,35 +267,35 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         }
     }
 
-    public static class ChipsTokenizer implements Tokenizer {
-
-        @Override
-        public int findTokenStart(CharSequence text, int cursor) {
-            Log.d(TAG, "findTokenStart [" + text + "] " + cursor);
-            int i = cursor;
-            while (i > 0 && text.charAt(i - 1) != ' ') {
-                i--;
-            }
-            return i;
-        }
-
-        @Override
-        public int findTokenEnd(CharSequence text, int cursor) {
-            Log.d(TAG, "findTokenEnd [" + text + "] " + cursor);
-            return text.length();
-        }
-
-        @Override
-        public CharSequence terminateToken(CharSequence text) {
-            Log.d(TAG, "terminateToken [" + text + "]");
-            if (text instanceof Spanned) {
-                SpannableStringBuilder s = new SpannableStringBuilder(text);
-                s.append(" ");
-                return s;
-            }
-            return text + " ";
-        }
-    }
+//    public static class ChipsTokenizer implements Tokenizer {
+//
+//        @Override
+//        public int findTokenStart(CharSequence text, int cursor) {
+//            Log.d(TAG, "findTokenStart [" + text + "] " + cursor);
+//            int i = cursor;
+//            while (i > 0 && text.charAt(i - 1) != ' ') {
+//                i--;
+//            }
+//            return i;
+//        }
+//
+//        @Override
+//        public int findTokenEnd(CharSequence text, int cursor) {
+//            Log.d(TAG, "findTokenEnd [" + text + "] " + cursor);
+//            return text.length();
+//        }
+//
+//        @Override
+//        public CharSequence terminateToken(CharSequence text) {
+//            Log.d(TAG, "terminateToken [" + text + "]");
+//            if (text instanceof Spanned) {
+//                SpannableStringBuilder s = new SpannableStringBuilder(text);
+//                s.append(" ");
+//                return s;
+//            }
+//            return text + " ";
+//        }
+//    }
 
     /**
      * Tokenizer to support completion of @user and #hashtag

@@ -24,7 +24,7 @@ public class HashtagMentionSpan extends ClickableSpan {
 
     private static final String TAG = HashtagMentionSpan.class.getSimpleName();
 
-    private static final int TEXT_COLOR = App.getInstance().getResources().getColor(
+    public static final int HASHTAG_COLOR = App.getInstance().getResources().getColor(
             R.color.chestnut_to_chestnut_pressed);
 
     private Context mContext;
@@ -54,7 +54,7 @@ public class HashtagMentionSpan extends ClickableSpan {
     @Override
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
-        ds.setColor(TEXT_COLOR);
+        ds.setColor(HASHTAG_COLOR);
         ds.setUnderlineText(false);
     }
 
