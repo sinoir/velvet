@@ -35,23 +35,23 @@ public class FollowFriendsFragment extends BaseFragment {
         //set up tab icons and fragments
         SlidingPagerItem experts = new SlidingPagerItem(
                 new FollowExpertsTabFragment(),
-                R.color.d_off_white,
-                R.color.d_red_experts_tab,
+                R.color.primary,
+                R.color.d_white,
                 R.drawable.tab_follow_friends_experts_icon);
         SlidingPagerItem contacts = new SlidingPagerItem(
                 new FollowContactsTabFragment(),
-                R.color.d_off_white,
-                R.color.d_yellow_contacts_tab,
+                R.color.primary,
+                R.color.d_white,
                 R.drawable.tab_follow_friends_contacts_icon);
         SlidingPagerItem facebook = new SlidingPagerItem(
                 new FollowFacebookFriendsTabFragment(),
-                R.color.d_off_white,
-                R.color.d_blue_facebook_tab,
+                R.color.primary,
+                R.color.d_white,
                 R.drawable.tab_follow_friends_facebook_icon);
         SlidingPagerItem twitter = new SlidingPagerItem(
                 new FollowTwitterFriendsTabFragment(),
-                R.color.d_off_white,
-                R.color.d_blue_twitter_tab,
+                R.color.primary,
+                R.color.d_white,
                 R.drawable.tab_follow_friends_twitter_icon);
 
         ArrayList<SlidingPagerItem> tabItems = new ArrayList<SlidingPagerItem>();
@@ -72,7 +72,7 @@ public class FollowFriendsFragment extends BaseFragment {
 
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
-        mTabStrip.setBackgroundColor(getResources().getColor(R.color.d_off_white));
+        mTabStrip.setBackgroundColor(getResources().getColor(R.color.primary));
         return view;
     }
 }

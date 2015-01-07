@@ -61,8 +61,8 @@ public class HomeFragment extends BaseFragment {
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabLayout = (SlidingTabLayout) mView.findViewById(R.id.tab_layout);
-        mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
-        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
+        mTabLayout.setBackgroundColor(getResources().getColor(R.color.primary));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_white));
 
         mCameraButton = (FloatingActionButton) mView.findViewById(R.id.camera_button);
         mCameraButton.setOnClickListener(new View.OnClickListener() {

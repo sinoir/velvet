@@ -15,7 +15,7 @@
     android:paddingRight="@dimen/spacing_16"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
-    android:textColor="@color/edward_to_chestnut"
+    android:textColor="@color/tab_text"
     android:textSize="18sp"
     android:text="ZINFANDEL"
     app:fontName="whitney_medium_sc"

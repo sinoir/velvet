@@ -10,6 +10,7 @@
     <!-- Brand Colors -->
     <color name="d_chestnut">#cd595a</color>
     <color name="d_big_stone">#334858</color>
+    <color name="d_big_stone_dark">#243847</color>
     <color name="d_suva_gray">#94938f</color>
     <color name="d_edward">#a3a7a6</color>
     <color name="d_soft_amber">#dbc5b0</color>
@@ -22,6 +23,11 @@
 
     <!-- Primary -->
     <color name="nav_selector">@color/d_black_30op</color>
+    <color name="primary">@color/d_big_stone</color>
+    <color name="primaryDark">@color/d_big_stone_dark</color>
+    <color name="accent">@color/d_chestnut</color>
+    <color name="accentDark">@color/d_black_60op</color>
+    <color name="titles">@color/d_white</color>
     <color name="toolbar_bg_gradient">#99000000</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
@@ -66,4 +72,5 @@
     <!-- Transparent Blacks -->
     <color name="d_black_10op">#1A000000</color>
     <color name="d_black_30op">#4D000000</color>
+    <color name="d_black_60op">#96000000</color>
 </resources>
