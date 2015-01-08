@@ -50,6 +50,10 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public static final char SYMBOL_MENTION = '@';
 
+    public static final int AUTO_COMPLETE_THRESHOLD = 1;
+
+    private Tokenizer mTokenizer;
+
     private boolean mIsDropdownShown;
 
     public ChipsMultiAutoCompleteTextView(Context context) {
@@ -78,9 +82,10 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             setTypeface(font);
         }
 
-        setTokenizer(new HashtagMentionTokenizer());
+        mTokenizer = new HashtagMentionTokenizer();
+        setTokenizer(mTokenizer);
 //        setTokenizer(new ChipsTokenizer());
-        setThreshold(1);
+        setThreshold(AUTO_COMPLETE_THRESHOLD);
         setMovementMethod(new ChipsArrowKeyMovementMethod());
 
         String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
@@ -171,6 +176,13 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         mIsDropdownShown = false;
     }
 
+    /**
+     * <p>Converts the selected item from the drop down list into a sequence of character that can
+     * be used in the edit box.</p>
+     *
+     * @param selectedItem the item selected by the user for completion
+     * @return a sequence of characters representing the selected suggestion
+     */
     @Override
     protected CharSequence convertSelectionToString(Object selectedItem) {
         //Log.d(TAG, "convertSelectionToString " + mIsDropdownShown);
@@ -179,6 +191,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             int nameIdx = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
             int emailIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
             int contactIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
+            // TODO determine correct replacement text (needs to be @User Name or #hashtag)
             SpannableString ss = new SpannableString(c.getString(nameIdx));
             // TODO determine what was selected and then set hashtag or mention span accordingly
             ChipSpan span = new MentionChipSpan(c.getString(nameIdx), c.getString(emailIdx));
@@ -188,6 +201,73 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             return ss;
         }
         return super.convertSelectionToString(selectedItem);
+    }
+
+    /**
+     * <p>Performs the text completion by replacing the range from {@link android.widget.MultiAutoCompleteTextView.Tokenizer#findTokenStart}
+     * to {@link #getSelectionEnd} by the the result of passing <code>text</code> through {@link
+     * android.widget.MultiAutoCompleteTextView.Tokenizer#terminateToken}. In addition, the replaced region will be marked as an AutoText
+     * substition so that if the user immediately presses DEL, the completion will be undone.
+     * Subclasses may override this method to do some different insertion of the content into the
+     * edit box.</p>
+     *
+     * @param text the selected suggestion in the drop down list
+     */
+    @Override
+    protected void replaceText(CharSequence text) {
+        super.replaceText(text);
+
+//        clearComposingText();
+//
+//        int end = getSelectionEnd();
+//        int start = mTokenizer.findTokenStart(getText(), end);
+//
+//        Editable editable = getText();
+//        String original = TextUtils.substring(editable, start, end);
+//
+//        QwertyKeyListener.markAsReplaced(editable, start, end, original);
+//        editable.replace(start, end, mTokenizer.terminateToken(text));
+    }
+
+    /**
+     * Instead of filtering whenever the total length of the text exceeds the threshhold, this
+     * subclass filters only when the length of the range from {@link android.widget.MultiAutoCompleteTextView.Tokenizer#findTokenStart}
+     * to {@link #getSelectionEnd} meets or exceeds {@link #getThreshold}.
+     */
+    @Override
+    public boolean enoughToFilter() {
+//        return super.enoughToFilter();
+        Editable text = getText();
+
+        int end = getSelectionEnd();
+        if (end <= 0 || mTokenizer == null) {
+            return false;
+        }
+
+        int start = mTokenizer.findTokenStart(text, end);
+        if (!isTagPrefix(text.charAt(start))) {
+            return false;
+        }
+
+        if (end - start >= getThreshold()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * <p>Starts filtering the content of the drop down list. The filtering pattern is the specified
+     * range of text from the edit box. Subclasses may override this method to filter with a
+     * different pattern, for instance a smaller substring of <code>text</code>.</p>
+     */
+    @Override
+    protected void performFiltering(CharSequence text, int start, int end, int keyCode) {
+        super.performFiltering(text, start, end, keyCode);
+    }
+
+    public static boolean isTagPrefix(char c) {
+        return (c == SYMBOL_HASHTAG || c == SYMBOL_MENTION);
     }
 
     public ArrayList<ChipSpan> getSpans() {
@@ -338,45 +418,49 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
      */
     public static class HashtagMentionTokenizer implements Tokenizer {
 
+        /**
+         * Returns the start of the token that ends at offset <code>cursor within text.
+         */
         @Override
         public int findTokenStart(CharSequence text, int cursor) {
-            int i = cursor;
+            if (text.length() == 0) {
+                return 0;
+            }
 
-            while (i > 0 && (text.charAt(i - 1) != SYMBOL_MENTION)
-                    && text.charAt(i - 1) != SYMBOL_HASHTAG) {
+            int i = cursor - 1; // start on last character
+
+            // move cursor back until a tag prefix is found
+            while (i > 0 && !isTagPrefix(text.charAt(i))) {
                 i--;
-                if (i >= 0 && i < text.length()) {
-                    Log.d(TAG, "tokenStart: " + i + " / " + text.charAt(i));
-                }
             }
 
-            if (i >= 0 && i < text.length()) {
-                Log.d(TAG, "finished tokenStart: " + i + " / " + text.charAt(i));
-            }
-//            return i;
-            return Math.max(i - 1, 0);
+            Log.d(TAG, "tokenStart: " + i + " / " + text.charAt(i));
+            return i;
         }
 
+        /**
+         * Returns the end of the token (minus trailing punctuation)
+         * that begins at offset <code>cursor within text.
+         */
         @Override
         public int findTokenEnd(CharSequence text, int cursor) {
             Log.d(TAG, "fte:" + text + "," + cursor);
-            int i = cursor;
-            int len = text.length();
 
-            while (i < len) {
-                if (text.charAt(i) == SYMBOL_MENTION) {
+            for (int i = cursor; i < text.length(); i++) {
+                if (isTagPrefix(text.charAt(i))) {
+                    Log.d(TAG, "tokenEnd: " + i + " / " + text.charAt(i));
                     return i;
-                } else {
-                    i++;
                 }
             }
 
-            if (len >= 0 && len < text.length()) {
-                Log.d(TAG, "tokenEnd: " + len + " / " + text.charAt(len));
-            }
-            return len;
+            Log.d(TAG, "tokenEnd: " + text.length() + " / " + text.charAt(text.length()));
+            return text.length();
         }
 
+        /**
+         * Returns <code>text, modified, if necessary, to ensure that
+         * it ends with a token terminator (for example a space or comma).
+         */
         @Override
         public CharSequence terminateToken(CharSequence text) {
 //            Log.d(TAG, "tto:" + text );
