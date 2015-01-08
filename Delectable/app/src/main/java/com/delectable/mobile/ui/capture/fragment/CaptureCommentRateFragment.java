@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -205,7 +204,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
     }
 
     private boolean emptyFieldExists() {
-        Log.d(TAG, "Edit Text: " + mCommentEditText.getText());
+//        Log.d(TAG, "Edit Text: " + mCommentEditText.getText());
         if (mCommentEditText.getText().toString().trim().equals("")) {
             return true;
         }

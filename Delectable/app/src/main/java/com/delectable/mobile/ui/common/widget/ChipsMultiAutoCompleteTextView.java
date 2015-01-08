@@ -1,11 +1,11 @@
 package com.delectable.mobile.ui.common.widget;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.util.FontEnum;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Canvas;
@@ -35,19 +35,22 @@ import android.widget.FilterQueryProvider;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Inspired by https://gist.github.com/pskink/5fe9c0bb4677c1debc5e
  */
 public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         implements MenuItem.OnMenuItemClickListener {
 
-    private final static String TAG = ChipsMultiAutoCompleteTextView.class.getSimpleName();
+    private static final String TAG = ChipsMultiAutoCompleteTextView.class.getSimpleName();
+
+    public static final char SYMBOL_HASHTAG = '#';
+
+    public static final char SYMBOL_MENTION = '@';
 
     private boolean mIsDropdownShown;
-
-    private int mSpanHeight;
-
-    private int mPadding;
 
     public ChipsMultiAutoCompleteTextView(Context context) {
         super(context);
@@ -75,11 +78,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             setTypeface(font);
         }
 
-        Resources res = getResources();
-        DisplayMetrics metrics = res.getDisplayMetrics();
-        mSpanHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, metrics);
-        mPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics);
-
         setTokenizer(new HashtagMentionTokenizer());
 //        setTokenizer(new ChipsTokenizer());
         setThreshold(1);
@@ -106,12 +104,15 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         FilterQueryProvider provider = new FilterQueryProvider() {
             @Override
             public Cursor runQuery(CharSequence constraint) {
-                if (constraint == null) {
+                if (constraint == null || (constraint != null && constraint.length() == 0)) {
                     return null;
                 }
+                Log.d(TAG, "query constraint: " + constraint);
                 Uri uri = Uri
                         .withAppendedPath(ContactsContract.CommonDataKinds.Email.CONTENT_FILTER_URI,
-                                constraint.toString());
+                                constraint.subSequence(1, constraint.length())
+                                        .toString()); // skip first character (#, @)
+                Log.d(TAG, "query uri: " + uri.toString());
                 String[] proj = {BaseColumns._ID, ContactsContract.Contacts.DISPLAY_NAME,
                         ContactsContract.CommonDataKinds.Email.DATA,
                         ContactsContract.CommonDataKinds.Email.CONTACT_ID};
@@ -147,6 +148,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        // delete spans
         Editable e = getText();
         ChipSpan[] chips = e.getSpans(0, e.length(), ChipSpan.class);
         for (ChipSpan chipSpan : chips) {
@@ -174,31 +176,44 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         //Log.d(TAG, "convertSelectionToString " + mIsDropdownShown);
         if (!mIsDropdownShown) {
             Cursor c = (Cursor) selectedItem;
-            SpannableString ss = new SpannableString("x");
             int nameIdx = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
             int emailIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
             int contactIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
-            Object what = new ChipSpan(c.getString(nameIdx), c.getString(emailIdx),
-                    c.getLong(contactIdx));
-            ss.setSpan(what, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            SpannableString ss = new SpannableString(c.getString(nameIdx));
+            // TODO determine what was selected and then set hashtag or mention span accordingly
+            ChipSpan span = new MentionChipSpan(c.getString(nameIdx), c.getString(emailIdx));
+//            ChipSpan span = new ChipSpan(c.getString(nameIdx),
+//                    c.getLong(contactIdx));
+            ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return ss;
         }
         return super.convertSelectionToString(selectedItem);
     }
 
-    class ChipSpan extends ReplacementSpan {
+    public ArrayList<ChipSpan> getSpans() {
+        ChipSpan[] chips = getText().getSpans(0, getText().length(), ChipSpan.class);
+        return (ArrayList<ChipSpan>) Arrays.asList(chips);
+    }
 
-        private String name;
+    public static class ChipSpan extends ReplacementSpan {
 
-        private String email;
+        private static DisplayMetrics sDisplayMetrics = App.getInstance().getResources()
+                .getDisplayMetrics();
 
-        private int length;
+        private static int sSpanHeight = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, sDisplayMetrics);
+
+        private static int sPadding = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, sDisplayMetrics);
+
+        private String mSpanText;
+
+        private int mLength;
 
         private boolean selected;
 
-        public ChipSpan(String name, String email, long contactId) {
-            this.name = name;
-            this.email = email;
+        public ChipSpan(String spanText, long contactId) {
+            mSpanText = spanText;
             Uri contactUri = ContentUris
                     .withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
         }
@@ -214,15 +229,15 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         @Override
         public int getSize(Paint paint, CharSequence text, int start, int end,
                 Paint.FontMetricsInt fm) {
-            length = (int) paint.measureText(name);// + mSpanHeight + 3 * mPadding;
+            mLength = (int) paint.measureText(mSpanText) + 2 * sPadding;
             if (fm != null) {
-                fm.ascent = -mSpanHeight;
+                fm.ascent = -sSpanHeight;
                 fm.descent = 0;
                 fm.top = fm.ascent;
                 fm.bottom = 0;
             }
             // 4 (2 + 2) is for cursor at both ends
-            return length + 4;
+            return mLength + 4;
         }
 
         @Override
@@ -232,15 +247,36 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 //            paint.setColor(0xffcccccc);
 //            canvas.drawRect(x, top, x + length, bottom, paint);
             paint.setColor(HashtagMentionSpan.HASHTAG_COLOR);
-            canvas.drawText(name, x + mPadding, y, paint);
+            canvas.drawText(mSpanText, x + sPadding, y, paint);
 
             if (selected) {
                 paint.setColor(0x33ff0000);
-                canvas.drawRect(x, top, x + length, bottom, paint);
+                canvas.drawRect(x, top, x + mLength, bottom, paint);
             }
         }
     }
 
+    public static class HashtagChipSpan extends ChipSpan {
+
+        public String listKey;
+
+        public HashtagChipSpan(String hashtag, String listKey) {
+            super(SYMBOL_HASHTAG + hashtag, 0);
+            this.listKey = listKey;
+        }
+
+    }
+
+    public static class MentionChipSpan extends ChipSpan {
+
+        public String accountId;
+
+        public MentionChipSpan(String userName, String accountId) {
+            super(SYMBOL_MENTION + userName, 0);
+            this.accountId = accountId;
+        }
+
+    }
     class ChipsArrowKeyMovementMethod extends ArrowKeyMovementMethod {
 
         @Override
@@ -306,13 +342,19 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         public int findTokenStart(CharSequence text, int cursor) {
             int i = cursor;
 
-            while (i > 0 && (text.charAt(i - 1) != '@') && text.charAt(i - 1) != '#') {
+            while (i > 0 && (text.charAt(i - 1) != SYMBOL_MENTION)
+                    && text.charAt(i - 1) != SYMBOL_HASHTAG) {
                 i--;
+                if (i >= 0 && i < text.length()) {
+                    Log.d(TAG, "tokenStart: " + i + " / " + text.charAt(i));
+                }
             }
-//            if (i>0)
-//                return i-1;
-//            else
-            return i;
+
+            if (i >= 0 && i < text.length()) {
+                Log.d(TAG, "finished tokenStart: " + i + " / " + text.charAt(i));
+            }
+//            return i;
+            return Math.max(i - 1, 0);
         }
 
         @Override
@@ -322,15 +364,17 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             int len = text.length();
 
             while (i < len) {
-                if (text.charAt(i) == '@') {
+                if (text.charAt(i) == SYMBOL_MENTION) {
                     return i;
                 } else {
                     i++;
                 }
             }
 
+            if (len >= 0 && len < text.length()) {
+                Log.d(TAG, "tokenEnd: " + len + " / " + text.charAt(len));
+            }
             return len;
-
         }
 
         @Override
