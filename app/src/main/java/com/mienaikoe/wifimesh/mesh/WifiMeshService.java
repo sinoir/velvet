@@ -13,14 +13,13 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 /*
  * Mesh Service
  */
 
-public class MeshService extends Service {
+public class WifiMeshService extends Service {
 
     private WifiP2pManager meshManager;
     private WifiP2pManager.Channel meshChannel;
@@ -37,7 +36,7 @@ public class MeshService extends Service {
 
 
 
-    public MeshService( ) {
+    public WifiMeshService() {
 
     }
 
@@ -104,6 +103,7 @@ public class MeshService extends Service {
             @Override
             public void onSuccess() {
                 peerList.put(device.deviceAddress, device);
+                device.isGroupOwner();
             }
             @Override
             public void onFailure(int reason) {
@@ -159,12 +159,12 @@ public class MeshService extends Service {
             }
 
             ArrayList<String> peerNames = new ArrayList<String>(peerList.size());
-            Intent intent = new Intent(MeshService.INTENT_PEERS);
+            Intent intent = new Intent(WifiMeshService.INTENT_PEERS);
             for( WifiP2pDevice peer : peerList.values() ){
                 peerNames.add(peer.deviceName);
             }
-            intent.putExtra(MeshService.FIELD_PEERS, peerNames);
-            intent.putExtra(MeshService.FIELD_STATUS, "New Peers");
+            intent.putExtra(WifiMeshService.FIELD_PEERS, peerNames);
+            intent.putExtra(WifiMeshService.FIELD_STATUS, "New Peers");
             sendBroadcast(intent);
         }
     }

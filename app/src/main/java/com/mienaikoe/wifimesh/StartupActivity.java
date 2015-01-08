@@ -10,7 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.mienaikoe.wifimesh.mesh.MeshService;
+import com.mienaikoe.wifimesh.mesh.BluetoothMeshService;
+import com.mienaikoe.wifimesh.mesh.WifiMeshService;
 
 import java.util.ArrayList;
 
@@ -24,8 +25,8 @@ public class StartupActivity extends Activity {
     private BroadcastReceiver meshServiceReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<String> peers = intent.getStringArrayListExtra(MeshService.FIELD_PEERS);
-            String status = intent.getStringExtra(MeshService.FIELD_STATUS);
+            ArrayList<String> peers = intent.getStringArrayListExtra(WifiMeshService.FIELD_PEERS);
+            String status = intent.getStringExtra(WifiMeshService.FIELD_STATUS);
             Log.i(this.getClass().getName(), "Peers: " + peers.toString());
             Log.i(this.getClass().getName(), "Status: " + status);
             if( peers.size() > 0 ) {
@@ -40,13 +41,14 @@ public class StartupActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(this, MeshService.class));
+        startService(new Intent(this, WifiMeshService.class));
+        startService(new Intent(this, BluetoothMeshService.class));
         loadMap();
     }
 
     public void onResume() {
         super.onResume();
-        registerReceiver(meshServiceReceiver, new IntentFilter(MeshService.INTENT_PEERS));
+        registerReceiver(meshServiceReceiver, new IntentFilter(WifiMeshService.INTENT_PEERS));
     }
 
     @Override
