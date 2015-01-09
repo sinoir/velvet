@@ -53,42 +53,25 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     private Tokenizer mTokenizer;
 
-    private Filter mHashtagFilter = new Filter() {
+    private Filter mFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             if (constraint == null || (constraint != null && (constraint.length() < 2))) {
                 return null;
-            } else if (SYMBOL_HASHTAG != constraint.charAt(0)) {
-                return null;
-            } else {
+            }
+
+            if (SYMBOL_HASHTAG == constraint.charAt(0)) {
                 if (mActionsHandler != null) {
                     mActionsHandler.queryHashtag(
                             constraint.subSequence(1, constraint.length()).toString());
                 }
-                return null;
-            }
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            // nothing to do here
-        }
-    };
-
-    private Filter mMentionFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            if (constraint == null || (constraint != null && (constraint.length() < 2))) {
-                return null;
-            } else if (SYMBOL_MENTION != constraint.charAt(0)) {
-                return null;
-            } else {
+            } else if (SYMBOL_MENTION == constraint.charAt(0)) {
                 if (mActionsHandler != null) {
                     mActionsHandler.queryMention(
                             constraint.subSequence(1, constraint.length()).toString());
                 }
-                return null;
             }
+            return null;
         }
 
         @Override
@@ -99,11 +82,11 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     private SearchAutoCompleteAdapter<HashtagResult>
             mHashtagAdapter = new SearchAutoCompleteAdapter<HashtagResult>(
-            getContext(), mHashtagFilter);
+            getContext(), mFilter);
 
     private SearchAutoCompleteAdapter<AccountSearch>
             mMentionAdapter = new SearchAutoCompleteAdapter<AccountSearch>(
-            getContext(), mMentionFilter);
+            getContext(), mFilter);
 
 
     private boolean mIsDropdownShown;
@@ -243,8 +226,10 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             setAdapter(mMentionAdapter);
             return true;
         } else if (end - start >= getThreshold()) {
+            setAdapter(null);
             return true;
         } else {
+            setAdapter(null);
             return false;
         }
     }
