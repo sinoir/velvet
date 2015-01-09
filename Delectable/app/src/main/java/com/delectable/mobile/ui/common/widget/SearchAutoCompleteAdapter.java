@@ -4,6 +4,7 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountSearch;
 import com.delectable.mobile.api.models.HashtagResult;
 import com.delectable.mobile.api.models.SearchHit;
+import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -67,10 +68,11 @@ public class SearchAutoCompleteAdapter<T> extends BaseAdapter implements Filtera
                     ChipsMultiAutoCompleteTextView.SYMBOL_HASHTAG + ((HashtagResult) hit
                             .getObject()).getTag());
         } else if (hit.getObject() instanceof AccountSearch) {
+            AccountSearch account = (AccountSearch) hit.getObject();
             holder.textView.setText(
-                    ChipsMultiAutoCompleteTextView.SYMBOL_MENTION + ((AccountSearch) hit
-                            .getObject()).getFullName());
-//            holder.imageView.setImageDrawable();
+                    ChipsMultiAutoCompleteTextView.SYMBOL_MENTION + account.getFullName());
+            String profileImageUrl = account.getPhoto().getBestThumb();
+            ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, holder.imageView);
             holder.imageView.setVisibility(View.VISIBLE);
         }
 

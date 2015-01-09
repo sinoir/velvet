@@ -72,7 +72,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            // TODO
+            // nothing to do here
         }
     };
 
@@ -96,7 +96,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            // TODO
+            // nothing to do here
         }
     };
 
@@ -142,31 +142,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 //        setTokenizer(new ChipsTokenizer());
         setThreshold(AUTO_COMPLETE_THRESHOLD);
         setMovementMethod(new ChipsArrowKeyMovementMethod());
-
-//        String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
-//        int[] to = {android.R.id.text1};
-        // TODO custom row layout that allows for user images
-//        mAdapter = new SimpleCursorAdapter(context,
-//                android.R.layout.simple_dropdown_item_1line, null, from, to);
-//
-//        FilterQueryProvider provider = new FilterQueryProvider() {
-//            @Override
-//            public Cursor runQuery(CharSequence constraint) {
-//                if (constraint == null || (constraint != null && constraint.length() == 0)) {
-//                    return null;
-//                }
-//                Log.d(TAG, "query constraint: " + constraint);
-//                Uri uri = Uri
-//                        .withAppendedPath(ContactsContract.CommonDataKinds.Email.CONTENT_FILTER_URI,
-//                                constraint.subSequence(1, constraint.length())
-//                                        .toString()); // skip first character (#, @)
-//                Log.d(TAG, "query uri: " + uri.toString());
-//                String[] proj = {BaseColumns._ID, ContactsContract.Contacts.DISPLAY_NAME,
-//                        ContactsContract.CommonDataKinds.Email.DATA,
-//                        ContactsContract.CommonDataKinds.Email.CONTACT_ID};
-//                return getContext().getContentResolver().query(uri, proj, null, null, null);
-//            }
-//        };
         setAdapter(mHashtagAdapter);
     }
 
@@ -232,9 +207,9 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     @Override
     protected CharSequence convertSelectionToString(Object selectedItem) {
         if (!mIsDropdownShown) {
-//            // FIXME replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
+            // FIXME replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
             SearchHit hit = (SearchHit) selectedItem;
-            SpannableString ss = new SpannableString(" ");
+            SpannableString ss = null;
             ChipSpan span = null;
             if (hit.getObject() instanceof HashtagResult) {
                 HashtagResult result = (HashtagResult) hit.getObject();
@@ -243,6 +218,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
                 AccountSearch result = (AccountSearch) hit.getObject();
                 span = new MentionChipSpan(result.getFullName(), result.getId());
             }
+            ss = new SpannableString(span.mSpanText);
             ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return ss;
         }
@@ -314,7 +290,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public ArrayList<ChipSpan> getSpans() {
         ChipSpan[] chips = getText().getSpans(0, getText().length(), ChipSpan.class);
-        return (ArrayList<ChipSpan>) Arrays.asList(chips);
+        return new ArrayList<>(Arrays.asList(chips));
     }
 
     public static boolean isTagPrefix(char c) {

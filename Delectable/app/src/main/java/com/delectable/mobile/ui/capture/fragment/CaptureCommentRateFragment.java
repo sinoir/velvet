@@ -47,7 +47,7 @@ public class CaptureCommentRateFragment extends BaseFragment implements
 
     public static final int HASHTAG_SEARCH_LIMIT = 15;
 
-    public static final int MENTION_SEARCH_LIMIT = 15;
+    public static final int MENTION_SEARCH_LIMIT = 20;
 
     @Inject
     public HashtagController mHashtagController;
