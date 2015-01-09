@@ -2,19 +2,19 @@ package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.models.AccountSearch;
+import com.delectable.mobile.api.models.HashtagResult;
+import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.util.FontEnum;
 
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.provider.ContactsContract;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -30,17 +30,13 @@ import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.FilterQueryProvider;
+import android.widget.Filter;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Inspired by https://gist.github.com/pskink/5fe9c0bb4677c1debc5e
- */
 public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         implements MenuItem.OnMenuItemClickListener {
 
@@ -52,7 +48,66 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public static final int AUTO_COMPLETE_THRESHOLD = 1;
 
+    private ActionsHandler mActionsHandler;
+
     private Tokenizer mTokenizer;
+
+    private Filter mHashtagFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            if (constraint == null || (constraint != null && (constraint.length() < 2))) {
+                return null;
+            } else if (SYMBOL_HASHTAG != constraint.charAt(0)) {
+                return null;
+            } else {
+                Log.d(TAG, "HASHTAG query: " + constraint
+                        .subSequence(1, constraint.length()));
+                if (mActionsHandler != null) {
+                    mActionsHandler.queryHashtag(
+                            constraint.subSequence(1, constraint.length()).toString());
+                }
+                return null;
+            }
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            // TODO
+        }
+    };
+
+    private Filter mMentionFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            if (constraint == null || (constraint != null && (constraint.length() < 2))) {
+                return null;
+            } else if (SYMBOL_MENTION != constraint.charAt(0)) {
+                return null;
+            } else {
+                Log.d(TAG, "MENTION query: " + constraint
+                        .subSequence(1, constraint.length()));
+                if (mActionsHandler != null) {
+                    mActionsHandler.queryMention(
+                            constraint.subSequence(1, constraint.length()).toString());
+                }
+                return null;
+            }
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            // TODO
+        }
+    };
+
+    private SearchAutoCompleteAdapter<HashtagResult>
+            mHashtagAdapter = new SearchAutoCompleteAdapter<HashtagResult>(
+            getContext(), mHashtagFilter);
+
+    private SearchAutoCompleteAdapter<AccountSearch>
+            mMentionAdapter = new SearchAutoCompleteAdapter<AccountSearch>(
+            getContext(), mMentionFilter);
+
 
     private boolean mIsDropdownShown;
 
@@ -88,44 +143,35 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         setThreshold(AUTO_COMPLETE_THRESHOLD);
         setMovementMethod(new ChipsArrowKeyMovementMethod());
 
-        String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
-        int[] to = {android.R.id.text1};
+//        String[] from = {ContactsContract.Contacts.DISPLAY_NAME};
+//        int[] to = {android.R.id.text1};
         // TODO custom row layout that allows for user images
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
-                android.R.layout.simple_dropdown_item_1line, null, from, to);
+//        mAdapter = new SimpleCursorAdapter(context,
+//                android.R.layout.simple_dropdown_item_1line, null, from, to);
+//
+//        FilterQueryProvider provider = new FilterQueryProvider() {
+//            @Override
+//            public Cursor runQuery(CharSequence constraint) {
+//                if (constraint == null || (constraint != null && constraint.length() == 0)) {
+//                    return null;
+//                }
+//                Log.d(TAG, "query constraint: " + constraint);
+//                Uri uri = Uri
+//                        .withAppendedPath(ContactsContract.CommonDataKinds.Email.CONTENT_FILTER_URI,
+//                                constraint.subSequence(1, constraint.length())
+//                                        .toString()); // skip first character (#, @)
+//                Log.d(TAG, "query uri: " + uri.toString());
+//                String[] proj = {BaseColumns._ID, ContactsContract.Contacts.DISPLAY_NAME,
+//                        ContactsContract.CommonDataKinds.Email.DATA,
+//                        ContactsContract.CommonDataKinds.Email.CONTACT_ID};
+//                return getContext().getContentResolver().query(uri, proj, null, null, null);
+//            }
+//        };
+        setAdapter(mHashtagAdapter);
+    }
 
-        SimpleCursorAdapter.ViewBinder viewBinder = new SimpleCursorAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View v, Cursor c, int index) {
-                TextView tv = (TextView) v;
-                int nameIdx = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                int emailIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
-                tv.setText(c.getString(nameIdx) + " (" + c.getString(emailIdx) + ")");
-                return true;
-            }
-        };
-        adapter.setViewBinder(viewBinder);
-
-        FilterQueryProvider provider = new FilterQueryProvider() {
-            @Override
-            public Cursor runQuery(CharSequence constraint) {
-                if (constraint == null || (constraint != null && constraint.length() == 0)) {
-                    return null;
-                }
-                Log.d(TAG, "query constraint: " + constraint);
-                Uri uri = Uri
-                        .withAppendedPath(ContactsContract.CommonDataKinds.Email.CONTENT_FILTER_URI,
-                                constraint.subSequence(1, constraint.length())
-                                        .toString()); // skip first character (#, @)
-                Log.d(TAG, "query uri: " + uri.toString());
-                String[] proj = {BaseColumns._ID, ContactsContract.Contacts.DISPLAY_NAME,
-                        ContactsContract.CommonDataKinds.Email.DATA,
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID};
-                return getContext().getContentResolver().query(uri, proj, null, null, null);
-            }
-        };
-        adapter.setFilterQueryProvider(provider);
-        setAdapter(adapter);
+    public void setActionsHandler(ActionsHandler handler) {
+        mActionsHandler = handler;
     }
 
     /**
@@ -185,18 +231,18 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
      */
     @Override
     protected CharSequence convertSelectionToString(Object selectedItem) {
-        //Log.d(TAG, "convertSelectionToString " + mIsDropdownShown);
         if (!mIsDropdownShown) {
-            Cursor c = (Cursor) selectedItem;
-            int nameIdx = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            int emailIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
-            int contactIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
-            // TODO determine correct replacement text (needs to be @User Name or #hashtag)
-            SpannableString ss = new SpannableString(c.getString(nameIdx));
-            // TODO determine what was selected and then set hashtag or mention span accordingly
-            ChipSpan span = new MentionChipSpan(c.getString(nameIdx), c.getString(emailIdx));
-//            ChipSpan span = new ChipSpan(c.getString(nameIdx),
-//                    c.getLong(contactIdx));
+//            // FIXME replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
+            SearchHit hit = (SearchHit) selectedItem;
+            SpannableString ss = new SpannableString(" ");
+            ChipSpan span = null;
+            if (hit.getObject() instanceof HashtagResult) {
+                HashtagResult result = (HashtagResult) hit.getObject();
+                span = new HashtagChipSpan(result.getTag());
+            } else if (hit.getObject() instanceof AccountSearch) {
+                AccountSearch result = (AccountSearch) hit.getObject();
+                span = new MentionChipSpan(result.getFullName(), result.getId());
+            }
             ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return ss;
         }
@@ -204,12 +250,13 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     }
 
     /**
-     * <p>Performs the text completion by replacing the range from {@link android.widget.MultiAutoCompleteTextView.Tokenizer#findTokenStart}
-     * to {@link #getSelectionEnd} by the the result of passing <code>text</code> through {@link
-     * android.widget.MultiAutoCompleteTextView.Tokenizer#terminateToken}. In addition, the replaced region will be marked as an AutoText
-     * substition so that if the user immediately presses DEL, the completion will be undone.
-     * Subclasses may override this method to do some different insertion of the content into the
-     * edit box.</p>
+     * <p>Performs the text completion by replacing the range from {@link
+     * android.widget.MultiAutoCompleteTextView.Tokenizer#findTokenStart} to {@link
+     * #getSelectionEnd} by the the result of passing <code>text</code> through {@link
+     * android.widget.MultiAutoCompleteTextView.Tokenizer#terminateToken}. In addition, the replaced
+     * region will be marked as an AutoText substition so that if the user immediately presses DEL,
+     * the completion will be undone. Subclasses may override this method to do some different
+     * insertion of the content into the edit box.</p>
      *
      * @param text the selected suggestion in the drop down list
      */
@@ -236,20 +283,19 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
      */
     @Override
     public boolean enoughToFilter() {
-//        return super.enoughToFilter();
-        Editable text = getText();
-
         int end = getSelectionEnd();
         if (end <= 0 || mTokenizer == null) {
             return false;
         }
 
-        int start = mTokenizer.findTokenStart(text, end);
-        if (!isTagPrefix(text.charAt(start))) {
-            return false;
-        }
-
-        if (end - start >= getThreshold()) {
+        int start = mTokenizer.findTokenStart(getText(), end);
+        if (SYMBOL_HASHTAG == getText().charAt(start)) {
+            setAdapter(mHashtagAdapter);
+            return true;
+        } else if (SYMBOL_MENTION == getText().charAt(start)) {
+            setAdapter(mMentionAdapter);
+            return true;
+        } else if (end - start >= getThreshold()) {
             return true;
         } else {
             return false;
@@ -266,13 +312,13 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         super.performFiltering(text, start, end, keyCode);
     }
 
-    public static boolean isTagPrefix(char c) {
-        return (c == SYMBOL_HASHTAG || c == SYMBOL_MENTION);
-    }
-
     public ArrayList<ChipSpan> getSpans() {
         ChipSpan[] chips = getText().getSpans(0, getText().length(), ChipSpan.class);
         return (ArrayList<ChipSpan>) Arrays.asList(chips);
+    }
+
+    public static boolean isTagPrefix(char c) {
+        return (c == SYMBOL_HASHTAG || c == SYMBOL_MENTION);
     }
 
     public static class ChipSpan extends ReplacementSpan {
@@ -338,11 +384,13 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public static class HashtagChipSpan extends ChipSpan {
 
+        private static final String KEY_PREFIX = "hashtag:";
+
         public String listKey;
 
-        public HashtagChipSpan(String hashtag, String listKey) {
+        public HashtagChipSpan(String hashtag) {
             super(SYMBOL_HASHTAG + hashtag, 0);
-            this.listKey = listKey;
+            this.listKey = KEY_PREFIX + hashtag;
         }
 
     }
@@ -357,6 +405,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         }
 
     }
+
     class ChipsArrowKeyMovementMethod extends ArrowKeyMovementMethod {
 
         @Override
@@ -434,13 +483,13 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
                 i--;
             }
 
-            Log.d(TAG, "tokenStart: " + i + " / " + text.charAt(i));
+//            Log.d(TAG, "tokenStart: " + i + " / " + text.charAt(i));
             return i;
         }
 
         /**
-         * Returns the end of the token (minus trailing punctuation)
-         * that begins at offset <code>cursor within text.
+         * Returns the end of the token (minus trailing punctuation) that begins at offset
+         * <code>cursor within text.
          */
         @Override
         public int findTokenEnd(CharSequence text, int cursor) {
@@ -458,8 +507,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         }
 
         /**
-         * Returns <code>text, modified, if necessary, to ensure that
-         * it ends with a token terminator (for example a space or comma).
+         * Returns <code>text, modified, if necessary, to ensure that it ends with a token
+         * terminator (for example a space or comma).
          */
         @Override
         public CharSequence terminateToken(CharSequence text) {
@@ -479,4 +528,22 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             return text + " ";
         }
     }
+
+    public void updateHashtagResults(ArrayList<SearchHit<HashtagResult>> results) {
+        mHashtagAdapter.setItems(results);
+        mHashtagAdapter.notifyDataSetChanged();
+    }
+
+    public void updateMentionResults(ArrayList<SearchHit<AccountSearch>> results) {
+        mMentionAdapter.setItems(results);
+        mMentionAdapter.notifyDataSetChanged();
+    }
+
+    public interface ActionsHandler {
+
+        public void queryHashtag(String query);
+
+        public void queryMention(String query);
+    }
+
 }

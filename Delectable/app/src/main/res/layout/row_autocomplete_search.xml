@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.delectable.mobile.ui.common.widget.CircleImageView
+        android:id="@+id/row_image"
+        android:layout_width="@dimen/general_icon_size"
+        android:layout_height="@dimen/general_icon_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/spacing_16"
+        android:src="@drawable/no_photo"
+        android:visibility="gone" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/row_text"
+        style="?android:attr/dropDownItemStyle"
+        android:layout_toRightOf="@id/image"
+        android:layout_alignWithParentIfMissing="true"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+        android:singleLine="true"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:ellipsize="marquee" />
+
+</RelativeLayout>

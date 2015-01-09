@@ -1,6 +1,11 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.controllers.HashtagController;
+import com.delectable.mobile.api.events.accounts.SearchAccountsEvent;
+import com.delectable.mobile.api.events.hashtags.SearchHashtagsEvent;
 import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
@@ -23,11 +28,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class CaptureCommentRateFragment extends BaseFragment {
+public class CaptureCommentRateFragment extends BaseFragment implements
+        ChipsMultiAutoCompleteTextView.ActionsHandler {
+
+    private static final String TAG = CaptureCommentRateFragment.class.getSimpleName();
 
     public static final String DATA_COMMENT = "DATA_COMMENT";
 
@@ -35,7 +45,15 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     public static final String DATA_RATING = "DATA_RATING";
 
-    private static final String TAG = CaptureCommentRateFragment.class.getSimpleName();
+    public static final int HASHTAG_SEARCH_LIMIT = 15;
+
+    public static final int MENTION_SEARCH_LIMIT = 15;
+
+    @Inject
+    public HashtagController mHashtagController;
+
+    @Inject
+    public AccountController mAccountController;
 
     private TextWatcher textValidationWatcher = new TextWatcher() {
         @Override
@@ -100,6 +118,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -116,6 +135,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.fragment_capture_rating_submit, container, false);
         ButterKnife.inject(this, mView);
 
+        mCommentEditText.setActionsHandler(this);
         mCommentEditText.setRawInputType(InputType.TYPE_CLASS_TEXT
                 | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
                 | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
@@ -192,10 +212,33 @@ public class CaptureCommentRateFragment extends BaseFragment {
         mPostButton.setEnabled(!emptyFieldExists());
     }
 
-
     @OnClick(R.id.post_button)
     public void postData() {
         Intent data = new Intent();
+        // TODO parse edit text, get chips, replace text and generate comment attributes
+        mCommentAttributes = new ArrayList<>();
+        ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = mCommentEditText.getSpans();
+        if (!spans.isEmpty()) {
+            for (ChipsMultiAutoCompleteTextView.ChipSpan span : spans) {
+                if (span instanceof ChipsMultiAutoCompleteTextView.HashtagChipSpan) {
+                    ChipsMultiAutoCompleteTextView.HashtagChipSpan s
+                            = (ChipsMultiAutoCompleteTextView.HashtagChipSpan) span;
+                    mCommentAttributes.add(new CaptureCommentAttributes(
+                            s.listKey,
+                            CaptureCommentAttributes.TYPE_HASHTAG,
+                            mCommentEditText.getText().getSpanStart(s),
+                            mCommentEditText.getText().getSpanEnd(s)));
+                } else if (span instanceof ChipsMultiAutoCompleteTextView.MentionChipSpan) {
+                    ChipsMultiAutoCompleteTextView.MentionChipSpan s
+                            = (ChipsMultiAutoCompleteTextView.MentionChipSpan) span;
+                    mCommentAttributes.add(new CaptureCommentAttributes(
+                            s.accountId,
+                            CaptureCommentAttributes.TYPE_MENTION,
+                            mCommentEditText.getText().getSpanStart(s),
+                            mCommentEditText.getText().getSpanEnd(s)));
+                }
+            }
+        }
         data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString());
         data.putExtra(DATA_COMMENT_ATTRIBUTES, mCommentAttributes);
         data.putExtra(DATA_RATING, mRating);
@@ -214,4 +257,26 @@ public class CaptureCommentRateFragment extends BaseFragment {
         return false;
     }
 
+    @Override
+    public void queryHashtag(String query) {
+        mHashtagController.searchHashtags(query, 0, HASHTAG_SEARCH_LIMIT);
+    }
+
+    @Override
+    public void queryMention(String query) {
+        // FIXME pass capture id
+        mAccountController.searchAccountsContextually(query, 0, MENTION_SEARCH_LIMIT, null);
+    }
+
+    public void onEventMainThread(SearchHashtagsEvent event) {
+        if (event.isSuccessful() && event.getResult() != null) {
+            mCommentEditText.updateHashtagResults(event.getResult().getHits());
+        }
+    }
+
+    public void onEventMainThread(SearchAccountsEvent event) {
+        if (event.isSuccessful() && event.getResult() != null) {
+            mCommentEditText.updateMentionResults(event.getResult().getHits());
+        }
+    }
 }

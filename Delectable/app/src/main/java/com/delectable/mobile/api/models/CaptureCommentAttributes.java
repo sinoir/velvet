@@ -25,6 +25,14 @@ public class CaptureCommentAttributes implements Parcelable {
 
     String link;
 
+    public CaptureCommentAttributes(String id, String type, int tagStart, int tagLength) {
+        this.id = id;
+        this.type = type;
+        range = new ArrayList<>(2);
+        range.add(INDEX_RANGE_START, tagStart);
+        range.add(INDEX_RANGE_LENGTH, tagLength);
+    }
+
     public String getType() {
         return type;
     }
