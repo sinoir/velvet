@@ -20,9 +20,13 @@ import java.util.ArrayList;
 
 public class HashtagMentionSpan extends ClickableSpan {
 
-    private static enum Type {HASHTAG, MENTION}
-
     private static final String TAG = HashtagMentionSpan.class.getSimpleName();
+
+    public static final String PREFIX_HASHTAG = "#";
+
+    public static final String PREFIX_MENTION = "@";
+
+    private static enum Type {HASHTAG, MENTION}
 
     public static final int HASHTAG_COLOR = App.getInstance().getResources().getColor(
             R.color.chestnut_to_chestnut_pressed);

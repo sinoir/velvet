@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -215,31 +216,26 @@ public class CaptureCommentRateFragment extends BaseFragment implements
     @OnClick(R.id.post_button)
     public void postData() {
         Intent data = new Intent();
-        // TODO parse edit text, get chips, replace text and generate comment attributes
+        Editable comment = mCommentEditText.getText();
         mCommentAttributes = new ArrayList<>();
         ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = mCommentEditText.getSpans();
         if (!spans.isEmpty()) {
             for (ChipsMultiAutoCompleteTextView.ChipSpan span : spans) {
-                if (span instanceof ChipsMultiAutoCompleteTextView.HashtagChipSpan) {
-                    ChipsMultiAutoCompleteTextView.HashtagChipSpan s
-                            = (ChipsMultiAutoCompleteTextView.HashtagChipSpan) span;
-                    mCommentAttributes.add(new CaptureCommentAttributes(
-                            s.listKey,
-                            CaptureCommentAttributes.TYPE_HASHTAG,
-                            mCommentEditText.getText().getSpanStart(s),
-                            mCommentEditText.getText().getSpanEnd(s)));
-                } else if (span instanceof ChipsMultiAutoCompleteTextView.MentionChipSpan) {
-                    ChipsMultiAutoCompleteTextView.MentionChipSpan s
-                            = (ChipsMultiAutoCompleteTextView.MentionChipSpan) span;
-                    mCommentAttributes.add(new CaptureCommentAttributes(
-                            s.accountId,
-                            CaptureCommentAttributes.TYPE_MENTION,
-                            mCommentEditText.getText().getSpanStart(s),
-                            mCommentEditText.getText().getSpanEnd(s)));
-                }
+                int spanStart = comment.getSpanStart(span);
+                int spanEnd = comment.getSpanEnd(span);
+                // replace single character in comment text with replacement span text
+                comment.replace(spanStart, spanEnd, span.getReplacedText());
+//                Log.d(TAG, "postData: spanStart=" + spanStart + ", spanEnd=" + spanEnd + ", replacedText='" + span.getReplacedText() + "', spanId=" + span.getId() + "\ncomment='" + comment.toString() + "'\n");
+                // generate comment attributes
+                mCommentAttributes.add(new CaptureCommentAttributes(
+                        span.getId(),
+                        span.getType(),
+                        spanStart,
+                        span.getReplacedText().length()));
             }
         }
-        data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString());
+        Log.d(TAG, "comment_attributes=" + mCommentAttributes.toString());
+        data.putExtra(DATA_COMMENT, comment.toString().trim());
         data.putExtra(DATA_COMMENT_ATTRIBUTES, mCommentAttributes);
         data.putExtra(DATA_RATING, mRating);
         getActivity().setResult(Activity.RESULT_OK, data);

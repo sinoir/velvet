@@ -3,18 +3,16 @@ package com.delectable.mobile.ui.common.widget;
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.models.AccountSearch;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.HashtagResult;
 import com.delectable.mobile.api.models.SearchHit;
 import com.delectable.mobile.util.FontEnum;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.net.Uri;
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -207,18 +205,20 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     @Override
     protected CharSequence convertSelectionToString(Object selectedItem) {
         if (!mIsDropdownShown) {
-            // FIXME replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
             SearchHit hit = (SearchHit) selectedItem;
-            SpannableString ss = null;
             ChipSpan span = null;
             if (hit.getObject() instanceof HashtagResult) {
                 HashtagResult result = (HashtagResult) hit.getObject();
-                span = new HashtagChipSpan(result.getTag());
+                span = new ChipSpan(result.getTag(), result.getTag(),
+                        CaptureCommentAttributes.TYPE_HASHTAG);
             } else if (hit.getObject() instanceof AccountSearch) {
                 AccountSearch result = (AccountSearch) hit.getObject();
-                span = new MentionChipSpan(result.getFullName(), result.getId());
+                span = new ChipSpan(result.getFullName(), result.getId(),
+                        CaptureCommentAttributes.TYPE_MENTION);
             }
-            ss = new SpannableString(span.mSpanText);
+            // replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
+            SpannableString ss = null;
+            ss = new SpannableString("x");
             ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return ss;
         }
@@ -238,6 +238,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
      */
     @Override
     protected void replaceText(CharSequence text) {
+        Log.d(TAG, "replaceText: " + text);
         super.replaceText(text);
 
 //        clearComposingText();
@@ -310,22 +311,44 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
         private String mSpanText;
 
+        private String mId;
+
+        private String mType;
+
         private int mLength;
 
-        private boolean selected;
+        private boolean mSelected;
 
-        public ChipSpan(String spanText, long contactId) {
-            mSpanText = spanText;
-            Uri contactUri = ContentUris
-                    .withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
+        public ChipSpan(String spanText, String id, String type) {
+            mType = type;
+            mId = id;
+            mSpanText = (CaptureCommentAttributes.TYPE_HASHTAG.equals(type)
+                    ? SYMBOL_HASHTAG
+                    : SYMBOL_MENTION)
+                    + spanText;
+        }
+
+        /**
+         * Returns the list key for hashtags or the account id for mentions
+         */
+        public String getId() {
+            return mId;
+        }
+
+        public String getType() {
+            return mType;
+        }
+
+        public String getReplacedText() {
+            return mSpanText;
         }
 
         public void toggleSelection() {
-            selected = !selected;
+            mSelected = !mSelected;
         }
 
         public boolean isSelected() {
-            return selected;
+            return mSelected;
         }
 
         @Override
@@ -351,35 +374,11 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             paint.setColor(HashtagMentionSpan.HASHTAG_COLOR);
             canvas.drawText(mSpanText, x + sPadding, y, paint);
 
-            if (selected) {
+            if (mSelected) {
                 paint.setColor(0x33ff0000);
                 canvas.drawRect(x, top, x + mLength, bottom, paint);
             }
         }
-    }
-
-    public static class HashtagChipSpan extends ChipSpan {
-
-        private static final String KEY_PREFIX = "hashtag:";
-
-        public String listKey;
-
-        public HashtagChipSpan(String hashtag) {
-            super(SYMBOL_HASHTAG + hashtag, 0);
-            this.listKey = KEY_PREFIX + hashtag;
-        }
-
-    }
-
-    public static class MentionChipSpan extends ChipSpan {
-
-        public String accountId;
-
-        public MentionChipSpan(String userName, String accountId) {
-            super(SYMBOL_MENTION + userName, 0);
-            this.accountId = accountId;
-        }
-
     }
 
     class ChipsArrowKeyMovementMethod extends ArrowKeyMovementMethod {

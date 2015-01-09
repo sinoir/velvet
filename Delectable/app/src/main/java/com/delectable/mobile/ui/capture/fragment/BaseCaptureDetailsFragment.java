@@ -294,7 +294,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
                 String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
                 ArrayList<CaptureCommentAttributes> commentAttributes = data
                         .getParcelableArrayListExtra(
-                                CaptureCommentRateFragment.DATA_COMMENT);
+                                CaptureCommentRateFragment.DATA_COMMENT_ATTRIBUTES);
                 Log.i(TAG, "Request Data Comment Text: " + commentText);
                 sendComment(mTempCaptureForAction, commentText, commentAttributes);
             }
