@@ -44,6 +44,9 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public static final char SYMBOL_MENTION = '@';
 
+    /**
+     * Start auto-complete after this many characters typed
+     */
     public static final int AUTO_COMPLETE_THRESHOLD = 1;
 
     private ActionsHandler mActionsHandler;
@@ -58,8 +61,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             } else if (SYMBOL_HASHTAG != constraint.charAt(0)) {
                 return null;
             } else {
-                Log.d(TAG, "HASHTAG query: " + constraint
-                        .subSequence(1, constraint.length()));
                 if (mActionsHandler != null) {
                     mActionsHandler.queryHashtag(
                             constraint.subSequence(1, constraint.length()).toString());
@@ -82,8 +83,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             } else if (SYMBOL_MENTION != constraint.charAt(0)) {
                 return null;
             } else {
-                Log.d(TAG, "MENTION query: " + constraint
-                        .subSequence(1, constraint.length()));
                 if (mActionsHandler != null) {
                     mActionsHandler.queryMention(
                             constraint.subSequence(1, constraint.length()).toString());
@@ -137,7 +136,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
         mTokenizer = new HashtagMentionTokenizer();
         setTokenizer(mTokenizer);
-//        setTokenizer(new ChipsTokenizer());
         setThreshold(AUTO_COMPLETE_THRESHOLD);
         setMovementMethod(new ChipsArrowKeyMovementMethod());
         setAdapter(mHashtagAdapter);
@@ -223,34 +221,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             return ss;
         }
         return super.convertSelectionToString(selectedItem);
-    }
-
-    /**
-     * <p>Performs the text completion by replacing the range from {@link
-     * android.widget.MultiAutoCompleteTextView.Tokenizer#findTokenStart} to {@link
-     * #getSelectionEnd} by the the result of passing <code>text</code> through {@link
-     * android.widget.MultiAutoCompleteTextView.Tokenizer#terminateToken}. In addition, the replaced
-     * region will be marked as an AutoText substition so that if the user immediately presses DEL,
-     * the completion will be undone. Subclasses may override this method to do some different
-     * insertion of the content into the edit box.</p>
-     *
-     * @param text the selected suggestion in the drop down list
-     */
-    @Override
-    protected void replaceText(CharSequence text) {
-        Log.d(TAG, "replaceText: " + text);
-        super.replaceText(text);
-
-//        clearComposingText();
-//
-//        int end = getSelectionEnd();
-//        int start = mTokenizer.findTokenStart(getText(), end);
-//
-//        Editable editable = getText();
-//        String original = TextUtils.substring(editable, start, end);
-//
-//        QwertyKeyListener.markAsReplaced(editable, start, end, original);
-//        editable.replace(start, end, mTokenizer.terminateToken(text));
     }
 
     /**
@@ -407,36 +377,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         }
     }
 
-//    public static class ChipsTokenizer implements Tokenizer {
-//
-//        @Override
-//        public int findTokenStart(CharSequence text, int cursor) {
-//            Log.d(TAG, "findTokenStart [" + text + "] " + cursor);
-//            int i = cursor;
-//            while (i > 0 && text.charAt(i - 1) != ' ') {
-//                i--;
-//            }
-//            return i;
-//        }
-//
-//        @Override
-//        public int findTokenEnd(CharSequence text, int cursor) {
-//            Log.d(TAG, "findTokenEnd [" + text + "] " + cursor);
-//            return text.length();
-//        }
-//
-//        @Override
-//        public CharSequence terminateToken(CharSequence text) {
-//            Log.d(TAG, "terminateToken [" + text + "]");
-//            if (text instanceof Spanned) {
-//                SpannableStringBuilder s = new SpannableStringBuilder(text);
-//                s.append(" ");
-//                return s;
-//            }
-//            return text + " ";
-//        }
-//    }
-
     /**
      * Tokenizer to support completion of @user and #hashtag
      */
@@ -452,13 +392,10 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             }
 
             int i = cursor - 1; // start on last character
-
             // move cursor back until a tag prefix is found
             while (i > 0 && !isTagPrefix(text.charAt(i))) {
                 i--;
             }
-
-//            Log.d(TAG, "tokenStart: " + i + " / " + text.charAt(i));
             return i;
         }
 
@@ -468,16 +405,14 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
          */
         @Override
         public int findTokenEnd(CharSequence text, int cursor) {
-            Log.d(TAG, "fte:" + text + "," + cursor);
-
+//            Log.d(TAG, "fte:" + text + "," + cursor);
             for (int i = cursor; i < text.length(); i++) {
                 if (isTagPrefix(text.charAt(i))) {
                     Log.d(TAG, "tokenEnd: " + i + " / " + text.charAt(i));
                     return i;
                 }
             }
-
-            Log.d(TAG, "tokenEnd: " + text.length() + " / " + text.charAt(text.length()));
+//            Log.d(TAG, "tokenEnd: " + text.length() + " / " + text.charAt(text.length()));
             return text.length();
         }
 
@@ -487,14 +422,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
          */
         @Override
         public CharSequence terminateToken(CharSequence text) {
-//            Log.d(TAG, "tto:" + text );
-//            String s = text.toString();
-////        if (s.startsWith("@")) {
-////            return s.substring(0, s.indexOf(',')) + " ";
-////        }
-////        return text + " ";
-//            return s;
-            Log.d(TAG, "terminateToken [" + text + "]");
+//            Log.d(TAG, "terminateToken [" + text + "]");
             if (text instanceof Spanned) {
                 SpannableStringBuilder s = new SpannableStringBuilder(text);
                 s.append(" ");
@@ -516,9 +444,9 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public interface ActionsHandler {
 
-        public void queryHashtag(String query);
+        public void queryHashtag(final String query);
 
-        public void queryMention(String query);
+        public void queryMention(final String query);
     }
 
 }
