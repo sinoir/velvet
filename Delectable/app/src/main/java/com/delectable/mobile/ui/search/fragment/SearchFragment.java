@@ -78,7 +78,7 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         ButterKnife.inject(this, rootView);
 
         mTabLayout.setBackgroundColor(getResources().getColor(R.color.primary));
-        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_white));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.accent));
 
         mViewPager.setAdapter(mTabsAdapter);
         mTabLayout.setViewPager(mViewPager);

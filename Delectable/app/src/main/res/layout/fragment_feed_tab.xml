@@ -19,7 +19,6 @@
             android:paddingTop="?attr/actionBarSize"
             android:clipToPadding="false"
             android:animateLayoutChanges="true"
-            android:background="@color/background"
             android:divider="@null"
             android:headerDividersEnabled="false"
             android:footerDividersEnabled="false"
@@ -46,7 +45,6 @@
                 android:alpha="0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
                 android:padding="@dimen/spacing_32"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -89,7 +87,6 @@
                 android:alpha="0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
                 android:padding="@dimen/spacing_32"
                 android:gravity="center"
                 android:orientation="vertical">
