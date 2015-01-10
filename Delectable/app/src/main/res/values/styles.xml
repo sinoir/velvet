@@ -8,7 +8,8 @@
 
     <style name="Theme.Delectable.Base" parent="@style/Theme.AppCompat.Light.NoActionBar">
     <item name="android:windowContentOverlay">@null</item>
-        <item name="colorPrimary">@color/primary</item>
+        <!-- using big stone as primary color here to get the blue header in recent apps -->
+        <item name="colorPrimary">@color/d_big_stone</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -16,7 +17,7 @@
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">false</item>
-        <item name="color">@color/accentDark</item>
+        <item name="color">@color/title</item>
     </style>
 
     <style name="ToolbarStyle">
@@ -24,20 +25,19 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:layout_gravity">top</item>
-        <!--<item name="android:background">?attr/colorPrimary</item>-->
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/primary</item>
         <item name="android:fitsSystemWindows">false</item>
         <item name="elevation">4dp</item>
         <item name="theme">@style/ToolbarTheme</item>
     </style>
 
     <style name="ToolbarStyle.Floating" parent="@style/ToolbarStyle">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/primary</item>
         <!--<item name="theme">@style/ThemeOverlay.AppCompat</item>-->
     </style>
 
     <style name="ToolbarStyle.Flat" parent="@style/ToolbarStyle">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/primary</item>
         <item name="elevation">0dp</item>
     </style>
 
@@ -51,14 +51,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">left</item>
         <item name="android:textSize">@dimen/abc_text_size_title_material_toolbar</item>
-        <item name="android:textColor">@color/titles</item>
+        <item name="android:textColor">@color/title</item>
         <item name="fontName">whitney_medium</item>
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:textColorPrimary">@color/titles</item>
-        <item name="android:textColorSecondary">@color/accentDark</item>
-        <item name="android:actionMenuTextColor">@color/accentDark</item>
+        <item name="android:textColorPrimary">@color/title</item>
+        <item name="android:textColorSecondary">@color/title</item>
+        <item name="android:actionMenuTextColor">@color/title</item>
     </style>
 
     <style name="ToolbarStyle.Error" parent="ToolbarStyle">
@@ -72,8 +72,8 @@
         <item name="fontName">whitney_medium</item>
     </style>
 
-    <style name="ToolbarStyleText">
-        <item name="android:gravity">center_vertical</item>
+    <style name="ToolbarStyleErrorText">
+    <item name="android:gravity">center_vertical</item>
         <item name="android:drawableLeft">@drawable/ic_alert</item>
         <item name="android:drawablePadding">20dp</item>
         <item name="android:textSize">16sp</item>
@@ -192,7 +192,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textColor">@color/d_white</item>
+        <item name="android:textColor">@color/title</item>
         <item name="android:textSize">@dimen/profile_counts_text_size</item>
         <item name="fontName">whitney_book</item>
     </style>

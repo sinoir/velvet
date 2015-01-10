@@ -10,6 +10,7 @@
     <color name="d_big_stone_dark">#243847</color>
     <color name="d_suva_gray">#94938f</color>
     <color name="d_edward">#a3a7a6</color>
+    <color name="d_edward_dark">#7a7d7c</color>
     <color name="d_soft_amber">#dbc5b0</color>
     <color name="d_dutch_white">#f8dfc2</color>
     <color name="d_antique_white">#f9ebdf</color>
@@ -20,15 +21,15 @@
 
     <!-- Primary -->
     <color name="transparent">#00000000</color>
-    <color name="nav_selector">@color/d_black_30op</color>
-    <color name="primary">@color/d_big_stone</color>
-    <color name="primaryDark">@color/d_big_stone_dark</color>
+    <color name="nav_selector">@color/d_big_stone_dark</color>
+    <color name="primary">@color/d_white</color>
+    <color name="primaryDark">@color/d_edward</color>
     <color name="accent">@color/d_chestnut</color>
-    <color name="accentDark">@color/d_black_60op</color>
-    <color name="titles">@color/d_white</color>
+    <color name="title">@color/d_edward_dark</color>
+    <color name="titleSecondary">@color/d_edward</color>
     <color name="toolbar_bg_gradient">#99000000</color>
-    <color name="feed_background">#E8E8E8</color>
-    <color name="overlayed_status_bar">#324E63</color>
+    <color name="background">#e6e6e6</color>
+    <color name="overlayed_status_bar">#d1d3d2</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>
@@ -64,9 +65,8 @@
     <color name="d_blue_twitter_tab">#55ACEE</color>
 
     <!-- Transparent Whites -->
-    <!-- 20% opacity -->
     <color name="d_white_20op">#33FFFFFF</color>
-    <!-- 80% opacity -->
+    <color name="d_white_60op">#96FFFFFF</color>
     <color name="d_white_80op">#CCFFFFFF</color>
 
     <!-- Transparent Blacks -->
