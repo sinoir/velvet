@@ -3,11 +3,12 @@ package com.delectable.mobile.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
-public class CaptureCommentAttributes implements Parcelable {
+public class CaptureCommentAttributes implements Parcelable, Serializable {
 
     public static final String TYPE_HASHTAG = "hashtag";
 
@@ -58,6 +59,10 @@ public class CaptureCommentAttributes implements Parcelable {
     }
 
     public String getLink() {
+        if (link == null) {
+            return null;
+        }
+
         try {
             return URLDecoder.decode(link, "UTF-8");
         } catch (UnsupportedEncodingException e) {

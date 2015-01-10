@@ -304,18 +304,20 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         if (requestCode == REQUEST_RATE_COMMENT_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
                 String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                ArrayList<CaptureCommentAttributes> commentAttributes = data
+                        .getParcelableArrayListExtra(
+                                CaptureCommentRateFragment.DATA_COMMENT_ATTRIBUTES);
                 int rating = data.getIntExtra(CaptureCommentRateFragment.DATA_RATING, -1);
                 Log.i(TAG, "Request Data Comment Text: " + commentText);
                 Log.i(TAG, "Request Data Rating: " + rating);
                 sendRating(mTempCaptureForAction, rating);
                 if (mTempUserComment != null && mTempUserComment.getId() != null) {
                     mTempUserComment.setComment(commentText);
+                    mTempUserComment.setCommentAttributes(commentAttributes);
                     editComment(mTempCaptureForAction, mTempUserComment,
                             mTempUserComment.getCommentAttributes());
                     dataSetChanged();
                 } else {
-                    ArrayList<CaptureCommentAttributes> commentAttributes = data
-                            .getParcelableArrayListExtra(CaptureCommentRateFragment.DATA_COMMENT);
                     sendComment(mTempCaptureForAction, commentText, commentAttributes);
                 }
             }

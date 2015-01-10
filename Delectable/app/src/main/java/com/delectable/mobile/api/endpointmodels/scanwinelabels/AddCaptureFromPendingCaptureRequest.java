@@ -1,11 +1,13 @@
 package com.delectable.mobile.api.endpointmodels.scanwinelabels;
 
-import com.delectable.mobile.api.endpointmodels.BaseRequest;
 import com.google.gson.annotations.SerializedName;
 
+import com.delectable.mobile.api.endpointmodels.BaseRequest;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.TaggeeContact;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements Serializable {
@@ -40,6 +42,10 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
 
     public void setNote(String note) {
         this.payload.note = note;
+    }
+
+    public void setCommentAttributes(ArrayList<CaptureCommentAttributes> comment_attributes) {
+        this.payload.comment_attributes = comment_attributes;
     }
 
     public void setShareTw(Boolean share_tw) {
@@ -86,6 +92,8 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
 
         private String note;
 
+        private ArrayList<CaptureCommentAttributes> comment_attributes;
+
         private boolean share_tw;
 
         private String user_tw; // Only required if share_tw it True
@@ -102,13 +110,15 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
         }
 
         public Payload(String pending_capture_id, boolean private_, int rating, String note,
-                boolean share_tw, String user_tw, boolean share_fb, String user_country_code,
+                ArrayList<CaptureCommentAttributes> comment_attributes, boolean share_tw,
+                String user_tw, boolean share_fb, String user_country_code,
                 String foursquare_location_id,
                 List<TaggeeContact> taggees) {
             this.pending_capture_id = pending_capture_id;
             this.private_ = private_;
             this.rating = rating;
             this.note = note;
+            this.comment_attributes = comment_attributes;
             this.share_tw = share_tw;
             this.user_tw = user_tw;
             this.share_fb = share_fb;
@@ -124,6 +134,7 @@ public class AddCaptureFromPendingCaptureRequest extends BaseRequest implements 
                     ", private_=" + private_ +
                     ", rating=" + rating +
                     ", note='" + note + '\'' +
+                    ", comment_attributes='" + comment_attributes + '\'' +
                     ", share_tw=" + share_tw +
                     ", user_tw='" + user_tw + '\'' +
                     ", share_fb=" + share_fb +

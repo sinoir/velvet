@@ -11,6 +11,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.ChipsMultiAutoCompleteTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
+import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -46,17 +47,6 @@ public class CaptureCommentRateFragment extends BaseFragment implements
     public static final String DATA_COMMENT_ATTRIBUTES = "DATA_COMMENT_ATTRIBUTES";
 
     public static final String DATA_RATING = "DATA_RATING";
-
-    public static final int HASHTAG_SEARCH_LIMIT = 15;
-
-    public static final int MENTION_SEARCH_LIMIT = 20;
-
-    /**
-     * Time how long queries are being held up before the last one in is executed. Yields at most
-     * one executed query every QUERY_DELAY_MS.
-     */
-    public static final int QUERY_DELAY_MS = 500;
-
 
     @Inject
     public HashtagController mHashtagController;
@@ -228,27 +218,12 @@ public class CaptureCommentRateFragment extends BaseFragment implements
     @OnClick(R.id.post_button)
     public void postData() {
         Intent data = new Intent();
-        Editable comment = mCommentEditText.getText();
-        mCommentAttributes = new ArrayList<>();
-        // TODO scan comment for #hashtags and account for them (non-auto-completed tags that is)
-        ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = mCommentEditText.getSpans();
-        if (!spans.isEmpty()) {
-            for (ChipsMultiAutoCompleteTextView.ChipSpan span : spans) {
-                int spanStart = comment.getSpanStart(span);
-                int spanEnd = comment.getSpanEnd(span);
-                // replace single character in comment text with replacement span text
-                comment.replace(spanStart, spanEnd, span.getReplacedText());
-//                Log.d(TAG, "postData: spanStart=" + spanStart + ", spanEnd=" + spanEnd + ", replacedText='" + span.getReplacedText() + "', spanId=" + span.getId() + "\ncomment='" + comment.toString() + "'\n");
-                // generate comment attributes
-                mCommentAttributes.add(new CaptureCommentAttributes(
-                        span.getId(),
-                        span.getType(),
-                        spanStart,
-                        span.getReplacedText().length()));
-            }
-        }
-        Log.d(TAG, "comment_attributes=" + mCommentAttributes.toString());
-        data.putExtra(DATA_COMMENT, comment.toString().trim());
+        mCommentAttributes = RateCaptureFragment
+                .getCommentAttributesFromAutoCompleteTextView(mCommentEditText);
+        Log.d(TAG,
+                "comment_attributes=" + (mCommentAttributes != null ? mCommentAttributes.toString()
+                        : "null"));
+        data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString().trim());
         data.putExtra(DATA_COMMENT_ATTRIBUTES, mCommentAttributes);
         data.putExtra(DATA_RATING, mRating);
         getActivity().setResult(Activity.RESULT_OK, data);
@@ -256,8 +231,9 @@ public class CaptureCommentRateFragment extends BaseFragment implements
     }
 
     private boolean emptyFieldExists() {
-//        Log.d(TAG, "Edit Text: " + mCommentEditText.getText());
-        if (mCommentEditText.getText().toString().trim().equals("")) {
+        if (mCommentEditText.getText() != null
+                && mCommentEditText.getText().toString() != null
+                && mCommentEditText.getText().toString().trim().isEmpty()) {
             return true;
         }
         if (mNumericRatingSeekBar.getRatingSeekBar().getProgress() == -1) {
@@ -271,7 +247,8 @@ public class CaptureCommentRateFragment extends BaseFragment implements
         queryDelayed(new Runnable() {
             @Override
             public void run() {
-                mHashtagController.searchHashtags(query, 0, HASHTAG_SEARCH_LIMIT);
+                mHashtagController
+                        .searchHashtags(query, 0, RateCaptureFragment.HASHTAG_SEARCH_LIMIT);
             }
         });
     }
@@ -282,7 +259,8 @@ public class CaptureCommentRateFragment extends BaseFragment implements
             @Override
             public void run() {
                 // FIXME pass capture id
-                mAccountController.searchAccountsContextually(query, 0, MENTION_SEARCH_LIMIT, null);
+                mAccountController.searchAccountsContextually(query, 0,
+                        RateCaptureFragment.MENTION_SEARCH_LIMIT, null);
             }
         });
     }
@@ -291,7 +269,7 @@ public class CaptureCommentRateFragment extends BaseFragment implements
         // clear queued up queries and submit a new one
         mQueryHandler.removeCallbacks(mQueryTask);
         mQueryTask = runnable;
-        mQueryHandler.postDelayed(runnable, QUERY_DELAY_MS);
+        mQueryHandler.postDelayed(runnable, RateCaptureFragment.QUERY_DELAY_MS);
     }
 
     public void onEventMainThread(SearchHashtagsEvent event) {

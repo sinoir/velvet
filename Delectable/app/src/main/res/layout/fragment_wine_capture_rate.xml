@@ -12,14 +12,13 @@
         android:layout_height="wrap_content">
 
         <!-- Comment And Rating -->
-
-        <com.delectable.mobile.ui.common.widget.FontEditText
+        <com.delectable.mobile.ui.common.widget.ChipsMultiAutoCompleteTextView
             android:id="@+id/comment_edit_text"
             style="@style/CommentEditText"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/capture_submit_margins"
+            android:layout_margin="@dimen/spacing_16"
             android:layout_marginBottom="20dp"
             android:gravity="top"
             android:hint="@string/capture_submit_leave_comment_hint" />
