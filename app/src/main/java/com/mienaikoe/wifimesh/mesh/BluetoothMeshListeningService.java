@@ -20,8 +20,10 @@ public class BluetoothMeshListeningService extends BluetoothMeshService {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     advertisers.put(device.getAddress(), device);
+                    // Crap.. scan record is a byte array?
                     broadcastUpdate();
                 }
+
             };
 
 

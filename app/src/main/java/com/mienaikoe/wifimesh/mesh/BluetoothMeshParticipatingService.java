@@ -1,5 +1,9 @@
 package com.mienaikoe.wifimesh.mesh;
 
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
@@ -9,9 +13,13 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.os.ParcelUuid;
 import android.util.Log;
 
+import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 // Fit for Android APIs 5+
@@ -22,9 +30,10 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
 
     private AdvertiseSettings advertiseSettings;
     private AdvertiseData advertiseData;
+    private Context context = this;
 
-
-
+    private static UUID VELVET_SERVICE_UUID = new UUID(0x92FA46, 0x92FA46); // Make something up? I have no clue
+    private static ParcelUuid VELVET_SERVICE_UUID_PARCEL = new ParcelUuid(VELVET_SERVICE_UUID);
 
 
 
@@ -51,7 +60,28 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             advertisers.put(result.getDevice().getAddress(), result.getDevice());
-            //result.getDevice().connectGatt(this, false, gattCallback);
+
+            // We're kind of getting into a different realm here. Consider using a different class
+            byte[] scanTimestamp = result.getScanRecord().getServiceData(VELVET_SERVICE_UUID_PARCEL);
+            // scanTimestamp will be a timestamp for the most up-to-date information the phone has.
+            if( scanTimestamp.length < 4 ){
+                Log.e(this.getClass().getSimpleName(), "Scan shows an invalid timestamp for device: "+result.getDevice().getName());
+                return;
+            }
+            ByteBuffer timestampBuffer = ByteBuffer.allocate(Long.SIZE).put(scanTimestamp);
+            timestampBuffer.flip();
+            long timestamp = timestampBuffer.getLong();
+            // TODO: if scanTimestamp is more up-to-date than the current information, ask phone for info from GATT and then become an advertiser yourself. This is the majority case.
+            // TODO: if scanTimestamp is less up-to-date than the current information, become an advertiser for your info. This should be rare.
+            // TODO: if scanTimestamp is equal date than the current information, do nothing because that means you're both good to go.
+
+            /*
+            // For connecting with GATT in order to have a continuous conversation
+            BluetoothGatt gatt = result.getDevice().connectGatt(context, false, gattCallback);
+            BluetoothGattService gattService = gatt.getService(VELVET_SERVICE_UUID);
+            BluetoothGattCharacteristic gattCharac = gattService.getCharacteristic(VELVET_SERVICE_UUID);
+            */
+
             broadcastUpdate();
         }
 
@@ -80,6 +110,8 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
         AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
         dataBuilder.setIncludeDeviceName(true);
         dataBuilder.setIncludeTxPowerLevel(false);
+        dataBuilder.addServiceUuid(VELVET_SERVICE_UUID_PARCEL);
+        dataBuilder.addServiceData(VELVET_SERVICE_UUID_PARCEL, ByteBuffer.allocate(Long.SIZE).putLong(new Date().getTime()).array() );
         this.advertiseData = dataBuilder.build();
     }
 
