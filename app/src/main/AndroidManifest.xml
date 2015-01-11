@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mienaikoe.wifimesh" >
 
-    <uses-sdk android:minSdkVersion="21" />
+    <uses-sdk android:minSdkVersion="19" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -10,7 +10,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
 
     <android:uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -38,12 +40,12 @@
         </activity>
 
         <service
-            android:name=".mesh.MeshService"
+            android:name="com.mienaikoe.wifimesh.mesh.BluetoothMeshListeningService"
             android:enabled="true"
             android:exported="true" >
         </service>
         <service
-            android:name=".mesh.BluetoothMeshService"
+            android:name="com.mienaikoe.wifimesh.mesh.BluetoothMeshParticipatingService"
             android:enabled="true"
             android:exported="true" >
         </service>
