@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/wine_profile_ratings_all_years_container_height"
         android:layout_below="@id/wine_banner_view"
+        android:background="@color/d_white"
         android:visibility="gone"
         android:paddingLeft="@dimen/general_row_horizontal_spacing"
         android:paddingRight="@dimen/general_row_horizontal_spacing">
