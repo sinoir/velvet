@@ -354,7 +354,7 @@ public class RateCaptureFragment extends BaseFragment
         String comment = null;
         if (mCommentEditText.length() > 0) {
             request.setCommentAttributes(
-                    mCommentEditText.getCommentAttributesFromAutoCompleteTextView());
+                    mCommentEditText.getCommentAttributes());
             comment = mCommentEditText.getText().toString();
             request.setNote(comment);
         }

@@ -34,6 +34,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         implements MenuItem.OnMenuItemClickListener {
@@ -44,6 +46,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public static final char SYMBOL_MENTION = '@';
 
+    public static final char SYMBOL_WHITESPACE = ' ';
+
     /**
      * Start auto-complete after this many characters typed
      */
@@ -52,6 +56,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     private ActionsHandler mActionsHandler;
 
     private Tokenizer mTokenizer;
+
+    private static Pattern sHashtagPattern = Pattern.compile("#\\w+");
 
     private Filter mFilter = new Filter() {
         @Override
@@ -226,6 +232,10 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         } else if (SYMBOL_MENTION == getText().charAt(start)) {
             setAdapter(mMentionAdapter);
             return true;
+        } else if (getAdapter() == mHashtagAdapter && SYMBOL_WHITESPACE == getText()
+                .charAt(start)) {
+            setAdapter(null); // stop hashtag auto complete after a whitespace
+            return true;
         } else if (end - start >= getThreshold()) {
             setAdapter(null);
             return true;
@@ -251,16 +261,32 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     }
 
     /**
-     * Replaces the text of the EditText (@see EditText#getText()) with the the tags and mentions
-     * aquired from the spans. After calling this, autoCompleteTextView.getText() will return the
+     * Replaces the text of the EditText (@see EditText#getText()) with the tags and mentions
+     * aquired from the spans. After calling this, getText() will return the
      * human readable comment text.
      *
      * @return the list of CaptureCommentAttributes parsed from the autoCompleteTextView
      */
-    public ArrayList<CaptureCommentAttributes> getCommentAttributesFromAutoCompleteTextView() {
+    public ArrayList<CaptureCommentAttributes> getCommentAttributes() {
         ArrayList<CaptureCommentAttributes> commentAttributes = new ArrayList<>();
         Editable comment = getText();
-        // TODO scan comment for #hashtags and account for them (non-auto-completed tags that is)
+
+        // parse comment for new #hashtags (non-auto-completed hashtags that is)
+        String commentString = comment.toString();
+        Matcher matcher = sHashtagPattern.matcher(commentString);
+        while (matcher.find()) {
+            int spanStart = matcher.start();
+            int spanEnd = matcher.end();
+            commentAttributes.add(new CaptureCommentAttributes(
+                    commentString.substring(spanStart + 1, spanEnd),
+                    // id is hashtag without the # symbol
+                    CaptureCommentAttributes.TYPE_HASHTAG,
+                    spanStart,
+                    spanEnd - spanStart
+            ));
+        }
+
+        // get tags and mentions from auto complete results
         ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = getSpans();
         if (!spans.isEmpty()) {
             for (ChipsMultiAutoCompleteTextView.ChipSpan span : spans) {
