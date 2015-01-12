@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
+            android:paddingBottom="@dimen/spacing_8"
             android:clipToPadding="false"
             android:animateLayoutChanges="true"
             android:divider="@null"

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -18,7 +19,7 @@ import android.view.animation.OvershootInterpolator;
  */
 public class Animate {
 
-    public static final int SHORT = 200;
+    public static final int SHORT = 250;
 
     public static final int MEDIUM = 400;
 
@@ -29,7 +30,7 @@ public class Animate {
                     App.getInstance().getResources().getDisplayMetrics());
 
     public static final int TRANSLATION_SMALL = (int) TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42,
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                     App.getInstance().getResources().getDisplayMetrics());
 
     public static final float ELEVATION = TypedValue
@@ -39,6 +40,9 @@ public class Animate {
     private static final Interpolator ACCELERATE = new AccelerateInterpolator();
 
     private static final Interpolator DECELERATE = new DecelerateInterpolator();
+
+    private static final Interpolator ACCELERATE_DECELERATE
+            = new AccelerateDecelerateInterpolator();
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
 
@@ -176,6 +180,73 @@ public class Animate {
                         view.setVisibility(View.GONE);
                     }
                 })
+                .start();
+    }
+
+    public static void fadeInVertical(final View view) {
+        fadeTranslateIn(view, 0, TRANSLATION_SMALL, 0);
+    }
+
+    public static void fadeInVertical(final View view, long startDelay) {
+        fadeTranslateIn(view, 0, TRANSLATION_SMALL, startDelay);
+    }
+
+    public static void fadeInHorizontal(final View view) {
+        fadeTranslateIn(view, TRANSLATION_SMALL, 0, 0);
+    }
+
+    public static void fadeInHorizontal(final View view, long startDelay) {
+        fadeTranslateIn(view, TRANSLATION_SMALL, 0, startDelay);
+    }
+
+    public static void fadeTranslateIn(final View view, int translationX, int translationY,
+            long startDelay) {
+        view.setTranslationX(translationX);
+        view.setTranslationY(translationY);
+        view.setVisibility(View.VISIBLE);
+        view.animate()
+                .alpha(1)
+                .translationX(0)
+                .translationY(0)
+                .setDuration(SHORT)
+                .setStartDelay(startDelay)
+                .setInterpolator(DECELERATE)
+                .setListener(null)
+                .start();
+    }
+
+    public static void fadeOutVertical(final View view) {
+        fadeTranslateOut(view, 0, TRANSLATION_SMALL, 0);
+    }
+
+    public static void fadeOutVertical(final View view, long startDelay) {
+        fadeTranslateOut(view, 0, TRANSLATION_SMALL, startDelay);
+    }
+
+    public static void fadeOutHorizontal(final View view) {
+        fadeTranslateOut(view, TRANSLATION_SMALL, 0, 0);
+    }
+
+    public static void fadeOutHorizontal(final View view, long startDelay) {
+        fadeTranslateOut(view, TRANSLATION_SMALL, 0, startDelay);
+    }
+
+    public static void fadeTranslateOut(final View view, int translationX, int translationY,
+            long startDelay) {
+        view.animate()
+                .alpha(0)
+                .translationX(translationX)
+                .translationY(translationY)
+                .setDuration(SHORT)
+                .setStartDelay(startDelay)
+                .setInterpolator(DECELERATE)
+                .setListener(null)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        view.setVisibility(View.INVISIBLE);
+//                    }
+//                })
                 .start();
     }
 

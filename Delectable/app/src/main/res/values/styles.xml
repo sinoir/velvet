@@ -102,6 +102,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:dividerHeight">0.5dp</item>
         <item name="android:divider">@color/d_light_gray</item>
+        <item name="android:background">@color/background</item>
         <!--<item name="android:listSelector">@color/transparent</item>-->
     </style>
 
@@ -135,8 +136,8 @@
     </style>
 
     <style name="CardViewStyle" parent="CardView.Light">
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="cardCornerRadius">5dp</item>

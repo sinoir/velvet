@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <com.delectable.mobile.ui.capture.widget.CaptureDetailsView
+        <com.delectable.mobile.ui.capture.widget.CaptureDetailsView
             android:id="@+id/capture_details_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </android.support.v7.widget.CardView>
+
 </FrameLayout>

@@ -256,7 +256,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ViewCompat.setElevation(mContainerView, TypedValue
-                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                             getResources().getDisplayMetrics()));
         } else {
             mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);

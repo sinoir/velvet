@@ -22,7 +22,7 @@
     <item android:state_enabled="false">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
             <corners android:radius="@dimen/signup_in_done_button_corner_radius" />
-            <solid android:color="@color/d_gray_disabled_done_button" />
+            <solid android:color="@color/titleSecondary" />
         </shape>
     </item>
     <item>

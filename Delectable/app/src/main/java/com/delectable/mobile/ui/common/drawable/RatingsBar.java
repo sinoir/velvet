@@ -2,7 +2,6 @@ package com.delectable.mobile.ui.common.drawable;
 
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.common.widget.Rating;
-import com.delectable.mobile.util.ColorsUtil;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -39,17 +38,16 @@ public class RatingsBar extends Drawable {
         mPercent = 0.0f;
         mCornerRadius = 2.0f;
 
-        int lightGray = mContext.getResources().getColor(R.color.d_light_gray);
         mDefaultBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mDefaultBarPaint.setColor(lightGray);
+        mDefaultBarPaint.setColor(Color.WHITE);
         mDefaultBarPaint.setStyle(Paint.Style.FILL);
 
         mColorOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mColorOverlayPaint.setColor(lightGray); //doesn't really matter what this is set to
+        mColorOverlayPaint.setColor(Color.WHITE); //doesn't really matter what this is set to
         mColorOverlayPaint.setStyle(Paint.Style.FILL);
 
         mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mDividerPaint.setColor(Color.WHITE);
+        mDividerPaint.setColor(context.getResources().getColor(R.color.background));
         mDividerPaint.setStyle(Paint.Style.STROKE);
         mDividerPaint.setStrokeWidth(2.0f);
     }

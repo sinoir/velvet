@@ -57,8 +57,6 @@
     <color name="d_rating_ok">#C5C4AF</color>
     <color name="d_rating_bad">#DBC5B0</color>
 
-    <color name="d_gray_disabled_done_button">#D2D2D2</color>
-
     <!-- Follow Friends Tabs-->
     <color name="d_red_experts_tab">@color/d_chestnut</color>
     <color name="d_yellow_contacts_tab">#F5A628</color>
