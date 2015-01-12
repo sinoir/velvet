@@ -56,7 +56,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     private Filter mFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            if (constraint == null || (constraint != null && (constraint.length() < 2))) {
+            if (constraint == null || constraint.length() < 2) {
                 return null;
             }
 
@@ -121,7 +121,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         setTokenizer(mTokenizer);
         setThreshold(AUTO_COMPLETE_THRESHOLD);
         setMovementMethod(new ChipsArrowKeyMovementMethod());
-        setAdapter(mHashtagAdapter);
+        setAdapter(null);
     }
 
     public void setActionsHandler(ActionsHandler handler) {
@@ -186,6 +186,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     @Override
     protected CharSequence convertSelectionToString(Object selectedItem) {
         if (!mIsDropdownShown) {
+            setAdapter(null); // tag completed, stop queries until new tag begins
             SearchHit hit = (SearchHit) selectedItem;
             ChipSpan span = null;
             if (hit.getObject() instanceof HashtagResult) {
@@ -247,6 +248,36 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     public ArrayList<ChipSpan> getSpans() {
         ChipSpan[] chips = getText().getSpans(0, getText().length(), ChipSpan.class);
         return new ArrayList<>(Arrays.asList(chips));
+    }
+
+    /**
+     * Replaces the text of the EditText (@see EditText#getText()) with the the tags and mentions
+     * aquired from the spans. After calling this, autoCompleteTextView.getText() will return the
+     * human readable comment text.
+     *
+     * @return the list of CaptureCommentAttributes parsed from the autoCompleteTextView
+     */
+    public ArrayList<CaptureCommentAttributes> getCommentAttributesFromAutoCompleteTextView() {
+        ArrayList<CaptureCommentAttributes> commentAttributes = new ArrayList<>();
+        Editable comment = getText();
+        // TODO scan comment for #hashtags and account for them (non-auto-completed tags that is)
+        ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = getSpans();
+        if (!spans.isEmpty()) {
+            for (ChipsMultiAutoCompleteTextView.ChipSpan span : spans) {
+                int spanStart = comment.getSpanStart(span);
+                int spanEnd = comment.getSpanEnd(span);
+                // replace single character in comment text with replacement span text
+                comment.replace(spanStart, spanEnd, span.getReplacedText());
+//                Log.d(TAG, "postData: spanStart=" + spanStart + ", spanEnd=" + spanEnd + ", replacedText='" + span.getReplacedText() + "', spanId=" + span.getId() + "\ncomment='" + comment.toString() + "'\n");
+                // generate comment attributes
+                commentAttributes.add(new CaptureCommentAttributes(
+                        span.getId(),
+                        span.getType(),
+                        spanStart,
+                        span.getReplacedText().length()));
+            }
+        }
+        return commentAttributes.isEmpty() ? null : commentAttributes;
     }
 
     public static boolean isTagPrefix(char c) {

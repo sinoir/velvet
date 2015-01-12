@@ -142,7 +142,7 @@ public class WineProfileInstantFragment extends WineProfileFragment {
 
     private void handleEventErrorMessage(BaseEvent event) {
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
-            showToastError(R.string.error_capture_wine_no_network);
+            showToastError(R.string.error_capture_no_network);
         } else {
             showToastError(event.getErrorMessage());
         }

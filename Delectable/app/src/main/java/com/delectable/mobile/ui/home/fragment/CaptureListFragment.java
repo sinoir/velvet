@@ -178,14 +178,15 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         mRefreshContainer.setColorSchemeResources(R.color.accent);
 
         // account for toolbar and tabbar height on embedded feed lists
+        int paddingTop = 0;
         if (!CaptureFeed.CUSTOM.equals(mListType)) {
-            int paddingTop = mListView.getPaddingTop() + getResources()
+            paddingTop = mListView.getPaddingTop() + getResources()
                     .getDimensionPixelSize(R.dimen.tab_height);
             mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
                     mListView.getPaddingTop() * 3);
-            mListView.setPadding(mListView.getPaddingLeft(), paddingTop,
-                    mListView.getPaddingRight(), mListView.getPaddingBottom());
         }
+        mListView.setPadding(mListView.getPaddingLeft(), paddingTop,
+                mListView.getPaddingRight(), mListView.getPaddingBottom());
 
         // list banner
         if (mBanner != null && !mBanner.isEmpty()) {

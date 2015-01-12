@@ -12,7 +12,6 @@ import com.delectable.mobile.api.events.accounts.SearchAccountsEvent;
 import com.delectable.mobile.api.events.hashtags.SearchHashtagsEvent;
 import com.delectable.mobile.api.events.scanwinelabel.AddedCaptureFromPendingCaptureEvent;
 import com.delectable.mobile.api.models.Account;
-import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.PendingCapture;
 import com.delectable.mobile.api.models.TaggeeContact;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -42,7 +41,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SwitchCompat;
-import android.text.Editable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -355,8 +353,8 @@ public class RateCaptureFragment extends BaseFragment
 
         String comment = null;
         if (mCommentEditText.length() > 0) {
-            request.setCommentAttributes(getCommentAttributesFromAutoCompleteTextView(
-                    mCommentEditText));
+            request.setCommentAttributes(
+                    mCommentEditText.getCommentAttributesFromAutoCompleteTextView());
             comment = mCommentEditText.getText().toString();
             request.setNote(comment);
         }
@@ -382,37 +380,6 @@ public class RateCaptureFragment extends BaseFragment
         }
 
         // TODO: Add Coordinates ?
-    }
-
-    /**
-     * Replaces the text of the EditText (@see EditText#getText()) with the the tags and mentions
-     * aquired from the spans. After calling this, autoCompleteTextView.getText() will return the
-     * human readable comment text.
-     *
-     * @return the list of CaptureCommentAttributes parsed from the autoCompleteTextView
-     */
-    public static ArrayList<CaptureCommentAttributes> getCommentAttributesFromAutoCompleteTextView(
-            ChipsMultiAutoCompleteTextView autoCompleteTextView) {
-        ArrayList<CaptureCommentAttributes> commentAttributes = new ArrayList<>();
-        Editable comment = autoCompleteTextView.getText();
-        // TODO scan comment for #hashtags and account for them (non-auto-completed tags that is)
-        ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = autoCompleteTextView.getSpans();
-        if (!spans.isEmpty()) {
-            for (ChipsMultiAutoCompleteTextView.ChipSpan span : spans) {
-                int spanStart = comment.getSpanStart(span);
-                int spanEnd = comment.getSpanEnd(span);
-                // replace single character in comment text with replacement span text
-                comment.replace(spanStart, spanEnd, span.getReplacedText());
-//                Log.d(TAG, "postData: spanStart=" + spanStart + ", spanEnd=" + spanEnd + ", replacedText='" + span.getReplacedText() + "', spanId=" + span.getId() + "\ncomment='" + comment.toString() + "'\n");
-                // generate comment attributes
-                commentAttributes.add(new CaptureCommentAttributes(
-                        span.getId(),
-                        span.getType(),
-                        spanStart,
-                        span.getReplacedText().length()));
-            }
-        }
-        return commentAttributes.isEmpty() ? null : commentAttributes;
     }
 
     public void onEventMainThread(AddedCaptureFromPendingCaptureEvent event) {
@@ -443,7 +410,7 @@ public class RateCaptureFragment extends BaseFragment
     private void handleEventErrorMessage(BaseEvent event) {
         mRateButton.setEnabled(true);
         if (event.getErrorCode() == ErrorUtil.NO_NETWORK_ERROR) {
-            showToastError(R.string.error_capture_wine_no_network);
+            showToastError(R.string.error_capture_no_network);
         } else {
             showToastError(event.getErrorMessage());
         }

@@ -218,8 +218,7 @@ public class CaptureCommentRateFragment extends BaseFragment implements
     @OnClick(R.id.post_button)
     public void postData() {
         Intent data = new Intent();
-        mCommentAttributes = RateCaptureFragment
-                .getCommentAttributesFromAutoCompleteTextView(mCommentEditText);
+        mCommentAttributes = mCommentEditText.getCommentAttributesFromAutoCompleteTextView();
         Log.d(TAG,
                 "comment_attributes=" + (mCommentAttributes != null ? mCommentAttributes.toString()
                         : "null"));
