@@ -213,8 +213,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
      */
     public void setUp(DrawerLayout drawerLayout) {
         mDrawerLayout = drawerLayout;
-        mDrawerLayout
-                .setStatusBarBackgroundColor(getResources().getColor(R.color.overlayed_status_bar));
+//        mDrawerLayout
+//                .setStatusBarBackgroundColor(getResources().getColor(R.color.overlayed_status_bar));
         mContainerView = getActivity().findViewById(R.id.drawer_container);
 
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -256,7 +256,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ViewCompat.setElevation(mContainerView, TypedValue
-                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
                             getResources().getDisplayMetrics()));
         } else {
             mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);

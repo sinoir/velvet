@@ -27,8 +27,9 @@
     <color name="accent">@color/d_chestnut</color>
     <color name="title">@color/d_edward_dark</color>
     <color name="titleSecondary">@color/d_edward</color>
-    <color name="toolbar_bg_gradient">#99000000</color>
-    <color name="background">#e6e6e6</color>
+    <!--<color name="toolbar_bg_gradient">#99000000</color>-->
+    <color name="background">#e8e8e8</color>
+    <!--<color name="background">#f2f2f2</color>-->
     <color name="overlayed_status_bar">#999999</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
@@ -72,5 +73,6 @@
     <!-- Transparent Blacks -->
     <color name="d_black_10op">#1A000000</color>
     <color name="d_black_30op">#4D000000</color>
-    <color name="d_black_60op">#96000000</color>
+    <color name="d_black_40op">#66000000</color>
+    <color name="d_black_60op">#99000000</color>
 </resources>
