@@ -34,7 +34,7 @@
     <string name="error_no_email_client">There is no email client installed</string>
     <string name="error_sms_failed">SMS failed</string>
 
-    <string name="error_capture_wine_no_network">Failed to Capture Wine.  Please make sure you are connected to the internet.</string>
+    <string name="error_capture_no_network">Failed to capture.  Please make sure you are connected to the internet.</string>
 
     <!-- Version Upgrade Dialog-->
     <string name="version_upgrade_your_app_out_of_date">Your app is out of date, download the new one!</string>
@@ -189,16 +189,16 @@
 
     <!-- Capture Feed -->
     <plurals name="cap_feed_tagged_count">
-        <item quantity="one">%1$d person shared this wine with %2$s</item>
-        <item quantity="other">%1$d people shared this wine with %2$s</item>
+        <item quantity="one">%1$d person shared this with %2$s</item>
+        <item quantity="other">%1$d people shared this with %2$s</item>
     </plurals>
     <plurals name="cap_feed_likes_count">
         <item quantity="one">1 like</item>
         <item quantity="other">%d likes</item>
     </plurals>
     <plurals name="cap_feed_likes_text">
-        <item quantity="one">1 person likes this wine</item>
-        <item quantity="other">%d people like this wine</item>
+        <item quantity="one">1 person likes this</item>
+        <item quantity="other">%d people like this</item>
     </plurals>
     <string name="cap_feed_divider">•</string>
     <plurals name="cap_feed_comments_count">
@@ -206,7 +206,6 @@
         <item quantity="other">%d comments</item>
     </plurals>
     <string name="cap_feed_add_rating">Tap to add your rating</string>
-    <string name="cap_feed_add_rating_and_comment">Rate, comment and share this wine</string>
     <string name="cap_feed_add_your_rating">Add your rating</string>
     <string name="cap_feed_at_location">at %s</string>
     <string name="cap_feed_at_location_time">— at %1$s %2$s</string>
@@ -227,11 +226,11 @@
 
     <!-- Capture Overflow Menu -->
     <string name="cap_action_recommend">Recommend</string>
-    <string name="cap_action_recommend_text">You might like this wine! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
+    <string name="cap_action_recommend_text">You might like this! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
     <string name="cap_action_edit">Edit rating</string>
-    <string name="cap_action_flag">Report incorrect wine</string>
+    <string name="cap_action_flag">Flag as incorrect</string>
     <string name="cap_action_remove">Remove</string>
-    <string name="capture_report">Do you want to report this wine as incorrect?</string>
+    <string name="capture_report">Do you want to report this capture as incorrect?</string>
 
     <!-- Capture Comment/Rating Dialog -->
     <string name="dialog_comment_text_hint">Write a comment</string>
@@ -275,7 +274,7 @@
     </plurals>
 
     <!-- Wine Capture Flow Screens-->
-    <string name="capture_instant_failed">Looks like a tricky one! A wine expert from Delectable will try to identify this wine manually and add it to your profile.</string>
+    <string name="capture_instant_failed">Looks like a tricky one! A wine expert from Delectable will try to identify this capture manually and add it to your profile.</string>
     <string name="capture_submit_title">Comment &amp; Rate</string>
     <string name="capture_submit_leave_comment_hint">Write a comment or tasting note...</string>
     <string name="capture_submit_drinking_where_text">Where are you drinking?</string>
@@ -286,8 +285,8 @@
     <string name="capture_edit_base_wine_title">Choose the correct wine</string>
     <string name="capture_edit_base_wine_report">Not the right wine?\nRequest expert review!</string>
     <string name="capture_edit_base_wine_report_confirm">An expert will correct your wine shortly!</string>
-    <string name="capture_camera_fill_frame_label">Fill frame with wine label</string>
-    <string name="capture_camera_hint_label_legible">Is the wine label legible?</string>
+    <string name="capture_camera_fill_frame_label">Fill frame with label</string>
+    <string name="capture_camera_hint_label_legible">Is the label legible?</string>
 
     <!--Capture Flow: Tag Friends -->
     <string name="tag_friends_empty_state_text">First add friends on Delectable in order to tag them!</string>
