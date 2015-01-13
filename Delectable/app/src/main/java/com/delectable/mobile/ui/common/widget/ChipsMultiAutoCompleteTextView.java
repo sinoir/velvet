@@ -338,7 +338,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         Matcher matcher = sHashtagPattern.matcher(commentString);
         Log.d(TAG, "NEW_TAG parsing: " + commentString);
         while (matcher.find()) {
-            int spanStart = matcher.start(); // TODO consider blown up text
+            int spanStart = matcher.start();
             int spanEnd = matcher.end();
             String tagId = commentString
                     .substring(spanStart + 1 /* id is hashtag without # symbol */, spanEnd);

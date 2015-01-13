@@ -28,6 +28,6 @@
         android:background="@drawable/bg_transparent_to_light_opacity"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:src="@drawable/ab_close" />
+        android:src="@drawable/ic_clear_mtrl_alpha" />
 
 </RelativeLayout>

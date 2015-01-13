@@ -4,6 +4,6 @@
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/toolbar_title"
-        style="@style/ToolbarTitle" />
+        style="@style/ToolbarText.Title" />
 
 </android.support.v7.widget.Toolbar>
