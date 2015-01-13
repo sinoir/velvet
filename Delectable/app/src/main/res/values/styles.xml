@@ -18,7 +18,7 @@
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">false</item>
-        <item name="color">@color/title</item>
+        <item name="color">@color/icons</item>
     </style>
 
     <style name="ToolbarStyle">
@@ -58,8 +58,8 @@
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
         <item name="android:textColorPrimary">@color/title</item>
-        <item name="android:textColorSecondary">@color/title</item>
-        <item name="android:actionMenuTextColor">@color/title</item>
+        <item name="android:textColorSecondary">@color/icons</item>
+        <item name="android:actionMenuTextColor">@color/icons</item>
     </style>
 
     <style name="ToolbarStyle.Error" parent="ToolbarStyle">

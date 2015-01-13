@@ -25,7 +25,8 @@
     <color name="primary">@color/d_white</color>
     <color name="primaryDark">@color/d_edward</color>
     <color name="accent">@color/d_chestnut</color>
-    <color name="title">@color/d_edward_dark</color>
+    <color name="icons">@color/d_medium_gray</color>
+    <color name="title">@color/d_big_stone</color>
     <color name="titleSecondary">@color/d_edward</color>
     <!--<color name="toolbar_bg_gradient">#99000000</color>-->
     <color name="background">#e8e8e8</color>

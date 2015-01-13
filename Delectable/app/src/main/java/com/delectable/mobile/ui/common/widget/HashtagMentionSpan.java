@@ -87,10 +87,11 @@ public class HashtagMentionSpan extends ClickableSpan {
             ArrayList<CaptureCommentAttributes> commentAttributes, int commentTextStartOffset) {
         if (commentAttributes != null && !commentAttributes.isEmpty()) {
             for (CaptureCommentAttributes a : commentAttributes) {
-                int tagStart = a.getRange().get(CaptureCommentAttributes.INDEX_RANGE_START)
-                        + commentTextStartOffset;
-                int tagEnd = tagStart + a.getRange()
-                        .get(CaptureCommentAttributes.INDEX_RANGE_LENGTH);
+                int tagStart = a.getStart();
+                int tagEnd = a.getEnd();
+                if (tagStart < 0 || tagEnd < tagStart || tagEnd > span.length()) {
+                    continue;
+                }
                 String tag = span.subSequence(tagStart, tagEnd).toString();
                 span.setSpan(
                         new HashtagMentionSpan(context, tag, a.getLink(), a.getType()),

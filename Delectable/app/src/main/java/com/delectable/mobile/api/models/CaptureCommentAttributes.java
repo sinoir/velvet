@@ -46,6 +46,18 @@ public class CaptureCommentAttributes implements Parcelable, Serializable {
         return range;
     }
 
+    public int getStart() {
+        return getRange().get(INDEX_RANGE_START);
+    }
+
+    public int getEnd() {
+        return getStart() + getLength();
+    }
+
+    public int getLength() {
+        return getRange().get(INDEX_RANGE_LENGTH);
+    }
+
     public void setRange(ArrayList<Integer> range) {
         this.range = range;
     }

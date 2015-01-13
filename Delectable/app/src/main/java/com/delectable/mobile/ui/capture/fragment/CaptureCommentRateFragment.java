@@ -209,6 +209,7 @@ public class CaptureCommentRateFragment extends BaseFragment implements
 
         // Comment if we're editing comment
         mCommentEditText.setText(mComment);
+        mCommentEditText.setCommentAttributes(mCommentAttributes);
     }
 
     private void togglePostButton() {

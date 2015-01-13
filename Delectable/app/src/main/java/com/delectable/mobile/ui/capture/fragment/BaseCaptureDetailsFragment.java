@@ -88,9 +88,11 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         ArrayList<CaptureComment> comments = capture.getCommentsForUserId(userId);
         mTempUserComment = comments.size() > 0 ? comments.get(0) : null;
         String currentUserCommentText = "";
+        ArrayList<CaptureCommentAttributes> currentUserCommentAttributes = null;
 
         if (mTempUserComment != null && isCurrentUserCapture) {
             currentUserCommentText = mTempUserComment.getComment();
+            currentUserCommentAttributes = mTempUserComment.getCommentAttributes();
         }
         int currentUserRating = capture.getRatingForId(userId);
 
@@ -98,6 +100,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         intent.putExtra(CaptureCommentRateActivity.PARAMS_IS_RATING, true);
         intent.putExtra(CaptureCommentRateActivity.PARAMS_RATING, currentUserRating);
         intent.putExtra(CaptureCommentRateActivity.PARAMS_COMMENT, currentUserCommentText);
+        intent.putExtra(CaptureCommentRateActivity.PARAMS_COMMENT_ATTRIBUTES,
+                currentUserCommentAttributes);
 
         intent.setClass(getActivity(), CaptureCommentRateActivity.class);
         startActivityForResult(intent, REQUEST_RATE_COMMENT_CAPTURE);

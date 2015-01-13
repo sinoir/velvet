@@ -34,7 +34,7 @@
             android:id="@+id/comment_edit_text"
             style="@style/CommentEditText"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="100dp"
             android:layout_margin="@dimen/spacing_16"
             android:layout_marginBottom="20dp"
             android:gravity="top"

@@ -48,6 +48,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
 
     public static final char SYMBOL_WHITESPACE = ' ';
 
+    private static final String TAG_REPLACEMENT_STRING = "x";
+
     /**
      * Start auto-complete after this many characters typed
      */
@@ -130,6 +132,46 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         setAdapter(null);
     }
 
+    /**
+     * This should be called after calling setText() in order to highlight the hashtags and mentions
+     * when editing
+     *
+     * @param attributes The comment attributes
+     */
+    public void setCommentAttributes(ArrayList<CaptureCommentAttributes> attributes) {
+        Log.d(TAG, "parsing attributes: " + attributes);
+        if (attributes == null || attributes.isEmpty()) {
+            return;
+        }
+
+        int deletedCharacters = 0;
+        for (CaptureCommentAttributes a : attributes) {
+            int start = a.getStart() - deletedCharacters;
+            int end = a.getEnd() - deletedCharacters;
+            if (start < 0 || end < start || end > getText().length()) {
+                continue;
+            }
+            ChipSpan span = null;
+            if (CaptureCommentAttributes.TYPE_HASHTAG.equals(a.getType())) {
+                span = new ChipSpan(
+                        getText().subSequence(start + 1, end).toString(),
+                        a.getId(),
+                        CaptureCommentAttributes.TYPE_HASHTAG);
+            } else if (CaptureCommentAttributes.TYPE_MENTION.equals(a.getType())) {
+                span = new ChipSpan(
+                        getText().subSequence(start + 1, end).toString(),
+                        a.getId(),
+                        CaptureCommentAttributes.TYPE_MENTION);
+            }
+            // replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
+            SpannableString ss = new SpannableString(TAG_REPLACEMENT_STRING);
+            ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            setText(getText().replace(start, end, ss));
+            deletedCharacters += span.getReplacedText().length()
+                    - 1; // replaced whole tag with one character
+        }
+    }
+
     public void setActionsHandler(ActionsHandler handler) {
         mActionsHandler = handler;
     }
@@ -205,8 +247,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
                         CaptureCommentAttributes.TYPE_MENTION);
             }
             // replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
-            SpannableString ss = null;
-            ss = new SpannableString("x");
+            SpannableString ss = new SpannableString(TAG_REPLACEMENT_STRING);
             ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return ss;
         }
@@ -271,21 +312,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         ArrayList<CaptureCommentAttributes> commentAttributes = new ArrayList<>();
         Editable comment = getText();
 
-        // parse comment for new #hashtags (non-auto-completed hashtags that is)
-        String commentString = comment.toString();
-        Matcher matcher = sHashtagPattern.matcher(commentString);
-        while (matcher.find()) {
-            int spanStart = matcher.start();
-            int spanEnd = matcher.end();
-            commentAttributes.add(new CaptureCommentAttributes(
-                    commentString.substring(spanStart + 1, spanEnd),
-                    // id is hashtag without the # symbol
-                    CaptureCommentAttributes.TYPE_HASHTAG,
-                    spanStart,
-                    spanEnd - spanStart
-            ));
-        }
-
         // get tags and mentions from auto complete results
         ArrayList<ChipsMultiAutoCompleteTextView.ChipSpan> spans = getSpans();
         if (!spans.isEmpty()) {
@@ -303,7 +329,42 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
                         span.getReplacedText().length()));
             }
         }
+
+        // parse comment for new #hashtags (non-auto-completed hashtags that is)
+        String commentString = comment.toString();
+        Matcher matcher = sHashtagPattern.matcher(commentString);
+        Log.d(TAG, "NEW_TAG parsing: " + commentString);
+        while (matcher.find()) {
+            int spanStart = matcher.start(); // TODO consider blown up text
+            int spanEnd = matcher.end();
+            String tagId = commentString
+                    .substring(spanStart + 1 /* id is hashtag without # symbol */, spanEnd);
+            // check if we have this tag already
+            if (!isNewHashtag(tagId, commentAttributes)) {
+                continue;
+            }
+            commentAttributes.add(new CaptureCommentAttributes(
+                    tagId,
+                    CaptureCommentAttributes.TYPE_HASHTAG,
+                    spanStart,
+                    spanEnd - spanStart// + 1
+            ));
+            Log.d(TAG,
+                    "NEW_TAG found: startChar=" + commentString.charAt(spanStart) + ", endChar-1="
+                            + commentString.charAt(spanEnd - 1));
+            Log.d(TAG, "NEW_TAG created: " + commentAttributes.get(commentAttributes.size() - 1));
+        }
+
         return commentAttributes.isEmpty() ? null : commentAttributes;
+    }
+
+    private boolean isNewHashtag(String id, ArrayList<CaptureCommentAttributes> attributes) {
+        for (CaptureCommentAttributes a : attributes) {
+            if (a.getId().equals(id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isTagPrefix(char c) {

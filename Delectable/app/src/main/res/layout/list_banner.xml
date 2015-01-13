@@ -8,10 +8,9 @@
     android:paddingRight="@dimen/spacing_24"
     android:paddingTop="@dimen/spacing_24"
     android:paddingBottom="@dimen/spacing_24"
-    android:textColor="@color/d_edward_dark"
+    android:textColor="@color/d_medium_gray"
     android:textSize="16sp"
     android:lineSpacingMultiplier="1.1"
     android:textAlignment="center"
     android:gravity="center"
     app:fontName="whitney_book" />
-
