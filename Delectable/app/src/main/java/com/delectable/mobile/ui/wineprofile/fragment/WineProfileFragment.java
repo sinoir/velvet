@@ -59,6 +59,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -522,7 +523,7 @@ public class WineProfileFragment extends BaseFragment implements
             mAnalytics.trackViewWineProfile();
         }
 
-        Animate.fadeIn(mToolbarContrast, 300);
+//        Animate.fadeIn(mToolbarContrast, 300);
     }
 
     @Override
@@ -832,11 +833,13 @@ public class WineProfileFragment extends BaseFragment implements
             mWineImageView.setTranslationY(-stickyToolbarTranslation / 2f);
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // elevate sticky toolbar once it docks
-                boolean elevate = top < minTranslation;
-                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION * 2 : 0);
-            }
+            ViewCompat
+                    .setElevation(mStickyToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                // elevate sticky toolbar once it docks
+//                boolean elevate = top < minTranslation;
+//                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION * 2 : 0);
+//            }
 
             // drag toolbar off the screen when reaching the bottom of the header
 //            int toolbarDragOffset = bannerHeight - mToolbarScrollOffset;

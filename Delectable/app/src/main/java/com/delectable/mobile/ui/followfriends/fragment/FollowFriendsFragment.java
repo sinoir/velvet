@@ -36,22 +36,22 @@ public class FollowFriendsFragment extends BaseFragment {
         SlidingPagerItem experts = new SlidingPagerItem(
                 new FollowExpertsTabFragment(),
                 R.color.primary,
-                R.color.d_white,
+                R.color.d_red_experts_tab,
                 R.drawable.tab_follow_friends_experts_icon);
         SlidingPagerItem contacts = new SlidingPagerItem(
                 new FollowContactsTabFragment(),
                 R.color.primary,
-                R.color.d_white,
+                R.color.d_yellow_contacts_tab,
                 R.drawable.tab_follow_friends_contacts_icon);
         SlidingPagerItem facebook = new SlidingPagerItem(
                 new FollowFacebookFriendsTabFragment(),
                 R.color.primary,
-                R.color.d_white,
+                R.color.d_blue_facebook_tab,
                 R.drawable.tab_follow_friends_facebook_icon);
         SlidingPagerItem twitter = new SlidingPagerItem(
                 new FollowTwitterFriendsTabFragment(),
                 R.color.primary,
-                R.color.d_white,
+                R.color.d_blue_twitter_tab,
                 R.drawable.tab_follow_friends_twitter_icon);
 
         ArrayList<SlidingPagerItem> tabItems = new ArrayList<SlidingPagerItem>();

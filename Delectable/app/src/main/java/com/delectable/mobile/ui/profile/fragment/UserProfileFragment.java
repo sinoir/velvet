@@ -369,7 +369,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
     public void onEventMainThread(FetchedAccountProfileEvent event) {
 
-        if (!mUserId.equals(event.getAccountId())) {
+        if (mUserId == null || !mUserId.equals(event.getAccountId())) {
             return;
         }
 

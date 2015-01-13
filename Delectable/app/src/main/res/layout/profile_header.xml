@@ -20,8 +20,8 @@
         android:paddingBottom="@dimen/spacing_8"
         android:layout_below="@id/profile_header_viewpager"
         android:visibility="gone"
-        custom:fillColor="@color/d_white"
-        custom:pageColor="@color/accentDark"
+        custom:fillColor="@color/title"
+        custom:pageColor="@color/titleSecondary"
         custom:radius="@dimen/circle_pager_indicator_radius"
         custom:strokeColor="@android:color/transparent"
         custom:strokeWidth="0dp" />

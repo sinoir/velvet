@@ -16,7 +16,7 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.controllers.FoursquareController;
-import com.delectable.mobile.api.controllers.HashtagsController;
+import com.delectable.mobile.api.controllers.HashtagController;
 import com.delectable.mobile.api.controllers.MotdController;
 import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.api.controllers.VersionPropsFileController;
@@ -92,6 +92,7 @@ import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment
 import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
 import com.delectable.mobile.ui.capture.activity.FeedActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.capture.fragment.CaptureCommentRateFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
 import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
@@ -172,6 +173,7 @@ import de.greenrobot.event.EventBus;
                 TaggedPeopleFragment.class,
                 WineCheckoutFragment.class,
                 ConfirmationDialogFragment.class,
+                CaptureCommentRateFragment.class,
                 // Dialogs
                 BaseDialogFragment.class,
                 BaseEventBusDialogFragment.class,
@@ -260,7 +262,7 @@ import de.greenrobot.event.EventBus;
                 FoursquareController.class,
                 WineScanController.class,
                 BaseWineController.class,
-                HashtagsController.class,
+                HashtagController.class,
                 // Other
                 DrawInsetsFrameLayout.class
         }

@@ -20,7 +20,6 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/d_white"
         android:padding="@dimen/spacing_32"
         android:gravity="center" />
 </RelativeLayout>

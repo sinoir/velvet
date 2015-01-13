@@ -24,7 +24,7 @@ public class SearchFoursquareVenuesJob extends BaseJob {
     private String mLatLon;
 
     public SearchFoursquareVenuesJob(String latLon) {
-        super(new Params(Priority.UX.value()).requireNetwork().persist());
+        super(new Params(Priority.UX.value()).requireNetwork());
         mLatLon = latLon;
     }
 

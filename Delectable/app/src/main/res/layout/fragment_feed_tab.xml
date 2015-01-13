@@ -14,16 +14,13 @@
 
         <com.delectable.mobile.ui.common.widget.ObservableListView
             android:id="@+id/list_view"
+            style="@style/ListViewStyle.NoDivider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
-            android:clipToPadding="false"
+            android:paddingBottom="@dimen/spacing_8"
             android:animateLayoutChanges="true"
-            android:background="@color/feed_background"
-            android:divider="@null"
-            android:headerDividersEnabled="false"
-            android:footerDividersEnabled="false"
-            android:listSelector="@android:color/white" />
+            android:listSelector="@android:color/transparent" />
 
         <FrameLayout
             android:id="@+id/empty_view_following_container"
@@ -46,7 +43,6 @@
                 android:alpha="0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/feed_background"
                 android:padding="@dimen/spacing_32"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -89,7 +85,6 @@
                 android:alpha="0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/feed_background"
                 android:padding="@dimen/spacing_32"
                 android:gravity="center"
                 android:orientation="vertical">
