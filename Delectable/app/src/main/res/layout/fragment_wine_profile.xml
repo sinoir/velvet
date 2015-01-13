@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/d_white">
 
-    <ListView
+    <com.delectable.mobile.ui.common.widget.ObservableListView
         android:id="@+id/list_view"
         style="@style/ListViewStyle"
         android:layout_width="match_parent"

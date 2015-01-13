@@ -25,6 +25,7 @@ import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.common.widget.ObservableListView;
 import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
@@ -38,7 +39,6 @@ import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
-import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
@@ -73,7 +73,6 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -179,7 +178,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected Toolbar mToolbar;
 
-    protected ListView mListView;
+    protected ObservableListView mListView;
 
     protected View mToolbarContrast;
 
@@ -409,7 +408,7 @@ public class WineProfileFragment extends BaseFragment implements
 
         updateVarietyRegionRatingView(mBaseWine);
 
-        mListView = (ListView) view.findViewById(R.id.list_view);
+        mListView = (ObservableListView) view.findViewById(R.id.list_view);
         mListView.addHeaderView(header, null, false);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -417,6 +416,18 @@ public class WineProfileFragment extends BaseFragment implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 position--; //headerview offsets position of listitems by 1
                 launchCaptureDetails(mAdapter.getItem(position));
+            }
+        });
+        mListView.addOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // nothing here
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                onScrollChanged();
             }
         });
         mListView.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -435,22 +446,9 @@ public class WineProfileFragment extends BaseFragment implements
                     }
                 });
 
-        final HideableActionBarScrollListener hideableActionBarScrollListener
-                = new HideableActionBarScrollListener(this);
-
         // Setup Floating Camera Button
         mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
-        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
-                = new FloatingActionButton.FabOnScrollListener() {
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                    int totalItemCount) {
-                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                onScrollChanged();
-            }
-        };
-        mCameraButton.attachToListView(mListView, fabOnScrollListener);
+        mCameraButton.attachToListView(mListView);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

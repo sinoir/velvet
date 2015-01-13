@@ -162,7 +162,7 @@ dependencies {
     compile files('libs/kahuna_516.jar')
     compile files('libs/metadata-extractor-2.6.4.jar')
     compile files('libs/xmpcore.jar')
-    compile 'com.melnykov:floatingactionbutton:1.0.6'
+    compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.pnikosis:materialish-progress:1.2'
     compile 'com.mixpanel.android:mixpanel-android:4.4.1@aar'
     // Crashlytics Kit

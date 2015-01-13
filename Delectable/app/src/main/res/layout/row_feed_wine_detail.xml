@@ -56,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/d_black"
-                    android:textSize="@dimen/cap_feed_comment_text_size"
+                    android:textSize="@dimen/text_size_medium"
                     app:fontName="whitney_medium" />
 
                 <ImageView
@@ -141,7 +141,7 @@
                 android:lines="1"
                 android:text="with User and n others"
                 android:textColor="@color/medium_gray_to_dark_gray"
-                android:textSize="@dimen/cap_feed_comment_text_size"
+                android:textSize="@dimen/text_size_medium"
                 android:visibility="visible"
                 app:fontName="whitney_book" />
 

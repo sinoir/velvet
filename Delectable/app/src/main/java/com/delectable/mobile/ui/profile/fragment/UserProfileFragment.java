@@ -26,6 +26,7 @@ import com.delectable.mobile.ui.common.widget.ContentLoadingProgressWheel;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
 import com.delectable.mobile.ui.common.widget.MutableForegroundColorSpan;
+import com.delectable.mobile.ui.common.widget.ObservableListView;
 import com.delectable.mobile.ui.profile.activity.FollowersFollowingActivity;
 import com.delectable.mobile.ui.profile.widget.CapturesPendingCapturesAdapter;
 import com.delectable.mobile.ui.profile.widget.MinimalCaptureDetailRow;
@@ -59,7 +60,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import javax.inject.Inject;
@@ -88,7 +88,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
     protected CapturesPendingCapturesListingModel mListingModel;
 
     @InjectView(R.id.list_view)
-    protected ListView mListView;
+    protected ObservableListView mListView;
 
     protected View mEmptyViewFooter;
 
@@ -181,7 +181,18 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
 
         mListView.addHeaderView(mProfileHeaderView, null, false);
         mListView.addFooterView(mEmptyViewFooter, null, false);
-        mListView.setOnScrollListener(new HideableActionBarScrollListener(this));
+        mListView.addOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // nothing here
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                onScrollChanged();
+            }
+        });
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
@@ -199,66 +210,7 @@ public class UserProfileFragment extends BaseCaptureDetailsFragment implements
                 = new HideableActionBarScrollListener(this);
 
         // Setup Floating Camera Button
-        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
-                = new FloatingActionButton.FabOnScrollListener() {
-
-//            boolean isTitleVisible = false;
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                    int totalItemCount) {
-                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                onScrollChanged();
-                /*
-                // decide if user name should be shown / transparent actionbar
-                if (mListView != null && mListView.getChildCount() > 1) {
-
-                    boolean firstItemVisible = mListView.getFirstVisiblePosition() > 0;
-                    if (isTitleVisible != firstItemVisible) {
-                        // title
-                        ObjectAnimator titleAnimator = new ObjectAnimator()
-                                .ofInt(mAlphaSpan, MutableForegroundColorSpan.ALPHA_PROPERTY,
-                                        firstItemVisible ? 0 : 255, firstItemVisible ? 255 : 0);
-                        titleAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
-                        titleAnimator.setInterpolator(new DecelerateInterpolator());
-                        titleAnimator.setEvaluator(new ArgbEvaluator());
-                        titleAnimator
-                                .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                        setActionBarSubtitle(mTitle);
-                                    }
-                                });
-                        titleAnimator.start();
-                        // background
-                        int solidColor = getResources().getColor(R.color.d_off_white);
-                        int transparentColor = getResources()
-                                .getColor(R.color.d_off_white_transparent);
-                        final ValueAnimator bgAnimator = ValueAnimator.ofObject(
-                                new ArgbEvaluator(),
-                                firstItemVisible ? transparentColor : solidColor,
-                                firstItemVisible ? solidColor : transparentColor);
-                        bgAnimator.setDuration(ACTIONBAR_TRANSITION_ANIM_DURATION);
-                        bgAnimator.setInterpolator(new DecelerateInterpolator());
-                        bgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                getActionBarToolbar().setBackgroundColor(
-                                        (Integer) bgAnimator.getAnimatedValue());
-                            }
-                        });
-                        bgAnimator.start();
-                    }
-                    isTitleVisible = firstItemVisible;
-                }
-
-                hideableActionBarScrollListener
-                        .onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-
-                */
-            }
-        };
-        mCameraButton.attachToListView(mListView, fabOnScrollListener);
+        mCameraButton.attachToListView(mListView);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
