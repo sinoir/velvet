@@ -29,7 +29,7 @@ public class SearchActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finishDeepLinkActivity();
+                onBackPressed();
                 break;
         }
         return true;
