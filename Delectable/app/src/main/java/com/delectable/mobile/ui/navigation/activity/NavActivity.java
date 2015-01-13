@@ -179,7 +179,7 @@ public class NavActivity extends BaseActivity
         actionBar.setDisplayHomeAsUpEnabled(false);
 //        actionBar.setTitle((String) null);
 //        actionBar.setLogo(R.drawable.feed_logo);
-        if (mTitle != null || (mTitle != null && mTitle.length() == 0)) {
+        if (mTitle != null) {
             mToolbarTitleView.setText(mTitle);
 //            actionBar.setTitle(mTitle);
 //            actionBar.setDisplayShowTitleEnabled(true);
