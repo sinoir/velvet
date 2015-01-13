@@ -28,7 +28,6 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
     private static final String TAG = BaseSearchTabFragment.class.getSimpleName();
 
-
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
@@ -88,15 +87,6 @@ public abstract class BaseSearchTabFragment extends BaseFragment
     @Override
     public boolean onQueryTextSubmit(String query) {
         mCurrentQuery = query;
-        getParentSearchFragment().getSearchView().clearFocus(); //hides keyboard
         return false;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (getParentSearchFragment().getSearchView() != null) {
-            getParentSearchFragment().getSearchView().clearFocus(); //hides keyboard
-        }
     }
 }

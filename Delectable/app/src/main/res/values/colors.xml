@@ -65,6 +65,7 @@
     <color name="d_blue_twitter_tab">#55ACEE</color>
 
     <!-- Transparent Whites -->
+    <color name="d_white_10op">#1AFFFFFF</color>
     <color name="d_white_20op">#33FFFFFF</color>
     <color name="d_white_60op">#96FFFFFF</color>
     <color name="d_white_80op">#CCFFFFFF</color>
