@@ -73,6 +73,8 @@
     <!-- Transparent Blacks -->
     <color name="d_black_10op">#1A000000</color>
     <color name="d_black_30op">#4D000000</color>
+    <color name="d_black_35op">#59000000</color>
+    <!-- like edward on white -->
     <color name="d_black_40op">#66000000</color>
     <color name="d_black_60op">#99000000</color>
 </resources>
