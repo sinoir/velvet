@@ -8,7 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
-public class CaptureCommentAttributes implements Parcelable, Serializable {
+public class CaptureCommentAttributes
+        implements Parcelable, Serializable, Comparable<CaptureCommentAttributes> {
 
     public static final String TYPE_HASHTAG = "hashtag";
 
@@ -123,10 +124,28 @@ public class CaptureCommentAttributes implements Parcelable, Serializable {
         return id.hashCode();
     }
 
+    /**
+     * Compares this object to the specified object to determine their relative order. Order is
+     * appearance of tag in the text.
+     *
+     * @param another the object to compare to this instance.
+     * @return a negative integer if this instance is less than {@code another}; a positive integer
+     * if this instance is greater than {@code another}; 0 if this instance has the same order as
+     * {@code another}.
+     * @throws ClassCastException if {@code another} cannot be converted into something comparable
+     *                            to {@code this} instance.
+     */
+    @Override
+    public int compareTo(CaptureCommentAttributes another) {
+        return this.getStart() - another.getStart();
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(type);
         out.writeList(range);

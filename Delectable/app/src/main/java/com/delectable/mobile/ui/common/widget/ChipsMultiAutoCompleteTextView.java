@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -145,6 +146,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         }
 
         int deletedCharacters = 0;
+        // attributes are not in order! we need to sort them first to get the rolling offset right
+        Collections.sort(attributes);
         for (CaptureCommentAttributes a : attributes) {
             int start = a.getStart() - deletedCharacters;
             int end = a.getEnd() - deletedCharacters;
