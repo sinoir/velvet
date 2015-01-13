@@ -56,6 +56,8 @@ public abstract class BaseSearchTabFragment extends BaseFragment
                 .inflate(R.layout.fragment_search_wines_people, container, false);
         ButterKnife.inject(this, layout);
 
+        int padding8 = getResources().getDimensionPixelSize(R.dimen.spacing_8);
+        mListView.setPadding(mListView.getPaddingLeft(), mListView.getPaddingTop() + padding8, mListView.getPaddingRight(), mListView.getPaddingBottom());
         mListView.setEmptyView(mEmptyStateTextView);
         mListView.setAdapter(getAdapter());
         mListView.setOnItemClickListener(this);

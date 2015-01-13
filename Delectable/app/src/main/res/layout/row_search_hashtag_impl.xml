@@ -2,5 +2,10 @@
 
 <com.delectable.mobile.ui.search.widget.SearchHashtagRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/search_hashtags_row_height"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/search_hashtags_row_height"
+    android:paddingLeft="@dimen/spacing_16"
+    android:paddingRight="@dimen/spacing_16"
+    android:paddingTop="@dimen/spacing_8"
+    android:paddingBottom="@dimen/spacing_8"
     android:background="@drawable/bg_white_to_light_opacity" />
