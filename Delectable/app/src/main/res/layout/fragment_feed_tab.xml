@@ -14,16 +14,13 @@
 
         <com.delectable.mobile.ui.common.widget.ObservableListView
             android:id="@+id/list_view"
+            style="@style/ListViewStyle.NoDivider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
             android:paddingBottom="@dimen/spacing_8"
-            android:clipToPadding="false"
             android:animateLayoutChanges="true"
-            android:divider="@null"
-            android:headerDividersEnabled="false"
-            android:footerDividersEnabled="false"
-            android:listSelector="@android:color/white" />
+            android:listSelector="@android:color/transparent" />
 
         <FrameLayout
             android:id="@+id/empty_view_following_container"
