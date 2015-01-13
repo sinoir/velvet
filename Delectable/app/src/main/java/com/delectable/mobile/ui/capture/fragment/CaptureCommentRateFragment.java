@@ -1,34 +1,58 @@
 package com.delectable.mobile.ui.capture.fragment;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.controllers.AccountController;
+import com.delectable.mobile.api.controllers.HashtagController;
+import com.delectable.mobile.api.events.accounts.SearchAccountsEvent;
+import com.delectable.mobile.api.events.hashtags.SearchHashtagsEvent;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.BaseFragment;
+import com.delectable.mobile.ui.common.widget.ChipsMultiAutoCompleteTextView;
 import com.delectable.mobile.ui.common.widget.NumericRatingSeekBar;
+import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class CaptureCommentRateFragment extends BaseFragment {
+public class CaptureCommentRateFragment extends BaseFragment implements
+        ChipsMultiAutoCompleteTextView.ActionsHandler {
+
+    private static final String TAG = CaptureCommentRateFragment.class.getSimpleName();
 
     public static final String DATA_COMMENT = "DATA_COMMENT";
 
+    public static final String DATA_COMMENT_ATTRIBUTES = "DATA_COMMENT_ATTRIBUTES";
+
     public static final String DATA_RATING = "DATA_RATING";
 
-    private static final String TAG = CaptureCommentRateFragment.class.getSimpleName();
+    @Inject
+    public HashtagController mHashtagController;
+
+    @Inject
+    public AccountController mAccountController;
 
     private TextWatcher textValidationWatcher = new TextWatcher() {
         @Override
@@ -37,7 +61,7 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            Log.d(TAG, "Text Change Count: " + count);
+//            Log.d(TAG, "Text Change Count: " + count);
             togglePostButton();
         }
 
@@ -49,18 +73,20 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     private static final String PARAMS_COMMENT = "PARAMS_COMMENT";
 
+    private static final String PARAMS_COMMENT_ATTRIBUTES = "PARAMS_COMMENT_ATTRIBUTES";
+
     private static final String PARAMS_RATING = "PARAMS_RATING";
 
     private static final String PARAMS_IS_RATING = "PARAMS_IS_RATING";
 
-    @InjectView(R.id.title)
+    @InjectView(R.id.toolbar_title)
     protected TextView mTitle;
 
     @InjectView(R.id.post_button)
     protected View mPostButton;
 
     @InjectView(R.id.comment_edit_text)
-    protected EditText mCommentEditText;
+    protected ChipsMultiAutoCompleteTextView mCommentEditText;
 
     @InjectView(R.id.numeric_rate_seek_bar)
     protected NumericRatingSeekBar mNumericRatingSeekBar;
@@ -69,15 +95,23 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
     private String mComment;
 
+    private ArrayList<CaptureCommentAttributes> mCommentAttributes;
+
     private int mRating;
 
     private boolean mIsRating;
 
-    public static CaptureCommentRateFragment newInstance(String comment, int rating,
+    private Handler mQueryHandler = new Handler();
+
+    private Runnable mQueryTask;
+
+    public static CaptureCommentRateFragment newInstance(String comment,
+            ArrayList<CaptureCommentAttributes> attributes, int rating,
             boolean isRating) {
         CaptureCommentRateFragment fragment = new CaptureCommentRateFragment();
         Bundle args = new Bundle();
         args.putString(PARAMS_COMMENT, comment);
+        args.putParcelableArrayList(PARAMS_COMMENT_ATTRIBUTES, attributes);
         args.putInt(PARAMS_RATING, rating);
         args.putBoolean(PARAMS_IS_RATING, isRating);
         fragment.setArguments(args);
@@ -87,10 +121,12 @@ public class CaptureCommentRateFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.injectMembers(this);
 
         Bundle args = getArguments();
         if (args != null) {
             mComment = args.getString(PARAMS_COMMENT);
+            mCommentAttributes = args.getParcelableArrayList(PARAMS_COMMENT_ATTRIBUTES);
             mRating = args.getInt(PARAMS_RATING);
             mIsRating = args.getBoolean(PARAMS_IS_RATING);
         }
@@ -102,17 +138,41 @@ public class CaptureCommentRateFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.fragment_capture_rating_submit, container, false);
         ButterKnife.inject(this, mView);
 
+        mCommentEditText.setActionsHandler(this);
+        mCommentEditText.setRawInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+//                | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
         updateRatingUI();
         updateCommentTextUI();
 
         return mView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        enableBackButton(true);
+        getActionBar().setTitle(null);
+//        ViewCompat.setElevation(getActionBarToolbar(), Animate.ELEVATION);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void updateRatingUI() {
         // Toggle display of rating if we're rating
         if (mIsRating) {
             mNumericRatingSeekBar.setVisibility(View.VISIBLE);
-            mTitle.setText(getActivity().getString(R.string.dialog_comment_rating_title));
+            mTitle.setText(getActivity().getString(R.string.capture_submit_title));
         } else {
             mNumericRatingSeekBar.setVisibility(View.GONE);
             mTitle.setText(getActivity().getString(R.string.dialog_comment_title));
@@ -149,30 +209,31 @@ public class CaptureCommentRateFragment extends BaseFragment {
 
         // Comment if we're editing comment
         mCommentEditText.setText(mComment);
+        mCommentEditText.setCommentAttributes(mCommentAttributes);
     }
 
     private void togglePostButton() {
         mPostButton.setEnabled(!emptyFieldExists());
     }
 
-
     @OnClick(R.id.post_button)
     public void postData() {
         Intent data = new Intent();
-        data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString());
+        mCommentAttributes = mCommentEditText.getCommentAttributes();
+        Log.d(TAG,
+                "comment_attributes=" + (mCommentAttributes != null ? mCommentAttributes.toString()
+                        : "null"));
+        data.putExtra(DATA_COMMENT, mCommentEditText.getText().toString().trim());
+        data.putExtra(DATA_COMMENT_ATTRIBUTES, mCommentAttributes);
         data.putExtra(DATA_RATING, mRating);
         getActivity().setResult(Activity.RESULT_OK, data);
         getActivity().finish();
     }
 
-    @OnClick(R.id.cancel_button)
-    public void cancel() {
-        getActivity().onBackPressed();
-    }
-
     private boolean emptyFieldExists() {
-        Log.d(TAG, "Edit Text: " + mCommentEditText.getText());
-        if (mCommentEditText.getText().toString().trim().equals("")) {
+        if (mCommentEditText.getText() != null
+                && mCommentEditText.getText().toString() != null
+                && mCommentEditText.getText().toString().trim().isEmpty()) {
             return true;
         }
         if (mNumericRatingSeekBar.getRatingSeekBar().getProgress() == -1) {
@@ -181,4 +242,45 @@ public class CaptureCommentRateFragment extends BaseFragment {
         return false;
     }
 
+    @Override
+    public void queryHashtag(final String query) {
+        queryDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mHashtagController
+                        .searchHashtags(query, 0, RateCaptureFragment.HASHTAG_SEARCH_LIMIT);
+            }
+        });
+    }
+
+    @Override
+    public void queryMention(final String query) {
+        queryDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // FIXME pass capture id
+                mAccountController.searchAccountsContextually(query, 0,
+                        RateCaptureFragment.MENTION_SEARCH_LIMIT, null);
+            }
+        });
+    }
+
+    private void queryDelayed(Runnable runnable) {
+        // clear queued up queries and submit a new one
+        mQueryHandler.removeCallbacks(mQueryTask);
+        mQueryTask = runnable;
+        mQueryHandler.postDelayed(runnable, RateCaptureFragment.QUERY_DELAY_MS);
+    }
+
+    public void onEventMainThread(SearchHashtagsEvent event) {
+        if (event.isSuccessful() && event.getResult() != null) {
+            mCommentEditText.updateHashtagResults(event.getResult().getHits());
+        }
+    }
+
+    public void onEventMainThread(SearchAccountsEvent event) {
+        if (event.isSuccessful() && event.getResult() != null) {
+            mCommentEditText.updateMentionResults(event.getResult().getHits());
+        }
+    }
 }

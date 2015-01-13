@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/tab_height"
-        android:layout_alignParentTop="true"
-        android:background="@color/d_white" />
+        android:layout_alignParentTop="true" />
 
     <!--TODO test on android L, this is using negative margin to make the progress bar appear more compact -->
     <ProgressBar
@@ -32,7 +31,6 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:padding="@dimen/spacing_32"
         android:gravity="center" />
 

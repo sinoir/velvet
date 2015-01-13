@@ -28,7 +28,6 @@ import com.delectable.mobile.util.SafeAsyncTask;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,31 +175,24 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         ButterKnife.inject(this, view);
 
         mRefreshContainer.setListView(mListView);
-        mRefreshContainer.setColorSchemeResources(R.color.d_chestnut);
+        mRefreshContainer.setColorSchemeResources(R.color.accent);
 
-        int topPadding = 0;
-        if (CaptureFeed.CUSTOM.equals(mListType)) {
-            // simple list padding when feed is in it's own activity
-            topPadding = getResources().getDimensionPixelOffset(R.dimen.spacing_8);
-        } else {
-            // account for toolbar and tabbar height on embedded feed lists
-            topPadding = mListView.getPaddingTop() + getResources()
-                    .getDimensionPixelSize(R.dimen.tab_height) + getResources()
-                    .getDimensionPixelSize(R.dimen.spacing_4);
+        // account for toolbar and tabbar height on embedded feed lists
+        int paddingTop = 0;
+        if (!CaptureFeed.CUSTOM.equals(mListType)) {
+            paddingTop = mListView.getPaddingTop() + getResources()
+                    .getDimensionPixelSize(R.dimen.tab_height);
             mRefreshContainer.setProgressViewOffset(true, mListView.getPaddingTop() * 2,
                     mListView.getPaddingTop() * 3);
         }
-        mListView.setPadding(mListView.getPaddingLeft(), topPadding,
+        mListView.setPadding(mListView.getPaddingLeft(), paddingTop,
                 mListView.getPaddingRight(), mListView.getPaddingBottom());
 
         // list banner
         if (mBanner != null && !mBanner.isEmpty()) {
-            View bannerView = inflater.inflate(R.layout.list_banner, mListView, false);
-            TextView bannerText = (TextView) bannerView.findViewById(R.id.list_banner_text);
-            CardView bannerCard = (CardView) bannerView.findViewById(R.id.card);
-            bannerText.setText(mBanner);
-            bannerText.setTextColor(mBannerTextColor);
-            bannerCard.setCardBackgroundColor(mBannerBackgroundColor);
+            TextView bannerView = (TextView) inflater
+                    .inflate(R.layout.list_banner, mListView, false);
+            bannerView.setText(mBanner);
             mListView.addHeaderView(bannerView);
         }
 
@@ -392,13 +384,14 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
     public void checkPrice(CaptureDetails capture, CaptureDetailsView view) {
 
         //fetch wine source
-        if (capture.getWineProfile()!=null) {
+        if (capture.getWineProfile() != null) {
 
             //immediate set these values for object on hand for immediate UI consumption, job will also set these in the model layer
             capture.setTransacting(true);
             capture.setTransitionState(TransitionState.UPDATING);
             capture.setTransactionKey(CaptureDetails.TRANSACTION_KEY_PRICE);
-            mBaseWineController.fetchWineSource(capture.getId(), capture.getWineProfile().getId(), null);
+            mBaseWineController
+                    .fetchWineSource(capture.getId(), capture.getWineProfile().getId(), null);
         }
     }
 
@@ -438,7 +431,7 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
         //replace item
         int position = NOT_FOUND;
         boolean foundCapture = false;
-        for(int i = 0; i < mAdapter.getItems().size(); i++) {
+        for (int i = 0; i < mAdapter.getItems().size(); i++) {
             CaptureDetails capture = mAdapter.getItems().get(i);
             if (capture.getId().equals(event.getCaptureId())) {
                 position = i;

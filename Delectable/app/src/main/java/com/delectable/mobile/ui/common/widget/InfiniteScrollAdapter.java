@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public abstract class InfiniteScrollAdapter<T> extends BaseAdapter {
 
-    //begin fetch of next items when 5th to last item is visible
-    private static final int LOAD_NEXT_PAGE_OFFSET = 5;
+    //begin fetch of next items when 10th to last item is visible
+    private static final int LOAD_NEXT_PAGE_OFFSET = 10;
 
     protected ArrayList<T> mItems = new ArrayList<T>();
 

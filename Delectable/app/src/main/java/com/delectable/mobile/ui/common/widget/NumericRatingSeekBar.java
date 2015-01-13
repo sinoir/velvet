@@ -1,12 +1,12 @@
 package com.delectable.mobile.ui.common.widget;
 
 import com.delectable.mobile.R;
+import com.delectable.mobile.util.Animate;
 
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -27,8 +27,6 @@ public class NumericRatingSeekBar extends RelativeLayout {
 
         public void onRatingsChanged(int rating);
     }
-
-    private static final int HAPPY_FACE_TRANSLATION = 50;
 
     @InjectView(R.id.happy_face_score_container)
     protected RelativeLayout mHappyFaceScoreContainer;
@@ -59,8 +57,6 @@ public class NumericRatingSeekBar extends RelativeLayout {
         View.inflate(context, R.layout.numeric_rating_bar, this);
         ButterKnife.inject(this);
 
-        mHappyFaceScoreContainer.setTranslationY(HAPPY_FACE_TRANSLATION);
-
         mRatingSeekBar.setOnRatingChangeListener(new RatingSeekBar.OnRatingsChangeListener() {
             @Override
             public void onRatingsChanged(int rating) {
@@ -80,41 +76,14 @@ public class NumericRatingSeekBar extends RelativeLayout {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                mHandler.removeCallbacks(null);
-                showHappyFace();
+                Animate.fadeInVertical(mHappyFaceScoreContainer);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideHappyFace();
-                    }
-                }, 1000);
+                Animate.fadeOutVertical(mHappyFaceScoreContainer, 1000);
             }
         });
-    }
-
-    private void showHappyFace() {
-        mHappyFaceScoreContainer.clearAnimation();
-        mHappyFaceScoreContainer.animate()
-                .alpha(1)
-                .setDuration(100)
-                .translationY(0)
-                .setInterpolator(new DecelerateInterpolator())
-                .start();
-    }
-
-    private void hideHappyFace() {
-        mHappyFaceScoreContainer.clearAnimation();
-        mHappyFaceScoreContainer.animate()
-                .alpha(0)
-                .translationY(HAPPY_FACE_TRANSLATION)
-//                .setStartDelay(600)
-                .setDuration(300)
-                .setInterpolator(new DecelerateInterpolator())
-                .start();
     }
 
     public RatingSeekBar getRatingSeekBar() {

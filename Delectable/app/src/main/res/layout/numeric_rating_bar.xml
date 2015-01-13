@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/not_for_me"
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rate_seek_bar"
         android:layout_alignLeft="@+id/rate_seek_bar"
-        android:layout_marginLeft="@dimen/capture_submit_margins"
+        android:layout_marginLeft="@dimen/spacing_32"
         android:text="@string/dialog_rating_notforme"
         android:textColor="@color/d_medium_gray"
         android:textSize="@dimen/dialog_rating_end_text_size"
@@ -29,9 +29,10 @@
         android:paddingBottom="6dp"
         android:gravity="center"
         android:alpha="0"
-        android:background="@drawable/bg_light_gray_rounded_corner_border">
+        android:elevation="4dp"
+        android:background="@drawable/bg_white_rounded_corner">
 
-        <ImageView
+    <ImageView
             android:id="@+id/rating_happy_face"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -60,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rate_seek_bar"
         android:layout_alignRight="@+id/rate_seek_bar"
-        android:layout_marginRight="@dimen/capture_submit_margins"
+        android:layout_marginRight="@dimen/spacing_32"
         android:text="@string/dialog_rating_loveit"
         android:textColor="@color/d_medium_gray"
         android:textSize="@dimen/dialog_rating_end_text_size"

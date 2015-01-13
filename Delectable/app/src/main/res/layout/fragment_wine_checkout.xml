@@ -216,7 +216,7 @@
                 android:layout_marginTop="@dimen/spacing_16"
                 android:paddingRight="@dimen/spacing_16">
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
+                <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/CheckoutPricingLabel"
                     android:text="@string/winecheckout_shipping_label" />
 
@@ -236,7 +236,7 @@
                 android:layout_marginLeft="@dimen/spacing_16"
                 android:paddingRight="@dimen/spacing_16">
 
-            <com.delectable.mobile.ui.common.widget.FontTextView
+                <com.delectable.mobile.ui.common.widget.FontTextView
                     style="@style/CheckoutPricingLabel"
                     android:text="@string/winecheckout_tax_label" />
 
@@ -315,7 +315,7 @@
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/toolbar_title"
             android:text="@string/winecheckout_title"
-            style="@style/ToolbarTitle" />
+            style="@style/ToolbarText.Title" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.Toolbar
@@ -323,7 +323,7 @@
         style="@style/ToolbarStyle.Error"
         android:visibility="gone"
         app:theme="@style/ToolbarStyle.Error"
-        app:titleTextAppearance="@style/ToolbarStyleText" />
+        app:titleTextAppearance="@style/ToolbarStyleErrorText" />
 
     <FrameLayout
         android:id="@+id/progress_bar"

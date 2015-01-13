@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- use status bar color for translucent toolbar background -->
-    <color name="toolbar_bg_gradient">@color/d_suva_gray</color>
-
-</resources>

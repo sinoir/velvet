@@ -5,7 +5,7 @@ import com.path.android.jobqueue.JobManager;
 
 import javax.inject.Inject;
 
-public class HashtagsController {
+public class HashtagController {
 
     @Inject
     JobManager mJobManager;

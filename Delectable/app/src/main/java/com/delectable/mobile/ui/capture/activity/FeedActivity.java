@@ -68,6 +68,7 @@ public class FeedActivity extends BaseActivity {
         getSupportActionBar().setTitle(null);
         TextView toolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
         toolbarTitleView.setText(mListTitle);
+        toolbarTitleView.setTextColor(getResources().getColor(R.color.accent));
         ViewCompat.setElevation(getActionBarToolbar(), Animate.ELEVATION);
 
         mCameraButton = (FloatingActionButton) findViewById(R.id.camera_button);
