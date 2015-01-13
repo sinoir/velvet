@@ -21,6 +21,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -74,6 +77,7 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+        setHasOptionsMenu(true);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -148,6 +152,21 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         int toolbarDragOffset = bannerHeight - mStickyToolbarHeight;
         int toolbarTranslation = MathUtil.clamp(top + toolbarDragOffset, -toolbarHeight, 0);
         mToolbar.setTranslationY(toolbarTranslation);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.capture_details_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.share) {
+            shareCapture(mCaptureDetails);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

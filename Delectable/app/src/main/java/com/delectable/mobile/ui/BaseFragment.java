@@ -1,6 +1,7 @@
 package com.delectable.mobile.ui;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.cache.CaptureListingModel;
 import com.delectable.mobile.api.cache.CaptureNoteListingModel;
@@ -10,6 +11,9 @@ import com.delectable.mobile.api.cache.PendingCapturesModel;
 import com.delectable.mobile.api.cache.ServerInfo;
 import com.delectable.mobile.api.cache.ShippingAddressModel;
 import com.delectable.mobile.api.cache.UserInfo;
+import com.delectable.mobile.api.models.BaseWine;
+import com.delectable.mobile.api.models.CaptureDetails;
+import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.camera.activity.WineCaptureActivity;
 import com.delectable.mobile.ui.common.dialog.ConfirmationNoTitleDialog;
 import com.delectable.mobile.ui.events.NavigationDrawerCloseEvent;
@@ -338,6 +342,47 @@ public class BaseFragment extends Fragment implements LifecycleProvider, Hideabl
         if (clearBackStack) {
             getActivity().finish();
         }
+    }
+
+    protected void shareWine(CaptureDetails capture) {
+        Log.d(TAG, "shareWine from CaptureDetails: " + capture);
+        if (capture == null) {
+            return;
+        }
+        //prepare vintage string
+        String vintage = "";
+        CaptureState state = CaptureState.getState(capture);
+        if (CaptureState.IDENTIFIED == state) {
+            vintage = capture.getWineProfile().getVintage() + " ";
+        }
+        //strip NV or -- if necessary
+        if (vintage.trim().equals("NV") ||
+                vintage.trim().equals("--")) {
+            vintage = "";
+        }
+
+        String wineTitle = capture.getDisplayTitle() + " " + vintage + capture.getDisplayDescription();
+        shareWine(wineTitle, capture.getShortShareUrl());
+    }
+
+    protected void shareWine(BaseWine baseWine) {
+        Log.d(TAG, "shareWine from BaseWine: " + baseWine);
+        if (baseWine == null) {
+            return;
+        }
+        String wineTitle = baseWine.getProducerName() + " " + baseWine.getName();
+        String url = "delectable://base_wine?base_wine_id=" + baseWine.getId();
+        shareWine(wineTitle, url);
+    }
+
+    private void shareWine(String wineName, String url) {
+        String shareText = getResources().getString(R.string.cap_action_recommend_text,
+                wineName, url);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        shareIntent.setType("text/plain");
+        startActivity(shareIntent);
     }
 
 }
