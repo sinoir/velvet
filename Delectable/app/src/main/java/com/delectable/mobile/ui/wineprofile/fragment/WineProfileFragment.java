@@ -180,8 +180,6 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected ObservableListView mListView;
 
-    protected View mToolbarContrast;
-
     protected int mStickyToolbarHeight;
 
     protected FloatingActionButton mCameraButton;
@@ -376,8 +374,6 @@ public class WineProfileFragment extends BaseFragment implements
         stickyToolbarBackgroundParms.height = screenSize.x;
         mStickyToolbarBackground.setLayoutParams(stickyToolbarBackgroundParms);
 
-        mToolbarContrast = view.findViewById(R.id.toolbar_contrast);
-
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
         getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -396,8 +392,6 @@ public class WineProfileFragment extends BaseFragment implements
             mStatusBarScrim.setElevation(Animate.ELEVATION);
             mToolbar.setOutlineProvider(null);
             mToolbar.setElevation(Animate.ELEVATION);
-            mToolbarContrast.setOutlineProvider(null);
-            mToolbarContrast.setElevation(Animate.ELEVATION);
             mStickyToolbarBackground.setOutlineProvider(null);
             mStickyToolbarBackground.setElevation(Animate.ELEVATION);
         }
@@ -798,7 +792,6 @@ public class WineProfileFragment extends BaseFragment implements
         }
         // adjust toolbar padding when status bar is translucent
         mToolbar.setPadding(0, insets.top, 0, 0);
-        mToolbarContrast.setPadding(0, insets.top, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // increase scrim height when status bar is translucent to compensate for additional padding
