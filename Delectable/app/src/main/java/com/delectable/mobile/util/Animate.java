@@ -37,6 +37,8 @@ public class Animate {
 
     public static final float ELEVATION = App.getInstance().getResources().getDimension(R.dimen.tab_elevation);
 
+    public static final float ELEVATION_SMALL = App.getInstance().getResources().getDimension(R.dimen.spacing_4);
+
     private static final Interpolator ACCELERATE = new AccelerateInterpolator();
 
     private static final Interpolator DECELERATE = new DecelerateInterpolator();

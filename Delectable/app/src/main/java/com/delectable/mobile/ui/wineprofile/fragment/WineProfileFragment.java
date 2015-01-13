@@ -393,13 +393,13 @@ public class WineProfileFragment extends BaseFragment implements
         // disable shadow on stacked toolbar views and elevate them to appear on top of the sticky toolbar when it gets elevated
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mStatusBarScrim.setOutlineProvider(null);
-            mStatusBarScrim.setElevation(Animate.ELEVATION * 2);
+            mStatusBarScrim.setElevation(Animate.ELEVATION);
             mToolbar.setOutlineProvider(null);
-            mToolbar.setElevation(Animate.ELEVATION * 2);
+            mToolbar.setElevation(Animate.ELEVATION);
             mToolbarContrast.setOutlineProvider(null);
-            mToolbarContrast.setElevation(Animate.ELEVATION * 2);
+            mToolbarContrast.setElevation(Animate.ELEVATION);
             mStickyToolbarBackground.setOutlineProvider(null);
-            mStickyToolbarBackground.setElevation(Animate.ELEVATION * 2);
+            mStickyToolbarBackground.setElevation(Animate.ELEVATION);
         }
 
         mBanner.setActionsHandler(this);
@@ -832,11 +832,11 @@ public class WineProfileFragment extends BaseFragment implements
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
             ViewCompat
-                    .setElevation(mStickyToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
+                    .setElevation(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                // elevate sticky toolbar once it docks
 //                boolean elevate = top < minTranslation;
-//                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION * 2 : 0);
+//                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION : 0);
 //            }
 
             // drag toolbar off the screen when reaching the bottom of the header
