@@ -5,14 +5,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
+import com.delectable.mobile.ui.search.widget.SearchToolbar;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,11 +20,13 @@ import java.util.HashSet;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * A custom toolbar searchview, {@link SearchToolbar} is used here, because the searchview provided
+ * by the v7 support library is not pretty like the searches inside the google apps.
+ */
 public class SearchFragment extends BaseFragment implements SearchView.OnQueryTextListener {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
-
-    private SearchView mSearchView;
 
     private SlidingTabAdapter mTabsAdapter;
 
@@ -63,11 +63,13 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
 
-            //TODO in order to make searh experience better (like google drive), will have to make custom searchview instead of crappy v7 one
-            //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            //getActionBar().setCustomView(R.layout.toolbar_searchview);
-            //mSearchView = (SearchView) getActionBar().getCustomView().findViewById(R.id.search_view);
-            //mSearchView.setOnQueryTextListener(this);
+            //custom searchview
+            getActionBar().setCustomView(R.layout.toolbar_search_impl);
+            getActionBar().setDisplayShowCustomEnabled(true);
+
+            SearchToolbar searchToolbar = (SearchToolbar) getActionBar().getCustomView();
+            searchToolbar.setOnQueryTextListener(this);
+            searchToolbar.showKeyboard();
         }
     }
 
@@ -87,26 +89,6 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.search_menu, menu);
-
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
-        mSearchView.setOnQueryTextListener(this);
-
-        mSearchView.setIconified(false);
-
-        if (mCurrentQuery != null && !mCurrentQuery.isEmpty()) {
-            mSearchView.setQuery(mCurrentQuery, false);
-        }
-    }
-
-    public SearchView getSearchView() {
-        return mSearchView;
-    }
-
-
-    @Override
     public boolean onQueryTextChange(String s) {
         for (SearchView.OnQueryTextListener listener : mListeners) {
             listener.onQueryTextChange(s);
@@ -115,10 +97,6 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     }
 
 
-    /**
-     * Subclasses should call super on this method to ensure that the keyboard gets hidden when a
-     * query is made.
-     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         mCurrentQuery = query;
