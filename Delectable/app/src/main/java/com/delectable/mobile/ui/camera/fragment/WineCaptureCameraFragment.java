@@ -12,6 +12,7 @@ import com.delectable.mobile.api.util.ErrorUtil;
 import com.delectable.mobile.ui.common.fragment.CameraFragment;
 import com.delectable.mobile.ui.common.widget.CameraView;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
+import com.delectable.mobile.util.AnalyticsUtil;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
 import com.delectable.mobile.util.ViewUtil;
@@ -109,6 +110,8 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     private String mPendingCaptureId;
 
+    private String mAnalyticsPhotoType = AnalyticsUtil.PHOTO_CAMERA_ROLL;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,6 +199,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
     private void onPictureTaken(Bitmap bitmap) {
         mCapturedImageBitmap = bitmap;
         mPreviewImage.setImageBitmap(bitmap);
+        mAnalyticsPhotoType = AnalyticsUtil.PHOTO_NEW;
         animateFromCaptureToConfirm();
     }
 
@@ -256,6 +260,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
 
     @OnClick(R.id.cancel_button)
     protected void cancelScan() {
+        mAnalyticsPhotoType = AnalyticsUtil.PHOTO_CAMERA_ROLL;
         animateFromConfirmToCapture();
     }
 
@@ -268,6 +273,7 @@ public class WineCaptureCameraFragment extends CameraFragment {
         releaseCameraAndPreview();
         animateFromConfirmToIdentify();
         mWineScanController.scanLabelInstantly(mCapturedImageBitmap);
+        mAnalytics.trackScan(mAnalyticsPhotoType);
     }
 
     public void onEventMainThread(InsetsChangedEvent event) {

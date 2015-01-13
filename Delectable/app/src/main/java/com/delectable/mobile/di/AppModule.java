@@ -123,6 +123,7 @@ import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
+import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
@@ -266,7 +267,8 @@ import de.greenrobot.event.EventBus;
                 BaseWineController.class,
                 HashtagController.class,
                 // Other
-                DrawInsetsFrameLayout.class
+                DrawInsetsFrameLayout.class,
+                WinePriceView.class
         }
 )
 public class AppModule {
