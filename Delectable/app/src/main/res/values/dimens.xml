@@ -36,6 +36,7 @@
 
     <!-- Delectabutton -->
     <dimen name="delectabutton_height_large">70dp</dimen>
+    <dimen name="delectabutton_width">300dp</dimen>
 
     <!-- General Dialog -->
     <dimen name="dialog_horizontal_spacing">20dp</dimen>

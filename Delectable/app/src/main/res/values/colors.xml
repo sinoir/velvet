@@ -28,9 +28,9 @@
     <color name="icons">@color/d_medium_gray</color>
     <color name="title">@color/d_big_stone</color>
     <color name="titleSecondary">@color/d_edward</color>
-    <!--<color name="toolbar_bg_gradient">#99000000</color>-->
-    <color name="background">#e8e8e8</color>
+    <!--<color name="background">#e8e8e8</color>-->
     <!--<color name="background">#f2f2f2</color>-->
+    <color name="background">#f0f0f0</color>
     <color name="overlayed_status_bar">#999999</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
@@ -71,6 +71,7 @@
     <color name="d_white_80op">#CCFFFFFF</color>
 
     <!-- Transparent Blacks -->
+    <color name="d_black_5op">#0D000000</color>
     <color name="d_black_10op">#1A000000</color>
     <color name="d_black_30op">#4D000000</color>
     <color name="d_black_35op">#59000000</color>

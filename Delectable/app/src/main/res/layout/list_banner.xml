@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/spacing_24"
     android:paddingRight="@dimen/spacing_24"
     android:paddingTop="@dimen/spacing_24"
-    android:paddingBottom="@dimen/spacing_24"
+    android:paddingBottom="@dimen/spacing_20"
     android:textColor="@color/d_medium_gray"
     android:textSize="16sp"
     android:lineSpacingMultiplier="1.1"

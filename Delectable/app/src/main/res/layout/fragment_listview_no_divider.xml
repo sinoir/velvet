@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_32"
+            android:padding="@dimen/spacing_24"
             android:visibility="visible">
 
             <com.delectable.mobile.ui.common.widget.FontTextView

@@ -1,16 +1,7 @@
 package com.delectable.mobile.ui.followfriends.fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.delectable.mobile.R;
-import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.AssociateTwitterEvent;
-import com.delectable.mobile.api.models.Account;
 import com.delectable.mobile.ui.followfriends.widget.TwitterAccountsAdapter;
 import com.delectable.mobile.util.TwitterUtil;
 import com.twitter.sdk.android.core.Callback;
@@ -18,6 +9,13 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragment {
 
@@ -57,6 +55,8 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
 
         mEmptyTextView.setText(R.string.empty_twitter);
 
+        mConnectButton.setBackgroundResource(R.drawable.btn_twitter);
+        mConnectButton.setTextColor(getResources().getColor(R.color.d_blue_twitter_tab));
         mConnectButton.setText(R.string.connect_twitter_button);
         mConnectButton.setIconDrawable(getResources().getDrawable(R.drawable.ic_find_twitter_pressed));
 
