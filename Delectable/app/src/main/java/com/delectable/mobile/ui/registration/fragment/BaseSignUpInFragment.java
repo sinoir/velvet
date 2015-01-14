@@ -43,6 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -190,8 +191,9 @@ public abstract class BaseSignUpInFragment extends BaseFragment
         mPasswordField.setTypeface(mWhitneyBookFont);
 
         mRealFacebookButton.setFragment(this);
-        //TODO may need to set more permissions onto the facebook login button
-        //by default it comes with: email, user_birthday, user_location, user_activities, user_interests, user_work_history, user_friends, user_about_me, basic_info
+        mRealFacebookButton.setReadPermissions(
+                Arrays.asList("public_profile", "email")); //add contact_email permission
+        //by default comes with these permissions: email, user_birthday, user_location, user_activities, user_interests, user_work_history, user_friends, user_about_me, basic_info
         return rootView;
     }
 

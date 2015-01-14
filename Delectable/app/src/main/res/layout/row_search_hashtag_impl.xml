@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.delectable.mobile.ui.search.widget.SearchHashtagRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/search_hashtags_row_height"
+    android:background="@drawable/bg_white_to_light_opacity" />
