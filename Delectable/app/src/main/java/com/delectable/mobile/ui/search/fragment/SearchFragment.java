@@ -28,6 +28,9 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
+    //# pages to the left/right for the viewpager to retain
+    private static final int PAGES_LIMIT = 2;
+
     private SlidingTabAdapter mTabsAdapter;
 
     @InjectView(R.id.tab_layout)
@@ -49,13 +52,20 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         SlidingTabAdapter.SlidingTabItem wines = new SlidingTabAdapter.SlidingTabItem(
                 new SearchWinesTabFragment(),
                 getString(R.string.search_wines));
+        SlidingTabAdapter.SlidingTabItem hashtags = new SlidingTabAdapter.SlidingTabItem(
+                new SearchHashtagsTabFragment(),
+                getString(R.string.search_hashtags));
         SlidingTabAdapter.SlidingTabItem people = new SlidingTabAdapter.SlidingTabItem(
                 new SearchPeopleTabFragment(),
                 getString(R.string.search_people));
 
+
+
+
         ArrayList<SlidingTabAdapter.SlidingTabItem>
                 tabItems = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
         tabItems.add(wines);
+        tabItems.add(hashtags);
         tabItems.add(people);
 
         mTabsAdapter = new SlidingTabAdapter(getChildFragmentManager(), tabItems);
@@ -83,6 +93,7 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.accent));
 
         mViewPager.setAdapter(mTabsAdapter);
+        mViewPager.setOffscreenPageLimit(PAGES_LIMIT);
         mTabLayout.setViewPager(mViewPager);
 
         return rootView;

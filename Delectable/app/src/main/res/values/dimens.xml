@@ -200,6 +200,7 @@
     <dimen name="search_wine_image_width">50dp</dimen>
     <dimen name="search_wine_horizontal_spacing">16dp</dimen>
     <dimen name="search_wine_text_size">16sp</dimen>
+    <dimen name="search_hashtags_row_height">48dp</dimen>
 
 
     <!-- Settings Screen -->

@@ -113,6 +113,7 @@ import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
+import com.delectable.mobile.ui.search.fragment.SearchHashtagsTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.NotificationsFragment;
@@ -168,6 +169,7 @@ import de.greenrobot.event.EventBus;
                 RateCaptureFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
+                SearchHashtagsTabFragment.class,
                 WineProfileFragment.class,
                 WineProfileInstantFragment.class,
                 TaggedPeopleFragment.class,

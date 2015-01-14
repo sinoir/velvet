@@ -11,6 +11,12 @@ public class SearchHashtagsRequest extends BaseRequest {
         this.payload = new Payload(q, offset, limit);
     }
 
+    public SearchHashtagsRequest(String q, int offset, int limit, boolean capture_counts,
+            String wine_profile_id, String base_wine_id, String capture_id,
+            String pending_capture_id) {
+        this.payload = new Payload(q, offset, limit, capture_counts, wine_profile_id, base_wine_id, capture_id, pending_capture_id);
+    }
+
     public static class Payload extends SearchRequest.Payload {
 
         private boolean capture_counts = false;
