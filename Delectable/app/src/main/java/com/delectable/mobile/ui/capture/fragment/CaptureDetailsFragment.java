@@ -5,14 +5,18 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.CaptureDetailsModel;
 import com.delectable.mobile.api.events.captures.AddCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.UpdatedCaptureDetailsEvent;
+import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.util.MathUtil;
 import com.delectable.mobile.util.SafeAsyncTask;
+import com.delectable.mobile.util.ScrimUtil;
 import com.delectable.mobile.util.ViewUtil;
 
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,6 +44,8 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     private View mWineBanner;
 
     private View mWineImageView;
+
+    private View mStatusBarScrim;
 
     private Toolbar mToolbar;
 
@@ -100,11 +106,32 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         Point screenSize = ViewUtil.getDisplayDimensions();
         mStickyToolbarHeight = screenSize.x / 2;
 
+        mStatusBarScrim = view.findViewById(R.id.statusbar_scrim);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mStatusBarScrim.setBackground(ScrimUtil.STATUS_BAR_SCRIM);
+        } else {
+            mStatusBarScrim.setBackgroundDrawable(ScrimUtil.STATUS_BAR_SCRIM);
+        }
+
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
         getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         return view;
+    }
+
+    private void onApplyWindowInsets(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+        // adjust toolbar padding when status bar is translucent
+        mToolbar.setPadding(0, insets.top, 0, 0);
+//        mToolbarContrast.setPadding(0, insets.top, 0, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // increase scrim height when status bar is translucent to compensate for additional padding
+            mStatusBarScrim.setMinimumHeight(mStatusBarScrim.getHeight() + insets.top);
+        }
     }
 
     private void onScrollChanged() {
@@ -126,6 +153,12 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        InsetsChangedEvent insetsEvent = mEventBus.getStickyEvent(InsetsChangedEvent.class);
+        if (insetsEvent != null) {
+            onApplyWindowInsets(insetsEvent.insets);
+        }
+
         loadLocalData();
         mCaptureController.fetchCapture(mCaptureId);
 
@@ -175,6 +208,10 @@ public class CaptureDetailsFragment extends BaseCaptureDetailsFragment {
         if (event.isSuccessful() && mCaptureId.equals(event.getCaptureId())) {
             loadLocalData();
         }
+    }
+
+    public void onEventMainThread(InsetsChangedEvent event) {
+        onApplyWindowInsets(event.insets);
     }
 
     @Override

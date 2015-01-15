@@ -25,6 +25,7 @@ import com.delectable.mobile.api.models.WineProfileSubProfile;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
 import com.delectable.mobile.ui.common.widget.InfiniteScrollAdapter;
+import com.delectable.mobile.ui.common.widget.ObservableListView;
 import com.delectable.mobile.ui.common.widget.Rating;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
@@ -38,7 +39,6 @@ import com.delectable.mobile.ui.wineprofile.widget.WineProfileCommentUnitRow;
 import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.CameraUtil;
-import com.delectable.mobile.util.HideableActionBarScrollListener;
 import com.delectable.mobile.util.ImageLoaderUtil;
 import com.delectable.mobile.util.KahunaUtil;
 import com.delectable.mobile.util.MathUtil;
@@ -73,7 +73,6 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -179,9 +178,7 @@ public class WineProfileFragment extends BaseFragment implements
 
     protected Toolbar mToolbar;
 
-    protected ListView mListView;
-
-    protected View mToolbarContrast;
+    protected ObservableListView mListView;
 
     protected int mStickyToolbarHeight;
 
@@ -377,8 +374,6 @@ public class WineProfileFragment extends BaseFragment implements
         stickyToolbarBackgroundParms.height = screenSize.x;
         mStickyToolbarBackground.setLayoutParams(stickyToolbarBackgroundParms);
 
-        mToolbarContrast = view.findViewById(R.id.toolbar_contrast);
-
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         getBaseActivity().setSupportActionBar(mToolbar);
         getBaseActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -394,13 +389,11 @@ public class WineProfileFragment extends BaseFragment implements
         // disable shadow on stacked toolbar views and elevate them to appear on top of the sticky toolbar when it gets elevated
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mStatusBarScrim.setOutlineProvider(null);
-            mStatusBarScrim.setElevation(Animate.ELEVATION * 2);
+            mStatusBarScrim.setElevation(Animate.ELEVATION);
             mToolbar.setOutlineProvider(null);
-            mToolbar.setElevation(Animate.ELEVATION * 2);
-            mToolbarContrast.setOutlineProvider(null);
-            mToolbarContrast.setElevation(Animate.ELEVATION * 2);
+            mToolbar.setElevation(Animate.ELEVATION);
             mStickyToolbarBackground.setOutlineProvider(null);
-            mStickyToolbarBackground.setElevation(Animate.ELEVATION * 2);
+            mStickyToolbarBackground.setElevation(Animate.ELEVATION);
         }
 
         mBanner.setActionsHandler(this);
@@ -409,7 +402,7 @@ public class WineProfileFragment extends BaseFragment implements
 
         updateVarietyRegionRatingView(mBaseWine);
 
-        mListView = (ListView) view.findViewById(R.id.list_view);
+        mListView = (ObservableListView) view.findViewById(R.id.list_view);
         mListView.addHeaderView(header, null, false);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -417,6 +410,18 @@ public class WineProfileFragment extends BaseFragment implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 position--; //headerview offsets position of listitems by 1
                 launchCaptureDetails(mAdapter.getItem(position));
+            }
+        });
+        mListView.addOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // nothing here
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                onScrollChanged();
             }
         });
         mListView.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -435,22 +440,9 @@ public class WineProfileFragment extends BaseFragment implements
                     }
                 });
 
-        final HideableActionBarScrollListener hideableActionBarScrollListener
-                = new HideableActionBarScrollListener(this);
-
         // Setup Floating Camera Button
         mCameraButton = (FloatingActionButton) view.findViewById(R.id.camera_button);
-        final FloatingActionButton.FabOnScrollListener fabOnScrollListener
-                = new FloatingActionButton.FabOnScrollListener() {
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                    int totalItemCount) {
-                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                onScrollChanged();
-            }
-        };
-        mCameraButton.attachToListView(mListView, fabOnScrollListener);
+        mCameraButton.attachToListView(mListView);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -800,7 +792,6 @@ public class WineProfileFragment extends BaseFragment implements
         }
         // adjust toolbar padding when status bar is translucent
         mToolbar.setPadding(0, insets.top, 0, 0);
-        mToolbarContrast.setPadding(0, insets.top, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // increase scrim height when status bar is translucent to compensate for additional padding
@@ -834,11 +825,11 @@ public class WineProfileFragment extends BaseFragment implements
             mStickyToolbarBackground.setTranslationY(-stickyToolbarTranslation / 2f);
 
             ViewCompat
-                    .setElevation(mStickyToolbar, top < minTranslation ? Animate.ELEVATION * 2 : 0);
+                    .setElevation(mStickyToolbar, top < minTranslation ? Animate.ELEVATION : 0);
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                // elevate sticky toolbar once it docks
 //                boolean elevate = top < minTranslation;
-//                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION * 2 : 0);
+//                Animate.elevate(mStickyToolbar, elevate ? Animate.ELEVATION : 0);
 //            }
 
             // drag toolbar off the screen when reaching the bottom of the header

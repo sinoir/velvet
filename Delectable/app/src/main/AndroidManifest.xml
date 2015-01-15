@@ -113,6 +113,7 @@
         <activity
             android:name="com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity"
             android:label=""
+            android:theme="@style/Theme.Delectable.Translucent"
             android:screenOrientation="portrait">
             <!--used to facilitate sythesizing a back stack for deep links-->
             <meta-data

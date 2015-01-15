@@ -109,14 +109,18 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:dividerHeight">0.5dp</item>
         <item name="android:divider">@color/d_light_gray</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:footerDividersEnabled">false</item>
+        <item name="android:background">@color/primary</item>
         <!--<item name="android:listSelector">@color/transparent</item>-->
     </style>
 
     <style name="ListViewStyle.NoDivider" parent="ListViewStyle">
-        <item name="android:headerDividersEnabled">false</item>
-        <item name="android:footerDividersEnabled">false</item>
         <item name="android:divider">@null</item>
+    </style>
+
+    <style name="ListViewStyle.Cards" parent="ListViewStyle.NoDivider">
+        <item name="android:background">@color/background</item>
     </style>
 
     <!-- Divider drawn horizontally, dividing vertical items -->
@@ -140,7 +144,7 @@
 
     <style name="StatusBarScrim">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_height">128dp</item>
         <item name="android:layout_gravity">top</item>
     </style>
 
@@ -156,20 +160,17 @@
     </style>
 
     <style name="delectabutton_large">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">@dimen/delectabutton_width</item>
         <item name="android:layout_height">70dp</item>
         <item name="android:background">@drawable/btn_large</item>
         <item name="android:textColor">@color/d_dark_gray</item>
         <item name="type">large</item>
     </style>
 
-    <style name="delectabutton_facebook">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">70dp</item>
+    <style name="delectabutton_facebook" parent="delectabutton_large">
         <item name="android:background">@drawable/btn_facebook</item>
         <item name="android:textColor">@color/com_facebook_blue</item>
         <item name="android:icon">@drawable/ic_fb</item>
-        <item name="type">large</item>
     </style>
 
     <!-- Navigation Item Styles -->

@@ -1,6 +1,7 @@
 package com.delectable.mobile.util;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.R;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -8,6 +9,7 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -33,9 +35,9 @@ public class Animate {
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                     App.getInstance().getResources().getDisplayMetrics());
 
-    public static final float ELEVATION = TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
-                    App.getInstance().getResources().getDisplayMetrics());
+    public static final float ELEVATION = App.getInstance().getResources().getDimension(R.dimen.tab_elevation);
+
+    public static final float ELEVATION_SMALL = App.getInstance().getResources().getDimension(R.dimen.spacing_4);
 
     private static final Interpolator ACCELERATE = new AccelerateInterpolator();
 
@@ -435,4 +437,71 @@ public class Animate {
         }
     }
 
+    public static void circularReveal(final View view) {
+        circularReveal(view, -1, -1, 0);
+    }
+
+    public static void circularReveal(final View view, final long startDelay) {
+        circularReveal(view, -1, -1, startDelay);
+    }
+
+    public static void circularReveal(final View view, int centerX, int centerY) {
+        circularReveal(view, centerX, centerY, 0);
+    }
+
+    public static void circularReveal(final View view, int centerX, int centerY, final long startDelay) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // get the center for the clipping circle
+            int cx = (view.getLeft() + view.getRight()) / 2;
+            int cy = (view.getTop() + view.getBottom()) / 2;
+
+            // get the final radius for the clipping circle
+            int finalRadius = Math.max(view.getWidth(), view.getHeight());
+
+            // create the animator for this view (the start radius is zero)
+            Animator anim = ViewAnimationUtils.createCircularReveal(
+                    view,
+                    centerX < 0 ? cx : centerX,
+                    centerY < 0 ? cy : centerY,
+                    0,
+                    finalRadius);
+            anim.setStartDelay(startDelay);
+
+            view.setVisibility(View.VISIBLE);
+            anim.start();
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public static void circularHide(final View view) {
+        circularHide(view, 0);
+    }
+
+    public static void circularHide(final View view, final long startDelay) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // get the center for the clipping circle
+            int cx = (view.getLeft() + view.getRight()) / 2;
+            int cy = (view.getTop() + view.getBottom()) / 2;
+
+            // get the initial radius for the clipping circle
+            int initialRadius = view.getWidth();
+
+            // create the animation (the final radius is zero)
+            Animator anim =
+                    ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
+            anim.setStartDelay(startDelay);
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            anim.start();
+        } else {
+            view.setVisibility(View.INVISIBLE);
+        }
+    }
 }

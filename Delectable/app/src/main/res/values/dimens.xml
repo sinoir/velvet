@@ -3,10 +3,12 @@
     <!-- Code Parameters -->
     <dimen name="min_scroll">1dp</dimen>
 
-    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- Defaults per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="navigation_drawer_width">304dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
 
     <!-- General Dimens -->
     <dimen name="button_text_size">20sp</dimen>
@@ -16,14 +18,10 @@
     <dimen name="rating_bar_horizontal_spacing">10dp</dimen>
     <dimen name="small_profile_image_size">40dp</dimen>
     <dimen name="tiny_profile_image_size">28dp</dimen>
-    <dimen name="cap_feed_comment_text_size">16sp</dimen>
     <dimen name="tab_height">48dp</dimen>
-    <dimen name="tab_elevation">4dp</dimen>
+    <dimen name="tab_elevation">8dp</dimen>
     <dimen name="general_icon_size">32dp</dimen>
-    <dimen name="circle_pager_indicator_padding">20dp</dimen>
     <dimen name="circle_pager_indicator_radius">4dp</dimen>
-    <dimen name="custom_ab_title_text_size">22sp</dimen>
-    <dimen name="custom_ab_action_text_size">16sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
@@ -38,6 +36,7 @@
 
     <!-- Delectabutton -->
     <dimen name="delectabutton_height_large">70dp</dimen>
+    <dimen name="delectabutton_width">300dp</dimen>
 
     <!-- General Dialog -->
     <dimen name="dialog_horizontal_spacing">20dp</dimen>

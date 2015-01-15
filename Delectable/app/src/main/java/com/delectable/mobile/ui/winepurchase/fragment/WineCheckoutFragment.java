@@ -225,6 +225,7 @@ public class WineCheckoutFragment extends BaseFragment {
             mMarketingMessage.setText(mData.getMarketingMessage());
             mMarketingMessage.setVisibility(View.VISIBLE);
         }
+        mAnalytics.trackLandOnBuyScreen(mData != null ? mData.getMarketingMessage() : null);
     }
 
     private void updateWineDetails() {
@@ -518,6 +519,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void showConfirmation() {
+        mAnalytics.trackOrderConfirmed(mData != null ? mData.getWineId() : null);
         ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance();
         dialog.setTargetFragment(this, REQUEST_CONFIRMATION_DIALOG);
         dialog.setCancelable(false);
