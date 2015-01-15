@@ -14,4 +14,9 @@ public class HashtagController {
         mJobManager.addJobInBackground(new SearchHashtagsJob(query, offset, limit));
     }
 
+    public void searchHashtagsWithCaptureCounts(String query, int offset, int limit) {
+        mJobManager.addJobInBackground(
+                new SearchHashtagsJob(query, offset, limit, true, null, null, null, null));
+    }
+
 }

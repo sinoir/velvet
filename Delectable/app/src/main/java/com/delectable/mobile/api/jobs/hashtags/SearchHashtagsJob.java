@@ -61,7 +61,7 @@ public class SearchHashtagsJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         String endpoint = "/hashtags/search";
-        SearchHashtagsRequest request = new SearchHashtagsRequest(mQ, mOffset, mLimit);
+        SearchHashtagsRequest request = new SearchHashtagsRequest(mQ, mOffset, mLimit, mCaptureCounts, mWineProfileId, mBaseWineId, mCaptureId, mPendingCaptureId);
         Type type = new TypeToken<SearchResponse<HashtagResult>>() {
         }.getType();
         SearchResponse<HashtagResult> response = mNetworkClient.post(endpoint, request, type);
