@@ -1,6 +1,8 @@
 package com.delectable.mobile.util;
 
+import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.capture.activity.CaptureDetailsActivity;
+import com.delectable.mobile.ui.capture.activity.FeedActivity;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
 
@@ -16,6 +18,7 @@ public enum DeepLink {
     CAPTURES("captures"),
     BASE_WINE("base_wine"),
     CAPTURE("capture"),
+    CUSTOM_FEED("custom_feed"),
     OPEN("open"),
     UNKNOWN("unknown");
 
@@ -87,6 +90,8 @@ public enum DeepLink {
                 return prepareWineProfile(c, data);
             case CAPTURE:
                 return prepareCaptureDetails(c, data);
+            case CUSTOM_FEED:
+                return prepareCustomFeed(c, data);
             case OPEN:
                 //no need to prepare intent, open simply opens the app
             case UNKNOWN:
@@ -112,4 +117,8 @@ public enum DeepLink {
         return CaptureDetailsActivity.newIntent(c, captureId);
     }
 
+    private static Intent prepareCustomFeed(Context c, Uri data) {
+        String feedKey = data.getQueryParameter("feed_key");
+        return FeedActivity.newIntent(c, feedKey, CaptureFeed.CUSTOM, "");
+    }
 }

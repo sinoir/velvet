@@ -11,6 +11,7 @@ import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.api.models.Listing;
 import com.delectable.mobile.api.models.TransitionState;
+import com.delectable.mobile.ui.capture.activity.FeedActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.CaptureDetailsAdapter;
@@ -349,6 +350,16 @@ public class CaptureListFragment extends BaseCaptureDetailsFragment implements
 
         if (event.getListing() != null) {
             mCapturesListing = event.getListing();
+
+            //feed params returns with the 1st page of the listing only, we use that to set the title
+            if (mCapturesListing.getFeedParams() != null) {
+                mTitle = mCapturesListing.getFeedParams().getTitle();
+
+                //only commandeer the activity's title if feedactivity, we don't want to change the title if it's just the normal feeds
+                if (getActivity() instanceof FeedActivity) {
+                    getActivity().setTitle(mTitle);
+                }
+            }
             mAdapter.setItems(mCapturesListing.getUpdates());
             mAdapter.notifyDataSetChanged();
             // scroll listener for FAB after adapter is populated (otherwise there is an unwanted scroll event)
