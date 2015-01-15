@@ -16,6 +16,7 @@ public enum DeepLink {
     CAPTURES("captures"),
     BASE_WINE("base_wine"),
     CAPTURE("capture"),
+    OPEN("open"),
     UNKNOWN("unknown");
 
     //TODO implement
@@ -86,6 +87,8 @@ public enum DeepLink {
                 return prepareWineProfile(c, data);
             case CAPTURE:
                 return prepareCaptureDetails(c, data);
+            case OPEN:
+                //no need to prepare intent, open simply opens the app
             case UNKNOWN:
             default:
                 return null;
