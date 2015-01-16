@@ -35,6 +35,8 @@ public class FeedActivity extends BaseActivity {
 
     private String mListTitle;
 
+    private TextView mToolbarTextView;
+
     public static Intent newIntent(Context context, String listKey, String listType,
             String listTitle) {
         Intent intent = new Intent();
@@ -66,9 +68,9 @@ public class FeedActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
-        TextView toolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
-        toolbarTitleView.setText(mListTitle);
-        toolbarTitleView.setTextColor(getResources().getColor(R.color.accent));
+        mToolbarTextView = (TextView) findViewById(R.id.toolbar_title);
+        mToolbarTextView.setText(mListTitle);
+        mToolbarTextView.setTextColor(getResources().getColor(R.color.accent));
         ViewCompat.setElevation(getActionBarToolbar(), Animate.ELEVATION);
 
         mCameraButton = (FloatingActionButton) findViewById(R.id.camera_button);
@@ -78,6 +80,11 @@ public class FeedActivity extends BaseActivity {
                 launchWineCapture();
             }
         });
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mToolbarTextView.setText(title);
     }
 
     @Override

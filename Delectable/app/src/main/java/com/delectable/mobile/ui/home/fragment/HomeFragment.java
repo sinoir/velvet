@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends BaseFragment {
@@ -31,6 +32,13 @@ public class HomeFragment extends BaseFragment {
      * Used with the ViewPager in order to cache a certain amount of pages
      */
     public static final int PREFETCH_FEED_COUNT = 6;
+
+    private static final String TAG = HomeFragment.class.getSimpleName();
+
+    /**
+     * keeps track of which position each feed key is in in the view pager
+     */
+    private HashMap<String, Integer> mFeedKeyMap = new HashMap<String, Integer>();
 
     private View mView;
 
@@ -82,8 +90,10 @@ public class HomeFragment extends BaseFragment {
         String currentUserId = UserInfo.getUserId(getActivity());
         List<SlidingTabAdapter.SlidingTabItem> tabItems
                 = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
+        mFeedKeyMap.clear();
 
         if (captureFeeds != null) {
+            int i = 0;
             for (CaptureFeed feed : captureFeeds) {
                 // list banner
                 int backgroundColor = getResources().getColor(R.color.d_suva_gray);
@@ -107,7 +117,7 @@ public class HomeFragment extends BaseFragment {
 
                 // add feed to tabs
                 boolean isNewFeed = oldCaptureFeeds != null && !oldCaptureFeeds.contains(feed);
-                tabItems.add(new SlidingTabAdapter.SlidingTabItem(
+                tabItems.add(i, new SlidingTabAdapter.SlidingTabItem(
                         CaptureListFragment
                                 .newInstance(feed.getKey(), feed.getFeedType(),
                                         feed.getTitle(),
@@ -115,6 +125,8 @@ public class HomeFragment extends BaseFragment {
                         feed.getTitle().toLowerCase(),
                         isNewFeed
                 ));
+                mFeedKeyMap.put(feed.getKey(), i);
+                i++;
             }
         }
         mCaptureFeeds = captureFeeds;
@@ -127,7 +139,12 @@ public class HomeFragment extends BaseFragment {
         // material design does not like page transformers!
 //        mViewPager.setPageTransformer(false, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //mEventBus.registerSticky(this);
     }
 
     @Override
@@ -137,6 +154,20 @@ public class HomeFragment extends BaseFragment {
             mCameraButton.show(true);
         }
     }
+
+    public void onEventMainThread(ShowSpecificFeedEvent event) {
+        String feedKey = event.getFeedKey();
+        Integer position = mFeedKeyMap.get(feedKey);
+        if (position == null) {
+            return;
+        }
+        mViewPager.setCurrentItem(position);
+
+        //event is consumed, we can remove it now
+        mEventBus.removeStickyEvent(event);
+
+    }
+
 
     public void onEventMainThread(HideOrShowFabEvent event) {
         if (event.show) {
@@ -177,6 +208,19 @@ public class HomeFragment extends BaseFragment {
         switch (item.getItemId()) {
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static class ShowSpecificFeedEvent {
+
+        private final String mFeedKey;
+
+        public ShowSpecificFeedEvent(String feedKey) {
+            mFeedKey = feedKey;
+        }
+
+        public String getFeedKey() {
+            return mFeedKey;
         }
     }
 
