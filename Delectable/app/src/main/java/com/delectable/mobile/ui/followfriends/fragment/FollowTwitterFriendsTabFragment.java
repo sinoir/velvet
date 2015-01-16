@@ -55,7 +55,6 @@ public class FollowTwitterFriendsTabFragment extends BaseFollowFriendsTabFragmen
 
         mEmptyTextView.setText(R.string.empty_twitter);
 
-        mConnectButton.setBackgroundResource(R.drawable.btn_twitter);
         mConnectButton.setTextColor(getResources().getColor(R.color.d_blue_twitter_tab));
         mConnectButton.setText(R.string.connect_twitter_button);
         mConnectButton.setIconDrawable(getResources().getDrawable(R.drawable.ic_find_twitter_pressed));

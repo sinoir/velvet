@@ -172,12 +172,6 @@
         <item name="type">large</item>
     </style>
 
-    <style name="delectabutton_facebook" parent="delectabutton_large">
-        <item name="android:background">@drawable/btn_facebook</item>
-        <item name="android:textColor">@color/com_facebook_blue</item>
-        <item name="android:icon">@drawable/ic_fb</item>
-    </style>
-
     <!-- Navigation Item Styles -->
     <style name="NavigationItem">
         <item name="android:layout_width">match_parent</item>
