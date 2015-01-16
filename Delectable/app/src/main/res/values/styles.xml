@@ -124,10 +124,15 @@
     </style>
 
     <!-- Divider drawn horizontally, dividing vertical items -->
-    <style name="VerticalDivider">
+    <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/d_light_gray</item>
+    </style>
+
+    <style name="Divider.Bold">
+        <item name="android:background">@color/background</item>
+        <item name="android:layout_height">@dimen/spacing_8</item>
     </style>
 
     <style name="ProgressBar">
@@ -223,7 +228,7 @@
 
     <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel"></style>
 
-    <style name="WineCaptureDividers" parent="VerticalDivider">
+    <style name="WineCaptureDividers" parent="Divider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
     </style>
 

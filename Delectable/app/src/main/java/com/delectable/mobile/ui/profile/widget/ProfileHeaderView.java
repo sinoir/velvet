@@ -13,12 +13,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ProfileHeaderView extends RelativeLayout implements
+public class ProfileHeaderView extends LinearLayout implements
         ProfileHeaderMainView.ActionListener {
 
     public static final int STATE_FOLLOWING = 0;

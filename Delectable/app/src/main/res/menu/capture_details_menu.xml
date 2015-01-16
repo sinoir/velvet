@@ -7,6 +7,6 @@
         android:id="@+id/share"
         app:showAsAction="ifRoom"
         android:title="@string/share"
-        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha" />
+        android:icon="@drawable/ic_action_social_share" />
 
 </menu>

@@ -152,12 +152,17 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:id="@+id/divider"
+        style="@style/Divider"
+        android:layout_below="@id/varietal_region_container" />
+
     <com.delectable.mobile.ui.common.widget.FontTextView
         android:id="@+id/empty_view_wine_profile"
         style="@style/TextEmptyState"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/varietal_region_container"
+        android:layout_below="@id/divider"
         android:background="@android:color/white"
         android:gravity="center"
         android:padding="@dimen/spacing_32"
