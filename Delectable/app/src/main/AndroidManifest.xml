@@ -49,6 +49,10 @@
                 <data
                     android:host="capture"
                     android:scheme="delectable" />
+                <!-- Accepts URIs that begin with "delectable://feed” -->
+                <data
+                    android:host="feed"
+                    android:scheme="delectable" />
                 <!-- Accepts URIs that begin with "delectable://custom_feed” -->
                 <data
                     android:host="custom_feed"
@@ -65,9 +69,6 @@
                     android:scheme="delectable" />
                 <data
                     android:host="purchase"
-                    android:scheme="delectable" />
-                <data
-                    android:host="recommendations"
                     android:scheme="delectable" />
                 -->
             </intent-filter>

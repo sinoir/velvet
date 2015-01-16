@@ -15,6 +15,7 @@ import com.delectable.mobile.ui.search.activity.SearchActivity;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String TAG = NavActivity.class.getSimpleName();
+
+    public static final String PARAMS_FEED_KEY = "PARAMS_FEED_KEY";
 
     @Inject
     protected EventBus mEventBus;
@@ -56,11 +59,20 @@ public class NavActivity extends BaseActivity
 
     private TextView mToolbarTitleView;
 
+    public static Intent newFeedIntent(Context packageContext, String feedKey) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_FEED_KEY, feedKey);
+        intent.setClass(packageContext, NavActivity.class);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         App.injectMembers(this);
+
+        handleFeedKeyParam();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -70,6 +82,22 @@ public class NavActivity extends BaseActivity
         mNavigationDrawerFragment.setUp(mDrawerLayout);
 
         mToolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
+    }
+
+    private void handleFeedKeyParam() {
+        //if it exists,
+        String feedKey = null;
+        Bundle args = getIntent().getExtras();
+        if (args == null) {
+            return;
+        }
+        feedKey = args.getString(PARAMS_FEED_KEY);
+        if (feedKey == null) {
+            return;
+        }
+
+        mEventBus.postSticky(new HomeFragment.ShowSpecificFeedEvent(feedKey));
+        //broadcast stickyevent to tell home fragment to select tab
     }
 
     @Override

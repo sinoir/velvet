@@ -427,6 +427,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
         if (intent != null) {
             startActivity(intent);
         }
+
+        //TODO account for opening intent that opens into NavActivity
+        //for now I haven't seen the feed deeplink appear in recent activity  but
+        //might need to account for delectable://feed which opens something in navactivity, the current activity that we're already in
     }
 
     /**
