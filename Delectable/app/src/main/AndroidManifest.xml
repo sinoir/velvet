@@ -57,7 +57,10 @@
                 <data
                     android:host="custom_feed"
                     android:scheme="delectable" />
-
+                <!-- Accepts URIs that begin with "delectable://camera” -->
+                <data
+                    android:host="camera"
+                    android:scheme="delectable" />
                 <!-- Accepts URIs that begin with "delectable://open” -->
                 <data
                     android:host="open"
@@ -98,8 +101,12 @@
             android:name="com.delectable.mobile.ui.camera.activity.WineCaptureActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Delectable.Translucent" />
-
+            android:theme="@style/Theme.Delectable.Translucent">
+            <!--used to facilitate sythesizing a back stack for deep links-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delectable.mobile.ui.navigation.activity.NavActivity" />
+        </activity>
         <activity
             android:name="com.delectable.mobile.ui.profile.activity.UserProfileActivity"
             android:label=""
