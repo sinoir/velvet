@@ -144,7 +144,7 @@
 
     <style name="StatusBarScrim">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">128dp</item>
+        <item name="android:layout_height">148dp</item>
         <item name="android:layout_gravity">top</item>
     </style>
 
@@ -539,7 +539,7 @@
     <style name="ActionMenuBuyButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginRight">8dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_centerVertical">true</item>
     </style>

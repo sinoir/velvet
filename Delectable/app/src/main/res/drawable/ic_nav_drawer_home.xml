@@ -6,6 +6,6 @@
     <!--<item android:drawable="@drawable/ic_nav_drawer_home_pressed" android:state_pressed="true" />-->
     <!--<item android:drawable="@drawable/ic_nav_drawer_home_pressed" android:state_activated="true" />-->
     <!--<item android:drawable="@drawable/ic_nav_drawer_home_pressed" android:state_focused="true" />-->
-    <item android:drawable="@drawable/ic_nav_drawer_home_normal" />
+    <item android:drawable="@drawable/ic_nav_drawer_home_pressed" />
 
 </selector>

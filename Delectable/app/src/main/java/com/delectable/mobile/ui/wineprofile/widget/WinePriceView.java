@@ -74,7 +74,7 @@ public class WinePriceView extends RelativeLayout {
             mSoldOutView.setVisibility(View.VISIBLE);
         } else if (vintageWineInfo.hasPrice()) {
             mPriceText.setVisibility(View.VISIBLE);
-            mPriceText.setText(vintageWineInfo.getPriceText());
+            mPriceText.setText(getResources().getString(R.string.wine_profile_buy) + " " + vintageWineInfo.getPriceText());
         } else {
             mCheckPrice.setVisibility(View.VISIBLE);
         }
