@@ -305,6 +305,8 @@ public class WineProfileFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.injectMembers(this);
+        setHasOptionsMenu(true);
+
         Bundle args = getArguments();
         if (args != null) {
             //spawned from Feed Fragment
@@ -491,6 +493,15 @@ public class WineProfileFragment extends BaseFragment implements
 //        mToolbarBuyButton.setTranslationX(Animate.TRANSLATION);
 //        mToolbarBuyButton.setAlpha(0);
         MenuItemCompat.setActionView(buyItem, mBuyActionView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (R.id.share == item.getItemId()) {
+            shareWine(mBaseWine);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

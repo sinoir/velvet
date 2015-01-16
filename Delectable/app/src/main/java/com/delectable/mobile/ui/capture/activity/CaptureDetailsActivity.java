@@ -52,8 +52,8 @@ public class CaptureDetailsActivity extends TranslucentStatusBarActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finishDeepLinkActivity();
-                break;
+                return true;
         }
-        return true;
+        return false;
     }
 }

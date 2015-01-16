@@ -10,14 +10,13 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@id/wine_image"
-        android:layout_marginLeft="@dimen/general_row_horizontal_spacing"
-        android:layout_marginRight="@dimen/general_row_horizontal_spacing"
         android:layout_toLeftOf="@+id/occurence_count"
         android:ellipsize="end"
-        android:gravity="center|left"
+        android:gravity="center_vertical|left"
+        android:layout_centerVertical="true"
         android:singleLine="true"
         android:text="#wine"
-        android:textColor="@color/d_black"
+        android:textColor="@color/d_dark_gray"
         android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium" />
 
@@ -26,11 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/general_row_horizontal_spacing"
         android:ellipsize="end"
         android:text="2231"
-        android:gravity="center|right"
+        android:gravity="center_vertical|right"
+        android:layout_centerVertical="true"
         android:textColor="@color/d_medium_gray"
         android:textSize="@dimen/text_size_medium"
-        app:fontName="whitney_book" />
+        app:fontName="whitney_medium" />
 </merge>

@@ -4,11 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/buy"
-        app:showAsAction="ifRoom"
-        android:title="@string/wine_profile_buy" />
-
-    <item
         android:id="@+id/share"
         app:showAsAction="ifRoom"
         android:title="@string/share"

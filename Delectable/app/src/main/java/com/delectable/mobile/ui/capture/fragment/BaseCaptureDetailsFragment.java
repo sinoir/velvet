@@ -231,27 +231,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void shareCapture(CaptureDetails capture) {
-        //prepare vintage string
-        String vintage = "";
-        CaptureState state = CaptureState.getState(capture);
-        if (CaptureState.IDENTIFIED == state) {
-            vintage = capture.getWineProfile().getVintage() + " ";
-        }
-        //strip NV or -- if necessary
-        if (vintage.trim().equals("NV") ||
-                vintage.trim().equals("--")) {
-            vintage = "";
-        }
-
-        String shareText = getResources().getString(R.string.cap_action_recommend_text,
-                capture.getDisplayTitle() + " " + vintage
-                        + capture.getDisplayDescription(),
-                capture.getShortShareUrl());
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-        shareIntent.setType("text/plain");
-        startActivity(shareIntent);
+        shareWine(capture);
     }
 
     private void sendRating(final CaptureDetails capture, final int rating) {

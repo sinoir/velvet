@@ -26,7 +26,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="La Rame"
-        android:textColor="@color/d_dark_gray"
+        android:textColor="@color/d_medium_gray"
         android:textSize="@dimen/search_wine_text_size"
         app:fontName="whitney_medium_sc" />
 
@@ -40,7 +40,7 @@
         android:maxLines="2"
         android:lineSpacingMultiplier="1.2"
         android:text="Sauvignon Blanc 2012"
-        android:textColor="@color/d_black"
+        android:textColor="@color/d_dark_gray"
         android:textSize="@dimen/search_wine_text_size"
         app:fontName="whitney_book" />
 </merge>

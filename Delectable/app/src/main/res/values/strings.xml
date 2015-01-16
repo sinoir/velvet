@@ -20,6 +20,7 @@
     <string name="remove">Remove</string>
     <string name="delete">Delete</string>
     <string name="report">Report</string>
+    <string name="share">Share</string>
     <string name="dialog_edit">Edit</string>
     <string name="invite_body">Join me on Delectable! The best way to save, share and discover wine.\nhttps://www.delectable.com/invite</string>
 
@@ -226,8 +227,8 @@
     <string name="cap_feed_like_text_anchor_and">and</string>
 
     <!-- Capture Overflow Menu -->
-    <string name="cap_action_recommend">Recommend</string>
-    <string name="cap_action_recommend_text">You might like this! %1$s (%2$s).\n\nCaptured and identified using Delectable for Android, the best way to save, share, and discover wine.</string>
+    <string name="cap_action_recommend">Recommend to a friend</string>
+    <string name="cap_action_recommend_text">You might like this %1$s on Delectable: %2$s\n\n____\nDon\'t have Delectable? Get the app: get.delectable.com</string>
     <string name="cap_action_edit">Edit rating</string>
     <string name="cap_action_flag">Flag as incorrect</string>
     <string name="cap_action_remove">Remove</string>

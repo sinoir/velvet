@@ -155,7 +155,7 @@ public class CaptureDetailsView extends RelativeLayout {
     public CaptureDetailsView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        View.inflate(context, R.layout.row_feed_wine_detail, this);
+        View.inflate(context, R.layout.capture_details, this);
         ButterKnife.inject(this);
 
         mUserComment.setMovementMethod(LinkMovementMethod.getInstance());

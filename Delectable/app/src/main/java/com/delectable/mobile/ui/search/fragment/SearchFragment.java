@@ -8,6 +8,7 @@ import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
 import com.delectable.mobile.ui.search.widget.SearchToolbar;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -31,6 +32,11 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     //# pages to the left/right for the viewpager to retain
     private static final int PAGES_LIMIT = 2;
 
+    /**
+     * Search starts automatically while typing after this many milliseconds
+     */
+    private static final int AUTO_SEARCH_DELAY = 300;
+
     private SlidingTabAdapter mTabsAdapter;
 
     @InjectView(R.id.tab_layout)
@@ -44,6 +50,10 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     private HashSet<SearchView.OnQueryTextListener> mListeners
             = new HashSet<SearchView.OnQueryTextListener>();
 
+    private Handler mAutoSearchHandler = new Handler();
+
+    private Runnable mAutoSearchTask;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +61,13 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         //set up tab icons and fragments
         SlidingTabAdapter.SlidingTabItem wines = new SlidingTabAdapter.SlidingTabItem(
                 new SearchWinesTabFragment(),
-                getString(R.string.search_wines));
+                getString(R.string.search_wines).toLowerCase());
         SlidingTabAdapter.SlidingTabItem hashtags = new SlidingTabAdapter.SlidingTabItem(
                 new SearchHashtagsTabFragment(),
-                getString(R.string.search_hashtags));
+                getString(R.string.search_hashtags).toLowerCase());
         SlidingTabAdapter.SlidingTabItem people = new SlidingTabAdapter.SlidingTabItem(
                 new SearchPeopleTabFragment(),
-                getString(R.string.search_people));
-
-
-
+                getString(R.string.search_people).toLowerCase());
 
         ArrayList<SlidingTabAdapter.SlidingTabItem>
                 tabItems = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
@@ -100,13 +107,20 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     }
 
     @Override
-    public boolean onQueryTextChange(String s) {
+    public boolean onQueryTextChange(final String s) {
         for (SearchView.OnQueryTextListener listener : mListeners) {
             listener.onQueryTextChange(s);
         }
+        mAutoSearchHandler.removeCallbacks(mAutoSearchTask);
+        mAutoSearchTask = new Runnable() {
+            @Override
+            public void run() {
+                onQueryTextSubmit(s);
+            }
+        };
+        mAutoSearchHandler.postDelayed(mAutoSearchTask, AUTO_SEARCH_DELAY);
         return false;
     }
-
 
     @Override
     public boolean onQueryTextSubmit(String query) {
