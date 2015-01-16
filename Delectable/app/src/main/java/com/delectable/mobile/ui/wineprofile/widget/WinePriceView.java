@@ -48,7 +48,9 @@ public class WinePriceView extends RelativeLayout {
 
     public WinePriceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        App.injectMembers(this);
+        if (!isInEditMode()) {
+            App.injectMembers(this);
+        }
 
         View.inflate(context, R.layout.widget_wine_price, this);
 
