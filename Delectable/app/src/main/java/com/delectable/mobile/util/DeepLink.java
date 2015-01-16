@@ -7,6 +7,7 @@ import com.delectable.mobile.ui.capture.activity.FeedActivity;
 import com.delectable.mobile.ui.navigation.activity.NavActivity;
 import com.delectable.mobile.ui.profile.activity.UserProfileActivity;
 import com.delectable.mobile.ui.wineprofile.activity.WineProfileActivity;
+import com.delectable.mobile.ui.winepurchase.activity.WineCheckoutActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ public enum DeepLink {
     CAPTURES("captures"),
     BASE_WINE("base_wine"),
     CAPTURE("capture"),
+    PURCHASE("purchase"),
     FEED("feed"),
     CUSTOM_FEED("custom_feed"),
     CAMERA("camera"),
@@ -94,6 +96,8 @@ public enum DeepLink {
                 return prepareWineProfile(c, data);
             case CAPTURE:
                 return prepareCaptureDetails(c, data);
+            case PURCHASE:
+                return preparePurchase(c, data);
             case FEED:
                 //the feeds are encapsulated in the feedactivity, there is no special intent
                 return prepareFeed(c, data);
@@ -126,6 +130,11 @@ public enum DeepLink {
         return CaptureDetailsActivity.newIntent(c, captureId);
     }
 
+    private static Intent preparePurchase(Context c, Uri data) {
+        String vintageId = data.getQueryParameter("vintage_id");
+        return WineCheckoutActivity.newIntent(c, vintageId);
+    }
+
     private static Intent prepareFeed(Context c, Uri data) {
         String feedKey = data.getQueryParameter("feed_key");
         return NavActivity.newFeedIntent(c, feedKey);
@@ -135,6 +144,7 @@ public enum DeepLink {
         String feedKey = data.getQueryParameter("feed_key");
         return FeedActivity.newIntent(c, feedKey, CaptureFeed.CUSTOM, "");
     }
+
     private static Intent prepareCamera(Context c) {
         return new Intent(c, WineCaptureActivity.class);
 

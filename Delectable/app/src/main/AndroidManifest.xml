@@ -49,6 +49,10 @@
                 <data
                     android:host="capture"
                     android:scheme="delectable" />
+                <!-- Accepts URIs that begin with "delectable://purchase” -->
+                <data
+                    android:host="purchase"
+                    android:scheme="delectable" />
                 <!-- Accepts URIs that begin with "delectable://feed” -->
                 <data
                     android:host="feed"
@@ -69,9 +73,6 @@
                 <!--TODO: Implement these once screens become available
                 <data
                     android:host="region"
-                    android:scheme="delectable" />
-                <data
-                    android:host="purchase"
                     android:scheme="delectable" />
                 -->
             </intent-filter>
@@ -178,16 +179,9 @@
             android:label="@string/winecheckout_title"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter android:label="">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "delectable://purchase?vintage_id=$VINTAGE_ID” -->
-                <data
-                    android:host="purchase"
-                    android:scheme="delectable" />
-            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delectable.mobile.ui.navigation.activity.NavActivity" />
         </activity>
 
         <activity
