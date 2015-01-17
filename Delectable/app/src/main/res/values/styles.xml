@@ -167,6 +167,7 @@
     <style name="delectabutton_large">
         <item name="android:layout_width">@dimen/delectabutton_width</item>
         <item name="android:layout_height">70dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:background">@drawable/btn_large</item>
         <item name="android:textColor">@color/d_dark_gray</item>
         <item name="type">large</item>
