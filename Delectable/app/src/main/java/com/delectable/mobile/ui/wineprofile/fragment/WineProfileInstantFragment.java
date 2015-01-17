@@ -111,6 +111,12 @@ public class WineProfileInstantFragment extends WineProfileFragment {
         mRateButton.setTranslationX(Animate.TRANSLATION);
         mRateButton.setAlpha(0);
         MenuItemCompat.setActionView(postItem, mActionView);
+
+        // disable share action
+        MenuItem shareItem = menu.findItem(R.id.share);
+        if (shareItem != null) {
+            shareItem.setVisible(false);
+        }
     }
 
     public void onEventMainThread(CreatedPendingCaptureEvent event) {

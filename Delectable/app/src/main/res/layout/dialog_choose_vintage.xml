@@ -9,7 +9,7 @@
 
     <View
         android:id="@+id/divider"
-        style="@style/VerticalDivider" />
+        style="@style/Divider" />
 
     <ListView
         android:id="@+id/list_view"

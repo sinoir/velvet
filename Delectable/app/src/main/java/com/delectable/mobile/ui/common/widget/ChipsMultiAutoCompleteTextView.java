@@ -299,7 +299,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         super.performFiltering(text, start, end, keyCode);
     }
 
-    public ArrayList<ChipSpan> getSpans() {
+    private ArrayList<ChipSpan> getSpans() {
         ChipSpan[] chips = getText().getSpans(0, getText().length(), ChipSpan.class);
         return new ArrayList<>(Arrays.asList(chips));
     }

@@ -8,10 +8,16 @@
         app:showAsAction="ifRoom"
         android:title="@string/wine_profile_buy" />
 
+    <!--<item-->
+        <!--android:id="@+id/cart"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:title="@string/wine_profile_buy"-->
+        <!--android:icon="@drawable/ic_action_action_shopping_cart" />-->
+
     <item
         android:id="@+id/share"
         app:showAsAction="ifRoom"
         android:title="@string/share"
-        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha" />
+        android:icon="@drawable/ic_action_social_share" />
 
 </menu>

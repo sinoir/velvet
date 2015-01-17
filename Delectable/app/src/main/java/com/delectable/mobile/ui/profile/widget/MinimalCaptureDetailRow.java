@@ -479,7 +479,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @OnClick({R.id.wine_image, R.id.wine_name, R.id.producer_name})
     protected void onWineDetailsClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.launchWineProfile(mCaptureDetails);
+            mCaptureDetailsActionsHandler.launchCaptureDetails(mCaptureDetails);
         }
     }
 

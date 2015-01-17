@@ -124,10 +124,15 @@
     </style>
 
     <!-- Divider drawn horizontally, dividing vertical items -->
-    <style name="VerticalDivider">
+    <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/d_light_gray</item>
+    </style>
+
+    <style name="Divider.Bold">
+        <item name="android:background">@color/background</item>
+        <item name="android:layout_height">@dimen/spacing_8</item>
     </style>
 
     <style name="ProgressBar">
@@ -144,15 +149,15 @@
 
     <style name="StatusBarScrim">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">128dp</item>
+        <item name="android:layout_height">148dp</item>
         <item name="android:layout_gravity">top</item>
     </style>
 
     <style name="CardViewStyle" parent="CardView.Light">
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">9dp</item>
         <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_8</item>
+        <item name="android:layout_marginRight">@dimen/spacing_8</item>
         <item name="cardCornerRadius">5dp</item>
         <item name="cardBackgroundColor">@color/d_white</item>
         <item name="cardPreventCornerOverlap">false</item>
@@ -165,12 +170,6 @@
         <item name="android:background">@drawable/btn_large</item>
         <item name="android:textColor">@color/d_dark_gray</item>
         <item name="type">large</item>
-    </style>
-
-    <style name="delectabutton_facebook" parent="delectabutton_large">
-        <item name="android:background">@drawable/btn_facebook</item>
-        <item name="android:textColor">@color/com_facebook_blue</item>
-        <item name="android:icon">@drawable/ic_fb</item>
     </style>
 
     <!-- Navigation Item Styles -->
@@ -223,7 +222,7 @@
 
     <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel"></style>
 
-    <style name="WineCaptureDividers" parent="VerticalDivider">
+    <style name="WineCaptureDividers" parent="Divider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
     </style>
 
@@ -406,7 +405,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">bottom|right</item>
-        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_marginRight">@dimen/spacing_16</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_16</item>
         <item name="android:src">@drawable/ic_camera</item>
         <item name="fab_colorNormal">@color/d_chestnut</item>
         <item name="fab_colorPressed">@color/d_chestnut_pressed</item>
@@ -539,7 +539,7 @@
     <style name="ActionMenuBuyButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginRight">8dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_centerVertical">true</item>
     </style>

@@ -48,7 +48,9 @@ public class WinePriceView extends RelativeLayout {
 
     public WinePriceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        App.injectMembers(this);
+        if (!isInEditMode()) {
+            App.injectMembers(this);
+        }
 
         View.inflate(context, R.layout.widget_wine_price, this);
 
@@ -74,7 +76,7 @@ public class WinePriceView extends RelativeLayout {
             mSoldOutView.setVisibility(View.VISIBLE);
         } else if (vintageWineInfo.hasPrice()) {
             mPriceText.setVisibility(View.VISIBLE);
-            mPriceText.setText(vintageWineInfo.getPriceText());
+            mPriceText.setText(getResources().getString(R.string.wine_profile_buy) + " " + vintageWineInfo.getPriceText());
         } else {
             mCheckPrice.setVisibility(View.VISIBLE);
         }
