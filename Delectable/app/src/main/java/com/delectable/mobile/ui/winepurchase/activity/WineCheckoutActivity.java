@@ -17,9 +17,6 @@ public class WineCheckoutActivity extends BaseActivity {
 
     private static final String PARAMS_VINTAGE_ID = "PARAMS_VINTAGE_ID";
 
-    //Deep Link keys
-    private static final String DEEP_BASE_VINTAGE_ID = "vintage_id";
-
     private Toolbar mErrorTooblar;
 
     private boolean mErrorBarShown = false;
