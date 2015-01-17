@@ -1,9 +1,6 @@
 package com.mienaikoe.wifimesh.mesh;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
+import android.app.Service;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
@@ -23,14 +20,13 @@ import java.util.UUID;
 
 
 // Fit for Android APIs 5+
-public class BluetoothMeshParticipatingService extends BluetoothMeshService {
+public class BluetoothMeshParticipatingMember extends BluetoothMeshMember {
 
     private BluetoothLeAdvertiser advertiser;
     private BluetoothLeScanner scanner;
 
     private AdvertiseSettings advertiseSettings;
     private AdvertiseData advertiseData;
-    private Context context = this;
 
     private static UUID VELVET_SERVICE_UUID = new UUID(0x92FA46, 0x92FA46); // Make something up? I have no clue
     private static ParcelUuid VELVET_SERVICE_UUID_PARCEL = new ParcelUuid(VELVET_SERVICE_UUID);
@@ -97,8 +93,11 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
 
 
 
-    public BluetoothMeshParticipatingService() {
-        super();
+    public BluetoothMeshParticipatingMember(BluetoothManager manager, Service parent) throws BluetoothMeshException {
+        super(manager, parent);
+
+        this.advertiser = adapter.getBluetoothLeAdvertiser();
+        this.scanner = adapter.getBluetoothLeScanner();
 
         AdvertiseSettings.Builder settingsBuilder = new AdvertiseSettings.Builder();
         settingsBuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED); // No clue what this is for
@@ -116,18 +115,7 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
     }
 
 
-
-    protected void setupBluetooth() {
-        super.setupBluetooth();
-        if( adapter != null ) {
-            this.advertiser = adapter.getBluetoothLeAdvertiser();
-            this.scanner = adapter.getBluetoothLeScanner();
-        }
-    }
-
-
-    @Override
-    public void onDestroy() {
+    public void stop() {
         if( this.scanner != null ) {
             this.scanner.stopScan(this.scanCallback);
         }
@@ -137,7 +125,7 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
     }
 
 
-    private void advertise(){
+    public void advertise(){
         if( this.state == BluetoothMeshState.SCANNING){
             scanner.stopScan(this.scanCallback);
             this.setState(BluetoothMeshState.ADVERTISING);
@@ -146,7 +134,7 @@ public class BluetoothMeshParticipatingService extends BluetoothMeshService {
     }
 
 
-    protected void scan(){
+    public void scan(){
         if( this.state == BluetoothMeshState.ADVERTISING ) {
             this.advertiser.stopAdvertising(this.advertiseCallback);
             this.setState(BluetoothMeshState.SCANNING);

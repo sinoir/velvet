@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +20,12 @@ import java.util.Map;
 
 
 
-public abstract class BluetoothMeshService extends Service {
+public abstract class BluetoothMeshMember {
 
     protected BluetoothManager manager;
     protected BluetoothAdapter adapter;
+
+    protected Service parent;
 
     protected Map<String, BluetoothDevice> advertisers = new HashMap<String, BluetoothDevice>();
 
@@ -55,9 +58,16 @@ public abstract class BluetoothMeshService extends Service {
 
 
 
-    public BluetoothMeshService() {
+    public BluetoothMeshMember(BluetoothManager manager, Service parent) throws BluetoothMeshException {
         super();
-        Log.i(this.getClass().getSimpleName(), "Initializing Service");
+        this.manager = manager;
+        this.adapter = manager.getAdapter();
+        if( this.adapter == null ){
+            this.setState(BluetoothMeshState.DISABLED);
+            throw new BluetoothMeshException("Bluetooth is not supported on this device");
+        } else if( !this.adapter.isEnabled() ){
+            this.adapter.enable();
+        }
     }
 
 
@@ -70,39 +80,15 @@ public abstract class BluetoothMeshService extends Service {
         Intent intent = new Intent(BluetoothMeshField.INTENT.getLabel());
         intent.putExtra(BluetoothMeshField.ADVERTISERS.getLabel(), peerNames);
         intent.putExtra(BluetoothMeshField.STATE.getLabel(), this.state.getLabel());
-        sendBroadcast(intent);
+        parent.sendBroadcast(intent); // TODO: REFACTOR AHH
     }
 
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void scan(){
+        // Meant to be overriden
     }
 
-
-    @Override
-    public void onCreate() {
-        this.setupBluetooth();
-        if( this.adapter != null ) {
-            this.scan();
-        }
-    }
-
-
-    protected void setupBluetooth() {
-        this.manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        this.adapter = this.manager.getAdapter();
-        if( this.adapter == null ){
-            Log.e(this.getClass().getSimpleName(), "Bluetooth is not supported on this device.");
-            this.setState(BluetoothMeshState.DISABLED);
-        } else if( !this.adapter.isEnabled() ){
-            this.adapter.enable();
-        }
-    }
-
-
-    protected void scan(){
+    public void advertise(){
         // Meant to be overriden
     }
 

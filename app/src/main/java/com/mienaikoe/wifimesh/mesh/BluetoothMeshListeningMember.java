@@ -1,12 +1,14 @@
 package com.mienaikoe.wifimesh.mesh;
 
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.os.Handler;
 
 
 // Fit for Android APIs 4.3+
-public class BluetoothMeshListeningService extends BluetoothMeshService {
+public class BluetoothMeshListeningMember extends BluetoothMeshMember {
 
     private Handler handler = new Handler();
 
@@ -27,20 +29,12 @@ public class BluetoothMeshListeningService extends BluetoothMeshService {
             };
 
 
-
-    public BluetoothMeshListeningService() {
-        super();
+    public BluetoothMeshListeningMember(BluetoothManager manager, Service parent) throws BluetoothMeshException {
+            super(manager, parent);
     }
 
 
-
-
-    @Override
-    public void onDestroy() {
-        adapter.stopLeScan(mLeScanCallback);
-    }
-
-    protected void scan(){
+    public void scan(){
         // Stops scanning after a pre-defined scan period.
         this.handler.postDelayed(new Runnable() {
             @Override

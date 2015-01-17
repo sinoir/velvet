@@ -6,18 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mienaikoe.wifimesh.mesh.BluetoothMeshField;
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshListeningService;
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshParticipatingService;
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshService;
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshState;
+import com.mienaikoe.wifimesh.mesh.BluetoothMeshListeningMember;
+import com.mienaikoe.wifimesh.mesh.BluetoothMeshParticipatingMember;
 
 import java.util.ArrayList;
 
@@ -65,13 +61,7 @@ public class StartupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, "Your phone will be unable to connect to mesh because it does not support Bluetooth Low-Energy", Toast.LENGTH_SHORT).show();
-        } else*/ if (android.os.Build.VERSION.SDK_INT >= 21) {
-            startService(new Intent(this, BluetoothMeshParticipatingService.class));
-        } else {
-            startService(new Intent(this, BluetoothMeshListeningService.class));
-        }
+        startService(new Intent(this, VelvetService.class));
 
         loadMap();
     }

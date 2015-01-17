@@ -9,10 +9,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
 
     <android:uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -40,12 +38,17 @@
         </activity>
 
         <service
-            android:name="com.mienaikoe.wifimesh.mesh.BluetoothMeshListeningService"
+            android:name=".mesh.BluetoothMeshListeningMember"
             android:enabled="true"
             android:exported="true" >
         </service>
         <service
-            android:name="com.mienaikoe.wifimesh.mesh.BluetoothMeshParticipatingService"
+            android:name=".mesh.BluetoothMeshParticipatingMember"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name=".VelvetService"
             android:enabled="true"
             android:exported="true" >
         </service>
