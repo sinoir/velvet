@@ -78,8 +78,9 @@ public class CommentRatingRowView extends RelativeLayout {
 //                            0,
 //                            name.length() + (comment.isEmpty() ? 0 : 1), 0);
         }
+        int startOffset = text.length() - comment.length();
         HashtagMentionSpan.applyHashtagAndMentionSpans(getContext(), spannableString, attributes,
-                text.length() - comment.length());
+                startOffset);
         mNameCommentTextView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 /*

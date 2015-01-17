@@ -87,8 +87,8 @@ public class HashtagMentionSpan extends ClickableSpan {
             ArrayList<CaptureCommentAttributes> commentAttributes, int commentTextStartOffset) {
         if (commentAttributes != null && !commentAttributes.isEmpty()) {
             for (CaptureCommentAttributes a : commentAttributes) {
-                int tagStart = a.getStart();
-                int tagEnd = a.getEnd();
+                int tagStart = a.getStart() + commentTextStartOffset;
+                int tagEnd = a.getEnd() + commentTextStartOffset;
                 if (tagStart < 0 || tagEnd < tagStart || tagEnd > span.length()) {
                     continue;
                 }

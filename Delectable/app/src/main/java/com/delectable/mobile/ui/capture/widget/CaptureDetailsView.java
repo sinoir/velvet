@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -143,6 +144,8 @@ public class CaptureDetailsView extends RelativeLayout {
     private MenuItem mMenuActionFlag;
 
     private MenuItem mMenuActionRemove;
+
+    private boolean mFirstCommentIsByCapturer = false;
 
     public CaptureDetailsView(Context context) {
         this(context, null);
@@ -373,11 +376,17 @@ public class CaptureDetailsView extends RelativeLayout {
             userAccountId = mCaptureDetails.getCapturerParticipant().getId();
         }
 
-        // Display the first user comment on top
-        ArrayList<CaptureComment> userCaptureComments = mCaptureDetails
-                .getCommentsForUserId(userAccountId);
-        if (userCaptureComments.size() > 0) {
-            userComment = userCaptureComments.get(0).getComment();
+        // If the first commenter is the capturer, then we display that as the capture's tasting note
+        //and this capturecomment is populated
+        CaptureComment firstCaptureComment = null;
+        mFirstCommentIsByCapturer = false;
+        if (mCaptureDetails.getComments() != null && !mCaptureDetails.getComments().isEmpty()) {
+            firstCaptureComment = mCaptureDetails.getComments().get(0);
+            String firstCommenter = firstCaptureComment.getAccountId();
+            if (firstCommenter.equalsIgnoreCase(userAccountId)) {
+                userComment = firstCaptureComment.getComment();
+                mFirstCommentIsByCapturer = true;
+            }
         }
 
         String time = DateHelperUtil.getPrettyTimePastOnly(mCaptureDetails.getCreatedAtDate());
@@ -409,8 +418,8 @@ public class CaptureDetailsView extends RelativeLayout {
                 .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
                         userComment.length(), spannableString.length(), Spanned.SPAN_COMPOSING);
         // spans for hashtags and mentions
-        if (!userCaptureComments.isEmpty()) {
-            ArrayList<CaptureCommentAttributes> attributes = userCaptureComments.get(0)
+        if (mFirstCommentIsByCapturer) {
+            ArrayList<CaptureCommentAttributes> attributes = firstCaptureComment
                     .getCommentAttributes();
             HashtagMentionSpan
                     .applyHashtagAndMentionSpans(getContext(), spannableString, attributes);
@@ -592,61 +601,43 @@ public class CaptureDetailsView extends RelativeLayout {
                 CommentRatingRowView.LayoutParams.MATCH_PARENT,
                 CommentRatingRowView.LayoutParams.WRAP_CONTENT);
 
-        // TODO: Finalize Test out with feed with participants.
-        // TODO: Show multiple comments for user
-        AccountMinimal capturingAccount = mCaptureDetails.getCapturerParticipant();
+        //build map of commenting accounts, so we can retreive names by account id's for the comment rows below
         ArrayList<AccountMinimal> participants = mCaptureDetails.getCommentingParticipants();
-        int numDisplayedComments = 0;
+        HashMap<String, AccountMinimal> commentingAccountsMap
+                = new HashMap<String, AccountMinimal>();
         if (participants != null) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.VISIBLE);
             for (AccountMinimal participant : participants) {
-                ArrayList<CaptureComment> comments = mCaptureDetails.getCommentsForUserId(
-                        participant.getId());
-                int firstIndex = 0;
-                int rating = mCaptureDetails.getRatingForId(participant.getId());
-                // Skip first user comment by the user who captured, otherwise it will show as duplicate
-                if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
-                    firstIndex = 1;
-                    // Don't duplicate ratings
-                    rating = -1;
-                }
-                ArrayList<CaptureCommentAttributes> attributes = null;
-                String firstCommentText = comments.size() > firstIndex ? comments.get(firstIndex)
-                        .getComment() : "";
-                // TODO : Figure out how to layout multiple comments with ratings?
-                if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
-                    CommentRatingRowView commentRow = new CommentRatingRowView(getContext(),
-                            mActionsHandler, participant.getId());
-                    attributes = comments.size() > firstIndex
-                            ? comments.get(firstIndex).getCommentAttributes()
-                            : null;
-                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
-                    commentRow.setNameAndComment(participant.getFullName(), firstCommentText,
-                            attributes);
-                    mParticipantsCommentsRatingsContainer.addView(commentRow,
-                            layoutParams);
-                    numDisplayedComments++;
-                }
-                for (int i = (firstIndex + 1); i < comments.size(); i++) {
-                    CommentRatingRowView commentRow = new CommentRatingRowView(getContext(),
-                            mActionsHandler, participant.getId());
-                    attributes = comments.get(i).getCommentAttributes();
-                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
-                    commentRow.setNameAndComment(participant.getFullName(),
-                            comments.get(i).getComment(), attributes);
-                    mParticipantsCommentsRatingsContainer.addView(commentRow,
-                            layoutParams);
-                    numDisplayedComments++;
-                }
+                commentingAccountsMap.put(participant.getId(), participant);
             }
         }
+
+        int numDisplayedComments = 0;
+
+        //offset start if 1st comment was made by capturer, meaning it is a special comment and the primary tasting note
+        //and not grouped with the rest of the joe schmoe comments
+        int start = mFirstCommentIsByCapturer ? 1 : 0;
+        for (int i = start; i < mCaptureDetails.getComments().size(); i++) {
+            CaptureComment comment = mCaptureDetails.getComments().get(i);
+            AccountMinimal participant = commentingAccountsMap.get(comment.getAccountId());
+            CommentRatingRowView commentRow = new CommentRatingRowView(getContext(),
+                    mActionsHandler, participant.getId());
+            //TODO simply not showing rating, might want to simplify CommentRatingRowView
+            commentRow.setNameAndComment(
+                    participant.getFullName(),
+                    comment.getComment(),
+                    comment.getCommentAttributes());
+            mParticipantsCommentsRatingsContainer.addView(commentRow, layoutParams);
+            numDisplayedComments++;
+        }
+
         if (numDisplayedComments == 0) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.GONE);
             mLikesCommentsDivider.setVisibility(View.GONE);
         }
 
         // Rating button
-        String currentUserId = UserInfo.getUserId(getContext());
+        String currentUserId = UserInfo.getUserId();
         boolean isCurrentUserCapture = mCaptureDetails.getCapturerParticipant().getId()
                 .equalsIgnoreCase(currentUserId);
         boolean isCurrentUserTaggedInCapture = mCaptureDetails.isUserTagged(currentUserId);
@@ -660,7 +651,7 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupActionButtonStates() {
-        String currentUserId = UserInfo.getUserId(getContext());
+        String currentUserId = UserInfo.getUserId();
         boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(currentUserId);
 
         mLikeButton.setSelected(userLikesCapture);

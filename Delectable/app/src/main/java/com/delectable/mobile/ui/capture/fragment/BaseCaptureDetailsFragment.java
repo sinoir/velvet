@@ -120,12 +120,13 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         }
         // Temp comment for instant UI
         final CaptureComment tempComment = new CaptureComment();
-        tempComment.setAccountId(UserInfo.getUserId(getActivity()));
+        tempComment.setAccountId(UserInfo.getUserId());
         tempComment.setComment(comment);
         if (capture.getComments() == null) {
             capture.setComments(new ArrayList<CaptureComment>());
         }
         capture.getComments().add(tempComment);
+        capture.getCommentingParticipants().add(UserInfo.getAccountPrivate());
         dataSetChanged();
 
         mCaptureController.addCommentToCapture(capture.getId(), comment, attributes);
