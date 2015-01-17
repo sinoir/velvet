@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/navigation_profile"
         android:orientation="vertical"
+        android:background="@color/primary"
         android:paddingBottom="@dimen/spacing_8"
         android:paddingTop="@dimen/spacing_8">
 
@@ -60,24 +61,45 @@
             android:id="@+id/navigation_discover"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_home"
-            android:text="@string/navigation_item_discover" />
+            android:text="@string/navigation_discover" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_your_wines"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_profile"
-            android:text="@string/navigation_item_your_wines" />
+            android:text="@string/navigation_your_wines" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_find_friends"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_friends"
-            android:text="@string/navigation_item_find_friends" />
+            android:text="@string/navigation_find_friends" />
 
         <com.delectable.mobile.ui.common.widget.FontTextView
             android:id="@+id/navigation_settings"
             style="@style/NavigationItem"
             android:drawableLeft="@drawable/ic_nav_drawer_settings"
-            android:text="@string/navigation_item_settings" />
+            android:text="@string/navigation_settings" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        style="@style/Divider"
+        android:layout_below="@id/navigation_items" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/recent_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:paddingLeft="@dimen/spacing_16"
+        android:paddingRight="@dimen/spacing_16"
+        android:paddingTop="@dimen/spacing_16"
+        android:paddingBottom="@dimen/spacing_4"
+        android:background="@color/primary"
+        android:textColor="@color/titleSecondary"
+        android:textSize="@dimen/text_size_medium"
+        android:text="@string/navigation_recent_activity"
+        app:fontName="whitney_medium" />
+
 </RelativeLayout>

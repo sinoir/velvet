@@ -176,16 +176,16 @@
     <style name="NavigationItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
-        <item name="android:drawablePadding">32dp</item>
-        <item name="android:background">@drawable/bg_nav_drawer_item</item>
+        <item name="android:drawablePadding">28dp</item>
+        <!--<item name="android:background">@drawable/bg_nav_drawer_item</item>-->
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">18sp</item>
         <item name="android:minHeight">48dp</item>
-        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textColor">@color/d_white</item>
-        <item name="fontName">whitney_medium_sc</item>
+        <item name="android:textColor">@color/selectable_text_on_primary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontName">whitney_medium</item>
     </style>
 
     <!--Rating TextView-->

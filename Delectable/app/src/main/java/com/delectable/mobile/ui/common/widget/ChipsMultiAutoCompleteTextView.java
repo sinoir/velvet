@@ -15,10 +15,12 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.Layout;
+import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.method.ArrowKeyMovementMethod;
 import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
@@ -57,6 +59,21 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     public static final int AUTO_COMPLETE_THRESHOLD = 1;
 
     private ActionsHandler mActionsHandler;
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            ChipsMultiAutoCompleteTextView.this.onTextChanged(s);
+        }
+    };
 
     private Tokenizer mTokenizer;
 
@@ -97,7 +114,6 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             mMentionAdapter = new SearchAutoCompleteAdapter<AccountSearch>(
             getContext(), mFilter);
 
-
     private boolean mIsDropdownShown;
 
     public ChipsMultiAutoCompleteTextView(Context context) {
@@ -133,6 +149,48 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
         setAdapter(null);
     }
 
+    private void onTextChanged(Editable comment)  {
+        // don't parse new hashtags while auto complete is running
+        if (mIsDropdownShown) {
+            return;
+        }
+
+        // parse comment for new #hashtags (non-auto-completed hashtags that is)
+        String commentString = comment.toString();
+        Matcher matcher = sHashtagPattern.matcher(commentString);
+        Log.d(TAG, "NEW_TAG parsing: " + commentString);
+        while (matcher.find()) {
+            int spanStart = matcher.start();
+            int spanEnd = matcher.end();
+            String tagId = comment.subSequence(spanStart + 1 /* id is hashtag without # symbol */,
+                    spanEnd).toString();
+            Log.d(TAG, "spanEnd=" + spanEnd + ", commentLength=" + commentString.length());
+            if ((spanEnd == commentString.length())
+                    || (spanEnd < commentString.length() && !isTagDelimiter(commentString.charAt(spanEnd)))) {
+                continue;
+            }
+            // check if we have this tag already
+            if (!isNewHashtagSpan(tagId)) {
+                continue;
+            }
+
+            ChipSpan span = new ChipSpan(tagId, tagId, CaptureCommentAttributes.TYPE_HASHTAG);
+            // replace with single character while in edit mode (allows for deleting chips with a single backspace), then replace later with real text (same for parsing when editing a comment)
+            SpannableString ss = new SpannableString(TAG_REPLACEMENT_STRING);
+            ss.setSpan(span, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            setText(getText().replace(spanStart, spanEnd, ss));
+            Selection.setSelection(getText(), Math.min(spanEnd + 1, getText().length()));
+
+            Log.d(TAG,
+                    "NEW_TAG found: startChar=" + commentString.charAt(spanStart) + ", endChar-1="
+                            + commentString.charAt(spanEnd - 1));
+        }
+    }
+
+    private boolean isTagDelimiter(char c) {
+        return !Character.isJavaIdentifierPart(c);
+    }
+
     /**
      * This should be called after calling setText() in order to highlight the hashtags and mentions
      * when editing
@@ -142,6 +200,7 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     public void setCommentAttributes(ArrayList<CaptureCommentAttributes> attributes) {
         Log.d(TAG, "parsing attributes: " + attributes);
         if (attributes == null || attributes.isEmpty()) {
+            addTextChangedListener(mTextWatcher);
             return;
         }
 
@@ -173,6 +232,8 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
             deletedCharacters += span.getReplacedText().length()
                     - 1; // replaced whole tag with one character
         }
+
+        addTextChangedListener(mTextWatcher);
     }
 
     public void setActionsHandler(ActionsHandler handler) {
@@ -364,6 +425,15 @@ public class ChipsMultiAutoCompleteTextView extends MultiAutoCompleteTextView
     private boolean isNewHashtag(String id, ArrayList<CaptureCommentAttributes> attributes) {
         for (CaptureCommentAttributes a : attributes) {
             if (a.getId().equals(id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isNewHashtagSpan(String key) {
+        for (ChipSpan span : getSpans()) {
+            if (span.getId().equals(key)) {
                 return false;
             }
         }
