@@ -56,7 +56,7 @@ public class HomeFragment extends BaseFragment {
 
         setHasOptionsMenu(true);
 
-        mView = inflater.inflate(R.layout.fragment_viewpager_with_sliding_tabs, container, false);
+        mView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabLayout = (SlidingTabLayout) mView.findViewById(R.id.tab_layout);

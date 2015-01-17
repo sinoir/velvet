@@ -154,10 +154,10 @@
     </style>
 
     <style name="CardViewStyle" parent="CardView.Light">
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">9dp</item>
         <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_8</item>
+        <item name="android:layout_marginRight">@dimen/spacing_8</item>
         <item name="cardCornerRadius">5dp</item>
         <item name="cardBackgroundColor">@color/d_white</item>
         <item name="cardPreventCornerOverlap">false</item>
@@ -405,7 +405,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">bottom|right</item>
-        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_marginRight">@dimen/spacing_16</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_16</item>
         <item name="android:src">@drawable/ic_camera</item>
         <item name="fab_colorNormal">@color/d_chestnut</item>
         <item name="fab_colorPressed">@color/d_chestnut_pressed</item>
