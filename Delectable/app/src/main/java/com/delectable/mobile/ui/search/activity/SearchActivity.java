@@ -32,7 +32,7 @@ public class SearchActivity extends BaseActivity {
                 onBackPressed();
                 break;
         }
-        return true;
+        return false;
     }
 
 }
