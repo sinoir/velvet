@@ -7,7 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,6 +71,7 @@ public class StartupActivity extends Activity {
         loadMap();
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         registerReceiver(bluetoothMeshServiceReceiver, new IntentFilter(BluetoothMeshField.INTENT.getLabel()));
@@ -77,6 +83,41 @@ public class StartupActivity extends Activity {
         unregisterReceiver(bluetoothMeshServiceReceiver);
     }
 
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_test_mesh:
+                openMeshTest();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void openMeshTest(){
+
+    }
+
+    private void openLine(){
+        Intent go = new Intent(  );
+        startActivity(go);
+    }
 
 
     private void loadMap(){

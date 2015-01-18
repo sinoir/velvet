@@ -6,11 +6,16 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <android:uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -25,6 +30,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".StartupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -32,21 +41,17 @@
             android:theme="@style/FullscreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".mesh.BluetoothMeshListeningMember"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
-            android:name=".mesh.BluetoothMeshParticipatingMember"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
+        <activity
+            android:name=".LineActivity"
+            android:label="Stations on Line"
+            android:theme="@style/FullscreenTheme">
+        </activity>
+
+
         <service
             android:name=".VelvetService"
             android:enabled="true"

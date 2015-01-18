@@ -5,9 +5,11 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.mienaikoe.wifimesh.location.StationSentinel;
 import com.mienaikoe.wifimesh.mesh.BluetoothMeshException;
 import com.mienaikoe.wifimesh.mesh.BluetoothMeshListeningMember;
 import com.mienaikoe.wifimesh.mesh.BluetoothMeshMember;
@@ -16,6 +18,7 @@ import com.mienaikoe.wifimesh.mesh.BluetoothMeshParticipatingMember;
 public class VelvetService extends Service {
 
     private BluetoothMeshMember mesh;
+    private StationSentinel station;
 
 
     public VelvetService() {
