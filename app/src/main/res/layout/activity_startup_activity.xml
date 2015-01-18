@@ -1,0 +1,43 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StartupActivity"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/mapView"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/nyc_subway_concentric" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:layout_width="190dp"
+            android:layout_height="fill_parent"
+            android:text="Disabled"
+            android:id="@+id/stateView"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#CCFF33"
+            android:typeface="monospace"
+            android:textAlignment="center"
+            android:paddingLeft="10dp" />
+
+        <TextView
+            android:layout_width="190dp"
+            android:layout_height="20dp"
+            android:text="0 Peers"
+            android:id="@+id/advertiserView"
+            android:typeface="monospace"
+            android:paddingLeft="10dp"
+            android:textColor="#33FFCC" />
+    </LinearLayout>
+
+</LinearLayout>
