@@ -7,7 +7,6 @@ public enum BluetoothMeshField {
 
     ADVERTISERS("velvet.BluetoothMeshField.ADVERTISERS"),
     STATE("velvet.BluetoothMeshField.STATE"),
-    INTENT("velvet.BluetoothMeshField.INTENT");
     ;
 
     private String label;

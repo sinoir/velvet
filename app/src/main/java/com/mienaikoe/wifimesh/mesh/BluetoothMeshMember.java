@@ -77,7 +77,7 @@ public abstract class BluetoothMeshMember {
             peerNames.add(advertiser.getName());
         }
 
-        Intent intent = new Intent(BluetoothMeshField.INTENT.getLabel());
+        Intent intent = new Intent(BluetoothMeshIntent.UPDATE.getLabel());
         intent.putExtra(BluetoothMeshField.ADVERTISERS.getLabel(), peerNames);
         intent.putExtra(BluetoothMeshField.STATE.getLabel(), this.state.getLabel());
         parent.sendBroadcast(intent); // TODO: REFACTOR AHH

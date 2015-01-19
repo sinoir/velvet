@@ -8,6 +8,11 @@
         auto:showAsAction="ifRoom|collapseActionView"
         auto:actionViewClass="android.support.v7.widget.SearchView" />
 
+    <item android:id="@+id/action_line"
+        android:title="@string/menu_line"
+        android:icon="@drawable/ic_action_overflow"
+        auto:showAsAction="ifRoom" />
+
     <item android:id="@+id/action_test_mesh"
         android:title="@string/menu_test"
         android:icon="@drawable/ic_action_bluetooth_searching"

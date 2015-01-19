@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map_view"
+        android:src="@drawable/hang_manhattan2">
+    </ImageView>
+
+    <com.mienaikoe.wifimesh.train.StationLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-40dp"
+        android:layout_below="@id/map_view"
+        android:background="#A0000000"
+        >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="14th Street &amp; 8th Ave"
+            android:id="@+id/textView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:textIsSelectable="false"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+        </TextView>
+
+    </com.mienaikoe.wifimesh.train.StationLayout>
+
+
+</RelativeLayout>

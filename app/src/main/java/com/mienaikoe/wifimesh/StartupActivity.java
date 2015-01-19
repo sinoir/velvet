@@ -2,32 +2,28 @@ package com.mienaikoe.wifimesh;
 
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshField;
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshListeningMember;
-import com.mienaikoe.wifimesh.mesh.BluetoothMeshParticipatingMember;
-
-import java.util.ArrayList;
 
 
-public class StartupActivity extends Activity {
+public class StartupActivity extends FragmentActivity {
 
-    private TextView stateView;
-    private TextView advertisersView;
     private ImageView mapView;
+
+    private ViewPager pager;
+    private PagerAdapter pagerAdapter;
 
 
 /*
@@ -47,20 +43,6 @@ public class StartupActivity extends Activity {
     };
 */
 
-    private BroadcastReceiver bluetoothMeshServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        ArrayList<String> advertisers = intent.getStringArrayListExtra(BluetoothMeshField.ADVERTISERS.getLabel());
-        String state = intent.getStringExtra(BluetoothMeshField.STATE.getLabel());
-        Log.i(this.getClass().getName(), "Peers: " + advertisers.toString());
-        Log.i(this.getClass().getName(), "State: " + state);
-
-        stateView.setText(state);
-        advertisersView.setText(advertisers.size() + " Advertisers");
-        }
-    };
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,19 +50,22 @@ public class StartupActivity extends Activity {
 
         startService(new Intent(this, VelvetService.class));
 
-        loadMap();
+        setContentView(R.layout.activity_startup_activity);
+
+        // Instantiate a ViewPager and a PagerAdapter.
+        this.pager = (ViewPager) findViewById(R.id.pager);
+        this.pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        this.pager.setAdapter(this.pagerAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(bluetoothMeshServiceReceiver, new IntentFilter(BluetoothMeshField.INTENT.getLabel()));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(bluetoothMeshServiceReceiver);
     }
 
 
@@ -102,7 +87,10 @@ public class StartupActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_test_mesh:
-                openMeshTest();
+                startActivity(new Intent(getApplicationContext(), TestActivity.class));
+                return true;
+            case R.id.action_line:
+                startActivity(new Intent(getApplicationContext(), LineFragment.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,25 +98,50 @@ public class StartupActivity extends Activity {
     }
 
 
-    private void openMeshTest(){
 
+
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (this.pager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
+        }
     }
 
-    private void openLine(){
-        Intent go = new Intent(  );
-        startActivity(go);
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch(position){
+                case 0:
+                    return new MapFragment();
+                case 1:
+                    return new LineFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 
 
-    private void loadMap(){
-        setContentView(R.layout.activity_startup_activity);
-
-        this.stateView = (TextView) findViewById(R.id.stateView);
-        this.advertisersView = (TextView) findViewById(R.id.advertiserView);
-        this.mapView = (ImageView) findViewById(R.id.mapView);
-
-        // Map Stuff?
-        Log.i(this.getClass().getSimpleName(), "Map Loaded");
-    }
 
 }
