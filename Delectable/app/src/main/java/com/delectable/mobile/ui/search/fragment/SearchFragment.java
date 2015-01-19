@@ -29,6 +29,15 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
+    private static final String DEFAULT_TAB = "DEFAULT_TAB";
+
+    public static final int WINES = 0;
+
+    public static final int HASHTAGS = 1;
+
+    public static final int PEOPLE = 2;
+
+
     //# pages to the left/right for the viewpager to retain
     private static final int PAGES_LIMIT = 2;
 
@@ -54,9 +63,28 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 
     private Runnable mAutoSearchTask;
 
+    private int mDefaultTab;
+
+    /**
+     * @param defaultTab The tab that you want the SearchFragment to start on.
+     */
+    public static SearchFragment newInstance(int defaultTab) {
+        SearchFragment fragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(DEFAULT_TAB, defaultTab);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mDefaultTab = args.getInt(DEFAULT_TAB, WINES);
+        }
 
         //set up tab icons and fragments
         SlidingTabAdapter.SlidingTabItem wines = new SlidingTabAdapter.SlidingTabItem(
@@ -101,6 +129,7 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 
         mViewPager.setAdapter(mTabsAdapter);
         mViewPager.setOffscreenPageLimit(PAGES_LIMIT);
+        mViewPager.setCurrentItem(mDefaultTab);
         mTabLayout.setViewPager(mViewPager);
 
         return rootView;

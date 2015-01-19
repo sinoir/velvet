@@ -11,7 +11,6 @@ import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
-import com.delectable.mobile.ui.search.activity.SearchActivity;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 
@@ -149,8 +148,8 @@ public class NavActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.nav_action_search) {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+            //don't consume event here, allow fragments to handle action
+            return false;
         }
         return super.onOptionsItemSelected(item);
     }

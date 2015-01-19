@@ -5,10 +5,13 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter.SlidingPagerItem;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +22,8 @@ import butterknife.InjectView;
 
 
 public class FollowFriendsFragment extends BaseFragment {
+
+    private static final String TAG = FollowFriendsFragment.class.getSimpleName();
 
     @InjectView(R.id.pager)
     protected ViewPager mViewPager;
@@ -74,5 +79,16 @@ public class FollowFriendsFragment extends BaseFragment {
         mTabStrip.setViewPager(mViewPager);
         mTabStrip.setBackgroundColor(getResources().getColor(R.color.primary));
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_action_search:
+                startActivity(SearchActivity.newIntent(getActivity(), SearchFragment.PEOPLE));
+                return true;
+            default:
+               return super.onOptionsItemSelected(item);
+        }
     }
 }
