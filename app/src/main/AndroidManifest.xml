@@ -42,12 +42,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LineFragment"
-            android:label="Stations on Line"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
-        <activity
-            android:name=".TestMeshActivity"
+            android:name=".mesh.TestMeshActivity"
             android:label="Test Meshnet"
             android:theme="@style/FullscreenTheme" >
         </activity>
@@ -58,10 +53,6 @@
             android:exported="true" >
         </service>
 
-        <activity
-            android:name=".StationActivity"
-            android:label="@string/title_activity_station" >
-        </activity>
     </application>
 
 </manifest>

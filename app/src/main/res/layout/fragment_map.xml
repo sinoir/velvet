@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +20,7 @@
         android:layout_below="@id/map_view"
         android:background="@color/black_overlay"
         >
-        <TextView
+        <com.mienaikoe.wifimesh.TypefaceTextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -31,8 +33,9 @@
             android:textSize="24dp"
             android:textIsSelectable="false"
             android:gravity="center_vertical"
-            android:padding="5dp">
-        </TextView>
+            android:padding="5dp"
+            auto:customFont="fonts/HelveticaNeue-Medium.otf">
+        </com.mienaikoe.wifimesh.TypefaceTextView>
 
     </com.mienaikoe.wifimesh.StationLayout>
 

@@ -1,4 +1,4 @@
-package com.mienaikoe.wifimesh;
+package com.mienaikoe.wifimesh.mesh;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -12,6 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.mienaikoe.wifimesh.R;
 import com.mienaikoe.wifimesh.mesh.BluetoothMeshField;
 import com.mienaikoe.wifimesh.mesh.BluetoothMeshIntent;
 

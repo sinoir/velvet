@@ -69,7 +69,8 @@ public class LineFragment extends Fragment {
         dotLine.setImageResource(R.drawable.ic_train_station);
         newRow.addView(dotLine);
 
-        TextView stationName = new TextView( getApplicationContext() );
+        TypefaceTextView stationName = new TypefaceTextView( getApplicationContext() );
+        stationName.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
         stationName.setText(station.getName());
         stationName.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, context.getResources().getDisplayMetrics()));
         stationName.setGravity(Gravity.CENTER_VERTICAL);
