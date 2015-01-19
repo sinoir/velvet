@@ -38,7 +38,7 @@ public class StationLayout extends LinearLayout {
         super(context, attributeSet);
         this.context = context;
         this.mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        this.bottomCapMargin = (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, -40, context.getResources().getDisplayMetrics() );
+        this.bottomCapMargin = (int) getResources().getDimension(R.dimen.station_fragment_initial_margin);
         this.targetMargin = this.bottomCapMargin;
     }
 
