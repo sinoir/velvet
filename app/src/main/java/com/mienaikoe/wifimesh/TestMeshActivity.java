@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class TestActivity extends Activity {
+public class TestMeshActivity extends Activity {
 
     private TextView stateView;
     private TextView advertisersView;

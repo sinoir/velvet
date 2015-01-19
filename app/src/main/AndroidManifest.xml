@@ -47,7 +47,7 @@
             android:theme="@style/FullscreenTheme" >
         </activity>
         <activity
-            android:name=".TestActivity"
+            android:name=".TestMeshActivity"
             android:label="Test Meshnet"
             android:theme="@style/FullscreenTheme" >
         </activity>

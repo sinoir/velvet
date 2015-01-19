@@ -11,12 +11,12 @@
         android:src="@drawable/hang_manhattan2">
     </ImageView>
 
-    <com.mienaikoe.wifimesh.train.StationLayout
+    <com.mienaikoe.wifimesh.StationLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="-40dp"
         android:layout_below="@id/map_view"
-        android:background="#A0000000"
+        android:background="@color/black_overlay"
         >
         <TextView
             android:layout_width="fill_parent"
@@ -34,7 +34,7 @@
             android:padding="5dp">
         </TextView>
 
-    </com.mienaikoe.wifimesh.train.StationLayout>
+    </com.mienaikoe.wifimesh.StationLayout>
 
 
 </RelativeLayout>

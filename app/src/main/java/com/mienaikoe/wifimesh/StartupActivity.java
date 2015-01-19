@@ -1,7 +1,6 @@
 package com.mienaikoe.wifimesh;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -26,22 +24,6 @@ public class StartupActivity extends FragmentActivity {
     private PagerAdapter pagerAdapter;
 
 
-/*
-    private BroadcastReceiver wifiMeshServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ArrayList<String> peers = intent.getStringArrayListExtra(WifiMeshService.FIELD_PEERS);
-            String status = intent.getStringExtra(WifiMeshService.FIELD_STATUS);
-            Log.i(this.getClass().getName(), "Peers: " + peers.toString());
-            Log.i(this.getClass().getName(), "Status: " + status);
-            if( peers.size() > 0 ) {
-                texties.setText("Peer Found: " + peers.get(0));
-            } else {
-                texties.setText("Finding Peers");
-            }
-        }
-    };
-*/
 
 
     @Override
@@ -87,10 +69,7 @@ public class StartupActivity extends FragmentActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_test_mesh:
-                startActivity(new Intent(getApplicationContext(), TestActivity.class));
-                return true;
-            case R.id.action_line:
-                startActivity(new Intent(getApplicationContext(), LineFragment.class));
+                startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

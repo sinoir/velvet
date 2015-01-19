@@ -1,4 +1,4 @@
-package com.mienaikoe.wifimesh.train;
+package com.mienaikoe.wifimesh;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

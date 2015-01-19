@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lines>
+    <line name="E">
+        <stations>
+            <station name="Jamaica – 179th Street">
+            </station>
+            <station name="Parsons Boulevard">
+            </station>
+            <station name="Jamaica Center – Parsons / Archer">
+            </station>
+            <station name="Sutphin Boulevard – Archer Avenue – JFK Airport">
+            </station>
+            <station name="Jamaica – Van Wyck">
+            </station>
+            <station name="Briarwood – Van Wyck Boulevard">
+            </station>
+            <station name="Kew Gardens – Union Turnpike">
+            </station>
+            <station name="75th Avenue">
+            </station>
+            <station name="Forest Hills – 71st Avenue">
+            </station>
+            <station name="67th Avenue">
+            </station>
+            <station name="63rd Drive – Rego Park">
+            </station>
+            <station name="Woodhaven Boulevard">
+            </station>
+            <station name="Grand Avenue – Newtown">
+            </station>
+            <station name="Elmhurst Avenue">
+            </station>
+            <station name="Jackson Heights – Roosevelt Avenue">
+            </station>
+            <station name="65th Street">
+            </station>
+            <station name="Northern Boulevard">
+            </station>
+            <station name="46th Street">
+            </station>
+            <station name="Steinway Street">
+            </station>
+            <station name="36th Street">
+            </station>
+            <station name="Queens Plaza">
+            </station>
+            <station name="Court Square – 23rd Street">
+            </station>
+            <station name="Lexington Avenue – 53rd Street">
+            </station>
+            <station name="Fifth Avenue / 53rd Street">
+            </station>
+            <station name="Seventh Avenue">
+            </station>
+            <station name="50th Street">
+            </station>
+            <station name="42nd Street – Port Authority Bus Terminal">
+            </station>
+            <station name="34th Street – Penn Station">
+            </station>
+            <station name="23rd Street">
+            </station>
+            <station name="14th Street">
+            </station>
+            <station name="West Fourth Street – Washington Square">
+            </station>
+            <station name="Spring Street">
+            </station>
+            <station name="Canal Street">
+            </station>
+            <station name="World Trade Center">
+            </station>
+        </stations>
+    </line>
+
+
+</lines>
+    
