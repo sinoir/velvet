@@ -98,18 +98,20 @@ public class CameraUtil {
         camera.setParameters(parameters);
     }
 
-    public static boolean checkSystemHasCameraHardware(Context context) {
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    public static boolean checkSystemHasCameraHardware() {
+        return App.getInstance().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
-    public static boolean checkSystemHasFlash(Context context) {
-        return checkSystemHasCameraHardware(context) &&
-                context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    public static boolean checkSystemHasFlash() {
+        return checkSystemHasCameraHardware() &&
+                App.getInstance().getPackageManager()
+                        .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
-    public static boolean checkSystemHasFocus(Context context) {
-        return checkSystemHasCameraHardware(context) &&
-                context.getPackageManager()
+    public static boolean checkSystemHasFocus() {
+        return checkSystemHasCameraHardware() &&
+                App.getInstance().getPackageManager()
                         .hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
     }
 
@@ -516,7 +518,8 @@ public class CameraUtil {
     public static Bitmap loadBitmapFromUri(Uri imageUri, int maxSize)
             throws Exception {
 
-        Bitmap bitmap = BitmapFactory.decodeStream(App.getInstance().getContentResolver().openInputStream(imageUri));
+        Bitmap bitmap = BitmapFactory
+                .decodeStream(App.getInstance().getContentResolver().openInputStream(imageUri));
 
         int rotationDegrees = getExifRotationInDegrees(imageUri);
         int width = bitmap.getWidth();
