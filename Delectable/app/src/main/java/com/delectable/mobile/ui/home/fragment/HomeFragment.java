@@ -9,6 +9,8 @@ import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.melnykov.fab.FloatingActionButton;
 
 import android.graphics.Color;
@@ -16,8 +18,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,14 +198,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Search in Menu
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_action_search:
+                startActivity(SearchActivity.newIntent(getActivity(), SearchFragment.WINES));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

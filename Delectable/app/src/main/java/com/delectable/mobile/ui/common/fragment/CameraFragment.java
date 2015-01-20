@@ -49,7 +49,7 @@ public class CameraFragment extends BaseFragment {
     }
 
     private void safeCameraOpen() {
-        if (CameraUtil.checkSystemHasCameraHardware(getActivity())) {
+        if (CameraUtil.checkSystemHasCameraHardware()) {
             // Open camera on another thread for UI performance
             final Handler handler = new Handler();
             final Runnable postCameraOpenAction = new Runnable() {
@@ -103,7 +103,7 @@ public class CameraFragment extends BaseFragment {
     }
 
     public boolean toggleFlash() {
-        if (mCamera != null && CameraUtil.checkSystemHasFlash(getActivity())) {
+        if (mCamera != null && CameraUtil.checkSystemHasFlash()) {
             Camera.Parameters p = mCamera.getParameters();
             if (mIsFlashOn) {
                 p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
@@ -129,7 +129,7 @@ public class CameraFragment extends BaseFragment {
         ArrayList<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
         focusAreas.add(focusArea);
 
-        if (maxFocusAraes > 0 && CameraUtil.checkSystemHasFocus(getActivity())) {
+        if (maxFocusAraes > 0 && CameraUtil.checkSystemHasFocus()) {
             mCamera.cancelAutoFocus();
             p.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             p.setFocusAreas(focusAreas);

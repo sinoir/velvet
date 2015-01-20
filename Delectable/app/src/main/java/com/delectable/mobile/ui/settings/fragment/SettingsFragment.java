@@ -16,6 +16,8 @@ import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
 import com.delectable.mobile.ui.common.widget.ObservableScrollView;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.activity.NotificationsActivty;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.CameraUtil;
@@ -48,6 +50,7 @@ import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -354,6 +357,17 @@ public class SettingsFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mFacebookUiHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_action_search:
+                startActivity(SearchActivity.newIntent(getActivity(), SearchFragment.WINES));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateInfo(EditText v, String text) {
