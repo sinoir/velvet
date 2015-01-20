@@ -9,7 +9,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,11 +24,19 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class LineFragment extends Fragment {
+public class LineFragment extends Fragment implements AdapterView.OnItemSelectedListener  {
 
     private Context context;
+
     private TrainSystem trainSystem;
     private TrainStation currentStation;
+    private TrainLine currentLine;
+
+    private Spinner lineSpinner;
+    private ArrayAdapter<CharSequence> lineSpinnerAdapter;
+    private TableLayout grid;
+
+
 
 
     @Override
@@ -34,14 +45,10 @@ public class LineFragment extends Fragment {
 
         this.context = inflater.getContext();
 
-        this.trainSystem = new TrainSystem( context.getResources().openRawResource(R.raw.train_system) );
+        this.grid = (TableLayout) rootView.findViewById(R.id.station_list);
+        this.lineSpinner = (Spinner) rootView.findViewById(R.id.line_spinner);
 
-        TableLayout grid = (TableLayout) rootView.findViewById(R.id.station_list);
-        TrainLine eLine = this.trainSystem.getLine("E");
-        currentStation = new TrainStation("Court Square – 23rd Street");
-        for( TrainStation station : eLine.getStations() ){
-            grid.addView( renderStation(station) );
-        }
+        populateLineSpinner();
 
         return rootView;
     }
@@ -57,10 +64,35 @@ public class LineFragment extends Fragment {
     }
 
 
+    public void setTrainSystem(TrainSystem trainSystem){
+        this.trainSystem = trainSystem;
+    }
+
+    private void populateLineSpinner(){
+        // populate line spinner because we can actually back the data with the Train System
+        this.lineSpinnerAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(),
+                R.array.lines_array, android.R.layout.simple_spinner_item);
+
+        this.lineSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        this.lineSpinner.setAdapter(this.lineSpinnerAdapter);
+        this.lineSpinner.setOnItemSelectedListener(this);
+    }
+
+
+
     private Context getApplicationContext(){
         return this.context;
     }
 
+
+
+
+    public void setStation(TrainStation station){
+        this.currentStation = station;
+        TrainLine line = station.getRandomLine();
+        this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(line.getName()));
+    }
 
     private TableRow renderStation(TrainStation station){
         TableRow newRow = new TableRow( getApplicationContext());
@@ -85,5 +117,21 @@ public class LineFragment extends Fragment {
         return newRow;
     }
 
+
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+        this.grid.removeAllViews();
+        String lineName = (String)parent.getItemAtPosition(pos);
+        TrainLine line = this.trainSystem.getLine(lineName);
+        for( TrainStation lineStation : line.getStations() ){
+            this.grid.addView( renderStation(lineStation) );
+        }
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // ??
+    }
 
 }

@@ -10,12 +10,39 @@
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">false</item>
         <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:spinnerStyle">@style/spinnerStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
     </style>
 
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
         <item name="android:background">@color/red_velvet</item>
+    </style>
+
+
+
+    <style name="spinnerStyle">
+        <item name="android:background">#222222</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <style name="SpinnerItem">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">#222222</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="SpinnerDropDownItem">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">#222222</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
 

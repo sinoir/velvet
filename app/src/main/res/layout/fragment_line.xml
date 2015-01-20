@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:id="@+id/line_spinner"
+        style="@style/spinnerStyle" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

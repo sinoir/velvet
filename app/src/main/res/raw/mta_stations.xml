@@ -1,0 +1,2187 @@
+<?xml version="1.0"?>
+<stations>
+  <station latitude="40.784045" longitude="-73.934916" name="103rd St">
+    <lines>
+      <line name="1" id="22"/>
+      <line name="6" id="120"/>
+      <line name="7" id="173"/>
+      <line name="B" id="191"/>
+      <line name="C" id="191"/>
+    </lines>
+  </station>
+  <station latitude="40.694955" longitude="-73.844727" name="104-102nd Sts">
+    <lines>
+      <line name="J" id="327"/>
+      <line name="Z" id="327"/>
+    </lines>
+  </station>
+  <station latitude="40.681701" longitude="-73.838032" name="104th St">
+    <lines>
+      <line name="A" id="238"/>
+    </lines>
+  </station>
+  <station latitude="40.795213" longitude="-73.944126" name="110th St">
+    <lines>
+      <line name="6" id="121"/>
+    </lines>
+  </station>
+  <station latitude="40.799098" longitude="-73.951899" name="110th St-Central Park N">
+    <lines>
+      <line name="2" id="39"/>
+      <line name="3" id="39"/>
+    </lines>
+  </station>
+  <station latitude="40.710977" longitude="-73.841549" name="111st St">
+    <lines>
+      <line name="7" id="174"/>
+      <line name="A" id="239"/>
+      <line name="J" id="328"/>
+    </lines>
+  </station>
+  <station latitude="40.802084" longitude="-73.94865366666667" name="116th St">
+    <lines>
+      <line name="2" id="40"/>
+      <line name="3" id="40"/>
+      <line name="6" id="122"/>
+      <line name="B" id="193"/>
+      <line name="C" id="193"/>
+    </lines>
+  </station>
+  <station latitude="40.807928" longitude="-73.963919" name="116th St-Columbia Univ">
+    <lines>
+      <line name="1" id="24"/>
+      <line name="9" id="24"/>
+    </lines>
+  </station>
+  <station latitude="40.700342" longitude="-73.828714" name="121st St">
+    <lines>
+      <line name="J" id="329"/>
+      <line name="Z" id="329"/>
+    </lines>
+  </station>
+  <station latitude="40.80980475" longitude="-73.94835950000001" name="125th St">
+    <lines>
+      <line name="1" id="25"/>
+      <line name="2" id="41"/>
+      <line name="3" id="41"/>
+      <line name="4" id="123"/>
+      <line name="5" id="123"/>
+      <line name="6" id="123"/>
+      <line name="A" id="194"/>
+      <line name="B" id="194"/>
+      <line name="C" id="194"/>
+      <line name="D" id="194"/>
+    </lines>
+  </station>
+  <station latitude="40.816044500000004" longitude="-73.9442475" name="135th St">
+    <lines>
+      <line name="2" id="42"/>
+      <line name="3" id="42"/>
+      <line name="B" id="195"/>
+      <line name="C" id="195"/>
+    </lines>
+  </station>
+  <station latitude="40.821459" longitude="-73.954062" name="137th St">
+    <lines>
+      <line name="1" id="26"/>
+    </lines>
+  </station>
+  <station latitude="40.813367" longitude="-73.930042" name="138th St-Grand Concourse">
+    <lines>
+      <line name="4" id="124"/>
+      <line name="5" id="124"/>
+    </lines>
+  </station>
+  <station latitude="40.824029" longitude="-73.943557" name="145th St">
+    <lines>
+      <line name="1" id="27"/>
+      <line name="3" id="43"/>
+      <line name="A" id="196"/>
+      <line name="B" id="196"/>
+      <line name="C" id="196"/>
+      <line name="D" id="196"/>
+    </lines>
+  </station>
+  <station latitude="40.823832" longitude="-73.936207" name="148th St">
+    <lines>
+      <line name="3" id="44"/>
+    </lines>
+  </station>
+  <station latitude="40.8184585" longitude="-73.927214" name="149th St-Grand Concourse">
+    <lines>
+      <line name="2" id="125"/>
+      <line name="4" id="125"/>
+      <line name="5" id="125"/>
+      <line name="2" id="45"/>
+      <line name="4" id="45"/>
+      <line name="5" id="45"/>
+    </lines>
+  </station>
+  <station latitude="40.73865" longitude="-73.995862" name="14th St-6-7th Aves">
+    <lines>
+      <line name="1" id="293"/>
+      <line name="2" id="293"/>
+      <line name="3" id="293"/>
+      <line name="F" id="293"/>
+      <line name="L" id="293"/>
+      <line name="M" id="293"/>
+    </lines>
+  </station>
+  <station latitude="40.74536" longitude="-73.998488" name="14th St-8th Ave">
+    <lines>
+      <line name="C" id="182"/>
+      <line name="E" id="182"/>
+    </lines>
+  </station>
+  <station latitude="40.8306045" longitude="-73.9396605" name="155th St">
+    <lines>
+      <line name="B" id="205"/>
+      <line name="D" id="205"/>
+      <line name="C" id="197"/>
+    </lines>
+  </station>
+  <station latitude="40.834143" longitude="-73.944819" name="157th St">
+    <lines>
+      <line name="1" id="28"/>
+    </lines>
+  </station>
+  <station latitude="40.660786" longitude="-73.980044" name="15th St">
+    <lines>
+      <line name="F" id="342"/>
+    </lines>
+  </station>
+  <station latitude="40.828127" longitude="-73.925904" name="161st St-Yankee Stadium">
+    <lines>
+      <line name="4" id="126"/>
+      <line name="B" id="126"/>
+      <line name="D" id="126"/>
+    </lines>
+  </station>
+  <station latitude="40.836164" longitude="-73.939974" name="163rd St">
+    <lines>
+      <line name="C" id="198"/>
+    </lines>
+  </station>
+  <station latitude="40.834854" longitude="-73.9197345" name="167th St">
+    <lines>
+      <line name="4" id="127"/>
+      <line name="B" id="207"/>
+      <line name="D" id="207"/>
+    </lines>
+  </station>
+  <station latitude="40.840926" longitude="-73.939507" name="168th St-Broadway">
+    <lines>
+      <line name="1" id="199"/>
+      <line name="A" id="199"/>
+      <line name="C" id="199"/>
+    </lines>
+  </station>
+  <station latitude="40.710468" longitude="-73.793563" name="169th St">
+    <lines>
+      <line name="F" id="276"/>
+    </lines>
+  </station>
+  <station latitude="40.839794" longitude="-73.9154795" name="170th St">
+    <lines>
+      <line name="4" id="128"/>
+      <line name="B" id="208"/>
+      <line name="D" id="208"/>
+    </lines>
+  </station>
+  <station latitude="40.845689" longitude="-73.910383" name="174-175th Sts">
+    <lines>
+      <line name="B" id="209"/>
+      <line name="D" id="209"/>
+    </lines>
+  </station>
+  <station latitude="40.837393" longitude="-73.887711" name="174th St-Southern Blvd">
+    <lines>
+      <line name="2" id="52"/>
+      <line name="5" id="52"/>
+    </lines>
+  </station>
+  <station latitude="40.847652" longitude="-73.939612" name="175th St">
+    <lines>
+      <line name="A" id="200"/>
+    </lines>
+  </station>
+  <station latitude="40.84857" longitude="-73.911638" name="176th St">
+    <lines>
+      <line name="4" id="130"/>
+    </lines>
+  </station>
+  <station latitude="40.712598" longitude="-73.783972" name="179th St">
+    <lines>
+      <line name="F" id="277"/>
+    </lines>
+  </station>
+  <station latitude="40.851006" longitude="-73.935544" name="181st St">
+    <lines>
+      <line name="1" id="30"/>
+      <line name="A" id="201"/>
+    </lines>
+  </station>
+  <station latitude="40.856355" longitude="-73.900565" name="182-183rd Sts">
+    <lines>
+      <line name="B" id="211"/>
+      <line name="D" id="211"/>
+    </lines>
+  </station>
+  <station latitude="40.858698" longitude="-73.9037" name="183rd St">
+    <lines>
+      <line name="4" id="132"/>
+    </lines>
+  </station>
+  <station latitude="40.61949033333334" longitude="-73.989763" name="18th Ave">
+    <lines>
+      <line name="F" id="346"/>
+      <line name="M" id="419"/>
+      <line name="N" id="419"/>
+      <line name="N" id="427"/>
+    </lines>
+  </station>
+  <station latitude="40.741029" longitude="-73.997814" name="18th St-7th Ave">
+    <lines>
+      <line name="1" id="10"/>
+      <line name="2" id="10"/>
+    </lines>
+  </station>
+  <station latitude="40.858841" longitude="-73.934339" name="190th St">
+    <lines>
+      <line name="A" id="202"/>
+    </lines>
+  </station>
+  <station latitude="40.855574" longitude="-73.929116" name="191st St">
+    <lines>
+      <line name="1" id="31"/>
+    </lines>
+  </station>
+  <station latitude="40.731336" longitude="-73.982536" name="1st Ave-14th St">
+    <lines>
+      <line name="L" id="441"/>
+    </lines>
+  </station>
+  <station latitude="40.875014" longitude="-73.87943" name="205th St">
+    <lines>
+      <line name="D" id="215"/>
+    </lines>
+  </station>
+  <station latitude="40.86507" longitude="-73.918415" name="207th St">
+    <lines>
+      <line name="1" id="33"/>
+    </lines>
+  </station>
+  <station latitude="40.868108" longitude="-73.919736" name="207th St-Washington Hts">
+    <lines>
+      <line name="A" id="204"/>
+    </lines>
+  </station>
+  <station latitude="40.6110645" longitude="-73.991718" name="20th Ave">
+    <lines>
+      <line name="M" id="420"/>
+      <line name="N" id="420"/>
+      <line name="N" id="428"/>
+    </lines>
+  </station>
+  <station latitude="40.869555" longitude="-73.915163" name="215th St">
+    <lines>
+      <line name="1" id="34"/>
+    </lines>
+  </station>
+  <station latitude="40.883528" longitude="-73.862756" name="219th St">
+    <lines>
+      <line name="2" id="60"/>
+      <line name="5" id="60"/>
+    </lines>
+  </station>
+  <station latitude="40.743741" longitude="-73.949454" name="21st St (Van Alst)">
+    <lines>
+      <line name="G" id="288"/>
+    </lines>
+  </station>
+  <station latitude="40.753621" longitude="-73.942198" name="21st St-Queensbridge">
+    <lines>
+      <line name="F" id="466"/>
+    </lines>
+  </station>
+  <station latitude="40.8814305" longitude="-73.88492249999999" name="225th St">
+    <lines>
+      <line name="1" id="35"/>
+      <line name="2" id="61"/>
+      <line name="5" id="61"/>
+    </lines>
+  </station>
+  <station latitude="40.878977" longitude="-73.90476" name="231st St">
+    <lines>
+      <line name="1" id="36"/>
+    </lines>
+  </station>
+  <station latitude="40.893302" longitude="-73.857375" name="233rd St">
+    <lines>
+      <line name="2" id="62"/>
+      <line name="5" id="62"/>
+    </lines>
+  </station>
+  <station latitude="40.891718" longitude="-73.8774645" name="238th St">
+    <lines>
+      <line name="2" id="37"/>
+      <line name="5" id="37"/>
+      <line name="2" id="63"/>
+      <line name="5" id="63"/>
+    </lines>
+  </station>
+  <station latitude="40.742939" longitude="-73.99281" name="23rd St-6th Ave">
+    <lines>
+      <line name="F" id="294"/>
+      <line name="M" id="294"/>
+    </lines>
+  </station>
+  <station latitude="40.744118" longitude="-73.99559" name="23rd St-7th Ave">
+    <lines>
+      <line name="1" id="11"/>
+      <line name="2" id="11"/>
+    </lines>
+  </station>
+  <station latitude="40.741065" longitude="-74.001525" name="23rd St-8th Ave">
+    <lines>
+      <line name="A" id="181"/>
+      <line name="C" id="181"/>
+      <line name="E" id="181"/>
+      <line name="L" id="181"/>
+    </lines>
+  </station>
+  <station latitude="40.741399" longitude="-73.989253" name="23rd St-Broadway">
+    <lines>
+      <line name="N" id="368"/>
+      <line name="R" id="368"/>
+    </lines>
+  </station>
+  <station latitude="40.747051" longitude="-73.9453635" name="23rd St-Ely Ave-Court Sq">
+    <lines>
+      <line name="7" id="161"/>
+      <line name="E" id="257"/>
+      <line name="G" id="257"/>
+      <line name="M" id="257"/>
+    </lines>
+  </station>
+  <station latitude="40.740185" longitude="-73.986365" name="23rd St-Park Ave S">
+    <lines>
+      <line name="6" id="110"/>
+    </lines>
+  </station>
+  <station latitude="40.903401" longitude="-73.850398" name="241st St">
+    <lines>
+      <line name="2" id="64"/>
+    </lines>
+  </station>
+  <station latitude="40.889438" longitude="-73.898408" name="242nd St">
+    <lines>
+      <line name="1" id="38"/>
+    </lines>
+  </station>
+  <station latitude="40.597869" longitude="-73.986911" name="25th Ave">
+    <lines>
+      <line name="N" id="422"/>
+    </lines>
+  </station>
+  <station latitude="40.660282" longitude="-73.998106" name="25th St">
+    <lines>
+      <line name="M" id="403"/>
+      <line name="N" id="403"/>
+      <line name="R" id="403"/>
+    </lines>
+  </station>
+  <station latitude="40.747181" longitude="-73.993321" name="28th St-7th Ave">
+    <lines>
+      <line name="1" id="12"/>
+      <line name="2" id="12"/>
+    </lines>
+  </station>
+  <station latitude="40.74538" longitude="-73.988663" name="28th St-Broadway">
+    <lines>
+      <line name="N" id="367"/>
+      <line name="R" id="367"/>
+    </lines>
+  </station>
+  <station latitude="40.743335" longitude="-73.984055" name="28th St-Park Ave S">
+    <lines>
+      <line name="6" id="111"/>
+    </lines>
+  </station>
+  <station latitude="40.723418" longitude="-73.990255" name="2nd Ave-Houston St">
+    <lines>
+      <line name="F" id="299"/>
+      <line name="M" id="299"/>
+    </lines>
+  </station>
+  <station latitude="40.766503" longitude="-73.921395" name="30th Ave">
+    <lines>
+      <line name="N" id="358"/>
+    </lines>
+  </station>
+  <station latitude="40.744368" longitude="-73.930814" name="33rd St">
+    <lines>
+      <line name="7" id="163"/>
+    </lines>
+  </station>
+  <station latitude="40.746415" longitude="-73.981829" name="33rd St-Park Ave">
+    <lines>
+      <line name="6" id="112"/>
+    </lines>
+  </station>
+  <station latitude="40.749824" longitude="-73.98777" name="34th St-6th Ave">
+    <lines>
+      <line name="B" id="295"/>
+      <line name="D" id="295"/>
+      <line name="F" id="295"/>
+      <line name="N" id="295"/>
+      <line name="Q" id="295"/>
+      <line name="R" id="295"/>
+      <line name="M" id="295"/>
+    </lines>
+  </station>
+  <station latitude="40.750868" longitude="-73.990645" name="34th St-7th Ave">
+    <lines>
+      <line name="1" id="13"/>
+      <line name="2" id="13"/>
+      <line name="3" id="13"/>
+    </lines>
+  </station>
+  <station latitude="40.752195" longitude="-73.993472" name="34th St-8th Ave">
+    <lines>
+      <line name="A" id="183"/>
+      <line name="C" id="183"/>
+      <line name="E" id="183"/>
+    </lines>
+  </station>
+  <station latitude="40.756616" longitude="-73.929445" name="36th Ave">
+    <lines>
+      <line name="N" id="356"/>
+    </lines>
+  </station>
+  <station latitude="40.703469" longitude="-73.966136" name="36th St">
+    <lines>
+      <line name="G" id="259"/>
+      <line name="R" id="259"/>
+      <line name="M" id="259"/>
+      <line name="M" id="404"/>
+      <line name="N" id="404"/>
+      <line name="R" id="404"/>
+    </lines>
+  </station>
+  <station latitude="40.752571" longitude="-73.932712" name="39 Ave">
+    <lines>
+      <line name="N" id="355"/>
+    </lines>
+  </station>
+  <station latitude="40.810529" longitude="-73.926275" name="3rd Ave-138th St">
+    <lines>
+      <line name="6" id="138"/>
+    </lines>
+  </station>
+  <station latitude="40.816144" longitude="-73.917895" name="3rd Ave-149th St">
+    <lines>
+      <line name="2" id="46"/>
+      <line name="5" id="46"/>
+    </lines>
+  </station>
+  <station latitude="40.733312" longitude="-73.987154" name="3rd Ave-14th St">
+    <lines>
+      <line name="L" id="440"/>
+    </lines>
+  </station>
+  <station latitude="40.743629" longitude="-73.923925" name="40th St">
+    <lines>
+      <line name="7" id="164"/>
+    </lines>
+  </station>
+  <station latitude="40.7540855" longitude="-73.9833615" name="42nd St-5th Ave-6th Ave">
+    <lines>
+      <line name="7" id="157"/>
+      <line name="B" id="157"/>
+      <line name="D" id="157"/>
+      <line name="F" id="157"/>
+      <line name="M" id="157"/>
+      <line name="7" id="296"/>
+      <line name="B" id="296"/>
+      <line name="D" id="296"/>
+      <line name="F" id="296"/>
+      <line name="M" id="296"/>
+    </lines>
+  </station>
+  <station latitude="40.64887" longitude="-74.010136" name="45th St">
+    <lines>
+      <line name="N" id="405"/>
+      <line name="R" id="405"/>
+    </lines>
+  </station>
+  <station latitude="40.749601" longitude="-73.91567850000001" name="46th St">
+    <lines>
+      <line name="7" id="165"/>
+      <line name="G" id="261"/>
+      <line name="R" id="261"/>
+      <line name="M" id="261"/>
+    </lines>
+  </station>
+  <station latitude="40.758629" longitude="-73.981273" name="47-50th Sts-Rockefeller Center">
+    <lines>
+      <line name="B" id="297"/>
+      <line name="D" id="297"/>
+      <line name="F" id="297"/>
+      <line name="M" id="297"/>
+    </lines>
+  </station>
+  <station latitude="40.759812" longitude="-73.984143" name="49th St-7th Ave">
+    <lines>
+      <line name="N" id="364"/>
+      <line name="R" id="364"/>
+    </lines>
+  </station>
+  <station latitude="40.636174" longitude="-73.994781" name="50th St">
+    <lines>
+      <line name="M" id="414"/>
+      <line name="N" id="414"/>
+    </lines>
+  </station>
+  <station latitude="40.762597" longitude="-73.985815" name="50th St-8th Ave">
+    <lines>
+      <line name="C" id="185"/>
+      <line name="E" id="185"/>
+    </lines>
+  </station>
+  <station latitude="40.761783" longitude="-73.983822" name="50th St-Broadway">
+    <lines>
+      <line name="1" id="15"/>
+      <line name="2" id="15"/>
+    </lines>
+  </station>
+  <station latitude="40.743977" longitude="-73.912347" name="52nd St">
+    <lines>
+      <line name="7" id="166"/>
+    </lines>
+  </station>
+  <station latitude="40.645101" longitude="-74.0141" name="53rd St">
+    <lines>
+      <line name="N" id="406"/>
+      <line name="R" id="406"/>
+    </lines>
+  </station>
+  <station latitude="40.631579" longitude="-73.995423" name="55th St">
+    <lines>
+      <line name="M" id="415"/>
+      <line name="N" id="415"/>
+    </lines>
+  </station>
+  <station latitude="40.764026" longitude="-73.977391" name="57th St-6th Ave">
+    <lines>
+      <line name="F" id="298"/>
+    </lines>
+  </station>
+  <station latitude="40.764632" longitude="-73.98066" name="57th St-7th Ave">
+    <lines>
+      <line name="N" id="363"/>
+      <line name="Q" id="363"/>
+      <line name="R" id="363"/>
+    </lines>
+  </station>
+  <station latitude="40.641269" longitude="-74.018086" name="59th St">
+    <lines>
+      <line name="N" id="407"/>
+      <line name="R" id="407"/>
+    </lines>
+  </station>
+  <station latitude="40.768044" longitude="-73.981955" name="59th St-Columbus Circle">
+    <lines>
+      <line name="1" id="16"/>
+      <line name="2" id="16"/>
+      <line name="A" id="16"/>
+      <line name="B" id="16"/>
+      <line name="C" id="16"/>
+      <line name="D" id="16"/>
+    </lines>
+  </station>
+  <station latitude="40.762678" longitude="-73.96771749999999" name="59th St-Lexington Ave">
+    <lines>
+      <line name="4" id="115"/>
+      <line name="5" id="115"/>
+      <line name="6" id="115"/>
+      <line name="N" id="115"/>
+      <line name="R" id="115"/>
+      <line name="F" id="361"/>
+    </lines>
+  </station>
+  <station latitude="40.760425" longitude="-73.975806" name="5th Ave-53rd St">
+    <lines>
+      <line name="E" id="255"/>
+      <line name="M" id="255"/>
+    </lines>
+  </station>
+  <station latitude="40.764955" longitude="-73.973535" name="5th Ave-60th St">
+    <lines>
+      <line name="N" id="362"/>
+      <line name="R" id="362"/>
+    </lines>
+  </station>
+  <station latitude="40.745402" longitude="-73.903138" name="61st St">
+    <lines>
+      <line name="7" id="167"/>
+    </lines>
+  </station>
+  <station latitude="40.729829" longitude="-73.861657" name="63rd Dr">
+    <lines>
+      <line name="G" id="268"/>
+      <line name="R" id="268"/>
+      <line name="M" id="268"/>
+    </lines>
+  </station>
+  <station latitude="40.749479" longitude="-73.898244" name="65th St">
+    <lines>
+      <line name="G" id="263"/>
+      <line name="R" id="263"/>
+      <line name="M" id="263"/>
+    </lines>
+  </station>
+  <station latitude="40.773463" longitude="-73.982193" name="66th St">
+    <lines>
+      <line name="1" id="17"/>
+      <line name="2" id="17"/>
+    </lines>
+  </station>
+  <station latitude="40.726479" longitude="-73.852616" name="67th Ave">
+    <lines>
+      <line name="G" id="269"/>
+      <line name="R" id="269"/>
+      <line name="M" id="269"/>
+    </lines>
+  </station>
+  <station latitude="40.768185" longitude="-73.963767" name="68th St">
+    <lines>
+      <line name="6" id="116"/>
+    </lines>
+  </station>
+  <station latitude="40.746177" longitude="-73.896183" name="69th St">
+    <lines>
+      <line name="7" id="168"/>
+    </lines>
+  </station>
+  <station latitude="40.721609" longitude="-73.844778" name="71-Continental Aves">
+    <lines>
+      <line name="E" id="270"/>
+      <line name="F" id="270"/>
+      <line name="G" id="270"/>
+      <line name="R" id="270"/>
+      <line name="M" id="270"/>
+    </lines>
+  </station>
+  <station latitude="40.619721" longitude="-73.998813" name="71st St">
+    <lines>
+      <line name="M" id="417"/>
+      <line name="N" id="417"/>
+    </lines>
+  </station>
+  <station latitude="40.7774395" longitude="-73.978924" name="72nd St">
+    <lines>
+      <line name="1" id="18"/>
+      <line name="2" id="18"/>
+      <line name="3" id="18"/>
+      <line name="B" id="187"/>
+      <line name="C" id="187"/>
+    </lines>
+  </station>
+  <station latitude="40.746686" longitude="-73.891274" name="74th St-Roosevelt Ave">
+    <lines>
+      <line name="7" id="169"/>
+      <line name="E" id="169"/>
+      <line name="F" id="169"/>
+      <line name="G" id="169"/>
+      <line name="R" id="169"/>
+      <line name="M" id="169"/>
+    </lines>
+  </station>
+  <station latitude="40.718357" longitude="-73.83737" name="75th Ave">
+    <lines>
+      <line name="E" id="271"/>
+      <line name="F" id="271"/>
+    </lines>
+  </station>
+  <station latitude="40.701659" longitude="-73.992764" name="77th St">
+    <lines>
+      <line name="6" id="117"/>
+      <line name="R" id="409"/>
+    </lines>
+  </station>
+  <station latitude="40.698612499999996" longitude="-73.990362" name="79th St">
+    <lines>
+      <line name="1" id="19"/>
+      <line name="2" id="19"/>
+      <line name="M" id="418"/>
+      <line name="N" id="418"/>
+    </lines>
+  </station>
+  <station latitude="40.6716455" longitude="-73.976303" name="7th Ave">
+    <lines>
+      <line name="F" id="341"/>
+      <line name="Q" id="381"/>
+    </lines>
+  </station>
+  <station latitude="40.762953" longitude="-73.981892" name="7th Ave-53rd St">
+    <lines>
+      <line name="B" id="254"/>
+      <line name="D" id="254"/>
+      <line name="E" id="254"/>
+    </lines>
+  </station>
+  <station latitude="40.679152" longitude="-73.859205" name="80th St">
+    <lines>
+      <line name="A" id="235"/>
+    </lines>
+  </station>
+  <station latitude="40.781504" longitude="-73.97225" name="81st St">
+    <lines>
+      <line name="B" id="188"/>
+      <line name="C" id="188"/>
+    </lines>
+  </station>
+  <station latitude="40.747419" longitude="-73.883573" name="82nd St-Jackson Hts">
+    <lines>
+      <line name="7" id="170"/>
+    </lines>
+  </station>
+  <station latitude="40.713865999999996" longitude="-73.9814982" name="86th St">
+    <lines>
+      <line name="1" id="20"/>
+      <line name="2" id="20"/>
+      <line name="4" id="118"/>
+      <line name="5" id="118"/>
+      <line name="6" id="118"/>
+      <line name="B" id="189"/>
+      <line name="C" id="189"/>
+      <line name="N" id="432"/>
+      <line name="R" id="410"/>
+    </lines>
+  </station>
+  <station latitude="40.679662" longitude="-73.851705" name="88th St">
+    <lines>
+      <line name="A" id="236"/>
+    </lines>
+  </station>
+  <station latitude="40.634999" longitude="-74.011586" name="8th Ave">
+    <lines>
+      <line name="N" id="424"/>
+    </lines>
+  </station>
+  <station latitude="40.730611" longitude="-73.992404" name="8th St-Broadway">
+    <lines>
+      <line name="N" id="370"/>
+      <line name="R" id="370"/>
+    </lines>
+  </station>
+  <station latitude="40.646092" longitude="-73.994779" name="9 Ave">
+    <lines>
+      <line name="M" id="412"/>
+      <line name="N" id="412"/>
+    </lines>
+  </station>
+  <station latitude="40.748383" longitude="-73.876395" name="90th St-Elmhurst Ave">
+    <lines>
+      <line name="7" id="171"/>
+    </lines>
+  </station>
+  <station latitude="40.616621" longitude="-74.030851" name="95th St">
+    <lines>
+      <line name="R" id="411"/>
+    </lines>
+  </station>
+  <station latitude="40.790516000000004" longitude="-73.96262233333333" name="96th St">
+    <lines>
+      <line name="1" id="21"/>
+      <line name="2" id="21"/>
+      <line name="3" id="21"/>
+      <line name="6" id="119"/>
+      <line name="B" id="190"/>
+      <line name="C" id="190"/>
+    </lines>
+  </station>
+  <station latitude="40.670931" longitude="-73.988213" name="9th St-4 Ave">
+    <lines>
+      <line name="F" id="401"/>
+      <line name="M" id="401"/>
+      <line name="N" id="401"/>
+      <line name="R" id="401"/>
+    </lines>
+  </station>
+  <station latitude="40.676974" longitude="-73.898995" name="Alabama Ave">
+    <lines>
+      <line name="J" id="319"/>
+    </lines>
+  </station>
+  <station latitude="40.865437" longitude="-73.867379" name="Allerton Ave">
+    <lines>
+      <line name="2" id="57"/>
+      <line name="5" id="57"/>
+    </lines>
+  </station>
+  <station latitude="40.667763" longitude="-73.834175" name="Aqueduct-North Conduit Ave">
+    <lines>
+      <line name="A" id="241"/>
+    </lines>
+  </station>
+  <station latitude="40.730634" longitude="-73.990565" name="Astor Place">
+    <lines>
+      <line name="6" id="108"/>
+    </lines>
+  </station>
+  <station latitude="40.769964" longitude="-73.917363" name="Astoria Blvd">
+    <lines>
+      <line name="N" id="359"/>
+    </lines>
+  </station>
+  <station latitude="40.675356" longitude="-73.903277" name="Atlantic Ave">
+    <lines>
+      <line name="L" id="455"/>
+    </lines>
+  </station>
+  <station latitude="40.684495" longitude="-73.97684" name="Atlantic Ave-Pacific St">
+    <lines>
+      <line name="1" id="380"/>
+      <line name="2" id="380"/>
+      <line name="4" id="380"/>
+      <line name="5" id="380"/>
+      <line name="M" id="380"/>
+      <line name="N" id="380"/>
+      <line name="Q" id="380"/>
+      <line name="R" id="380"/>
+    </lines>
+  </station>
+  <station latitude="40.629256" longitude="-73.961779" name="Ave H">
+    <lines>
+      <line name="Q" id="388"/>
+    </lines>
+  </station>
+  <station latitude="40.625373" longitude="-73.976192" name="Ave I">
+    <lines>
+      <line name="F" id="347"/>
+    </lines>
+  </station>
+  <station latitude="40.624723" longitude="-73.960863" name="Ave J">
+    <lines>
+      <line name="Q" id="389"/>
+    </lines>
+  </station>
+  <station latitude="40.617638" longitude="-73.959544" name="Ave M">
+    <lines>
+      <line name="Q" id="390"/>
+    </lines>
+  </station>
+  <station latitude="40.614662" longitude="-73.974168" name="Ave N">
+    <lines>
+      <line name="F" id="349"/>
+    </lines>
+  </station>
+  <station latitude="40.608892" longitude="-73.973102" name="Ave P">
+    <lines>
+      <line name="F" id="350"/>
+    </lines>
+  </station>
+  <station latitude="40.597836666666666" longitude="-73.96954466666666" name="Ave U">
+    <lines>
+      <line name="F" id="352"/>
+      <line name="N" id="431"/>
+      <line name="Q" id="392"/>
+    </lines>
+  </station>
+  <station latitude="40.589402" longitude="-73.97417" name="Ave X">
+    <lines>
+      <line name="F" id="353"/>
+    </lines>
+  </station>
+  <station latitude="40.588922" longitude="-73.98361" name="Bay 50th St">
+    <lines>
+      <line name="N" id="423"/>
+    </lines>
+  </station>
+  <station latitude="40.606896500000005" longitude="-73.987968" name="Bay Pkwy">
+    <lines>
+      <line name="M" id="421"/>
+      <line name="N" id="421"/>
+      <line name="N" id="429"/>
+    </lines>
+  </station>
+  <station latitude="40.620983" longitude="-73.975315" name="Bay Pkwy-22nd Ave">
+    <lines>
+      <line name="F" id="348"/>
+    </lines>
+  </station>
+  <station latitude="40.634878" longitude="-74.023489" name="Bay Ridge Ave">
+    <lines>
+      <line name="R" id="408"/>
+    </lines>
+  </station>
+  <station latitude="40.878721" longitude="-73.838557" name="Baychester Ave">
+    <lines>
+      <line name="5" id="67"/>
+    </lines>
+  </station>
+  <station latitude="40.583238" longitude="-73.827484" name="Beach 105th St">
+    <lines>
+      <line name="A" id="252"/>
+      <line name="S" id="252"/>
+    </lines>
+  </station>
+  <station latitude="40.599934" longitude="-73.761451" name="Beach 25th St">
+    <lines>
+      <line name="A" id="248"/>
+    </lines>
+  </station>
+  <station latitude="40.59536" longitude="-73.768139" name="Beach 36th St">
+    <lines>
+      <line name="A" id="247"/>
+    </lines>
+  </station>
+  <station latitude="40.593003" longitude="-73.775843" name="Beach 44th St">
+    <lines>
+      <line name="A" id="246"/>
+    </lines>
+  </station>
+  <station latitude="40.592447" longitude="-73.788457" name="Beach 60th St">
+    <lines>
+      <line name="A" id="245"/>
+    </lines>
+  </station>
+  <station latitude="40.590899" longitude="-73.79661" name="Beach 67th St">
+    <lines>
+      <line name="A" id="244"/>
+    </lines>
+  </station>
+  <station latitude="40.588064" longitude="-73.813436" name="Beach 90th St">
+    <lines>
+      <line name="A" id="250"/>
+      <line name="S" id="250"/>
+    </lines>
+  </station>
+  <station latitude="40.58525" longitude="-73.820323" name="Beach 98th St">
+    <lines>
+      <line name="A" id="251"/>
+      <line name="S" id="251"/>
+    </lines>
+  </station>
+  <station latitude="40.717247" longitude="-73.956738" name="Bedford Ave">
+    <lines>
+      <line name="L" id="442"/>
+    </lines>
+  </station>
+  <station latitude="40.8731375" longitude="-73.8889905" name="Bedford Park Blvd">
+    <lines>
+      <line name="4" id="135"/>
+      <line name="B" id="214"/>
+      <line name="D" id="214"/>
+    </lines>
+  </station>
+  <station latitude="40.689616" longitude="-73.953507" name="Bedford-Nostrand Aves">
+    <lines>
+      <line name="G" id="281"/>
+    </lines>
+  </station>
+  <station latitude="40.6834125" longitude="-73.982895" name="Bergen St">
+    <lines>
+      <line name="1" id="77"/>
+      <line name="2" id="77"/>
+      <line name="F" id="337"/>
+      <line name="G" id="337"/>
+    </lines>
+  </station>
+  <station latitude="40.644729999999996" longitude="-73.95665249999999" name="Beverley Rd">
+    <lines>
+      <line name="2" id="95"/>
+      <line name="5" id="95"/>
+      <line name="Q" id="385"/>
+    </lines>
+  </station>
+  <station latitude="40.669879" longitude="-73.959352" name="Botanic Garden">
+    <lines/>
+  </station>
+  <station latitude="40.720312" longitude="-73.994024" name="Bowery">
+    <lines>
+      <line name="J" id="307"/>
+      <line name="M" id="307"/>
+    </lines>
+  </station>
+  <station latitude="40.705078" longitude="-74.013934" name="Bowling Green">
+    <lines>
+      <line name="4" id="101"/>
+      <line name="5" id="101"/>
+    </lines>
+  </station>
+  <station latitude="40.577717" longitude="-73.960939" name="Brighton Beach">
+    <lines>
+      <line name="Q" id="395"/>
+    </lines>
+  </station>
+  <station latitude="40.608085" longitude="-73.815542" name="Broad Channel">
+    <lines>
+      <line name="A" id="243"/>
+      <line name="S" id="243"/>
+    </lines>
+  </station>
+  <station latitude="40.707147" longitude="-74.010716" name="Broad St">
+    <lines>
+      <line name="J" id="303"/>
+      <line name="M" id="303"/>
+      <line name="Z" id="303"/>
+    </lines>
+  </station>
+  <station latitude="40.7337895" longitude="-73.937848" name="Broadway">
+    <lines>
+      <line name="G" id="284"/>
+      <line name="N" id="357"/>
+    </lines>
+  </station>
+  <station latitude="40.849322" longitude="-73.868832" name="Bronx Park East">
+    <lines>
+      <line name="2" id="55"/>
+      <line name="5" id="55"/>
+    </lines>
+  </station>
+  <station latitude="40.80754" longitude="-73.919257" name="Brook Ave">
+    <lines>
+      <line name="6" id="139"/>
+    </lines>
+  </station>
+  <station latitude="40.846756" longitude="-73.832613" name="Buhre Ave">
+    <lines>
+      <line name="6" id="154"/>
+    </lines>
+  </station>
+  <station latitude="40.871413" longitude="-73.867147" name="Burke Ave">
+    <lines>
+      <line name="2" id="58"/>
+      <line name="5" id="58"/>
+    </lines>
+  </station>
+  <station latitude="40.853836" longitude="-73.907312" name="Burnside Ave">
+    <lines>
+      <line name="4" id="131"/>
+    </lines>
+  </station>
+  <station latitude="40.682968" longitude="-73.905283" name="Bushwick Ave">
+    <lines>
+      <line name="L" id="453"/>
+    </lines>
+  </station>
+  <station latitude="40.7261115" longitude="-73.9953535" name="Bway-Lafayette St-Bleecker St">
+    <lines>
+      <line name="6" id="291"/>
+      <line name="F" id="291"/>
+      <line name="S" id="291"/>
+      <line name="M" id="291"/>
+      <line name="6" id="107"/>
+      <line name="F" id="107"/>
+      <line name="S" id="107"/>
+      <line name="M" id="107"/>
+    </lines>
+  </station>
+  <station latitude="40.721342" longitude="-74.005294" name="Canal-Church Sts">
+    <lines>
+      <line name="A" id="178"/>
+      <line name="C" id="178"/>
+      <line name="E" id="178"/>
+    </lines>
+  </station>
+  <station latitude="40.72317" longitude="-74.006179" name="Canal-Varick Sts">
+    <lines>
+      <line name="1" id="6"/>
+      <line name="2" id="6"/>
+    </lines>
+  </station>
+  <station latitude="40.680186" longitude="-73.994907" name="Carroll St">
+    <lines>
+      <line name="F" id="338"/>
+      <line name="G" id="338"/>
+    </lines>
+  </station>
+  <station latitude="40.834203" longitude="-73.851501" name="Castle Hill Ave">
+    <lines>
+      <line name="6" id="150"/>
+    </lines>
+  </station>
+  <station latitude="40.80235" longitude="-73.9624475" name="Cathedral Pkwy">
+    <lines>
+      <line name="1" id="23"/>
+      <line name="B" id="192"/>
+      <line name="C" id="192"/>
+    </lines>
+  </station>
+  <station latitude="40.697873" longitude="-73.927706" name="Central Ave">
+    <lines>
+      <line name="M" id="330"/>
+    </lines>
+  </station>
+  <station latitude="40.716005" longitude="-74.008796" name="Chambers St-W Broadway">
+    <lines>
+      <line name="1" id="4"/>
+      <line name="2" id="4"/>
+    </lines>
+  </station>
+  <station latitude="40.713722" longitude="-74.0037685" name="Chambers-Brooklyn Bridge">
+    <lines>
+      <line name="4" id="104"/>
+      <line name="5" id="104"/>
+      <line name="6" id="104"/>
+      <line name="J" id="104"/>
+      <line name="M" id="104"/>
+      <line name="Z" id="104"/>
+      <line name="4" id="305"/>
+      <line name="5" id="305"/>
+      <line name="6" id="305"/>
+      <line name="J" id="305"/>
+      <line name="M" id="305"/>
+      <line name="Z" id="305"/>
+    </lines>
+  </station>
+  <station latitude="40.714629" longitude="-74.00815" name="Chambers-World Trade Ctr-Park Pl">
+    <lines>
+      <line name="1" id="216"/>
+      <line name="2" id="216"/>
+      <line name="A" id="216"/>
+      <line name="C" id="216"/>
+      <line name="E" id="216"/>
+    </lines>
+  </station>
+  <station latitude="40.682905" longitude="-73.910456" name="Chauncey St">
+    <lines>
+      <line name="J" id="317"/>
+      <line name="Z" id="317"/>
+    </lines>
+  </station>
+  <station latitude="40.734074" longitude="-74.002529" name="Christopher St">
+    <lines>
+      <line name="1" id="8"/>
+      <line name="2" id="8"/>
+    </lines>
+  </station>
+  <station latitude="40.648561" longitude="-73.96405500000002" name="Church Ave">
+    <lines>
+      <line name="2" id="94"/>
+      <line name="5" id="94"/>
+      <line name="F" id="344"/>
+      <line name="Q" id="384"/>
+    </lines>
+  </station>
+  <station latitude="40.71361" longitude="-74.006724" name="City Hall-Broadway">
+    <lines>
+      <line name="N" id="373"/>
+      <line name="R" id="373"/>
+    </lines>
+  </station>
+  <station latitude="40.69745" longitude="-73.992984" name="Clark St">
+    <lines>
+      <line name="1" id="72"/>
+      <line name="2" id="72"/>
+    </lines>
+  </station>
+  <station latitude="40.688865" longitude="-73.959987" name="Classon Ave">
+    <lines>
+      <line name="G" id="280"/>
+    </lines>
+  </station>
+  <station latitude="40.679814" longitude="-73.88493" name="Cleveland St">
+    <lines>
+      <line name="J" id="320"/>
+    </lines>
+  </station>
+  <station latitude="40.6857075" longitude="-73.9657795" name="Clinton-Washington Aves">
+    <lines>
+      <line name="C" id="222"/>
+      <line name="G" id="279"/>
+    </lines>
+  </station>
+  <station latitude="40.640853" longitude="-73.963821" name="Cortelyou Rd">
+    <lines>
+      <line name="Q" id="386"/>
+    </lines>
+  </station>
+  <station latitude="40.712165" longitude="-74.012134" name="Cortlandt St-Greenwich St">
+    <lines>
+      <line name="1" id="3"/>
+      <line name="9" id="3"/>
+    </lines>
+  </station>
+  <station latitude="40.711018" longitude="-74.01077" name="Cortlandt St-Trinity Pl">
+    <lines>
+      <line name="N" id="374"/>
+      <line name="R" id="374"/>
+    </lines>
+  </station>
+  <station latitude="40.6930405" longitude="-73.9900325" name="Court St-Borough Hall">
+    <lines>
+      <line name="1" id="377"/>
+      <line name="2" id="377"/>
+      <line name="4" id="377"/>
+      <line name="5" id="377"/>
+      <line name="M" id="377"/>
+      <line name="R" id="377"/>
+      <line name="4" id="100"/>
+      <line name="5" id="100"/>
+    </lines>
+  </station>
+  <station latitude="40.68312" longitude="-73.873928" name="Crescent St">
+    <lines>
+      <line name="J" id="322"/>
+      <line name="Z" id="322"/>
+    </lines>
+  </station>
+  <station latitude="40.805481" longitude="-73.914272" name="Cypress Ave">
+    <lines>
+      <line name="6" id="140"/>
+    </lines>
+  </station>
+  <station latitude="40.689806" longitude="-73.87317" name="Cypress Hills">
+    <lines>
+      <line name="J" id="323"/>
+    </lines>
+  </station>
+  <station latitude="40.696857" longitude="-73.9498525" name="DeKalb Ave">
+    <lines>
+      <line name="L" id="449"/>
+      <line name="M" id="379"/>
+      <line name="N" id="379"/>
+      <line name="Q" id="379"/>
+      <line name="R" id="379"/>
+    </lines>
+  </station>
+  <station latitude="40.718542" longitude="-73.988197" name="Delancey-Essex Sts">
+    <lines>
+      <line name="F" id="300"/>
+      <line name="J" id="300"/>
+      <line name="M" id="300"/>
+      <line name="Z" id="300"/>
+    </lines>
+  </station>
+  <station latitude="40.774874" longitude="-73.911427" name="Ditmars Blvd">
+    <lines>
+      <line name="N" id="360"/>
+    </lines>
+  </station>
+  <station latitude="40.63609" longitude="-73.978245" name="Ditmas Ave">
+    <lines>
+      <line name="F" id="345"/>
+    </lines>
+  </station>
+  <station latitude="40.861564" longitude="-73.924766" name="Dyckman St">
+    <lines>
+      <line name="1" id="32"/>
+    </lines>
+  </station>
+  <station latitude="40.865502" longitude="-73.927262" name="Dyckman St-200th St">
+    <lines>
+      <line name="A" id="203"/>
+    </lines>
+  </station>
+  <station latitude="40.888595" longitude="-73.831306" name="Dyre Ave-233rd St">
+    <lines>
+      <line name="5" id="68"/>
+    </lines>
+  </station>
+  <station latitude="40.650841" longitude="-73.899865" name="E 105th St">
+    <lines>
+      <line name="L" id="459"/>
+    </lines>
+  </station>
+  <station latitude="40.808695" longitude="-73.907658" name="E 143rd St">
+    <lines>
+      <line name="6" id="141"/>
+    </lines>
+  </station>
+  <station latitude="40.812192" longitude="-73.904059" name="E 149th St">
+    <lines>
+      <line name="6" id="142"/>
+    </lines>
+  </station>
+  <station latitude="40.833073" longitude="-73.86153" name="E 177th St-Parkchester">
+    <lines>
+      <line name="6" id="149"/>
+    </lines>
+  </station>
+  <station latitude="40.841876" longitude="-73.873761" name="E 180th St">
+    <lines>
+      <line name="2" id="54"/>
+      <line name="5" id="54"/>
+    </lines>
+  </station>
+  <station latitude="40.677992" longitude="-73.905935" name="E New York-Eastern Pkwy">
+    <lines>
+      <line name="A" id="229"/>
+      <line name="C" id="229"/>
+      <line name="J" id="229"/>
+      <line name="L" id="229"/>
+      <line name="Z" id="229"/>
+    </lines>
+  </station>
+  <station latitude="40.840579" longitude="-73.879751" name="E Tremont Ave">
+    <lines>
+      <line name="2" id="53"/>
+      <line name="5" id="53"/>
+    </lines>
+  </station>
+  <station latitude="40.714409" longitude="-73.990219" name="East Broadway">
+    <lines>
+      <line name="F" id="301"/>
+    </lines>
+  </station>
+  <station latitude="40.672148" longitude="-73.964659" name="Eastern Pkwy">
+    <lines>
+      <line name="1" id="79"/>
+      <line name="2" id="79"/>
+    </lines>
+  </station>
+  <station latitude="40.828576" longitude="-73.879497" name="Elder Ave">
+    <lines>
+      <line name="6" id="146"/>
+    </lines>
+  </station>
+  <station latitude="40.691321" longitude="-73.867226" name="Elderts Lane">
+    <lines>
+      <line name="J" id="324"/>
+      <line name="Z" id="324"/>
+    </lines>
+  </station>
+  <station latitude="40.742328" longitude="-73.881804" name="Elmhurst Ave">
+    <lines>
+      <line name="G" id="265"/>
+      <line name="R" id="265"/>
+      <line name="M" id="265"/>
+    </lines>
+  </station>
+  <station latitude="40.675275" longitude="-73.872409" name="Euclid Ave">
+    <lines>
+      <line name="A" id="233"/>
+      <line name="C" id="233"/>
+    </lines>
+  </station>
+  <station latitude="40.603992" longitude="-73.755358" name="Far Rockaway-Mott Ave">
+    <lines>
+      <line name="A" id="249"/>
+    </lines>
+  </station>
+  <station latitude="40.632918" longitude="-73.947595" name="Flatbush Ave">
+    <lines>
+      <line name="2" id="97"/>
+      <line name="5" id="97"/>
+    </lines>
+  </station>
+  <station latitude="40.7004245" longitude="-73.9456485" name="Flushing Ave">
+    <lines>
+      <line name="G" id="283"/>
+      <line name="J" id="312"/>
+      <line name="M" id="312"/>
+    </lines>
+  </station>
+  <station latitude="40.862033999999994" longitude="-73.89939050000001" name="Fordham Rd">
+    <lines>
+      <line name="4" id="133"/>
+      <line name="B" id="212"/>
+      <line name="D" id="212"/>
+    </lines>
+  </station>
+  <station latitude="40.704341" longitude="-73.903111" name="Forest Ave">
+    <lines>
+      <line name="M" id="334"/>
+    </lines>
+  </station>
+  <station latitude="40.692293" longitude="-73.860423" name="Forest Pkwy">
+    <lines>
+      <line name="J" id="325"/>
+    </lines>
+  </station>
+  <station latitude="40.681496" longitude="-73.957209" name="Franklin Ave">
+    <lines>
+      <line name="C" id="223"/>
+      <line name="S" id="223"/>
+    </lines>
+  </station>
+  <station latitude="40.719775" longitude="-74.006824" name="Franklin St">
+    <lines>
+      <line name="1" id="5"/>
+      <line name="2" id="5"/>
+    </lines>
+  </station>
+  <station latitude="40.830485" longitude="-73.891822" name="Freeman St">
+    <lines>
+      <line name="2" id="51"/>
+      <line name="5" id="51"/>
+    </lines>
+  </station>
+  <station latitude="40.706193" longitude="-73.896089" name="Fresh Pond Rd">
+    <lines>
+      <line name="M" id="335"/>
+    </lines>
+  </station>
+  <station latitude="40.641093000000005" longitude="-73.99175833333334" name="Ft Hamilton Pkwy">
+    <lines>
+      <line name="F" id="343"/>
+      <line name="M" id="413"/>
+      <line name="N" id="413"/>
+      <line name="N" id="425"/>
+    </lines>
+  </station>
+  <station latitude="40.687289" longitude="-73.974837" name="Fulton St">
+    <lines>
+      <line name="G" id="278"/>
+    </lines>
+  </station>
+  <station latitude="40.710582" longitude="-74.007387" name="Fulton St-Broadway-Nassau">
+    <lines>
+      <line name="1" id="304"/>
+      <line name="2" id="304"/>
+      <line name="4" id="304"/>
+      <line name="5" id="304"/>
+      <line name="A" id="304"/>
+      <line name="C" id="304"/>
+      <line name="J" id="304"/>
+      <line name="M" id="304"/>
+      <line name="Z" id="304"/>
+    </lines>
+  </station>
+  <station latitude="40.689449" longitude="-73.922059" name="Gates Ave">
+    <lines>
+      <line name="J" id="315"/>
+      <line name="Z" id="315"/>
+    </lines>
+  </station>
+  <station latitude="40.714581" longitude="-73.943744" name="Graham Ave">
+    <lines>
+      <line name="L" id="444"/>
+    </lines>
+  </station>
+  <station latitude="40.675307" longitude="-73.971028" name="Grand Army Plaza">
+    <lines>
+      <line name="1" id="78"/>
+      <line name="2" id="78"/>
+    </lines>
+  </station>
+  <station latitude="40.737252" longitude="-73.877179" name="Grand Ave">
+    <lines>
+      <line name="G" id="266"/>
+      <line name="R" id="266"/>
+      <line name="M" id="266"/>
+    </lines>
+  </station>
+  <station latitude="40.752956" longitude="-73.979218" name="Grand Central">
+    <lines>
+      <line name="4" id="99"/>
+      <line name="5" id="99"/>
+      <line name="6" id="99"/>
+      <line name="7" id="99"/>
+      <line name="S" id="99"/>
+    </lines>
+  </station>
+  <station latitude="40.715537999999995" longitude="-73.967006" name="Grand St">
+    <lines>
+      <line name="L" id="445"/>
+      <line name="S" id="290"/>
+    </lines>
+  </station>
+  <station latitude="40.676879" longitude="-73.86546" name="Grant Ave">
+    <lines>
+      <line name="A" id="234"/>
+    </lines>
+  </station>
+  <station latitude="40.731553" longitude="-73.95447" name="Greenpoint Ave">
+    <lines>
+      <line name="G" id="287"/>
+    </lines>
+  </station>
+  <station latitude="40.873515" longitude="-73.856191" name="Gun Hill Rd">
+    <lines>
+      <line name="2" id="59"/>
+      <line name="5" id="59"/>
+      <line name="5" id="66"/>
+    </lines>
+  </station>
+  <station latitude="40.691047499999996" longitude="-73.910453" name="Halsey St">
+    <lines>
+      <line name="J" id="316"/>
+      <line name="L" id="451"/>
+    </lines>
+  </station>
+  <station latitude="40.706804" longitude="-73.9532" name="Hewes St">
+    <lines>
+      <line name="J" id="310"/>
+      <line name="M" id="310"/>
+    </lines>
+  </station>
+  <station latitude="40.699094" longitude="-73.990383" name="High St">
+    <lines>
+      <line name="A" id="218"/>
+      <line name="C" id="218"/>
+    </lines>
+  </station>
+  <station latitude="40.728602" longitude="-74.005329" name="Houston St">
+    <lines>
+      <line name="1" id="7"/>
+      <line name="2" id="7"/>
+    </lines>
+  </station>
+  <station latitude="40.660403" longitude="-73.830446" name="Howard Beach">
+    <lines>
+      <line name="A" id="242"/>
+    </lines>
+  </station>
+  <station latitude="40.690358" longitude="-73.984572" name="Hoyt St">
+    <lines>
+      <line name="1" id="74"/>
+      <line name="2" id="74"/>
+    </lines>
+  </station>
+  <station latitude="40.688488" longitude="-73.984831" name="Hoyt-Schermerhorn Sts">
+    <lines>
+      <line name="A" id="220"/>
+      <line name="C" id="220"/>
+      <line name="G" id="220"/>
+    </lines>
+  </station>
+  <station latitude="40.742068" longitude="-73.948928" name="Hunters Pt Ave">
+    <lines>
+      <line name="7" id="160"/>
+    </lines>
+  </station>
+  <station latitude="40.820957" longitude="-73.891288" name="Hunts Pt Ave">
+    <lines>
+      <line name="6" id="144"/>
+    </lines>
+  </station>
+  <station latitude="40.82213" longitude="-73.896834" name="Intervale Ave">
+    <lines>
+      <line name="2" id="49"/>
+      <line name="5" id="49"/>
+    </lines>
+  </station>
+  <station latitude="40.816525" longitude="-73.907731" name="Jackson Ave">
+    <lines>
+      <line name="2" id="47"/>
+      <line name="5" id="47"/>
+    </lines>
+  </station>
+  <station latitude="40.702263" longitude="-73.801037" name="Jamaica Center">
+    <lines>
+      <line name="E" id="463"/>
+      <line name="J" id="463"/>
+      <line name="Z" id="463"/>
+    </lines>
+  </station>
+  <station latitude="40.702465" longitude="-73.817079" name="Jamaica-Van Wyck">
+    <lines>
+      <line name="E" id="461"/>
+    </lines>
+  </station>
+  <station latitude="40.6927" longitude="-73.98727" name="Jay St">
+    <lines>
+      <line name="A" id="219"/>
+      <line name="C" id="219"/>
+      <line name="F" id="219"/>
+    </lines>
+  </station>
+  <station latitude="40.706559" longitude="-73.922537" name="Jefferson St">
+    <lines>
+      <line name="L" id="448"/>
+    </lines>
+  </station>
+  <station latitude="40.749087" longitude="-73.869446" name="Junction Blvd">
+    <lines>
+      <line name="7" id="172"/>
+    </lines>
+  </station>
+  <station latitude="40.663394" longitude="-73.902654" name="Junius St">
+    <lines>
+      <line name="1" id="87"/>
+    </lines>
+  </station>
+  <station latitude="40.60551733333333" longitude="-73.97024833333333" name="Kings Highway">
+    <lines>
+      <line name="F" id="351"/>
+      <line name="N" id="430"/>
+      <line name="Q" id="391"/>
+    </lines>
+  </station>
+  <station latitude="40.867611999999994" longitude="-73.8952405" name="Kingsbridge Rd">
+    <lines>
+      <line name="4" id="134"/>
+      <line name="B" id="213"/>
+      <line name="D" id="213"/>
+    </lines>
+  </station>
+  <station latitude="40.669321" longitude="-73.942045" name="Kingston Ave">
+    <lines>
+      <line name="1" id="82"/>
+    </lines>
+  </station>
+  <station latitude="40.679807" longitude="-73.940584" name="Kingston-Throop Aves">
+    <lines>
+      <line name="C" id="225"/>
+    </lines>
+  </station>
+  <station latitude="40.698755" longitude="-73.918852" name="Knickerbocker Ave">
+    <lines>
+      <line name="M" id="331"/>
+    </lines>
+  </station>
+  <station latitude="40.69328" longitude="-73.928643" name="Kosciusko St">
+    <lines>
+      <line name="J" id="314"/>
+    </lines>
+  </station>
+  <station latitude="40.686045" longitude="-73.9738" name="Lafayette Ave">
+    <lines>
+      <line name="C" id="221"/>
+    </lines>
+  </station>
+  <station latitude="40.692191" longitude="-73.986201" name="Lawrence St">
+    <lines>
+      <line name="M" id="378"/>
+      <line name="R" id="378"/>
+    </lines>
+  </station>
+  <station latitude="40.685701" longitude="-73.826148" name="Lefferts Blvd">
+    <lines>
+      <line name="A" id="240"/>
+    </lines>
+  </station>
+  <station latitude="40.757661" longitude="-73.969345" name="Lexington-3rd Aves-51st St">
+    <lines>
+      <line name="6" id="256"/>
+      <line name="E" id="256"/>
+      <line name="M" id="256"/>
+    </lines>
+  </station>
+  <station latitude="40.674639" longitude="-73.896906" name="Liberty Ave">
+    <lines>
+      <line name="C" id="230"/>
+    </lines>
+  </station>
+  <station latitude="40.663777" longitude="-73.900841" name="Livonia Ave">
+    <lines>
+      <line name="L" id="457"/>
+    </lines>
+  </station>
+  <station latitude="40.81632" longitude="-73.896191" name="Longwood Ave">
+    <lines>
+      <line name="6" id="143"/>
+    </lines>
+  </station>
+  <station latitude="40.703835" longitude="-73.947257" name="Lorimer St">
+    <lines>
+      <line name="J" id="311"/>
+      <line name="M" id="311"/>
+    </lines>
+  </station>
+  <station latitude="40.759429" longitude="-73.829937" name="Main St">
+    <lines>
+      <line name="7" id="176"/>
+    </lines>
+  </station>
+  <station latitude="40.708476" longitude="-73.957754" name="Marcy Ave">
+    <lines>
+      <line name="J" id="309"/>
+      <line name="M" id="309"/>
+      <line name="Z" id="309"/>
+    </lines>
+  </station>
+  <station latitude="40.711741" longitude="-73.889023" name="Metropolitan Ave">
+    <lines>
+      <line name="M" id="336"/>
+    </lines>
+  </station>
+  <station latitude="40.713509" longitude="-73.950687" name="Metropolitan Ave-Lorimer St">
+    <lines>
+      <line name="G" id="285"/>
+      <line name="L" id="285"/>
+      <line name="G" id="443"/>
+      <line name="L" id="443"/>
+    </lines>
+  </station>
+  <station latitude="40.843945" longitude="-73.83623" name="Middletown Rd">
+    <lines>
+      <line name="6" id="153"/>
+    </lines>
+  </station>
+  <station latitude="40.70767" longitude="-73.939817" name="Montrose Ave">
+    <lines>
+      <line name="L" id="446"/>
+    </lines>
+  </station>
+  <station latitude="40.706151" longitude="-73.932799" name="Morgan Ave">
+    <lines>
+      <line name="L" id="447"/>
+    </lines>
+  </station>
+  <station latitude="40.854456" longitude="-73.860542" name="Morris Park">
+    <lines>
+      <line name="5" id="65"/>
+    </lines>
+  </station>
+  <station latitude="40.82952" longitude="-73.874589" name="Morrison-Soundview Aves">
+    <lines>
+      <line name="6" id="147"/>
+    </lines>
+  </station>
+  <station latitude="40.879704" longitude="-73.884703" name="Mosholu Pkwy">
+    <lines>
+      <line name="4" id="136"/>
+    </lines>
+  </station>
+  <station latitude="40.844318" longitude="-73.914715" name="Mt Eden Ave">
+    <lines>
+      <line name="4" id="129"/>
+    </lines>
+  </station>
+  <station latitude="40.697203" longitude="-73.935504" name="Myrtle Ave">
+    <lines>
+      <line name="J" id="313"/>
+      <line name="M" id="313"/>
+      <line name="Z" id="313"/>
+    </lines>
+  </station>
+  <station latitude="40.694649" longitude="-73.949041" name="Myrtle-Willoughby Aves">
+    <lines>
+      <line name="G" id="282"/>
+    </lines>
+  </station>
+  <station latitude="40.69955" longitude="-73.911056" name="Myrtle-Wyckoff Aves">
+    <lines>
+      <line name="L" id="450"/>
+      <line name="M" id="450"/>
+    </lines>
+  </station>
+  <station latitude="40.724555" longitude="-73.951219" name="Nassau Ave">
+    <lines>
+      <line name="G" id="286"/>
+    </lines>
+  </station>
+  <station latitude="40.595545" longitude="-73.955274" name="Neck Rd">
+    <lines>
+      <line name="Q" id="393"/>
+    </lines>
+  </station>
+  <station latitude="40.579977" longitude="-73.974625" name="Neptune Ave-Van Sicklen">
+    <lines>
+      <line name="F" id="354"/>
+    </lines>
+  </station>
+  <station latitude="40.688192" longitude="-73.980456" name="Nevins St">
+    <lines>
+      <line name="1" id="75"/>
+      <line name="2" id="75"/>
+      <line name="4" id="75"/>
+      <line name="5" id="75"/>
+    </lines>
+  </station>
+  <station latitude="40.662556" longitude="-73.8919715" name="New Lots Ave">
+    <lines>
+      <line name="1" id="90"/>
+      <line name="L" id="458"/>
+    </lines>
+  </station>
+  <station latitude="40.625085" longitude="-73.996753" name="New Utrecht Ave-62nd St">
+    <lines>
+      <line name="M" id="426"/>
+      <line name="N" id="426"/>
+    </lines>
+  </station>
+  <station latitude="40.637645500000005" longitude="-73.9556185" name="Newkirk Ave">
+    <lines>
+      <line name="2" id="96"/>
+      <line name="5" id="96"/>
+      <line name="Q" id="387"/>
+    </lines>
+  </station>
+  <station latitude="40.752664" longitude="-73.905683" name="Northern Blvd">
+    <lines>
+      <line name="G" id="262"/>
+      <line name="R" id="262"/>
+      <line name="M" id="262"/>
+    </lines>
+  </station>
+  <station latitude="40.681323" longitude="-73.880213" name="Norwood Ave">
+    <lines>
+      <line name="J" id="321"/>
+      <line name="Z" id="321"/>
+    </lines>
+  </station>
+  <station latitude="40.676893" longitude="-73.95191" name="Nostrand Ave">
+    <lines>
+      <line name="1" id="81"/>
+      <line name="1" id="436"/>
+      <line name="2" id="436"/>
+      <line name="4" id="436"/>
+      <line name="5" id="436"/>
+      <line name="S" id="436"/>
+      <line name="A" id="224"/>
+      <line name="C" id="224"/>
+    </lines>
+  </station>
+  <station latitude="40.576349" longitude="-73.968089" name="Ocean Pkwy">
+    <lines>
+      <line name="Q" id="396"/>
+    </lines>
+  </station>
+  <station latitude="40.674835" longitude="-73.95752" name="Park Place">
+    <lines>
+      <line name="S" id="434"/>
+    </lines>
+  </station>
+  <station latitude="40.655116" longitude="-73.961465" name="Parkside Ave">
+    <lines>
+      <line name="Q" id="383"/>
+    </lines>
+  </station>
+  <station latitude="40.707567" longitude="-73.803322" name="Parsons Blvd">
+    <lines>
+      <line name="F" id="275"/>
+    </lines>
+  </station>
+  <station latitude="40.852745" longitude="-73.827398" name="Pelham Bay Park">
+    <lines>
+      <line name="6" id="155"/>
+    </lines>
+  </station>
+  <station latitude="40.857194" longitude="-73.867581" name="Pelham Pkwy">
+    <lines>
+      <line name="2" id="56"/>
+      <line name="5" id="56"/>
+    </lines>
+  </station>
+  <station latitude="40.664503" longitude="-73.89536" name="Pennsylvania Ave">
+    <lines>
+      <line name="1" id="88"/>
+    </lines>
+  </station>
+  <station latitude="40.667862" longitude="-73.950662" name="President St">
+    <lines>
+      <line name="2" id="91"/>
+      <line name="5" id="91"/>
+    </lines>
+  </station>
+  <station latitude="40.724854" longitude="-73.997275" name="Prince St">
+    <lines>
+      <line name="N" id="371"/>
+      <line name="R" id="371"/>
+    </lines>
+  </station>
+  <station latitude="40.74252" longitude="-73.9471635" name="Prospect Ave">
+    <lines>
+      <line name="2" id="48"/>
+      <line name="5" id="48"/>
+      <line name="M" id="402"/>
+      <line name="N" id="402"/>
+      <line name="R" id="402"/>
+    </lines>
+  </station>
+  <station latitude="40.661342" longitude="-73.96203" name="Prospect Park">
+    <lines>
+      <line name="Q" id="382"/>
+      <line name="S" id="382"/>
+    </lines>
+  </station>
+  <station latitude="40.748741" longitude="-73.93699" name="Queens Plaza">
+    <lines>
+      <line name="E" id="258"/>
+      <line name="G" id="258"/>
+      <line name="R" id="258"/>
+      <line name="M" id="258"/>
+    </lines>
+  </station>
+  <station latitude="40.750486" longitude="-73.940117" name="Queensboro Plaza">
+    <lines>
+      <line name="7" id="162"/>
+      <line name="N" id="162"/>
+    </lines>
+  </station>
+  <station latitude="40.678784" longitude="-73.920833" name="Ralph Ave">
+    <lines>
+      <line name="C" id="227"/>
+    </lines>
+  </station>
+  <station latitude="40.707964" longitude="-74.013562" name="Rector St-Greenwich St">
+    <lines>
+      <line name="1" id="2"/>
+      <line name="9" id="2"/>
+    </lines>
+  </station>
+  <station latitude="40.707795" longitude="-74.012894" name="Rector St-Trinity Pl">
+    <lines>
+      <line name="N" id="375"/>
+      <line name="R" id="375"/>
+    </lines>
+  </station>
+  <station latitude="40.670340499999995" longitude="-73.9106285" name="Rockaway Ave">
+    <lines>
+      <line name="1" id="86"/>
+      <line name="C" id="228"/>
+    </lines>
+  </station>
+  <station latitude="40.680266" longitude="-73.844235" name="Rockaway Blvd">
+    <lines>
+      <line name="A" id="237"/>
+    </lines>
+  </station>
+  <station latitude="40.580745" longitude="-73.835479" name="Rockaway Park-Beach 116th St">
+    <lines>
+      <line name="A" id="253"/>
+      <line name="S" id="253"/>
+    </lines>
+  </station>
+  <station latitude="40.646827" longitude="-73.902293" name="Rockaway Pkwy">
+    <lines>
+      <line name="L" id="460"/>
+    </lines>
+  </station>
+  <station latitude="40.759198" longitude="-73.953033" name="Roosevelt Island">
+    <lines>
+      <line name="F" id="465"/>
+    </lines>
+  </station>
+  <station latitude="40.661348" longitude="-73.916655" name="Saratoga Ave">
+    <lines>
+      <line name="1" id="85"/>
+    </lines>
+  </station>
+  <station latitude="40.702817" longitude="-73.907675" name="Seneca Ave">
+    <lines>
+      <line name="M" id="333"/>
+    </lines>
+  </station>
+  <station latitude="40.58713" longitude="-73.953779" name="Sheepshead Bay">
+    <lines>
+      <line name="Q" id="394"/>
+    </lines>
+  </station>
+  <station latitude="40.674037" longitude="-73.881158" name="Shepherd Ave">
+    <lines>
+      <line name="C" id="232"/>
+    </lines>
+  </station>
+  <station latitude="40.824157" longitude="-73.892888" name="Simpson St">
+    <lines>
+      <line name="2" id="50"/>
+      <line name="5" id="50"/>
+    </lines>
+  </station>
+  <station latitude="40.674" longitude="-73.997251" name="Smith-9th Sts">
+    <lines>
+      <line name="F" id="339"/>
+      <line name="G" id="339"/>
+    </lines>
+  </station>
+  <station latitude="40.701322" longitude="-74.013882" name="South Ferry">
+    <lines>
+      <line name="1" id="1"/>
+      <line name="9" id="1"/>
+    </lines>
+  </station>
+  <station latitude="40.72682" longitude="-74.003563" name="Spring St-6th Ave">
+    <lines>
+      <line name="C" id="179"/>
+      <line name="E" id="179"/>
+    </lines>
+  </station>
+  <station latitude="40.722318" longitude="-73.997117" name="Spring St-Lafayette St">
+    <lines>
+      <line name="6" id="106"/>
+    </lines>
+  </station>
+  <station latitude="40.831373" longitude="-73.868101" name="St Lawrence Ave">
+    <lines>
+      <line name="6" id="148"/>
+    </lines>
+  </station>
+  <station latitude="40.756736" longitude="-73.92016" name="Steinway St">
+    <lines>
+      <line name="G" id="260"/>
+      <line name="R" id="260"/>
+      <line name="M" id="260"/>
+    </lines>
+  </station>
+  <station latitude="40.662713" longitude="-73.950677" name="Sterling St">
+    <lines>
+      <line name="2" id="92"/>
+      <line name="5" id="92"/>
+    </lines>
+  </station>
+  <station latitude="40.57694" longitude="-73.980594" name="Stillwell Ave">
+    <lines>
+      <line name="F" id="398"/>
+      <line name="Q" id="398"/>
+    </lines>
+  </station>
+  <station latitude="40.705321" longitude="-73.810955" name="Sutphin Blvd">
+    <lines>
+      <line name="F" id="274"/>
+    </lines>
+  </station>
+  <station latitude="40.700565" longitude="-73.8081" name="Sutphin Blvd-Archer Ave">
+    <lines>
+      <line name="E" id="462"/>
+      <line name="J" id="462"/>
+      <line name="Z" id="462"/>
+    </lines>
+  </station>
+  <station latitude="40.666925500000005" longitude="-73.91239300000001" name="Sutter Ave">
+    <lines>
+      <line name="1" id="84"/>
+      <line name="L" id="456"/>
+    </lines>
+  </station>
+  <station latitude="40.757191" longitude="-73.989801" name="Times Square-42nd St-8th Ave">
+    <lines>
+      <line name="1" id="184"/>
+      <line name="2" id="184"/>
+      <line name="3" id="184"/>
+      <line name="7" id="184"/>
+      <line name="A" id="184"/>
+      <line name="C" id="184"/>
+      <line name="E" id="184"/>
+      <line name="N" id="184"/>
+      <line name="Q" id="184"/>
+      <line name="R" id="184"/>
+    </lines>
+  </station>
+  <station latitude="40.850568" longitude="-73.905022" name="Tremont Ave">
+    <lines>
+      <line name="B" id="210"/>
+      <line name="D" id="210"/>
+    </lines>
+  </station>
+  <station latitude="40.735301" longitude="-73.989929" name="Union Square">
+    <lines>
+      <line name="4" id="109"/>
+      <line name="5" id="109"/>
+      <line name="6" id="109"/>
+      <line name="L" id="109"/>
+      <line name="N" id="109"/>
+      <line name="Q" id="109"/>
+      <line name="R" id="109"/>
+    </lines>
+  </station>
+  <station latitude="40.677406" longitude="-73.983042" name="Union St">
+    <lines>
+      <line name="M" id="400"/>
+      <line name="N" id="400"/>
+      <line name="R" id="400"/>
+    </lines>
+  </station>
+  <station latitude="40.714207" longitude="-73.830912" name="Union Turnpike">
+    <lines>
+      <line name="E" id="272"/>
+      <line name="F" id="272"/>
+    </lines>
+  </station>
+  <station latitude="40.674073500000006" longitude="-73.9312205" name="Utica Ave">
+    <lines>
+      <line name="1" id="83"/>
+      <line name="4" id="83"/>
+      <line name="A" id="226"/>
+      <line name="C" id="226"/>
+    </lines>
+  </station>
+  <station latitude="40.668960999999996" longitude="-73.89014499999999" name="Van Siclen Ave">
+    <lines>
+      <line name="1" id="89"/>
+      <line name="C" id="231"/>
+    </lines>
+  </station>
+  <station latitude="40.709329" longitude="-73.821015" name="Van Wyck Blvd">
+    <lines>
+      <line name="E" id="273"/>
+      <line name="F" id="273"/>
+    </lines>
+  </station>
+  <station latitude="40.74247" longitude="-73.952763" name="Vernon-Jackson Aves">
+    <lines>
+      <line name="7" id="159"/>
+    </lines>
+  </station>
+  <station latitude="40.73292" longitude="-74.000075" name="W 4th St">
+    <lines>
+      <line name="A" id="180"/>
+      <line name="C" id="180"/>
+      <line name="E" id="180"/>
+      <line name="F" id="180"/>
+      <line name="S" id="180"/>
+      <line name="M" id="180"/>
+    </lines>
+  </station>
+  <station latitude="40.575926" longitude="-73.975439" name="W 8th St">
+    <lines>
+      <line name="F" id="397"/>
+      <line name="Q" id="397"/>
+    </lines>
+  </station>
+  <station latitude="40.708307" longitude="-74.011243" name="Wall St-Broadway">
+    <lines>
+      <line name="4" id="102"/>
+      <line name="5" id="102"/>
+    </lines>
+  </station>
+  <station latitude="40.707011" longitude="-74.008961" name="Wall St-William St">
+    <lines>
+      <line name="1" id="71"/>
+      <line name="2" id="71"/>
+    </lines>
+  </station>
+  <station latitude="40.839805" longitude="-73.843058" name="Westchester Square">
+    <lines>
+      <line name="6" id="152"/>
+    </lines>
+  </station>
+  <station latitude="40.703153" longitude="-74.012999" name="Whitehall St">
+    <lines>
+      <line name="N" id="376"/>
+      <line name="R" id="376"/>
+    </lines>
+  </station>
+  <station latitude="40.826797" longitude="-73.886009" name="Whitlock Rd">
+    <lines>
+      <line name="6" id="145"/>
+    </lines>
+  </station>
+  <station latitude="40.754388" longitude="-73.84586" name="Willets Pt">
+    <lines>
+      <line name="7" id="175"/>
+    </lines>
+  </station>
+  <station latitude="40.689013" longitude="-73.904283" name="Wilson Ave">
+    <lines>
+      <line name="L" id="452"/>
+    </lines>
+  </station>
+  <station latitude="40.656712" longitude="-73.95021" name="Winthrop St">
+    <lines>
+      <line name="2" id="93"/>
+      <line name="5" id="93"/>
+    </lines>
+  </station>
+  <station latitude="40.713384000000005" longitude="-73.86082" name="Woodhaven Blvd">
+    <lines>
+      <line name="G" id="267"/>
+      <line name="R" id="267"/>
+      <line name="M" id="267"/>
+      <line name="J" id="326"/>
+      <line name="Z" id="326"/>
+    </lines>
+  </station>
+  <station latitude="40.886345" longitude="-73.878444" name="Woodlawn">
+    <lines>
+      <line name="4" id="137"/>
+    </lines>
+  </station>
+  <station latitude="40.700059" longitude="-73.986667" name="York St">
+    <lines>
+      <line name="F" id="302"/>
+    </lines>
+  </station>
+  <station latitude="40.836381" longitude="-73.847072" name="Zerega Ave">
+    <lines>
+      <line name="6" id="151"/>
+    </lines>
+  </station>
+</stations>

@@ -17,48 +17,41 @@ public class TrainStation {
     private float latitude = 0;
 
 
-    public TrainStation(String name){
+    public TrainStation(String name, float latitude, float longitude){
         this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
-
 
     public String getName() {
         return name;
     }
 
 
-    public void addLine(TrainLine line){
-        this.lines.add(line);
+    public void addLine(TrainLine line, int id){
+        if( !this.lines.contains(line.getName() )) {
+            this.lines.add(line);
+            line.addStation(this, id);
+        }
     }
 
     public Set<TrainLine> getLines() {
         return lines;
     }
 
-    public float distance(float longitude, float latitude){
-        return (float)Math.sqrt(Math.pow(this.longitude - longitude, 2) + Math.pow(this.latitude + latitude, 2));
+    public float distance(float latitude, float longitude){
+        return (float)Math.sqrt(Math.pow(this.longitude - longitude, 2) + Math.pow(this.latitude - latitude, 2));
     }
 
     public boolean equals(TrainStation other){
         return this.name.equals(other.getName());
     }
 
-
-
-
-
-    private static final Set<TrainStation> all = new HashSet<TrainStation>();
-
-    public static TrainStation closestStation(float longitude, float latitude){
-        float closestRadius = 0;
-        TrainStation closestStation = null;
-        for( TrainStation station : all ) {
-            float radius = station.distance(longitude, latitude);
-            if( radius < closestRadius ){
-                closestRadius = radius;
-                closestStation = station;
-            }
+    public TrainLine getRandomLine(){
+        for( TrainLine line : this.lines ){
+            return line;
         }
-        return closestStation;
+        return null;
     }
+
 }

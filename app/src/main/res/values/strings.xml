@@ -4,10 +4,7 @@
     <string name="app_name">Velvet</string>
 
     <string name="menu_test">Test Mesh</string>
-    <string name="menu_line">Test Line</string>
     <string name="menu_search">Search For Station</string>
     <string name="title_activity_station">StationActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 
 </resources>

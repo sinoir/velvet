@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="lines_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>6X</item>
+        <item>7</item>
+        <item>7X</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+        <item>J</item>
+        <item>L</item>
+        <item>M</item>
+        <item>N</item>
+        <item>Q</item>
+        <item>R</item>
+        <item>S</item>
+        <item>Z</item>
+    </string-array>
+
+</resources>

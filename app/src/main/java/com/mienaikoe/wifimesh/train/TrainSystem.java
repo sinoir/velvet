@@ -1,62 +1,69 @@
 package com.mienaikoe.wifimesh.train;
 
-import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import org.xml.sax.Parser;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-
-import javax.xml.parsers.SAXParser;
+import java.util.Set;
 
 /**
  * Created by Jesse on 1/19/2015.
  */
 public class TrainSystem {
 
-    private Map<String, TrainLine> system = new HashMap<String, TrainLine>();
+    private Map<String, TrainLine> lines = new HashMap<String, TrainLine>();
+
+    private Map<String, TrainStation> stations = new HashMap<String, TrainStation>();
 
 
-    public TrainSystem( InputStream systemXml ) {
+    public TrainSystem( InputStream stationsXml ) {
+        parseStations(stationsXml);
+    }
+
+
+    private void parseStations(InputStream systemXml) {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(systemXml, null);
             parser.nextTag();
 
-            parser.require(XmlPullParser.START_TAG, null, "lines");
-            TrainLine currentLine = null;
+            parser.require(XmlPullParser.START_TAG, null, "stations");
+            TrainStation currentStation = null;
 
             while ( parser.next() != XmlPullParser.END_DOCUMENT ) {
                 String tagName = parser.getName();
                 int tagType = parser.getEventType();
 
                 if ( tagType == XmlPullParser.END_TAG) {
-                    if( tagName.equals("line") && currentLine != null ){
-                        this.system.put(currentLine.getName(), currentLine);
+                    if( tagName.equals("station") && currentStation != null ){
+                        this.stations.put(currentStation.getName(), currentStation);
                     }
                 } else if( tagType == XmlPullParser.START_TAG){
                     // Starts by looking for the entry tag
-                    if (tagName.equals("line")) {
-
+                    if (tagName.equals("station")) {
+                        String stationName = parser.getAttributeValue("","name");
+                        float lineLatitude = Float.valueOf(parser.getAttributeValue("","latitude"));
+                        float lineLongitude = Float.valueOf(parser.getAttributeValue("","longitude"));
+                        currentStation = new TrainStation(stationName, lineLatitude, lineLongitude);
+                    } else if (tagName.equals("line")) {
                         String lineName = parser.getAttributeValue("","name");
-                        currentLine = new TrainLine(lineName);
-                    } else if (tagName.equals("station")) {
-                        String stationName = parser.getAttributeValue("", "name");
-                        TrainStation station = new TrainStation(stationName);
-                        currentLine.addStation( station );
+                        Integer lineStationId = Integer.valueOf(parser.getAttributeValue("", "id"));
+                        TrainLine line;
+                        if( lines.containsKey(lineName) ){
+                            line = lines.get(lineName);
+                        } else {
+                            line = new TrainLine(lineName);
+                            lines.put(lineName, line);
+                        }
+                        currentStation.addLine(line, lineStationId);
                     }
                 }
             }
@@ -78,9 +85,29 @@ public class TrainSystem {
         }
     }
 
-    public TrainLine getLine(String name){
-        return this.system.get(name);
+
+
+    public TrainStation getStation(String name) {
+        return this.stations.get(name);
     }
+
+    public TrainLine getLine(String name){
+        return this.lines.get(name);
+    }
+
+    public TrainStation closestStation(float latitude, float longitude){
+        float closestRadius = 180F;
+        TrainStation closestStation = null;
+        for( TrainStation station : this.stations.values() ){
+            float radius = station.distance(latitude, longitude);
+            if( radius < closestRadius ){
+                closestRadius = radius;
+                closestStation = station;
+            }
+        }
+        return closestStation;
+    }
+
 
 
 }
