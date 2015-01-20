@@ -193,12 +193,13 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         }
 
         //viewing own captures from here down
-
-        //viewing own captures where we are capturer
-        if (mUserIsCapturer) {
+        if (mUserIsCapturer) { //where we are capturer
             if (CaptureState.UNIDENTIFIED == captureState) {
-                mMenuActionEdit.setVisible(true);
-                mMenuActionRemove.setVisible(true);
+                //if there is no rating, then no need to show edit or remove in popupmenu
+                //bc there will be a add rating button and remove button in the row
+                mMenuActionEdit.setVisible(mHasRating);
+                mMenuActionRemove.setVisible(mHasRating);
+                mMenuActionFlag.setVisible(true);
                 return;
             }
 
@@ -431,7 +432,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
         // set like button state
-        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(UserInfo.getUserId(getContext()));
+        boolean userLikesCapture = mCaptureDetails
+                .doesUserLikeCapture(UserInfo.getUserId(getContext()));
         mLikeButton.setSelected(userLikesCapture);
 
         //setup likes/comments counts
@@ -459,10 +461,6 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         //from here down, looking at your own feed
         if (!mHasRating) { //and there was no rating
             mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
-
-            // remove redundant overflow actions
-            mMenuActionEdit.setVisible(false);
-            mMenuActionRemove.setVisible(false);
 
             //don't show like/comment count here, so return
             return;
