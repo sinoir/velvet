@@ -15,18 +15,25 @@ import java.util.TreeSet;
  */
 public class TrainLine {
 
-    private String name;
-    private TreeMap<Integer,TrainStation> stations = new TreeMap<Integer,TrainStation>(
-            new Comparator<Integer>(){
-                @Override
-                public int compare(Integer lhs, Integer rhs) {
-                    return lhs.compareTo(rhs);
-                }
-            }
-    );
+    private final String name;
 
-    public TrainLine(String name){
+    private final ArrayList<TrainStop> northStops;
+    private final ArrayList<TrainStop> southStops;
+
+
+
+
+    public TrainLine(String name, ArrayList<TrainStop> northStops, ArrayList<TrainStop> southStops ){
         this.name = name;
+        this.northStops = northStops;
+        this.southStops = southStops;
+
+        for( TrainStop stop : this.northStops ){
+            stop.addLine(this);
+        }
+        for( TrainStop stop : this.southStops ){
+            stop.addLine(this);
+        }
     }
 
 
@@ -36,15 +43,12 @@ public class TrainLine {
 
 
 
-    public Collection<TrainStation> getStations() {
-        return stations.values();
+    public ArrayList<TrainStop> getNorthStops() {
+        return northStops;
     }
 
-    public void addStation(TrainStation station, Integer id){
-        // This could be out of order
-        if( !this.stations.containsKey(id) ) {
-            this.stations.put(id, station);
-            station.addLine(this, id);
-        }
+    public ArrayList<TrainStop> getSouthStops() {
+        return southStops;
     }
+
 }

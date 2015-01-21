@@ -3,13 +3,21 @@ package com.mienaikoe.wifimesh.train;
 import android.util.Log;
 import android.util.Xml;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,88 +26,128 @@ import java.util.Set;
  */
 public class TrainSystem {
 
+    private Map<String, TrainStop> stops = new HashMap<String, TrainStop>();
     private Map<String, TrainLine> lines = new HashMap<String, TrainLine>();
+    private Set<TrainStation> stations = new HashSet<TrainStation>();
 
-    private Map<String, TrainStation> stations = new HashMap<String, TrainStation>();
 
-
-    public TrainSystem( InputStream stationsXml ) {
-        parseStations(stationsXml);
+    public TrainSystem( InputStream stopsJson, InputStream linesJson, InputStream transfersJson ) {
+        parseStops(streamToJSON(stopsJson), streamToJSON(transfersJson));
+        parseLines(streamToJSON(linesJson));
     }
 
-
-    private void parseStations(InputStream systemXml) {
+    private JSONObject streamToJSON(InputStream inputStream) {
         try {
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(systemXml, null);
-            parser.nextTag();
-
-            parser.require(XmlPullParser.START_TAG, null, "stations");
-            TrainStation currentStation = null;
-
-            while ( parser.next() != XmlPullParser.END_DOCUMENT ) {
-                String tagName = parser.getName();
-                int tagType = parser.getEventType();
-
-                if ( tagType == XmlPullParser.END_TAG) {
-                    if( tagName.equals("station") && currentStation != null ){
-                        this.stations.put(currentStation.getName(), currentStation);
-                    }
-                } else if( tagType == XmlPullParser.START_TAG){
-                    // Starts by looking for the entry tag
-                    if (tagName.equals("station")) {
-                        String stationName = parser.getAttributeValue("","name");
-                        float lineLatitude = Float.valueOf(parser.getAttributeValue("","latitude"));
-                        float lineLongitude = Float.valueOf(parser.getAttributeValue("","longitude"));
-                        currentStation = new TrainStation(stationName, lineLatitude, lineLongitude);
-                    } else if (tagName.equals("line")) {
-                        String lineName = parser.getAttributeValue("","name");
-                        Integer lineStationId = Integer.valueOf(parser.getAttributeValue("", "id"));
-                        TrainLine line;
-                        if( lines.containsKey(lineName) ){
-                            line = lines.get(lineName);
-                        } else {
-                            line = new TrainLine(lineName);
-                            lines.put(lineName, line);
-                        }
-                        currentStation.addLine(line, lineStationId);
-                    }
-                }
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line);
             }
-        } catch( XmlPullParserException ex ) {
-            Log.e(this.getClass().getSimpleName(), "Could not Parse XML File. Please check train_system.xml");
-            throw new IllegalArgumentException("Could not Parse Assets", ex);
-        } catch( IOException ex ){
-            Log.e(this.getClass().getSimpleName(), "Could not Locate XML File. Please check train_system.xml");
-            throw new IllegalArgumentException("Could not Locate Assets", ex);
-        } finally {
-            if( systemXml != null) {
-                try {
-                    systemXml.close();
-                } catch( IOException ex ){
-                    Log.e(this.getClass().getSimpleName(), "Could not close Xml File. Please check train_system.xml");
-                    throw new IllegalArgumentException("Could not Locate Assets");
-                }
-            }
+            return new JSONObject(total.toString());
+        } catch (IOException ex ){
+            Log.e(this.getClass().getSimpleName(), "Could Not Read JSON File");
+            return null;
+        } catch (JSONException ex ){
+            Log.e(this.getClass().getSimpleName(), "Could Not Parse JSON File");
+            return null;
         }
     }
 
 
 
-    public TrainStation getStation(String name) {
-        return this.stations.get(name);
+
+
+    private void parseStops(JSONObject stopsJson, JSONObject transfersJson) {
+        try {
+            JSONArray transfers = transfersJson.getJSONArray("transfers");
+            for( int i=0; i<transfers.length(); i++ ){
+                JSONArray stationTransferSet = transfers.getJSONArray(i);
+                TrainStation station = null;
+                for( int j=0; j<stationTransferSet.length(); j++ ){
+                    String stopId = stationTransferSet.getString(j);
+                    JSONObject stopJson = stopsJson.getJSONObject(stopId);
+                    if( station == null ){
+                        station = new TrainStation( stopJson.getString("name") );
+                        this.stations.add(station);
+                    }
+                    TrainStop stop = new TrainStop(
+                            station,
+                            stopJson.getDouble("latitude"),
+                            stopJson.getDouble("longitude")
+                    );
+                    this.stops.put(stopId, stop);
+                }
+            }
+
+            Iterator<String> stopsKeys = stopsJson.keys();
+            while (stopsKeys.hasNext()) {
+                String stopId = stopsKeys.next();
+                JSONObject stopJson = stopsJson.getJSONObject(stopId);
+
+                if( !this.stops.containsKey(stopId) ) {
+                    TrainStation station = new TrainStation(stopJson.getString("name"));
+                    this.stations.add(station);
+
+                    TrainStop stop = new TrainStop(
+                            station,
+                            stopJson.getDouble("latitude"),
+                            stopJson.getDouble("longitude")
+                    );
+                    this.stops.put(stopId, stop);
+                }
+            }
+        } catch (JSONException ex ){
+            Log.e(this.getClass().getSimpleName(), "Could not parse stops");
+            throw new IllegalArgumentException("Invalid Stops Json");
+        }
     }
+
+    private void parseLines(JSONObject linesJson) {
+        try {
+            Iterator<String> linesKeys = linesJson.keys();
+            while (linesKeys.hasNext()) {
+                String lineId = linesKeys.next();
+                JSONObject lineJson = linesJson.getJSONObject(lineId);
+
+                TrainLine line = new TrainLine(
+                        lineId,
+                        parseLineDirection(lineJson.getJSONArray("N")),
+                        parseLineDirection(lineJson.getJSONArray("S"))
+                );
+
+                this.lines.put(lineId, line);
+            }
+        } catch (JSONException ex ){
+            Log.e(this.getClass().getSimpleName(), "Could not parse stops");
+            throw new IllegalArgumentException("Invalid Stops Json");
+        }
+    }
+
+    private ArrayList<TrainStop> parseLineDirection(JSONArray northJson) throws JSONException{
+        ArrayList<TrainStop> parsedStations = new ArrayList<TrainStop>(northJson.length());
+        for( int i=0; i< northJson.length(); i++ ){
+            String stopId = northJson.getString(i);
+            TrainStop stop = this.stops.get(stopId);
+            if (stop == null){
+                throw new IllegalArgumentException("Could not find train station with id "+stopId);
+            }
+            parsedStations.add(stop);
+        }
+        return parsedStations;
+    }
+
+
 
     public TrainLine getLine(String name){
         return this.lines.get(name);
     }
 
-    public TrainStation closestStation(float latitude, float longitude){
-        float closestRadius = 180F;
+    public TrainStation closestStation(double latitude, double longitude){
+        double closestRadius = 180F;
         TrainStation closestStation = null;
-        for( TrainStation station : this.stations.values() ){
-            float radius = station.distance(latitude, longitude);
+        for( TrainStation station : this.stations ){
+            double radius = station.distance(latitude, longitude);
             if( radius < closestRadius ){
                 closestRadius = radius;
                 closestStation = station;

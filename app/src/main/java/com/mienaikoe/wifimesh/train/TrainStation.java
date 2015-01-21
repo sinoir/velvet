@@ -11,36 +11,51 @@ import java.util.Set;
 public class TrainStation {
 
     private String name;
-    private Set<TrainLine> lines = new HashSet<TrainLine>();
 
-    private float longitude = 0;
-    private float latitude = 0;
+    private Set<TrainStop> stops = new HashSet<TrainStop>();
+
+    private double longitude = 0;
+    private double latitude = 0;
 
 
-    public TrainStation(String name, float latitude, float longitude){
+    public TrainStation(String name){
         this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
+
+
+    public void addStop(TrainStop stop){
+        this.stops.add(stop);
+
+        double latitudeSum = 0;
+        double longitudeSum = 0;
+        for( TrainStop itStop : this.stops ){
+            latitudeSum += itStop.getLatitude();
+            longitudeSum += itStop.getLongitude();
+        }
+        this.latitude = latitudeSum / this.stops.size();
+        this.longitude = longitudeSum / this.stops.size();
+    }
+
 
     public String getName() {
         return name;
     }
 
 
-    public void addLine(TrainLine line, int id){
-        if( !this.lines.contains(line.getName() )) {
-            this.lines.add(line);
-            line.addStation(this, id);
-        }
-    }
+
+
+
 
     public Set<TrainLine> getLines() {
-        return lines;
+        Set<TrainLine> allLines = new HashSet<TrainLine>();
+        for( TrainStop stop : this.stops ){
+            allLines.addAll(stop.getLines());
+        }
+        return allLines;
     }
 
-    public float distance(float latitude, float longitude){
-        return (float)Math.sqrt(Math.pow(this.longitude - longitude, 2) + Math.pow(this.latitude - latitude, 2));
+    public double distance(double latitude, double longitude){
+        return Math.sqrt(Math.pow(this.longitude - longitude, 2) + Math.pow(this.latitude - latitude, 2));
     }
 
     public boolean equals(TrainStation other){
@@ -48,8 +63,10 @@ public class TrainStation {
     }
 
     public TrainLine getRandomLine(){
-        for( TrainLine line : this.lines ){
-            return line;
+        for( TrainStop stop : this.stops ){
+            for( TrainLine line : stop.getLines() ){
+                return line;
+            }
         }
         return null;
     }

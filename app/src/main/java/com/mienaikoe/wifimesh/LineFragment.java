@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
+import com.mienaikoe.wifimesh.train.TrainStop;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
 /**
@@ -108,6 +109,7 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         stationName.setGravity(Gravity.CENTER_VERTICAL);
         if( station.equals(this.currentStation) ){
             stationName.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+            stationName.setBackgroundColor(getResources().getColor(R.color.dark_gray));
             stationName.setTextColor(getResources().getColor(R.color.white));
         } else {
             stationName.setTextColor(getResources().getColor(R.color.light_gray));
@@ -125,8 +127,8 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         this.grid.removeAllViews();
         String lineName = (String)parent.getItemAtPosition(pos);
         TrainLine line = this.trainSystem.getLine(lineName);
-        for( TrainStation lineStation : line.getStations() ){
-            this.grid.addView( renderStation(lineStation) );
+        for( TrainStop lineStop : line.getSouthStops() ){
+            this.grid.addView( renderStation(lineStop.getStation()) );
         }
     }
 

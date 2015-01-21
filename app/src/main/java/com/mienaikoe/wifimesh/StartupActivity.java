@@ -56,7 +56,11 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         startService(new Intent(this, VelvetService.class));
         setContentView(R.layout.activity_startup_activity);
 
-        this.trainSystem = new TrainSystem( this.getApplicationContext().getResources().openRawResource(R.raw.mta_stations) );
+        this.trainSystem = new TrainSystem(
+                this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
+                this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
+                this.getApplicationContext().getResources().openRawResource(R.raw.transfers_normalized)
+        );
 
         // Instantiate a ViewPager and a PagerAdapter.
         this.pager = (ViewPager) findViewById(R.id.pager);
@@ -186,7 +190,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         Log.i(this.getClass().getSimpleName(), "Location Changed");
         Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
         if( location != null ) {
-            TrainStation closestStation = trainSystem.closestStation((float) location.getLatitude(), (float) location.getLongitude());
+            TrainStation closestStation = trainSystem.closestStation(location.getLatitude(), location.getLongitude());
             mapFragment.setStation(closestStation);
             lineFragment.setStation(closestStation);
         }
