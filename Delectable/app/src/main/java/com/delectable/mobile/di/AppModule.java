@@ -16,6 +16,7 @@ import com.delectable.mobile.api.controllers.AccountController;
 import com.delectable.mobile.api.controllers.BaseWineController;
 import com.delectable.mobile.api.controllers.CaptureController;
 import com.delectable.mobile.api.controllers.FoursquareController;
+import com.delectable.mobile.api.controllers.HashtagController;
 import com.delectable.mobile.api.controllers.MotdController;
 import com.delectable.mobile.api.controllers.RegistrationController;
 import com.delectable.mobile.api.controllers.VersionPropsFileController;
@@ -70,6 +71,7 @@ import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
 import com.delectable.mobile.api.jobs.foursquare.SearchFoursquareVenuesJob;
+import com.delectable.mobile.api.jobs.hashtags.SearchHashtagsJob;
 import com.delectable.mobile.api.jobs.motd.FetchMotdJob;
 import com.delectable.mobile.api.jobs.pendingcaptures.DeletePendingCaptureJob;
 import com.delectable.mobile.api.jobs.pendingcaptures.SetBaseWineJob;
@@ -88,7 +90,9 @@ import com.delectable.mobile.api.net.S3ImageUploadNetworkClient;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.camera.fragment.FoursquareVenueSelectionFragment;
 import com.delectable.mobile.ui.camera.fragment.WineCaptureCameraFragment;
+import com.delectable.mobile.ui.capture.activity.FeedActivity;
 import com.delectable.mobile.ui.capture.fragment.BaseCaptureDetailsFragment;
+import com.delectable.mobile.ui.capture.fragment.CaptureCommentRateFragment;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
 import com.delectable.mobile.ui.capture.fragment.TaggedPeopleFragment;
 import com.delectable.mobile.ui.common.dialog.BaseDialogFragment;
@@ -109,6 +113,7 @@ import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
 import com.delectable.mobile.ui.registration.dialog.ResetPasswordDialog;
 import com.delectable.mobile.ui.registration.fragment.SignInFragment;
 import com.delectable.mobile.ui.registration.fragment.SignUpFragment;
+import com.delectable.mobile.ui.search.fragment.SearchHashtagsTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchPeopleTabFragment;
 import com.delectable.mobile.ui.search.fragment.SearchWinesTabFragment;
 import com.delectable.mobile.ui.settings.fragment.NotificationsFragment;
@@ -118,6 +123,7 @@ import com.delectable.mobile.ui.wineprofile.dialog.BuyVintageDialog;
 import com.delectable.mobile.ui.wineprofile.fragment.RateCaptureFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileFragment;
 import com.delectable.mobile.ui.wineprofile.fragment.WineProfileInstantFragment;
+import com.delectable.mobile.ui.wineprofile.widget.WinePriceView;
 import com.delectable.mobile.ui.winepurchase.dialog.AddPaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.AddShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
@@ -138,6 +144,7 @@ import de.greenrobot.event.EventBus;
                 App.class,
                 MainActivity.class,
                 NavActivity.class,
+                FeedActivity.class,
                 // Fragments
                 BaseFragment.class,
                 SignUpFragment.class,
@@ -163,11 +170,13 @@ import de.greenrobot.event.EventBus;
                 RateCaptureFragment.class,
                 SearchWinesTabFragment.class,
                 SearchPeopleTabFragment.class,
+                SearchHashtagsTabFragment.class,
                 WineProfileFragment.class,
                 WineProfileInstantFragment.class,
                 TaggedPeopleFragment.class,
                 WineCheckoutFragment.class,
                 ConfirmationDialogFragment.class,
+                CaptureCommentRateFragment.class,
                 // Dialogs
                 BaseDialogFragment.class,
                 BaseEventBusDialogFragment.class,
@@ -246,6 +255,7 @@ import de.greenrobot.event.EventBus;
                 SetPrimaryPaymentMethodJob.class,
                 RemovePaymentMethodJob.class,
                 PurchaseWineJob.class,
+                SearchHashtagsJob.class,
                 // Controllers
                 MotdController.class,
                 VersionPropsFileController.class,
@@ -255,8 +265,10 @@ import de.greenrobot.event.EventBus;
                 FoursquareController.class,
                 WineScanController.class,
                 BaseWineController.class,
+                HashtagController.class,
                 // Other
-                DrawInsetsFrameLayout.class
+                DrawInsetsFrameLayout.class,
+                WinePriceView.class
         }
 )
 public class AppModule {

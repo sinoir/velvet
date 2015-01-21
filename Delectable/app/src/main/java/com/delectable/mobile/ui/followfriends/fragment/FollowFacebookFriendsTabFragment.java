@@ -1,12 +1,5 @@
 package com.delectable.mobile.ui.followfriends.fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.events.accounts.AssociateFacebookEvent;
@@ -16,6 +9,13 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragment {
 
@@ -63,7 +63,6 @@ public class FollowFacebookFriendsTabFragment extends BaseFollowFriendsTabFragme
         mAdapter.setTopHeaderTitleResId(R.string.follow_friends_facebook);
         mEmptyTextView.setText(R.string.empty_facebook);
 
-        mConnectButton.setBackgroundResource(R.drawable.btn_facebook);
         mConnectButton.setText(R.string.connect_facebook_button);
         mConnectButton.setTextColor(getResources().getColor(R.color.com_facebook_blue));
         mConnectButton.setIconDrawable(getResources().getDrawable(R.drawable.ic_fb));

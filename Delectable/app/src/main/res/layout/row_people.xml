@@ -23,7 +23,7 @@
         android:layout_centerVertical="true"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/d_black"
+        android:textColor="@color/d_dark_gray"
         android:textSize="@dimen/text_size_medium"
         app:fontName="whitney_medium" />
 

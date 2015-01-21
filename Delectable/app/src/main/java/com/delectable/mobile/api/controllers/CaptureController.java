@@ -10,10 +10,13 @@ import com.delectable.mobile.api.jobs.captures.FlagCaptureJob;
 import com.delectable.mobile.api.jobs.captures.LikeCaptureJob;
 import com.delectable.mobile.api.jobs.captures.MarkCaptureHelpfulJob;
 import com.delectable.mobile.api.jobs.captures.RateCaptureJob;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureNote;
 import com.delectable.mobile.api.models.Listing;
 import com.path.android.jobqueue.JobManager;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -26,13 +29,16 @@ public class CaptureController {
         mJobManager.addJobInBackground(new FetchCaptureDetailsJob(captureId));
     }
 
-    public void addCommentToCapture(String captureId, String captureComment) {
-        mJobManager.addJobInBackground(new AddCaptureCommentJob(captureId, captureComment));
+    public void addCommentToCapture(String captureId, String captureComment,
+            ArrayList<CaptureCommentAttributes> attributes) {
+        mJobManager.addJobInBackground(
+                new AddCaptureCommentJob(captureId, captureComment, attributes));
     }
 
-    public void editCaptureComment(String captureId, String commentId, String captureComment) {
+    public void editCaptureComment(String captureId, String commentId, String captureComment,
+            ArrayList<CaptureCommentAttributes> attributes) {
         mJobManager.addJobInBackground(
-                new EditCaptureCommentJob(captureId, commentId, captureComment));
+                new EditCaptureCommentJob(captureId, commentId, captureComment, attributes));
     }
 
     public void toggleLikeCapture(String captureId, boolean userLikesCapture) {

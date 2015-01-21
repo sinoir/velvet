@@ -144,8 +144,11 @@
                 app:fontName="whitney_book_sc" />
 
             <com.delectable.mobile.ui.common.widget.Delectabutton
-                style="@style/delectabutton_facebook"
+                style="@style/delectabutton_large"
                 android:id="@+id/facebook_button"
+                android:textColor="@color/com_facebook_blue"
+                android:icon="@drawable/ic_fb"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@id/or_textview"
                 android:text="@string/signup_in_sign_in_using_facebook" />
 

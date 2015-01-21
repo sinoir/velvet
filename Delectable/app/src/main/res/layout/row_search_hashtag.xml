@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!-- made for RelativeLayout-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/search_hashtags_row_height">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/hashtag_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/wine_image"
+        android:layout_toLeftOf="@+id/occurence_count"
+        android:ellipsize="end"
+        android:gravity="center_vertical|left"
+        android:layout_centerVertical="true"
+        android:singleLine="true"
+        android:text="#wine"
+        android:textColor="@color/d_dark_gray"
+        android:textSize="@dimen/text_size_medium"
+        app:fontName="whitney_medium" />
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/occurence_count"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:ellipsize="end"
+        android:text="2231"
+        android:gravity="center_vertical|right"
+        android:layout_centerVertical="true"
+        android:textColor="@color/d_medium_gray"
+        android:textSize="@dimen/text_size_medium"
+        app:fontName="whitney_medium" />
+</merge>

@@ -15,6 +15,9 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.activity.WebViewActivity;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.common.widget.ObservableScrollView;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.delectable.mobile.ui.settings.activity.NotificationsActivty;
 import com.delectable.mobile.ui.settings.dialog.SetProfilePicDialog;
 import com.delectable.mobile.util.CameraUtil;
@@ -42,10 +45,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -160,6 +165,9 @@ public class SettingsFragment extends BaseFragment {
     AccountController mAccountController;
 
     //region Views
+    @InjectView(R.id.scroll_view)
+    ObservableScrollView mScrollView;
+
     @InjectView(R.id.profile_image)
     CircleImageView mProfileImage;
 
@@ -248,6 +256,19 @@ public class SettingsFragment extends BaseFragment {
 
         ButterKnife.inject(this, view);
 
+//        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
+//            @Override
+//            public void onScrollChanged(int deltaX, int deltaY) {
+//                ViewCompat.setElevation(getActionBarToolbar(), mScrollView.getScrollY() > 0 ? Animate.ELEVATION : 0);
+//            }
+//
+//            @Override
+//            public void onScrollViewOverScrollBy(int deltaY, int scrollY, boolean isTouchEvent,
+//                    boolean overScrollResult) {
+//                // nothing here
+//            }
+//        });
+
         mRealFacebookLoginButton.setFragment(this);
 
         //need to manually set typeface instead of using FontEditText because of support library limitations with subclassing EditText
@@ -294,6 +315,7 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        ViewCompat.setElevation(getActionBarToolbar(), 0);
         mFacebookUiHelper.onResume();
         if (mUserAccount == null) {
             mUserAccount = UserInfo.getAccountPrivate(getActivity());
@@ -312,6 +334,7 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        ViewCompat.setElevation(getActionBarToolbar(), 0);
         mFacebookUiHelper.onPause();
     }
 
@@ -334,6 +357,17 @@ public class SettingsFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mFacebookUiHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_action_search:
+                startActivity(SearchActivity.newIntent(getActivity(), SearchFragment.WINES));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateInfo(EditText v, String text) {

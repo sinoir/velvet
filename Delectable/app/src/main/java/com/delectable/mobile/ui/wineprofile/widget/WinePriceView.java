@@ -1,13 +1,17 @@
 package com.delectable.mobile.ui.wineprofile.widget;
 
+import com.delectable.mobile.App;
 import com.delectable.mobile.R;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
+import com.delectable.mobile.util.AnalyticsUtil;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,6 +31,9 @@ public class WinePriceView extends RelativeLayout {
     @InjectView(R.id.price_button)
     protected TextView mPriceText;
 
+    @Inject
+    protected AnalyticsUtil mAnalytics;
+
     private WinePriceViewActionsCallback mActionsCallback;
 
     private VintageWineInfo mWineInfo;
@@ -41,6 +48,9 @@ public class WinePriceView extends RelativeLayout {
 
     public WinePriceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        if (!isInEditMode()) {
+            App.injectMembers(this);
+        }
 
         View.inflate(context, R.layout.widget_wine_price, this);
 
@@ -66,7 +76,7 @@ public class WinePriceView extends RelativeLayout {
             mSoldOutView.setVisibility(View.VISIBLE);
         } else if (vintageWineInfo.hasPrice()) {
             mPriceText.setVisibility(View.VISIBLE);
-            mPriceText.setText(vintageWineInfo.getPriceText());
+            mPriceText.setText(getResources().getString(R.string.wine_profile_buy) + " " + vintageWineInfo.getPriceText());
         } else {
             mCheckPrice.setVisibility(View.VISIBLE);
         }
@@ -90,6 +100,7 @@ public class WinePriceView extends RelativeLayout {
         if (mActionsCallback != null) {
             mActionsCallback.onPriceCheckClicked(mWineInfo);
         }
+        mAnalytics.trackBuyButtonPressed(AnalyticsUtil.BUTTON_STATE_CHECK_PRICE);
     }
 
     @OnClick(R.id.price_button)
@@ -97,6 +108,7 @@ public class WinePriceView extends RelativeLayout {
         if (mActionsCallback != null) {
             mActionsCallback.onPriceClicked(mWineInfo);
         }
+        mAnalytics.trackBuyButtonPressed(AnalyticsUtil.BUTTON_STATE_PRICE_SHOWN);
     }
 
     @OnClick(R.id.sold_out)

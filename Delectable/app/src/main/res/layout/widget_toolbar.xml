@@ -1,0 +1,9 @@
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    style="@style/ToolbarStyle">
+
+    <com.delectable.mobile.ui.common.widget.FontTextView
+        android:id="@+id/toolbar_title"
+        style="@style/ToolbarText.Title" />
+
+</android.support.v7.widget.Toolbar>

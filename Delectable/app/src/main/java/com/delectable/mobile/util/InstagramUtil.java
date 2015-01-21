@@ -9,8 +9,16 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InstagramUtil {
+
+    private static final String TAG = InstagramUtil.class.getSimpleName();
+
+    private static Pattern sMentionPattern = Pattern.compile("@\\w+");
 
     public static boolean isInstagramAvailable() {
         boolean appInstalled = false;
@@ -33,6 +41,19 @@ public class InstagramUtil {
                 .insertImage(activity.getContentResolver(), bitmap, "DelectableCapture",
                         caption);
         Uri uri = Uri.parse(url);
+
+        // remove @mentions from caption to avoid conflicts
+        Log.d(TAG, "raw caption: " + caption);
+        Matcher matcher = sMentionPattern.matcher(caption);
+        while (matcher.find()) {
+            int spanStart = matcher.start();
+            int spanEnd = matcher.end();
+            String mention = caption
+                    .substring(spanStart, spanEnd);
+            caption = caption.replace(mention, mention.substring(1)); // remove @ symbol
+            matcher = sMentionPattern.matcher(caption); // start over because we changed the text
+        }
+        Log.d(TAG, "cleaned caption: " + caption);
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");

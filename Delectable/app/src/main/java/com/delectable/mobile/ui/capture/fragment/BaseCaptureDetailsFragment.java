@@ -10,6 +10,7 @@ import com.delectable.mobile.api.events.captures.EditedCaptureCommentEvent;
 import com.delectable.mobile.api.events.captures.LikedCaptureEvent;
 import com.delectable.mobile.api.events.captures.RatedCaptureEvent;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.api.util.ErrorUtil;
@@ -87,9 +88,11 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         ArrayList<CaptureComment> comments = capture.getCommentsForUserId(userId);
         mTempUserComment = comments.size() > 0 ? comments.get(0) : null;
         String currentUserCommentText = "";
+        ArrayList<CaptureCommentAttributes> currentUserCommentAttributes = null;
 
         if (mTempUserComment != null && isCurrentUserCapture) {
             currentUserCommentText = mTempUserComment.getComment();
+            currentUserCommentAttributes = mTempUserComment.getCommentAttributes();
         }
         int currentUserRating = capture.getRatingForId(userId);
 
@@ -97,6 +100,8 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         intent.putExtra(CaptureCommentRateActivity.PARAMS_IS_RATING, true);
         intent.putExtra(CaptureCommentRateActivity.PARAMS_RATING, currentUserRating);
         intent.putExtra(CaptureCommentRateActivity.PARAMS_COMMENT, currentUserCommentText);
+        intent.putExtra(CaptureCommentRateActivity.PARAMS_COMMENT_ATTRIBUTES,
+                currentUserCommentAttributes);
 
         intent.setClass(getActivity(), CaptureCommentRateActivity.class);
         startActivityForResult(intent, REQUEST_RATE_COMMENT_CAPTURE);
@@ -107,27 +112,30 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         mCaptureController.toggleLikeCapture(capture.getId(), isLiked);
     }
 
-    private void sendComment(final CaptureDetails capture, String comment) {
+    private void sendComment(final CaptureDetails capture, String comment,
+            ArrayList<CaptureCommentAttributes> attributes) {
         // TODO: Loader?
         if (comment != null && comment.trim().isEmpty()) {
             return; //do nothing if commment was empty
         }
         // Temp comment for instant UI
         final CaptureComment tempComment = new CaptureComment();
-        tempComment.setAccountId(UserInfo.getUserId(getActivity()));
+        tempComment.setAccountId(UserInfo.getUserId());
         tempComment.setComment(comment);
         if (capture.getComments() == null) {
             capture.setComments(new ArrayList<CaptureComment>());
         }
         capture.getComments().add(tempComment);
+        capture.getCommentingParticipants().add(UserInfo.getAccountPrivate());
         dataSetChanged();
 
-        mCaptureController.addCommentToCapture(capture.getId(), comment);
+        mCaptureController.addCommentToCapture(capture.getId(), comment, attributes);
     }
 
-    private void editComment(CaptureDetails capture, final CaptureComment captureComment) {
+    private void editComment(CaptureDetails capture, final CaptureComment captureComment,
+            ArrayList<CaptureCommentAttributes> attributes) {
         mCaptureController.editCaptureComment(capture.getId(), captureComment.getId(),
-                captureComment.getComment());
+                captureComment.getComment(), attributes);
     }
 
     @Override
@@ -224,27 +232,7 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
 
     @Override
     public void shareCapture(CaptureDetails capture) {
-        //prepare vintage string
-        String vintage = "";
-        CaptureState state = CaptureState.getState(capture);
-        if (CaptureState.IDENTIFIED == state) {
-            vintage = capture.getWineProfile().getVintage() + " ";
-        }
-        //strip NV or -- if necessary
-        if (vintage.trim().equals("NV") ||
-                vintage.trim().equals("--")) {
-            vintage = "";
-        }
-
-        String shareText = getResources().getString(R.string.cap_action_recommend_text,
-                capture.getDisplayTitle() + " " + vintage
-                        + capture.getDisplayDescription(),
-                capture.getShortShareUrl());
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-        shareIntent.setType("text/plain");
-        startActivity(shareIntent);
+        shareWine(capture);
     }
 
     private void sendRating(final CaptureDetails capture, final int rating) {
@@ -289,8 +277,11 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         if (requestCode == REQUEST_COMMENT_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
                 String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                ArrayList<CaptureCommentAttributes> commentAttributes = data
+                        .getParcelableArrayListExtra(
+                                CaptureCommentRateFragment.DATA_COMMENT_ATTRIBUTES);
                 Log.i(TAG, "Request Data Comment Text: " + commentText);
-                sendComment(mTempCaptureForAction, commentText);
+                sendComment(mTempCaptureForAction, commentText, commentAttributes);
             }
             mTempCaptureForAction = null;
         }
@@ -298,16 +289,21 @@ public abstract class BaseCaptureDetailsFragment extends BaseFragment
         if (requestCode == REQUEST_RATE_COMMENT_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
                 String commentText = data.getStringExtra(CaptureCommentRateFragment.DATA_COMMENT);
+                ArrayList<CaptureCommentAttributes> commentAttributes = data
+                        .getParcelableArrayListExtra(
+                                CaptureCommentRateFragment.DATA_COMMENT_ATTRIBUTES);
                 int rating = data.getIntExtra(CaptureCommentRateFragment.DATA_RATING, -1);
                 Log.i(TAG, "Request Data Comment Text: " + commentText);
                 Log.i(TAG, "Request Data Rating: " + rating);
                 sendRating(mTempCaptureForAction, rating);
                 if (mTempUserComment != null && mTempUserComment.getId() != null) {
                     mTempUserComment.setComment(commentText);
-                    editComment(mTempCaptureForAction, mTempUserComment);
+                    mTempUserComment.setCommentAttributes(commentAttributes);
+                    editComment(mTempCaptureForAction, mTempUserComment,
+                            mTempUserComment.getCommentAttributes());
                     dataSetChanged();
                 } else {
-                    sendComment(mTempCaptureForAction, commentText);
+                    sendComment(mTempCaptureForAction, commentText, commentAttributes);
                 }
             }
             mTempUserComment = null;

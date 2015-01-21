@@ -9,6 +9,8 @@ import com.delectable.mobile.api.models.CaptureFeed;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 import com.melnykov.fab.FloatingActionButton;
 
 import android.graphics.Color;
@@ -16,13 +18,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends BaseFragment {
@@ -32,6 +33,13 @@ public class HomeFragment extends BaseFragment {
      */
     public static final int PREFETCH_FEED_COUNT = 6;
 
+    private static final String TAG = HomeFragment.class.getSimpleName();
+
+    /**
+     * keeps track of which position each feed key is in in the view pager
+     */
+    private HashMap<String, Integer> mFeedKeyMap = new HashMap<String, Integer>();
+
     private View mView;
 
     private ViewPager mViewPager;
@@ -39,7 +47,6 @@ public class HomeFragment extends BaseFragment {
     private SlidingTabLayout mTabLayout;
 
     protected FloatingActionButton mCameraButton;
-
 
     private SlidingTabAdapter mTabsAdapter;
 
@@ -57,12 +64,12 @@ public class HomeFragment extends BaseFragment {
 
         setHasOptionsMenu(true);
 
-        mView = inflater.inflate(R.layout.fragment_viewpager_with_sliding_tabs, container, false);
+        mView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = (ViewPager) mView.findViewById(R.id.pager);
         mTabLayout = (SlidingTabLayout) mView.findViewById(R.id.tab_layout);
-        mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
-        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
+        mTabLayout.setBackgroundColor(getResources().getColor(R.color.primary));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.accent));
 
         mCameraButton = (FloatingActionButton) mView.findViewById(R.id.camera_button);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +90,10 @@ public class HomeFragment extends BaseFragment {
         String currentUserId = UserInfo.getUserId(getActivity());
         List<SlidingTabAdapter.SlidingTabItem> tabItems
                 = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
+        mFeedKeyMap.clear();
 
         if (captureFeeds != null) {
+            int i = 0;
             for (CaptureFeed feed : captureFeeds) {
                 // list banner
                 int backgroundColor = getResources().getColor(R.color.d_suva_gray);
@@ -108,14 +117,16 @@ public class HomeFragment extends BaseFragment {
 
                 // add feed to tabs
                 boolean isNewFeed = oldCaptureFeeds != null && !oldCaptureFeeds.contains(feed);
-                tabItems.add(new SlidingTabAdapter.SlidingTabItem(
+                tabItems.add(i, new SlidingTabAdapter.SlidingTabItem(
                         CaptureListFragment
-                                .newInstance(currentUserId, feed.getKey(), feed.getFeedType(),
+                                .newInstance(feed.getKey(), feed.getFeedType(),
                                         feed.getTitle(),
                                         feed.getBanner(), backgroundColor, textColor),
                         feed.getTitle().toLowerCase(),
                         isNewFeed
                 ));
+                mFeedKeyMap.put(feed.getKey(), i);
+                i++;
             }
         }
         mCaptureFeeds = captureFeeds;
@@ -128,17 +139,35 @@ public class HomeFragment extends BaseFragment {
         // material design does not like page transformers!
 //        mViewPager.setPageTransformer(false, new FeedPageTransformer());
         mTabLayout.setViewPager(mViewPager);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //mEventBus.registerSticky(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (!mCameraButton.isShown()) {
-            mCameraButton.hide(false);
             mCameraButton.show(true);
         }
     }
+
+    public void onEventMainThread(ShowSpecificFeedEvent event) {
+        String feedKey = event.getFeedKey();
+        Integer position = mFeedKeyMap.get(feedKey);
+        if (position == null) {
+            return;
+        }
+        mViewPager.setCurrentItem(position);
+
+        //event is consumed, we can remove it now
+        mEventBus.removeStickyEvent(event);
+
+    }
+
 
     public void onEventMainThread(HideOrShowFabEvent event) {
         if (event.show) {
@@ -169,16 +198,26 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO: Search in Menu
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_action_search:
+                startActivity(SearchActivity.newIntent(getActivity(), SearchFragment.WINES));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static class ShowSpecificFeedEvent {
+
+        private final String mFeedKey;
+
+        public ShowSpecificFeedEvent(String feedKey) {
+            mFeedKey = feedKey;
+        }
+
+        public String getFeedKey() {
+            return mFeedKey;
         }
     }
 

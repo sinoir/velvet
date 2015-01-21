@@ -11,12 +11,13 @@ public class CaptureNote extends Capture {
 
     private String note;
 
+    ArrayList<CaptureCommentAttributes> comment_attributes;
+
     private String vintage;
 
     private ArrayList<String> helpfuling_account_ids;
 
     private AccountMinimal capturer_participant;
-
 
     public float getRatingPercent() {
         float ratingPercent = -1.0f;
@@ -75,19 +76,46 @@ public class CaptureNote extends Capture {
         this.capturer_participant = capturer_participant;
     }
 
+    public ArrayList<CaptureCommentAttributes> getCommentAttributes() {
+        return comment_attributes;
+    }
+
+    public void setCommentAttributes(ArrayList<CaptureCommentAttributes> comment_attributes) {
+        this.comment_attributes = comment_attributes;
+    }
+
     @Override
     public String toString() {
         return "CaptureNote{" +
-                "id='" + getId() + '\'' +
-                ", created_at=" + getCreatedAt() +
-                ", private_=" + getPrivate() +
+                "capturer_rating=" + capturer_rating +
                 ", note='" + note + '\'' +
-                ", capturer_rating=" + capturer_rating +
+                ", comment_attributes=" + comment_attributes +
                 ", vintage='" + vintage + '\'' +
                 ", helpfuling_account_ids=" + helpfuling_account_ids +
-                ", context='" + getContext() + '\'' +
-                ", e_tag='" + getETag() + '\'' +
                 ", capturer_participant=" + capturer_participant +
-                "}";
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CaptureNote that = (CaptureNote) o;
+
+        if (!getId().equals(that.getId())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

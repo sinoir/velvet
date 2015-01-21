@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/d_white">
+    android:background="@color/background">
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.delectable.mobile.ui.common.widget.ObservableListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@id/list_view"
+        style="@style/ListViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/d_white"
-        android:headerDividersEnabled="false"
-        android:footerDividersEnabled="false"
         android:animateLayoutChanges="true"
         tools:context="com.delectable.mobile.ui.profile.fragment.UserProfileFragment" />
 

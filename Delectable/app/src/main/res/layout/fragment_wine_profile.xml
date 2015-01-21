@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/d_white">
 
-    <ListView
+    <com.delectable.mobile.ui.common.widget.ObservableListView
         android:id="@+id/list_view"
         style="@style/ListViewStyle"
         android:layout_width="match_parent"
@@ -17,15 +17,6 @@
     <View
         android:id="@+id/statusbar_scrim"
         style="@style/StatusBarScrim" />
-
-    <ImageView
-        android:id="@+id/toolbar_contrast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/navigation_background"
-        android:alpha="0"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

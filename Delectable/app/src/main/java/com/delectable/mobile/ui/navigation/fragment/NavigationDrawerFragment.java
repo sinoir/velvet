@@ -26,11 +26,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -76,7 +79,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     private DrawerLayout mDrawerLayout;
 
-    private View mFragmentContainerView;
+    private View mContainerView;
 
     private ListView mDrawerListView;
 
@@ -200,19 +203,19 @@ public class NavigationDrawerFragment extends BaseFragment implements
     }
 
     public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mContainerView);
     }
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(DrawerLayout drawerLayout) {
         mDrawerLayout = drawerLayout;
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.d_suva_gray));
-        mFragmentContainerView = getActivity().findViewById(fragmentId);
+//        mDrawerLayout
+//                .setStatusBarBackgroundColor(getResources().getColor(R.color.overlayed_status_bar));
+        mContainerView = getActivity().findViewById(R.id.drawer_container);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
@@ -251,7 +254,13 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ViewCompat.setElevation(mContainerView, TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
+                            getResources().getDisplayMetrics()));
+        } else {
+            mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        }
 
         // When the user runs the app for the first time, we want to land them with the
         // navigation drawer open. But just the first time.
@@ -342,7 +351,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(NavigationDrawerCloseEvent event) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            mDrawerLayout.closeDrawer(mContainerView);
         }
     }
 
@@ -365,10 +374,11 @@ public class NavigationDrawerFragment extends BaseFragment implements
             }
 
         }
+    }
 
-        //TODO make emptyview, show here
-        //mEmptyView.setVisibility(mAdapter.isEmpty() ? View.VISIBLE : View.GONE);
-
+    public void onEventMainThread(NavigationEvent event) {
+        mNavHeader.setCurrentSelectedNavItem(event.itemPosition);
+        navItemSelected(event.itemPosition);
     }
 
     //endregion
@@ -393,17 +403,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
         startActivity(UserProfileActivity.newIntent(getActivity(), mUserId));
     }
 
-    public void onEventMainThread(NavigationEvent event) {
-        mNavHeader.setCurrentSelectedNavItem(event.itemPosition);
-        navItemSelected(event.itemPosition);
-    }
-
     @Override
     public void navItemSelected(final int navItem) {
         boolean wasNavAlreadySelected = mCurrentSelectedNavItem == navItem;
         mCurrentSelectedNavItem = navItem;
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            mDrawerLayout.closeDrawer(mContainerView);
         }
         if (mCallbacks != null && !wasNavAlreadySelected) {
             mDrawerLayout.postDelayed(new Runnable() {
@@ -422,6 +427,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
         if (intent != null) {
             startActivity(intent);
         }
+
+        //TODO account for opening intent that opens into NavActivity
+        //for now I haven't seen the feed deeplink appear in recent activity  but
+        //might need to account for delectable://feed which opens something in navactivity, the current activity that we're already in
     }
 
     /**

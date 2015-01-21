@@ -66,6 +66,18 @@ public class AnalyticsUtil {
 
     public static final String PHOTO_CAMERA_ROLL = "camera roll";
 
+    // PURCHASE
+    public static final String BUTTON_STATE = "Button state";
+
+    public static final String BUTTON_STATE_PRICE_SHOWN = "price shown";
+
+    public static final String BUTTON_STATE_CHECK_PRICE = "check price";
+
+    public static final String SPECIAL_OFFER_TEXT = "Special offer text";
+
+    public static final String WINE_PROFILE = "Wine profile";
+
+
     private static final String TAG = AnalyticsUtil.class.getSimpleName();
 
     private MixpanelAPI mixpanel = MixpanelAPI
@@ -195,6 +207,36 @@ public class AnalyticsUtil {
             e.printStackTrace();
         }
         mixpanel.track("Scan-Mobile-02-Scan submitted", props);
+    }
+
+    public void trackBuyButtonPressed(String buttonState) {
+        JSONObject props = new JSONObject();
+        try {
+            props.put(BUTTON_STATE, buttonState);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.track("Buy-Mobile-01-Buy button pressed", props);
+    }
+
+    public void trackLandOnBuyScreen(String specialOfferText) {
+        JSONObject props = new JSONObject();
+        try {
+            props.put(SPECIAL_OFFER_TEXT, specialOfferText != null ? specialOfferText : "n/a");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.track("Buy-Mobile-02-Land on buy screen", props);
+    }
+
+    public void trackOrderConfirmed(String wineProfileId) {
+        JSONObject props = new JSONObject();
+        try {
+            props.put(WINE_PROFILE, wineProfileId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.track("Buy-Mobile-04-Order confirmed", props);
     }
 
     public void trackRate() {

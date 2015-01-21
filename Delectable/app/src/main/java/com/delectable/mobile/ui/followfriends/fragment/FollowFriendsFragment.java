@@ -5,10 +5,13 @@ import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingPagerAdapter.SlidingPagerItem;
 import com.delectable.mobile.ui.common.widget.SlidingPagerTabStrip;
+import com.delectable.mobile.ui.search.activity.SearchActivity;
+import com.delectable.mobile.ui.search.fragment.SearchFragment;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +22,8 @@ import butterknife.InjectView;
 
 
 public class FollowFriendsFragment extends BaseFragment {
+
+    private static final String TAG = FollowFriendsFragment.class.getSimpleName();
 
     @InjectView(R.id.pager)
     protected ViewPager mViewPager;
@@ -35,22 +40,22 @@ public class FollowFriendsFragment extends BaseFragment {
         //set up tab icons and fragments
         SlidingPagerItem experts = new SlidingPagerItem(
                 new FollowExpertsTabFragment(),
-                R.color.d_off_white,
+                R.color.primary,
                 R.color.d_red_experts_tab,
                 R.drawable.tab_follow_friends_experts_icon);
         SlidingPagerItem contacts = new SlidingPagerItem(
                 new FollowContactsTabFragment(),
-                R.color.d_off_white,
+                R.color.primary,
                 R.color.d_yellow_contacts_tab,
                 R.drawable.tab_follow_friends_contacts_icon);
         SlidingPagerItem facebook = new SlidingPagerItem(
                 new FollowFacebookFriendsTabFragment(),
-                R.color.d_off_white,
+                R.color.primary,
                 R.color.d_blue_facebook_tab,
                 R.drawable.tab_follow_friends_facebook_icon);
         SlidingPagerItem twitter = new SlidingPagerItem(
                 new FollowTwitterFriendsTabFragment(),
-                R.color.d_off_white,
+                R.color.primary,
                 R.color.d_blue_twitter_tab,
                 R.drawable.tab_follow_friends_twitter_icon);
 
@@ -72,7 +77,18 @@ public class FollowFriendsFragment extends BaseFragment {
 
         mViewPager.setAdapter(mTabsAdapter);
         mTabStrip.setViewPager(mViewPager);
-        mTabStrip.setBackgroundColor(getResources().getColor(R.color.d_off_white));
+        mTabStrip.setBackgroundColor(getResources().getColor(R.color.primary));
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_action_search:
+                startActivity(SearchActivity.newIntent(getActivity(), SearchFragment.PEOPLE));
+                return true;
+            default:
+               return super.onOptionsItemSelected(item);
+        }
     }
 }

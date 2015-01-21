@@ -2,6 +2,7 @@ package com.delectable.mobile.ui.navigation.activity;
 
 import com.delectable.mobile.App;
 import com.delectable.mobile.R;
+import com.delectable.mobile.api.events.ui.InsetsChangedEvent;
 import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.events.NavigationEvent;
@@ -10,17 +11,19 @@ import com.delectable.mobile.ui.home.fragment.HomeFragment;
 import com.delectable.mobile.ui.navigation.fragment.NavigationDrawerFragment;
 import com.delectable.mobile.ui.navigation.widget.NavHeader;
 import com.delectable.mobile.ui.profile.fragment.YourWinesFragment;
-import com.delectable.mobile.ui.search.activity.SearchActivity;
 import com.delectable.mobile.ui.settings.fragment.SettingsFragment;
 import com.delectable.mobile.util.AnalyticsUtil;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -30,6 +33,8 @@ public class NavActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String TAG = NavActivity.class.getSimpleName();
+
+    public static final String PARAMS_FEED_KEY = "PARAMS_FEED_KEY";
 
     @Inject
     protected EventBus mEventBus;
@@ -51,24 +56,74 @@ public class NavActivity extends BaseActivity
      */
     private CharSequence mTitle = null;
 
+    private TextView mToolbarTitleView;
+
+    public static Intent newFeedIntent(Context packageContext, String feedKey) {
+        Intent intent = new Intent();
+        intent.putExtra(PARAMS_FEED_KEY, feedKey);
+        intent.setClass(packageContext, NavActivity.class);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         App.injectMembers(this);
 
+        handleFeedKeyParam();
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         // Set up the drawer.
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationDrawerFragment
-                .setUp(R.id.navigation_drawer, mDrawerLayout);
+        mNavigationDrawerFragment.setUp(mDrawerLayout);
+
+        mToolbarTitleView = (TextView) findViewById(R.id.toolbar_title);
+    }
+
+    private void handleFeedKeyParam() {
+        //if it exists,
+        String feedKey = null;
+        Bundle args = getIntent().getExtras();
+        if (args == null) {
+            return;
+        }
+        feedKey = args.getString(PARAMS_FEED_KEY);
+        if (feedKey == null) {
+            return;
+        }
+
+        mEventBus.postSticky(new HomeFragment.ShowSpecificFeedEvent(feedKey));
+        //broadcast stickyevent to tell home fragment to select tab
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mEventBus.register(this);
+        } catch (Throwable t) {
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            mEventBus.unregister(this);
+        } catch (Throwable t) {
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        InsetsChangedEvent insetsEvent = mEventBus.getStickyEvent(InsetsChangedEvent.class);
+        if (insetsEvent != null) {
+            onApplyWindowInsets(insetsEvent.insets);
+        }
         restoreActionBar();
     }
 
@@ -93,8 +148,8 @@ public class NavActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.nav_action_search) {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+            //don't consume event here, allow fragments to handle action
+            return false;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -115,7 +170,7 @@ public class NavActivity extends BaseActivity
             //break;
             case NavHeader.NAV_DISCOVER:
                 fragment = new HomeFragment();
-                //mTitle = getResources().getString(R.string.app_name);
+                mTitle = getResources().getString(R.string.app_name);
                 mTitle = null;
                 break;
             case NavHeader.NAV_YOUR_WINES:
@@ -136,24 +191,31 @@ public class NavActivity extends BaseActivity
                 mCurrentSelectedNavItem = NavHeader.NAV_DISCOVER;
         }
         if (fragment != null) {
+            restoreActionBar();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setLogo(R.drawable.feed_logo);
-        if (mTitle != null || (mTitle != null && mTitle.length() == 0)) {
-            actionBar.setTitle(mTitle);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(false);
+//        actionBar.setTitle((String) null);
+//        actionBar.setLogo(R.drawable.feed_logo);
+        if (mTitle != null) {
+            mToolbarTitleView.setText(mTitle);
+//            actionBar.setTitle(mTitle);
+//            actionBar.setDisplayShowTitleEnabled(true);
+//            actionBar.setDisplayUseLogoEnabled(false);
         } else {
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setTitle((String) null);
-            actionBar.setDisplayUseLogoEnabled(true);
+//            actionBar.setDisplayShowTitleEnabled(false);
+            mToolbarTitleView.setText(getResources().getString(R.string.app_name));
+//            actionBar.setTitle((String) null);
+//            actionBar.setDisplayUseLogoEnabled(true);
         }
         actionBar.setSubtitle(null);
     }
@@ -166,6 +228,19 @@ public class NavActivity extends BaseActivity
             // navigate to home fragment
             mEventBus.post(new NavigationEvent(NavHeader.NAV_DISCOVER));
         }
+    }
+
+    public void onEventMainThread(InsetsChangedEvent event) {
+        onApplyWindowInsets(event.insets);
+    }
+
+    private void onApplyWindowInsets(Rect insets) {
+        if (insets == null) {
+            return;
+        }
+//        // adjust toolbar padding when status bar is translucent
+//        mToolbar.setPadding(0, insets.top, 0, 0);
+//        mToolbarContrast.setPadding(0, insets.top, 0, 0);
     }
 
 }

@@ -4,10 +4,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.capture.widget.CaptureDetailsView;
 import com.delectable.mobile.ui.common.widget.FontTextView;
+import com.delectable.mobile.ui.common.widget.HashtagMentionSpan;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.util.DateHelperUtil;
 import com.delectable.mobile.util.ImageLoaderUtil;
@@ -16,6 +18,7 @@ import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.MenuItem;
@@ -24,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -123,6 +128,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         View.inflate(context, R.layout.row_minimal_capture_detail, this);
         ButterKnife.inject(this);
 
+        mCommentText.setMovementMethod(LinkMovementMethod.getInstance());
+
         PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -186,12 +193,13 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         }
 
         //viewing own captures from here down
-
-        //viewing own captures where we are capturer
-        if (mUserIsCapturer) {
+        if (mUserIsCapturer) { //where we are capturer
             if (CaptureState.UNIDENTIFIED == captureState) {
-                mMenuActionEdit.setVisible(true);
-                mMenuActionRemove.setVisible(true);
+                //if there is no rating, then no need to show edit or remove in popupmenu
+                //bc there will be a add rating button and remove button in the row
+                mMenuActionEdit.setVisible(mHasRating);
+                mMenuActionRemove.setVisible(mHasRating);
+                mMenuActionFlag.setVisible(true);
                 return;
             }
 
@@ -352,6 +360,10 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (userComment != null) {
             SpannableString span = new SpannableString(userComment);
             span.setSpan(DARK_GRAY_SPAN, 0, span.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            // spans for hashtags and mentions
+            ArrayList<CaptureCommentAttributes> attributes = capture.getComments().get(
+                    0).getCommentAttributes();
+            HashtagMentionSpan.applyHashtagAndMentionSpans(getContext(), span, attributes);
             return TextUtils.concat(span, " — ", message);
         }
 
@@ -420,7 +432,8 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         mLikeCommentButtonsContainer.setVisibility(visibility);
 
         // set like button state
-        boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(UserInfo.getUserId(getContext()));
+        boolean userLikesCapture = mCaptureDetails
+                .doesUserLikeCapture(UserInfo.getUserId(getContext()));
         mLikeButton.setSelected(userLikesCapture);
 
         //setup likes/comments counts
@@ -449,10 +462,6 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
         if (!mHasRating) { //and there was no rating
             mAddRatingRemoveTextContainer.setVisibility(View.VISIBLE);
 
-            // remove redundant overflow actions
-            mMenuActionEdit.setVisible(false);
-            mMenuActionRemove.setVisible(false);
-
             //don't show like/comment count here, so return
             return;
         }
@@ -468,7 +477,7 @@ public class MinimalCaptureDetailRow extends RelativeLayout {
     @OnClick({R.id.wine_image, R.id.wine_name, R.id.producer_name})
     protected void onWineDetailsClick() {
         if (mCaptureDetailsActionsHandler != null) {
-            mCaptureDetailsActionsHandler.launchWineProfile(mCaptureDetails);
+            mCaptureDetailsActionsHandler.launchCaptureDetails(mCaptureDetails);
         }
     }
 

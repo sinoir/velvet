@@ -1,15 +1,15 @@
 package com.delectable.mobile.ui.capture.activity;
 
 import com.delectable.mobile.R;
-import com.delectable.mobile.ui.BaseActivity;
 import com.delectable.mobile.ui.capture.fragment.CaptureDetailsFragment;
+import com.delectable.mobile.ui.common.activity.TranslucentStatusBarActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class CaptureDetailsActivity extends BaseActivity {
+public class CaptureDetailsActivity extends TranslucentStatusBarActivity {
 
     public static final String PARAMS_CAPTURE_ID = "PARAMS_CAPTURE_ID";
 
@@ -52,8 +52,8 @@ public class CaptureDetailsActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finishDeepLinkActivity();
-                break;
+                return true;
         }
-        return true;
+        return false;
     }
 }

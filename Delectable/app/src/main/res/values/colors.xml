@@ -4,14 +4,13 @@
     <!-- colors based on style guide from here:
     https://quip.com/MyqKAYPFRbJt -->
 
-    <color name="transparent">#00000000</color>
-
-
     <!-- Brand Colors -->
     <color name="d_chestnut">#cd595a</color>
     <color name="d_big_stone">#334858</color>
+    <color name="d_big_stone_dark">#243847</color>
     <color name="d_suva_gray">#94938f</color>
     <color name="d_edward">#a3a7a6</color>
+    <color name="d_edward_dark">#7a7d7c</color>
     <color name="d_soft_amber">#dbc5b0</color>
     <color name="d_dutch_white">#f8dfc2</color>
     <color name="d_antique_white">#f9ebdf</color>
@@ -21,8 +20,18 @@
     <color name="d_soft_amber_25op">#40dbc5b0</color>
 
     <!-- Primary -->
-    <color name="nav_selector">@color/d_black_30op</color>
-    <color name="toolbar_bg_gradient">#99000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="nav_selector">@color/d_big_stone_dark</color>
+    <color name="primary">@color/d_white</color>
+    <color name="primaryDark">@color/d_edward</color>
+    <color name="accent">@color/d_chestnut</color>
+    <color name="icons">@color/d_medium_gray</color>
+    <color name="title">@color/d_big_stone</color>
+    <color name="titleSecondary">@color/d_edward</color>
+    <!--<color name="background">#e8e8e8</color>-->
+    <!--<color name="background">#f2f2f2</color>-->
+    <color name="background">#f0f0f0</color>
+    <color name="overlayed_status_bar">#999999</color>
 
     <!-- d_chestnut and_chestnut_pressed for text links that are clicked -->
     <color name="d_chestnut_pressed">#A14546</color>
@@ -49,8 +58,6 @@
     <color name="d_rating_ok">#C5C4AF</color>
     <color name="d_rating_bad">#DBC5B0</color>
 
-    <color name="d_gray_disabled_done_button">#D2D2D2</color>
-
     <!-- Follow Friends Tabs-->
     <color name="d_red_experts_tab">@color/d_chestnut</color>
     <color name="d_yellow_contacts_tab">#F5A628</color>
@@ -58,12 +65,17 @@
     <color name="d_blue_twitter_tab">#55ACEE</color>
 
     <!-- Transparent Whites -->
-    <!-- 20% opacity -->
+    <color name="d_white_10op">#1AFFFFFF</color>
     <color name="d_white_20op">#33FFFFFF</color>
-    <!-- 80% opacity -->
+    <color name="d_white_60op">#96FFFFFF</color>
     <color name="d_white_80op">#CCFFFFFF</color>
 
     <!-- Transparent Blacks -->
+    <color name="d_black_5op">#0D000000</color>
     <color name="d_black_10op">#1A000000</color>
     <color name="d_black_30op">#4D000000</color>
+    <color name="d_black_35op">#59000000</color>
+    <!-- like edward on white -->
+    <color name="d_black_40op">#66000000</color>
+    <color name="d_black_60op">#99000000</color>
 </resources>

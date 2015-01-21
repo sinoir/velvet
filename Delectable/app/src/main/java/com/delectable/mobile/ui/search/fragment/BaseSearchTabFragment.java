@@ -28,7 +28,6 @@ public abstract class BaseSearchTabFragment extends BaseFragment
 
     private static final String TAG = BaseSearchTabFragment.class.getSimpleName();
 
-
     @InjectView(R.id.list_view)
     protected ListView mListView;
 
@@ -57,6 +56,8 @@ public abstract class BaseSearchTabFragment extends BaseFragment
                 .inflate(R.layout.fragment_search_wines_people, container, false);
         ButterKnife.inject(this, layout);
 
+        int padding8 = getResources().getDimensionPixelSize(R.dimen.spacing_8);
+        mListView.setPadding(mListView.getPaddingLeft(), mListView.getPaddingTop() + padding8, mListView.getPaddingRight(), mListView.getPaddingBottom());
         mListView.setEmptyView(mEmptyStateTextView);
         mListView.setAdapter(getAdapter());
         mListView.setOnItemClickListener(this);
@@ -88,15 +89,6 @@ public abstract class BaseSearchTabFragment extends BaseFragment
     @Override
     public boolean onQueryTextSubmit(String query) {
         mCurrentQuery = query;
-        getParentSearchFragment().getSearchView().clearFocus(); //hides keyboard
         return false;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (getParentSearchFragment().getSearchView() != null) {
-            getParentSearchFragment().getSearchView().clearFocus(); //hides keyboard
-        }
     }
 }

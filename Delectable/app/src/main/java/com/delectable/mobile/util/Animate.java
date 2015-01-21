@@ -1,6 +1,7 @@
 package com.delectable.mobile.util;
 
 import com.delectable.mobile.App;
+import com.delectable.mobile.R;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -8,6 +9,8 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -18,7 +21,7 @@ import android.view.animation.OvershootInterpolator;
  */
 public class Animate {
 
-    public static final int SHORT = 200;
+    public static final int SHORT = 250;
 
     public static final int MEDIUM = 400;
 
@@ -29,16 +32,19 @@ public class Animate {
                     App.getInstance().getResources().getDisplayMetrics());
 
     public static final int TRANSLATION_SMALL = (int) TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42,
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                     App.getInstance().getResources().getDisplayMetrics());
 
-    public static final float ELEVATION = TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
-                    App.getInstance().getResources().getDisplayMetrics());
+    public static final float ELEVATION = App.getInstance().getResources().getDimension(R.dimen.tab_elevation);
+
+    public static final float ELEVATION_SMALL = App.getInstance().getResources().getDimension(R.dimen.spacing_4);
 
     private static final Interpolator ACCELERATE = new AccelerateInterpolator();
 
     private static final Interpolator DECELERATE = new DecelerateInterpolator();
+
+    private static final Interpolator ACCELERATE_DECELERATE
+            = new AccelerateDecelerateInterpolator();
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
 
@@ -176,6 +182,73 @@ public class Animate {
                         view.setVisibility(View.GONE);
                     }
                 })
+                .start();
+    }
+
+    public static void fadeInVertical(final View view) {
+        fadeTranslateIn(view, 0, TRANSLATION_SMALL, 0);
+    }
+
+    public static void fadeInVertical(final View view, long startDelay) {
+        fadeTranslateIn(view, 0, TRANSLATION_SMALL, startDelay);
+    }
+
+    public static void fadeInHorizontal(final View view) {
+        fadeTranslateIn(view, TRANSLATION_SMALL, 0, 0);
+    }
+
+    public static void fadeInHorizontal(final View view, long startDelay) {
+        fadeTranslateIn(view, TRANSLATION_SMALL, 0, startDelay);
+    }
+
+    public static void fadeTranslateIn(final View view, int translationX, int translationY,
+            long startDelay) {
+        view.setTranslationX(translationX);
+        view.setTranslationY(translationY);
+        view.setVisibility(View.VISIBLE);
+        view.animate()
+                .alpha(1)
+                .translationX(0)
+                .translationY(0)
+                .setDuration(SHORT)
+                .setStartDelay(startDelay)
+                .setInterpolator(DECELERATE)
+                .setListener(null)
+                .start();
+    }
+
+    public static void fadeOutVertical(final View view) {
+        fadeTranslateOut(view, 0, TRANSLATION_SMALL, 0);
+    }
+
+    public static void fadeOutVertical(final View view, long startDelay) {
+        fadeTranslateOut(view, 0, TRANSLATION_SMALL, startDelay);
+    }
+
+    public static void fadeOutHorizontal(final View view) {
+        fadeTranslateOut(view, TRANSLATION_SMALL, 0, 0);
+    }
+
+    public static void fadeOutHorizontal(final View view, long startDelay) {
+        fadeTranslateOut(view, TRANSLATION_SMALL, 0, startDelay);
+    }
+
+    public static void fadeTranslateOut(final View view, int translationX, int translationY,
+            long startDelay) {
+        view.animate()
+                .alpha(0)
+                .translationX(translationX)
+                .translationY(translationY)
+                .setDuration(SHORT)
+                .setStartDelay(startDelay)
+                .setInterpolator(DECELERATE)
+                .setListener(null)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        view.setVisibility(View.INVISIBLE);
+//                    }
+//                })
                 .start();
     }
 
@@ -364,4 +437,71 @@ public class Animate {
         }
     }
 
+    public static void circularReveal(final View view) {
+        circularReveal(view, -1, -1, 0);
+    }
+
+    public static void circularReveal(final View view, final long startDelay) {
+        circularReveal(view, -1, -1, startDelay);
+    }
+
+    public static void circularReveal(final View view, int centerX, int centerY) {
+        circularReveal(view, centerX, centerY, 0);
+    }
+
+    public static void circularReveal(final View view, int centerX, int centerY, final long startDelay) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // get the center for the clipping circle
+            int cx = (view.getLeft() + view.getRight()) / 2;
+            int cy = (view.getTop() + view.getBottom()) / 2;
+
+            // get the final radius for the clipping circle
+            int finalRadius = Math.max(view.getWidth(), view.getHeight());
+
+            // create the animator for this view (the start radius is zero)
+            Animator anim = ViewAnimationUtils.createCircularReveal(
+                    view,
+                    centerX < 0 ? cx : centerX,
+                    centerY < 0 ? cy : centerY,
+                    0,
+                    finalRadius);
+            anim.setStartDelay(startDelay);
+
+            view.setVisibility(View.VISIBLE);
+            anim.start();
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public static void circularHide(final View view) {
+        circularHide(view, 0);
+    }
+
+    public static void circularHide(final View view, final long startDelay) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // get the center for the clipping circle
+            int cx = (view.getLeft() + view.getRight()) / 2;
+            int cy = (view.getTop() + view.getBottom()) / 2;
+
+            // get the initial radius for the clipping circle
+            int initialRadius = view.getWidth();
+
+            // create the animation (the final radius is zero)
+            Animator anim =
+                    ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
+            anim.setStartDelay(startDelay);
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            anim.start();
+        } else {
+            view.setVisibility(View.INVISIBLE);
+        }
+    }
 }

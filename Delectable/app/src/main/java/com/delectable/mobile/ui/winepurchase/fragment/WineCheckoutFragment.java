@@ -18,11 +18,13 @@ import com.delectable.mobile.ui.winepurchase.dialog.ChoosePaymentMethodDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ChooseShippingAddressDialog;
 import com.delectable.mobile.ui.winepurchase.dialog.ConfirmationDialogFragment;
 import com.delectable.mobile.ui.winepurchase.viewmodel.CheckoutData;
+import com.delectable.mobile.util.Animate;
 import com.delectable.mobile.util.FacebookEventUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -168,8 +170,8 @@ public class WineCheckoutFragment extends BaseFragment {
 
         // configure ActionBar
         enableBackButton(true);
-        getActionBarToolbar()
-                .setBackgroundColor(getResources().getColor(R.color.d_off_white_translucent));
+        getActionBar().setTitle(null); // we're using a custom view for the title, so this is null
+        ViewCompat.setElevation(getActionBarToolbar(), Animate.ELEVATION);
     }
 
     @Override
@@ -223,6 +225,7 @@ public class WineCheckoutFragment extends BaseFragment {
             mMarketingMessage.setText(mData.getMarketingMessage());
             mMarketingMessage.setVisibility(View.VISIBLE);
         }
+        mAnalytics.trackLandOnBuyScreen(mData != null ? mData.getMarketingMessage() : null);
     }
 
     private void updateWineDetails() {
@@ -516,6 +519,7 @@ public class WineCheckoutFragment extends BaseFragment {
     }
 
     private void showConfirmation() {
+        mAnalytics.trackOrderConfirmed(mData != null ? mData.getWineId() : null);
         ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance();
         dialog.setTargetFragment(this, REQUEST_CONFIRMATION_DIALOG);
         dialog.setCancelable(false);

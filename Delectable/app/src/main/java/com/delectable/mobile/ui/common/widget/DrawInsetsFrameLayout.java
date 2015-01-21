@@ -9,7 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -18,18 +18,18 @@ import javax.inject.Inject;
 import de.greenrobot.event.EventBus;
 
 
+/**
+ * A layout that draws something in the insets passed to {@link #fitSystemWindows(Rect)}, i.e. the
+ * area above UI chrome (status and navigation bars, overlay action bars).
+ *
+ * Inspired by https://github.com/google/iosched/blob/master/android/src/main/java/com/google/samples/apps/iosched/ui/widget/ScrimInsetsFrameLayout.java
+ */
 public class DrawInsetsFrameLayout extends FrameLayout {
 
     @Inject
     public EventBus mEventBus;
 
-    private Drawable mInsetBackground;
-
-    private Drawable mTopInsetBackground;
-
-    private Drawable mBottomInsetBackground;
-
-    private Drawable mSideInsetBackground;
+    private Drawable mInsetForeground;
 
     private Rect mInsets;
 
@@ -55,58 +55,36 @@ public class DrawInsetsFrameLayout extends FrameLayout {
 
         final TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.DrawInsetsFrameLayout, defStyle, 0);
-        assert a != null;
-
-        mInsetBackground = a.getDrawable(R.styleable.DrawInsetsFrameLayout_insetBackground);
-        mTopInsetBackground = a.getDrawable(R.styleable.DrawInsetsFrameLayout_topInsetBackground);
-        mBottomInsetBackground =
-                a.getDrawable(R.styleable.DrawInsetsFrameLayout_bottomInsetBackground);
-        mSideInsetBackground = a.getDrawable(R.styleable.DrawInsetsFrameLayout_sideInsetBackground);
-
+        if (a == null) {
+            return;
+        }
+        mInsetForeground = a.getDrawable(R.styleable.DrawInsetsFrameLayout_insetForeground);
         a.recycle();
+
+        setWillNotDraw(true);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mInsetBackground != null) {
-            mInsetBackground.setCallback(this);
-        }
-        if (mTopInsetBackground != null) {
-            mTopInsetBackground.setCallback(this);
-        }
-        if (mBottomInsetBackground != null) {
-            mBottomInsetBackground.setCallback(this);
-        }
-        if (mSideInsetBackground != null) {
-            mSideInsetBackground.setCallback(this);
+        if (mInsetForeground != null) {
+            mInsetForeground.setCallback(this);
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mInsetBackground != null) {
-            mInsetBackground.setCallback(null);
-        }
-        if (mTopInsetBackground != null) {
-            mTopInsetBackground.setCallback(null);
-        }
-        if (mBottomInsetBackground != null) {
-            mBottomInsetBackground.setCallback(null);
-        }
-        if (mSideInsetBackground != null) {
-            mSideInsetBackground.setCallback(null);
+        if (mInsetForeground != null) {
+            mInsetForeground.setCallback(null);
         }
     }
 
     @Override
     protected boolean fitSystemWindows(Rect insets) {
         mInsets = new Rect(insets);
-        setWillNotDraw(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            postInvalidateOnAnimation();
-        }
+        setWillNotDraw(mInsetForeground == null);
+        ViewCompat.postInvalidateOnAnimation(this);
         mEventBus.postSticky(new InsetsChangedEvent(insets));
         return true;
     }
@@ -117,50 +95,31 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         int width = getWidth();
         int height = getHeight();
 
-        if (mInsets != null) {
+        if (mInsets != null && mInsetForeground != null) {
+            int sc = canvas.save();
+            canvas.translate(getScrollX(), getScrollY());
+
             // Top
             mTempRect.set(0, 0, width, mInsets.top);
-            if (mInsetBackground != null) {
-                mInsetBackground.setBounds(mTempRect);
-                mInsetBackground.draw(canvas);
-            }
-            if (mTopInsetBackground != null) {
-                mTopInsetBackground.setBounds(mTempRect);
-                mTopInsetBackground.draw(canvas);
-            }
+            mInsetForeground.setBounds(mTempRect);
+            mInsetForeground.draw(canvas);
 
             // Bottom
             mTempRect.set(0, height - mInsets.bottom, width, height);
-            if (mInsetBackground != null) {
-                mInsetBackground.setBounds(mTempRect);
-                mInsetBackground.draw(canvas);
-            }
-            if (mTopInsetBackground != null) {
-                mBottomInsetBackground.setBounds(mTempRect);
-                mBottomInsetBackground.draw(canvas);
-            }
+            mInsetForeground.setBounds(mTempRect);
+            mInsetForeground.draw(canvas);
 
             // Left
             mTempRect.set(0, mInsets.top, mInsets.left, height - mInsets.bottom);
-            if (mInsetBackground != null) {
-                mInsetBackground.setBounds(mTempRect);
-                mInsetBackground.draw(canvas);
-            }
-            if (mSideInsetBackground != null) {
-                mSideInsetBackground.setBounds(mTempRect);
-                mSideInsetBackground.draw(canvas);
-            }
+            mInsetForeground.setBounds(mTempRect);
+            mInsetForeground.draw(canvas);
 
             // Right
             mTempRect.set(width - mInsets.right, mInsets.top, width, height - mInsets.bottom);
-            if (mInsetBackground != null) {
-                mInsetBackground.setBounds(mTempRect);
-                mInsetBackground.draw(canvas);
-            }
-            if (mSideInsetBackground != null) {
-                mSideInsetBackground.setBounds(mTempRect);
-                mSideInsetBackground.draw(canvas);
-            }
+            mInsetForeground.setBounds(mTempRect);
+            mInsetForeground.draw(canvas);
+
+            canvas.restoreToCount(sc);
         }
     }
 

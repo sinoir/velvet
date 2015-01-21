@@ -8,35 +8,37 @@
 
     <style name="Theme.Delectable.Base" parent="@style/Theme.AppCompat.Light.NoActionBar">
     <item name="android:windowContentOverlay">@null</item>
-        <item name="colorPrimary">@color/d_off_white</item>
-        <item name="colorPrimaryDark">@color/d_suva_gray</item>
-        <item name="colorAccent">@color/d_chestnut</item>
+        <!-- using big stone as primary color here to get the blue header in recent apps -->
+        <item name="colorPrimary">@color/d_big_stone</item>
+        <!-- used as status bar color -->
+        <item name="colorPrimaryDark">@color/overlayed_status_bar</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">false</item>
-        <item name="color">@color/d_big_stone</item>
+        <item name="color">@color/icons</item>
     </style>
 
     <style name="ToolbarStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
-        <!--<item name="android:background">?attr/colorPrimary</item>-->
-        <item name="android:background">@drawable/tab_bg</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:background">@color/primary</item>
         <item name="android:fitsSystemWindows">false</item>
         <item name="elevation">4dp</item>
         <item name="theme">@style/ToolbarTheme</item>
     </style>
 
     <style name="ToolbarStyle.Floating" parent="@style/ToolbarStyle">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/primary</item>
         <!--<item name="theme">@style/ThemeOverlay.AppCompat</item>-->
     </style>
 
     <style name="ToolbarStyle.Flat" parent="@style/ToolbarStyle">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/primary</item>
         <item name="elevation">0dp</item>
     </style>
 
@@ -45,10 +47,26 @@
         <item name="theme">@style/ToolbarTheme.Translucent</item>
     </style>
 
+    <style name="ToolbarText.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/title</item>
+        <item name="android:textSize">@dimen/abc_text_size_title_material_toolbar</item>
+        <item name="fontName">whitney_medium</item>
+    </style>
+
+    <!--Used by the search field in the action bar as well-->
+    <style name="ToolbarText">
+        <item name="android:textColor">@color/title</item>
+        <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
+        <item name="fontName">whitney_book</item>
+    </style>
+
     <style name="ToolbarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:textColorPrimary">@color/d_big_stone</item>
-        <item name="android:textColorSecondary">@color/d_big_stone</item>
-        <item name="android:actionMenuTextColor">@color/d_big_stone</item>
+        <item name="android:textColorPrimary">@color/title</item>
+        <item name="android:textColorSecondary">@color/icons</item>
+        <item name="android:actionMenuTextColor">@color/icons</item>
     </style>
 
     <style name="ToolbarStyle.Error" parent="ToolbarStyle">
@@ -62,8 +80,8 @@
         <item name="fontName">whitney_medium</item>
     </style>
 
-    <style name="ToolbarStyleText">
-        <item name="android:gravity">center_vertical</item>
+    <style name="ToolbarStyleErrorText">
+    <item name="android:gravity">center_vertical</item>
         <item name="android:drawableLeft">@drawable/ic_alert</item>
         <item name="android:drawablePadding">20dp</item>
         <item name="android:textSize">16sp</item>
@@ -91,18 +109,30 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:dividerHeight">0.5dp</item>
         <item name="android:divider">@color/d_light_gray</item>
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:footerDividersEnabled">false</item>
+        <item name="android:background">@color/primary</item>
         <!--<item name="android:listSelector">@color/transparent</item>-->
     </style>
 
     <style name="ListViewStyle.NoDivider" parent="ListViewStyle">
-        <item name="android:dividerHeight">0dp</item>
+        <item name="android:divider">@null</item>
+    </style>
+
+    <style name="ListViewStyle.Cards" parent="ListViewStyle.NoDivider">
+        <item name="android:background">@color/background</item>
     </style>
 
     <!-- Divider drawn horizontally, dividing vertical items -->
-    <style name="VerticalDivider">
+    <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/d_light_gray</item>
+    </style>
+
+    <style name="Divider.Bold">
+        <item name="android:background">@color/background</item>
+        <item name="android:layout_height">@dimen/spacing_8</item>
     </style>
 
     <style name="ProgressBar">
@@ -119,24 +149,27 @@
 
     <style name="StatusBarScrim">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_height">148dp</item>
         <item name="android:layout_gravity">top</item>
     </style>
 
-    <style name="delectabutton_large">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">70dp</item>
-        <item name="android:background">@drawable/btn_large</item>
-        <item name="android:textColor">@color/d_dark_gray</item>
-        <item name="type">large</item>
+    <style name="CardViewStyle" parent="CardView.Light">
+        <item name="android:layout_marginTop">9dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_8</item>
+        <item name="android:layout_marginRight">@dimen/spacing_8</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardBackgroundColor">@color/d_white</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardElevation">0dp</item>
     </style>
 
-    <style name="delectabutton_facebook">
-        <item name="android:layout_width">match_parent</item>
+    <style name="delectabutton_large">
+        <item name="android:layout_width">@dimen/delectabutton_width</item>
         <item name="android:layout_height">70dp</item>
-        <item name="android:background">@drawable/btn_facebook</item>
-        <item name="android:textColor">@color/com_facebook_blue</item>
-        <item name="android:icon">@drawable/ic_fb</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">@drawable/btn_large</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
         <item name="type">large</item>
     </style>
 
@@ -144,16 +177,16 @@
     <style name="NavigationItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
-        <item name="android:drawablePadding">32dp</item>
-        <item name="android:background">@drawable/bg_nav_drawer_item</item>
+        <item name="android:drawablePadding">28dp</item>
+        <!--<item name="android:background">@drawable/bg_nav_drawer_item</item>-->
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">18sp</item>
         <item name="android:minHeight">48dp</item>
-        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textColor">@color/d_white</item>
-        <item name="fontName">whitney_medium_sc</item>
+        <item name="android:textColor">@color/selectable_text_on_primary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontName">whitney_medium</item>
     </style>
 
     <!--Rating TextView-->
@@ -171,7 +204,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textColor">@color/d_big_stone</item>
+        <item name="android:textColor">@color/title</item>
         <item name="android:textSize">@dimen/profile_counts_text_size</item>
         <item name="fontName">whitney_book</item>
     </style>
@@ -190,8 +223,18 @@
 
     <style name="WineCaptureFlow_switch" parent="WineCaptureFlow_optionsLabel"></style>
 
-    <style name="WineCaptureDividers" parent="VerticalDivider">
+    <style name="WineCaptureDividers" parent="Divider">
         <item name="android:layout_marginLeft">@dimen/capture_submit_margins</item>
+    </style>
+
+    <style name="CommentEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/d_white</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:textColor">@color/d_dark_gray</item>
+        <item name="android:textColorHint">@color/d_medium_gray</item>
+        <item name="fontName">whitney_book</item>
     </style>
 
 
@@ -363,7 +406,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">bottom|right</item>
-        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_marginRight">@dimen/spacing_16</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_16</item>
         <item name="android:src">@drawable/ic_camera</item>
         <item name="fab_colorNormal">@color/d_chestnut</item>
         <item name="fab_colorPressed">@color/d_chestnut_pressed</item>
@@ -496,7 +540,7 @@
     <style name="ActionMenuBuyButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginRight">8dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_centerVertical">true</item>
     </style>

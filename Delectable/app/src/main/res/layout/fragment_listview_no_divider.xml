@@ -11,8 +11,7 @@
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize"
         android:paddingBottom="@dimen/spacing_8"
-        android:clipToPadding="false"
-        android:background="@color/d_white" />
+        android:clipToPadding="false" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/empty_state_layout"
@@ -30,10 +29,9 @@
             android:id="@+id/text_and_button_empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_32"
+            android:padding="@dimen/spacing_24"
             android:visibility="visible">
 
             <com.delectable.mobile.ui.common.widget.FontTextView

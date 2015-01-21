@@ -5,14 +5,13 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.ui.BaseFragment;
 import com.delectable.mobile.ui.common.widget.SlidingTabAdapter;
 import com.delectable.mobile.ui.common.widget.SlidingTabLayout;
+import com.delectable.mobile.ui.search.widget.SearchToolbar;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,11 +21,30 @@ import java.util.HashSet;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * A custom toolbar searchview, {@link SearchToolbar} is used here, because the searchview provided
+ * by the v7 support library is not pretty like the searches inside the google apps.
+ */
 public class SearchFragment extends BaseFragment implements SearchView.OnQueryTextListener {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
-    private SearchView mSearchView;
+    private static final String DEFAULT_TAB = "DEFAULT_TAB";
+
+    public static final int WINES = 0;
+
+    public static final int HASHTAGS = 1;
+
+    public static final int PEOPLE = 2;
+
+
+    //# pages to the left/right for the viewpager to retain
+    private static final int PAGES_LIMIT = 2;
+
+    /**
+     * Search starts automatically while typing after this many milliseconds
+     */
+    private static final int AUTO_SEARCH_DELAY = 300;
 
     private SlidingTabAdapter mTabsAdapter;
 
@@ -41,21 +59,48 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
     private HashSet<SearchView.OnQueryTextListener> mListeners
             = new HashSet<SearchView.OnQueryTextListener>();
 
+    private Handler mAutoSearchHandler = new Handler();
+
+    private Runnable mAutoSearchTask;
+
+    private int mDefaultTab;
+
+    /**
+     * @param defaultTab The tab that you want the SearchFragment to start on.
+     */
+    public static SearchFragment newInstance(int defaultTab) {
+        SearchFragment fragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(DEFAULT_TAB, defaultTab);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            mDefaultTab = args.getInt(DEFAULT_TAB, WINES);
+        }
+
         //set up tab icons and fragments
         SlidingTabAdapter.SlidingTabItem wines = new SlidingTabAdapter.SlidingTabItem(
                 new SearchWinesTabFragment(),
-                getString(R.string.search_wines));
+                getString(R.string.search_wines).toLowerCase());
+        SlidingTabAdapter.SlidingTabItem hashtags = new SlidingTabAdapter.SlidingTabItem(
+                new SearchHashtagsTabFragment(),
+                getString(R.string.search_hashtags).toLowerCase());
         SlidingTabAdapter.SlidingTabItem people = new SlidingTabAdapter.SlidingTabItem(
                 new SearchPeopleTabFragment(),
-                getString(R.string.search_people));
+                getString(R.string.search_people).toLowerCase());
 
         ArrayList<SlidingTabAdapter.SlidingTabItem>
                 tabItems = new ArrayList<SlidingTabAdapter.SlidingTabItem>();
         tabItems.add(wines);
+        tabItems.add(hashtags);
         tabItems.add(people);
 
         mTabsAdapter = new SlidingTabAdapter(getChildFragmentManager(), tabItems);
@@ -63,11 +108,13 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
 
-            //TODO in order to make searh experience better (like google drive), will have to make custom searchview instead of crappy v7 one
-            //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            //getActionBar().setCustomView(R.layout.toolbar_searchview);
-            //mSearchView = (SearchView) getActionBar().getCustomView().findViewById(R.id.search_view);
-            //mSearchView.setOnQueryTextListener(this);
+            //custom searchview
+            getActionBar().setCustomView(R.layout.toolbar_search_impl);
+            getActionBar().setDisplayShowCustomEnabled(true);
+
+            SearchToolbar searchToolbar = (SearchToolbar) getActionBar().getCustomView();
+            searchToolbar.setOnQueryTextListener(this);
+            searchToolbar.showKeyboard();
         }
     }
 
@@ -77,48 +124,33 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.inject(this, rootView);
 
-        mTabLayout.setBackgroundColor(getResources().getColor(R.color.d_off_white));
-        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.d_chestnut));
+        mTabLayout.setBackgroundColor(getResources().getColor(R.color.primary));
+        mTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.accent));
 
         mViewPager.setAdapter(mTabsAdapter);
+        mViewPager.setOffscreenPageLimit(PAGES_LIMIT);
+        mViewPager.setCurrentItem(mDefaultTab);
         mTabLayout.setViewPager(mViewPager);
 
         return rootView;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.search_menu, menu);
-
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
-        mSearchView.setOnQueryTextListener(this);
-
-        mSearchView.setIconified(false);
-
-        if (mCurrentQuery != null && !mCurrentQuery.isEmpty()) {
-            mSearchView.setQuery(mCurrentQuery, false);
-        }
-    }
-
-    public SearchView getSearchView() {
-        return mSearchView;
-    }
-
-
-    @Override
-    public boolean onQueryTextChange(String s) {
+    public boolean onQueryTextChange(final String s) {
         for (SearchView.OnQueryTextListener listener : mListeners) {
             listener.onQueryTextChange(s);
         }
+        mAutoSearchHandler.removeCallbacks(mAutoSearchTask);
+        mAutoSearchTask = new Runnable() {
+            @Override
+            public void run() {
+                onQueryTextSubmit(s);
+            }
+        };
+        mAutoSearchHandler.postDelayed(mAutoSearchTask, AUTO_SEARCH_DELAY);
         return false;
     }
 
-
-    /**
-     * Subclasses should call super on this method to ensure that the keyboard gets hidden when a
-     * query is made.
-     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         mCurrentQuery = query;

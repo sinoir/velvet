@@ -4,10 +4,12 @@ import com.delectable.mobile.R;
 import com.delectable.mobile.api.cache.UserInfo;
 import com.delectable.mobile.api.models.AccountMinimal;
 import com.delectable.mobile.api.models.CaptureComment;
+import com.delectable.mobile.api.models.CaptureCommentAttributes;
 import com.delectable.mobile.api.models.CaptureDetails;
 import com.delectable.mobile.api.models.CaptureState;
 import com.delectable.mobile.ui.common.widget.CircleImageView;
 import com.delectable.mobile.ui.common.widget.CommentRatingRowView;
+import com.delectable.mobile.ui.common.widget.HashtagMentionSpan;
 import com.delectable.mobile.ui.common.widget.RatingTextView;
 import com.delectable.mobile.ui.common.widget.WineBannerView;
 import com.delectable.mobile.ui.wineprofile.viewmodel.VintageWineInfo;
@@ -17,9 +19,10 @@ import com.delectable.mobile.util.ImageLoaderUtil;
 
 import android.content.Context;
 import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -123,8 +127,6 @@ public class CaptureDetailsView extends RelativeLayout {
     @InjectView(R.id.price_view)
     protected WinePriceView mPriceButton;
 
-    private Context mContext;
-
     private boolean mIsShowingComments = false;
 
     private boolean mShowPurchase = false;
@@ -143,6 +145,8 @@ public class CaptureDetailsView extends RelativeLayout {
 
     private MenuItem mMenuActionRemove;
 
+    private boolean mFirstCommentIsByCapturer = false;
+
     public CaptureDetailsView(Context context) {
         this(context, null);
     }
@@ -153,10 +157,11 @@ public class CaptureDetailsView extends RelativeLayout {
 
     public CaptureDetailsView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
 
-        View.inflate(context, R.layout.row_feed_wine_detail, this);
+        View.inflate(context, R.layout.capture_details, this);
         ButterKnife.inject(this);
+
+        mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
 
         PopupMenu.OnMenuItemClickListener popUpListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -179,7 +184,7 @@ public class CaptureDetailsView extends RelativeLayout {
             }
         };
 
-        mPopupMenu = new PopupMenu(mContext, mMenuButton);
+        mPopupMenu = new PopupMenu(getContext(), mMenuButton);
         mPopupMenu.inflate(R.menu.capture_actions);
         mPopupMenu.setOnMenuItemClickListener(popUpListener);
         mMenuActionRecommend = mPopupMenu.getMenu().findItem(R.id.capture_action_recommend);
@@ -261,7 +266,7 @@ public class CaptureDetailsView extends RelativeLayout {
         mMenuActionRemove.setVisible(true);
 
         boolean isOwnCapture = mCaptureDetails.getCapturerParticipant().getId()
-                .equals(UserInfo.getUserId(mContext));
+                .equals(UserInfo.getUserId(getContext()));
         CaptureState captureState = CaptureState.getState(mCaptureDetails);
         boolean isUnidentified =
                 captureState == CaptureState.UNIDENTIFIED
@@ -315,7 +320,7 @@ public class CaptureDetailsView extends RelativeLayout {
                 String imageUrl = getThumbnailParticipantPhotoFromAccount(
                         taggedParticipants.get(i));
                 final String accountId = taggedParticipants.get(i).getId();
-                ImageLoaderUtil.loadImageIntoView(mContext, imageUrl,
+                ImageLoaderUtil.loadImageIntoView(getContext(), imageUrl,
                         mTaggedParticipantImages.get(i));
                 mTaggedParticipantImages.get(i).setVisibility(View.VISIBLE);
                 mTaggedParticipantImages.get(i).setOnClickListener(
@@ -338,9 +343,9 @@ public class CaptureDetailsView extends RelativeLayout {
 
             String firstParticipant = taggedParticipants.get(0).getFname();
             String withText = taggedParticipants.size() == 2
-                    ? mContext.getResources()
+                    ? getContext().getResources()
                     .getString(R.string.cap_feed_with_two, firstParticipant)
-                    : mContext.getResources()
+                    : getContext().getResources()
                             .getQuantityString(R.plurals.cap_feed_with, taggedParticipants.size(),
                                     firstParticipant,
                                     taggedParticipants.size() - 1);
@@ -371,11 +376,17 @@ public class CaptureDetailsView extends RelativeLayout {
             userAccountId = mCaptureDetails.getCapturerParticipant().getId();
         }
 
-        // Display the first user comment on top
-        ArrayList<CaptureComment> userCaptureComments = mCaptureDetails
-                .getCommentsForUserId(userAccountId);
-        if (userCaptureComments.size() > 0) {
-            userComment = userCaptureComments.get(0).getComment();
+        // If the first commenter is the capturer, then we display that as the capture's tasting note
+        //and this capturecomment is populated
+        CaptureComment firstCaptureComment = null;
+        mFirstCommentIsByCapturer = false;
+        if (mCaptureDetails.getComments() != null && !mCaptureDetails.getComments().isEmpty()) {
+            firstCaptureComment = mCaptureDetails.getComments().get(0);
+            String firstCommenter = firstCaptureComment.getAccountId();
+            if (firstCommenter.equalsIgnoreCase(userAccountId)) {
+                userComment = firstCaptureComment.getComment();
+                mFirstCommentIsByCapturer = true;
+            }
         }
 
         String time = DateHelperUtil.getPrettyTimePastOnly(mCaptureDetails.getCreatedAtDate());
@@ -398,16 +409,25 @@ public class CaptureDetailsView extends RelativeLayout {
                             : getResources()
                                     .getString(R.string.cap_feed_no_comment_no_location, time);
         }
+        // span for location and time
         SpannableString spannableString = SpannableString
                 .valueOf((!userComment.isEmpty())
                         ? (userComment + " " + captureTimeLocation)
                         : captureTimeLocation);
         spannableString
                 .setSpan(new ForegroundColorSpan(getResources().getColor(R.color.d_medium_gray)),
-                        userComment.length(), spannableString.length(), 0);
+                        userComment.length(), spannableString.length(), Spanned.SPAN_COMPOSING);
+        // spans for hashtags and mentions
+        if (mFirstCommentIsByCapturer) {
+            ArrayList<CaptureCommentAttributes> attributes = firstCaptureComment
+                    .getCommentAttributes();
+            HashtagMentionSpan
+                    .applyHashtagAndMentionSpans(getContext(), spannableString, attributes);
+        }
+        // set user comment text
         mUserComment.setText(spannableString, TextView.BufferType.SPANNABLE);
 
-        ImageLoaderUtil.loadImageIntoView(mContext, profileImageUrl, mProfileImage2);
+        ImageLoaderUtil.loadImageIntoView(getContext(), profileImageUrl, mProfileImage2);
 
         final String finalUserAccountId = userAccountId;
         OnClickListener clickListener =
@@ -463,7 +483,7 @@ public class CaptureDetailsView extends RelativeLayout {
         int numLikes = mCaptureDetails.getLikesCount();
         if (numLikes > 0) {
             mLikesCount.setVisibility(View.VISIBLE);
-            String likesCountText = mContext.getResources()
+            String likesCountText = getContext().getResources()
                     .getQuantityString(R.plurals.cap_feed_likes_count, numLikes, numLikes);
             mLikesCount.setText(likesCountText);
             mLikesCount.setOnClickListener(new OnClickListener() {
@@ -481,7 +501,7 @@ public class CaptureDetailsView extends RelativeLayout {
         int numComments = mCaptureDetails.getCommentsCount();
         if (numComments > 0) {
             mCommentsCount.setVisibility(View.VISIBLE);
-            String commentsCountText = mContext.getResources()
+            String commentsCountText = getContext().getResources()
                     .getQuantityString(R.plurals.cap_feed_comments_count, numComments, numComments);
             mCommentsCount.setText(commentsCountText);
             mCommentsCount.setOnClickListener(expandLikesAndCommentsClickListener);
@@ -490,7 +510,7 @@ public class CaptureDetailsView extends RelativeLayout {
         }
 
         // Rating button
-        String currentUserId = UserInfo.getUserId(mContext);
+        String currentUserId = UserInfo.getUserId(getContext());
         boolean isCurrentUserCapture = mCaptureDetails.getCapturerParticipant().getId()
                 .equalsIgnoreCase(currentUserId);
         boolean isCurrentUserTaggedInCapture = mCaptureDetails.isUserTagged(currentUserId);
@@ -581,55 +601,43 @@ public class CaptureDetailsView extends RelativeLayout {
                 CommentRatingRowView.LayoutParams.MATCH_PARENT,
                 CommentRatingRowView.LayoutParams.WRAP_CONTENT);
 
-        // TODO: Finalize Test out with feed with participants.
-        // TODO: Show multiple comments for user
-        AccountMinimal capturingAccount = mCaptureDetails.getCapturerParticipant();
+        //build map of commenting accounts, so we can retreive names by account id's for the comment rows below
         ArrayList<AccountMinimal> participants = mCaptureDetails.getCommentingParticipants();
-        int numDisplayedComments = 0;
+        HashMap<String, AccountMinimal> commentingAccountsMap
+                = new HashMap<String, AccountMinimal>();
         if (participants != null) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.VISIBLE);
             for (AccountMinimal participant : participants) {
-                ArrayList<CaptureComment> comments = mCaptureDetails.getCommentsForUserId(
-                        participant.getId());
-                int firstIndex = 0;
-                int rating = mCaptureDetails.getRatingForId(participant.getId());
-                // Skip first user comment by the user who captured, otherwise it will show as duplicate
-                if (capturingAccount.getId().equalsIgnoreCase(participant.getId())) {
-                    firstIndex = 1;
-                    // Don't duplicate ratings
-                    rating = -1;
-                }
-                String firstCommentText = comments.size() > firstIndex ? comments.get(firstIndex)
-                        .getComment() : "";
-                // TODO : Figure out how to layout multiple comments with ratings?
-                if (!firstCommentText.isEmpty() || Float.compare(rating, 0.0f) > 0) {
-                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
-                            mActionsHandler, participant.getId());
-                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
-                    commentRow.setNameAndComment(participant.getFullName(), firstCommentText);
-                    mParticipantsCommentsRatingsContainer.addView(commentRow,
-                            layoutParams);
-                    numDisplayedComments++;
-                }
-                for (int i = (firstIndex + 1); i < comments.size(); i++) {
-                    CommentRatingRowView commentRow = new CommentRatingRowView(mContext,
-                            mActionsHandler, participant.getId());
-                    //TODO simply not showing rating, might want to simplify CommentRatingRowView
-                    commentRow.setNameAndComment(participant.getFullName(),
-                            comments.get(i).getComment());
-                    mParticipantsCommentsRatingsContainer.addView(commentRow,
-                            layoutParams);
-                    numDisplayedComments++;
-                }
+                commentingAccountsMap.put(participant.getId(), participant);
             }
         }
+
+        int numDisplayedComments = 0;
+
+        //offset start if 1st comment was made by capturer, meaning it is a special comment and the primary tasting note
+        //and not grouped with the rest of the joe schmoe comments
+        int start = mFirstCommentIsByCapturer ? 1 : 0;
+        for (int i = start; i < mCaptureDetails.getComments().size(); i++) {
+            CaptureComment comment = mCaptureDetails.getComments().get(i);
+            AccountMinimal participant = commentingAccountsMap.get(comment.getAccountId());
+            CommentRatingRowView commentRow = new CommentRatingRowView(getContext(),
+                    mActionsHandler, participant.getId());
+            //TODO simply not showing rating, might want to simplify CommentRatingRowView
+            commentRow.setNameAndComment(
+                    participant.getFullName(),
+                    comment.getComment(),
+                    comment.getCommentAttributes());
+            mParticipantsCommentsRatingsContainer.addView(commentRow, layoutParams);
+            numDisplayedComments++;
+        }
+
         if (numDisplayedComments == 0) {
             mParticipantsCommentsRatingsContainer.setVisibility(View.GONE);
             mLikesCommentsDivider.setVisibility(View.GONE);
         }
 
         // Rating button
-        String currentUserId = UserInfo.getUserId(mContext);
+        String currentUserId = UserInfo.getUserId();
         boolean isCurrentUserCapture = mCaptureDetails.getCapturerParticipant().getId()
                 .equalsIgnoreCase(currentUserId);
         boolean isCurrentUserTaggedInCapture = mCaptureDetails.isUserTagged(currentUserId);
@@ -643,7 +651,7 @@ public class CaptureDetailsView extends RelativeLayout {
     }
 
     private void setupActionButtonStates() {
-        String currentUserId = UserInfo.getUserId(mContext);
+        String currentUserId = UserInfo.getUserId();
         boolean userLikesCapture = mCaptureDetails.doesUserLikeCapture(currentUserId);
 
         mLikeButton.setSelected(userLikesCapture);

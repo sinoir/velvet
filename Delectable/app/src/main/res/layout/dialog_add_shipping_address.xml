@@ -18,7 +18,7 @@
 
     <View
         android:id="@+id/header_divider"
-        style="@style/VerticalDivider"
+        style="@style/Divider"
         android:layout_below="@+id/dialog_title" />
 
     <ScrollView
@@ -103,7 +103,7 @@
                 android:maxLength="20" />
 
             <View
-                style="@style/VerticalDivider"
+                style="@style/Divider"
                 android:layout_marginTop="20dp" />
 
             <com.delectable.mobile.ui.common.widget.CancelSaveButtons

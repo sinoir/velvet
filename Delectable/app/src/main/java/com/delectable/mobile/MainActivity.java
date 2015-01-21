@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
         String action = intent.getAction();
 
         //spawned from deep link
+        //the scheme/host pairs specified in the manifest are the only ones that can invoke this part of the code
         if (Intent.ACTION_VIEW.equals(action)) {
             if (intent.getData() != null) {
                 Uri data = intent.getData();
