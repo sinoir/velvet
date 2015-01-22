@@ -7,5 +7,18 @@
     <color name="light_gray">#CCCCCC</color>
     <color name="dark_gray">#555555</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="train_g_green">#77CC22</color>
+    <color name="train_ace_blue">#2233BB</color>
+    <color name="train_7_purple">#9911CC</color>
+    <color name="train_bdfm_orange">#EE6611</color>
+    <color name="train_nqr_yellow">#EECC00</color>
+    <color name="train_123_red">#EE1111</color>
+    <color name="train_456_green">#008844</color>
+    <color name="train_jz_brown">#885500</color>
+    <color name="train_sl_gray">#555555</color>
+    <color name="train_si_blue">#5577EE</color>
 
 </resources>
+

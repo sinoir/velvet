@@ -3,10 +3,15 @@ package com.mienaikoe.wifimesh;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,6 +45,9 @@ public class StationLayout extends LinearLayout {
         this.mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         this.bottomCapMargin = (int) getResources().getDimension(R.dimen.station_fragment_initial_margin);
         this.targetMargin = this.bottomCapMargin;
+        this.fillingAnimation = new StationFillingAnimation(this);
+        this.fillingAnimation.setDuration(300);
+        this.setOrientation(LinearLayout.VERTICAL);
     }
 
     public StationLayout(Context context){
@@ -47,6 +55,8 @@ public class StationLayout extends LinearLayout {
     }
 
 
+
+    private static int INERTIA_CUTOFF = 200;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -70,13 +80,11 @@ public class StationLayout extends LinearLayout {
                 break;
             } case MotionEvent.ACTION_UP: {
                 this.upMargin = this.targetMargin - (int)distY;
-                if( distY > 100 && this.targetMargin == bottomCapMargin ){
+                if( this.targetMargin == bottomCapMargin && distY > INERTIA_CUTOFF ){
                     this.targetMargin = topCapMargin;
-                } else if( distY < -100 && this.targetMargin == topCapMargin ){
+                } else if( this.targetMargin == topCapMargin && distY < -INERTIA_CUTOFF ){
                     this.targetMargin = bottomCapMargin;
                 }
-                this.fillingAnimation = new StationFillingAnimation(this);
-                this.fillingAnimation.setDuration(300);
                 this.startAnimation(this.fillingAnimation);
             }
         }
@@ -120,6 +128,7 @@ public class StationLayout extends LinearLayout {
         StationFillingAnimation(StationLayout view){
             this.stationLayout = view;
             this.distance = targetMargin - upMargin;
+            this.setInterpolator(new DecelerateInterpolator(2.0F));
         }
 
         @Override

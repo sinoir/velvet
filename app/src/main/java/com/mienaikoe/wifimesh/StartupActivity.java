@@ -167,7 +167,6 @@ public class StartupActivity extends FragmentActivity implements LocationListene
                 .build();
 
         this.googleApiClient.connect();
-
     }
 
 
@@ -179,15 +178,15 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         }
 
         LocationRequest mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(1000*60*60);
+        mLocationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        mLocationRequest.setFastestInterval(1000*10);
+        mLocationRequest.setFastestInterval(1000*10); // walking for 10 seconds won't get you far
         LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, mLocationRequest, this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(this.getClass().getSimpleName(), "Location Changed");
+        Log.i(this.getClass().getSimpleName(), "Location Changed: "+location.getLatitude() + ", " + location.getLongitude());
         Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
         if( location != null ) {
             TrainStation closestStation = trainSystem.closestStation(location.getLatitude(), location.getLongitude());

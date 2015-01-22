@@ -39,6 +39,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
         this.context = inflater.getContext();
+
         this.stationName = (TypefaceTextView) rootView.findViewById(R.id.station_name);
 
         return rootView;

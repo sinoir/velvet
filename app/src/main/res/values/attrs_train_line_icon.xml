@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="TrainLineIcon">
+        <attr name="symbol" format="string" />
+        <attr name="size" format="dimension" />
+    </declare-styleable>
+</resources>

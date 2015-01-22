@@ -15,11 +15,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by Jesse on 1/19/2015.
@@ -138,6 +142,25 @@ public class TrainSystem {
     }
 
 
+    public Map<String, TrainLine> getLines() {
+        return lines;
+    }
+
+    public List<String> getLineNames(){
+        SortedSet<String> lineNames = new TreeSet<String>();
+        for( String lineName : this.getLines().keySet() ){
+            lineNames.add(lineName);
+        }
+        return Arrays.asList(lineNames.toArray(new String[]{}));
+    }
+
+    public Map<String, TrainStop> getStops() {
+        return stops;
+    }
+
+    public Set<TrainStation> getStations() {
+        return stations;
+    }
 
     public TrainLine getLine(String name){
         return this.lines.get(name);

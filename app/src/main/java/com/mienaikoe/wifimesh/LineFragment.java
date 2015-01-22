@@ -1,9 +1,11 @@
 package com.mienaikoe.wifimesh;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -34,7 +38,7 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
     private TrainLine currentLine;
 
     private Spinner lineSpinner;
-    private ArrayAdapter<CharSequence> lineSpinnerAdapter;
+    private ArrayAdapter<String> lineSpinnerAdapter;
     private TableLayout grid;
 
 
@@ -49,7 +53,14 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         this.grid = (TableLayout) rootView.findViewById(R.id.station_list);
         this.lineSpinner = (Spinner) rootView.findViewById(R.id.line_spinner);
 
-        populateLineSpinner();
+        // populate line spinner because we can actually back the data with the Train System
+        this.lineSpinnerAdapter = new ArrayAdapter<String>(
+                this.getApplicationContext(),
+                android.R.layout.simple_spinner_item,
+                trainSystem.getLineNames());
+        this.lineSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.lineSpinner.setAdapter(this.lineSpinnerAdapter);
+        this.lineSpinner.setOnItemSelectedListener(this);
 
         return rootView;
     }
@@ -69,17 +80,6 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         this.trainSystem = trainSystem;
     }
 
-    private void populateLineSpinner(){
-        // populate line spinner because we can actually back the data with the Train System
-        this.lineSpinnerAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(),
-                R.array.lines_array, android.R.layout.simple_spinner_item);
-
-        this.lineSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        this.lineSpinner.setAdapter(this.lineSpinnerAdapter);
-        this.lineSpinner.setOnItemSelectedListener(this);
-    }
-
 
 
     private Context getApplicationContext(){
@@ -91,22 +91,45 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
 
     public void setStation(TrainStation station){
         this.currentStation = station;
-        TrainLine line = station.getRandomLine();
-        this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(line.getName()));
+        this.currentLine = station.getRandomLine();
+        this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(this.currentLine.getName()));
     }
 
     private TableRow renderStation(TrainStation station){
         TableRow newRow = new TableRow( getApplicationContext());
 
+        // Connecting Lines
+        TypefaceTextView stationLines = new TypefaceTextView( getApplicationContext() );
+        if( station.getLines().size() > 1 ) {
+            StringBuilder stationNameBuilder = new StringBuilder();
+            boolean delimit = false;
+            for (String lineName : station.getLineNames()) {
+                if( lineName.equals(this.currentLine.getName()) ){
+                    continue;
+                }
+                if(delimit){
+                    stationNameBuilder.append(" ");
+                } else {
+                    delimit = true;
+                }
+                stationNameBuilder.append(lineName);
+            }
+            stationLines.setText(stationNameBuilder.toString());
+        }
+        this.styleTypefaceTextView(stationLines);
+        stationLines.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, context.getResources().getDisplayMetrics()));
+        stationLines.setGravity(Gravity.RIGHT);
+        newRow.addView(stationLines);
+
+        // Train Icon
         ImageView dotLine = new ImageView( getApplicationContext() );
         dotLine.setImageResource(R.drawable.ic_train_station);
         newRow.addView(dotLine);
 
+        // Station Name
         TypefaceTextView stationName = new TypefaceTextView( getApplicationContext() );
-        stationName.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
         stationName.setText(station.getName());
-        stationName.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, context.getResources().getDisplayMetrics()));
-        stationName.setGravity(Gravity.CENTER_VERTICAL);
+        this.styleTypefaceTextView(stationName);
         if( station.equals(this.currentStation) ){
             stationName.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             stationName.setBackgroundColor(getResources().getColor(R.color.dark_gray));
@@ -114,6 +137,16 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         } else {
             stationName.setTextColor(getResources().getColor(R.color.light_gray));
         }
+
+
+        /*
+        stationName.setLayoutParams(new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+        ));
+        */
+
+
         newRow.addView(stationName);
 
         return newRow;
@@ -126,14 +159,25 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         // parent.getItemAtPosition(pos)
         this.grid.removeAllViews();
         String lineName = (String)parent.getItemAtPosition(pos);
-        TrainLine line = this.trainSystem.getLine(lineName);
-        for( TrainStop lineStop : line.getSouthStops() ){
+        this.currentLine = this.trainSystem.getLine(lineName);
+        for( TrainStop lineStop : this.currentLine.getSouthStops() ){
             this.grid.addView( renderStation(lineStop.getStation()) );
         }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         // ??
+    }
+
+
+    private void styleTypefaceTextView(TypefaceTextView textView){
+        textView.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        textView.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, context.getResources().getDisplayMetrics()));
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        textView.setPadding(
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()),0,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()),0);
     }
 
 }

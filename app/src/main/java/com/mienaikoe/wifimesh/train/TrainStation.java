@@ -1,9 +1,12 @@
 package com.mienaikoe.wifimesh.train;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by Jesse on 1/19/2015.
@@ -69,6 +72,14 @@ public class TrainStation {
             }
         }
         return null;
+    }
+
+    public List<String> getLineNames(){
+        SortedSet<String> lineNames = new TreeSet<String>();
+        for( TrainLine line : this.getLines() ){
+            lineNames.add(line.getName());
+        }
+        return Arrays.asList(lineNames.toArray(new String[]{}));
     }
 
 }
