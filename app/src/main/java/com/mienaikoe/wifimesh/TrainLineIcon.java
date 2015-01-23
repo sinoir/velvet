@@ -127,7 +127,6 @@ public class TrainLineIcon extends TypefaceTextView {
         this.setHeight(size);
         this.setWidth(size);
 
-
         this.setGravity(Gravity.CENTER);
         this.setTextAlignment(TEXT_ALIGNMENT_CENTER);
         this.setTextSize(this.size * 0.25F); // What are the parameter units?? Causing weird sizing on different devices
