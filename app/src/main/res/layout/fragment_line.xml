@@ -17,12 +17,12 @@
         android:layout_height="match_parent">
 
         <TableLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:id="@+id/station_list">
 
             <TableRow
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:padding="5dp">
 

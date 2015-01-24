@@ -82,4 +82,8 @@ public class TrainStation {
         return Arrays.asList(lineNames.toArray(new String[]{}));
     }
 
+    public boolean hasLine(TrainLine line){
+        return this.getLines().contains(line);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.mienaikoe.wifimesh;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -100,7 +101,11 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
 
     public void setStation(TrainStation station){
         this.currentStation = station;
-        this.currentLine = station.getRandomLine();
+        if( !station.hasLine(this.currentLine) ) {
+            this.currentLine = station.getRandomLine();
+        }
+        this.renderLine();
+
         this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(this.currentLine.getName()));
     }
 
@@ -144,7 +149,7 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         }
         newRow.addView(stationLines);
 
-        // Train Icon
+        // Train Track Icon
         ImageView dotLine = new ImageView( getApplicationContext() );
         dotLine.setImageResource(R.drawable.ic_train_station);
         newRow.addView(dotLine);
@@ -161,14 +166,7 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
             stationName.setTextColor(getResources().getColor(R.color.light_gray));
         }
 
-
-        /*
-        stationName.setLayoutParams(new TableLayout.LayoutParams(
-                TableLayout.LayoutParams.MATCH_PARENT,
-                TableLayout.LayoutParams.WRAP_CONTENT
-        ));
-        */
-
+        stationName.setOnClickListener(new StationClickListener( (StartupActivity)getActivity(), station) );
 
         newRow.addView(stationName);
 
@@ -180,9 +178,13 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        this.grid.removeAllViews();
         String lineName = (String)parent.getItemAtPosition(pos);
         this.currentLine = this.trainSystem.getLine(lineName);
+        this.renderLine();
+    }
+
+    public void renderLine(){
+        this.grid.removeAllViews();
         for( TrainStop lineStop : this.currentLine.getSouthStops() ){
             this.grid.addView( renderStation(lineStop.getStation()) );
         }
@@ -201,6 +203,23 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         textView.setPadding(
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()),0,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()),0);
+    }
+
+
+    private class StationClickListener implements View.OnClickListener {
+
+        private StartupActivity parent;
+        private TrainStation station;
+
+        StationClickListener( StartupActivity parent, TrainStation station ){
+            this.parent = parent;
+            this.station = station;
+        }
+
+        @Override
+        public void onClick(View v) {
+            this.parent.setStation(this.station);
+        }
     }
 
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:auto="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,90 +12,6 @@
         android:id="@+id/map_view"
         android:src="@drawable/hang_manhattan2">
     </ImageView>
-
-    <com.mienaikoe.wifimesh.StationLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/station_fragment_initial_margin"
-        android:background="@color/black_overlay"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_below="@+id/map_view">
-        <com.mienaikoe.wifimesh.TypefaceTextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="14th Street &amp; 8th Ave"
-            android:id="@+id/station_name"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:textColor="#FFF"
-            android:textStyle="bold"
-            android:textSize="24dp"
-            android:textIsSelectable="false"
-            android:gravity="center_vertical"
-            android:padding="4dp"
-            auto:customFont="fonts/HelveticaNeue-Medium.otf">
-        </com.mienaikoe.wifimesh.TypefaceTextView>
-
-        <GridLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/gridView"
-            android:numColumns="2"
-            android:columnCount="2"
-            android:columnOrderPreserved="false"
-            android:alignmentMode="alignMargins"
-            android:rowOrderPreserved="false"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:useDefaultMargins="true">
-
-            <com.mienaikoe.wifimesh.TrainLineIcon
-                auto:symbol="G"
-                auto:size="30dp"
-                android:id="@+id/train_view"
-                android:layout_height="30dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:text="4m"
-                android:id="@+id/textView4"
-                android:textColor="@color/white" />
-
-            <com.mienaikoe.wifimesh.TrainLineIcon
-                auto:symbol="E"
-                auto:size="30dp"
-                android:id="@+id/train_view2"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:text="5m"
-                android:id="@+id/textView5"
-                android:textColor="@color/white"/>
-
-            <com.mienaikoe.wifimesh.TrainLineIcon
-                auto:symbol="7"
-                auto:size="30dp"
-                android:id="@+id/train_view3"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:text="2m"
-                android:id="@+id/textView6"
-                android:textColor="@color/white" />
-
-        </GridLayout>
-
-    </com.mienaikoe.wifimesh.StationLayout>
-
-
 
 
 </RelativeLayout>

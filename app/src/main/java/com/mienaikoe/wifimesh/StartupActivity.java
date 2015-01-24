@@ -1,11 +1,8 @@
 package com.mienaikoe.wifimesh;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,22 +13,23 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
-
-import java.security.Provider;
 
 
 public class StartupActivity extends FragmentActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -45,7 +43,14 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     private MapFragment mapFragment;
 
     private TrainSystem trainSystem;
+
     private GoogleApiClient googleApiClient;
+
+    private TypefaceTextView stationName;
+    private GridLayout linesTiming;
+
+    private TrainStation currentStation;
+
 
 
 
@@ -53,7 +58,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(this, VelvetService.class));
+        //startService(new Intent(this, VelvetService.class)); Not now, mabe eventually
         setContentView(R.layout.activity_startup_activity);
 
         this.trainSystem = new TrainSystem(
@@ -66,6 +71,9 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         this.pager = (ViewPager) findViewById(R.id.pager);
         this.pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         this.pager.setAdapter(this.pagerAdapter);
+
+        this.stationName = (TypefaceTextView) findViewById(R.id.station_name);
+        this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
 
         initLocationSystem();
 
@@ -160,6 +168,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
 
     private void initLocationSystem(){
+
         this.googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -177,11 +186,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
             this.onLocationChanged(lastLocation);
         }
 
-        LocationRequest mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        mLocationRequest.setFastestInterval(1000*10); // walking for 10 seconds won't get you far
-        LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, mLocationRequest, this);
+        this.deferStation();
     }
 
     @Override
@@ -190,10 +195,50 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
         if( location != null ) {
             TrainStation closestStation = trainSystem.closestStation(location.getLatitude(), location.getLongitude());
-            mapFragment.setStation(closestStation);
-            lineFragment.setStation(closestStation);
+            this.setStation(closestStation);
         }
     }
+
+    public void setStation(TrainStation station){
+        LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+        this.stationName.setText(station.getName());
+        this.linesTiming.removeAllViews();
+        for( TrainLine line : station.getLines() ){
+            TrainLineIcon icon = new TrainLineIcon( getApplicationContext(), line.getName(),
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics())
+            );
+
+            this.linesTiming.addView(icon);
+
+            TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
+            timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+            timing.setText("Fake Timing");
+            timing.setGravity(Gravity.CENTER_VERTICAL);
+            timing.setTextColor(getResources().getColor(R.color.white));
+            timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+            timing.setPadding(
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()),
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()),
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics())
+            );
+            this.linesTiming.addView(timing);
+        }
+        this.linesTiming.invalidate();
+
+        mapFragment.setStation(station);
+        lineFragment.setStation(station);
+    }
+
+    public void deferStation(){
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
+
+        LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);
+    }
+
 
     @Override
     public void onConnectionSuspended(int i) {
