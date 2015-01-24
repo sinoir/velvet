@@ -9,16 +9,49 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
 
-    <color name="train_g_green">#77CC22</color>
-    <color name="train_ace_blue">#2233BB</color>
-    <color name="train_7_purple">#9911CC</color>
-    <color name="train_bdfm_orange">#EE6611</color>
-    <color name="train_nqr_yellow">#EECC00</color>
-    <color name="train_123_red">#EE1111</color>
-    <color name="train_456_green">#008844</color>
-    <color name="train_jz_brown">#885500</color>
-    <color name="train_sl_gray">#555555</color>
+    <color name="train_g_green">#6CBE45</color>
+    <color name="train_ace_blue">#2850AD</color>
+    <color name="train_7_purple">#B933AD</color>
+    <color name="train_bdfm_orange">#FF6319</color>
+    <color name="train_nqr_yellow">#FCCC0A</color>
+    <color name="train_123_red">#EE352E</color>
+    <color name="train_456_green">#00933C</color>
+    <color name="train_jz_brown">#996633</color>
+    <color name="train_l_gray">#A7A9AC</color>
+    <color name="train_s_gray">#808183</color>
     <color name="train_si_blue">#5577EE</color>
+
+
+
+    G subway
+
+    Pantone 376
+    c56 y100
+    J subwayZ subway
+
+    Pantone 154
+    m43 y100 k34
+    L subway
+
+    50% Black
+    k50
+    N subwayQ subwayR subway
+
+    Pantone 116
+    m15 y94
+    S subway
+
+    70% Black
+    k70
+    1 subway2 subway3 subway
+
+    Pantone 185
+    m91 y76
+    4 subway5 subway6 subway
+
+    Pantone 355
+    c100 y91 6k
+    7 subway
 
 </resources>
 

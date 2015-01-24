@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
@@ -47,11 +45,13 @@ public class TrainLineIcon extends TypefaceTextView {
         BACKGROUND_COLORS.put("Q",R.color.train_nqr_yellow);
         BACKGROUND_COLORS.put("R",R.color.train_nqr_yellow);
 
-        BACKGROUND_COLORS.put("L",R.color.train_sl_gray);
-        BACKGROUND_COLORS.put("GS",R.color.train_sl_gray);
-        BACKGROUND_COLORS.put("FS",R.color.train_sl_gray);
+        BACKGROUND_COLORS.put("L",R.color.train_l_gray);
+
+        BACKGROUND_COLORS.put("GS",R.color.train_s_gray);
+        BACKGROUND_COLORS.put("FS",R.color.train_s_gray);
 
         BACKGROUND_COLORS.put("SI",R.color.train_si_blue);
+        BACKGROUND_COLORS.put("H",R.color.train_si_blue);
     }
 
     private static Map<String, Integer> FOREGROUND_COLORS = new HashMap<String, Integer>();
@@ -67,7 +67,7 @@ public class TrainLineIcon extends TypefaceTextView {
 
         FOREGROUND_COLORS.put("7",R.color.white);
 
-        FOREGROUND_COLORS.put("G",R.color.black);
+        FOREGROUND_COLORS.put("G",R.color.white);
 
         FOREGROUND_COLORS.put("1",R.color.white);
         FOREGROUND_COLORS.put("2",R.color.white);
@@ -89,6 +89,7 @@ public class TrainLineIcon extends TypefaceTextView {
         FOREGROUND_COLORS.put("FS",R.color.white);
 
         FOREGROUND_COLORS.put("SI",R.color.white);
+        FOREGROUND_COLORS.put("H",R.color.white);
     }
 
 
@@ -99,7 +100,13 @@ public class TrainLineIcon extends TypefaceTextView {
 
     public TrainLineIcon(Context context) {
         super(context);
-        init(null, 0);
+    }
+
+    public TrainLineIcon(Context context, String symbol, int size){
+        super(context);
+        setSymbol(symbol);
+        setSize(size);
+        this.setLayout();
     }
 
     public TrainLineIcon(Context context, AttributeSet attrs) {
@@ -114,27 +121,31 @@ public class TrainLineIcon extends TypefaceTextView {
 
     private void init(AttributeSet attrs, int defStyle) {
 
-        this.setCustomFont(this.getContext(), "fonts/HelveticaNeue-Medium.otf");
-
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.TrainLineIcon, defStyle, 0);
 
         symbol = a.getString(R.styleable.TrainLineIcon_symbol);
-        this.setText(symbol);
-
         size = a.getDimensionPixelSize(R.styleable.TrainLineIcon_size, 42);
+
+        a.recycle();
+
+        this.setLayout();
+    }
+
+    private void setLayout(){
+        this.setCustomFont(this.getContext(), "fonts/HelveticaNeue-Medium.otf");
+
+        this.setText(symbol);
         this.setHeight(size);
         this.setWidth(size);
 
         this.setGravity(Gravity.CENTER);
         this.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-        this.setTextSize(this.size * 0.25F); // What are the parameter units?? Causing weird sizing on different devices
+        this.setTextSize(this.size * 0.2F); // What are the parameter units?? Causing weird sizing on different devices
 
         this.setTextColor(this.getForegroundColor());
         this.setBackgroundColor(getResources().getColor(R.color.transparent));
-
-        a.recycle();
     }
 
 
@@ -148,8 +159,13 @@ public class TrainLineIcon extends TypefaceTextView {
         super.onDraw(canvas);
     }
 
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
 
-
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     private int getForegroundColor(){
         return getResources().getColor(FOREGROUND_COLORS.get(this.symbol));
@@ -158,4 +174,9 @@ public class TrainLineIcon extends TypefaceTextView {
     private int getBackgroundColor(){
         return getResources().getColor(BACKGROUND_COLORS.get(this.symbol));
     }
+
+
+
+
+
 }

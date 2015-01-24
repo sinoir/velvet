@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
+import android.util.LayoutDirection;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -25,6 +30,10 @@ import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainStop;
 import com.mienaikoe.wifimesh.train.TrainSystem;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Jesse on 1/18/2015.
@@ -97,28 +106,42 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
 
     private TableRow renderStation(TrainStation station){
         TableRow newRow = new TableRow( getApplicationContext());
+        newRow.setGravity(Gravity.CENTER_VERTICAL);
 
         // Connecting Lines
-        TypefaceTextView stationLines = new TypefaceTextView( getApplicationContext() );
+        int columnWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
+        GridLayout stationLines = new GridLayout( getApplicationContext() );
+        stationLines.setColumnCount(6);
+        stationLines.setMinimumWidth(6 * columnWidth);
+
+        stationLines.setRotationY(180);
+
         if( station.getLines().size() > 1 ) {
-            StringBuilder stationNameBuilder = new StringBuilder();
-            boolean delimit = false;
-            for (String lineName : station.getLineNames()) {
+            List<String> lineNames = station.getLineNames();
+            Collections.reverse(lineNames);
+
+            for( String lineName : lineNames ) {
                 if( lineName.equals(this.currentLine.getName()) ){
                     continue;
                 }
-                if(delimit){
-                    stationNameBuilder.append(" ");
-                } else {
-                    delimit = true;
-                }
-                stationNameBuilder.append(lineName);
+                TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), lineName,
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, context.getResources().getDisplayMetrics())
+                );
+                icon.setRotationY(180);
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.setGravity(Gravity.RIGHT);
+                params.setGravity(Gravity.CENTER_VERTICAL);
+                params.setMargins(
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()),
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()),
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()),
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics())
+                );
+                icon.setLayoutParams(params);
+
+                stationLines.addView( icon );
             }
-            stationLines.setText(stationNameBuilder.toString());
         }
-        this.styleTypefaceTextView(stationLines);
-        stationLines.setWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, context.getResources().getDisplayMetrics()));
-        stationLines.setGravity(Gravity.RIGHT);
         newRow.addView(stationLines);
 
         // Train Icon
