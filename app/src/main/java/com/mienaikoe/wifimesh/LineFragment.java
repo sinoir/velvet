@@ -105,13 +105,17 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
             this.currentLine = station.getRandomLine();
         }
         this.renderLine();
-
         this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(this.currentLine.getName()));
     }
 
     private TableRow renderStation(TrainStation station){
         TableRow newRow = new TableRow( getApplicationContext());
         newRow.setGravity(Gravity.CENTER_VERTICAL);
+        if( station.equals(this.currentStation) ){
+            newRow.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+        }
+        newRow.setOnClickListener(new StationClickListener((StartupActivity) getActivity(), station));
+        newRow.setMinimumHeight( (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44, context.getResources().getDisplayMetrics()) );
 
         // Connecting Lines
         int columnWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
@@ -122,14 +126,14 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         stationLines.setRotationY(180);
 
         if( station.getLines().size() > 1 ) {
-            List<String> lineNames = station.getLineNames();
+            List<TrainLine> lineNames = new ArrayList<TrainLine>(station.getLines());
             Collections.reverse(lineNames);
 
-            for( String lineName : lineNames ) {
-                if( lineName.equals(this.currentLine.getName()) ){
+            for( TrainLine line : lineNames ) {
+                if( line.equals(this.currentLine) ){
                     continue;
                 }
-                TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), lineName,
+                TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
                         (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, context.getResources().getDisplayMetrics())
                 );
                 icon.setRotationY(180);
@@ -158,19 +162,19 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         TypefaceTextView stationName = new TypefaceTextView( getApplicationContext() );
         stationName.setText(station.getName());
         this.styleTypefaceTextView(stationName);
-        if( station.equals(this.currentStation) ){
-            stationName.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-            stationName.setBackgroundColor(getResources().getColor(R.color.dark_gray));
-            stationName.setTextColor(getResources().getColor(R.color.white));
-        } else {
-            stationName.setTextColor(getResources().getColor(R.color.light_gray));
-        }
-
-        stationName.setOnClickListener(new StationClickListener( (StartupActivity)getActivity(), station) );
+        stationName.setTextColor(getResources().getColor(R.color.white));
 
         newRow.addView(stationName);
 
         return newRow;
+    }
+
+
+    public void renderLine(){
+        this.grid.removeAllViews();
+        for( TrainStop lineStop : this.currentLine.getSouthStops() ){
+            this.grid.addView( renderStation(lineStop.getStation()) );
+        }
     }
 
 
@@ -181,13 +185,6 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         String lineName = (String)parent.getItemAtPosition(pos);
         this.currentLine = this.trainSystem.getLine(lineName);
         this.renderLine();
-    }
-
-    public void renderLine(){
-        this.grid.removeAllViews();
-        for( TrainStop lineStop : this.currentLine.getSouthStops() ){
-            this.grid.addView( renderStation(lineStop.getStation()) );
-        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {

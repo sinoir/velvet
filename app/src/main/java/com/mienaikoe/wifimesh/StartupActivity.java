@@ -149,6 +149,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
             switch(position){
                 case 0:
                     mapFragment = new MapFragment();
+                    mapFragment.setSystem(trainSystem);
                     return mapFragment;
                 case 1:
                     lineFragment = new LineFragment();
@@ -204,7 +205,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){
-            TrainLineIcon icon = new TrainLineIcon( getApplicationContext(), line.getName(),
+            TrainLineIcon icon = new TrainLineIcon( getApplicationContext(), line,
                     (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics())
             );
 

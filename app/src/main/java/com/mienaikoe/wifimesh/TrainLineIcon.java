@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
+import com.mienaikoe.wifimesh.train.TrainLine;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,85 +17,7 @@ import java.util.Map;
  */
 public class TrainLineIcon extends TypefaceTextView {
 
-    private static Map<String, Integer> BACKGROUND_COLORS = new HashMap<String, Integer>();
-    static{
-        BACKGROUND_COLORS.put("A",R.color.train_ace_blue);
-        BACKGROUND_COLORS.put("C",R.color.train_ace_blue);
-        BACKGROUND_COLORS.put("E",R.color.train_ace_blue);
-
-        BACKGROUND_COLORS.put("B",R.color.train_bdfm_orange);
-        BACKGROUND_COLORS.put("D",R.color.train_bdfm_orange);
-        BACKGROUND_COLORS.put("F",R.color.train_bdfm_orange);
-        BACKGROUND_COLORS.put("M",R.color.train_bdfm_orange);
-
-        BACKGROUND_COLORS.put("7",R.color.train_7_purple);
-
-        BACKGROUND_COLORS.put("G",R.color.train_g_green);
-
-        BACKGROUND_COLORS.put("1",R.color.train_123_red);
-        BACKGROUND_COLORS.put("2",R.color.train_123_red);
-        BACKGROUND_COLORS.put("3",R.color.train_123_red);
-
-        BACKGROUND_COLORS.put("4",R.color.train_456_green);
-        BACKGROUND_COLORS.put("5",R.color.train_456_green);
-        BACKGROUND_COLORS.put("6",R.color.train_456_green);
-
-        BACKGROUND_COLORS.put("J",R.color.train_jz_brown);
-        BACKGROUND_COLORS.put("Z",R.color.train_jz_brown);
-
-        BACKGROUND_COLORS.put("N",R.color.train_nqr_yellow);
-        BACKGROUND_COLORS.put("Q",R.color.train_nqr_yellow);
-        BACKGROUND_COLORS.put("R",R.color.train_nqr_yellow);
-
-        BACKGROUND_COLORS.put("L",R.color.train_l_gray);
-
-        BACKGROUND_COLORS.put("GS",R.color.train_s_gray);
-        BACKGROUND_COLORS.put("FS",R.color.train_s_gray);
-
-        BACKGROUND_COLORS.put("SI",R.color.train_si_blue);
-        BACKGROUND_COLORS.put("H",R.color.train_si_blue);
-    }
-
-    private static Map<String, Integer> FOREGROUND_COLORS = new HashMap<String, Integer>();
-    static{
-        FOREGROUND_COLORS.put("A",R.color.white);
-        FOREGROUND_COLORS.put("C",R.color.white);
-        FOREGROUND_COLORS.put("E",R.color.white);
-
-        FOREGROUND_COLORS.put("B",R.color.white);
-        FOREGROUND_COLORS.put("D",R.color.white);
-        FOREGROUND_COLORS.put("F",R.color.white);
-        FOREGROUND_COLORS.put("M",R.color.white);
-
-        FOREGROUND_COLORS.put("7",R.color.white);
-
-        FOREGROUND_COLORS.put("G",R.color.white);
-
-        FOREGROUND_COLORS.put("1",R.color.white);
-        FOREGROUND_COLORS.put("2",R.color.white);
-        FOREGROUND_COLORS.put("3",R.color.white);
-
-        FOREGROUND_COLORS.put("4",R.color.white);
-        FOREGROUND_COLORS.put("5",R.color.white);
-        FOREGROUND_COLORS.put("6",R.color.white);
-
-        FOREGROUND_COLORS.put("J",R.color.white);
-        FOREGROUND_COLORS.put("Z",R.color.white);
-
-        FOREGROUND_COLORS.put("N",R.color.black);
-        FOREGROUND_COLORS.put("Q",R.color.black);
-        FOREGROUND_COLORS.put("R",R.color.black);
-
-        FOREGROUND_COLORS.put("L",R.color.white);
-        FOREGROUND_COLORS.put("GS",R.color.white);
-        FOREGROUND_COLORS.put("FS",R.color.white);
-
-        FOREGROUND_COLORS.put("SI",R.color.white);
-        FOREGROUND_COLORS.put("H",R.color.white);
-    }
-
-
-    private String symbol;
+    private TrainLine line;
     private int size;
 
 
@@ -102,41 +26,19 @@ public class TrainLineIcon extends TypefaceTextView {
         super(context);
     }
 
-    public TrainLineIcon(Context context, String symbol, int size){
+    public TrainLineIcon(Context context, TrainLine line, int size){
         super(context);
-        setSymbol(symbol);
-        setSize(size);
+        this.line = line;
+        this.size = size;
         this.setLayout();
     }
 
-    public TrainLineIcon(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs, 0);
-    }
 
-    public TrainLineIcon(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(attrs, defStyle);
-    }
-
-    private void init(AttributeSet attrs, int defStyle) {
-
-        // Load attributes
-        final TypedArray a = getContext().obtainStyledAttributes(
-                attrs, R.styleable.TrainLineIcon, defStyle, 0);
-
-        symbol = a.getString(R.styleable.TrainLineIcon_symbol);
-        size = a.getDimensionPixelSize(R.styleable.TrainLineIcon_size, 42);
-
-        a.recycle();
-
-        this.setLayout();
-    }
 
     private void setLayout(){
         this.setCustomFont(this.getContext(), "fonts/HelveticaNeue-Medium.otf");
 
-        this.setText(symbol);
+        this.setText(this.line.getName());
         this.setHeight(size);
         this.setWidth(size);
 
@@ -144,7 +46,7 @@ public class TrainLineIcon extends TypefaceTextView {
         this.setTextAlignment(TEXT_ALIGNMENT_CENTER);
         this.setTextSize(this.size * 0.2F); // What are the parameter units?? Causing weird sizing on different devices
 
-        this.setTextColor(this.getForegroundColor());
+        this.setTextColor(getResources().getColor(this.line.getForegroundColor()));
         this.setBackgroundColor(getResources().getColor(R.color.transparent));
     }
 
@@ -153,30 +55,10 @@ public class TrainLineIcon extends TypefaceTextView {
     @Override
     protected void onDraw(Canvas canvas) {
         Paint painter = new Paint();
-        painter.setColor(this.getBackgroundColor());
+        painter.setColor(getResources().getColor(this.line.getBackgroundColor()));
         canvas.drawCircle(this.size/2, this.size/2, this.size/2, painter);
 
         super.onDraw(canvas);
     }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    private int getForegroundColor(){
-        return getResources().getColor(FOREGROUND_COLORS.get(this.symbol));
-    }
-
-    private int getBackgroundColor(){
-        return getResources().getColor(BACKGROUND_COLORS.get(this.symbol));
-    }
-
-
-
-
 
 }

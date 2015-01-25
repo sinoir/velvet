@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="station_fragment_initial_margin">-44dp</dimen>
+    <dimen name="line_fragment_margin">44dp</dimen>
 </resources>

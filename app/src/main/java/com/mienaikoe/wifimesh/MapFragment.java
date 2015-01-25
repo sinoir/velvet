@@ -26,6 +26,7 @@ import android.widget.TableLayout;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.mienaikoe.wifimesh.map.TrainView;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
@@ -36,16 +37,28 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 public class MapFragment extends Fragment {
 
     private Context context;
+
+    private ViewGroup rootView;
     private TrainStation station;
+    private TrainView trainView;
+    private TrainSystem system;
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
         this.context = inflater.getContext();
 
-        return rootView;
+        this.trainView = new TrainView(this.context);
+        this.trainView.setSystem( system );
+        this.rootView.addView(this.trainView);
+
+        return this.rootView;
+    }
+
+    public void setSystem( TrainSystem system ){
+        this.system = system;
     }
 
     public void setStation( TrainStation station ){

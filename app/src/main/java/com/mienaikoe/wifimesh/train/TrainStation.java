@@ -2,6 +2,7 @@ package com.mienaikoe.wifimesh.train;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +51,22 @@ public class TrainStation {
 
 
     public Set<TrainLine> getLines() {
-        Set<TrainLine> allLines = new HashSet<TrainLine>();
+        SortedSet<TrainLine> allLines = new TreeSet<TrainLine>( new Comparator<TrainLine>(){
+            @Override
+            public int compare(TrainLine lhs, TrainLine rhs) {
+                if( lhs == null ){
+                    if( rhs == null ){
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                } else if (rhs == null){
+                    return 1;
+                } else {
+                    return lhs.getName().compareTo(rhs.getName());
+                }
+            }
+        } );
         for( TrainStop stop : this.stops ){
             allLines.addAll(stop.getLines());
         }
@@ -86,4 +102,15 @@ public class TrainStation {
         return this.getLines().contains(line);
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public Set<TrainStop> getStops() {
+        return stops;
+    }
 }

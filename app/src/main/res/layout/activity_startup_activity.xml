@@ -28,7 +28,6 @@
         <com.mienaikoe.wifimesh.TypefaceTextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="14th Street &amp; 8th Ave"
             android:id="@+id/station_name"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
@@ -40,6 +39,12 @@
             android:padding="4dp"
             auto:customFont="fonts/HelveticaNeue-Medium.otf">
         </com.mienaikoe.wifimesh.TypefaceTextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
 
         <GridLayout
             android:layout_width="fill_parent"
@@ -53,7 +58,6 @@
             android:orientation="horizontal"
             android:padding="10dp"
             android:useDefaultMargins="true">
-
         </GridLayout>
 
     </com.mienaikoe.wifimesh.StationLayout>
