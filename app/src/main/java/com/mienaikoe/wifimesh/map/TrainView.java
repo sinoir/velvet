@@ -169,7 +169,12 @@ public class TrainView extends View {
     }
 
 
-
+    public void setCenter( float x, float y ){
+        //mScaleFactor = 1.0f;
+        //dx = x;
+        //dy = y;
+        // This isn't working right
+    }
 
     public void setSystem(TrainSystem system) {
         this.system = system;
