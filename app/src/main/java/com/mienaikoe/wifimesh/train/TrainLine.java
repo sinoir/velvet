@@ -104,22 +104,34 @@ public class TrainLine {
 
     private final String name;
 
-    private final ArrayList<TrainStop> northStops;
-    private final ArrayList<TrainStop> southStops;
+    private final ArrayList<TrainStation> northStops;
+    private final ArrayList<TrainStation> southStops;
 
 
 
 
-    public TrainLine(String name, ArrayList<TrainStop> northStops, ArrayList<TrainStop> southStops ){
+    public TrainLine(String name, ArrayList<TrainStation> northStops, ArrayList<TrainStation> southStops ){
         this.name = name;
         this.northStops = northStops;
         this.southStops = southStops;
 
-        for( TrainStop stop : this.northStops ){
-            stop.addLine(this);
+        for( TrainStation station : this.northStops ){
+            station.addLine(this);
         }
-        for( TrainStop stop : this.southStops ){
-            stop.addLine(this);
+        for( TrainStation station : this.southStops ){
+            station.addLine(this);
+        }
+    }
+
+
+    public void replaceStation( TrainStation existingStation, TrainStation newStation ){
+        int southIndex = this.southStops.indexOf(existingStation);
+        if( southIndex != -1 ) {
+            this.southStops.set(southIndex, newStation);
+        }
+        int northIndex = this.northStops.indexOf(existingStation);
+        if( northIndex != -1 ) {
+            this.northStops.set(northIndex, newStation);
         }
     }
 
@@ -130,11 +142,11 @@ public class TrainLine {
 
 
 
-    public ArrayList<TrainStop> getNorthStops() {
+    public ArrayList<TrainStation> getNorthStops() {
         return northStops;
     }
 
-    public ArrayList<TrainStop> getSouthStops() {
+    public ArrayList<TrainStation> getSouthStops() {
         return southStops;
     }
 

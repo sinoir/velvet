@@ -192,16 +192,16 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(this.getClass().getSimpleName(), "Location Changed: "+location.getLatitude() + ", " + location.getLongitude());
-        Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
         if( location != null ) {
+            Log.i(this.getClass().getSimpleName(), "Location Changed: "+location.getLatitude() + ", " + location.getLongitude());
+            Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
             TrainStation closestStation = trainSystem.closestStation(location.getLatitude(), location.getLongitude());
             this.setStation(closestStation);
         }
     }
 
     public void setStation(TrainStation station){
-        LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+        //LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){

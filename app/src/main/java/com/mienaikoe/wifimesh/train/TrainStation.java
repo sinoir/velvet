@@ -1,5 +1,7 @@
 package com.mienaikoe.wifimesh.train;
 
+import android.location.Location;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,28 +18,36 @@ public class TrainStation {
 
     private String name;
 
-    private Set<TrainStop> stops = new HashSet<TrainStop>();
+    private Set<TrainLine> lines = new TreeSet<TrainLine>( new TrainLineComparator() );
 
     private double longitude = 0;
     private double latitude = 0;
 
 
-    public TrainStation(String name){
+
+    private static double offsetLatitude = 40.95; // top-side latitude limit
+    private static double offsetLongitude = -74.28; // left-side longitude limit
+
+    private static float multiplierX = 1900;
+    private static float multiplierY = 2900;
+
+    private float viewX;
+    private float viewY;
+
+
+    public TrainStation(String name, double longitude, double latitude){
+        this.longitude = longitude;
+        this.latitude = latitude;
+
+        this.viewX = (float)(this.longitude - offsetLongitude) * multiplierX;
+        this.viewY = (float)(offsetLatitude - latitude) * multiplierY;
+
         this.name = name;
     }
 
 
-    public void addStop(TrainStop stop){
-        this.stops.add(stop);
-
-        double latitudeSum = 0;
-        double longitudeSum = 0;
-        for( TrainStop itStop : this.stops ){
-            latitudeSum += itStop.getLatitude();
-            longitudeSum += itStop.getLongitude();
-        }
-        this.latitude = latitudeSum / this.stops.size();
-        this.longitude = longitudeSum / this.stops.size();
+    public void addLine(TrainLine line){
+        this.lines.add(line);
     }
 
 
@@ -51,26 +61,7 @@ public class TrainStation {
 
 
     public Set<TrainLine> getLines() {
-        SortedSet<TrainLine> allLines = new TreeSet<TrainLine>( new Comparator<TrainLine>(){
-            @Override
-            public int compare(TrainLine lhs, TrainLine rhs) {
-                if( lhs == null ){
-                    if( rhs == null ){
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                } else if (rhs == null){
-                    return 1;
-                } else {
-                    return lhs.getName().compareTo(rhs.getName());
-                }
-            }
-        } );
-        for( TrainStop stop : this.stops ){
-            allLines.addAll(stop.getLines());
-        }
-        return allLines;
+        return lines;
     }
 
     public double distance(double latitude, double longitude){
@@ -78,24 +69,38 @@ public class TrainStation {
     }
 
     public boolean equals(TrainStation other){
+        if( other == null ){
+            return false;
+        }
         return this.name.equals(other.getName());
     }
 
     public TrainLine getRandomLine(){
-        for( TrainStop stop : this.stops ){
-            for( TrainLine line : stop.getLines() ){
-                return line;
-            }
+        for( TrainLine line : this.lines ){
+            return line;
         }
         return null;
     }
 
     public List<String> getLineNames(){
-        SortedSet<String> lineNames = new TreeSet<String>();
+        List<String> lineNames = new ArrayList<String>(this.lines.size());
         for( TrainLine line : this.getLines() ){
             lineNames.add(line.getName());
         }
-        return Arrays.asList(lineNames.toArray(new String[]{}));
+        return lineNames;
+    }
+
+    public void merge(TrainStation other){
+        for( TrainLine line : other.getLines() ){
+            line.replaceStation(other, this);
+        }
+        this.longitude = (this.longitude + other.getLongitude()) / 2;
+        this.latitude = (this.latitude + other.getLatitude()) / 2;
+
+        this.viewX = (float)(this.longitude - offsetLongitude) * multiplierX;
+        this.viewY = (float)(offsetLatitude - latitude) * multiplierY;
+
+        this.lines.addAll(other.getLines());
     }
 
     public boolean hasLine(TrainLine line){
@@ -110,7 +115,11 @@ public class TrainStation {
         return longitude;
     }
 
-    public Set<TrainStop> getStops() {
-        return stops;
+    public float getViewX() {
+        return viewX;
+    }
+
+    public float getViewY() {
+        return viewY;
     }
 }

@@ -30,14 +30,90 @@ import java.util.TreeSet;
  */
 public class TrainSystem {
 
-    private Map<String, TrainStop> stops = new HashMap<String, TrainStop>();
-    private Map<String, TrainLine> lines = new HashMap<String, TrainLine>();
+    private ArrayList<TrainLine> lines = new ArrayList<TrainLine>();
     private Set<TrainStation> stations = new HashSet<TrainStation>();
 
 
-    public TrainSystem( InputStream stopsJson, InputStream linesJson, InputStream transfersJson ) {
-        parseStops(streamToJSON(stopsJson), streamToJSON(transfersJson));
-        parseLines(streamToJSON(linesJson));
+    public TrainSystem( InputStream stopsJsonStream, InputStream linesJsonStream, InputStream transfersJsonStream ) {
+        JSONObject stopsJson = streamToJSON(stopsJsonStream);
+        JSONObject transfersJson = streamToJSON(transfersJsonStream);
+        JSONObject linesJson = streamToJSON(linesJsonStream);
+
+        Map<String, TrainStation> uniqueStations = new HashMap<String, TrainStation>();
+        Map<String, TrainStation> stopidStations = new HashMap<String, TrainStation>();
+
+        try {
+
+            Iterator<String> stopsKeys = stopsJson.keys();
+            while (stopsKeys.hasNext()) {
+                String stopId = stopsKeys.next();
+                JSONObject stopJson = stopsJson.getJSONObject(stopId);
+
+                String name = stopJson.getString("name");
+                double latitude = stopJson.getDouble("latitude");
+                double longitude = stopJson.getDouble("longitude");
+                String uniquifier = latitude+":"+longitude;
+
+                TrainStation station;
+                if( uniqueStations.containsKey(uniquifier) ){
+                    station = uniqueStations.get(uniquifier);
+                    stopidStations.put(stopId, station);
+                } else {
+                    station = new TrainStation(
+                            name, longitude, latitude
+                    );
+                    this.stations.add(station);
+                    uniqueStations.put(uniquifier, station);
+                }
+                stopidStations.put(stopId, station);
+            }
+
+
+            Iterator<String> linesKeys = linesJson.keys();
+            while (linesKeys.hasNext()) {
+                String lineId = linesKeys.next();
+                JSONObject lineJson = linesJson.getJSONObject(lineId);
+                TrainLine line = new TrainLine(
+                        lineId,
+                        parseLineDirection(lineJson.getJSONArray("N"), stopidStations),
+                        parseLineDirection(lineJson.getJSONArray("S"), stopidStations)
+                );
+
+                this.lines.add(line);
+            }
+
+
+
+            JSONArray transfers = transfersJson.getJSONArray("transfers");
+            for( int i=0; i<transfers.length(); i++ ){
+                JSONArray stationTransferSet = transfers.getJSONArray(i);
+                TrainStation station = null;
+                Set<TrainStation> sameStations = new HashSet<TrainStation>();
+                for( int j=0; j<stationTransferSet.length(); j++ ){
+                    String stopId = stationTransferSet.getString(j);
+                    TrainStation aStation = stopidStations.get(stopId);
+                    sameStations.add(aStation);
+                }
+                if( sameStations.size() > 1 ) {
+                    TrainStation keepStation = null;
+                    for (TrainStation aStation : sameStations ) {
+                        if( keepStation == null ){
+                            keepStation = aStation;
+                        } else {
+                            keepStation.merge(aStation);
+                            this.stations.remove(aStation);
+                        }
+                    }
+                }
+
+            }
+
+
+        } catch (JSONException ex ){
+            Log.e(this.getClass().getSimpleName(), "Could not parse stops");
+            throw new IllegalArgumentException("Invalid Stops Json");
+        }
+
     }
 
     private JSONObject streamToJSON(InputStream inputStream) {
@@ -59,103 +135,30 @@ public class TrainSystem {
     }
 
 
-
-
-
-    private void parseStops(JSONObject stopsJson, JSONObject transfersJson) {
-        try {
-            JSONArray transfers = transfersJson.getJSONArray("transfers");
-            for( int i=0; i<transfers.length(); i++ ){
-                JSONArray stationTransferSet = transfers.getJSONArray(i);
-                TrainStation station = null;
-                for( int j=0; j<stationTransferSet.length(); j++ ){
-                    String stopId = stationTransferSet.getString(j);
-                    JSONObject stopJson = stopsJson.getJSONObject(stopId);
-                    if( station == null ){
-                        station = new TrainStation( stopJson.getString("name") );
-                        this.stations.add(station);
-                    }
-                    TrainStop stop = new TrainStop(
-                            station,
-                            stopJson.getDouble("latitude"),
-                            stopJson.getDouble("longitude")
-                    );
-                    this.stops.put(stopId, stop);
-                }
+    private ArrayList<TrainStation> parseLineDirection(JSONArray directionJson, Map<String,TrainStation> stopidStations) throws JSONException{
+        ArrayList<TrainStation> parsedStations = new ArrayList<TrainStation>(directionJson.length());
+        for( int i=0; i< directionJson.length(); i++ ){
+            String stopId = directionJson.getString(i);
+            TrainStation station = stopidStations.get(stopId);
+            if (station == null){
+                throw new IllegalArgumentException("Could not find train station with id " + stopId);
             }
-
-            Iterator<String> stopsKeys = stopsJson.keys();
-            while (stopsKeys.hasNext()) {
-                String stopId = stopsKeys.next();
-                JSONObject stopJson = stopsJson.getJSONObject(stopId);
-
-                if( !this.stops.containsKey(stopId) ) {
-                    TrainStation station = new TrainStation(stopJson.getString("name"));
-                    this.stations.add(station);
-
-                    TrainStop stop = new TrainStop(
-                            station,
-                            stopJson.getDouble("latitude"),
-                            stopJson.getDouble("longitude")
-                    );
-                    this.stops.put(stopId, stop);
-                }
-            }
-        } catch (JSONException ex ){
-            Log.e(this.getClass().getSimpleName(), "Could not parse stops");
-            throw new IllegalArgumentException("Invalid Stops Json");
-        }
-    }
-
-    private void parseLines(JSONObject linesJson) {
-        try {
-            Iterator<String> linesKeys = linesJson.keys();
-            while (linesKeys.hasNext()) {
-                String lineId = linesKeys.next();
-                JSONObject lineJson = linesJson.getJSONObject(lineId);
-
-                TrainLine line = new TrainLine(
-                        lineId,
-                        parseLineDirection(lineJson.getJSONArray("N")),
-                        parseLineDirection(lineJson.getJSONArray("S"))
-                );
-
-                this.lines.put(lineId, line);
-            }
-        } catch (JSONException ex ){
-            Log.e(this.getClass().getSimpleName(), "Could not parse stops");
-            throw new IllegalArgumentException("Invalid Stops Json");
-        }
-    }
-
-    private ArrayList<TrainStop> parseLineDirection(JSONArray northJson) throws JSONException{
-        ArrayList<TrainStop> parsedStations = new ArrayList<TrainStop>(northJson.length());
-        for( int i=0; i< northJson.length(); i++ ){
-            String stopId = northJson.getString(i);
-            TrainStop stop = this.stops.get(stopId);
-            if (stop == null){
-                throw new IllegalArgumentException("Could not find train station with id "+stopId);
-            }
-            parsedStations.add(stop);
+            parsedStations.add(station);
         }
         return parsedStations;
     }
 
 
-    public Map<String, TrainLine> getLines() {
+    public List<TrainLine> getLines() {
         return lines;
     }
 
     public List<String> getLineNames(){
         SortedSet<String> lineNames = new TreeSet<String>();
-        for( String lineName : this.getLines().keySet() ){
-            lineNames.add(lineName);
+        for( TrainLine line : this.getLines() ){
+            lineNames.add(line.getName());
         }
         return Arrays.asList(lineNames.toArray(new String[]{}));
-    }
-
-    public Map<String, TrainStop> getStops() {
-        return stops;
     }
 
     public Set<TrainStation> getStations() {
@@ -163,11 +166,16 @@ public class TrainSystem {
     }
 
     public TrainLine getLine(String name){
-        return this.lines.get(name);
+        for( TrainLine line : this.getLines() ){
+            if( name.equals(line.getName()) ){
+                return line;
+            }
+        }
+        return null;
     }
 
     public TrainStation closestStation(double latitude, double longitude){
-        double closestRadius = 180F;
+        double closestRadius = 360F;
         TrainStation closestStation = null;
         for( TrainStation station : this.stations ){
             double radius = station.distance(latitude, longitude);

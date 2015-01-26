@@ -1,13 +1,8 @@
 package com.mienaikoe.wifimesh;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.AttributeSet;
-import android.util.LayoutDirection;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,21 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainStop;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.util.ArrayList;
@@ -126,10 +114,10 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         stationLines.setRotationY(180);
 
         if( station.getLines().size() > 1 ) {
-            List<TrainLine> lineNames = new ArrayList<TrainLine>(station.getLines());
-            Collections.reverse(lineNames);
+            List<TrainLine> lines = new ArrayList<TrainLine>(station.getLines());
+            Collections.reverse(lines);
 
-            for( TrainLine line : lineNames ) {
+            for( TrainLine line : lines ) {
                 if( line.equals(this.currentLine) ){
                     continue;
                 }
@@ -172,8 +160,8 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
 
     public void renderLine(){
         this.grid.removeAllViews();
-        for( TrainStop lineStop : this.currentLine.getSouthStops() ){
-            this.grid.addView( renderStation(lineStop.getStation()) );
+        for( TrainStation lineStation : this.currentLine.getSouthStops() ){
+            this.grid.addView( renderStation(lineStation) );
         }
     }
 
