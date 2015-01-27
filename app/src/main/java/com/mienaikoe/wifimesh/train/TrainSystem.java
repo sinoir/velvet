@@ -3,6 +3,8 @@ package com.mienaikoe.wifimesh.train;
 import android.util.Log;
 import android.util.Xml;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,10 +36,16 @@ public class TrainSystem {
     private Set<TrainStation> stations = new HashSet<TrainStation>();
 
 
-    public TrainSystem( InputStream stopsJsonStream, InputStream linesJsonStream, InputStream transfersJsonStream ) {
+    public TrainSystem(
+            InputStream stopsJsonStream,
+            InputStream linesJsonStream,
+            InputStream transfersJsonStream,
+            InputStream entrancesJsonStream
+            ) {
         JSONObject stopsJson = streamToJSON(stopsJsonStream);
         JSONObject transfersJson = streamToJSON(transfersJsonStream);
         JSONObject linesJson = streamToJSON(linesJsonStream);
+        JSONObject entrancesJson = streamToJSON(entrancesJsonStream);
 
         Map<String, TrainStation> uniqueStations = new HashMap<String, TrainStation>();
         Map<String, TrainStation> stopidStations = new HashMap<String, TrainStation>();
@@ -60,7 +68,7 @@ public class TrainSystem {
                     stopidStations.put(stopId, station);
                 } else {
                     station = new TrainStation(
-                            name, longitude, latitude
+                            name, new LatLng(latitude, longitude)
                     );
                     this.stations.add(station);
                     uniqueStations.put(uniquifier, station);
@@ -105,9 +113,15 @@ public class TrainSystem {
                         }
                     }
                 }
-
             }
 
+            JSONArray entrances = entrancesJson.getJSONArray("entrances");
+            for( int i=0; i< entrances.length(); i++ ){
+                JSONObject coordsJson = entrances.getJSONObject(i);
+                LatLng coords = new LatLng( coordsJson.getDouble("latitude"), coordsJson.getDouble("longitude") );
+                TrainStation closest = this.closestStation(coords);
+                closest.addEntrance(coords);
+            }
 
         } catch (JSONException ex ){
             Log.e(this.getClass().getSimpleName(), "Could not parse stops");
@@ -174,11 +188,11 @@ public class TrainSystem {
         return null;
     }
 
-    public TrainStation closestStation(double latitude, double longitude){
+    public TrainStation closestStation(LatLng point){
         double closestRadius = 360F;
         TrainStation closestStation = null;
         for( TrainStation station : this.stations ){
-            double radius = station.distance(latitude, longitude);
+            double radius = station.distance(point);
             if( radius < closestRadius ){
                 closestRadius = radius;
                 closestStation = station;

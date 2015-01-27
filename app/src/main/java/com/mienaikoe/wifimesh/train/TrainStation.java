@@ -2,6 +2,8 @@ package com.mienaikoe.wifimesh.train;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -20,8 +22,9 @@ public class TrainStation {
 
     private Set<TrainLine> lines = new TreeSet<TrainLine>( new TrainLineComparator() );
 
-    private double longitude = 0;
-    private double latitude = 0;
+    private Set<LatLng> entrances = new HashSet<LatLng>();
+
+    private LatLng center;
 
 
 
@@ -35,12 +38,11 @@ public class TrainStation {
     private float viewY;
 
 
-    public TrainStation(String name, double longitude, double latitude){
-        this.longitude = longitude;
-        this.latitude = latitude;
+    public TrainStation(String name, LatLng center){
+        this.center = center;
 
-        this.viewX = (float)(this.longitude - offsetLongitude) * multiplierX;
-        this.viewY = (float)(offsetLatitude - latitude) * multiplierY;
+        this.viewX = (float)(this.center.longitude - offsetLongitude) * multiplierX;
+        this.viewY = (float)(offsetLatitude - this.center.latitude) * multiplierY;
 
         this.name = name;
     }
@@ -50,6 +52,13 @@ public class TrainStation {
         this.lines.add(line);
     }
 
+    public void addEntrance(LatLng entrance){
+        this.entrances.add(entrance);
+    }
+
+    public Set<LatLng> getEntrances() {
+        return entrances;
+    }
 
     public String getName() {
         return name;
@@ -64,8 +73,8 @@ public class TrainStation {
         return lines;
     }
 
-    public double distance(double latitude, double longitude){
-        return Math.sqrt(Math.pow(this.longitude - longitude, 2) + Math.pow(this.latitude - latitude, 2));
+    public double distance(LatLng point){
+        return Math.sqrt(Math.pow(this.center.longitude - point.longitude, 2) + Math.pow(this.center.latitude - point.latitude, 2));
     }
 
     public boolean equals(TrainStation other){
@@ -94,11 +103,13 @@ public class TrainStation {
         for( TrainLine line : other.getLines() ){
             line.replaceStation(other, this);
         }
-        this.longitude = (this.longitude + other.getLongitude()) / 2;
-        this.latitude = (this.latitude + other.getLatitude()) / 2;
+        this.center = new LatLng (
+                (this.center.latitude + other.getLatitude()) / 2,
+                (this.center.longitude + other.getLongitude()) / 2
+        );
 
-        this.viewX = (float)(this.longitude - offsetLongitude) * multiplierX;
-        this.viewY = (float)(offsetLatitude - latitude) * multiplierY;
+        this.viewX = (float)(this.center.longitude - offsetLongitude) * multiplierX;
+        this.viewY = (float)(offsetLatitude - this.center.latitude) * multiplierY;
 
         this.lines.addAll(other.getLines());
     }
@@ -108,11 +119,15 @@ public class TrainStation {
     }
 
     public double getLatitude() {
-        return latitude;
+        return this.center.latitude;
     }
 
     public double getLongitude() {
-        return longitude;
+        return this.center.longitude;
+    }
+
+    public LatLng getCenter() {
+        return center;
     }
 
     public float getViewX() {

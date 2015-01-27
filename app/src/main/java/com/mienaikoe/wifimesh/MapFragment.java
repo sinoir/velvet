@@ -63,7 +63,6 @@ public class MapFragment extends Fragment {
 
     public void setStation( TrainStation station ){
         this.trainView.setCenter( station.getViewX(), station.getViewY() );
-
         this.station = station;
     }
 

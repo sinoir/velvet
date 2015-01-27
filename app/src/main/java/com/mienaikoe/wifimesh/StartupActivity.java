@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
@@ -64,7 +65,8 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         this.trainSystem = new TrainSystem(
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.transfers_normalized)
+                this.getApplicationContext().getResources().openRawResource(R.raw.transfers_normalized),
+                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
         );
 
         // Instantiate a ViewPager and a PagerAdapter.
@@ -195,7 +197,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         if( location != null ) {
             Log.i(this.getClass().getSimpleName(), "Location Changed: "+location.getLatitude() + ", " + location.getLongitude());
             Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
-            TrainStation closestStation = trainSystem.closestStation(location.getLatitude(), location.getLongitude());
+            TrainStation closestStation = trainSystem.closestStation(new LatLng(location.getLatitude(), location.getLongitude()));
             this.setStation(closestStation);
         }
     }
