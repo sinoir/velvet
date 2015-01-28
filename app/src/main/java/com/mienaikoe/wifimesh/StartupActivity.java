@@ -2,6 +2,7 @@ package com.mienaikoe.wifimesh;
 
 
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,14 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -207,31 +214,74 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){
-            TrainLineIcon icon = new TrainLineIcon( getApplicationContext(), line,
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics())
-            );
-
-            this.linesTiming.addView(icon);
-
-            TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
-            timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-            timing.setText("Fake Timing");
-            timing.setGravity(Gravity.CENTER_VERTICAL);
-            timing.setTextColor(getResources().getColor(R.color.white));
-            timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-            timing.setPadding(
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics())
-            );
-            this.linesTiming.addView(timing);
+            renderStationLine(line);
         }
         this.linesTiming.invalidate();
 
         mapFragment.setStation(station);
         lineFragment.setStation(station);
     }
+
+
+    private ViewGroup renderStationLine(TrainLine line){
+        LinearLayout layout = new LinearLayout(this.getApplicationContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        this.linesTiming.addView(layout);
+
+        RelativeLayout topLine = new RelativeLayout( this.getApplicationContext() );
+        layout.addView(topLine);
+
+        TrainLineIcon icon = new TrainLineIcon( getApplicationContext(), line,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics())
+        );
+        topLine.addView(icon);
+        RelativeLayout.LayoutParams iconParams = (RelativeLayout.LayoutParams)icon.getLayoutParams();
+        iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, -1);
+        icon.setLayoutParams(iconParams);
+
+
+
+        GridLayout timingGrid = new GridLayout( this.getApplicationContext() );
+        topLine.addView(timingGrid);
+        RelativeLayout.LayoutParams timingParams = (RelativeLayout.LayoutParams)timingGrid.getLayoutParams();
+        timingParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, -1);
+        timingGrid.setLayoutParams(timingParams);
+
+
+        int timingPaddingHoriz = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
+        int timingPaddingVert = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
+
+
+        TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
+        timingGrid.addView( timing );
+        timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setText("5m");
+        timing.setTextColor(getResources().getColor(R.color.white));
+        timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        timing.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
+
+        TypefaceTextView timing2 = new TypefaceTextView( getApplicationContext() );
+        timingGrid.addView( timing2 );
+        timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing2.setText("2m");
+        timing2.setTextColor(getResources().getColor(R.color.white));
+        timing2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        timing2.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
+
+
+
+        TypefaceTextView plannedWork = new TypefaceTextView(this.getApplicationContext());
+        layout.addView(plannedWork);
+        plannedWork.setCustomFont(this.getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        plannedWork.setTextSize(16.0f);
+        plannedWork.setTextColor(getResources().getColor(R.color.white));
+        plannedWork.setText("World Trade Center Bound Trains run express between Times Sq-42nd St and 14th St");
+
+        return layout;
+    }
+
+
+
 
     public void deferStation(){
         LocationRequest locationRequest = LocationRequest.create();
