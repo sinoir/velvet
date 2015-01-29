@@ -33,19 +33,20 @@ public class TrainView extends View {
     private TrainSystem system;
     private TrainStation currentStation;
 
-    private float mScaleFactor = 0.7f;
+    private float mScaleFactor = 0.6f;
     private float scalePointX = 0.f;
     private float scalePointY = 0.f;
     private ScaleGestureDetector mScaleDetector;
 
-    private int mActivePointerId = -1;
     private float startX = 0;
     private float startY = 0;
-    private float deltaX = 0;
-    private float deltaY = 0;
+    private float deltaX = 200;
+    private float deltaY = -50;
 
 
     private List<VectorInstruction> lines = new ArrayList<VectorInstruction>(0);
+    private List<VectorInstruction> linesText = new ArrayList<VectorInstruction>(0);
+    private List<VectorInstruction> stationsText = new ArrayList<VectorInstruction>(0);
     private List<VectorInstruction> crossStreets = new ArrayList<VectorInstruction>(0);
 
 
@@ -85,6 +86,12 @@ public class TrainView extends View {
 
         for( VectorInstruction line : this.lines ){
             line.draw(canvas);
+        }
+        for( VectorInstruction lineText : this.linesText ){
+            lineText.draw(canvas);
+        }
+        for( VectorInstruction stationText : this.stationsText ){
+            stationText.draw(canvas);
         }
 
         Paint stationPainter = new Paint();
@@ -136,10 +143,8 @@ public class TrainView extends View {
             case MotionEvent.ACTION_DOWN: {
                 startX = MotionEventCompat.getX(ev, pointerIndex) - deltaX;
                 startY = MotionEventCompat.getY(ev, pointerIndex) - deltaY;
-                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 break;
             }
-
             case MotionEvent.ACTION_MOVE: {
                 float atX = MotionEventCompat.getX(ev, pointerIndex);
                 float atY = MotionEventCompat.getY(ev, pointerIndex);
@@ -148,23 +153,15 @@ public class TrainView extends View {
                 invalidate();
                 break;
             }
-
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = -1;
-                break;
-            }
         }
         return true;
     }
 
 
     public void setCenter( float x, float y ){
-        //mScaleFactor = 1.0f;
-        //dx = x;
-        //dy = y;
-        // This isn't working right
+        mScaleFactor = 3.0f;
+        this.scalePointX = x;
+        this.scalePointY = y;
     }
 
     public void setSystem(TrainSystem system) {
@@ -177,5 +174,13 @@ public class TrainView extends View {
 
     public void setLines(List<VectorInstruction> paths){
         this.lines = paths;
+    }
+
+    public void setLinesText(List<VectorInstruction> paths){
+        this.linesText = paths;
+    }
+
+    public void setStationsText(List<VectorInstruction> paths){
+        this.stationsText = paths;
     }
 }

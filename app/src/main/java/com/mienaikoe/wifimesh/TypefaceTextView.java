@@ -5,13 +5,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class TypefaceTextView extends TextView {
 
@@ -41,11 +38,11 @@ public class TypefaceTextView extends TextView {
     }
 
     public void setCustomFont(Context ctx, String customFont){
-        Typeface tf = addTypeface(ctx, customFont);
+        Typeface tf = getTypeface(ctx, customFont);
         setTypeface(tf);
     }
 
-    public static Typeface addTypeface(Context ctx, String asset) {
+    public static Typeface getTypeface(Context ctx, String asset) {
         Typeface typeface;
         if( typefaces.containsKey(asset) ) {
             typeface = typefaces.get(asset);

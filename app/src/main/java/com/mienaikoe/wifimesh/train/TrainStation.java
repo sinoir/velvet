@@ -150,4 +150,8 @@ public class TrainStation {
         }
         return sumY / this.mapRectangles.size();
     }
+
+    public boolean hasRectangles(){
+        return this.mapRectangles.size() > 0;
+    }
 }
