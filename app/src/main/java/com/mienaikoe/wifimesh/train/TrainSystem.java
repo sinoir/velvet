@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -40,7 +41,8 @@ public class TrainSystem {
             InputStream stopsJsonStream,
             InputStream linesJsonStream,
             InputStream transfersJsonStream,
-            InputStream entrancesJsonStream
+            InputStream entrancesJsonStream,
+            InputStream blocksXmlStream
             ) {
         JSONObject stopsJson = streamToJSON(stopsJsonStream);
         JSONObject transfersJson = streamToJSON(transfersJsonStream);
@@ -52,6 +54,7 @@ public class TrainSystem {
 
         try {
 
+            // Set Stops
             Iterator<String> stopsKeys = stopsJson.keys();
             while (stopsKeys.hasNext()) {
                 String stopId = stopsKeys.next();
@@ -76,7 +79,32 @@ public class TrainSystem {
                 stopidStations.put(stopId, station);
             }
 
+            // Parse Map Stops
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(blocksXmlStream, null);
+            parser.nextTag();
+            parser.require(XmlPullParser.START_TAG, "", "g");
+            while (parser.next() != XmlPullParser.END_DOCUMENT) {
+                if (parser.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                String name = parser.getName();
+                // Starts by looking for the entry tag
+                if (name.equals("rect")) {
+                    String stopId = parser.getAttributeValue("","id");
+                    TrainStation station = stopidStations.get(stopId);
+                    station.addMapRectangle(
+                            Math.round(Float.valueOf(parser.getAttributeValue("","x"))),
+                            Math.round(Float.valueOf(parser.getAttributeValue("","y"))),
+                            Math.round(Float.valueOf(parser.getAttributeValue("","width"))),
+                            Math.round(Float.valueOf(parser.getAttributeValue("","height")))
+                    );
+                }
+            }
 
+
+            // Set Lines
             Iterator<String> linesKeys = linesJson.keys();
             while (linesKeys.hasNext()) {
                 String lineId = linesKeys.next();
@@ -91,7 +119,7 @@ public class TrainSystem {
             }
 
 
-
+            // Set Transfers
             JSONArray transfers = transfersJson.getJSONArray("transfers");
             for( int i=0; i<transfers.length(); i++ ){
                 JSONArray stationTransferSet = transfers.getJSONArray(i);
@@ -115,6 +143,7 @@ public class TrainSystem {
                 }
             }
 
+            // Set entrances
             JSONArray entrances = entrancesJson.getJSONArray("entrances");
             for( int i=0; i< entrances.length(); i++ ){
                 JSONObject coordsJson = entrances.getJSONObject(i);
@@ -123,9 +152,26 @@ public class TrainSystem {
                 closest.addEntrance(coords);
             }
 
+
         } catch (JSONException ex ){
             Log.e(this.getClass().getSimpleName(), "Could not parse stops");
             throw new IllegalArgumentException("Invalid Stops Json");
+        } catch (XmlPullParserException ex ){
+            Log.e(this.getClass().getSimpleName(), "Could not parse map");
+            throw new IllegalArgumentException("Invalid Map Xml");
+        } catch (IOException ex ){
+            Log.e(this.getClass().getSimpleName(), "Culd not parse map");
+            throw new IllegalArgumentException("IO Exception while parsing map");
+        } finally {
+            try {
+                stopsJsonStream.close();
+                linesJsonStream.close();
+                transfersJsonStream.close();
+                entrancesJsonStream.close();
+                blocksXmlStream.close();
+            } catch (IOException ex ){
+                Log.e(this.getClass().getSimpleName(), "Could not close streams");
+            }
         }
 
     }

@@ -159,9 +159,9 @@ public class TrainView extends View {
 
 
     public void setCenter( float x, float y ){
-        mScaleFactor = 3.0f;
-        this.scalePointX = x;
-        this.scalePointY = y;
+        mScaleFactor = 2.5f;
+        this.deltaX = -(x * mScaleFactor) + (getResources().getDisplayMetrics().widthPixels/2);
+        this.deltaY = -(y * mScaleFactor) + (getResources().getDisplayMetrics().heightPixels/2);
     }
 
     public void setSystem(TrainSystem system) {
