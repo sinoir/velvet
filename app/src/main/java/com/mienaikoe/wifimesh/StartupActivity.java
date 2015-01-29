@@ -2,7 +2,6 @@ package com.mienaikoe.wifimesh;
 
 
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,17 +14,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -73,7 +68,8 @@ public class StartupActivity extends FragmentActivity implements LocationListene
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.transfers_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
+                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
+                this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
         );
 
         // Instantiate a ViewPager and a PagerAdapter.

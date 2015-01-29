@@ -1,5 +1,6 @@
 package com.mienaikoe.wifimesh.train;
 
+import android.graphics.Rect;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -26,24 +27,11 @@ public class TrainStation {
 
     private LatLng center;
 
-
-
-    private static double offsetLatitude = 40.95; // top-side latitude limit
-    private static double offsetLongitude = -74.28; // left-side longitude limit
-
-    private static float multiplierX = 1900;
-    private static float multiplierY = 2900;
-
-    private float viewX;
-    private float viewY;
+    private Set<Rect> mapRectangles = new HashSet<Rect>();
 
 
     public TrainStation(String name, LatLng center){
         this.center = center;
-
-        this.viewX = (float)(this.center.longitude - offsetLongitude) * multiplierX;
-        this.viewY = (float)(offsetLatitude - this.center.latitude) * multiplierY;
-
         this.name = name;
     }
 
@@ -108,10 +96,8 @@ public class TrainStation {
                 (this.center.longitude + other.getLongitude()) / 2
         );
 
-        this.viewX = (float)(this.center.longitude - offsetLongitude) * multiplierX;
-        this.viewY = (float)(offsetLatitude - this.center.latitude) * multiplierY;
-
         this.lines.addAll(other.getLines());
+        this.mapRectangles.addAll(other.getMapRectangles());
     }
 
     public boolean hasLine(TrainLine line){
@@ -126,15 +112,42 @@ public class TrainStation {
         return this.center.longitude;
     }
 
+
     public LatLng getCenter() {
         return center;
     }
 
-    public float getViewX() {
-        return viewX;
+
+
+
+    // Map View Dimensions
+
+    public void addMapRectangle(Rect rect){
+        this.mapRectangles.add(rect);
     }
 
-    public float getViewY() {
-        return viewY;
+    public void addMapRectangle(int x, int y, int width, int height){
+        Rect rect = new Rect(x, y, x+width, y+height);
+        this.addMapRectangle(rect);
+    }
+
+    public Set<Rect> getMapRectangles() {
+        return mapRectangles;
+    }
+
+    public float getViewX(){
+        float sumX = 0;
+        for( Rect rect : this.mapRectangles ){
+            sumX += rect.left;
+        }
+        return sumX / this.mapRectangles.size();
+    }
+
+    public float getViewY(){
+        float sumY = 0;
+        for( Rect rect : this.mapRectangles ){
+            sumY += rect.top;
+        }
+        return sumY / this.mapRectangles.size();
     }
 }
