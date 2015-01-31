@@ -29,10 +29,18 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.transit.realtime.GtfsRealtime;
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
+import com.mienaikoe.wifimesh.train.TrainRealtimeService;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 public class StartupActivity extends FragmentActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -62,7 +70,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //startService(new Intent(this, VelvetService.class)); Not now, mabe eventually
+        //startService(new Intent(this, TrainRealtimeService.class));
         setContentView(R.layout.activity_startup_activity);
 
         this.trainSystem = new TrainSystem(
@@ -72,6 +80,8 @@ public class StartupActivity extends FragmentActivity implements LocationListene
                 this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
                 this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
         );
+
+        initTrainTiming();
 
         // Instantiate a ViewPager and a PagerAdapter.
         this.pager = (ViewPager) findViewById(R.id.pager);
@@ -83,6 +93,30 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
         initLocationSystem();
 
+    }
+
+
+    private static final String[] ASYNC_URLS = new String[]{
+            "http://sinoir-appifyed.rhcloud.com/mta/subway/update/1",
+            "http://sinoir-appifyed.rhcloud.com/mta/subway/update/2"
+    };
+
+    private void initTrainTiming() {
+        SinoirRestServiceTask asyncTask = new SinoirRestServiceTask();
+        asyncTask.execute(ASYNC_URLS);
+        List<GtfsRealtime.FeedMessage> feedMessages = null;
+
+        try {
+            feedMessages = asyncTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        for( GtfsRealtime.FeedMessage feedMessage : feedMessages ) {
+            this.trainSystem.fillTimings(feedMessage);
+        }
     }
 
     @Override
@@ -188,23 +222,33 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     }
 
     private void startLocationSystem(){
-        if( this.googleApiConnected ) {
-            if (mapFragment != null && lineFragment != null) {
-                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
-                this.onLocationChanged(lastLocation);
-            }
+        this.updateLocation();
+
+            /*
             LocationRequest locationRequest = LocationRequest.create();
             locationRequest.setInterval(1000 * 60); // walking for 1 minute will change enough with accuracy differences
             locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
             LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
+            */
+
+    }
+
+    private void updateLocation(){
+        if( this.googleApiConnected ) {
+            if (mapFragment != null && lineFragment != null) {
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+                this.onLocationChanged(lastLocation);
+            }
         }
     }
 
     private void suspendLocationSystem(){
+        /*
         if( this.googleApiConnected ) {
             LocationServices.FusedLocationApi.removeLocationUpdates(this.googleApiClient, this);
         }
+        */
     }
 
 
@@ -228,7 +272,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){
-            renderStationLine(line);
+            renderStationLine(station, line);
         }
         this.linesTiming.invalidate();
 
@@ -237,7 +281,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     }
 
 
-    private ViewGroup renderStationLine(TrainLine line){
+    private ViewGroup renderStationLine(TrainStation station, TrainLine line){
         LinearLayout layout = new LinearLayout(this.getApplicationContext());
         layout.setOrientation(LinearLayout.VERTICAL);
         this.linesTiming.addView(layout);
@@ -266,10 +310,18 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         int timingPaddingVert = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
 
 
+        Date[] timings = trainSystem.getTimings(station, line);
+
+
         TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
         timingGrid.addView( timing );
         timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-        timing.setText("5m");
+
+        if( timings[0] != null ) {
+            long northDiff = TimeUnit.MINUTES.convert(timings[0].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+            timing.setText(String.valueOf(northDiff) + "min");
+        }
+
         timing.setTextColor(getResources().getColor(R.color.white));
         timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
@@ -277,19 +329,25 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         TypefaceTextView timing2 = new TypefaceTextView( getApplicationContext() );
         timingGrid.addView( timing2 );
         timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-        timing2.setText("2m");
+
+        if( timings[1] != null ) {
+            long southDiff = TimeUnit.MINUTES.convert(timings[1].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+            timing.setText(String.valueOf(southDiff) + "min");
+        }
+
         timing2.setTextColor(getResources().getColor(R.color.white));
         timing2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing2.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
 
 
-
+/*
         TypefaceTextView plannedWork = new TypefaceTextView(this.getApplicationContext());
         layout.addView(plannedWork);
         plannedWork.setCustomFont(this.getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
         plannedWork.setTextSize(16.0f);
         plannedWork.setTextColor(getResources().getColor(R.color.white));
         plannedWork.setText("World Trade Center Bound Trains run express between Times Sq-42nd St and 14th St");
+*/
 
         return layout;
     }

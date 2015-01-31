@@ -1,6 +1,7 @@
 package com.mienaikoe.wifimesh.train;
 
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -27,7 +28,7 @@ public class TrainStation {
 
     private LatLng center;
 
-    private Set<Rect> mapRectangles = new HashSet<Rect>();
+    private Set<RectF> mapRectangles = new HashSet<RectF>();
 
 
     public TrainStation(String name, LatLng center){
@@ -127,22 +128,22 @@ public class TrainStation {
 
     // Map View Dimensions
 
-    public void addMapRectangle(Rect rect){
+    public void addMapRectangle(RectF rect){
         this.mapRectangles.add(rect);
     }
 
-    public void addMapRectangle(int x, int y, int width, int height){
-        Rect rect = new Rect(x, y, x+width, y+height);
+    public void addMapRectangle(float x, float y, float width, float height){
+        RectF rect = new RectF(x, y, x+width, y+height);
         this.addMapRectangle(rect);
     }
 
-    public Set<Rect> getMapRectangles() {
+    public Set<RectF> getMapRectangles() {
         return mapRectangles;
     }
 
     public float getViewX(){
         float sumX = 0;
-        for( Rect rect : this.mapRectangles ){
+        for( RectF rect : this.mapRectangles ){
             sumX += rect.left;
         }
         return sumX / this.mapRectangles.size();
@@ -150,7 +151,7 @@ public class TrainStation {
 
     public float getViewY(){
         float sumY = 0;
-        for( Rect rect : this.mapRectangles ){
+        for( RectF rect : this.mapRectangles ){
             sumY += rect.top;
         }
         return sumY / this.mapRectangles.size();

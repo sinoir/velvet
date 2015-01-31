@@ -10,13 +10,18 @@ public enum TrainDirection {
     ;
 
     public static TrainDirection fromString(String code){
-        if( code == "N"){
+        if( code.equals("N")){
             return NORTH;
-        } else if (code == "S") {
+        } else if (code.equals("S")) {
             return SOUTH;
         } else {
             return null;
         }
+    }
+
+    public static TrainDirection fromStopId(String stopId){
+        String lastChar = stopId.substring(stopId.length()-2, stopId.length()-1);
+        return fromString(lastChar);
     }
 
 }

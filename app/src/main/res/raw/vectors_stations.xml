@@ -1,150 +1,158 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <g id="STATION BLOCKS">
-    <rect id="725" name="Times Sq - 42 St" x="484.1" y="1386" width="8" height="8"/>
-    <rect id="724" name="5 Av" x="615.1" y="1386" width="8" height="8"/>
-    <rect id="723" name="Grand Central - 42 St" x="668.3" y="1386.1" width="20" height="8"/>
-    <rect id="640" name="Brooklyn Bridge - City Hall" x="668.2" y="1986.3" width="20" height="8"/>
-    <rect id="639" name="Canal St" x="668.2" y="1865.6" width="20" height="8"/>
-    <rect id="638" name="Spring St" x="680.1" y="1805.4" width="8" height="8"/>
-    <rect id="637" name="Bleecker St" x="680.1" y="1731.3" width="8" height="8"/>
-    <rect id="636" name="Astor Pl" x="680.1" y="1689.3" width="8" height="8"/>
-    <rect id="635" name="14 St - Union Sq" x="667.8" y="1635.3" width="20.5" height="8"/>
-    <rect id="634" name="23 St" x="680.1" y="1563.4" width="8" height="8"/>
-    <rect id="633" name="28 St" x="680.1" y="1534.4" width="8" height="8"/>
-    <rect id="632" name="33 St" x="680.1" y="1493.4" width="8" height="8"/>
-    <rect id="631" name="Grand Central - 42 St" x="668.3" y="1386.1" width="20" height="8"/>
-    <rect id="630" name="51 St" x="718.1" y="1324" width="8" height="8"/>
-    <rect id="629" name="59 St" x="706.1" y="1236.2" width="20.1" height="8"/>
-    <rect id="628" name="68 St - Hunter College" x="718.1" y="1110.7" width="8" height="8"/>
-    <rect id="627" name="77 St" x="718.1" y="1042.7" width="8" height="8"/>
-    <rect id="626" name="86 St" x="706.1" y="985.7" width="20.1" height="8"/>
-    <rect id="625" name="96 St" x="718.1" y="912.7" width="8" height="8"/>
-    <rect id="624" name="103 St" x="718.1" y="839.4" width="8" height="8"/>
-    <rect id="623" name="110 St" x="718.1" y="769.7" width="8" height="8"/>
-    <rect id="622" name="116 St" x="718.1" y="707.4" width="8" height="8"/>
-    <rect id="621" name="125 St" x="706" y="638" width="20.1" height="8"/>
-    <rect id="420" name="Bowling Green" x="668.1" y="2220.1" width="8" height="8"/>
-    <rect id="419" name="Wall St" x="668.1" y="2167.2" width="8" height="8"/>
-    <rect id="418" name="Fulton St" x="668.1" y="2124" width="8" height="8"/>
-    <rect id="302" name="145 St" x="546.8" y="515.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -206.064 541.626)" width="8" height="8"/>
-    <rect id="301" name="Harlem - 148 St" x="506.1" y="503.2" width="8" height="8"/>
-    <rect id="230" name="Wall St" x="734.1" y="2167.2" width="8" height="8"/>
-    <rect id="229" name="Fulton St" x="734.1" y="2104.1" width="8" height="8"/>
-    <rect id="228" name="Park Pl" x="587.1" y="2036.2" width="8" height="8"/>
-    <rect id="227" name="Central Park North  x28 110 St x29 " x="555.1" y="770.1" width="8" height="8"/>
-    <rect id="226" name="116 St" x="555.1" y="709.2" width="8" height="8"/>
-    <rect id="225" name="125 St" x="555.1" y="638" width="8" height="8"/>
-    <rect id="224" name="135 St" x="555.1" y="582.2" width="8" height="8"/>
-    <rect id="140" name="South Ferry Loop" x="741.3" y="2274.4" width="8" height="8"/>
-    <rect id="139" name="Rector St" x="539.8" y="2192.2" width="8" height="8"/>
-    <rect id="137" name="Chambers St" x="472.2" y="1985" width="20" height="8"/>
-    <rect id="136" name="Franklin St" x="472.1" y="1920.2" width="8" height="8"/>
-    <rect id="135" name="Canal St" x="472.1" y="1864.8" width="8" height="8"/>
-    <rect id="134" name="Houston St" x="472.1" y="1787.2" width="8" height="8"/>
-    <rect id="133" name="Christopher St - Sheridan Sq" x="472.1" y="1710.2" width="8" height="8"/>
-    <rect id="132" name="14 St" x="472.1" y="1646.8" width="20.1" height="8"/>
-    <rect id="131" name="18 St" x="472.1" y="1607.2" width="8" height="8"/>
-    <rect id="130" name="23 St" x="472.1" y="1563.4" width="8" height="8"/>
-    <rect id="129" name="28 St" x="472.1" y="1530" width="8" height="8"/>
-    <rect id="128" name="34 St - Penn Station" x="472.1" y="1483.1" width="20.1" height="8"/>
-    <rect id="127" name="Times Sq - 42 St" x="472" y="1378.1" width="20" height="8.1"/>
-    <rect id="126" name="50 St" x="472.1" y="1329.3" width="8" height="8"/>
-    <rect id="125" name="59 St - Columbus Circle" x="281.1" y="1071" width="20.1" height="8"/>
-    <rect id="124" name="66 St - Lincoln Center" x="339.8" y="1157.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -720.4897 583.2766)" width="8" height="8"/>
-    <rect id="123" name="72 St" x="420.2" y="1237.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -753.7981 663.6452)" width="8" height="8"/>
-    <rect id="122" name="79 St" x="281.1" y="1031.9" width="8" height="8"/>
-    <rect id="121" name="86 St" x="281.1" y="988.2" width="8" height="8"/>
-    <rect id="120" name="96 St" x="281.1" y="914.4" width="20" height="8"/>
-    <rect id="119" name="103 St" x="281.1" y="842.4" width="8" height="8"/>
-    <rect id="118" name="Cathedral Pkwy" x="281.1" y="769.6" width="8" height="8"/>
-    <rect id="117" name="116 St - Columbia University" x="281.1" y="707.8" width="8" height="8"/>
-    <rect id="116" name="125 St" x="281.1" y="637.6" width="8" height="8"/>
-    <rect id="115" name="137 St - City College" x="281.1" y="573.8" width="8" height="8"/>
-    <rect id="114" name="145 St" x="281.1" y="525.3" width="8" height="8"/>
-    <rect id="113" name="157 St" x="281.1" y="449.8" width="8" height="8"/>
-    <rect id="112" name="168 St - Washington Hts" x="281.1" y="391.2" width="8" height="19.9"/>
-    <rect id="111" name="181 St" x="281.1" y="316.9" width="8" height="8"/>
-    <rect id="110" name="191 St" x="281.1" y="256" width="8" height="8"/>
-    <rect id="109" name="Dykeman St" x="281.1" y="217" width="8" height="8"/>
-    <rect id="108" name="207 St" x="281.1" y="166" width="8" height="8"/>
-    <rect id="107" name="215 St" x="281.1" y="121" width="8" height="8"/>
-    <rect id="A07" name="175 St" x="191.1" y="355.5" width="8" height="8"/>
-    <rect id="A06" name="181 St" x="191.1" y="315.5" width="8" height="8"/>
-    <rect id="A05" name="190 St" x="191.1" y="260.9" width="8" height="8"/>
-    <rect id="A03" name="Dyckman St" x="191.1" y="218.9" width="8" height="8"/>
-    <rect id="A02" name="Inwood - 207 St" x="191.1" y="166.7" width="8" height="8"/>
-    <rect id="E01" name="World Trade Center" x="573.1" y="2069.2" width="8" height="8"/>
-    <rect id="A34" name="Canal St" x="527.1" y="1865.6" width="20" height="8"/>
-    <rect id="A33" name="Sprint St" x="539.1" y="1807.4" width="8" height="8"/>
-    <rect id="A32" name="W 4 St" x="527.1" y="1717.4" width="47.4" height="8"/>
-    <rect id="A31" name="14 St" x="389.1" y="1635.3" width="20.1" height="8"/>
-    <rect id="A30" name="23 St" x="401.1" y="1563.4" width="8" height="8"/>
-    <rect id="A28" name="34 St - Penn Station" x="389" y="1483.1" width="20.1" height="8"/>
-    <rect id="A27" name="42 St - Port Authority Bus Terminal" x="389" y="1378.4" width="20.1" height="8"/>
-    <rect id="A25" name="50 St" x="401.1" y="1330.2" width="8" height="8"/>
-    <rect id="D14" name="7 Av" x="523.2" y="1292.2" width="8" height="15.9"/>
-    <rect id="F12" name="5 Av - 53 St" x="609.4" y="1300.1" width="8" height="15.9"/>
-    <rect id="F11" name="Lexington Av - 53 St" x="733.2" y="1300.1" width="8" height="15.9"/>
-    <rect id="901" name="Grand Central - 42 St" x="668.2" y="1377.8" width="7.9" height="8.2"/>
-    <rect id="R17" name="34 St - Herald Sq" x="540.1" y="1495.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -900.9692 823.9813)" width="8" height="8"/>
-    <rect id="D18" name="23 St" x="566.3" y="1563.4" width="8" height="8"/>
-    <rect id="D12" name="155 St" x="445.3" y="457.8" width="8" height="8"/>
-    <rect id="902" name="Times Sq - 42 St" x="506" y="1377.9" width="8" height="8"/>
-    <rect id="A22" name="72 St" x="401.1" y="1071.2" width="15.9" height="8"/>
-    <rect id="A21" name="81 St - Museum of Natural History" x="401.1" y="1027.9" width="15.9" height="8"/>
-    <rect id="A20" name="86 St" x="401.1" y="988.2" width="15.9" height="8"/>
-    <rect id="A19" name="96 St" x="401.1" y="914" width="15.9" height="8"/>
-    <rect id="A18" name="103 St" x="401.1" y="842" width="15.9" height="8"/>
-    <rect id="A17" name="Cathedral Pkwy - 110 St" x="401.1" y="770.1" width="15.9" height="8"/>
-    <rect id="A16" name="116 St" x="401.1" y="709.2" width="15.9" height="8"/>
-    <rect id="A14" name="135 St" x="401.1" y="582.2" width="15.9" height="8"/>
-    <rect id="A15" name="125 St" x="381.1" y="637.9" width="35.9" height="8"/>
-    <rect id="A12" name="145 St" x="381.1" y="525.2" width="35.9" height="8"/>
-    <rect id="A11" name="155 St" x="376.3" y="458.8" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -215.8512 404.4268)" width="8" height="8"/>
-    <rect id="A10" name="163 St" x="340.4" y="423" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -201.0966 368.5776)" width="8" height="8"/>
-    <rect id="R15" name="49 St" x="506.1" y="1336.3" width="8" height="8"/>
-    <rect id="R14" name="57 St - 7 Av" x="506.3" y="1252.1" width="8" height="8"/>
-    <rect id="R13" name="5 Av - 59 St" x="611.1" y="1220.2" width="8" height="8"/>
-    <rect id="R11" name="Lexington Av - 59 St" x="733.2" y="1220.2" width="8" height="8"/>
-    <rect id="B08" name="Lexington Av - 63 St" x="733.2" y="1175.2" width="8" height="8"/>
-    <rect id="B10" name="57 St" x="566.1" y="1252.2" width="8" height="8"/>
-    <rect id="R19" name="23 St" x="606.2" y="1561.8" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -928.4382 890.1084)" width="8" height="8"/>
-    <rect id="R18" name="28 St" x="579" y="1534.4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -917.087 862.8272)" width="8" height="8"/>
-    <rect id="M20" name="Canal St" x="701.1" y="1865.6" width="8" height="8"/>
-    <rect id="M19" name="Bowery" x="748.1" y="1825.2" width="8" height="8"/>
-    <rect id="D22" name="Grand St" x="764.1" y="1855.2" width="8" height="8"/>
-    <rect id="F14" name="2 Av" x="796.1" y="1747.2" width="8" height="8"/>
-    <rect id="F15" name="Delancey St" x="845.1" y="1813.2" width="8" height="20"/>
-    <rect id="F16" name="East Broadway" x="875.1" y="1874.2" width="8" height="8"/>
-    <rect id="D21" name="Broadway-Lafayette St" x="696.1" y="1747.3" width="8" height="20"/>
-    <rect id="R23" name="Canal St" x="634.2" y="1865.6" width="8.1" height="8"/>
-    <rect id="Q01" name="Canal St" x="646.1" y="1865.6" width="8.1" height="8"/>
-    <rect id="R21" name="8 St - NYU" x="634.1" y="1689.3" width="8" height="8"/>
-    <rect id="R22" name="Prince St" x="634.1" y="1783.2" width="8" height="8"/>
-    <rect id="R24" name="City Hall" x="634.1" y="2016.2" width="8" height="8"/>
-    <rect id="R25" name="Cortlandt St" x="587.1" y="2109.7" width="8" height="8"/>
-    <rect id="A38" name="Fulton St" x="701.1" y="2091.4" width="8" height="8"/>
-    <rect id="M21" name="Chambers St" x="701.1" y="1964.9" width="8" height="8"/>
-    <rect id="M23" name="Broad St 1 " x="701.1" y="2193.4" width="8" height="8"/>
-    <rect id="M23" name="Broad St" x="701.1" y="2185.2" width="8" height="8"/>
-    <rect id="R27" name="Whitehall St" x="719.9" y="2251.2" width="8" height="8"/>
-    <rect id="R26" name="Rector St" x="587.1" y="2192.2" width="8" height="8"/>
-    <rect id="D19" name="14 St" x="566.1" y="1635.3" width="8" height="8"/>
-    <rect id="L06" name="1 Av" x="837.1" y="1635.3" width="8" height="8"/>
-    <rect id="L05" name="3 Av" x="764.1" y="1635.4" width="8" height="8"/>
-    <rect id="L03" name="Union Sq - 14 St" x="667.9" y="1635.3" width="20.5" height="8"/>
-    <rect id="R16" name="Times Sq - 42 St" x="506" y="1377.9" width="8" height="8"/>
-    <rect id="D20" name="W 4 St" x="527.1" y="1717.4" width="47.4" height="8"/>
-    <rect id="M18" name="Essex St" x="845.1" y="1813.2" width="8" height="20"/>
-    <rect id="M22" name="Fulton St" x="701.1" y="2091.4" width="8" height="8"/>
-    <rect id="L02" name="6 Av" x="566.1" y="1635.3" width="8" height="8"/>
-    <rect id="D17" name="34 St - Herald Sq" x="554.1" y="1484.2" width="20.1" height="8"/>
-    <rect id="R20" name="14 St - Union Sq" x="633.9" y="1635.3" width="20.5" height="8"/>
-    <rect id="D16" name="42 St - Bryant Pk" x="554.1" y="1401.7" width="20.1" height="8"/>
-    <rect id="D15" name="47-50 Sts - Rockefeller Ctr" x="554.1" y="1342.7" width="20.1" height="8"/>
-    <rect id="D13" name="145 St" x="381.1" y="525.2" width="35.9" height="8"/>
-    <rect id="L01" name="8 Av" x="388.9" y="1635.3" width="20.1" height="8"/>
-    <rect id="A36" name="Chambers St" x="573.1" y="1995.2" width="8" height="8"/>
-    <rect id="A24" name="59 St - Columbus Circle" x="381.1" y="1230.2" width="36.1" height="8"/>
-    <rect id="A09" name="168 St" x="281.1" y="391.2" width="8" height="19.9"/>
+    <rect id="725" name="Times Sq - 42 St" x="484.1" y="1386" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="724" name="5 Av" x="615.1" y="1386" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="723" name="Grand Central - 42 St" x="668.3" y="1386.1" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="640" name="Brooklyn Bridge - City Hall" x="668.2" y="1986.3" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="639" name="Canal St" x="668.2" y="1865.6" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="638" name="Spring St" x="680.1" y="1805.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="637" name="Bleecker St" x="680.1" y="1731.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="636" name="Astor Pl" x="680.1" y="1689.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="635" name="14 St - Union Sq" x="667.8" y="1635.3" fill="#FFFFFF" width="20.5" height="8"/>
+    <rect id="634" name="23 St" x="680.1" y="1563.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="633" name="28 St" x="680.1" y="1534.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="632" name="33 St" x="680.1" y="1493.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="631" name="Grand Central - 42 St" x="668.3" y="1386.1" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="630" name="51 St" x="718.1" y="1324" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="629" name="59 St" x="706.1" y="1236.2" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="628" name="68 St - Hunter College" x="718.1" y="1110.7" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="627" name="77 St" x="718.1" y="1042.7" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="626" name="86 St" x="706.1" y="985.7" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="625" name="96 St" x="718.1" y="912.7" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="624" name="103 St" x="718.1" y="839.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="623" name="110 St" x="718.1" y="769.7" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="622" name="116 St" x="718.1" y="707.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="621" name="125 St" x="706" y="638" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="420" name="Bowling Green" x="668.1" y="2220.1" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="419" name="Wall St" x="668.1" y="2167.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="418" name="Fulton St" x="668.1" y="2124" fill="#FFFFFF" width="8" height="8"/>
+
+    <rect id="302" name="145 St" x="546.8" y="515.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -206.064 541.626)" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="301" name="Harlem - 148 St" x="506.1" y="503.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="230" name="Wall St" x="734.1" y="2167.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="229" name="Fulton St" x="734.1" y="2104.1" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="228" name="Park Pl" x="587.1" y="2036.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="227" name="Central Park North  x28 110 St x29 " x="555.1" y="770.1" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="226" name="116 St" x="555.1" y="709.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="225" name="125 St" x="555.1" y="638" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="224" name="135 St" x="555.1" y="582.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="140" name="South Ferry Loop" x="741.3" y="2274.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="139" name="Rector St" x="539.8" y="2192.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="137" name="Chambers St" x="472.2" y="1985" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="136" name="Franklin St" x="472.1" y="1920.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="135" name="Canal St" x="472.1" y="1864.8" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="134" name="Houston St" x="472.1" y="1787.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="133" name="Christopher St - Sheridan Sq" x="472.1" y="1710.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="132" name="14 St" x="472.1" y="1646.8" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="131" name="18 St" x="472.1" y="1607.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="130" name="23 St" x="472.1" y="1563.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="129" name="28 St" x="472.1" y="1530" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="128" name="34 St - Penn Station" x="472.1" y="1483.1" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="127" name="Times Sq - 42 St" x="472" y="1378.1" fill="#FFFFFF" width="20" height="8.1"/>
+    <rect id="126" name="50 St" x="472.1" y="1329.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="125" name="59 St - Columbus Circle" x="281.1" y="1071" fill="#FFFFFF" width="20.1" height="8"/>
+
+    <rect id="124" name="66 St - Lincoln Center" x="339.8" y="1157.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -720.4897 583.2766)" fill="#FFFFFF" width="8" height="8"/>
+
+    <rect id="123" name="72 St" x="420.2" y="1237.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -753.7981 663.6452)" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="122" name="79 St" x="281.1" y="1031.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="121" name="86 St" x="281.1" y="988.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="120" name="96 St" x="281.1" y="914.4" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="119" name="103 St" x="281.1" y="842.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="118" name="Cathedral Pkwy" x="281.1" y="769.6" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="117" name="116 St - Columbia University" x="281.1" y="707.8" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="116" name="125 St" x="281.1" y="637.6" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="115" name="137 St - City College" x="281.1" y="573.8" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="114" name="145 St" x="281.1" y="525.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="113" name="157 St" x="281.1" y="449.8" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="112" name="168 St - Washington Hts" x="281.1" y="391.2" fill="#FFFFFF" width="8" height="19.9"/>
+    <rect id="111" name="181 St" x="281.1" y="316.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="110" name="191 St" x="281.1" y="256" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="109" name="Dykeman St" x="281.1" y="217" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="108" name="207 St" x="281.1" y="166" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="107" name="215 St" x="281.1" y="121" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A07" name="175 St" x="191.1" y="355.5" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A06" name="181 St" x="191.1" y="315.5" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A05" name="190 St" x="191.1" y="260.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A03" name="Dyckman St" x="191.1" y="218.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A02" name="Inwood - 207 St" x="191.1" y="166.7" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="E01" name="World Trade Center" x="573.1" y="2069.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A34" name="Canal St" x="527.1" y="1865.6" fill="#FFFFFF" width="20" height="8"/>
+    <rect id="A33" name="Sprint St" x="539.1" y="1807.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A32" name="W 4 St" x="527.1" y="1717.4" fill="#FFFFFF" width="47.4" height="8"/>
+    <rect id="A31" name="14 St" x="389.1" y="1635.3" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="A30" name="23 St" x="401.1" y="1563.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A28" name="34 St - Penn Station" x="389" y="1483.1" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="A27" name="42 St - Port Authority Bus Terminal" x="389" y="1378.4" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="A25" name="50 St" x="401.1" y="1330.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D14" name="7 Av" x="523.2" y="1292.2" fill="#FFFFFF" width="8" height="15.9"/>
+    <rect id="F12" name="5 Av x2F 53 St" x="609.4" y="1300.1" fill="#FFFFFF" width="8" height="15.9"/>
+    <rect id="F11" name="Lexington Av x2F 53 St" x="733.2" y="1300.1" fill="#FFFFFF" width="8" height="15.9"/>
+    <rect id="901" name="Grand Central - 42 St" x="668.2" y="1377.8" fill="#FFFFFF" width="7.9" height="8.2"/>
+
+    <rect id="R17" name="34 St - Herald Sq" x="540.1" y="1495.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -900.9692 823.9813)" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D18" name="23 St" x="566.3" y="1563.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D12" name="155 St" x="445.3" y="457.8" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="902" name="Times Sq - 42 St" x="506" y="1377.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A22" name="72 St" x="401.1" y="1071.2" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A21" name="81 St - Museum of Natural History" x="401.1" y="1027.9" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A20" name="86 St" x="401.1" y="988.2" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A19" name="96 St" x="401.1" y="914" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A18" name="103 St" x="401.1" y="842" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A17" name="Cathedral Pkwy  x28 110 St x29 " x="401.1" y="770.1" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A16" name="116 St" x="401.1" y="709.2" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A14" name="135 St" x="401.1" y="582.2" fill="#FFFFFF" width="15.9" height="8"/>
+    <rect id="A15" name="125 St" x="381.1" y="637.9" fill="#FFFFFF" width="35.9" height="8"/>
+    <rect id="A12" name="145 St" x="381.1" y="525.2" fill="#FFFFFF" width="35.9" height="8"/>
+
+    <rect id="A11" name="155 St" x="376.3" y="458.8" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -215.8512 404.4268)" fill="#FFFFFF" width="8" height="8"/>
+
+    <rect id="A10" name="163 St" x="340.4" y="423" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -201.0966 368.5776)" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R15" name="49 St" x="506.1" y="1336.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R14" name="57 St - 7 Av" x="506.3" y="1252.1" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R13" name="5 Av x2F 59 St" x="611.1" y="1220.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R11" name="Lexington Av x2F 59 St" x="733.2" y="1220.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="B08" name="Lexington Av x2F 63 St" x="733.2" y="1175.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="B10" name="57 St" x="566.1" y="1252.2" fill="#FFFFFF" width="8" height="8"/>
+
+    <rect id="R19" name="23 St" x="606.2" y="1561.8" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -928.4382 890.1084)" fill="#FFFFFF" width="8" height="8"/>
+
+    <rect id="R18" name="28 St" x="579" y="1534.4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -917.087 862.8272)" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="M20" name="Canal St" x="701.1" y="1865.6" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="M19" name="Bowery" x="748.1" y="1825.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D22" name="Grand St" x="764.1" y="1855.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="F14" name="2 Av" x="796.1" y="1747.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="F15" name="Delancey St" x="845.1" y="1813.2" fill="#FFFFFF" width="8" height="20"/>
+    <rect id="F16" name="East Broadway" x="875.1" y="1874.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D21" name="Broadway-Lafayette St" x="696.1" y="1747.3" fill="#FFFFFF" width="8" height="20"/>
+    <rect id="R23" name="Canal St" x="634.2" y="1865.6" fill="#FFFFFF" width="8.1" height="8"/>
+    <rect id="Q01" name="Canal St" x="646.1" y="1865.6" fill="#FFFFFF" width="8.1" height="8"/>
+    <rect id="R21" name="8 St - NYU" x="634.1" y="1689.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R22" name="Prince St" x="634.1" y="1783.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R24" name="City Hall" x="634.1" y="2016.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R25" name="Cortlandt St" x="587.1" y="2109.7" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A38" name="Fulton St" x="701.1" y="2091.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="M21" name="Chambers St" x="701.1" y="1964.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="M23" name="Broad St 1 " x="701.1" y="2193.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="M23" name="Broad St" x="701.1" y="2185.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R27" name="Whitehall St" x="719.9" y="2251.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="R26" name="Rector St" x="587.1" y="2192.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D19" name="14 St" x="566.1" y="1635.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="L06" name="1 Av" x="837.1" y="1635.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="L05" name="3 Av" x="764.1" y="1635.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="L03" name="Union Sq - 14 St" x="667.9" y="1635.3" fill="#FFFFFF" width="20.5" height="8"/>
+    <rect id="R16" name="Times Sq - 42 St" x="506" y="1377.9" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D20" name="W 4 St" x="527.1" y="1717.4" fill="#FFFFFF" width="47.4" height="8"/>
+    <rect id="M18" name="Essex St" x="845.1" y="1813.2" fill="#FFFFFF" width="8" height="20"/>
+    <rect id="M22" name="Fulton St" x="701.1" y="2091.4" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="L02" name="6 Av" x="566.1" y="1635.3" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="D17" name="34 St - Herald Sq" x="554.1" y="1484.2" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="R20" name="14 St - Union Sq" x="633.9" y="1635.3" fill="#FFFFFF" width="20.5" height="8"/>
+    <rect id="D16" name="42 St - Bryant Pk" x="554.1" y="1401.7" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="D15" name="47-50 Sts - Rockefeller Ctr" x="554.1" y="1342.7" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="D13" name="145 St" x="381.1" y="525.2" fill="#FFFFFF" width="35.9" height="8"/>
+    <rect id="L01" name="8 Av" x="388.9" y="1635.3" fill="#FFFFFF" width="20.1" height="8"/>
+    <rect id="A36" name="Chambers St" x="573.1" y="1995.2" fill="#FFFFFF" width="8" height="8"/>
+    <rect id="A24" name="59 St - Columbus Circle" x="381.1" y="1230.2" fill="#FFFFFF" width="36.1" height="8"/>
+    <rect id="A09" name="168 St" x="281.1" y="391.2" fill="#FFFFFF" width="8" height="19.9"/>
 </g>

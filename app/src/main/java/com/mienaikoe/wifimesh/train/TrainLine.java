@@ -107,6 +107,8 @@ public class TrainLine {
     private final ArrayList<TrainStation> northStops;
     private final ArrayList<TrainStation> southStops;
 
+    private ArrayList<Trip> trips = new ArrayList<Trip>();
+
 
 
 

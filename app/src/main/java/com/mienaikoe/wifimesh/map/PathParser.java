@@ -145,7 +145,7 @@ public class PathParser {
     /**
      * Parse a list of transforms such as: foo(n,n,n...) bar(n,n,n..._ ...) Delimiters are whitespaces or commas
      */
-    private static Matrix parseTransform(String s) {
+    public static Matrix parseTransform(String s) {
         Matrix matrix = new Matrix();
         while (true) {
             parseTransformItem(s, matrix);

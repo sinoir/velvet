@@ -1,9 +1,12 @@
 package com.mienaikoe.wifimesh.train;
 
+import android.graphics.Matrix;
 import android.util.Log;
 import android.util.Xml;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.transit.realtime.GtfsRealtime;
+import com.mienaikoe.wifimesh.map.PathParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +22,7 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,6 +39,9 @@ public class TrainSystem {
 
     private ArrayList<TrainLine> lines = new ArrayList<TrainLine>();
     private Set<TrainStation> stations = new HashSet<TrainStation>();
+    private Set<Trip> trips = new HashSet<Trip>();
+
+    private Map<String, TrainStation> stopidStations = new HashMap<String, TrainStation>();
 
 
     public TrainSystem(
@@ -50,7 +57,6 @@ public class TrainSystem {
         JSONObject entrancesJson = streamToJSON(entrancesJsonStream);
 
         Map<String, TrainStation> uniqueStations = new HashMap<String, TrainStation>();
-        Map<String, TrainStation> stopidStations = new HashMap<String, TrainStation>();
 
         try {
 
@@ -94,11 +100,19 @@ public class TrainSystem {
                 if (name.equals("rect")) {
                     String stopId = parser.getAttributeValue("","id");
                     TrainStation station = stopidStations.get(stopId);
+                    float[] xy = new float[]{
+                        Float.valueOf(parser.getAttributeValue("","x")),
+                        Float.valueOf(parser.getAttributeValue("","y"))
+                    };
+                    String transformStr = parser.getAttributeValue("","transform");
+                    if( transformStr != null ) {
+                        Matrix matrix = PathParser.parseTransform( transformStr );
+                        matrix.mapPoints(xy);
+                    }
                     station.addMapRectangle(
-                            Math.round(Float.valueOf(parser.getAttributeValue("","x"))),
-                            Math.round(Float.valueOf(parser.getAttributeValue("","y"))),
-                            Math.round(Float.valueOf(parser.getAttributeValue("","width"))),
-                            Math.round(Float.valueOf(parser.getAttributeValue("","height")))
+                            xy[0], xy[1],
+                            Float.valueOf(parser.getAttributeValue("","width")),
+                            Float.valueOf(parser.getAttributeValue("","height"))
                     );
                 }
             }
@@ -209,6 +223,70 @@ public class TrainSystem {
         return parsedStations;
     }
 
+
+    public void fillTimings( GtfsRealtime.FeedMessage message ){
+        for( int i=0; i<message.getEntityCount(); i++ ) {
+            GtfsRealtime.TripUpdate update = message.getEntity(i).getTripUpdate();
+            if( !update.isInitialized() ){
+                continue;
+            }
+
+            String routeId = update.getTrip().getRouteId();
+
+            TrainLine entityLine = null;
+            for (TrainLine line : this.lines) {
+                if (line.getName().equals(routeId)) {
+                    entityLine = line;
+                    break;
+                }
+            }
+
+            String directionStr = update.getTrip().getTripId().split("_")[1].substring(3, 4);
+            TrainDirection direction = TrainDirection.fromString(directionStr);
+
+            for (GtfsRealtime.TripUpdate.StopTimeUpdate stopTimeUpdate : message.getEntity(i).getTripUpdate().getStopTimeUpdateList()) {
+                String stopId = stopTimeUpdate.getStopId().substring(0, stopTimeUpdate.getStopId().length() - 1);
+                TrainStation station = this.stopidStations.get(stopId);
+                Trip trip = new Trip(entityLine, direction);
+                long timestamp = stopTimeUpdate.getArrival().getTime();
+                trip.addStationTiming(station, timestamp);
+                this.trips.add(trip);
+            }
+        }
+    }
+
+    public Date[] getTimings(TrainStation station, TrainLine line){
+        Date northTiming = null;
+        Date southTiming = null;
+        for( Trip trip : this.trips ){
+            if( trip.getLine() == line || trip.getLine().getName().equals("L")){
+                Log.i("TESTING STATION TIMINGS","trip: "+trip.getStationTimings().values().toString());
+                if( trip.getStationTimings().containsKey(station) ) {
+                    Date date = trip.getStationTimings().get(station);
+                    if (date.before(new Date())) {
+                        continue;
+                    }
+                    if (trip.getDirection() == TrainDirection.NORTH) {
+                        if (northTiming == null || date.before(northTiming)) {
+                            northTiming = date;
+                        }
+                    } else {
+                        if (southTiming == null || date.before(southTiming)) {
+                            southTiming = date;
+                        }
+                    }
+                }
+            }
+        }
+        return new Date[]{northTiming, southTiming};
+    }
+
+
+
+
+
+
+    // Getters
 
     public List<TrainLine> getLines() {
         return lines;

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.text.TextPaint;
@@ -97,7 +98,7 @@ public class TrainView extends View {
         Paint stationPainter = new Paint();
         stationPainter.setColor(getResources().getColor(R.color.white));
         for(TrainStation station : this.system.getStations()){
-            for( Rect rect : station.getMapRectangles() ){
+            for( RectF rect : station.getMapRectangles() ){
                 canvas.drawRect( rect, stationPainter );
             }
         }
@@ -162,6 +163,7 @@ public class TrainView extends View {
         mScaleFactor = 2.5f;
         this.deltaX = -(x * mScaleFactor) + (getResources().getDisplayMetrics().widthPixels/2);
         this.deltaY = -(y * mScaleFactor) + (getResources().getDisplayMetrics().heightPixels/2);
+        this.invalidate();
     }
 
     public void setSystem(TrainSystem system) {
