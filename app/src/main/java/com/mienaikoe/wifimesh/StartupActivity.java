@@ -48,6 +48,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     private TrainSystem trainSystem;
 
     private GoogleApiClient googleApiClient;
+    private boolean googleApiConnected = false;
 
     private TypefaceTextView stationName;
     private GridLayout linesTiming;
@@ -86,11 +87,15 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
     @Override
     public void onResume() {
+        // Get location and resume location updates
+        startLocationSystem();
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        // Suspend Location Updates
+        suspendLocationSystem();
         super.onPause();
     }
 
@@ -174,33 +179,46 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
 
     private void initLocationSystem(){
-
         this.googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
         this.googleApiClient.connect();
+    }
+
+    private void startLocationSystem(){
+        if( this.googleApiConnected ) {
+            if (mapFragment != null && lineFragment != null) {
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+                this.onLocationChanged(lastLocation);
+            }
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setInterval(1000 * 60); // walking for 1 minute will change enough with accuracy differences
+            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
+            LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
+        }
+    }
+
+    private void suspendLocationSystem(){
+        if( this.googleApiConnected ) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(this.googleApiClient, this);
+        }
     }
 
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        if (mapFragment != null && lineFragment != null) {
-            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
-            this.onLocationChanged(lastLocation);
-        }
-
-        this.deferStation();
+        this.googleApiConnected = true;
+        startLocationSystem();
     }
 
     @Override
     public void onLocationChanged(Location location) {
         if( location != null ) {
             Log.i(this.getClass().getSimpleName(), "Location Changed: "+location.getLatitude() + ", " + location.getLongitude());
-            Toast.makeText(this.getApplicationContext(), "Location Changed", Toast.LENGTH_LONG).show();
-            TrainStation closestStation = trainSystem.closestStation(new LatLng(location.getLatitude(), location.getLongitude()));
+            TrainStation closestStation = trainSystem.closestEntrance(new LatLng(location.getLatitude(), location.getLongitude()));
             this.setStation(closestStation);
         }
     }
@@ -276,17 +294,6 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         return layout;
     }
 
-
-
-
-    public void deferStation(){
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
-
-        LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);
-    }
 
 
     @Override

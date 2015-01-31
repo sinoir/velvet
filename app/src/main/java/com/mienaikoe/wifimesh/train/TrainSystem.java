@@ -79,7 +79,7 @@ public class TrainSystem {
                 stopidStations.put(stopId, station);
             }
 
-            // Parse Map Stops
+            // Parse Map Stop Rectangles
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(blocksXmlStream, null);
@@ -124,20 +124,21 @@ public class TrainSystem {
             for( int i=0; i<transfers.length(); i++ ){
                 JSONArray stationTransferSet = transfers.getJSONArray(i);
                 TrainStation station = null;
-                Set<TrainStation> sameStations = new HashSet<TrainStation>();
+                Set<TrainStation> transferStations = new HashSet<TrainStation>();
                 for( int j=0; j<stationTransferSet.length(); j++ ){
                     String stopId = stationTransferSet.getString(j);
                     TrainStation aStation = stopidStations.get(stopId);
-                    sameStations.add(aStation);
+                    transferStations.add(aStation);
                 }
-                if( sameStations.size() > 1 ) {
+                if( transferStations.size() > 1 ) {
                     TrainStation keepStation = null;
-                    for (TrainStation aStation : sameStations ) {
+                    for (TrainStation aStation : transferStations ) {
                         if( keepStation == null ){
                             keepStation = aStation;
                         } else {
-                            keepStation.merge(aStation);
-                            this.stations.remove(aStation);
+                            keepStation.transfer(aStation);
+                            aStation.transfer(keepStation);
+                            //this.stations.remove(aStation);
                         }
                     }
                 }
@@ -242,6 +243,22 @@ public class TrainSystem {
             if( radius < closestRadius ){
                 closestRadius = radius;
                 closestStation = station;
+            }
+        }
+        return closestStation;
+    }
+
+    // TODO: Optimize
+    public TrainStation closestEntrance(LatLng point){
+        double closestRadius = 360F;
+        TrainStation closestStation = null;
+        for( TrainStation station : this.stations ){
+            for( LatLng entrance : station.getEntrances() ){
+                double radius = Math.sqrt(Math.pow(entrance.longitude - point.longitude, 2) + Math.pow(entrance.latitude - point.latitude, 2));
+                if( radius < closestRadius ){
+                    closestRadius = radius;
+                    closestStation = station;
+                }
             }
         }
         return closestStation;

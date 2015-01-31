@@ -100,6 +100,11 @@ public class TrainStation {
         this.mapRectangles.addAll(other.getMapRectangles());
     }
 
+    public void transfer(TrainStation other){
+        this.lines.addAll(other.getLines());
+    }
+
+
     public boolean hasLine(TrainLine line){
         return this.getLines().contains(line);
     }
