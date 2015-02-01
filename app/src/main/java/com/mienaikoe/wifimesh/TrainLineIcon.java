@@ -43,7 +43,7 @@ public class TrainLineIcon extends TypefaceTextView {
         a.recycle();
 
         setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
-        setBackgroundColor(getResources().getColor(R.color.transparent));
+        //setBackgroundColor(getResources().getColor(R.color.transparent));
     }
 
     public void setData(String text, int iconColor, int textColor, int pixelSize) {
@@ -85,7 +85,9 @@ public class TrainLineIcon extends TypefaceTextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(this.size/2, this.size/2, this.size/2, mPainter);
+        int width = getWidth();
+        int height = getHeight();
+        canvas.drawCircle(width / 2, height/ 2, this.size / 2, mPainter);
         setGravity(Gravity.CENTER);
         setTextAlignment(TEXT_ALIGNMENT_CENTER);
         super.onDraw(canvas);

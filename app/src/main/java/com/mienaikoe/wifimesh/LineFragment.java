@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class LineFragment extends BaseFragment implements AdapterView.OnItemSelectedListener  {
+public class LineFragment extends BaseFragment implements AdapterView.OnItemSelectedListener, TrainIconAdapter.OnItemClickListener  {
 
     private static final String TAG = LineFragment.class.getSimpleName();
 
@@ -43,7 +43,7 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
     private ArrayAdapter<String> lineSpinnerAdapter;
     private TableLayout grid;
 
-    private TrainIconAdapter mAdapter = new TrainIconAdapter();
+    private TrainIconAdapter mAdapter = new TrainIconAdapter(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,6 +169,12 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
         for( TrainStation lineStation : this.currentLine.getSouthStops() ){
             this.grid.addView( renderStation(lineStation) );
         }
+    }
+
+    @Override
+    public void onItemClick(View view, TrainLine trainline) {
+        currentLine = trainline;
+        renderLine();
     }
 
 
