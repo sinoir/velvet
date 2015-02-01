@@ -106,13 +106,15 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
             List<TrainLine> lines = new ArrayList<TrainLine>(station.getLines());
             Collections.reverse(lines);
 
+            int smallSize = getResources().getDimensionPixelSize(R.dimen.train_icon_small);
+
             for( TrainLine line : lines ) {
                 if( line.equals(this.currentLine) ){
                     continue;
                 }
-                TrainLineIcon icon = new TrainLineIcon(getActivity(), line,
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getActivity().getResources().getDisplayMetrics())
-                );
+
+                TrainLineIcon icon = new TrainLineIcon(getActivity());
+                icon.setTrainLine(line,smallSize);
                 icon.setRotationY(180);
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.setGravity(Gravity.RIGHT);

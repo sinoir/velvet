@@ -245,11 +245,11 @@ public class StartupActivity extends BaseActivity
         RelativeLayout topLine = new RelativeLayout(this.getApplicationContext());
         layout.addView(topLine);
 
-        TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
-                        getResources().getDisplayMetrics())
-        );
-        topLine.addView(icon);
+        int largeIconSize = getResources().getDimensionPixelSize(R.dimen.train_icon_large);
+        TrainLineIcon icon = new TrainLineIcon(this);
+        icon.setTrainLine(line, largeIconSize);
+
+                topLine.addView(icon);
         RelativeLayout.LayoutParams iconParams = (RelativeLayout.LayoutParams) icon
                 .getLayoutParams();
         iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, -1);

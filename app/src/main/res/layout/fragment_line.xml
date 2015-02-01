@@ -10,7 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary" >
+               <com.mienaikoe.wifimesh.TrainLineIcon
+                   android:layout_width="@dimen/train_icon_small"
+                   android:layout_height="@dimen/train_icon_small" />
+    </android.support.v7.widget.Toolbar>
 
     <Spinner
         android:layout_width="match_parent"

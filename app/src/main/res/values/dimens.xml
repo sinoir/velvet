@@ -5,4 +5,7 @@
 
     <dimen name="station_fragment_initial_margin">-44dp</dimen>
     <dimen name="line_fragment_margin">44dp</dimen>
+
+    <dimen name="train_icon_large">32dp</dimen>
+    <dimen name="train_icon_small">16dp</dimen>
 </resources>
