@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mienaikoe.wifimesh.TrainLineIcon xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/train_icon_large"
+    android:layout_height="@dimen/train_icon_large"
+    app:iconSize="@dimen/train_icon_large" />

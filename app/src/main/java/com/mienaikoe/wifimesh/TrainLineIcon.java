@@ -14,6 +14,8 @@ import android.view.Gravity;
  */
 public class TrainLineIcon extends TypefaceTextView {
 
+    private static final int DEFAULT = -1;
+
     private Paint mPainter = new Paint();
 
     private int size;
@@ -45,6 +47,10 @@ public class TrainLineIcon extends TypefaceTextView {
     }
 
     public void setData(String text, int iconColor, int textColor, int pixelSize) {
+        //keep current size if default option was provided
+        if (pixelSize == DEFAULT) {
+            pixelSize = size;
+        }
         size = pixelSize;
         setText(text);
         setTextSize(pixelSize
@@ -65,6 +71,15 @@ public class TrainLineIcon extends TypefaceTextView {
                 line.getForegroundColor(),
                 size);
     }
+
+    public void setTrainLine(TrainLine line){
+        setData(line.getName(),
+                line.getBackgroundColor(),
+                line.getForegroundColor(),
+                DEFAULT);
+    }
+
+
 
 
 

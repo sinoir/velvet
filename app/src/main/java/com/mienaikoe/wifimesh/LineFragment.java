@@ -6,6 +6,8 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -36,10 +38,17 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
     private TrainStation currentStation;
     private TrainLine currentLine;
 
+    private RecyclerView mRecyclerView;
     private Spinner lineSpinner;
     private ArrayAdapter<String> lineSpinnerAdapter;
     private TableLayout grid;
 
+    private TrainIconAdapter mAdapter = new TrainIconAdapter();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +58,11 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
 
         setSupportActionBar((Toolbar)rootView.findViewById(R.id.toolbar));
         setDisplayHomeAsUpEnabled(true);
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+       // mRecyclerView.setHasFixedSize(true);
 
         this.grid = (TableLayout) rootView.findViewById(R.id.station_list);
         this.lineSpinner = (Spinner) rootView.findViewById(R.id.line_spinner);
@@ -67,6 +81,7 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
 
     public void setTrainSystem(TrainSystem trainSystem){
         this.trainSystem = trainSystem;
+        mAdapter.setItems(trainSystem.getLines());
     }
 
     public void setStation(TrainStation station){

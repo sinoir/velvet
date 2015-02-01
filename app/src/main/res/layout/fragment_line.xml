@@ -7,13 +7,14 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary" >
-               <com.mienaikoe.wifimesh.TrainLineIcon
-                   android:layout_width="@dimen/train_icon_small"
-                   android:layout_height="@dimen/train_icon_small" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
     </android.support.v7.widget.Toolbar>
 
     <Spinner
