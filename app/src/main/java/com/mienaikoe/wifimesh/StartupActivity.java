@@ -1,17 +1,22 @@
 package com.mienaikoe.wifimesh;
 
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
+import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.train.TrainLine;
+import com.mienaikoe.wifimesh.train.TrainStation;
+import com.mienaikoe.wifimesh.train.TrainSystem;
+
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -43,14 +48,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
-public class StartupActivity extends FragmentActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+public class StartupActivity extends BaseActivity
+        implements LocationListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private ImageView mapView;
 
-    private ViewPager pager;
-    private PagerAdapter pagerAdapter;
-
     private LineFragment lineFragment;
+
     private MapFragment mapFragment;
 
     private TrainSystem trainSystem;
@@ -59,12 +65,10 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     private boolean googleApiConnected = false;
 
     private TypefaceTextView stationName;
+
     private GridLayout linesTiming;
 
     private TrainStation currentStation;
-
-
-
 
 
     @Override
@@ -72,21 +76,31 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         super.onCreate(savedInstanceState);
         //startService(new Intent(this, TrainRealtimeService.class));
         setContentView(R.layout.activity_startup_activity);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         this.trainSystem = new TrainSystem(
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.transfers_normalized),
+                this.getApplicationContext().getResources()
+                        .openRawResource(R.raw.transfers_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
                 this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
         );
+        TrainSystemModel.setTrainSystem(trainSystem);
+
 
         initTrainTiming();
 
-        // Instantiate a ViewPager and a PagerAdapter.
-        this.pager = (ViewPager) findViewById(R.id.pager);
-        this.pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        this.pager.setAdapter(this.pagerAdapter);
+
+        if (savedInstanceState == null) {
+            mapFragment = new MapFragment();
+            mapFragment.setSystem(trainSystem);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, mapFragment)
+                    .commit();
+        }
+
 
         this.stationName = (TypefaceTextView) findViewById(R.id.station_name);
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
@@ -122,7 +136,7 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     @Override
     public void onResume() {
         // Get location and resume location updates
-        startLocationSystem();
+        updateLocation();
         super.onResume();
     }
 
@@ -137,13 +151,10 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
 
     @Override
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -153,6 +164,9 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         switch (item.getItemId()) {
             case R.id.action_test_mesh:
                 startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
+                return true;
+            case R.id.action_trainlines:
+                startActivity(new Intent(getApplicationContext(), LineActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -165,50 +179,10 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
 
 
-    @Override
-    public void onBackPressed() {
-        if (this.pager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
-        }
-    }
 
 
 
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
 
-        @Override
-        public Fragment getItem(int position) {
-            switch(position){
-                case 0:
-                    mapFragment = new MapFragment();
-                    mapFragment.setSystem(trainSystem);
-                    return mapFragment;
-                case 1:
-                    lineFragment = new LineFragment();
-                    lineFragment.setTrainSystem(trainSystem);
-                    return lineFragment;
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }
 
 
 
@@ -218,30 +192,19 @@ public class StartupActivity extends FragmentActivity implements LocationListene
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
         this.googleApiClient.connect();
     }
 
-    private void startLocationSystem(){
-        this.updateLocation();
-
-            /*
-            LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setInterval(1000 * 60); // walking for 1 minute will change enough with accuracy differences
-            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
-            LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
-            */
-
-    }
-
-    private void updateLocation(){
-        if( this.googleApiConnected ) {
+    private void updateLocation() {
+        if (this.googleApiConnected) {
             if (mapFragment != null && lineFragment != null) {
                 Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
                 this.onLocationChanged(lastLocation);
             }
         }
     }
+
 
     private void suspendLocationSystem(){
         /*
@@ -255,19 +218,23 @@ public class StartupActivity extends FragmentActivity implements LocationListene
     @Override
     public void onConnected(Bundle connectionHint) {
         this.googleApiConnected = true;
-        startLocationSystem();
+        updateLocation();
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        if( location != null ) {
-            Log.i(this.getClass().getSimpleName(), "Location Changed: "+location.getLatitude() + ", " + location.getLongitude());
-            TrainStation closestStation = trainSystem.closestEntrance(new LatLng(location.getLatitude(), location.getLongitude()));
+        if (location != null) {
+            Log.i(this.getClass().getSimpleName(),
+                    "Location Changed: " + location.getLatitude() + ", " + location.getLongitude());
+
+            TrainStation closestStation = trainSystem
+                    .closestStation(new LatLng(location.getLatitude(), location.getLongitude()));
+
             this.setStation(closestStation);
         }
     }
 
-    public void setStation(TrainStation station){
+    public void setStation(TrainStation station) {
         //LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
@@ -277,8 +244,8 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         this.linesTiming.invalidate();
 
         mapFragment.setStation(station);
-        lineFragment.setStation(station);
     }
+
 
 
     private ViewGroup renderStationLine(TrainStation station, TrainLine line){
@@ -286,35 +253,36 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         layout.setOrientation(LinearLayout.VERTICAL);
         this.linesTiming.addView(layout);
 
-        RelativeLayout topLine = new RelativeLayout( this.getApplicationContext() );
+        RelativeLayout topLine = new RelativeLayout(this.getApplicationContext());
         layout.addView(topLine);
 
-        TrainLineIcon icon = new TrainLineIcon( getApplicationContext(), line,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics())
+        TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
+                        getResources().getDisplayMetrics())
         );
         topLine.addView(icon);
-        RelativeLayout.LayoutParams iconParams = (RelativeLayout.LayoutParams)icon.getLayoutParams();
+        RelativeLayout.LayoutParams iconParams = (RelativeLayout.LayoutParams) icon
+                .getLayoutParams();
         iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, -1);
         icon.setLayoutParams(iconParams);
 
-
-
-        GridLayout timingGrid = new GridLayout( this.getApplicationContext() );
+        GridLayout timingGrid = new GridLayout(this.getApplicationContext());
         topLine.addView(timingGrid);
-        RelativeLayout.LayoutParams timingParams = (RelativeLayout.LayoutParams)timingGrid.getLayoutParams();
+        RelativeLayout.LayoutParams timingParams = (RelativeLayout.LayoutParams) timingGrid
+                .getLayoutParams();
         timingParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, -1);
         timingGrid.setLayoutParams(timingParams);
 
-
-        int timingPaddingHoriz = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
-        int timingPaddingVert = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
-
+        int timingPaddingHoriz = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
+                getResources().getDisplayMetrics());
+        int timingPaddingVert = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
 
         Date[] timings = trainSystem.getTimings(station, line);
 
-
         TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
         timingGrid.addView( timing );
+
         timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
 
         if( timings[0] != null ) {
@@ -324,10 +292,11 @@ public class StartupActivity extends FragmentActivity implements LocationListene
 
         timing.setTextColor(getResources().getColor(R.color.white));
         timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        timing.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
+        timing.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz,
+                timingPaddingVert);
 
-        TypefaceTextView timing2 = new TypefaceTextView( getApplicationContext() );
-        timingGrid.addView( timing2 );
+        TypefaceTextView timing2 = new TypefaceTextView(getApplicationContext());
+        timingGrid.addView(timing2);
         timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
 
         if( timings[1] != null ) {
@@ -339,15 +308,6 @@ public class StartupActivity extends FragmentActivity implements LocationListene
         timing2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing2.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
 
-
-/*
-        TypefaceTextView plannedWork = new TypefaceTextView(this.getApplicationContext());
-        layout.addView(plannedWork);
-        plannedWork.setCustomFont(this.getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-        plannedWork.setTextSize(16.0f);
-        plannedWork.setTextColor(getResources().getColor(R.color.white));
-        plannedWork.setText("World Trade Center Bound Trains run express between Times Sq-42nd St and 14th St");
-*/
 
         return layout;
     }
