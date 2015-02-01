@@ -13,6 +13,7 @@ import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -53,24 +54,19 @@ public class StartupActivity extends BaseActivity
         implements LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    private static final int REQUEST_LINES = 1;
+
     private ImageView mapView;
-
-    private LineFragment lineFragment;
-
     private MapFragment mapFragment;
-
     private TrainSystem trainSystem;
-
     private GoogleApiClient googleApiClient;
     private boolean googleApiConnected = false;
-
     private TypefaceTextView stationName;
-
     private GridLayout linesTiming;
 
     private TrainStation currentStation;
 
-
+    //region Lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +102,6 @@ public class StartupActivity extends BaseActivity
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
 
         initLocationSystem();
-
     }
 
 
@@ -136,14 +131,12 @@ public class StartupActivity extends BaseActivity
     @Override
     public void onResume() {
         // Get location and resume location updates
-        updateLocation();
+        //updateLocation(); // call update location only when requested
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        // Suspend Location Updates
-        suspendLocationSystem();
         super.onPause();
     }
 
@@ -166,7 +159,8 @@ public class StartupActivity extends BaseActivity
                 startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
                 return true;
             case R.id.action_trainlines:
-                startActivity(new Intent(getApplicationContext(), LineActivity.class));
+                Intent intent = new Intent(getApplicationContext(), LineActivity.class);
+                startActivityForResult(intent, REQUEST_LINES);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -174,12 +168,29 @@ public class StartupActivity extends BaseActivity
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_LINES:
+                if (resultCode == Activity.RESULT_OK) {
+                    StationSelectEvent event = mEventBus.getStickyEvent(StationSelectEvent.class);
+                    if (event == null) {
+                        return;
+                    }
+                    setStation(event.getStation());
+                    //event is consumed, we can remove it now
+                    mEventBus.removeStickyEvent(event);
+                }
+                return;
+            default:
+                return;
+        }
 
 
 
-
-
-
+    }
+    //endregion Lifecycle
 
 
 
@@ -198,21 +209,13 @@ public class StartupActivity extends BaseActivity
 
     private void updateLocation() {
         if (this.googleApiConnected) {
-            if (mapFragment != null && lineFragment != null) {
+            if (mapFragment != null) {
                 Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
                 this.onLocationChanged(lastLocation);
             }
         }
     }
 
-
-    private void suspendLocationSystem(){
-        /*
-        if( this.googleApiConnected ) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(this.googleApiClient, this);
-        }
-        */
-    }
 
 
     @Override
@@ -323,5 +326,6 @@ public class StartupActivity extends BaseActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(this.getClass().getSimpleName(), "Connection to Play Services Failed");
     }
+
 
 }
