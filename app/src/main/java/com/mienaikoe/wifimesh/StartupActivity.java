@@ -38,8 +38,6 @@ public class StartupActivity extends BaseActivity
 
     private ImageView mapView;
 
-    private LineFragment lineFragment;
-
     private MapFragment mapFragment;
 
     private TrainSystem trainSystem;
@@ -147,7 +145,7 @@ public class StartupActivity extends BaseActivity
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        if (mapFragment != null && lineFragment != null) {
+        if (mapFragment != null) {
             Location lastLocation = LocationServices.FusedLocationApi
                     .getLastLocation(this.googleApiClient);
             this.onLocationChanged(lastLocation);
