@@ -23,6 +23,7 @@ public class VectorTextInstruction implements VectorInstruction {
         }
         this.text = text;
 
+        matrix = matrix.substring(7, matrix.length()-1);
         String[] matrixArr = matrix.split(" ");
         this.x = Float.valueOf(matrixArr[matrixArr.length-2]);
         this.y = Float.valueOf(matrixArr[matrixArr.length-1]);

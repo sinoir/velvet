@@ -83,6 +83,8 @@ public class TrainView extends View {
         display.getSize(size);
         this.maxX = size.x;
         this.maxY = size.y;
+
+        this.setBackgroundColor(this.getResources().getColor(R.color.light_gray));
     }
 
 
@@ -91,15 +93,9 @@ public class TrainView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        this.setBackgroundColor(this.getResources().getColor(R.color.light_gray));
+        canvas.scale( mScaleFactor, mScaleFactor, scalePointX - deltaX, scalePointY - deltaY);
 
         canvas.translate(deltaX / mScaleFactor, deltaY / mScaleFactor);
-
-        Log.i("SCALE FACTOR", mScaleFactor+"");
-
-        canvas.scale(
-                mScaleFactor, mScaleFactor,
-                scalePointX - deltaX, scalePointY - deltaY);
 
         for( VectorInstruction crossStreet : this.crossStreets ){
             crossStreet.draw(canvas);
@@ -203,8 +199,8 @@ public class TrainView extends View {
 
     public void setCenter( float x, float y ){
         mScaleFactor = 2.5f;
-        this.deltaX = -(x * mScaleFactor) + (getResources().getDisplayMetrics().widthPixels/2);
-        this.deltaY = -(y * mScaleFactor) + (getResources().getDisplayMetrics().heightPixels/2);
+        this.deltaX = -(x / mScaleFactor) + (getResources().getDisplayMetrics().widthPixels/2);
+        this.deltaY = -(y / mScaleFactor) + (getResources().getDisplayMetrics().heightPixels/2);
         invalidate();
     }
 
