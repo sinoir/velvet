@@ -1,8 +1,12 @@
 package com.mienaikoe.wifimesh;
 
+import com.mienaikoe.wifimesh.train.TrainLine;
+import com.mienaikoe.wifimesh.train.TrainStation;
+import com.mienaikoe.wifimesh.train.TrainSystem;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,10 +20,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainSystem;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class LineFragment extends Fragment implements AdapterView.OnItemSelectedListener  {
+public class LineFragment extends BaseFragment implements AdapterView.OnItemSelectedListener  {
 
     private Context context;
 
@@ -96,13 +96,21 @@ public class LineFragment extends Fragment implements AdapterView.OnItemSelected
         this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(this.currentLine.getName()));
     }
 
-    private TableRow renderStation(TrainStation station){
+    private TableRow renderStation(final TrainStation station){
         TableRow newRow = new TableRow( getApplicationContext());
         newRow.setGravity(Gravity.CENTER_VERTICAL);
         if( station.equals(this.currentStation) ){
             newRow.setBackgroundColor(getResources().getColor(R.color.dark_gray));
         }
-        newRow.setOnClickListener(new StationClickListener((StartupActivity) getActivity(), station));
+        //newRow.setOnClickListener(new StationClickListener((StartupActivity) getActivity(), station));
+        newRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEventBus.postSticky(new StationSelectEvent(station));
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
+            }
+        });
         newRow.setMinimumHeight( (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44, context.getResources().getDisplayMetrics()) );
 
         // Connecting Lines

@@ -13,6 +13,7 @@ import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class StartupActivity extends BaseActivity
         implements LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    private static final int REQUEST_LINES = 1;
+
     private ImageView mapView;
 
     private LineFragment lineFragment;
@@ -49,7 +52,7 @@ public class StartupActivity extends BaseActivity
 
     private TrainStation currentStation;
 
-
+    //region Lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +84,6 @@ public class StartupActivity extends BaseActivity
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
 
         initLocationSystem();
-
     }
 
     @Override
@@ -99,12 +101,37 @@ public class StartupActivity extends BaseActivity
                 startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
                 return true;
             case R.id.action_trainlines:
-                startActivity(new Intent(getApplicationContext(), LineActivity.class));
+                Intent intent = new Intent(getApplicationContext(), LineActivity.class);
+                startActivityForResult(intent, REQUEST_LINES);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_LINES:
+                if (resultCode == Activity.RESULT_OK) {
+                    StationSelectEvent event = mEventBus.getStickyEvent(StationSelectEvent.class);
+                    if (event == null) {
+                        return;
+                    }
+                    setStation(event.getStation());
+                    //event is consumed, we can remove it now
+                    mEventBus.removeStickyEvent(event);
+                }
+                return;
+            default:
+                return;
+        }
+
+
+
+    }
+    //endregion Lifecycle
 
     private void initLocationSystem() {
 
@@ -236,5 +263,6 @@ public class StartupActivity extends BaseActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(this.getClass().getSimpleName(), "Connection to Play Services Failed");
     }
+
 
 }
