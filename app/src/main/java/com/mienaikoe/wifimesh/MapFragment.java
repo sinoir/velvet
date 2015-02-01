@@ -6,6 +6,7 @@ import com.mienaikoe.wifimesh.map.VectorInstruction;
 import com.mienaikoe.wifimesh.map.VectorLineInstruction;
 import com.mienaikoe.wifimesh.map.VectorPathInstruction;
 import com.mienaikoe.wifimesh.map.VectorTextInstruction;
+import com.mienaikoe.wifimesh.map.VectorTextInstructionMatrix;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
@@ -133,10 +134,7 @@ public class MapFragment extends BaseFragment {
                             color = "#000000";
                         }
                         activeTextInstruction = new VectorTextInstruction(
-                                "",
-                                transform.substring(7, transform.length()-1),
-                                Color.parseColor(color),
-                                TypefaceTextView.getTypeface(this.context, "Helvetica-Neue-Medium.otf")
+                                "", transform, Color.parseColor(color), TypefaceTextView.getTypeface(this.context, "fonts/HelveticaNeue-Medium.otf")
                         );
                     } else if (name.equals("tspan")){
                         if( activeTextInstruction != null ) {
