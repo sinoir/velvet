@@ -1,10 +1,10 @@
 package com.mienaikoe.wifimesh;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseActivity extends ActionBarActivity{
+public class BaseFragment extends Fragment{
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -27,5 +27,4 @@ public class BaseActivity extends ActionBarActivity{
         } catch (Throwable t) {
         }
     }
-
 }

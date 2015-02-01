@@ -1,17 +1,6 @@
 package com.mienaikoe.wifimesh;
 
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.util.Xml;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.mienaikoe.wifimesh.map.TrainView;
 import com.mienaikoe.wifimesh.map.VectorInstruction;
 import com.mienaikoe.wifimesh.map.VectorLineInstruction;
@@ -23,6 +12,15 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.Xml;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends BaseFragment {
 
     private Context context;
 
