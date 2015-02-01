@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
@@ -75,23 +76,26 @@ public class StartupActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Fill Out Train System Information
         this.trainSystem = new TrainSystem(
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
                 this.getApplicationContext().getResources()
                         .openRawResource(R.raw.transfers_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
-                this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
+                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
         );
+        VectorMapIngestor ingestor = new VectorMapIngestor(getApplicationContext(), "normal_map.svg");
+        this.trainSystem.fillRectangles(ingestor);
+        initTrainTiming();
+
         TrainSystemModel.setTrainSystem(trainSystem);
 
-
-        initTrainTiming();
 
 
         if (savedInstanceState == null) {
             mapFragment = new MapFragment();
             mapFragment.setSystem(trainSystem);
+            mapFragment.setMapIngestor(ingestor);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, mapFragment)
                     .commit();

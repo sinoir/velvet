@@ -29,6 +29,7 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * TODO: document your custom view class.
@@ -51,10 +52,10 @@ public class TrainView extends View {
     private float maxY;
 
 
-    private List<VectorInstruction> lines = new ArrayList<VectorInstruction>(0);
-    private List<VectorInstruction> linesText = new ArrayList<VectorInstruction>(0);
-    private List<VectorInstruction> stationsText = new ArrayList<VectorInstruction>(0);
-    private List<VectorInstruction> crossStreets = new ArrayList<VectorInstruction>(0);
+    private VectorMapIngestor ingestor;
+
+    private ArrayList<VectorInstruction> crossStreetInstructions = new ArrayList<VectorInstruction>();
+    private ArrayList<VectorInstruction> mapInstructions = new ArrayList<VectorInstruction>();
 
 
 
@@ -88,6 +89,14 @@ public class TrainView extends View {
     }
 
 
+    private String[] STANDARD_GROUPS = new String[]{
+            "PARKS", "TRAIN_LINES", "TRANSFERS", "STATION_BLOCKS", "TRAIN_NAMES", "NEIGHBORHOOD_NAMES", "STATION_NAMES",
+    };
+
+    private String[] CROSS_STREET_GROUPS = new String[]{
+            "CROSS_STREETS","STREET_NAMES"
+    };
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -97,28 +106,12 @@ public class TrainView extends View {
 
         canvas.translate(deltaX / mScaleFactor, deltaY / mScaleFactor);
 
-        for( VectorInstruction crossStreet : this.crossStreets ){
-            crossStreet.draw(canvas);
+        for( VectorInstruction instruction : this.crossStreetInstructions ){
+            instruction.draw(canvas);
         }
-
-        for( VectorInstruction line : this.lines ){
-            line.draw(canvas);
+        for( VectorInstruction instruction : this.mapInstructions ){
+            instruction.draw(canvas);
         }
-        for( VectorInstruction lineText : this.linesText ){
-            lineText.draw(canvas);
-        }
-        for( VectorInstruction stationText : this.stationsText ){
-            stationText.draw(canvas);
-        }
-
-        Paint stationPainter = new Paint();
-        stationPainter.setColor(getResources().getColor(R.color.white));
-        for(TrainStation station : this.system.getStations()){
-            for( RectF rect : station.getMapRectangles() ){
-                canvas.drawRect( rect, stationPainter );
-            }
-        }
-
     }
 
 
@@ -208,19 +201,18 @@ public class TrainView extends View {
         this.system = system;
     }
 
+    public void setIngestor(VectorMapIngestor ingestor){
+        this.ingestor = ingestor;
+        for( String groupName : CROSS_STREET_GROUPS ) {
+            this.crossStreetInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
+        }
+        for( String groupName : STANDARD_GROUPS ) {
+           this.mapInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
+        }
+    }
+
     public void setStation(TrainStation currentStation) {
         this.currentStation = currentStation;
     }
 
-    public void setLines(List<VectorInstruction> paths){
-        this.lines = paths;
-    }
-
-    public void setLinesText(List<VectorInstruction> paths){
-        this.linesText = paths;
-    }
-
-    public void setStationsText(List<VectorInstruction> paths){
-        this.stationsText = paths;
-    }
 }

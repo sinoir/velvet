@@ -7,6 +7,9 @@ import android.util.Xml;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.transit.realtime.GtfsRealtime;
 import com.mienaikoe.wifimesh.map.PathParser;
+import com.mienaikoe.wifimesh.map.VectorInstruction;
+import com.mienaikoe.wifimesh.map.VectorMapIngestor;
+import com.mienaikoe.wifimesh.map.VectorRectangleInstruction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,8 +51,7 @@ public class TrainSystem {
             InputStream stopsJsonStream,
             InputStream linesJsonStream,
             InputStream transfersJsonStream,
-            InputStream entrancesJsonStream,
-            InputStream blocksXmlStream
+            InputStream entrancesJsonStream
             ) {
         JSONObject stopsJson = streamToJSON(stopsJsonStream);
         JSONObject transfersJson = streamToJSON(transfersJsonStream);
@@ -83,38 +85,6 @@ public class TrainSystem {
                     uniqueStations.put(uniquifier, station);
                 }
                 stopidStations.put(stopId, station);
-            }
-
-            // Parse Map Stop Rectangles
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(blocksXmlStream, null);
-            parser.nextTag();
-            parser.require(XmlPullParser.START_TAG, "", "g");
-            while (parser.next() != XmlPullParser.END_DOCUMENT) {
-                if (parser.getEventType() != XmlPullParser.START_TAG) {
-                    continue;
-                }
-                String name = parser.getName();
-                // Starts by looking for the entry tag
-                if (name.equals("rect")) {
-                    String stopId = parser.getAttributeValue("","id");
-                    TrainStation station = stopidStations.get(stopId);
-                    float[] xy = new float[]{
-                        Float.valueOf(parser.getAttributeValue("","x")),
-                        Float.valueOf(parser.getAttributeValue("","y"))
-                    };
-                    String transformStr = parser.getAttributeValue("","transform");
-                    if( transformStr != null ) {
-                        Matrix matrix = PathParser.parseTransform( transformStr );
-                        matrix.mapPoints(xy);
-                    }
-                    station.addMapRectangle(
-                            xy[0], xy[1],
-                            Float.valueOf(parser.getAttributeValue("","width")),
-                            Float.valueOf(parser.getAttributeValue("","height"))
-                    );
-                }
             }
 
 
@@ -171,19 +141,12 @@ public class TrainSystem {
         } catch (JSONException ex ){
             Log.e(this.getClass().getSimpleName(), "Could not parse stops");
             throw new IllegalArgumentException("Invalid Stops Json");
-        } catch (XmlPullParserException ex ){
-            Log.e(this.getClass().getSimpleName(), "Could not parse map");
-            throw new IllegalArgumentException("Invalid Map Xml");
-        } catch (IOException ex ){
-            Log.e(this.getClass().getSimpleName(), "Culd not parse map");
-            throw new IllegalArgumentException("IO Exception while parsing map");
         } finally {
             try {
                 stopsJsonStream.close();
                 linesJsonStream.close();
                 transfersJsonStream.close();
                 entrancesJsonStream.close();
-                blocksXmlStream.close();
             } catch (IOException ex ){
                 Log.e(this.getClass().getSimpleName(), "Could not close streams");
             }
@@ -222,6 +185,20 @@ public class TrainSystem {
         }
         return parsedStations;
     }
+
+
+    public void fillRectangles( VectorMapIngestor ingestor ){
+        for( Map.Entry<String, VectorInstruction> namedInstruction : ingestor.getNamedInstructions().entrySet() ) {
+            if (namedInstruction.getValue() instanceof VectorRectangleInstruction) {
+                VectorRectangleInstruction instruction = (VectorRectangleInstruction) namedInstruction.getValue();
+                TrainStation station = stopidStations.get(namedInstruction.getKey());
+                if (station != null) {
+                    station.addMapRectangle(instruction);
+                }
+            }
+        }
+    }
+
 
 
     public void fillTimings( GtfsRealtime.FeedMessage message ){
