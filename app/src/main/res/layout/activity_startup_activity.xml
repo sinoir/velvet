@@ -42,7 +42,7 @@
             android:textIsSelectable="false"
             android:textSize="24dp"
             android:textStyle="bold"
-            auto:customFont="fonts/HelveticaNeue-Medium.otf"/>
+            auto:customFont="helvetica_neue_medium"/>
 
         <LinearLayout
             android:id="@+id/planned_work_section"

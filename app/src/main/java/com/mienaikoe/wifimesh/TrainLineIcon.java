@@ -1,16 +1,11 @@
 package com.mienaikoe.wifimesh;
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.view.Gravity;
-
 import com.mienaikoe.wifimesh.train.TrainLine;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.view.Gravity;
 
 /**
  * TODO: document your custom view class.
@@ -36,7 +31,7 @@ public class TrainLineIcon extends TypefaceTextView {
 
 
     private void setLayout(){
-        this.setCustomFont(this.getContext(), "fonts/HelveticaNeue-Medium.otf");
+        setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
 
         this.setText(this.line.getName());
         this.setHeight(size);

@@ -134,9 +134,9 @@ public class MapFragment extends BaseFragment {
                         }
                         activeTextInstruction = new VectorTextInstruction(
                                 "",
-                                transform.substring(7, transform.length()-1),
+                                transform.substring(7, transform.length() - 1),
                                 Color.parseColor(color),
-                                TypefaceTextView.getTypeface(this.context, "Helvetica-Neue-Medium.otf")
+                                FontEnum.HELVETICA_NEUE_MEDIUM.getTypeface(context)
                         );
                     } else if (name.equals("tspan")){
                         if( activeTextInstruction != null ) {

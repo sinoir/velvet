@@ -11,7 +11,11 @@
 
 
     <declare-styleable name="TypefaceTextView">
-        <attr name="customFont" format="string"/>
+        <!--Mapped to FontEnum, additions here must be reflected there-->
+        <attr name="customFont">
+            <enum name="helvetica_neue" value="0" />
+            <enum name="helvetica_neue_medium" value="1" />
+        </attr>
     </declare-styleable>
 
 

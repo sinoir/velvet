@@ -170,7 +170,7 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
 
 
     private void styleTypefaceTextView(TypefaceTextView textView){
-        textView.setCustomFont(getActivity(), "fonts/HelveticaNeue-Medium.otf");
+        textView.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
         textView.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getActivity().getResources().getDisplayMetrics()));
         textView.setGravity(Gravity.CENTER_VERTICAL);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);

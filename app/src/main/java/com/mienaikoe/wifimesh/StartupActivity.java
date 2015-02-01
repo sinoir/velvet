@@ -4,11 +4,12 @@ package com.mienaikoe.wifimesh;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.transit.realtime.GtfsRealtime;
 
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
@@ -27,21 +28,6 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.transit.realtime.GtfsRealtime;
-import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
-import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
-import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainRealtimeService;
-import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.util.Date;
 import java.util.List;
@@ -286,7 +272,7 @@ public class StartupActivity extends BaseActivity
         TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
         timingGrid.addView( timing );
 
-        timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
 
         if( timings[0] != null ) {
             long northDiff = TimeUnit.MINUTES.convert(timings[0].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
@@ -300,7 +286,7 @@ public class StartupActivity extends BaseActivity
 
         TypefaceTextView timing2 = new TypefaceTextView(getApplicationContext());
         timingGrid.addView(timing2);
-        timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
 
         if( timings[1] != null ) {
             long southDiff = TimeUnit.MINUTES.convert(timings[1].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
