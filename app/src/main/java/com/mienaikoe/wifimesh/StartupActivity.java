@@ -16,13 +16,7 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -40,10 +34,6 @@ public class StartupActivity extends BaseActivity
         GoogleApiClient.OnConnectionFailedListener {
 
     private ImageView mapView;
-
-    private ViewPager pager;
-
-    private PagerAdapter pagerAdapter;
 
     private LineFragment lineFragment;
 
@@ -65,6 +55,8 @@ public class StartupActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         //startService(new Intent(this, VelvetService.class)); Not now, mabe eventually
         setContentView(R.layout.activity_startup_activity);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         this.trainSystem = new TrainSystem(
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
@@ -74,11 +66,16 @@ public class StartupActivity extends BaseActivity
                 this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
                 this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
         );
+        TrainSystemModel.setTrainSystem(trainSystem);
 
-        // Instantiate a ViewPager and a PagerAdapter.
-        this.pager = (ViewPager) findViewById(R.id.pager);
-        this.pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        this.pager.setAdapter(this.pagerAdapter);
+
+        if (savedInstanceState == null) {
+            mapFragment = new MapFragment();
+            mapFragment.setSystem(trainSystem);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, mapFragment)
+                    .commit();
+        }
 
         this.stationName = (TypefaceTextView) findViewById(R.id.station_name);
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
@@ -88,24 +85,9 @@ public class StartupActivity extends BaseActivity
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -117,57 +99,12 @@ public class StartupActivity extends BaseActivity
                 startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
                 return true;
             case R.id.action_trainlines:
+                startActivity(new Intent(getApplicationContext(), LineActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-    @Override
-    public void onBackPressed() {
-        if (this.pager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
-        }
-    }
-
-
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    mapFragment = new MapFragment();
-                    mapFragment.setSystem(trainSystem);
-                    return mapFragment;
-                case 1:
-                    lineFragment = new LineFragment();
-                    lineFragment.setTrainSystem(trainSystem);
-                    return lineFragment;
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }
-
 
     private void initLocationSystem() {
 
@@ -215,7 +152,6 @@ public class StartupActivity extends BaseActivity
         this.linesTiming.invalidate();
 
         mapFragment.setStation(station);
-        lineFragment.setStation(station);
     }
 
 

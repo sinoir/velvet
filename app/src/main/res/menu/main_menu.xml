@@ -5,8 +5,7 @@
     <item android:id="@+id/action_trainlines"
         android:title="@string/menu_lines"
         android:icon="@drawable/ic_launcher"
-        auto:showAsAction="ifRoom"
-        auto:actionViewClass="android.support.v7.widget.SearchView" />
+        auto:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_search"
         android:title="@string/menu_search"
