@@ -17,12 +17,6 @@
             android:layout_height="match_parent" />
     </android.support.v7.widget.Toolbar>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:id="@+id/line_spinner"
-        style="@style/spinnerStyle" />
-
     <ScrollView
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"

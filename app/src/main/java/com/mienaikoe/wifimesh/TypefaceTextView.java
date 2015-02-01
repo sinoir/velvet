@@ -23,6 +23,9 @@ public class TypefaceTextView extends TextView {
     }
 
     private void setCustomFont(Context ctx, AttributeSet attrs) {
+        if (isInEditMode()) {
+            return;
+        }
         TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.TypefaceTextView);
         int fontIntValue = a.getInt(R.styleable.TypefaceTextView_customFont,
                 FontEnum.HELVETICA_NEUE.ordinal());

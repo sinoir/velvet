@@ -15,11 +15,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -30,7 +27,7 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class LineFragment extends BaseFragment implements AdapterView.OnItemSelectedListener, TrainIconAdapter.OnItemClickListener  {
+public class LineFragment extends BaseFragment implements TrainIconAdapter.OnItemClickListener  {
 
     private static final String TAG = LineFragment.class.getSimpleName();
 
@@ -39,9 +36,7 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
     private TrainLine currentLine;
 
     private RecyclerView mRecyclerView;
-    private Spinner lineSpinner;
-    private ArrayAdapter<String> lineSpinnerAdapter;
-    private TableLayout grid;
+    private TableLayout mGrid;
 
     private TrainIconAdapter mAdapter = new TrainIconAdapter(this);
 
@@ -64,17 +59,8 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
        // mRecyclerView.setHasFixedSize(true);
 
-        this.grid = (TableLayout) rootView.findViewById(R.id.station_list);
-        this.lineSpinner = (Spinner) rootView.findViewById(R.id.line_spinner);
+        mGrid = (TableLayout) rootView.findViewById(R.id.station_list);
 
-        // populate line spinner because we can actually back the data with the Train System
-        this.lineSpinnerAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_spinner_item,
-                trainSystem.getLineNames());
-        this.lineSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        this.lineSpinner.setAdapter(this.lineSpinnerAdapter);
-        this.lineSpinner.setOnItemSelectedListener(this);
 
         return rootView;
     }
@@ -90,7 +76,6 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
             this.currentLine = station.getRandomLine();
         }
         this.renderLine();
-        this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(this.currentLine.getName()));
     }
 
     private TableRow renderStation(final TrainStation station){
@@ -152,12 +137,9 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
         dotLine.setImageResource(R.drawable.ic_train_station);
         newRow.addView(dotLine);
 
-        // Station Name
-        TypefaceTextView stationName = new TypefaceTextView(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        TypefaceTextView stationName = (TypefaceTextView)inflater.inflate(R.layout.station_name, newRow, false);
         stationName.setText(station.getName());
-        this.styleTypefaceTextView(stationName);
-        stationName.setTextColor(getResources().getColor(R.color.white));
-
         newRow.addView(stationName);
 
         return newRow;
@@ -165,9 +147,9 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
 
 
     public void renderLine(){
-        this.grid.removeAllViews();
+        mGrid.removeAllViews();
         for( TrainStation lineStation : this.currentLine.getSouthStops() ){
-            this.grid.addView( renderStation(lineStation) );
+            mGrid.addView( renderStation(lineStation) );
         }
     }
 
@@ -176,32 +158,5 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
         currentLine = trainline;
         renderLine();
     }
-
-
-
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        String lineName = (String)parent.getItemAtPosition(pos);
-        this.currentLine = this.trainSystem.getLine(lineName);
-        this.renderLine();
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // ??
-    }
-
-
-    private void styleTypefaceTextView(TypefaceTextView textView){
-        textView.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
-        textView.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getActivity().getResources().getDisplayMetrics()));
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-        textView.setPadding(
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getActivity().getResources().getDisplayMetrics()),0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getActivity().getResources().getDisplayMetrics()),0);
-    }
-
-
 
 }
