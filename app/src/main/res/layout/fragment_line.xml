@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -13,6 +19,7 @@
         style="@style/spinnerStyle" />
 
     <ScrollView
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
