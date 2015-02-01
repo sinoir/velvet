@@ -252,12 +252,11 @@ public class StartupActivity extends BaseActivity
 
 
     private ViewGroup renderStationLine(TrainStation station, TrainLine line){
-        LinearLayout layout = new LinearLayout(this.getApplicationContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
-        this.linesTiming.addView(layout);
-
         RelativeLayout topLine = new RelativeLayout(this.getApplicationContext());
-        layout.addView(topLine);
+        this.linesTiming.addView(topLine);
+        GridLayout.LayoutParams linesLayout = (GridLayout.LayoutParams)topLine.getLayoutParams();
+        linesLayout.width = 420;
+        topLine.setLayoutParams(linesLayout);
 
         TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
@@ -276,8 +275,8 @@ public class StartupActivity extends BaseActivity
         timingParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, -1);
         timingGrid.setLayoutParams(timingParams);
 
-        int timingPaddingHoriz = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
-                getResources().getDisplayMetrics());
+        int timingPaddingHoriz = (int) TypedValue.
+                applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
         int timingPaddingVert = (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
 
@@ -287,12 +286,10 @@ public class StartupActivity extends BaseActivity
         timingGrid.addView( timing );
 
         timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-
         if( timings[0] != null ) {
             long northDiff = TimeUnit.MINUTES.convert(timings[0].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
-            timing.setText(String.valueOf(northDiff) + "min");
+            timing.setText(String.valueOf(northDiff) + "m");
         }
-
         timing.setTextColor(getResources().getColor(R.color.white));
         timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz,
@@ -301,18 +298,15 @@ public class StartupActivity extends BaseActivity
         TypefaceTextView timing2 = new TypefaceTextView(getApplicationContext());
         timingGrid.addView(timing2);
         timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-
         if( timings[1] != null ) {
             long southDiff = TimeUnit.MINUTES.convert(timings[1].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
-            timing.setText(String.valueOf(southDiff) + "min");
+            timing.setText(String.valueOf(southDiff) + "m");
         }
-
         timing2.setTextColor(getResources().getColor(R.color.white));
         timing2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing2.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
 
-
-        return layout;
+        return topLine;
     }
 
 
