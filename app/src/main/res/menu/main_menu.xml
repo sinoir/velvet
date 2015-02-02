@@ -15,7 +15,7 @@
 
     <item android:id="@+id/action_trainlines"
         android:title="@string/menu_lines"
-        android:icon="@drawable/ic_train_station"
+        android:icon="@drawable/ic_action_view_as_list"
         auto:showAsAction="ifRoom"/>
 
 
