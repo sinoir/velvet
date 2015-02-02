@@ -43,6 +43,15 @@ public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //look for event to consume
+        InitEvent event = mEventBus.getStickyEvent(InitEvent.class);
+        if (event == null) {
+            return;
+        }
+        currentStation = event.station;
+        //event is consumed, we can remove it now
+        mEventBus.removeStickyEvent(event);
     }
 
     @Override
@@ -57,12 +66,30 @@ public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-       // mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(true);
 
         mGrid = (TableLayout) rootView.findViewById(R.id.station_list);
 
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (currentStation != null) {
+            LastLineSeen event = mEventBus.getStickyEvent(LastLineSeen.class);
+            if (event != null) {
+                currentLine = event.line;
+            }
+            setStation(currentStation);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mEventBus.postSticky(new LastLineSeen(currentLine));
     }
 
     public void setTrainSystem(TrainSystem trainSystem){
@@ -75,6 +102,10 @@ public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter
         if( !station.hasLine(this.currentLine) ) {
             this.currentLine = station.getRandomLine();
         }
+        int position = mAdapter.getItems().indexOf(currentLine);
+        mAdapter.setSelectedPosition(position);
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(position);
         this.renderLine();
     }
 
@@ -130,7 +161,6 @@ public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter
 
         TypefaceTextView stationName = (TypefaceTextView)inflater.inflate(R.layout.station_name, newRow, false);
         stationName.setText(station.getName());
-        stationName.setTextSize( TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getActivity().getResources().getDisplayMetrics()) );
         newRow.addView(stationName);
 
         return newRow;
@@ -145,9 +175,26 @@ public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter
     }
 
     @Override
-    public void onItemClick(View view, TrainLine trainline) {
+    public void onItemClick(View view, TrainLine trainline, int position) {
+        mAdapter.setSelectedPosition(position);
+        mAdapter.notifyDataSetChanged();
         currentLine = trainline;
         renderLine();
+    }
+
+    public static class InitEvent {
+        private TrainStation station;
+
+        public InitEvent(TrainStation station) {
+            this.station = station;
+        }
+    }
+
+    public static class LastLineSeen {
+        private TrainLine line;
+        public LastLineSeen(TrainLine line) {
+            this.line = line;
+        }
     }
 
 }

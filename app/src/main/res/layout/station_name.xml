@@ -8,6 +8,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:textAlignment="gravity"
+    android:textSize="15sp"
     android:textColor="@color/white"
     app:customFont="helvetica_neue_medium"
     tools:text="Delancey ST" />

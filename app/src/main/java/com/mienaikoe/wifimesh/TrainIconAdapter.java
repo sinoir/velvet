@@ -1,7 +1,6 @@
 package com.mienaikoe.wifimesh;
 
 import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainLineComparator;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,30 +8,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.TreeSet;
 
 public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.ViewHolder> {
 
     private OnItemClickListener mClickListener;
+    private int mSelectedPosition = -1;
+    private ArrayList<TrainLine> mLines = new ArrayList<TrainLine>();
+
 
     public TrainIconAdapter(OnItemClickListener listener) {
         mClickListener = listener;
     }
 
-    List<TrainLine> mLines = new ArrayList<TrainLine>();
 
-    public void setItems(List<TrainLine> items) {
+    public void setItems(ArrayList<TrainLine> items) {
         mLines = items;
     }
 
-    public Collection<TrainLine> getItems() {
+    public ArrayList<TrainLine> getItems() {
         return mLines;
     }
 
     public TrainLine getItem(int position) {
         return mLines.get(position);
+    }
+
+    public void setSelectedPosition(int selectedPosition) {
+        mSelectedPosition = selectedPosition;
     }
 
     @Override
@@ -45,7 +47,8 @@ public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.bindData(getItem(position));
+        viewHolder.bindData(getItem(position), position);
+        viewHolder.mIcon.setSelected(mSelectedPosition == position);
     }
 
     @Override
@@ -53,33 +56,38 @@ public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.View
         return mLines.size();
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TrainLineIcon mIcon;
         TrainLine mLine;
+        int mPosition;
+        OnItemClickListener mListener;
 
-        public ViewHolder(TrainLineIcon icon, final OnItemClickListener listener) {
+        public ViewHolder(TrainLineIcon icon, OnItemClickListener listener) {
             super(icon);
             mIcon = icon;
-            mIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener!= null) {
-                        listener.onItemClick(v, mLine);
-                    }
-                }
-            });
+            mIcon.setOnClickListener(this);
+            mListener = listener;
         }
 
-        public void bindData(TrainLine line) {
+        public void bindData(TrainLine line, int position) {
+            mPosition = position;
             mLine = line;
             mIcon.setTrainLine(line);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            if (mListener != null) {
+                mListener.onItemClick(v, mLine, mPosition);
+            }
         }
     }
 
     public interface OnItemClickListener {
 
-        public void onItemClick(View view, TrainLine trainline);
+        public void onItemClick(View view, TrainLine trainline, int position);
 
     }
 }

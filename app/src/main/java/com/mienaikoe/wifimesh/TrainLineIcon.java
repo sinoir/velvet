@@ -16,9 +16,13 @@ public class TrainLineIcon extends TypefaceTextView {
 
     private static final int DEFAULT = -1;
 
+    private static final String TAG = TrainLineIcon.class.getSimpleName();
+
     private Paint mPainter = new Paint();
 
     private int size;
+
+    private int mBgRes;
 
     public TrainLineIcon(Context context) {
         super(context);
@@ -37,11 +41,16 @@ public class TrainLineIcon extends TypefaceTextView {
 
     private void init(AttributeSet attrs) {
 
+        int[] attrsWanted = {
+                android.R.attr.background,
+                R.attr.iconSize
+        };
+        TypedArray a = getContext().obtainStyledAttributes(attrs, attrsWanted);
 
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TrainLineIcon);
+        mBgRes = a.getResourceId(0, 0);
 
         int defaultSize = getResources().getDimensionPixelSize(R.dimen.train_icon_small);
-        size = a.getDimensionPixelSize(R.styleable.TrainLineIcon_iconSize, defaultSize);
+        size = a.getDimensionPixelSize(1, defaultSize);
         a.recycle();
 
         if (isInEditMode()) {
@@ -71,14 +80,14 @@ public class TrainLineIcon extends TypefaceTextView {
     /**
      * Convenience method to set TrainLine to view.
      */
-    public void setTrainLine(TrainLine line, int size){
+    public void setTrainLine(TrainLine line, int size) {
         setData(line.getName(),
                 line.getBackgroundColor(),
                 line.getForegroundColor(),
                 size);
     }
 
-    public void setTrainLine(TrainLine line){
+    public void setTrainLine(TrainLine line) {
         setData(line.getName(),
                 line.getBackgroundColor(),
                 line.getForegroundColor(),
@@ -86,17 +95,16 @@ public class TrainLineIcon extends TypefaceTextView {
     }
 
 
-
-
-
     @Override
     protected void onDraw(Canvas canvas) {
         int width = getWidth();
         int height = getHeight();
-        canvas.drawCircle(width / 2, height/ 2, this.size / 2, mPainter);
+        canvas.drawCircle(width / 2, height / 2, this.size / 2, mPainter);
         setGravity(Gravity.CENTER);
         setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        setBackgroundResource(mBgRes);
         super.onDraw(canvas);
+
     }
 
 }

@@ -152,6 +152,7 @@ public class StartupActivity extends BaseActivity
                 this.toggleMap();
                 return true;
             case R.id.action_trainlines:
+                mEventBus.postSticky(new LineFragment.InitEvent(currentStation));
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);
                 startActivityForResult(intent, REQUEST_LINES);
                 return true;
@@ -271,6 +272,7 @@ public class StartupActivity extends BaseActivity
 
     public void setStation(TrainStation station) {
 
+        //LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
         this.currentStation = station;
 
         this.stationName.setText(station.getName());
