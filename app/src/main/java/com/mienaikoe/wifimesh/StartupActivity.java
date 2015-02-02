@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.transit.realtime.GtfsRealtime;
 
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
-import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
 import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
@@ -27,7 +26,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.Date;
@@ -149,6 +147,7 @@ public class StartupActivity extends BaseActivity
                 this.updateLocation();
                 return true;
             case R.id.action_trainlines:
+                mEventBus.postSticky(new LineFragment.InitEvent(currentStation));
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);
                 startActivityForResult(intent, REQUEST_LINES);
                 return true;
@@ -229,6 +228,7 @@ public class StartupActivity extends BaseActivity
 
     public void setStation(TrainStation station) {
         //LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+        currentStation = station;
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){

@@ -43,6 +43,15 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //look for event to consume
+        InitEvent event = mEventBus.getStickyEvent(InitEvent.class);
+        if (event == null) {
+            return;
+        }
+        currentStation = event.station;
+        //event is consumed, we can remove it now
+        mEventBus.removeStickyEvent(event);
     }
 
     @Override
@@ -63,6 +72,14 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
 
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (currentStation != null) {
+            setStation(currentStation);
+        }
     }
 
     public void setTrainSystem(TrainSystem trainSystem){
@@ -149,6 +166,14 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
         mAdapter.notifyDataSetChanged();
         currentLine = trainline;
         renderLine();
+    }
+
+    public static class InitEvent {
+        private TrainStation station;
+
+        public InitEvent(TrainStation station) {
+            this.station = station;
+        }
     }
 
 }
