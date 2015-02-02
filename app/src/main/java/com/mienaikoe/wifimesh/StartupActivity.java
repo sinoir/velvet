@@ -4,12 +4,13 @@ package com.mienaikoe.wifimesh;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.transit.realtime.GtfsRealtime;
 
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
@@ -28,21 +29,6 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.transit.realtime.GtfsRealtime;
-import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
-import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
-import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainRealtimeService;
-import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.util.Date;
 import java.util.List;
@@ -262,11 +248,11 @@ public class StartupActivity extends BaseActivity
         linesLayout.width = 420;
         topLine.setLayoutParams(linesLayout);
 
-        TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
-                        getResources().getDisplayMetrics())
-        );
-        topLine.addView(icon);
+        int largeIconSize = getResources().getDimensionPixelSize(R.dimen.train_icon_large);
+        TrainLineIcon icon = new TrainLineIcon(this);
+        icon.setTrainLine(line, largeIconSize);
+
+                topLine.addView(icon);
         RelativeLayout.LayoutParams iconParams = (RelativeLayout.LayoutParams) icon
                 .getLayoutParams();
         iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, -1);
@@ -289,7 +275,8 @@ public class StartupActivity extends BaseActivity
         TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
         timingGrid.addView( timing );
 
-        timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
+
         if( timings[0] != null ) {
             long northDiff = TimeUnit.MINUTES.convert(timings[0].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
             timing.setText(String.valueOf(northDiff) + "m");
@@ -301,7 +288,8 @@ public class StartupActivity extends BaseActivity
 
         TypefaceTextView timing2 = new TypefaceTextView(getApplicationContext());
         timingGrid.addView(timing2);
-        timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
+
         if( timings[1] != null ) {
             long southDiff = TimeUnit.MINUTES.convert(timings[1].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
             timing.setText(String.valueOf(southDiff) + "m");

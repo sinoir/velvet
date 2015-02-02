@@ -5,14 +5,20 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-
-    <Spinner
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:id="@+id/line_spinner"
-        style="@style/spinnerStyle" />
+        android:background="?attr/colorPrimary" >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

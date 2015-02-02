@@ -48,8 +48,6 @@ public class MapFragment extends BaseFragment {
 
 
 
-
-
     public void setSystem( TrainSystem system ){
         this.system = system;
     }

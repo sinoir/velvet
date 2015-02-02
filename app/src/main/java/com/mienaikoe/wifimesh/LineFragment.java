@@ -5,18 +5,18 @@ import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -27,65 +27,48 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class LineFragment extends BaseFragment implements AdapterView.OnItemSelectedListener  {
+public class LineFragment extends BaseFragment implements TrainIconAdapter.OnItemClickListener  {
 
-    private Context context;
+    private static final String TAG = LineFragment.class.getSimpleName();
 
     private TrainSystem trainSystem;
     private TrainStation currentStation;
     private TrainLine currentLine;
 
-    private Spinner lineSpinner;
-    private ArrayAdapter<String> lineSpinnerAdapter;
-    private TableLayout grid;
+    private RecyclerView mRecyclerView;
+    private TableLayout mGrid;
 
+    private TrainIconAdapter mAdapter = new TrainIconAdapter(this);
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_line, container, false);
 
-        this.context = inflater.getContext();
+        setSupportActionBar((Toolbar)rootView.findViewById(R.id.toolbar));
+        setDisplayHomeAsUpEnabled(true);
 
-        this.grid = (TableLayout) rootView.findViewById(R.id.station_list);
-        this.lineSpinner = (Spinner) rootView.findViewById(R.id.line_spinner);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+       // mRecyclerView.setHasFixedSize(true);
 
-        // populate line spinner because we can actually back the data with the Train System
-        this.lineSpinnerAdapter = new ArrayAdapter<String>(
-                this.getApplicationContext(),
-                android.R.layout.simple_spinner_item,
-                trainSystem.getLineNames());
-        this.lineSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        this.lineSpinner.setAdapter(this.lineSpinnerAdapter);
-        this.lineSpinner.setOnItemSelectedListener(this);
+        mGrid = (TableLayout) rootView.findViewById(R.id.station_list);
+
 
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
     public void setTrainSystem(TrainSystem trainSystem){
         this.trainSystem = trainSystem;
+        mAdapter.setItems(trainSystem.getLines());
     }
-
-
-
-    private Context getApplicationContext(){
-        return this.context;
-    }
-
-
-
 
     public void setStation(TrainStation station){
         this.currentStation = station;
@@ -93,16 +76,14 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
             this.currentLine = station.getRandomLine();
         }
         this.renderLine();
-        this.lineSpinner.setSelection(this.lineSpinnerAdapter.getPosition(this.currentLine.getName()));
     }
 
     private TableRow renderStation(final TrainStation station){
-        TableRow newRow = new TableRow( getApplicationContext());
+        TableRow newRow = new TableRow(getActivity());
         newRow.setGravity(Gravity.CENTER_VERTICAL);
         if( station.equals(this.currentStation) ){
             newRow.setBackgroundColor(getResources().getColor(R.color.dark_gray));
         }
-        //newRow.setOnClickListener(new StationClickListener((StartupActivity) getActivity(), station));
         newRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,11 +92,11 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
                 getActivity().finish();
             }
         });
-        newRow.setMinimumHeight( (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44, context.getResources().getDisplayMetrics()) );
+        newRow.setMinimumHeight( (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44, getActivity().getResources().getDisplayMetrics()) );
 
         // Connecting Lines
-        int columnWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
-        GridLayout stationLines = new GridLayout( getApplicationContext() );
+        int columnWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getActivity().getResources().getDisplayMetrics());
+        GridLayout stationLines = new GridLayout(getActivity());
         stationLines.setColumnCount(6);
         stationLines.setMinimumWidth(6 * columnWidth);
 
@@ -125,22 +106,24 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
             List<TrainLine> lines = new ArrayList<TrainLine>(station.getLines());
             Collections.reverse(lines);
 
+            int smallSize = getResources().getDimensionPixelSize(R.dimen.train_icon_small);
+
             for( TrainLine line : lines ) {
                 if( line.equals(this.currentLine) ){
                     continue;
                 }
-                TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, context.getResources().getDisplayMetrics())
-                );
+
+                TrainLineIcon icon = new TrainLineIcon(getActivity());
+                icon.setTrainLine(line,smallSize);
                 icon.setRotationY(180);
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.setGravity(Gravity.RIGHT);
                 params.setGravity(Gravity.CENTER_VERTICAL);
                 params.setMargins(
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics())
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics()),
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics()),
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics()),
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics())
                 );
                 icon.setLayoutParams(params);
 
@@ -150,16 +133,13 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
         newRow.addView(stationLines);
 
         // Train Track Icon
-        ImageView dotLine = new ImageView( getApplicationContext() );
+        ImageView dotLine = new ImageView(getActivity());
         dotLine.setImageResource(R.drawable.ic_train_station);
         newRow.addView(dotLine);
 
-        // Station Name
-        TypefaceTextView stationName = new TypefaceTextView( getApplicationContext() );
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        TypefaceTextView stationName = (TypefaceTextView)inflater.inflate(R.layout.station_name, newRow, false);
         stationName.setText(station.getName());
-        this.styleTypefaceTextView(stationName);
-        stationName.setTextColor(getResources().getColor(R.color.white));
-
         newRow.addView(stationName);
 
         return newRow;
@@ -167,52 +147,16 @@ public class LineFragment extends BaseFragment implements AdapterView.OnItemSele
 
 
     public void renderLine(){
-        this.grid.removeAllViews();
+        mGrid.removeAllViews();
         for( TrainStation lineStation : this.currentLine.getSouthStops() ){
-            this.grid.addView( renderStation(lineStation) );
+            mGrid.addView( renderStation(lineStation) );
         }
     }
 
-
-
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        String lineName = (String)parent.getItemAtPosition(pos);
-        this.currentLine = this.trainSystem.getLine(lineName);
-        this.renderLine();
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // ??
-    }
-
-
-    private void styleTypefaceTextView(TypefaceTextView textView){
-        textView.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
-        textView.setHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, context.getResources().getDisplayMetrics()));
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-        textView.setPadding(
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()),0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()),0);
-    }
-
-
-    private class StationClickListener implements View.OnClickListener {
-
-        private StartupActivity parent;
-        private TrainStation station;
-
-        StationClickListener( StartupActivity parent, TrainStation station ){
-            this.parent = parent;
-            this.station = station;
-        }
-
-        @Override
-        public void onClick(View v) {
-            this.parent.setStation(this.station);
-        }
+    @Override
+    public void onItemClick(View view, TrainLine trainline) {
+        currentLine = trainline;
+        renderLine();
     }
 
 }
