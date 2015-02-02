@@ -145,8 +145,8 @@ public class StartupActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_test_mesh:
-                startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
+            case R.id.action_locate:
+                this.updateLocation();
                 return true;
             case R.id.action_trainlines:
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);

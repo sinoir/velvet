@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.util.Log;
 import android.util.Xml;
 
+import com.mienaikoe.wifimesh.FontEnum;
 import com.mienaikoe.wifimesh.TypefaceTextView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -178,7 +179,7 @@ public class VectorMapIngestor {
                             activeTextInstruction = new VectorTextInstruction(
                                     "", transform,
                                     Color.parseColor(color),
-                                    TypefaceTextView.getTypeface(this.context, "fonts/HelveticaNeue-Medium.otf"),
+                                    FontEnum.HELVETICA_NEUE_MEDIUM.getTypeface(this.context),
                                     Float.valueOf(fontSize)
                             );
                         } else if (name.equals("tspan")){

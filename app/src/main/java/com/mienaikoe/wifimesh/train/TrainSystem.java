@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +41,7 @@ import java.util.TreeSet;
  */
 public class TrainSystem {
 
-    private ArrayList<TrainLine> lines = new ArrayList<TrainLine>();
+    private TreeSet<TrainLine> lines = new TreeSet<TrainLine>( new TrainLineComparator() );
     private Set<TrainStation> stations = new HashSet<TrainStation>();
     private Set<Trip> trips = new HashSet<Trip>();
 
@@ -265,7 +266,7 @@ public class TrainSystem {
 
     // Getters
 
-    public List<TrainLine> getLines() {
+    public Collection<TrainLine> getLines() {
         return lines;
     }
 
