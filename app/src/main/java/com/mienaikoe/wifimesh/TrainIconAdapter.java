@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.ViewHolder> {
 
     private OnItemClickListener mClickListener;
     private int mSelectedPosition = -1;
-    private List<TrainLine> mLines = new ArrayList<TrainLine>();
+    private ArrayList<TrainLine> mLines = new ArrayList<TrainLine>();
 
 
     public TrainIconAdapter(OnItemClickListener listener) {
@@ -22,11 +21,11 @@ public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.View
     }
 
 
-    public void setItems(List<TrainLine> items) {
+    public void setItems(ArrayList<TrainLine> items) {
         mLines = items;
     }
 
-    public List<TrainLine> getItems() {
+    public ArrayList<TrainLine> getItems() {
         return mLines;
     }
 

@@ -78,8 +78,18 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
     public void onResume() {
         super.onResume();
         if (currentStation != null) {
+            LastLineSeen event = mEventBus.getStickyEvent(LastLineSeen.class);
+            if (event != null) {
+                currentLine = event.line;
+            }
             setStation(currentStation);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mEventBus.postSticky(new LastLineSeen(currentLine));
     }
 
     public void setTrainSystem(TrainSystem trainSystem){
@@ -92,6 +102,10 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
         if( !station.hasLine(this.currentLine) ) {
             this.currentLine = station.getRandomLine();
         }
+        int position = mAdapter.getItems().indexOf(currentLine);
+        mAdapter.setSelectedPosition(position);
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(position);
         this.renderLine();
     }
 
@@ -173,6 +187,13 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
 
         public InitEvent(TrainStation station) {
             this.station = station;
+        }
+    }
+
+    public static class LastLineSeen {
+        private TrainLine line;
+        public LastLineSeen(TrainLine line) {
+            this.line = line;
         }
     }
 
