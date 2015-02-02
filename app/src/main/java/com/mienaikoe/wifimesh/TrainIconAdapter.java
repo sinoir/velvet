@@ -1,6 +1,7 @@
 package com.mienaikoe.wifimesh;
 
 import com.mienaikoe.wifimesh.train.TrainLine;
+import com.mienaikoe.wifimesh.train.TrainLineComparator;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 
 public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.ViewHolder> {
 
@@ -24,7 +27,7 @@ public class TrainIconAdapter extends RecyclerView.Adapter<TrainIconAdapter.View
         mLines = items;
     }
 
-    public List<TrainLine> getItems() {
+    public Collection<TrainLine> getItems() {
         return mLines;
     }
 

@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.transit.realtime.GtfsRealtime;
 
+import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
 import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
@@ -61,23 +62,26 @@ public class StartupActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Fill Out Train System Information
         this.trainSystem = new TrainSystem(
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
                 this.getApplicationContext().getResources()
                         .openRawResource(R.raw.transfers_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
-                this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
+                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
         );
+        VectorMapIngestor ingestor = new VectorMapIngestor(getApplicationContext(), "normal_map.svg");
+        this.trainSystem.fillRectangles(ingestor);
+        initTrainTiming();
+
         TrainSystemModel.setTrainSystem(trainSystem);
 
-
-        initTrainTiming();
 
 
         if (savedInstanceState == null) {
             mapFragment = new MapFragment();
             mapFragment.setSystem(trainSystem);
+            mapFragment.setMapIngestor(ingestor);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, mapFragment)
                     .commit();
@@ -141,8 +145,8 @@ public class StartupActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_test_mesh:
-                startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
+            case R.id.action_locate:
+                this.updateLocation();
                 return true;
             case R.id.action_trainlines:
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);
@@ -238,12 +242,11 @@ public class StartupActivity extends BaseActivity
 
 
     private ViewGroup renderStationLine(TrainStation station, TrainLine line){
-        LinearLayout layout = new LinearLayout(this.getApplicationContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
-        this.linesTiming.addView(layout);
-
         RelativeLayout topLine = new RelativeLayout(this.getApplicationContext());
-        layout.addView(topLine);
+        this.linesTiming.addView(topLine);
+        GridLayout.LayoutParams linesLayout = (GridLayout.LayoutParams)topLine.getLayoutParams();
+        linesLayout.width = 420;
+        topLine.setLayoutParams(linesLayout);
 
         int largeIconSize = getResources().getDimensionPixelSize(R.dimen.train_icon_large);
         TrainLineIcon icon = new TrainLineIcon(this);
@@ -262,8 +265,8 @@ public class StartupActivity extends BaseActivity
         timingParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, -1);
         timingGrid.setLayoutParams(timingParams);
 
-        int timingPaddingHoriz = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
-                getResources().getDisplayMetrics());
+        int timingPaddingHoriz = (int) TypedValue.
+                applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
         int timingPaddingVert = (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
 
@@ -276,9 +279,8 @@ public class StartupActivity extends BaseActivity
 
         if( timings[0] != null ) {
             long northDiff = TimeUnit.MINUTES.convert(timings[0].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
-            timing.setText(String.valueOf(northDiff) + "min");
+            timing.setText(String.valueOf(northDiff) + "m");
         }
-
         timing.setTextColor(getResources().getColor(R.color.white));
         timing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz,
@@ -290,15 +292,13 @@ public class StartupActivity extends BaseActivity
 
         if( timings[1] != null ) {
             long southDiff = TimeUnit.MINUTES.convert(timings[1].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
-            timing.setText(String.valueOf(southDiff) + "min");
+            timing.setText(String.valueOf(southDiff) + "m");
         }
-
         timing2.setTextColor(getResources().getColor(R.color.white));
         timing2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         timing2.setPadding(timingPaddingHoriz, timingPaddingVert, timingPaddingHoriz, timingPaddingVert);
 
-
-        return layout;
+        return topLine;
     }
 
 

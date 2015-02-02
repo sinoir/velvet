@@ -3,14 +3,17 @@ package com.mienaikoe.wifimesh;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum FontEnum {
 
     HELVETICA_NEUE("HelveticaNeue.otf"),
     HELVETICA_NEUE_MEDIUM("HelveticaNeue-Medium.otf");
 
     private String mFileName;
-
     private Typeface mTypeface;
+
 
     private FontEnum(String fileName) {
         mFileName = fileName;
@@ -25,6 +28,7 @@ public enum FontEnum {
         if (mTypeface == null) {
            mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + mFileName);
         }
+
         return mTypeface;
     }
 }

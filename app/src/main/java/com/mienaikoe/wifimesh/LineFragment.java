@@ -67,7 +67,7 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
 
     public void setTrainSystem(TrainSystem trainSystem){
         this.trainSystem = trainSystem;
-        mAdapter.setItems(trainSystem.getLines());
+        mAdapter.setItems(new ArrayList<TrainLine>(trainSystem.getLines()));
     }
 
     public void setStation(TrainStation station){
@@ -130,6 +130,7 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
 
         TypefaceTextView stationName = (TypefaceTextView)inflater.inflate(R.layout.station_name, newRow, false);
         stationName.setText(station.getName());
+        stationName.setTextSize( TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getActivity().getResources().getDisplayMetrics()) );
         newRow.addView(stationName);
 
         return newRow;

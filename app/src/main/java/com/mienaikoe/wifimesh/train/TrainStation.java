@@ -5,6 +5,8 @@ import android.graphics.RectF;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.mienaikoe.wifimesh.map.VectorInstruction;
+import com.mienaikoe.wifimesh.map.VectorRectangleInstruction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +30,7 @@ public class TrainStation {
 
     private LatLng center;
 
-    private Set<RectF> mapRectangles = new HashSet<RectF>();
+    private List<VectorRectangleInstruction> mapRectangles = new ArrayList<VectorRectangleInstruction>();
 
 
     public TrainStation(String name, LatLng center){
@@ -128,33 +130,28 @@ public class TrainStation {
 
     // Map View Dimensions
 
-    public void addMapRectangle(RectF rect){
-        this.mapRectangles.add(rect);
+    public void addMapRectangle(VectorRectangleInstruction instruction){
+        this.mapRectangles.add(instruction);
     }
 
-    public void addMapRectangle(float x, float y, float width, float height){
-        RectF rect = new RectF(x, y, x+width, y+height);
-        this.addMapRectangle(rect);
-    }
-
-    public Set<RectF> getMapRectangles() {
+    public List<VectorRectangleInstruction> getMapRectangles() {
         return mapRectangles;
     }
 
     public float getViewX(){
-        float sumX = 0;
-        for( RectF rect : this.mapRectangles ){
-            sumX += rect.left;
+        float sum = 0;
+        for( VectorRectangleInstruction rect : this.mapRectangles ){
+            sum += rect.getCenterX();
         }
-        return sumX / this.mapRectangles.size();
+        return sum / this.mapRectangles.size();
     }
 
     public float getViewY(){
-        float sumY = 0;
-        for( RectF rect : this.mapRectangles ){
-            sumY += rect.top;
+        float sum = 0;
+        for( VectorRectangleInstruction rect : this.mapRectangles ){
+            sum += rect.getCenterY();
         }
-        return sumY / this.mapRectangles.size();
+        return sum / this.mapRectangles.size();
     }
 
     public boolean hasRectangles(){

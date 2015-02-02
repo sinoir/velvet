@@ -20,6 +20,7 @@ public class VectorPathInstruction implements VectorInstruction {
         paint.setColor(color);
         paint.setStrokeWidth(width);
         paint.setStyle(Paint.Style.STROKE);
+        paint.setAntiAlias(true);
     }
 
     @Override

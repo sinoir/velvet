@@ -17,12 +17,13 @@ public class VectorTextInstruction implements VectorInstruction {
     private float x;
     private float y;
 
-    public VectorTextInstruction(String text, String matrix, int color, Typeface typeface){
+    public VectorTextInstruction(String text, String matrix, int color, Typeface typeface, float fontSize){
         if( text == null ){
             text = "";
         }
         this.text = text;
 
+        matrix = matrix.substring(7, matrix.length()-1);
         String[] matrixArr = matrix.split(" ");
         this.x = Float.valueOf(matrixArr[matrixArr.length-2]);
         this.y = Float.valueOf(matrixArr[matrixArr.length-1]);
@@ -30,7 +31,7 @@ public class VectorTextInstruction implements VectorInstruction {
         this.paint = new Paint();
         this.paint.setColor(color);
         this.paint.setTypeface(typeface);
-        this.paint.setTextSize(9.0f);
+        this.paint.setTextSize(fontSize);
     }
 
     public VectorTextInstruction(VectorTextInstruction copy){
@@ -61,5 +62,9 @@ public class VectorTextInstruction implements VectorInstruction {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawText(this.text, this.x, this.y, this.paint);
+    }
+
+    public void setFontSize(float fontSize) {
+        this.paint.setTextSize(fontSize);
     }
 }

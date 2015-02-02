@@ -17,21 +17,31 @@
             android:layout_height="match_parent" />
     </android.support.v7.widget.Toolbar>
 
+    <View
+        android:id="@+id/colored_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@color/white" />
+
     <ScrollView
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:paddingBottom="@dimen/line_fragment_margin"
             android:id="@+id/station_list">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:padding="5dp">
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
             </TableRow>
         </TableLayout>
