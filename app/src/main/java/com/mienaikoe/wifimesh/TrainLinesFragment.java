@@ -27,9 +27,9 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class LineFragment extends BaseFragment implements TrainIconAdapter.OnItemClickListener  {
+public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter.OnItemClickListener  {
 
-    private static final String TAG = LineFragment.class.getSimpleName();
+    private static final String TAG = TrainLinesFragment.class.getSimpleName();
 
     private TrainSystem trainSystem;
     private TrainStation currentStation;

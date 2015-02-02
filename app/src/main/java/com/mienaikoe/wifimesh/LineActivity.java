@@ -16,10 +16,10 @@ public class LineActivity extends BaseActivity {
         setContentView(R.layout.activity_fragment_container);
 
         if (savedInstanceState == null) {
-            LineFragment lineFragment = new LineFragment();
-            lineFragment.setTrainSystem(TrainSystemModel.getTrainSystem());
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, lineFragment)
+            TrainLinesFragment trainLinesFragment = new TrainLinesFragment();
+            trainLinesFragment.setTrainSystem(TrainSystemModel.getTrainSystem());
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, trainLinesFragment)
                     .commit();
         }
 

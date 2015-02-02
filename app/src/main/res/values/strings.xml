@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Velvet</string>
+    <string name="app_name">remap</string>
 
     <string name="menu_test">Test Mesh</string>
     <string name="menu_lines">Lines</string>
     <string name="menu_locate">Update Location</string>
+    <string name="menu_map">Toggle Map</string>
     <string name="menu_search">Search For Station</string>
     <string name="title_activity_station">StationActivity</string>
 

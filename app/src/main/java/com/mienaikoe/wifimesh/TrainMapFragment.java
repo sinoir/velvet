@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by Jesse on 1/18/2015.
  */
-public class MapFragment extends BaseFragment {
+public class TrainMapFragment extends BaseFragment {
 
     private Context context;
 

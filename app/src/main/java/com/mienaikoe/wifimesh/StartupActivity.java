@@ -4,18 +4,26 @@ package com.mienaikoe.wifimesh;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.transit.realtime.GtfsRealtime;
 
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
-import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
 import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -27,7 +35,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.Date;
@@ -44,14 +51,17 @@ public class StartupActivity extends BaseActivity
     private static final int REQUEST_LINES = 1;
 
     private ImageView mapView;
-    private MapFragment mapFragment;
+    private TrainMapFragment trainMapFragment;
+    private MapFragment googleMapFragment;
     private TrainSystem trainSystem;
     private GoogleApiClient googleApiClient;
     private boolean googleApiConnected = false;
     private TypefaceTextView stationName;
     private GridLayout linesTiming;
-
+    private LatLng currentLocation;
+    private boolean usingGoogleMap = false;
     private TrainStation currentStation;
+    private VectorMapIngestor ingestor;
 
     //region Lifecycle
     @Override
@@ -70,23 +80,15 @@ public class StartupActivity extends BaseActivity
                         .openRawResource(R.raw.transfers_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
         );
-        VectorMapIngestor ingestor = new VectorMapIngestor(getApplicationContext(), "normal_map.svg");
+        this.ingestor = new VectorMapIngestor(getApplicationContext(), "normal_map.svg");
         this.trainSystem.fillRectangles(ingestor);
         initTrainTiming();
 
         TrainSystemModel.setTrainSystem(trainSystem);
 
-
-
         if (savedInstanceState == null) {
-            mapFragment = new MapFragment();
-            mapFragment.setSystem(trainSystem);
-            mapFragment.setMapIngestor(ingestor);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, mapFragment)
-                    .commit();
+            this.initMaps();
         }
-
 
         this.stationName = (TypefaceTextView) findViewById(R.id.station_name);
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
@@ -120,8 +122,6 @@ public class StartupActivity extends BaseActivity
 
     @Override
     public void onResume() {
-        // Get location and resume location updates
-        //updateLocation(); // call update location only when requested
         super.onResume();
     }
 
@@ -148,6 +148,9 @@ public class StartupActivity extends BaseActivity
             case R.id.action_locate:
                 this.updateLocation();
                 return true;
+            case R.id.action_map_toggle:
+                this.toggleMap();
+                return true;
             case R.id.action_trainlines:
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);
                 startActivityForResult(intent, REQUEST_LINES);
@@ -156,6 +159,38 @@ public class StartupActivity extends BaseActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void toggleMap() {
+        if( this.usingGoogleMap ){
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(googleMapFragment)
+                    .show(trainMapFragment)
+                    .commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(trainMapFragment)
+                    .show(googleMapFragment)
+                    .commit();
+        }
+        this.usingGoogleMap = !this.usingGoogleMap;
+    }
+
+
+    private void initMaps(){
+        trainMapFragment = new TrainMapFragment();
+        trainMapFragment.setSystem(trainSystem);
+        trainMapFragment.setMapIngestor(ingestor);
+        googleMapFragment = new MapFragment();
+
+        getFragmentManager().beginTransaction()
+                .add(R.id.container, trainMapFragment)
+                .add(R.id.container, googleMapFragment)
+                .hide(googleMapFragment)
+                .commit();
+    }
+
 
 
     @Override
@@ -193,25 +228,30 @@ public class StartupActivity extends BaseActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
         this.googleApiClient.connect();
     }
 
     private void updateLocation() {
-        if (this.googleApiConnected) {
-            if (mapFragment != null) {
-                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
-                this.onLocationChanged(lastLocation);
-            }
-        }
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
+        LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);
     }
+
+
 
 
 
     @Override
     public void onConnected(Bundle connectionHint) {
         this.googleApiConnected = true;
-        updateLocation();
+        if (this.googleApiConnected) {
+            if (trainMapFragment != null) {
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+                this.onLocationChanged(lastLocation);
+            }
+        }
     }
 
     @Override
@@ -219,26 +259,47 @@ public class StartupActivity extends BaseActivity
         if (location != null) {
             Log.i(this.getClass().getSimpleName(),
                     "Location Changed: " + location.getLatitude() + ", " + location.getLongitude());
-
-            TrainStation closestStation = trainSystem
-                    .closestStation(new LatLng(location.getLatitude(), location.getLongitude()));
-
+            this.currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            TrainStation closestStation = trainSystem.closestStation(this.currentLocation);
             this.setStation(closestStation);
+            LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
         }
     }
 
     public void setStation(TrainStation station) {
-        //LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+
+        this.currentStation = station;
+
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){
             renderStationLine(station, line);
         }
+
         this.linesTiming.invalidate();
 
-        mapFragment.setStation(station);
-    }
+        trainMapFragment.setStation(station);
 
+        googleMapFragment.getMap().setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                googleMapFragment.getMap().setBuildingsEnabled(false);
+                googleMapFragment.getMap().setTrafficEnabled(false);
+                LatLngBounds boundedCoords;
+                if (currentStation.getCenter().latitude > currentLocation.latitude) {
+                    boundedCoords = new LatLngBounds(currentLocation, currentStation.getCenter());
+                } else {
+                    boundedCoords = new LatLngBounds(currentStation.getCenter(), currentLocation);
+                }
+                for( LatLng entrance : currentStation.getEntrances() ) {
+                    MarkerOptions mo = new MarkerOptions();
+                    mo.position(entrance);
+                    googleMapFragment.getMap().addMarker(mo);
+                }
+                googleMapFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngBounds(boundedCoords, 100));
+            }
+        });
+    }
 
 
     private ViewGroup renderStationLine(TrainStation station, TrainLine line){
@@ -312,6 +373,4 @@ public class StartupActivity extends BaseActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(this.getClass().getSimpleName(), "Connection to Play Services Failed");
     }
-
-
 }
