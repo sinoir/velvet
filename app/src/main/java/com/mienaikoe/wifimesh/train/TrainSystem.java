@@ -219,16 +219,20 @@ public class TrainSystem {
                 }
             }
 
-            String directionStr = update.getTrip().getTripId().split("_")[1].substring(3, 4);
-            TrainDirection direction = TrainDirection.fromString(directionStr);
-
-            for (GtfsRealtime.TripUpdate.StopTimeUpdate stopTimeUpdate : message.getEntity(i).getTripUpdate().getStopTimeUpdateList()) {
-                String stopId = stopTimeUpdate.getStopId().substring(0, stopTimeUpdate.getStopId().length() - 1);
-                TrainStation station = this.stopidStations.get(stopId);
-                Trip trip = new Trip(entityLine, direction);
-                long timestamp = stopTimeUpdate.getArrival().getTime();
-                trip.addStationTiming(station, timestamp);
-                this.trips.add(trip);
+            String tripIdPortion = update.getTrip().getTripId().split("_")[1];
+            if( tripIdPortion.length() > 1 ) {
+                String directionStr = update.getTrip().getTripId().split("_")[1].substring(3, 4);
+                TrainDirection direction = TrainDirection.fromString(directionStr);
+                for (GtfsRealtime.TripUpdate.StopTimeUpdate stopTimeUpdate : message.getEntity(i).getTripUpdate().getStopTimeUpdateList()) {
+                    String stopId = stopTimeUpdate.getStopId().substring(0, stopTimeUpdate.getStopId().length() - 1);
+                    TrainStation station = this.stopidStations.get(stopId);
+                    Trip trip = new Trip(entityLine, direction);
+                    long timestamp = stopTimeUpdate.getArrival().getTime();
+                    trip.addStationTiming(station, timestamp);
+                    this.trips.add(trip);
+                }
+            } else {
+                Log.w(this.getClass().getSimpleName(), "Invalid Trip Id from Sinoir: "+tripIdPortion);
             }
         }
     }
@@ -237,8 +241,7 @@ public class TrainSystem {
         Date northTiming = null;
         Date southTiming = null;
         for( Trip trip : this.trips ){
-            if( trip.getLine() == line || trip.getLine().getName().equals("L")){
-                Log.i("TESTING STATION TIMINGS","trip: "+trip.getStationTimings().values().toString());
+            if( trip.getLine() == line ){
                 if( trip.getStationTimings().containsKey(station) ) {
                     Date date = trip.getStationTimings().get(station);
                     if (date.before(new Date())) {

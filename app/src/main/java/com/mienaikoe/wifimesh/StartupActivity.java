@@ -152,7 +152,7 @@ public class StartupActivity extends BaseActivity
                 this.toggleMap();
                 return true;
             case R.id.action_trainlines:
-                mEventBus.postSticky(new LineFragment.InitEvent(currentStation));
+                mEventBus.postSticky(new TrainLinesFragment.InitEvent(currentStation));
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);
                 startActivityForResult(intent, REQUEST_LINES);
                 return true;
@@ -235,9 +235,9 @@ public class StartupActivity extends BaseActivity
     private void updateLocation() {
         Log.i(this.getClass().getSimpleName(), "Updating Location");
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        locationRequest.setFastestInterval(1000 * 10); // walking for 10 seconds won't get you far
+        locationRequest.setInterval(1000*10); // walking for 1 minute will change enough with accuracy differences
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setFastestInterval(1000 * 5); // walking for 10 seconds won't get you far
         LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);
     }
 
@@ -290,18 +290,12 @@ public class StartupActivity extends BaseActivity
             public void onMapLoaded() {
                 googleMapFragment.getMap().setBuildingsEnabled(false);
                 googleMapFragment.getMap().setTrafficEnabled(false);
-                LatLngBounds boundedCoords;
-                if (currentStation.getCenter().latitude > currentLocation.latitude) {
-                    boundedCoords = new LatLngBounds(currentLocation, currentStation.getCenter());
-                } else {
-                    boundedCoords = new LatLngBounds(currentStation.getCenter(), currentLocation);
-                }
                 for( LatLng entrance : currentStation.getEntrances() ) {
                     MarkerOptions mo = new MarkerOptions();
                     mo.position(entrance);
                     googleMapFragment.getMap().addMarker(mo);
                 }
-                googleMapFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngBounds(boundedCoords, 100));
+                googleMapFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(currentStation.getCenter(), 16));
             }
         });
     }

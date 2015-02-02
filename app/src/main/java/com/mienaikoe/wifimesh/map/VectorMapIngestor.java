@@ -128,11 +128,15 @@ public class VectorMapIngestor {
                                 String[] nameId = shittyId.split("_x5F");
                                 StringBuilder rectIdBuilder = new StringBuilder();
                                 Matcher rectIdMatcher = ILLUSTRATOR_HEX_PATTERN.matcher(nameId[0]);
+                                int lastEnd = 0;
                                 while (rectIdMatcher.find()) {
+                                    rectIdBuilder.append( nameId[0].substring(lastEnd,rectIdMatcher.start()) );
                                     String hexCode = rectIdMatcher.group(1);
                                     rectIdBuilder.append((char) Integer.parseInt(hexCode, 16));
+                                    lastEnd = rectIdMatcher.end();
                                 }
-                                String rectId = rectIdBuilder.toString();
+                                rectIdBuilder.append( nameId[0].substring(lastEnd) );
+                                String rectId = rectIdBuilder.toString().replace("_","");
                                 this.namedInstructions.put(rectId, instruction);
                             }
                         } else if (name.equals("line")) {

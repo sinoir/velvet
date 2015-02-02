@@ -192,8 +192,8 @@ public class TrainView extends View {
 
     public void setCenter( float x, float y ){
         mScaleFactor = 2.5f;
-        this.deltaX = -x + (this.maxX/2);
-        this.deltaY = -y + (this.maxY/2);
+        this.deltaX = -(x);
+        this.deltaY = -(y);
         invalidate();
     }
 

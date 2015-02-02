@@ -12,15 +12,15 @@
 	<path fill="#8DA59A" d="M508.5,2294.7"/>
 </g>
 <g id="PARKS" opacity="0.18">
-	<rect x="424.4" y="781.5" fill="#009D57" width="193.1" height="433.9"/>
-	<rect x="361.4" y="543.2" fill="#009D57" width="19.3" height="74.1"/>
-	<rect x="344.1" y="657.6" fill="#009D57" width="19.3" height="119.4"/>
-	<rect x="232.8" y="635.9" fill="#009D57" width="18.7" height="552.8"/>
-	<rect x="597.5" y="641.8" fill="#009D57" width="48" height="46.4"/>
-	<rect x="574.1" y="1394.7" fill="#009D57" width="43.9" height="30.9"/>
-	<rect x="622.9" y="1534" fill="#009D57" width="22.2" height="30.9"/>
-	<rect x="583.8" y="1704.4" fill="#009D57" width="42.6" height="25.9"/>
-	<rect x="640.1" y="2000.1" fill="#009D57" width="28.3" height="63.8"/>
+	<rect x="424.4" y="781.5" fill="#b7edb7" width="193.1" height="433.9"/>
+	<rect x="361.4" y="543.2" fill="#b7edb7" width="19.3" height="74.1"/>
+	<rect x="344.1" y="657.6" fill="#b7edb7" width="19.3" height="119.4"/>
+	<rect x="232.8" y="635.9" fill="#b7edb7" width="18.7" height="552.8"/>
+	<rect x="597.5" y="641.8" fill="#b7edb7" width="48" height="46.4"/>
+	<rect x="574.1" y="1394.7" fill="#b7edb7" width="43.9" height="30.9"/>
+	<rect x="622.9" y="1534" fill="#b7edb7" width="22.2" height="30.9"/>
+	<rect x="583.8" y="1704.4" fill="#b7edb7" width="42.6" height="25.9"/>
+	<rect x="640.1" y="2000.1" fill="#b7edb7" width="28.3" height="63.8"/>
 </g>
 <g id="CROSS_STREETS" opacity="0.15">
 	<line fill="none" stroke="#FFFFFF" stroke-width="5" x1="620.4" y1="688.3" x2="620.4" y2="1740.7"/>
