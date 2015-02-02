@@ -36,11 +36,17 @@ public class TrainLineIcon extends TypefaceTextView {
     }
 
     private void init(AttributeSet attrs) {
+
+
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TrainLineIcon);
 
         int defaultSize = getResources().getDimensionPixelSize(R.dimen.train_icon_small);
         size = a.getDimensionPixelSize(R.styleable.TrainLineIcon_iconSize, defaultSize);
         a.recycle();
+
+        if (isInEditMode()) {
+            return;
+        }
 
         setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
         //setBackgroundColor(getResources().getColor(R.color.transparent));

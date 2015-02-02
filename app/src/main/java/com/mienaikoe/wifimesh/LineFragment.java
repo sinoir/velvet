@@ -79,11 +79,10 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
     }
 
     private TableRow renderStation(final TrainStation station){
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
         TableRow newRow = new TableRow(getActivity());
         newRow.setGravity(Gravity.CENTER_VERTICAL);
-        if( station.equals(this.currentStation) ){
-            newRow.setBackgroundColor(getResources().getColor(R.color.dark_gray));
-        }
         newRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +91,11 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
                 getActivity().finish();
             }
         });
+        newRow.setBackgroundResource(R.drawable.bg_transparent_to_light_white_opacity);
+        if( station.equals(this.currentStation) ) {
+            newRow.setSelected(true);
+        }
+
         newRow.setMinimumHeight( (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44, getActivity().getResources().getDisplayMetrics()) );
 
         // Connecting Lines
@@ -106,28 +110,15 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
             List<TrainLine> lines = new ArrayList<TrainLine>(station.getLines());
             Collections.reverse(lines);
 
-            int smallSize = getResources().getDimensionPixelSize(R.dimen.train_icon_small);
-
             for( TrainLine line : lines ) {
                 if( line.equals(this.currentLine) ){
                     continue;
                 }
 
-                TrainLineIcon icon = new TrainLineIcon(getActivity());
-                icon.setTrainLine(line,smallSize);
+                TrainLineIcon icon = (TrainLineIcon)inflater.inflate(R.layout.lineview_train_icon, stationLines, false);
+                icon.setTrainLine(line);
                 icon.setRotationY(180);
-                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                params.setGravity(Gravity.RIGHT);
-                params.setGravity(Gravity.CENTER_VERTICAL);
-                params.setMargins(
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics()),
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getActivity().getResources().getDisplayMetrics())
-                );
-                icon.setLayoutParams(params);
-
-                stationLines.addView( icon );
+                stationLines.addView(icon);
             }
         }
         newRow.addView(stationLines);
@@ -137,7 +128,6 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
         dotLine.setImageResource(R.drawable.ic_train_station);
         newRow.addView(dotLine);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
         TypefaceTextView stationName = (TypefaceTextView)inflater.inflate(R.layout.station_name, newRow, false);
         stationName.setText(station.getName());
         stationName.setTextSize( TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getActivity().getResources().getDisplayMetrics()) );

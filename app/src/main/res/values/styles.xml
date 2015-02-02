@@ -35,7 +35,14 @@
         <item name="android:background">@color/red_velvet</item>
     </style>
 
-
+    <style name="trainIconStyle">
+        <item name="android:layout_width">@dimen/train_icon_small</item>
+        <item name="android:layout_height">@dimen/train_icon_small</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="iconSize">@dimen/train_icon_small</item>
+    </style>
 
     <style name="spinnerStyle">
         <item name="android:background">#222222</item>
