@@ -232,6 +232,7 @@ public class StartupActivity extends BaseActivity
     }
 
     private void updateLocation() {
+        Log.i(this.getClass().getSimpleName(), "Updating Location");
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(1000*60); // walking for 1 minute will change enough with accuracy differences
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -263,6 +264,8 @@ public class StartupActivity extends BaseActivity
             TrainStation closestStation = trainSystem.closestStation(this.currentLocation);
             this.setStation(closestStation);
             LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+        } else {
+            Log.w(this.getClass().getSimpleName(), "Location was Null");
         }
     }
 
