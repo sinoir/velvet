@@ -13,6 +13,10 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
+    <!-- Transparent Whites -->
+    <color name="d_white_10op">#1AFFFFFF</color>
+    <color name="d_white_20op">#33FFFFFF</color>
+
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#CCCCCC</color>
     <color name="dark_gray">#333333</color>
