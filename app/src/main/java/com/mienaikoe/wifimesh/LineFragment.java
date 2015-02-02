@@ -57,7 +57,7 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-       // mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(true);
 
         mGrid = (TableLayout) rootView.findViewById(R.id.station_list);
 
@@ -130,7 +130,6 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
 
         TypefaceTextView stationName = (TypefaceTextView)inflater.inflate(R.layout.station_name, newRow, false);
         stationName.setText(station.getName());
-        stationName.setTextSize( TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getActivity().getResources().getDisplayMetrics()) );
         newRow.addView(stationName);
 
         return newRow;
@@ -145,7 +144,9 @@ public class LineFragment extends BaseFragment implements TrainIconAdapter.OnIte
     }
 
     @Override
-    public void onItemClick(View view, TrainLine trainline) {
+    public void onItemClick(View view, TrainLine trainline, int position) {
+        mAdapter.setSelectedPosition(position);
+        mAdapter.notifyDataSetChanged();
         currentLine = trainline;
         renderLine();
     }
