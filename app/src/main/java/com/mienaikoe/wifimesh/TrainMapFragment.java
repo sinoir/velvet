@@ -7,6 +7,7 @@ import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Jesse on 1/18/2015.

@@ -22,14 +22,20 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.mienaikoe.wifimesh.R;
+import com.mienaikoe.wifimesh.StartupActivity;
+import com.mienaikoe.wifimesh.StationSelectEvent;
+import com.mienaikoe.wifimesh.TrainMapFragment;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * TODO: document your custom view class.
@@ -48,8 +54,6 @@ public class TrainView extends View {
     private float startY = 0;
     private float deltaX = 200;
     private float deltaY = -50;
-    private float maxX;
-    private float maxY;
 
 
     private VectorMapIngestor ingestor;
@@ -58,6 +62,7 @@ public class TrainView extends View {
     private ArrayList<VectorInstruction> mapInstructions = new ArrayList<VectorInstruction>();
 
 
+    private EventBus mEventBus = EventBus.getDefault();
 
 
     public TrainView(Context context) {
@@ -77,14 +82,6 @@ public class TrainView extends View {
 
     private void init(Context context){
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        this.maxX = size.x;
-        this.maxY = size.y;
-
         this.setBackgroundColor(this.getResources().getColor(R.color.light_gray));
     }
 
@@ -137,6 +134,8 @@ public class TrainView extends View {
 
 
     private int mActivePointerId = -1;
+    private Long lastTouch = null;
+    private boolean moved = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -145,6 +144,7 @@ public class TrainView extends View {
 
         switch (MotionEventCompat.getActionMasked(ev)) {
             case MotionEvent.ACTION_DOWN: {
+                lastTouch = new Date().getTime();
                 final int pointerIndex = MotionEventCompat.getActionIndex(ev);
                 startX = MotionEventCompat.getX(ev, pointerIndex) - deltaX;
                 startY = MotionEventCompat.getY(ev, pointerIndex) - deltaY;
@@ -152,6 +152,7 @@ public class TrainView extends View {
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
+                moved = true;
                 if( MotionEventCompat.getPointerCount(ev) <= 1 ) {
                     final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                     if (pointerIndex == -1) {
@@ -167,6 +168,14 @@ public class TrainView extends View {
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
+                if( !moved && new Date().getTime() - lastTouch < 500 ){
+                    final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+                    onClick(
+                            (-deltaX) + (MotionEventCompat.getX(ev, pointerIndex)),
+                            (-deltaY) + (MotionEventCompat.getY(ev, pointerIndex))
+                    );
+                }
+                moved = false;
                 mActivePointerId = -1;
                 break;
             }
@@ -190,10 +199,31 @@ public class TrainView extends View {
     }
 
 
+
+    private static final int CLICK_THRESHOLD_DISTANCE = 20;
+
+    private void onClick( float x, float y ){
+        Log.i(this.getClass().getSimpleName(), "On Clicking: ["+x+","+y+"]");
+        for( TrainStation station : this.system.getStations() ){
+            if( Math.abs(station.getViewX() - x) < CLICK_THRESHOLD_DISTANCE &&
+                Math.abs(station.getViewY() - y) < CLICK_THRESHOLD_DISTANCE ){
+
+                Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+Math.abs(station.getViewX() - x)+":"+Math.abs(station.getViewY() - y));
+                Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+station.getName());
+
+                mEventBus.postSticky(new StationSelectEvent(station));
+                return;
+            }
+        }
+    }
+
+
     public void setCenter( float x, float y ){
         mScaleFactor = 2.5f;
-        this.deltaX = -(x);
-        this.deltaY = -(y);
+        this.scalePointX = 0.f;
+        this.scalePointY = 0.f;
+        this.deltaX = -x + (this.getWidth()/(2*mScaleFactor));
+        this.deltaY = -y + (this.getHeight()/(2*mScaleFactor));
         invalidate();
     }
 
