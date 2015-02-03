@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:columnCount="6"
+    android:minWidth="108dp">
+
+    <!--There are 12 spots max in the layout, they are number from right to left, one row at a time-->
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_6"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_5"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_4"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_3"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_2"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_1"
+        style="@style/trainIconStyle" />
+
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_12"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_11"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_10"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_9"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_8"
+        style="@style/trainIconStyle" />
+
+    <com.mienaikoe.wifimesh.TrainLineIcon
+        android:id="@+id/train_7"
+        style="@style/trainIconStyle" />
+
+
+</GridLayout>

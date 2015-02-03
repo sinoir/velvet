@@ -1,10 +1,14 @@
 package com.mienaikoe.wifimesh;
 
-import android.support.v4.app.Fragment;
+
+import android.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseFragment extends Fragment{
+public class BaseFragment extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -26,5 +30,14 @@ public class BaseFragment extends Fragment{
             mEventBus.unregister(this);
         } catch (Throwable t) {
         }
+    }
+
+    protected void setSupportActionBar(Toolbar toolbar) {
+        ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
+    }
+
+    protected void setDisplayHomeAsUpEnabled(boolean b) {
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(b);
     }
 }

@@ -7,6 +7,9 @@ import android.util.Xml;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.transit.realtime.GtfsRealtime;
 import com.mienaikoe.wifimesh.map.PathParser;
+import com.mienaikoe.wifimesh.map.VectorInstruction;
+import com.mienaikoe.wifimesh.map.VectorMapIngestor;
+import com.mienaikoe.wifimesh.map.VectorRectangleInstruction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +25,7 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +41,7 @@ import java.util.TreeSet;
  */
 public class TrainSystem {
 
-    private ArrayList<TrainLine> lines = new ArrayList<TrainLine>();
+    private TreeSet<TrainLine> lines = new TreeSet<TrainLine>( new TrainLineComparator() );
     private Set<TrainStation> stations = new HashSet<TrainStation>();
     private Set<Trip> trips = new HashSet<Trip>();
 
@@ -48,8 +52,7 @@ public class TrainSystem {
             InputStream stopsJsonStream,
             InputStream linesJsonStream,
             InputStream transfersJsonStream,
-            InputStream entrancesJsonStream,
-            InputStream blocksXmlStream
+            InputStream entrancesJsonStream
             ) {
         JSONObject stopsJson = streamToJSON(stopsJsonStream);
         JSONObject transfersJson = streamToJSON(transfersJsonStream);
@@ -83,38 +86,6 @@ public class TrainSystem {
                     uniqueStations.put(uniquifier, station);
                 }
                 stopidStations.put(stopId, station);
-            }
-
-            // Parse Map Stop Rectangles
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(blocksXmlStream, null);
-            parser.nextTag();
-            parser.require(XmlPullParser.START_TAG, "", "g");
-            while (parser.next() != XmlPullParser.END_DOCUMENT) {
-                if (parser.getEventType() != XmlPullParser.START_TAG) {
-                    continue;
-                }
-                String name = parser.getName();
-                // Starts by looking for the entry tag
-                if (name.equals("rect")) {
-                    String stopId = parser.getAttributeValue("","id");
-                    TrainStation station = stopidStations.get(stopId);
-                    float[] xy = new float[]{
-                        Float.valueOf(parser.getAttributeValue("","x")),
-                        Float.valueOf(parser.getAttributeValue("","y"))
-                    };
-                    String transformStr = parser.getAttributeValue("","transform");
-                    if( transformStr != null ) {
-                        Matrix matrix = PathParser.parseTransform( transformStr );
-                        matrix.mapPoints(xy);
-                    }
-                    station.addMapRectangle(
-                            xy[0], xy[1],
-                            Float.valueOf(parser.getAttributeValue("","width")),
-                            Float.valueOf(parser.getAttributeValue("","height"))
-                    );
-                }
             }
 
 
@@ -171,19 +142,12 @@ public class TrainSystem {
         } catch (JSONException ex ){
             Log.e(this.getClass().getSimpleName(), "Could not parse stops");
             throw new IllegalArgumentException("Invalid Stops Json");
-        } catch (XmlPullParserException ex ){
-            Log.e(this.getClass().getSimpleName(), "Could not parse map");
-            throw new IllegalArgumentException("Invalid Map Xml");
-        } catch (IOException ex ){
-            Log.e(this.getClass().getSimpleName(), "Culd not parse map");
-            throw new IllegalArgumentException("IO Exception while parsing map");
         } finally {
             try {
                 stopsJsonStream.close();
                 linesJsonStream.close();
                 transfersJsonStream.close();
                 entrancesJsonStream.close();
-                blocksXmlStream.close();
             } catch (IOException ex ){
                 Log.e(this.getClass().getSimpleName(), "Could not close streams");
             }
@@ -228,6 +192,18 @@ public class TrainSystem {
         this.trips.clear();
     }
 
+    public void fillRectangles( VectorMapIngestor ingestor ){
+        for( Map.Entry<String, VectorInstruction> namedInstruction : ingestor.getNamedInstructions().entrySet() ) {
+            if (namedInstruction.getValue() instanceof VectorRectangleInstruction) {
+                VectorRectangleInstruction instruction = (VectorRectangleInstruction) namedInstruction.getValue();
+                TrainStation station = stopidStations.get(namedInstruction.getKey());
+                if (station != null) {
+                    station.addMapRectangle(instruction);
+                }
+            }
+        }
+    }
+
     public void fillTimings( GtfsRealtime.FeedMessage message ){
         for( int i=0; i<message.getEntityCount(); i++ ) {
             GtfsRealtime.TripUpdate update = message.getEntity(i).getTripUpdate();
@@ -245,16 +221,20 @@ public class TrainSystem {
                 }
             }
 
-            String directionStr = update.getTrip().getTripId().split("_")[1].substring(3, 4);
-            TrainDirection direction = TrainDirection.fromString(directionStr);
-
-            for (GtfsRealtime.TripUpdate.StopTimeUpdate stopTimeUpdate : message.getEntity(i).getTripUpdate().getStopTimeUpdateList()) {
-                String stopId = stopTimeUpdate.getStopId().substring(0, stopTimeUpdate.getStopId().length() - 1);
-                TrainStation station = this.stopidStations.get(stopId);
-                Trip trip = new Trip(entityLine, direction);
-                long timestamp = stopTimeUpdate.getArrival().getTime();
-                trip.addStationTiming(station, timestamp);
-                this.trips.add(trip);
+            String tripIdPortion = update.getTrip().getTripId().split("_")[1];
+            if( tripIdPortion.length() > 1 ) {
+                String directionStr = update.getTrip().getTripId().split("_")[1].substring(3, 4);
+                TrainDirection direction = TrainDirection.fromString(directionStr);
+                for (GtfsRealtime.TripUpdate.StopTimeUpdate stopTimeUpdate : message.getEntity(i).getTripUpdate().getStopTimeUpdateList()) {
+                    String stopId = stopTimeUpdate.getStopId().substring(0, stopTimeUpdate.getStopId().length() - 1);
+                    TrainStation station = this.stopidStations.get(stopId);
+                    Trip trip = new Trip(entityLine, direction);
+                    long timestamp = stopTimeUpdate.getArrival().getTime();
+                    trip.addStationTiming(station, timestamp);
+                    this.trips.add(trip);
+                }
+            } else {
+                Log.w(this.getClass().getSimpleName(), "Invalid Trip Id from Sinoir: "+tripIdPortion);
             }
         }
     }
@@ -263,8 +243,7 @@ public class TrainSystem {
         Date northTiming = null;
         Date southTiming = null;
         for( Trip trip : this.trips ){
-            if( trip.getLine() == line || trip.getLine().getName().equals("L")){
-                Log.i("TESTING STATION TIMINGS","trip: "+trip.getStationTimings().values().toString());
+            if( trip.getLine() == line ){
                 if( trip.getStationTimings().containsKey(station) ) {
                     Date date = trip.getStationTimings().get(station);
                     if (date.before(new Date())) {
@@ -292,7 +271,7 @@ public class TrainSystem {
 
     // Getters
 
-    public List<TrainLine> getLines() {
+    public Collection<TrainLine> getLines() {
         return lines;
     }
 

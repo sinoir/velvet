@@ -18,8 +18,8 @@ public class VectorTextInstructionMatrix extends VectorTextInstruction {
         }
     }
 
-    public VectorTextInstructionMatrix(String text, String matrix, int color, Typeface typeface) {
-        super(text, matrix, color, typeface);
+    public VectorTextInstructionMatrix(String text, String matrix, int color, Typeface typeface, float fontSize) {
+        super(text, matrix, color, typeface, fontSize);
         this.matrix = PathParser.parseTransform(matrix);
     }
 

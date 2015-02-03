@@ -3,6 +3,33 @@
     <color name="black_overlay">#BB000000</color>
     <color name="red_velvet">#AA2233</color>
 
+    <!--theme colors-->
+    <!--
+    <color name="primary">#03a9f4</color>
+    <color name="primary_dark">#0288d1</color>
+    <color name="accent">#536dfe</color>
+    <color name="primary_light">#CFD8DC</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
+    -->
+
+    <color name="primary">#333333</color>
+    <color name="primary_dark">#AAAAAA</color>
+    <color name="accent">#a3adae</color>
+    <color name="primary_light">#CFD8DC</color>
+    <color name="primary_text">#F2F2F2</color>
+    <color name="secondary_text">#E2E2E2</color>
+    <color name="icons">#ffffff</color>
+    <color name="divider">#B6B6B6</color>
+
+
+
+    <!-- Transparent Whites -->
+    <color name="d_white_10op">#1AFFFFFF</color>
+    <color name="d_white_20op">#33FFFFFF</color>
+
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#CCCCCC</color>
     <color name="dark_gray">#333333</color>

@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
 
-
-    <Spinner
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:id="@+id/line_spinner"
-        style="@style/spinnerStyle" />
+        android:elevation="2dp"
+        android:background="?attr/colorPrimary" >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:paddingBottom="@dimen/line_fragment_margin"
+            android:layout_height="wrap_content"
             android:id="@+id/station_list">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:padding="5dp">
-
-            </TableRow>
         </TableLayout>
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

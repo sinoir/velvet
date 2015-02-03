@@ -1,19 +1,6 @@
 package com.mienaikoe.wifimesh;
 
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-
-import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
-import com.mienaikoe.wifimesh.sinoir.GtfsUpdateService;
-import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainSystem;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -26,21 +13,23 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.transit.realtime.GtfsRealtime;
-import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.map.VectorMapIngestor;
+import com.mienaikoe.wifimesh.sinoir.GtfsUpdateService;
 import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainRealtimeService;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
@@ -58,14 +47,17 @@ public class StartupActivity extends BaseActivity
     private static final int REQUEST_LINES = 1;
 
     private ImageView mapView;
-    private MapFragment mapFragment;
+    private TrainMapFragment trainMapFragment;
+    private MapFragment googleMapFragment;
     private TrainSystem trainSystem;
     private GoogleApiClient googleApiClient;
     private boolean googleApiConnected = false;
     private TypefaceTextView stationName;
     private GridLayout linesTiming;
-
+    private LatLng currentLocation;
+    private boolean usingGoogleMap = false;
     private TrainStation currentStation;
+    private VectorMapIngestor ingestor;
 
     //region Lifecycle
     @Override
@@ -76,28 +68,27 @@ public class StartupActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Fill Out Train System Information
         this.trainSystem = new TrainSystem(
                 this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
                 this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
                 this.getApplicationContext().getResources()
                         .openRawResource(R.raw.transfers_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances),
-                this.getApplicationContext().getResources().openRawResource(R.raw.vectors_stations)
+                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
         );
-        TrainSystemModel.setTrainSystem(trainSystem);
 
+        this.ingestor = new VectorMapIngestor(getApplicationContext(), "normal_map.svg");
+        this.trainSystem.fillRectangles(ingestor);
 
         //initTrainTiming();
         startService(new Intent(this, GtfsUpdateService.class));
 
-        if (savedInstanceState == null) {
-            mapFragment = new MapFragment();
-            mapFragment.setSystem(trainSystem);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, mapFragment)
-                    .commit();
-        }
+        TrainSystemModel.setTrainSystem(trainSystem);
 
+
+        if (savedInstanceState == null) {
+            this.initMaps();
+        }
 
         this.stationName = (TypefaceTextView) findViewById(R.id.station_name);
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
@@ -136,8 +127,6 @@ public class StartupActivity extends BaseActivity
 
     @Override
     public void onResume() {
-        // Get location and resume location updates
-        //updateLocation(); // call update location only when requested
         super.onResume();
     }
 
@@ -161,10 +150,14 @@ public class StartupActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_test_mesh:
-                startActivity(new Intent(getApplicationContext(), TestMeshActivity.class));
+            case R.id.action_locate:
+                this.updateLocation();
+                return true;
+            case R.id.action_map_toggle:
+                this.toggleMap();
                 return true;
             case R.id.action_trainlines:
+                mEventBus.postSticky(new TrainLinesFragment.InitEvent(currentStation));
                 Intent intent = new Intent(getApplicationContext(), LineActivity.class);
                 startActivityForResult(intent, REQUEST_LINES);
                 return true;
@@ -172,6 +165,38 @@ public class StartupActivity extends BaseActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void toggleMap() {
+        if( this.usingGoogleMap ){
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(googleMapFragment)
+                    .show(trainMapFragment)
+                    .commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(trainMapFragment)
+                    .show(googleMapFragment)
+                    .commit();
+        }
+        this.usingGoogleMap = !this.usingGoogleMap;
+    }
+
+
+    private void initMaps(){
+        trainMapFragment = new TrainMapFragment();
+        trainMapFragment.setSystem(trainSystem);
+        trainMapFragment.setMapIngestor(ingestor);
+        googleMapFragment = new MapFragment();
+
+        getFragmentManager().beginTransaction()
+                .add(R.id.container, trainMapFragment)
+                .add(R.id.container, googleMapFragment)
+                .hide(googleMapFragment)
+                .commit();
+    }
+
 
 
     @Override
@@ -209,25 +234,31 @@ public class StartupActivity extends BaseActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
         this.googleApiClient.connect();
     }
 
     private void updateLocation() {
-        if (this.googleApiConnected) {
-            if (mapFragment != null) {
-                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
-                this.onLocationChanged(lastLocation);
-            }
-        }
+        Log.i(this.getClass().getSimpleName(), "Updating Location");
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(1000*10); // walking for 1 minute will change enough with accuracy differences
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setFastestInterval(1000 * 5); // walking for 10 seconds won't get you far
+        LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);
     }
+
+
 
 
 
     @Override
     public void onConnected(Bundle connectionHint) {
         this.googleApiConnected = true;
-        updateLocation();
+        if (this.googleApiConnected) {
+            if (trainMapFragment != null) {
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+                this.onLocationChanged(lastLocation);
+            }
+        }
     }
 
     @Override
@@ -235,26 +266,44 @@ public class StartupActivity extends BaseActivity
         if (location != null) {
             Log.i(this.getClass().getSimpleName(),
                     "Location Changed: " + location.getLatitude() + ", " + location.getLongitude());
-
-            TrainStation closestStation = trainSystem
-                    .closestStation(new LatLng(location.getLatitude(), location.getLongitude()));
-
+            this.currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            TrainStation closestStation = trainSystem.closestStation(this.currentLocation);
             this.setStation(closestStation);
+            LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+        } else {
+            Log.w(this.getClass().getSimpleName(), "Location was Null");
         }
     }
 
     public void setStation(TrainStation station) {
+
         //LocationServices.FusedLocationApi.removeLocationUpdates( this.googleApiClient, this );
+        this.currentStation = station;
+
         this.stationName.setText(station.getName());
         this.linesTiming.removeAllViews();
         for( TrainLine line : station.getLines() ){
             renderStationLine(station, line);
         }
+
         this.linesTiming.invalidate();
 
-        mapFragment.setStation(station);
-    }
+        trainMapFragment.setStation(station);
 
+        googleMapFragment.getMap().setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                googleMapFragment.getMap().setBuildingsEnabled(false);
+                googleMapFragment.getMap().setTrafficEnabled(false);
+                for( LatLng entrance : currentStation.getEntrances() ) {
+                    MarkerOptions mo = new MarkerOptions();
+                    mo.position(entrance);
+                    googleMapFragment.getMap().addMarker(mo);
+                }
+                googleMapFragment.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(currentStation.getCenter(), 16));
+            }
+        });
+    }
 
 
     private ViewGroup renderStationLine(TrainStation station, TrainLine line){
@@ -264,11 +313,11 @@ public class StartupActivity extends BaseActivity
         linesLayout.width = 420;
         topLine.setLayoutParams(linesLayout);
 
-        TrainLineIcon icon = new TrainLineIcon(getApplicationContext(), line,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
-                        getResources().getDisplayMetrics())
-        );
-        topLine.addView(icon);
+        int largeIconSize = getResources().getDimensionPixelSize(R.dimen.train_icon_large);
+        TrainLineIcon icon = new TrainLineIcon(this);
+        icon.setTrainLine(line, largeIconSize);
+
+                topLine.addView(icon);
         RelativeLayout.LayoutParams iconParams = (RelativeLayout.LayoutParams) icon
                 .getLayoutParams();
         iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, -1);
@@ -291,7 +340,8 @@ public class StartupActivity extends BaseActivity
         TypefaceTextView timing = new TypefaceTextView( getApplicationContext() );
         timingGrid.addView( timing );
 
-        timing.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
+
         if( timings[0] != null ) {
             long northDiff = TimeUnit.MINUTES.convert(timings[0].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
             timing.setText(String.valueOf(northDiff) + "m");
@@ -303,7 +353,8 @@ public class StartupActivity extends BaseActivity
 
         TypefaceTextView timing2 = new TypefaceTextView(getApplicationContext());
         timingGrid.addView(timing2);
-        timing2.setCustomFont(getApplicationContext(), "fonts/HelveticaNeue-Medium.otf");
+        timing.setTypeface(FontEnum.HELVETICA_NEUE_MEDIUM);
+
         if( timings[1] != null ) {
             long southDiff = TimeUnit.MINUTES.convert(timings[1].getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
             timing.setText(String.valueOf(southDiff) + "m");
@@ -326,6 +377,4 @@ public class StartupActivity extends BaseActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(this.getClass().getSimpleName(), "Connection to Play Services Failed");
     }
-
-
 }
