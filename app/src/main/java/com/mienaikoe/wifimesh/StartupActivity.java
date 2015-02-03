@@ -46,7 +46,7 @@ public class StartupActivity extends BaseActivity
 
     private static final int REQUEST_LINES = 1;
 
-    private ImageView mapView;
+
     private TrainMapFragment trainMapFragment;
     private MapFragment googleMapFragment;
     private TrainSystem trainSystem;
@@ -159,6 +159,9 @@ public class StartupActivity extends BaseActivity
                 return true;
             case R.id.action_map_toggle:
                 this.toggleMap();
+                return true;
+            case R.id.action_streets_toggle:
+                this.trainMapFragment.toggleStreets();
                 return true;
             case R.id.action_trainlines:
                 mEventBus.postSticky(new TrainLinesFragment.InitEvent(currentStation));

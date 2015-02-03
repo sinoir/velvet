@@ -66,6 +66,10 @@ public class TrainMapFragment extends BaseFragment {
         this.station = station;
     }
 
+    public void toggleStreets(){
+        this.trainView.toggleStreets();
+    }
+
 
 
 

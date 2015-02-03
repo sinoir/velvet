@@ -52,8 +52,8 @@ public class TrainView extends View {
 
     private float startX = 0;
     private float startY = 0;
-    private float deltaX = 200;
-    private float deltaY = -50;
+    private float deltaX = 0;
+    private float deltaY = -300;
 
 
     private VectorMapIngestor ingestor;
@@ -103,8 +103,10 @@ public class TrainView extends View {
 
         canvas.translate(deltaX / mScaleFactor, deltaY / mScaleFactor);
 
-        for( VectorInstruction instruction : this.crossStreetInstructions ){
-            instruction.draw(canvas);
+        if( this.showingStreets ) {
+            for (VectorInstruction instruction : this.crossStreetInstructions) {
+                instruction.draw(canvas);
+            }
         }
 
         if( this.currentStation != null ) {
@@ -127,6 +129,12 @@ public class TrainView extends View {
     }
 
 
+    private boolean showingStreets = true;
+
+    public void toggleStreets() {
+        showingStreets = !showingStreets;
+        this.invalidate();
+    }
 
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
