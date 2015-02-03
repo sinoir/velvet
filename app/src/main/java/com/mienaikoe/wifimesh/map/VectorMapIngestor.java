@@ -3,6 +3,7 @@ package com.mienaikoe.wifimesh.map;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.util.Xml;
 
@@ -59,6 +60,7 @@ public class VectorMapIngestor {
             VectorTextInstruction activeTextInstruction = null;
             VectorTextInstruction subTextInstruction = null;
             String lastName = "";
+            String groupName = "";
             List<VectorInstruction> groupInstructions = new ArrayList<VectorInstruction>(0); //trash to prevent warnings
 
             while (parser.next() != XmlPullParser.END_DOCUMENT) {
@@ -96,8 +98,9 @@ public class VectorMapIngestor {
                     case(XmlPullParser.START_TAG ):{
                         // Starts by looking for the entry tag
                         if( name.equals("g") ){
+                            groupName = parser.getAttributeValue("","id");
                             groupInstructions  = new ArrayList<VectorInstruction>();
-                            this.instructionss.put( parser.getAttributeValue("","id"), groupInstructions );
+                            this.instructionss.put( groupName, groupInstructions );
                         } else if( name.equals("rect") ){
                             // making dimensions
                             float[] xy = new float[]{
@@ -180,10 +183,16 @@ public class VectorMapIngestor {
                             if( fontSize == null ){
                                 fontSize = "9";
                             }
+                            FontEnum fontFace;
+                            if( groupName.equals("PARKS_TEXT") || groupName.equals("NEIGHBORHOOD_NAMES") ){
+                                fontFace = FontEnum.HELVETICA_NEUE_STD67_CON_MED;
+                            } else {
+                                fontFace = FontEnum.HELVETICA_NEUE_MEDIUM;
+                            }
                             activeTextInstruction = new VectorTextInstruction(
                                     "", transform,
                                     Color.parseColor(color),
-                                    FontEnum.HELVETICA_NEUE_MEDIUM.getTypeface(this.context),
+                                    fontFace.getTypeface(this.context),
                                     Float.valueOf(fontSize)
                             );
                         } else if (name.equals("tspan")){

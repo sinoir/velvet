@@ -45,7 +45,7 @@ public class TrainView extends View {
     private TrainSystem system;
     private TrainStation currentStation;
 
-    private float mScaleFactor = 0.6f;
+    private float mScaleFactor = 1.0f;
     private float scalePointX = 0.f;
     private float scalePointY = 0.f;
     private ScaleGestureDetector mScaleDetector;
@@ -82,12 +82,12 @@ public class TrainView extends View {
 
     private void init(Context context){
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        this.setBackgroundColor(this.getResources().getColor(R.color.light_gray));
+        this.setBackgroundColor(Color.parseColor("#E3E2D5"));
     }
 
 
     private String[] STANDARD_GROUPS = new String[]{
-            "PARKS", "TRAIN_LINES", "TRANSFERS", "STATION_BLOCKS", "TRAIN_NAMES", "NEIGHBORHOOD_NAMES", "STATION_NAMES",
+            "PARKS", "PARKS_TEXT", "NEIGHBORHOOD_NAMES", "TRAIN_LINES", "TRANSFERS", "STATION_BLOCKS", "TRAIN_NAMES", "STATION_NAMES",
     };
 
     private String[] CROSS_STREET_GROUPS = new String[]{
@@ -106,9 +106,24 @@ public class TrainView extends View {
         for( VectorInstruction instruction : this.crossStreetInstructions ){
             instruction.draw(canvas);
         }
+
+        if( this.currentStation != null ) {
+            Paint arcPaint = new Paint();
+            arcPaint.setStrokeWidth(8.0f);
+            arcPaint.setColor(Color.parseColor("#ffffff"));
+            arcPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawArc(new RectF(
+                    this.currentStation.getViewX() - 24,
+                    this.currentStation.getViewY() - 24,
+                    this.currentStation.getViewX() + 24,
+                    this.currentStation.getViewY() + 24
+            ), 0, 360, false, arcPaint);
+        }
+
         for( VectorInstruction instruction : this.mapInstructions ){
             instruction.draw(canvas);
         }
+        //canvas.drawCircle(this.clickedX, this.clickedY, 15, new Paint());
     }
 
 
@@ -163,18 +178,20 @@ public class TrainView extends View {
                     float atY = MotionEventCompat.getY(ev, pointerIndex);
                     deltaX = atX - startX;
                     deltaY = atY - startY;
-                    break;
                 }
+                break;
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
+                /*
                 if( !moved && new Date().getTime() - lastTouch < 500 ){
                     final int pointerIndex = MotionEventCompat.getActionIndex(ev);
                     onClick(
-                            (-deltaX) + (MotionEventCompat.getX(ev, pointerIndex)),
-                            (-deltaY) + (MotionEventCompat.getY(ev, pointerIndex))
+                            -deltaX + (MotionEventCompat.getX(ev, pointerIndex)),
+                            -deltaY + (MotionEventCompat.getY(ev, pointerIndex))
                     );
                 }
+                */
                 moved = false;
                 mActivePointerId = -1;
                 break;
@@ -202,8 +219,13 @@ public class TrainView extends View {
 
     private static final int CLICK_THRESHOLD_DISTANCE = 20;
 
+    private float clickedX;
+    private float clickedY;
+
     private void onClick( float x, float y ){
         Log.i(this.getClass().getSimpleName(), "On Clicking: ["+x+","+y+"]");
+        clickedX = x;
+        clickedY = y;
         for( TrainStation station : this.system.getStations() ){
             if( Math.abs(station.getViewX() - x) < CLICK_THRESHOLD_DISTANCE &&
                 Math.abs(station.getViewY() - y) < CLICK_THRESHOLD_DISTANCE ){
@@ -218,14 +240,7 @@ public class TrainView extends View {
     }
 
 
-    public void setCenter( float x, float y ){
-        mScaleFactor = 2.5f;
-        this.scalePointX = 0.f;
-        this.scalePointY = 0.f;
-        this.deltaX = -x + (this.getWidth()/(2*mScaleFactor));
-        this.deltaY = -y + (this.getHeight()/(2*mScaleFactor));
-        invalidate();
-    }
+
 
     public void setSystem(TrainSystem system) {
         this.system = system;
@@ -243,6 +258,16 @@ public class TrainView extends View {
 
     public void setStation(TrainStation currentStation) {
         this.currentStation = currentStation;
+        this.setCenter(currentStation.getViewX(), currentStation.getViewY());
+    }
+
+    private void setCenter( float x, float y ){
+        mScaleFactor = 2.5f;
+        this.scalePointX = 0.f;
+        this.scalePointY = 0.f;
+        this.deltaX = -x + (this.getWidth()/(2*mScaleFactor));
+        this.deltaY = -y + (this.getHeight()/(2*mScaleFactor));
+        invalidate();
     }
 
 }

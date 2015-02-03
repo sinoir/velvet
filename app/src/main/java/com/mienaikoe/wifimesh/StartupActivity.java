@@ -77,7 +77,7 @@ public class StartupActivity extends BaseActivity
                 this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
         );
 
-        this.ingestor = new VectorMapIngestor(getApplicationContext(), "normal_map.svg");
+        this.ingestor = new VectorMapIngestor(getApplicationContext(), "final_map.svg");
         this.trainSystem.fillRectangles(ingestor);
 
         //initTrainTiming();

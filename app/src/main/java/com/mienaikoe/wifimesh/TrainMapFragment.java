@@ -61,7 +61,7 @@ public class TrainMapFragment extends BaseFragment {
 
     public void setStation( TrainStation station ){
         if( station.hasRectangles() ) {
-            this.trainView.setCenter(station.getViewX(), station.getViewY());
+            this.trainView.setStation(station);
         }
         this.station = station;
     }

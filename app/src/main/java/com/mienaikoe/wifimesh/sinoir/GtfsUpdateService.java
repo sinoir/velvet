@@ -16,6 +16,7 @@ import java.util.Properties;
 
 import de.greenrobot.event.EventBus;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.ProtoConverter;
 
@@ -65,7 +66,9 @@ public class GtfsUpdateService extends IntentService {
                         messages.add(GtfsRealtime.FeedMessage.parseFrom(endPoint.getUpdate(2).getBody().in()));
                         mEventBus.post(new GtfsUpdateEvent(messages));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(this.getClass().getSimpleName(), "IO Error Occured: "+e.getMessage());
+                    } catch (RetrofitError e){
+                        Log.e(this.getClass().getSimpleName(), "Retrofit Error Occured: "+e.getMessage());
                     }
 
                     try {

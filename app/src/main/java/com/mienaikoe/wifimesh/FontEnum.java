@@ -9,7 +9,9 @@ import java.util.Map;
 public enum FontEnum {
 
     HELVETICA_NEUE("HelveticaNeue.otf"),
-    HELVETICA_NEUE_MEDIUM("HelveticaNeue-Medium.otf");
+    HELVETICA_NEUE_MEDIUM("HelveticaNeue-Medium.otf"),
+    HELVETICA_NEUE_STD67_CON_MED("HelveticaNeueLTStd-MdCn.otf")
+    ;
 
     private String mFileName;
     private Typeface mTypeface;
