@@ -224,6 +224,10 @@ public class TrainSystem {
     }
 
 
+    public void clearTimnings() {
+        this.trips.clear();
+    }
+
     public void fillTimings( GtfsRealtime.FeedMessage message ){
         for( int i=0; i<message.getEntityCount(); i++ ) {
             GtfsRealtime.TripUpdate update = message.getEntity(i).getTripUpdate();

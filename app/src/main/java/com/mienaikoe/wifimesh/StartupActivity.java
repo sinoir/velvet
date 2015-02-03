@@ -9,6 +9,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.mienaikoe.wifimesh.mesh.TestMeshActivity;
+import com.mienaikoe.wifimesh.sinoir.GtfsUpdateService;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
@@ -86,8 +87,8 @@ public class StartupActivity extends BaseActivity
         TrainSystemModel.setTrainSystem(trainSystem);
 
 
-        initTrainTiming();
-
+        //initTrainTiming();
+        startService(new Intent(this, GtfsUpdateService.class));
 
         if (savedInstanceState == null) {
             mapFragment = new MapFragment();
@@ -102,6 +103,11 @@ public class StartupActivity extends BaseActivity
         this.linesTiming = (GridLayout) findViewById(R.id.lines_timing);
 
         initLocationSystem();
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, GtfsUpdateService.class));
     }
 
 
