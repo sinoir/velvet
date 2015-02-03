@@ -7,7 +7,8 @@
     <string name="menu_lines">Lines</string>
     <string name="menu_locate">Update Location</string>
     <string name="menu_map">Toggle Map</string>
-    <string name="menu_search">Search For Station</string>
+    <string name="menu_search">Station Search</string>
+    <string name="search">Search</string>
     <string name="title_activity_station">StationActivity</string>
 
 </resources>

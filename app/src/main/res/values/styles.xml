@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. NoActionBar because we're using toolbars instead. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- colorPrimary is used for the default action bar background -->
         <item name="colorPrimary">@color/primary</item>
 
@@ -13,13 +13,22 @@
              which is used to tint widgets -->
         <item name="colorAccent">@color/accent</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
+        <!--back arrow, overflow menu icon, scrollbars, native search icon-->
         <item name="android:textColorSecondary">@color/secondary_text</item>
+
         <item name="android:icon">@color/icons</item>
         <item name="android:divider">@color/divider</item>
 
+    </style>
+    <style name="AbStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="elevation">2dp</item>
+        <item name="displayOptions">homeAsUp|showTitle</item>
+        <!--showHome-->
+    </style>
 
-
-
+    <style name="AppThemeDark" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/secondary_text</item>
+        <item name="actionBarStyle">@style/AbStyle</item>
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.Holo">
@@ -28,7 +37,8 @@
         <item name="android:windowBackground">@null</item>
         <item name="android:spinnerStyle">@style/spinnerStyle</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
+        -->
     </style>
 
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
@@ -53,6 +63,7 @@
         <item name="android:textSize">32dp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
     <style name="SpinnerItem">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_height">44dp</item>
@@ -60,6 +71,7 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:gravity">center_vertical</item>
     </style>
+
     <style name="SpinnerDropDownItem">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_height">32dp</item>
