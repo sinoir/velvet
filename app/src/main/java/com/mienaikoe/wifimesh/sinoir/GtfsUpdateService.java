@@ -67,13 +67,13 @@ public class GtfsUpdateService extends IntentService {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-            }
 
-            try {
-                this.wait(mInterval);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                    try {
+                        this.wait(mInterval);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

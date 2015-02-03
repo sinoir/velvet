@@ -10,6 +10,7 @@ import com.mienaikoe.wifimesh.map.PathParser;
 import com.mienaikoe.wifimesh.map.VectorInstruction;
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.map.VectorRectangleInstruction;
+import com.mienaikoe.wifimesh.sinoir.GtfsUpdateEvent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -187,6 +188,12 @@ public class TrainSystem {
         return parsedStations;
     }
 
+    public void onEvent(GtfsUpdateEvent event) {
+        clearTimnings();
+        for (GtfsRealtime.FeedMessage m : event.getMessages()) {
+            fillTimings(m);
+        }
+    }
 
     public void clearTimnings() {
         this.trips.clear();

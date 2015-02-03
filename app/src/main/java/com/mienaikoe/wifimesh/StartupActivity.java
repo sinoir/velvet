@@ -128,11 +128,15 @@ public class StartupActivity extends BaseActivity
     @Override
     public void onResume() {
         super.onResume();
+
+        mEventBus.register(trainSystem);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
+        mEventBus.unregister(trainSystem);
     }
 
 
