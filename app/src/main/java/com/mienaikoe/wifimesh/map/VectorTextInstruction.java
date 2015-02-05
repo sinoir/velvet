@@ -2,6 +2,7 @@ package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
@@ -14,19 +15,19 @@ public class VectorTextInstruction implements VectorInstruction {
 
     private Paint paint;
     private String text = null;
-    private float x;
-    private float y;
+    private Matrix matrix;
 
-    public VectorTextInstruction(String text, String matrix, int color, Typeface typeface, float fontSize){
+    public VectorTextInstruction(String text, String matrixStr, int color, Typeface typeface, float fontSize){
         if( text == null ){
             text = "";
         }
         this.text = text;
 
-        matrix = matrix.substring(7, matrix.length()-1);
-        String[] matrixArr = matrix.split(" ");
-        this.x = Float.valueOf(matrixArr[matrixArr.length-2]);
-        this.y = Float.valueOf(matrixArr[matrixArr.length-1]);
+        if( matrixStr != null ) {
+            this.matrix = PathParser.parseTransform(matrixStr);
+        } else {
+            this.matrix = new Matrix();
+        }
 
         this.paint = new Paint();
         this.paint.setColor(color);
@@ -37,8 +38,7 @@ public class VectorTextInstruction implements VectorInstruction {
     public VectorTextInstruction(VectorTextInstruction copy){
         this.text = copy.text;
         this.paint = copy.paint;
-        this.x = copy.x;
-        this.y = copy.y;
+        this.matrix = new Matrix(copy.matrix);
     }
 
 
@@ -51,8 +51,7 @@ public class VectorTextInstruction implements VectorInstruction {
     }
 
     public void addOffset(float x, float y){
-        this.x += x;
-        this.y += y;
+        this.matrix.postTranslate(x, y);
     }
 
     public boolean hasText(){
@@ -61,7 +60,11 @@ public class VectorTextInstruction implements VectorInstruction {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawText(this.text, this.x, this.y, this.paint);
+        Matrix inverse = new Matrix();
+        this.matrix.invert(inverse);
+        canvas.concat(this.matrix);
+        canvas.drawText(this.text, 0, 0, this.paint);
+        canvas.concat(inverse);
     }
 
     public void setFontSize(float fontSize) {

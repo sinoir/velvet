@@ -109,16 +109,12 @@ public class VectorMapIngestor {
                             };
                             // no clue if possible but would like some diagonalness
                             String transformStr = parser.getAttributeValue("","transform");
-                            if( transformStr != null ) {
-                                Matrix matrix = PathParser.parseTransform( transformStr );
-                                matrix.mapPoints(xy);
-                            }
                             String fillColor = parser.getAttributeValue("", "fill");
                             if( fillColor == null ){
                                 fillColor = "#FFFFFF";
                             }
                             VectorRectangleInstruction instruction = new VectorRectangleInstruction(
-                                    xy[0], xy[1],
+                                    xy[0], xy[1], transformStr,
                                     Float.valueOf(parser.getAttributeValue("","width")),
                                     Float.valueOf(parser.getAttributeValue("","height")),
                                     Color.parseColor(fillColor)

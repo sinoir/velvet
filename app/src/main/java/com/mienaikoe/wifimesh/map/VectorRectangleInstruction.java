@@ -2,6 +2,7 @@ package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 /**
@@ -9,15 +10,18 @@ import android.graphics.Paint;
  */
 public class VectorRectangleInstruction implements VectorInstruction {
 
-    private float x;
-    private float y;
+    private Matrix matrix;
     private float width;
     private float height;
     private Paint paint;
 
-    public VectorRectangleInstruction( float x, float y, float width, float height, int color ){
-        this.x = x;
-        this.y = y;
+    public VectorRectangleInstruction( float x, float y, String matrixStr, float width, float height, int color ){
+        if( matrixStr != null ) {
+            this.matrix = PathParser.parseTransform(matrixStr);
+        } else {
+            this.matrix = new Matrix();
+        }
+        this.matrix.preTranslate(x, y);
         this.width = width;
         this.height = height;
         this.paint = new Paint();
@@ -27,15 +31,20 @@ public class VectorRectangleInstruction implements VectorInstruction {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawRect( x, y, x+width, y+height, paint );
+        Matrix inverse = new Matrix();
+        this.matrix.invert(inverse);
+        canvas.concat(this.matrix);
+        canvas.drawRect( 0, 0, width, height, paint );
+        canvas.concat(inverse);
     }
 
 
-    public float getCenterX(){
-        return this.x + (this.width / 2);
+    public float[] getCenter(){
+        float[] ret = new float[]{ 0, 0 };
+        this.matrix.mapPoints(ret);
+        ret[0] += this.width/2;
+        ret[1] += this.height/2;
+        return ret;
     }
 
-    public float getCenterY(){
-        return this.y + (this.height / 2);
-    }
 }

@@ -138,21 +138,16 @@ public class TrainStation {
         return mapRectangles;
     }
 
-    public float getViewX(){
-        float sum = 0;
+    public float[] getVectorCenter(){
+        float[] sums = new float[]{0,0};
         for( VectorRectangleInstruction rect : this.mapRectangles ){
-            sum += rect.getCenterX();
+            float[] rectCenter = rect.getCenter();
+            sums[0] += rectCenter[0];
+            sums[1] += rectCenter[1];
         }
-        return sum / this.mapRectangles.size();
+        return new float[]{ sums[0] / this.mapRectangles.size(), sums[1] / this.mapRectangles.size() };
     }
 
-    public float getViewY(){
-        float sum = 0;
-        for( VectorRectangleInstruction rect : this.mapRectangles ){
-            sum += rect.getCenterY();
-        }
-        return sum / this.mapRectangles.size();
-    }
 
     public boolean hasRectangles(){
         return this.mapRectangles.size() > 0;

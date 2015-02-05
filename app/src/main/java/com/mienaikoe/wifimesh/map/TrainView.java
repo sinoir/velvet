@@ -1,39 +1,23 @@
 package com.mienaikoe.wifimesh.map;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
-import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.WindowManager;
 
-import com.mienaikoe.wifimesh.R;
-import com.mienaikoe.wifimesh.StartupActivity;
 import com.mienaikoe.wifimesh.StationSelectEvent;
-import com.mienaikoe.wifimesh.TrainMapFragment;
-import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Vector;
 
 import de.greenrobot.event.EventBus;
 
@@ -87,11 +71,11 @@ public class TrainView extends View {
 
 
     private String[] STANDARD_GROUPS = new String[]{
-            "PARKS", "PARKS_TEXT", "NEIGHBORHOOD_NAMES", "TRAIN_LINES", "TRANSFERS", "STATION_BLOCKS", "TRAIN_NAMES", "STATION_NAMES",
+            "TRAIN_LINES", "TRANSFERS", "STATION_BLOCKS", "TRAIN_NAMES", "STATION_NAMES",
     };
 
     private String[] CROSS_STREET_GROUPS = new String[]{
-            "CROSS_STREETS","STREET_NAMES"
+            "CROSS_STREETS","STREET_NAMES","NEIGHBORHOOD_NAMES", "PARKS", "PARKS_TEXT"
     };
 
 
@@ -114,11 +98,10 @@ public class TrainView extends View {
             arcPaint.setStrokeWidth(8.0f);
             arcPaint.setColor(Color.parseColor("#ffffff"));
             arcPaint.setStyle(Paint.Style.STROKE);
+            float[] stationVectorCenter = this.currentStation.getVectorCenter();
             canvas.drawArc(new RectF(
-                    this.currentStation.getViewX() - 24,
-                    this.currentStation.getViewY() - 24,
-                    this.currentStation.getViewX() + 24,
-                    this.currentStation.getViewY() + 24
+                    stationVectorCenter[0] - 24, stationVectorCenter[1] - 24,
+                    stationVectorCenter[0] + 24, stationVectorCenter[1] + 24
             ), 0, 360, false, arcPaint);
         }
 
@@ -235,10 +218,11 @@ public class TrainView extends View {
         clickedX = x;
         clickedY = y;
         for( TrainStation station : this.system.getStations() ){
-            if( Math.abs(station.getViewX() - x) < CLICK_THRESHOLD_DISTANCE &&
-                Math.abs(station.getViewY() - y) < CLICK_THRESHOLD_DISTANCE ){
+            float[] stationVectorCenter = station.getVectorCenter();
+            if( Math.abs(stationVectorCenter[0] - x) < CLICK_THRESHOLD_DISTANCE &&
+                Math.abs(stationVectorCenter[1] - y) < CLICK_THRESHOLD_DISTANCE ){
 
-                Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+Math.abs(station.getViewX() - x)+":"+Math.abs(station.getViewY() - y));
+                Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+Math.abs(stationVectorCenter[0] - x)+":"+Math.abs(stationVectorCenter[1] - y));
                 Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+station.getName());
 
                 mEventBus.postSticky(new StationSelectEvent(station));
@@ -266,15 +250,15 @@ public class TrainView extends View {
 
     public void setStation(TrainStation currentStation) {
         this.currentStation = currentStation;
-        this.setCenter(currentStation.getViewX(), currentStation.getViewY());
+        this.setCenter(currentStation.getVectorCenter());
     }
 
-    private void setCenter( float x, float y ){
+    private void setCenter( float[] center ){
         mScaleFactor = 2.5f;
         this.scalePointX = 0.f;
         this.scalePointY = 0.f;
-        this.deltaX = -x + (this.getWidth()/(2*mScaleFactor));
-        this.deltaY = -y + (this.getHeight()/(2*mScaleFactor));
+        this.deltaX = -center[0] + (this.getWidth()/(2*mScaleFactor));
+        this.deltaY = -center[1] + (this.getHeight()/(2*mScaleFactor));
         invalidate();
     }
 
