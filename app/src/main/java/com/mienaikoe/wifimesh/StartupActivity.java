@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,17 +24,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.transit.realtime.GtfsRealtime;
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.sinoir.GtfsUpdateService;
-import com.mienaikoe.wifimesh.train.SinoirRestServiceTask;
 import com.mienaikoe.wifimesh.train.TrainLine;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -63,7 +58,7 @@ public class StartupActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //startService(new Intent(this, TrainRealtimeService.class));
+
         setContentView(R.layout.activity_startup_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,7 +75,6 @@ public class StartupActivity extends BaseActivity
         this.ingestor = new VectorMapIngestor(getApplicationContext(), "final_map.svg");
         this.trainSystem.fillRectangles(ingestor);
 
-        //initTrainTiming();
         startService(new Intent(this, GtfsUpdateService.class));
 
         TrainSystemModel.setTrainSystem(trainSystem);
@@ -107,23 +101,6 @@ public class StartupActivity extends BaseActivity
             "http://sinoir-appifyed.rhcloud.com/mta/subway/update/2"
     };
 
-    private void initTrainTiming() {
-        SinoirRestServiceTask asyncTask = new SinoirRestServiceTask();
-        asyncTask.execute(ASYNC_URLS);
-        List<GtfsRealtime.FeedMessage> feedMessages = null;
-
-        try {
-            feedMessages = asyncTask.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        for( GtfsRealtime.FeedMessage feedMessage : feedMessages ) {
-            this.trainSystem.fillTimings(feedMessage);
-        }
-    }
 
     @Override
     public void onResume() {
@@ -245,11 +222,14 @@ public class StartupActivity extends BaseActivity
     }
 
     private void updateLocation() {
+        if( this.googleApiConnected ){
+            this.onConnected(null); // update with immediately known location
+        }
         Log.i(this.getClass().getSimpleName(), "Updating Location");
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000*10); // walking for 1 minute will change enough with accuracy differences
+        locationRequest.setInterval(500); // very quick update if possible
+        locationRequest.setFastestInterval(1); // very quick update if possible
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setFastestInterval(1000 * 5); // walking for 10 seconds won't get you far
         LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);
     }
 
@@ -260,11 +240,9 @@ public class StartupActivity extends BaseActivity
     @Override
     public void onConnected(Bundle connectionHint) {
         this.googleApiConnected = true;
-        if (this.googleApiConnected) {
-            if (trainMapFragment != null) {
-                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
-                this.onLocationChanged(lastLocation);
-            }
+        if (trainMapFragment != null) {
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+            this.onLocationChanged(lastLocation);
         }
     }
 

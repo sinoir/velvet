@@ -64,11 +64,6 @@
             android:exported="true" >
         </service>
         <service
-            android:name=".train.TrainRealtimeService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
             android:name=".sinoir.GtfsUpdateService" />
     </application>
 

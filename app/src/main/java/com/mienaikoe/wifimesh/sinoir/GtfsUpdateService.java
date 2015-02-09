@@ -28,19 +28,26 @@ public class GtfsUpdateService extends IntentService {
     private EventBus mEventBus;
     private int mInterval;
     private boolean mIsPause;
+    private IGtfsUpdateRetrofit endPoint = null;
 
     public GtfsUpdateService() {
         super("GtfsUpdateService");
 
         mEventBus = EventBus.getDefault();
         mInterval = 1000 * 30 + 10;  // refresh every 30s + 10ms
-        mIsPause = false;
+        mIsPause = true; //This will destroy my data plan if it's false.
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        IGtfsUpdateRetrofit endPoint = null;
+        initialize();
+        while (this.endPoint != null) {
+            postLoop();
+        }
+    }
 
+
+    private void initialize(){
         try {
             Resources resources = this.getResources();
             AssetManager assetManager = resources.getAssets();
@@ -56,28 +63,33 @@ public class GtfsUpdateService extends IntentService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        while (endPoint != null) {
-            if (!mIsPause) {
-                synchronized (this) {
-                    try {
-                        List<GtfsRealtime.FeedMessage> messages = new ArrayList<>(2);
-                        messages.add(GtfsRealtime.FeedMessage.parseFrom(endPoint.getUpdate(1).getBody().in()));
-                        messages.add(GtfsRealtime.FeedMessage.parseFrom(endPoint.getUpdate(2).getBody().in()));
-                        mEventBus.post(new GtfsUpdateEvent(messages));
-                    } catch (IOException e) {
-                        Log.e(this.getClass().getSimpleName(), "IO Error Occured: "+e.getMessage());
-                    } catch (RetrofitError e){
-                        Log.e(this.getClass().getSimpleName(), "Retrofit Error Occured: "+e.getMessage());
-                    }
 
-                    try {
-                        this.wait(mInterval);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    private void postLoop(){
+        if (!mIsPause) {
+            synchronized (this) {
+                try {
+                    List<GtfsRealtime.FeedMessage> messages = new ArrayList<>(2);
+                    messages.add(GtfsRealtime.FeedMessage.parseFrom(this.endPoint.getUpdate(1).getBody().in()));
+                    messages.add(GtfsRealtime.FeedMessage.parseFrom(this.endPoint.getUpdate(2).getBody().in()));
+                    mEventBus.post(new GtfsUpdateEvent(messages));
+                } catch (IOException e) {
+                    Log.e(this.getClass().getSimpleName(), "IO Error Occured: "+e.getMessage());
+                } catch (RetrofitError e){
+                    Log.e(this.getClass().getSimpleName(), "Retrofit Error Occured: "+e.getMessage());
+                }
+
+                try {
+                    this.wait(mInterval);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
+
+
+
+
 }

@@ -1,12 +1,9 @@
 package com.mienaikoe.wifimesh.train;
 
-import android.graphics.Matrix;
 import android.util.Log;
-import android.util.Xml;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.transit.realtime.GtfsRealtime;
-import com.mienaikoe.wifimesh.map.PathParser;
 import com.mienaikoe.wifimesh.map.VectorInstruction;
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.map.VectorRectangleInstruction;
@@ -15,15 +12,11 @@ import com.mienaikoe.wifimesh.sinoir.GtfsUpdateEvent;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xml.sax.XMLReader;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -189,13 +182,13 @@ public class TrainSystem {
     }
 
     public void onEvent(GtfsUpdateEvent event) {
-        clearTimnings();
+        clearTimings();
         for (GtfsRealtime.FeedMessage m : event.getMessages()) {
             fillTimings(m);
         }
     }
 
-    public void clearTimnings() {
+    public void clearTimings() {
         this.trips.clear();
     }
 
