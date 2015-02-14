@@ -24,7 +24,7 @@ import de.greenrobot.event.EventBus;
 /**
  * TODO: document your custom view class.
  */
-public class TrainView extends View {
+public class SubwayMapView extends View {
 
     private TrainSystem system;
     private TrainStation currentStation;
@@ -49,17 +49,17 @@ public class TrainView extends View {
     private EventBus mEventBus = EventBus.getDefault();
 
 
-    public TrainView(Context context) {
+    public SubwayMapView(Context context) {
         super(context);
         init(context);
     }
 
-    public TrainView(Context context, AttributeSet attrs) {
+    public SubwayMapView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public TrainView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SubwayMapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
