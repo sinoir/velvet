@@ -16,6 +16,7 @@ public class VectorTextInstruction implements VectorInstruction {
     private Paint paint;
     private String text = null;
     private Matrix matrix;
+    private Matrix inverse;
 
     public VectorTextInstruction(String text, String matrixStr, int color, Typeface typeface, float fontSize){
         if( text == null ){
@@ -28,6 +29,8 @@ public class VectorTextInstruction implements VectorInstruction {
         } else {
             this.matrix = new Matrix();
         }
+        this.inverse = new Matrix();
+        this.matrix.invert(this.inverse);
 
         this.paint = new Paint();
         this.paint.setColor(color);
@@ -39,6 +42,7 @@ public class VectorTextInstruction implements VectorInstruction {
         this.text = copy.text;
         this.paint = copy.paint;
         this.matrix = new Matrix(copy.matrix);
+        this.inverse = new Matrix(copy.inverse);
     }
 
 
@@ -52,6 +56,8 @@ public class VectorTextInstruction implements VectorInstruction {
 
     public void addOffset(float x, float y){
         this.matrix.postTranslate(x, y);
+        this.inverse = new Matrix();
+        this.matrix.invert(this.inverse);
     }
 
     public boolean hasText(){
@@ -60,11 +66,9 @@ public class VectorTextInstruction implements VectorInstruction {
 
     @Override
     public void draw(Canvas canvas) {
-        Matrix inverse = new Matrix();
-        this.matrix.invert(inverse);
         canvas.concat(this.matrix);
         canvas.drawText(this.text, 0, 0, this.paint);
-        canvas.concat(inverse);
+        canvas.concat(this.inverse);
     }
 
     public void setFontSize(float fontSize) {

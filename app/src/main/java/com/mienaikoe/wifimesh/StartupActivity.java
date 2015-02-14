@@ -298,7 +298,7 @@ public class StartupActivity extends BaseActivity
         }
         Log.i(this.getClass().getSimpleName(), "Updating Location");
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(500); // very quick update if possible
+        locationRequest.setInterval(1000); // very quick update if possible
         locationRequest.setFastestInterval(1); // very quick update if possible
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationServices.FusedLocationApi.requestLocationUpdates( this.googleApiClient, locationRequest, this);

@@ -11,6 +11,7 @@ import android.graphics.Paint;
 public class VectorRectangleInstruction implements VectorInstruction {
 
     private Matrix matrix;
+    private Matrix inverse;
     private float width;
     private float height;
     private Paint paint;
@@ -22,6 +23,8 @@ public class VectorRectangleInstruction implements VectorInstruction {
             this.matrix = new Matrix();
         }
         this.matrix.preTranslate(x, y);
+        this.inverse = new Matrix();
+        this.matrix.invert(this.inverse);
         this.width = width;
         this.height = height;
         this.paint = new Paint();
@@ -31,11 +34,9 @@ public class VectorRectangleInstruction implements VectorInstruction {
 
     @Override
     public void draw(Canvas canvas) {
-        Matrix inverse = new Matrix();
-        this.matrix.invert(inverse);
         canvas.concat(this.matrix);
         canvas.drawRect( 0, 0, width, height, paint );
-        canvas.concat(inverse);
+        canvas.concat(this.inverse);
     }
 
 

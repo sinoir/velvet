@@ -1,13 +1,12 @@
 package com.mienaikoe.wifimesh;
 
 
-import com.mienaikoe.wifimesh.map.TrainView;
+import com.mienaikoe.wifimesh.map.SubwayMapView;
 import com.mienaikoe.wifimesh.map.VectorInstruction;
 import com.mienaikoe.wifimesh.map.VectorMapIngestor;
 import com.mienaikoe.wifimesh.train.TrainStation;
 import com.mienaikoe.wifimesh.train.TrainSystem;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Jesse on 1/18/2015.
@@ -27,7 +24,7 @@ public class TrainMapFragment extends BaseFragment {
 
     private ViewGroup rootView;
     private TrainStation station;
-    private TrainView trainView;
+    private SubwayMapView subwayMapView;
 
     private TrainSystem system;
     private VectorMapIngestor mapIngestor;
@@ -40,11 +37,11 @@ public class TrainMapFragment extends BaseFragment {
         this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
         this.context = inflater.getContext();
 
-        this.trainView = new TrainView(this.context);
-        this.trainView.setSystem( system );
-        this.trainView.setIngestor(mapIngestor);
+        this.subwayMapView = new SubwayMapView(this.context);
+        this.subwayMapView.setSystem( system );
+        this.subwayMapView.setIngestor(mapIngestor);
 
-        this.rootView.addView(this.trainView);
+        this.rootView.addView(this.subwayMapView);
 
         return this.rootView;
     }
@@ -61,13 +58,13 @@ public class TrainMapFragment extends BaseFragment {
 
     public void setStation( TrainStation station ){
         if( station.hasRectangles() ) {
-            this.trainView.setStation(station);
+            this.subwayMapView.setStation(station);
         }
         this.station = station;
     }
 
     public void toggleStreets(){
-        this.trainView.toggleStreets();
+        this.subwayMapView.toggleStreets();
     }
 
 
