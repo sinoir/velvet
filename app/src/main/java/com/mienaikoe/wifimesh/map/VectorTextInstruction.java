@@ -1,12 +1,9 @@
 package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-
-import com.mienaikoe.wifimesh.TypefaceTextView;
 
 /**
  * Created by Jesse on 1/29/2015.
@@ -65,10 +62,12 @@ public class VectorTextInstruction implements VectorInstruction {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
+        canvas.concat(transformationMatrix);
         canvas.concat(this.matrix);
         canvas.drawText(this.text, 0, 0, this.paint);
         canvas.concat(this.inverse);
+        canvas.concat(inverserTransformation);
     }
 
     public void setFontSize(float fontSize) {

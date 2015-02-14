@@ -1,6 +1,7 @@
 package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Path;
 
 /**
@@ -8,6 +9,6 @@ import android.graphics.Path;
  */
 public interface VectorInstruction {
 
-    public void draw(Canvas canvas);
+    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverseTransformation, float scalingFactor);
 
 }

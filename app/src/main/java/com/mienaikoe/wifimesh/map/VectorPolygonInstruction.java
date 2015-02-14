@@ -1,7 +1,7 @@
 package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 
@@ -29,7 +29,9 @@ public class VectorPolygonInstruction implements VectorInstruction {
 
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
+        this.path.transform(transformationMatrix);
         canvas.drawPath( this.path, this.paint );
+        this.path.transform(inverserTransformation);
     }
 }

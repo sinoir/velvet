@@ -7,6 +7,7 @@ import com.mienaikoe.wifimesh.train.TrainSystem;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v4.view.MotionEventCompat;
@@ -17,7 +18,6 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 
@@ -97,15 +97,18 @@ public class SubwayMapView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.scale( mScaleFactor, mScaleFactor, (-deltaX + scalePointX), (-deltaY + scalePointY) );
-
-        canvas.translate(deltaX / mScaleFactor, deltaY / mScaleFactor);
+        // Yay Matrix Math
+        Matrix transformationMatrix = new Matrix();
+        transformationMatrix.setTranslate(deltaX, deltaY);
+        transformationMatrix.postScale(mScaleFactor, mScaleFactor, scalePointX, scalePointY);
+        Matrix inverseTransformationMatrix = new Matrix();
+        transformationMatrix.invert(inverseTransformationMatrix);
 
         if( this.showingStreets ) {
             for (VectorInstruction instruction : this.crossStreetInstructions) {
-                instruction.draw(canvas);
+                instruction.draw(canvas, transformationMatrix, inverseTransformationMatrix, mScaleFactor);
             }
-            this.setBackgroundColor( WATER_COLOR );
+            this.setBackgroundColor(WATER_COLOR);
         } else {
             this.setBackgroundColor( LAND_COLOR );
         }
@@ -119,10 +122,11 @@ public class SubwayMapView extends View {
         }
 
         for( VectorInstruction instruction : this.mapInstructions ){
-            instruction.draw(canvas);
+            instruction.draw(canvas, transformationMatrix, inverseTransformationMatrix, mScaleFactor);
         }
 
-        //canvas.drawCircle((-deltaX) + (scalePointX), (-deltaY) + (scalePointY), 8.0f, TEST_PAINT);
+        canvas.drawCircle((-deltaX + scalePointX), (-deltaY + scalePointY), 8.0f, TEST_PAINT);
+
         //canvas.drawCircle(this.clickedX, this.clickedY, 15, new Paint());
     }
 
@@ -178,6 +182,7 @@ public class SubwayMapView extends View {
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
                 mActivePointerId = -1;
+                Log.i("Pre Coords", deltaX + ", "+deltaY);
                 startX = scalePointX - deltaX;
                 startY = scalePointY - deltaY;
                 break;
@@ -191,10 +196,8 @@ public class SubwayMapView extends View {
                         mActivePointerId = -1;
                         break;
                     }
-                    atX = MotionEventCompat.getX(ev, pointerIndex);
-                    atY = MotionEventCompat.getY(ev, pointerIndex);
-                    deltaX = atX - startX;
-                    deltaY = atY - startY;
+                    deltaX = MotionEventCompat.getX(ev, pointerIndex) - startX;
+                    deltaY = MotionEventCompat.getY(ev, pointerIndex) - startY;
                 } else {
                     deltaX = scalePointX - startX;
                     deltaY = scalePointY - startY;
@@ -207,7 +210,7 @@ public class SubwayMapView extends View {
                     mActivePointerId = MotionEventCompat.getPointerId(ev, newIdx);
                     startX = MotionEventCompat.getX(ev, newIdx) - deltaX;
                     startY = MotionEventCompat.getY(ev, newIdx) - deltaY;
-                } else {
+                } else if(ev.getPointerCount() > 2) {
                     startX = scalePointX - deltaX;
                     startY = scalePointY - deltaY;
                 }
@@ -233,8 +236,8 @@ public class SubwayMapView extends View {
             avgX += theseCoords.x;
             avgY += theseCoords.y;
         }
-        scalePointX = avgX / ev.getPointerCount();
-        scalePointY = avgY / ev.getPointerCount();
+        scalePointX = (avgX / ev.getPointerCount()); // screen coordinates
+        scalePointY = (avgY / ev.getPointerCount()); // screen coordinates
     }
 
 

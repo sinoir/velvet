@@ -1,7 +1,6 @@
 package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
@@ -33,10 +32,12 @@ public class VectorRectangleInstruction implements VectorInstruction {
 
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
+        canvas.concat(transformationMatrix);
         canvas.concat(this.matrix);
         canvas.drawRect( 0, 0, width, height, paint );
         canvas.concat(this.inverse);
+        canvas.concat(inverserTransformation);
     }
 
 
