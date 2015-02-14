@@ -20,15 +20,13 @@ public class VectorPathInstruction implements VectorInstruction {
         this.paint = new Paint();
         paint.setColor(color);
         this.width = width;
+        paint.setStrokeWidth(width);
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
     }
 
     @Override
-    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
-        this.path.transform(transformationMatrix);
-        paint.setStrokeWidth(width * scalingFactor );
+    public void draw(Canvas canvas) {
         canvas.drawPath(this.path, this.paint);
-        this.path.transform(inverserTransformation);
     }
 }
