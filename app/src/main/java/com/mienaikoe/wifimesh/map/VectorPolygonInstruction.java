@@ -29,9 +29,7 @@ public class VectorPolygonInstruction implements VectorInstruction {
 
 
     @Override
-    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
-        this.path.transform(transformationMatrix);
+    public void draw(Canvas canvas) {
         canvas.drawPath( this.path, this.paint );
-        this.path.transform(inverserTransformation);
     }
 }

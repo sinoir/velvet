@@ -9,6 +9,6 @@ import android.graphics.Path;
  */
 public interface VectorInstruction {
 
-    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverseTransformation, float scalingFactor);
+    public void draw(Canvas canvas);
 
 }

@@ -281,6 +281,7 @@ public class StartupActivity extends BaseActivity
             public void onMapLoaded() {
                 googleMapFragment.getMap().setBuildingsEnabled(false);
                 googleMapFragment.getMap().setTrafficEnabled(false);
+                googleMapFragment.getMap().setMyLocationEnabled(true);
                 for( LatLng entrance : currentStation.getEntrances() ) {
                     MarkerOptions mo = new MarkerOptions();
                     mo.position(entrance);

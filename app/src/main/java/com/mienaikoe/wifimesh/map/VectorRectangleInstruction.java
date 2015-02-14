@@ -32,12 +32,11 @@ public class VectorRectangleInstruction implements VectorInstruction {
 
 
     @Override
-    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
-        canvas.concat(transformationMatrix);
+    public void draw(Canvas canvas) {
+        canvas.save();
         canvas.concat(this.matrix);
         canvas.drawRect( 0, 0, width, height, paint );
-        canvas.concat(this.inverse);
-        canvas.concat(inverserTransformation);
+        canvas.restore();
     }
 
 

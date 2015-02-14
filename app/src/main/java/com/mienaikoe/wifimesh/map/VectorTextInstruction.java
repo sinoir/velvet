@@ -62,12 +62,11 @@ public class VectorTextInstruction implements VectorInstruction {
     }
 
     @Override
-    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
-        canvas.concat(transformationMatrix);
+    public void draw(Canvas canvas) {
+        canvas.save();
         canvas.concat(this.matrix);
         canvas.drawText(this.text, 0, 0, this.paint);
-        canvas.concat(this.inverse);
-        canvas.concat(inverserTransformation);
+        canvas.restore();
     }
 
     public void setFontSize(float fontSize) {

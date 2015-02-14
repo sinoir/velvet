@@ -101,12 +101,12 @@ public class SubwayMapView extends View {
         Matrix transformationMatrix = new Matrix();
         transformationMatrix.setTranslate(deltaX, deltaY);
         transformationMatrix.postScale(mScaleFactor, mScaleFactor, scalePointX, scalePointY);
-        Matrix inverseTransformationMatrix = new Matrix();
-        transformationMatrix.invert(inverseTransformationMatrix);
+
+        canvas.setMatrix(transformationMatrix);
 
         if( this.showingStreets ) {
             for (VectorInstruction instruction : this.crossStreetInstructions) {
-                instruction.draw(canvas, transformationMatrix, inverseTransformationMatrix, mScaleFactor);
+                instruction.draw(canvas);
             }
             this.setBackgroundColor(WATER_COLOR);
         } else {
@@ -122,7 +122,7 @@ public class SubwayMapView extends View {
         }
 
         for( VectorInstruction instruction : this.mapInstructions ){
-            instruction.draw(canvas, transformationMatrix, inverseTransformationMatrix, mScaleFactor);
+            instruction.draw(canvas);
         }
 
         canvas.drawCircle((-deltaX + scalePointX), (-deltaY + scalePointY), 8.0f, TEST_PAINT);
