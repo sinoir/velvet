@@ -102,7 +102,7 @@ public class SubwayMapView extends View {
         transformationMatrix.setTranslate(deltaX, deltaY);
         transformationMatrix.postScale(mScaleFactor, mScaleFactor, scalePointX, scalePointY);
 
-        canvas.setMatrix(transformationMatrix);
+        canvas.concat(transformationMatrix);
 
         if( this.showingStreets ) {
             for (VectorInstruction instruction : this.crossStreetInstructions) {
