@@ -1,6 +1,7 @@
 package com.mienaikoe.wifimesh.map;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 /**
@@ -31,7 +32,9 @@ public class VectorLineInstruction implements VectorInstruction {
 
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Matrix transformationMatrix, Matrix inverserTransformation, float scalingFactor) {
+        canvas.concat(transformationMatrix);
         canvas.drawLine(x1, y1, x2, y2, paint);
+        canvas.concat(inverserTransformation);
     }
 }
