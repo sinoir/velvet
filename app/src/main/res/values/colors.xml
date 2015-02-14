@@ -16,7 +16,8 @@
     -->
 
     <color name="primary">#333333</color>
-    <color name="primary_dark">#AAAAAA</color>
+    <color name="primary_dark">#555555</color>
+    <color name="primary_medium">#AAAAAA</color>
     <color name="accent">#a3adae</color>
     <color name="primary_light">#CFD8DC</color>
     <color name="primary_text">#F2F2F2</color>

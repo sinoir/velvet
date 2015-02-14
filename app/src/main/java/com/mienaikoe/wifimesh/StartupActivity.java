@@ -93,6 +93,7 @@ public class StartupActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         stopService(new Intent(this, GtfsUpdateService.class));
+        super.onDestroy();
     }
 
 
