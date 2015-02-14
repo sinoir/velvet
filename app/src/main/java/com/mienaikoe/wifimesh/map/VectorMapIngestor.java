@@ -138,6 +138,20 @@ public class VectorMapIngestor {
                                 String rectId = rectIdBuilder.toString().replace("_","");
                                 this.namedInstructions.put(rectId, instruction);
                             }
+                        } else if ( name.equals("polygon") ){
+                            String pointsStr = parser.getAttributeValue("","points");
+                            String[] pointsSplit = pointsStr.trim().split("\\s+");
+                            float[] pointsFloat = new float[pointsSplit.length*2];
+                            for( int i=0; i<pointsSplit.length; i++ ){
+                                if( pointsSplit[i].contains(",") ) {
+                                    String[] coords = pointsSplit[i].split(",");
+                                    pointsFloat[2*i] = Float.valueOf(coords[0]);
+                                    pointsFloat[(2*i)+1] = Float.valueOf(coords[1]);
+                                }
+                            }
+                            groupInstructions.add( new VectorPolygonInstruction(
+                                pointsFloat, Color.parseColor(parser.getAttributeValue("", "fill"))
+                            ));
                         } else if (name.equals("line")) {
                             String color = parser.getAttributeValue("", "stroke");
                             if( color == null ){
