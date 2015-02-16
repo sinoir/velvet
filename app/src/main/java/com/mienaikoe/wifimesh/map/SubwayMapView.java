@@ -30,14 +30,19 @@ public class SubwayMapView extends View {
     private TrainStation currentStation;
 
     private float mScaleFactor = 1.0f;
-    private float scalePointX = 0.f;
-    private float scalePointY = 0.f;
     private ScaleGestureDetector mScaleDetector;
 
-    private float startX = 0;
-    private float startY = 0;
-    private float deltaX = 0;
-    private float deltaY = -300;
+    private float startX = 0f;          // Screen Coordinates
+    private float startY = 0f;          // Screen Coordinates
+
+    private float currentX = 0f;        // Screen Coordinates
+    private float currentY = 0f;        // Screen Coordinates
+
+    private float translateX = 0f;      // Map Coordinates, 1:1 scale
+    private float translateY = -300f;   // Map Coordinates, 1:1 scale
+
+    private float scaleX = 0.f;         // Screen Coordinates
+    private float scaleY = 0.f;         // Screen Coordinates
 
 
     private VectorMapIngestor ingestor;
@@ -99,8 +104,8 @@ public class SubwayMapView extends View {
 
         // Yay Matrix Math
         Matrix transformationMatrix = new Matrix();
-        transformationMatrix.setTranslate(deltaX, deltaY);
-        transformationMatrix.postScale(mScaleFactor, mScaleFactor, scalePointX, scalePointY);
+        transformationMatrix.setTranslate(translateX, translateY);
+        transformationMatrix.postScale(mScaleFactor, mScaleFactor, scaleX, scaleY);
 
         canvas.concat(transformationMatrix);
 
@@ -125,9 +130,7 @@ public class SubwayMapView extends View {
             instruction.draw(canvas);
         }
 
-        canvas.drawCircle((-deltaX + scalePointX), (-deltaY + scalePointY), 8.0f, TEST_PAINT);
-
-        //canvas.drawCircle(this.clickedX, this.clickedY, 15, new Paint());
+        canvas.drawCircle( (-translateX + scaleX), (-translateY + scaleY), 8.0f, TEST_PAINT );
     }
 
 
@@ -149,10 +152,8 @@ public class SubwayMapView extends View {
             // Don't let the object get too small or too large.
             mScaleFactor = Math.max(0.5f, Math.min(mScaleFactor, 5.0f));
 
-            Log.i("TESTER", mScaleFactor + "");
-
-            //scalePointX = detector.getFocusX();
-            //scalePointY = detector.getFocusY();
+            scaleX = detector.getFocusX();
+            scaleY = detector.getFocusY();
 
             return true;
         }
@@ -163,56 +164,58 @@ public class SubwayMapView extends View {
 
 
     private int mActivePointerId = -1;
+    private boolean isScaling = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
 
-        mScaleDetector.onTouchEvent(ev);
-
         if( ev.getPointerCount() > 1 ){
-            calculateScalePoint(ev);
+            mScaleDetector.onTouchEvent(ev);
         }
 
         switch (MotionEventCompat.getActionMasked(ev)) {
             case MotionEvent.ACTION_DOWN: {
-                startX = MotionEventCompat.getX(ev, 0) - deltaX;
-                startY = MotionEventCompat.getY(ev, 0) - deltaY;
+                startX = (MotionEventCompat.getX(ev, 0)); // Screen Coordinates
+                startY = (MotionEventCompat.getY(ev, 0)); // Screen Coordinates
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 break;
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
-                mActivePointerId = -1;
-                Log.i("Pre Coords", deltaX + ", "+deltaY);
-                startX = scalePointX - deltaX;
-                startY = scalePointY - deltaY;
+                if( !isScaling ) {
+                    mActivePointerId = -1;
+                    startX = (scaleX);
+                    startY = (scaleY);
+                    isScaling = true;
+                }
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                 if( ev.getPointerCount() == 1 ) {
-                    float atX;
-                    float atY;
+                float deltaX, deltaY;
+                if( isScaling ){
+                    deltaX = scaleX - startX;
+                    deltaY = scaleY - startY;
+                } else {
                     final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                     if (pointerIndex == -1) {
                         mActivePointerId = -1;
                         break;
                     }
-                    deltaX = MotionEventCompat.getX(ev, pointerIndex) - startX;
-                    deltaY = MotionEventCompat.getY(ev, pointerIndex) - startY;
-                } else {
-                    deltaX = scalePointX - startX;
-                    deltaY = scalePointY - startY;
+                    deltaX = MotionEventCompat.getX(ev, pointerIndex) - startX; // 1:1 scale delta
+                    deltaY = MotionEventCompat.getY(ev, pointerIndex) - startY; // 1:1 scale delta
                 }
+                translateX = translateX + (deltaX / mScaleFactor);
+                translateY = translateY + (deltaY / mScaleFactor);
+                startX += deltaX;
+                startY += deltaY;
                 break;
             }
             case MotionEvent.ACTION_POINTER_UP: {
-                if( ev.getPointerCount() == 2 ){
+                if( isScaling ){
                     int newIdx = ev.getActionIndex() == 0 ? 1 : 0; // The one not lifted
                     mActivePointerId = MotionEventCompat.getPointerId(ev, newIdx);
-                    startX = MotionEventCompat.getX(ev, newIdx) - deltaX;
-                    startY = MotionEventCompat.getY(ev, newIdx) - deltaY;
-                } else if(ev.getPointerCount() > 2) {
-                    startX = scalePointX - deltaX;
-                    startY = scalePointY - deltaY;
+                    startX = MotionEventCompat.getX(ev, newIdx);
+                    startY = MotionEventCompat.getY(ev, newIdx);
+                    isScaling = false;
                 }
                 break;
             }
@@ -226,20 +229,6 @@ public class SubwayMapView extends View {
         this.invalidate();
         return true;
     }
-
-
-    private void calculateScalePoint(MotionEvent ev){
-        float avgX = 0, avgY = 0;
-        for( int i=0; i<ev.getPointerCount(); i++ ){
-            MotionEvent.PointerCoords theseCoords = new MotionEvent.PointerCoords();
-            ev.getPointerCoords(i, theseCoords);
-            avgX += theseCoords.x;
-            avgY += theseCoords.y;
-        }
-        scalePointX = (avgX / ev.getPointerCount()); // screen coordinates
-        scalePointY = (avgY / ev.getPointerCount()); // screen coordinates
-    }
-
 
     private static final int CLICK_THRESHOLD_DISTANCE = 20;
 
@@ -288,10 +277,10 @@ public class SubwayMapView extends View {
 
     private void setCenter( float[] center ){
         mScaleFactor = 2.5f;
-        this.scalePointX = 0.f;
-        this.scalePointY = 0.f;
-        this.deltaX = -center[0] + (this.getWidth()/(2*mScaleFactor));
-        this.deltaY = -center[1] + (this.getHeight()/(2*mScaleFactor));
+        this.scaleX = 0.f;
+        this.scaleY = 0.f;
+        this.translateX = -center[0] + (this.getWidth()/(2*mScaleFactor));
+        this.translateY = -center[1] + (this.getHeight()/(2*mScaleFactor));
         invalidate();
     }
 
