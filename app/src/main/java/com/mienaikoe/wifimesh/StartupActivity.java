@@ -1,6 +1,23 @@
 package com.mienaikoe.wifimesh;
 
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.mienaikoe.wifimesh.map.VectorMapIngestor;
+import com.mienaikoe.wifimesh.sinoir.GtfsUpdateService;
+import com.mienaikoe.wifimesh.train.TrainLine;
+import com.mienaikoe.wifimesh.train.TrainStation;
+import com.mienaikoe.wifimesh.train.TrainSystem;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -13,22 +30,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.mienaikoe.wifimesh.map.VectorMapIngestor;
-import com.mienaikoe.wifimesh.sinoir.GtfsUpdateService;
-import com.mienaikoe.wifimesh.train.TrainLine;
-import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -50,9 +51,12 @@ public class StartupActivity extends BaseActivity
     private TypefaceTextView stationName;
     private GridLayout linesTiming;
     private LatLng currentLocation;
+
     private boolean usingGoogleMap = false;
     private TrainStation currentStation;
     private VectorMapIngestor ingestor;
+
+    private MapName mCurrentMap;
 
     //region Lifecycle
     @Override
@@ -63,21 +67,9 @@ public class StartupActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Fill Out Train System Information
-        this.trainSystem = new TrainSystem(
-                this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
-                this.getApplicationContext().getResources()
-                        .openRawResource(R.raw.transfers_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
-        );
-
-        this.ingestor = new VectorMapIngestor(getApplicationContext(), "final_map.svg");
-        this.trainSystem.fillRectangles(ingestor);
-
+        drawMap(MapName.DAY);
         startService(new Intent(this, GtfsUpdateService.class));
 
-        TrainSystemModel.setTrainSystem(trainSystem);
 
 
         if (savedInstanceState == null) {
@@ -90,9 +82,26 @@ public class StartupActivity extends BaseActivity
         initLocationSystem();
     }
 
+    private void drawMap(MapName map) {
+        mCurrentMap = map;
+        // Fill Out Train System Information
+        this.trainSystem = new TrainSystem(
+                this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
+                this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
+                this.getApplicationContext().getResources()
+                        .openRawResource(R.raw.transfers_normalized),
+                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
+        );
+
+        this.ingestor = new VectorMapIngestor(getApplicationContext(), map.toString());
+        this.trainSystem.fillRectangles(ingestor);
+        TrainSystemModel.setTrainSystem(trainSystem);
+    }
+
     @Override
     protected void onDestroy() {
         stopService(new Intent(this, GtfsUpdateService.class));
+        super.onDestroy();
     }
 
 
@@ -127,10 +136,55 @@ public class StartupActivity extends BaseActivity
         return super.onCreateOptionsMenu(menu);
     }
 
+    private static enum MapName {
+        DAY("final_map.svg"),
+        //NIGHT("night.svg"), //TODO account for this when ready
+        WEEKEND("weekend.svg");
+
+        private String mFilename;
+
+        private MapName(String filename) {
+            mFilename = filename;
+        }
+
+        @Override
+        public String toString() {
+            return mFilename;
+        }
+
+        public MapName getNext() {
+            if (this==DAY) {
+                return WEEKEND;
+            }
+
+            if (this == WEEKEND) {
+                return DAY;
+            }
+            //TODO account for NIGHT when ready
+            return DAY;
+
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+            case R.id.action_service_toggle:
+                this.drawMap(mCurrentMap.getNext());
+
+                TrainMapFragment oldMap = trainMapFragment;
+                trainMapFragment = new TrainMapFragment();
+                trainMapFragment.setSystem(trainSystem);
+                trainMapFragment.setMapIngestor(ingestor);
+
+                getFragmentManager().beginTransaction()
+                        .remove(oldMap)
+                        .add(R.id.container, trainMapFragment)
+                        .hide(googleMapFragment)
+                        .show(trainMapFragment)
+                        .commit();
+                return true;
             case R.id.action_locate:
                 this.updateLocation();
                 return true;
