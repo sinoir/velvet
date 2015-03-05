@@ -32,6 +32,7 @@ import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -56,7 +57,7 @@ public class StartupActivity extends BaseActivity
     private TrainStation currentStation;
     private VectorMapIngestor ingestor;
 
-    private MapName mCurrentMap;
+    private MapName mCurrentMap = MapName.DAY;
 
     //region Lifecycle
     @Override
@@ -129,22 +130,36 @@ public class StartupActivity extends BaseActivity
 
 
     @Override
-
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.action_service_toggle);
+        menuItem.setIcon(mCurrentMap.getIcon());
+        return         super.onPrepareOptionsMenu(menu);
+
+    }
+
     private static enum MapName {
-        DAY("final_map.svg"),
-        NIGHT("night.svg"),
-        WEEKEND("weekend.svg");
+        DAY("final_map.svg", R.drawable.ic_sun),
+        NIGHT("night.svg", R.drawable.ic_action_image_brightness_3),
+        WEEKEND("weekend_final.svg", R.drawable.ic_action_notification_mms);
 
         private String mFilename;
 
-        private MapName(String filename) {
+        private int mIcon;
+
+        private MapName(String filename, int icon) {
             mFilename = filename;
+            mIcon = icon;
+        }
+
+        public int getIcon() {
+            return mIcon;
         }
 
         @Override
@@ -171,7 +186,9 @@ public class StartupActivity extends BaseActivity
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_service_toggle:
-                this.drawMap(mCurrentMap.getNext());
+                MapName newMap = mCurrentMap.getNext();
+                this.drawMap(newMap);
+                invalidateOptionsMenu();
 
                 TrainMapFragment oldMap = trainMapFragment;
                 trainMapFragment = new TrainMapFragment();
