@@ -138,7 +138,7 @@ public class StartupActivity extends BaseActivity
 
     private static enum MapName {
         DAY("final_map.svg"),
-        //NIGHT("night.svg"), //TODO account for this when ready
+        NIGHT("night.svg"),
         WEEKEND("weekend.svg");
 
         private String mFilename;
@@ -153,29 +153,16 @@ public class StartupActivity extends BaseActivity
         }
 
         public MapName getNext() {
-
-            //TODO uncomment when NIGHT is ready
-//            if (this==DAY) {
-//                return NIGHT;
-//            }
-//            if (this == NIGHT) {
-//                return WEEKEND;
-//            }
-//            if (this == WEEKEND) {
-//                return DAY;
-//            }
-//            return DAY;
-
-            //TODO delete everything here when NIGHTis ready
             if (this==DAY) {
+                return NIGHT;
+            }
+            if (this == NIGHT) {
                 return WEEKEND;
             }
-
             if (this == WEEKEND) {
                 return DAY;
             }
             return DAY;
-
         }
     }
 

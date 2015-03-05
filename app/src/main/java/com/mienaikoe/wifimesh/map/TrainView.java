@@ -1,5 +1,9 @@
 package com.mienaikoe.wifimesh.map;
 
+import com.mienaikoe.wifimesh.StationSelectEvent;
+import com.mienaikoe.wifimesh.train.TrainStation;
+import com.mienaikoe.wifimesh.train.TrainSystem;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,10 +15,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-
-import com.mienaikoe.wifimesh.StationSelectEvent;
-import com.mienaikoe.wifimesh.train.TrainStation;
-import com.mienaikoe.wifimesh.train.TrainSystem;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -241,10 +241,16 @@ public class TrainView extends View {
     public void setIngestor(VectorMapIngestor ingestor){
         this.ingestor = ingestor;
         for( String groupName : CROSS_STREET_GROUPS ) {
+            if (this.ingestor.getInstructionGroup(groupName) == null) {
+                continue;
+            }
             this.crossStreetInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
         }
         for( String groupName : STANDARD_GROUPS ) {
-           this.mapInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
+            if (this.ingestor.getInstructionGroup(groupName)==null) {
+                continue;
+            }
+            this.mapInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
         }
     }
 
