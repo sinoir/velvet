@@ -23,7 +23,7 @@
 	<rect x="583.8" y="1704.4" fill="#5DA093" width="42.6" height="25.9"/>
 	<rect x="640.1" y="2000.1" fill="#5DA093" width="28.3" height="63.8"/>
 </g>
-<g id="CROSS StREETS">
+<g id="CROSS_STREETS">
 	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="620.4" y1="688.3" x2="620.4" y2="1740.7"/>
 	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="620.4" y1="551.2" x2="620.4" y2="641.8"/>
 	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="549.8" y1="1216.9" x2="549.8" y2="2001.3"/>
@@ -545,35 +545,35 @@
 	<line fill="none" stroke="#F58220" stroke-width="8" x1="384.9" y1="525" x2="384.9" y2="1266"/>
 	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="741" y1="2278.2" x2="573.1" y2="2278.2"/>
 	
-		<line id="3_4 St_Herald_Sq_Transfer_NQR_BDFM" fill="none" stroke="#FFFFFF" stroke-width="3" x1="544.2" y1="1498.3" x2="555.6" y2="1486.9"/>
+		<line id="_x33_4_St_Herald_Sq_Transfer_NQR_BDFM_1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="544.2" y1="1498.3" x2="555.6" y2="1486.9"/>
 	
-		<line id="Bleecker St_Broadway_Lafayette St_transfer_BDFM_6" fill="none" stroke="#FFFFFF" stroke-width="3" x1="688.9" y1="1749.7" x2="672.9" y2="1733.7"/>
+		<line id="Bleecker_St_Broadway_Lafayette_St_transfer_BDFM_6_1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="688.9" y1="1749.7" x2="672.9" y2="1733.7"/>
 	
-		<line id="1_4 St_Union_Sq_Transfer_456_NQR" fill="none" stroke="#FFFFFF" stroke-width="3" x1="652" y1="1639.1" x2="670.7" y2="1639.1"/>
-	<polyline id="Canal St_transfer_NQR_456_JZ" fill="none" stroke="#FFFFFF" stroke-width="3" points="700.6,1869.3 684.1,1869.3 
+		<line id="_x31_4_St_Union_Sq_Transfer_456_NQR_1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="652" y1="1639.1" x2="670.7" y2="1639.1"/>
+	<polyline id="Canal_St_transfer_NQR_456_JZ_1_" fill="none" stroke="#FFFFFF" stroke-width="3" points="700.6,1869.3 684.1,1869.3 
 		658.5,1869.3 638,1869.3 	"/>
-	<polyline id="Chambers St_WTC_Park_Place_Transfer_AC_E_23" fill="none" stroke="#FFFFFF" stroke-width="3" points="591.2,2040 
+	<polyline id="Chambers_St_WTC_Park_Place_Transfer_AC_E_23_1_" fill="none" stroke="#FFFFFF" stroke-width="3" points="591.2,2040 
 		578.1,2040 576.9,2073 576.9,1998.5 	"/>
-	<polyline id="Chambers St_Brooklyn_Bridge_City_Hall_transfer_456_JZ" fill="none" stroke="#FFFFFF" stroke-width="3" points="
+	<polyline id="Chambers_St_Brooklyn_Bridge_City_Hall_transfer_456_JZ_2_" fill="none" stroke="#FFFFFF" stroke-width="3" points="
 		669.7,1990.1 683.2,1990.1 702.1,1971.2 	"/>
-	<path id="1_4 St_Transfer_123_FM_L_3_" fill="none" stroke="#FFFFFF" stroke-width="3" d="M562.9,1650.8
+	<path id="_x31_4_St_Transfer_123_FM_L_3_" fill="none" stroke="#FFFFFF" stroke-width="3" d="M562.9,1650.8
 		c-0.6,0.1-1.2,0.1-1.8,0.1l-82.3,0"/>
-	<path id="1_4 St_Transfer_123_FM_L" fill="none" stroke="#FFFFFF" stroke-width="3" d="M570,1642.2c0,4.3-3.1,7.8-7.1,8.5"/>
+	<path id="_x31_4_St_Transfer_123_FM_L_2_" fill="none" stroke="#FFFFFF" stroke-width="3" d="M570,1642.2c0,4.3-3.1,7.8-7.1,8.5"/>
 	
-		<line id="Times_Square_42 St_Transfer_ACE_1237_NQR" fill="none" stroke="#FFFFFF" stroke-width="3" x1="407.5" y1="1381.9" x2="513.1" y2="1381.9"/>
-	<path id="Fulton St_Transfer_45_AC_JZ_23" fill="none" stroke="#FFFFFF" stroke-width="3" d="M737.9,2103.9
+		<line id="Times_Square_42_St_Transfer_ACE_1237_NQR_1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="407.5" y1="1381.9" x2="513.1" y2="1381.9"/>
+	<path id="Fulton_St_Transfer_45_AC_JZ_23_1_" fill="none" stroke="#FFFFFF" stroke-width="3" d="M737.9,2103.9
 		c0-4.8-3.9-8.7-8.7-8.7l0.8,0h-26.4h1.1l-30.5,30.5"/>
 	
-		<line id="Lexington Av - 63 St_transfer_between_F_and_NQR_456_3_" opacity="0.5" fill="#6F79B2" stroke="#232840" stroke-width="3" x1="726.9" y1="1225.2" x2="726.9" y2="1182.7"/>
-	<polyline id="Lexington Av - 63 St_transfer_between_F_and_NQR_456" fill="none" stroke="#FFFFFF" stroke-width="3" points="
+		<line id="Lexington_Av_-_63_St_transfer_between_F_and_NQR_456_3_" opacity="0.5" fill="#6F79B2" stroke="#232840" stroke-width="3" x1="726.9" y1="1225.2" x2="726.9" y2="1182.7"/>
+	<polyline id="Lexington_Av_-_63_St_transfer_between_F_and_NQR_456_2_" fill="none" stroke="#FFFFFF" stroke-width="3" points="
 		724.9,1302.5 724.9,1313 724.9,1313.4 711.7,1326.7 	"/>
 	
-		<line id="Lexington Av - 63 St_above_ground_transfer_between_NQR_and_456" fill="none" stroke="#FFFFFF" stroke-width="3" x1="712.5" y1="1240.6" x2="726.2" y2="1226.9"/>
+		<line id="Lexington_Av_-_63_St_above_ground_transfer_between_NQR_and_456_1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="712.5" y1="1240.6" x2="726.2" y2="1226.9"/>
 	
-		<line id="Whitehall St_South_Ferry_Loop_Transfer_R1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="743.6" y1="2275.3" x2="723.9" y2="2255.8"/>
-	<polyline id="5_9 St_Columbus_Circle_Transfer_ABCD_1" fill="none" stroke="#FFFFFF" stroke-width="3" points="392.1,1234 
+		<line id="Whitehall_St_South_Ferry_Loop_Transfer_R_1_1_" fill="none" stroke="#FFFFFF" stroke-width="3" x1="743.6" y1="2275.3" x2="723.9" y2="2255.8"/>
+	<polyline id="_x35_9_St_Columbus_Circle_Transfer_ABCD_1_2_" fill="none" stroke="#FFFFFF" stroke-width="3" points="392.1,1234 
 		416.4,1234 423.9,1241.3 	"/>
-	<path id="4_2nd St_Bryant_Park_and_5 Ave_Transfer_BDFM_7" fill="none" stroke="#FFFFFF" stroke-width="3" d="M618.8,1393
+	<path id="_x34_2nd_St_Bryant_Park_and_5_Ave_Transfer_BDFM_7_1_" fill="none" stroke="#FFFFFF" stroke-width="3" d="M618.8,1393
 		v3.4c0,4.8-3.9,8.7-8.7,8.7v0.1l-38.6,0"/>
 	<text transform="matrix(1 0 0 1 707.1482 1312.3947)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</tspan></text>
 	<text transform="matrix(1 0 0 1 731.4498 1306.8337)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
@@ -890,158 +890,158 @@
 	<line x1="707.4" y1="1991" x2="688.5" y2="1991"/>
 </g>
 <g id="STATION_BLOCKS">
-	<rect id="725_Times_Sq - 42 St" x="483.9" y="1385.8" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="724_5 Av" x="614.9" y="1385.8" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="723_Grand_Central - 42 St" x="668" y="1385.9" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="640_Brooklyn_Bridge - City_Hall" x="667.9" y="1986.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="639_Canal St" x="667.9" y="1865.3" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="638_Spring St" x="667.9" y="1805.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="637_Bleecker St" x="667.9" y="1731.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="636_Astor_Pl" x="667.9" y="1689.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="635_14 St - Union_Sq" x="667.6" y="1635.1" fill="#FFFFFF" width="8.5" height="8"/>
-	<rect id="634_23 St" x="667.9" y="1563.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="633_28 St" x="667.9" y="1534.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="632_33 St" x="667.9" y="1493.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="631_Grand_Central - 42 St" x="668" y="1385.9" fill="#FFFFFF" width="7.1" height="8"/>
-	<rect id="630_51 St" x="705.9" y="1323.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="629_59 St" x="705.8" y="1235.9" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="628_68 St - Hunter_College" x="705.9" y="1110.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="627_77 St" x="705.9" y="1042.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="626_86 St" x="705.8" y="985.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="625_96 St" x="705.9" y="912.4" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="624_103 St" x="705.9" y="839.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="623_110 St" x="705.9" y="769.4" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="622_116 St" x="705.9" y="707.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="621_125 St" x="705.9" y="637.7" fill="#FFFFFF" width="7.8" height="8"/>
-	<rect id="420_Bowling_Green" x="667.9" y="2219.9" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="419_Wall St" x="667.9" y="2167" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="418_Fulton St" x="667.9" y="2123.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x37_25_x5F_Times_Sq_-_42_St" x="483.9" y="1385.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x37_24_x5F_5_Av" x="614.9" y="1385.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x37_23_x5F_Grand_Central_-_42_St" x="668" y="1385.9" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x36_40_x5F_Brooklyn_Bridge_-_City_Hall" x="667.9" y="1986.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_39_x5F_Canal_St" x="667.9" y="1865.3" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x36_38_x5F_Spring_St" x="667.9" y="1805.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_37_x5F_Bleecker_St_2_" x="667.9" y="1731.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_36_x5F_Astor_Pl" x="667.9" y="1689.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_35_x5F_14_St_-_Union_Sq" x="667.6" y="1635.1" fill="#FFFFFF" width="8.5" height="8"/>
+	<rect id="_x36_34_x5F_23_St" x="667.9" y="1563.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_33_x5F_28_St" x="667.9" y="1534.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_32_x5F_33_St" x="667.9" y="1493.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_31_x5F_Grand_Central_-_42_St" x="668" y="1385.9" fill="#FFFFFF" width="7.1" height="8"/>
+	<rect id="_x36_30_x5F_51_St_1_" x="705.9" y="1323.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_29_x5F_59_St" x="705.8" y="1235.9" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x36_28_x5F_68_St_-_Hunter_College" x="705.9" y="1110.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_27_x5F_77_St" x="705.9" y="1042.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_26_x5F_86_St" x="705.8" y="985.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_25_x5F_96_St" x="705.9" y="912.4" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_24_x5F_103_St" x="705.9" y="839.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_23_x5F_110_St" x="705.9" y="769.4" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_22_x5F_116_St" x="705.9" y="707.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_21_x5F_125_St" x="705.9" y="637.7" fill="#FFFFFF" width="7.8" height="8"/>
+	<rect id="_x34_20_x5F_Bowling_Green" x="667.9" y="2219.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x34_19_x5F_Wall_St" x="667.9" y="2167" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x34_18_x5F_Fulton_St" x="667.9" y="2123.8" fill="#FFFFFF" width="8" height="8"/>
 	
-		<rect id="302_145 St" x="546.5" y="515.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -205.9675 541.3785)" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="301_Harlem - 148 St" x="505.9" y="503" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="230_Wall St" x="733.9" y="2167" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="229_Fulton St" x="733.9" y="2103.9" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="228_Park_Pl" x="586.9" y="2036" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="227_Central_Park_North (110 St)" x="554.9" y="769.9" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="226_116 St" x="554.9" y="709" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="225_125 St" x="554.9" y="637.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="224_135 St" x="554.9" y="582" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="140_South_Ferry_Loop" x="741" y="2274.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="139_Rector St" x="539.5" y="2192" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="137_Chambers St" x="472" y="1984.7" fill="#FFFFFF" width="7.9" height="8"/>
-	<rect id="136_Franklin St" x="471.9" y="1920" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="135_Canal St" x="471.9" y="1864.6" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="134_Houston St" x="471.9" y="1787" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="133_Christopher St - Sheridan_Sq" x="471.9" y="1710" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="132_14 St" x="471.8" y="1646.5" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="131_18 St" x="471.9" y="1607" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="130_23 St" x="471.9" y="1563.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="129_28 St" x="471.9" y="1529.8" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="128_34 St - Penn Station" x="471.8" y="1482.9" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="127_Times_Sq - 42 St" x="471.7" y="1377.8" fill="#FFFFFF" width="20" height="8.1"/>
-	<rect id="126_50 St" x="471.9" y="1329.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="125_59 St - Columbus_Circle" x="280.8" y="1070.8" fill="#FFFFFF" width="20.1" height="8"/>
+		<rect id="_x33_02_x5F_145_St" x="546.5" y="515.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -205.9675 541.3785)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x33_01_x5F_Harlem_-_148_St" x="505.9" y="503" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_30_x5F_Wall_St" x="733.9" y="2167" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_29_x5F_Fulton_St" x="733.9" y="2103.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_28_x5F_Park_Pl" x="586.9" y="2036" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_27_x5F_Central_Park_North__x28_110_St_x29_" x="554.9" y="769.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_26_x5F_116_St" x="554.9" y="709" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_25_x5F_125_St" x="554.9" y="637.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_24_x5F_135_St" x="554.9" y="582" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_40_x5F_South_Ferry_Loop" x="741" y="2274.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_39_x5F_Rector_St" x="539.5" y="2192" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_37_x5F_Chambers_St" x="472" y="1984.7" fill="#FFFFFF" width="7.9" height="8"/>
+	<rect id="_x31_36_x5F_Franklin_St" x="471.9" y="1920" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_35_x5F_Canal_St" x="471.9" y="1864.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_34_x5F_Houston_St" x="471.9" y="1787" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_33_x5F_Christopher_St_-_Sheridan_Sq" x="471.9" y="1710" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_32_x5F_14_St" x="471.8" y="1646.5" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x31_31_x5F_18_St" x="471.9" y="1607" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_30_x5F_23_St" x="471.9" y="1563.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_29_x5F_28_St" x="471.9" y="1529.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_28_x5F_34_St_-_Penn_Station" x="471.8" y="1482.9" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x31_27_x5F_Times_Sq_-_42_St" x="471.7" y="1377.8" fill="#FFFFFF" width="20" height="8.1"/>
+	<rect id="_x31_26_x5F_50_St" x="471.9" y="1329.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_25_x5F_59_St_-_Columbus_Circle" x="280.8" y="1070.8" fill="#FFFFFF" width="20.1" height="8"/>
 	
-		<rect id="124_66 St - Lincoln_Center" x="339.6" y="1157.1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -720.3932 583.0291)" fill="#FFFFFF" width="8" height="8"/>
+		<rect id="_x31_24_x5F_66_St_-_Lincoln_Center" x="339.6" y="1157.1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -720.3932 583.0291)" fill="#FFFFFF" width="8" height="8"/>
 	
-		<rect id="123_72 St" x="419.9" y="1237.5" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -753.7015 663.3977)" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="122_79 St" x="280.9" y="1031.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="121_86 St" x="280.9" y="988" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="120_96 St" x="280.8" y="914.2" fill="#FFFFFF" width="20" height="8"/>
-	<rect id="119_103 St" x="280.9" y="842.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="118_Cathedral Pkwy" x="280.9" y="769.3" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="117_116 St - Columbia University" x="280.9" y="707.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="116_125 St" x="280.9" y="637.3" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="115_137 St - City College" x="280.9" y="573.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="114_145 St" x="280.9" y="525" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="113_157 St" x="280.9" y="449.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="112_168 St - Washington Hts" x="280.8" y="402.2" fill="#FFFFFF" width="8" height="8.7"/>
-	<rect id="111_181 St" x="280.9" y="316.6" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="110_191 St" x="280.9" y="255.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="109_Dykeman St" x="280.9" y="216.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="108_207 St" x="280.9" y="165.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="107_215 St" x="280.9" y="120.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A07_175 St" x="190.9" y="355.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A06_181 St" x="190.9" y="315.3" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A05_190 St" x="190.9" y="260.6" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A03_Dyckman St" x="190.9" y="218.6" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A02_Inwood - 207 St" x="190.9" y="166.4" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="E01_World Trade Center" x="572.9" y="2069" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A34_Canal St" x="526.9" y="1865.3" fill="#FFFFFF" width="20" height="8"/>
-	<rect id="A33_Sprint St" x="526.5" y="1807.2" fill="#FFFFFF" width="20.4" height="8"/>
-	<rect id="A32_W_4 St" x="526.9" y="1717.2" fill="#FFFFFF" width="47.4" height="8"/>
-	<rect id="A31_14 St" x="388.9" y="1635.1" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="A30_23 St" x="388.9" y="1563.2" fill="#FFFFFF" width="20" height="8"/>
-	<rect id="A28_34 St - Penn Station" x="388.8" y="1482.9" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="A27_42 St - Port Authority Bus Terminal" x="388.8" y="1378.1" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="A25_50 St" x="400.9" y="1330" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D14_7 Av" x="522.9" y="1292" fill="#FFFFFF" width="8" height="15.9"/>
-	<rect id="F12_5 Av/53 St" x="609.1" y="1299.9" fill="#FFFFFF" width="8" height="8.1"/>
-	<rect id="F11_Lexington Av/53 St" x="720.9" y="1299.9" fill="#FFFFFF" width="8" height="8.5"/>
+		<rect id="_x31_23_x5F_72_St" x="419.9" y="1237.5" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -753.7015 663.3977)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_22_x5F_79_St" x="280.9" y="1031.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_21_x5F_86_St" x="280.9" y="988" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_20_x5F_96_St" x="280.8" y="914.2" fill="#FFFFFF" width="20" height="8"/>
+	<rect id="_x31_19_x5F_103_St" x="280.9" y="842.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_18_x5F_Cathedral_Pkwy" x="280.9" y="769.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_17_x5F_116_St_-_Columbia_University" x="280.9" y="707.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_16_x5F_125_St" x="280.9" y="637.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_15_x5F_137_St_-_City_College" x="280.9" y="573.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_14_x5F_145_St" x="280.9" y="525" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_13_x5F_157_St" x="280.9" y="449.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_12_x5F_168_St_-_Washington_Hts" x="280.8" y="402.2" fill="#FFFFFF" width="8" height="8.7"/>
+	<rect id="_x31_11_x5F_181_St" x="280.9" y="316.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_10_x5F_191_St" x="280.9" y="255.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_09_x5F_Dykeman_St" x="280.9" y="216.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_08_x5F_207_St" x="280.9" y="165.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_07_x5F_215_St" x="280.9" y="120.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A07_x5F_175_St" x="190.9" y="355.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A06_x5F_181_St" x="190.9" y="315.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A05_x5F_190_St" x="190.9" y="260.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A03_x5F_Dyckman_St" x="190.9" y="218.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A02_x5F_Inwood_-_207_St" x="190.9" y="166.4" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="E01_x5F_World_Trade_Center" x="572.9" y="2069" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A34_x5F_Canal_St" x="526.9" y="1865.3" fill="#FFFFFF" width="20" height="8"/>
+	<rect id="A33_x5F_Sprint_St" x="526.5" y="1807.2" fill="#FFFFFF" width="20.4" height="8"/>
+	<rect id="A32_x5F_W_4_St" x="526.9" y="1717.2" fill="#FFFFFF" width="47.4" height="8"/>
+	<rect id="A31_x5F_14_St" x="388.9" y="1635.1" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A30_x5F_23_St" x="388.9" y="1563.2" fill="#FFFFFF" width="20" height="8"/>
+	<rect id="A28_x5F_34_St_-_Penn_Station" x="388.8" y="1482.9" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A27_x5F_42_St_-_Port_Authority_Bus_Terminal" x="388.8" y="1378.1" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A25_x5F_50_St" x="400.9" y="1330" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D14_x5F_7_Av" x="522.9" y="1292" fill="#FFFFFF" width="8" height="15.9"/>
+	<rect id="F12_x5F_5_Av_x2F_53_St" x="609.1" y="1299.9" fill="#FFFFFF" width="8" height="8.1"/>
+	<rect id="F11_x5F_Lexington_Av_x2F_53_St_1_" x="720.9" y="1299.9" fill="#FFFFFF" width="8" height="8.5"/>
 	
-		<rect id="R17_34 St - Herald_Sq" x="539.9" y="1495.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -900.8727 823.7339)" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D18_23 St" x="566" y="1563.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D12_155 St" x="445.1" y="457.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="902_Times Sq - 42 St" x="505.7" y="1377.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A22_72 St" x="388.8" y="1071" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A21_81 St - Museum_of_Natural_History" x="388.8" y="1027.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A20_86 St" x="388.8" y="988" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A19_96 St" x="388.8" y="913.8" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A18_103 St" x="388.9" y="841.8" fill="#FFFFFF" width="8.3" height="8"/>
-	<rect id="A17_Cathedral Pkwy (110 St)" x="388.9" y="769.9" fill="#FFFFFF" width="8.3" height="8"/>
-	<rect id="A16_116 St" x="388.9" y="709" fill="#FFFFFF" width="8.2" height="8"/>
-	<rect id="A14_135 St" x="388.9" y="582" fill="#FFFFFF" width="7.9" height="8"/>
-	<rect id="A15_125 St" x="380.9" y="637.7" fill="#FFFFFF" width="16.3" height="8"/>
-	<rect id="A12_145 St" x="380.9" y="525" fill="#FFFFFF" width="16.3" height="8"/>
+		<rect id="R17_x5F_34_St_-_Herald_Sq" x="539.9" y="1495.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -900.8727 823.7339)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D18_x5F_23_St" x="566" y="1563.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D12_x5F_155_St" x="445.1" y="457.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x39_02_x5F_Times_Sq_-_42_St" x="505.7" y="1377.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A22_x5F_72_St" x="388.8" y="1071" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A21_x5F_81_St_-_Museum_of_Natural_History" x="388.8" y="1027.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A20_x5F_86_St" x="388.8" y="988" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A19_x5F_96_St" x="388.8" y="913.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A18_x5F_103_St" x="388.9" y="841.8" fill="#FFFFFF" width="8.3" height="8"/>
+	<rect id="A17_x5F_Cathedral_Pkwy__x28_110_St_x29_" x="388.9" y="769.9" fill="#FFFFFF" width="8.3" height="8"/>
+	<rect id="A16_x5F_116_St" x="388.9" y="709" fill="#FFFFFF" width="8.2" height="8"/>
+	<rect id="A14_x5F_135_St" x="388.9" y="582" fill="#FFFFFF" width="7.9" height="8"/>
+	<rect id="A15_x5F_125_St" x="380.9" y="637.7" fill="#FFFFFF" width="16.3" height="8"/>
+	<rect id="A12_x5F_145_St" x="380.9" y="525" fill="#FFFFFF" width="16.3" height="8"/>
 	
-		<rect id="A11_155 St" x="367.9" y="467.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -224.3295 401.0079)" fill="#FFFFFF" width="8" height="8"/>
+		<rect id="A11_x5F_155_St" x="367.9" y="467.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -224.3295 401.0079)" fill="#FFFFFF" width="8" height="8"/>
 	
-		<rect id="A10_163 St" x="332" y="431.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -209.5749 365.1587)" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R15_49 St" x="505.8" y="1336.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R14_57 St - 7 Av" x="506.1" y="1251.9" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R13_5 Av/59 St" x="610.9" y="1220" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R11_Lexington Av/59 St" x="722.9" y="1220" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="B08_Lexington Av/63 St" x="722.9" y="1175" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="B10_57 St" x="565.9" y="1252" fill="#FFFFFF" width="8" height="8"/>
+		<rect id="A10_x5F_163_St" x="332" y="431.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -209.5749 365.1587)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R15_x5F_49_St" x="505.8" y="1336.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R14_x5F_57_St_-_7_Av" x="506.1" y="1251.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R13_x5F_5_Av_x2F_59_St" x="610.9" y="1220" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R11_x5F_Lexington_Av_x2F_59_St_1_" x="722.9" y="1220" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="B08_x5F_Lexington_Av_x2F_63_St_1_" x="722.9" y="1175" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="B10_x5F_57_St" x="565.9" y="1252" fill="#FFFFFF" width="8" height="8"/>
 	
-		<rect id="R19_23 St" x="606" y="1561.5" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -928.3417 889.861)" fill="#FFFFFF" width="8" height="8"/>
+		<rect id="R19_x5F_23_St" x="606" y="1561.5" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -928.3417 889.861)" fill="#FFFFFF" width="8" height="8"/>
 	
-		<rect id="R18_28 St" x="578.7" y="1534.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -916.9904 862.5798)" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="M20_Canal St" x="700.9" y="1865.3" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="M19_Bowery" x="747.8" y="1825" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D22_Grand St" x="763.9" y="1855" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="F14_2 Av" x="795.9" y="1747" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="F15_Delancey St" x="844.9" y="1824.9" fill="#FFFFFF" width="8" height="8.1"/>
-	<rect id="F16_East Broadway" x="874.9" y="1874" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D21_Broadway-Lafayette St" x="683.9" y="1747.1" fill="#FFFFFF" width="8" height="20"/>
-	<rect id="R23_Canal St" x="633.9" y="1865.3" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="Q01_Canal St" x="645.8" y="1865.3" fill="#FFFFFF" width="8.1" height="8"/>
-	<rect id="R21_8 St - NYU" x="633.9" y="1689.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R22_Prince St" x="633.9" y="1783" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R24_City Hall" x="633.9" y="2016" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R25_Cortlandt St" x="586.9" y="2109.5" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A38_Fulton St" x="700.9" y="2091.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="M21_Chambers St" x="700.9" y="1964.6" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="M23_Broad St" x="700.9" y="2193.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R27_Whitehall St" x="719.7" y="2251" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="R26_Rector St" x="586.9" y="2192" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D19_14 St" x="565.9" y="1635.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="L06_1 Av" x="836.9" y="1635.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="L05_3 Av" x="763.9" y="1635.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="L03_Union Sq - 14 St" x="667.6" y="1635.1" fill="#FFFFFF" width="8.5" height="8"/>
-	<rect id="R16_Times Sq - 42 St" x="505.7" y="1377.7" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D20_W 4 St" x="526.9" y="1717.2" fill="#FFFFFF" width="47.4" height="8"/>
-	<rect id="M18_Essex St" x="844.9" y="1824.4" fill="#FFFFFF" width="8" height="8.5"/>
-	<rect id="M22_Fulton St" x="700.9" y="2091.2" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="L02_6 Av" x="565.9" y="1635.1" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="D17_34 St - Herald_Sq" x="553.8" y="1484" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="R20_14 St - Union_Sq" x="633.6" y="1635.1" fill="#FFFFFF" width="20.5" height="8"/>
-	<rect id="D16_42 St - Bryant_Pk" x="553.8" y="1401.5" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="D15_47-50 Sts - Rockefeller Ctr" x="553.8" y="1342.5" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="D13_145 St" x="380.9" y="525" fill="#FFFFFF" width="16.3" height="8"/>
-	<rect id="L01_8 Av" x="388.7" y="1635.1" fill="#FFFFFF" width="20.1" height="8"/>
-	<rect id="A36_Chambers St" x="572.9" y="1995" fill="#FFFFFF" width="8" height="8"/>
-	<rect id="A24_59 St - Columbus Circle" x="380.9" y="1230" fill="#FFFFFF" width="16" height="8"/>
-	<rect id="A09_168 St" x="280.8" y="402.8" fill="#FFFFFF" width="8" height="8"/>
+		<rect id="R18_x5F_28_St" x="578.7" y="1534.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -916.9904 862.5798)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M20_x5F_Canal_St" x="700.9" y="1865.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M19_x5F_Bowery" x="747.8" y="1825" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D22_x5F_Grand_St" x="763.9" y="1855" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="F14_x5F_2_Av" x="795.9" y="1747" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="F15_x5F_Delancey_St" x="844.9" y="1824.9" fill="#FFFFFF" width="8" height="8.1"/>
+	<rect id="F16_x5F_East_Broadway" x="874.9" y="1874" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D21_x5F_Broadway-Lafayette_St_2_" x="683.9" y="1747.1" fill="#FFFFFF" width="8" height="20"/>
+	<rect id="R23_x5F_Canal_St" x="633.9" y="1865.3" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="Q01_x5F_Canal_St" x="645.8" y="1865.3" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="R21_x5F_8_St_-_NYU" x="633.9" y="1689.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R22_x5F_Prince_St" x="633.9" y="1783" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R24_x5F_City_Hall" x="633.9" y="2016" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R25_x5F_Cortlandt_St" x="586.9" y="2109.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A38_x5F_Fulton_St" x="700.9" y="2091.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M21_x5F_Chambers_St" x="700.9" y="1964.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M23_x5F_Broad_St_1_" x="700.9" y="2193.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R27_x5F_Whitehall_St" x="719.7" y="2251" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R26_x5F_Rector_St" x="586.9" y="2192" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D19_x5F_14_St" x="565.9" y="1635.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L06_x5F_1_Av" x="836.9" y="1635.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L05_x5F_3_Av" x="763.9" y="1635.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L03_x5F_Union_Sq_-_14_St" x="667.6" y="1635.1" fill="#FFFFFF" width="8.5" height="8"/>
+	<rect id="R16_x5F_Times_Sq_-_42_St" x="505.7" y="1377.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D20_x5F_W_4_St" x="526.9" y="1717.2" fill="#FFFFFF" width="47.4" height="8"/>
+	<rect id="M18_x5F_Essex_St" x="844.9" y="1824.4" fill="#FFFFFF" width="8" height="8.5"/>
+	<rect id="M22_x5F_Fulton_St" x="700.9" y="2091.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L02_x5F_6_Av" x="565.9" y="1635.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D17_x5F_34_St_-_Herald_Sq" x="553.8" y="1484" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="R20_x5F_14_St_-_Union_Sq" x="633.6" y="1635.1" fill="#FFFFFF" width="20.5" height="8"/>
+	<rect id="D16_x5F_42_St_-_Bryant_Pk" x="553.8" y="1401.5" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="D15_x5F_47-50_Sts_-_Rockefeller_Ctr" x="553.8" y="1342.5" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="D13_x5F_145_St" x="380.9" y="525" fill="#FFFFFF" width="16.3" height="8"/>
+	<rect id="L01_x5F_8_Av" x="388.7" y="1635.1" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A36_x5F_Chambers_St" x="572.9" y="1995" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A24_x5F_59_St_-_Columbus_Circle" x="380.9" y="1230" fill="#FFFFFF" width="16" height="8"/>
+	<rect id="A09_x5F_168_St" x="280.8" y="402.8" fill="#FFFFFF" width="8" height="8"/>
 </g>
 </svg>
