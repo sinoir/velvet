@@ -10,6 +10,11 @@
         auto:actionViewClass="android.support.v7.widget.SearchView" />
     -->
 
+    <item android:id="@+id/action_service_toggle"
+        android:title="Weekend/Night/Day"
+        android:icon="@drawable/ic_sun"
+        auto:showAsAction="always" />
+
     <item android:id="@+id/action_streets_toggle"
         android:title="@string/menu_streets"
         android:icon="@drawable/ic_action_directions"

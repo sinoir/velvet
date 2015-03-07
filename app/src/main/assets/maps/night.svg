@@ -1,0 +1,1122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1800 2418.3" enable-background="new 0 0 1800 2418.3" xml:space="preserve">
+<g id="RIVER">
+	<rect x="-41.4" y="-22.1" opacity="0.89" fill="#304F4F" stroke="#939598" width="2331.1" height="2511"/>
+</g>
+<g id="MANHATTAN_LAND">
+	<polygon fill="#AFC1C9" points="148.7,92.6 365,92.6 365,277.5 662.5,572.6 923.3,572.6 923.3,717.5 889.7,717.5 889.7,984.8 
+		923.3,984.8 923.3,1141.6 889.7,1141.6 889.7,1528 923.3,1528 923.3,1574.7 958.3,1574.7 958.3,1630.1 1028.9,1630.1 
+		1028.9,1914.5 819.6,1977.2 819.6,2308.6 501.9,2308.6 501.9,2183.6 395.6,2077.2 223.3,1524.7 223.3,529.4 135.3,354.6 
+		135.3,92.6 	"/>
+</g>
+<g id="PARKS">
+	<rect x="424.4" y="781.5" fill="#5DA093" width="193.1" height="433.9"/>
+	<rect x="361.4" y="543.2" fill="#5DA093" width="19.3" height="74.1"/>
+	<rect x="344.1" y="657.6" fill="#5DA093" width="19.3" height="119.4"/>
+	<rect x="232.8" y="635.9" fill="#5DA093" width="18.7" height="552.8"/>
+	<rect x="597.5" y="641.8" fill="#5DA093" width="48" height="46.4"/>
+	<rect x="574.1" y="1394.7" fill="#5DA093" width="43.9" height="30.9"/>
+	<rect x="622.9" y="1534" fill="#5DA093" width="22.2" height="30.9"/>
+	<rect x="583.8" y="1704.4" fill="#5DA093" width="42.6" height="25.9"/>
+	<rect x="640.1" y="2000.1" fill="#5DA093" width="28.3" height="63.8"/>
+</g>
+<g id="CROSS_STREETS">
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="620.4" y1="688.3" x2="620.4" y2="1740.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="620.4" y1="551.2" x2="620.4" y2="641.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="549.8" y1="1216.9" x2="549.8" y2="2001.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="549.8" y1="480.2" x2="549.8" y2="781.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="499" y1="1216.9" x2="499" y2="1920.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="499" y1="429.1" x2="499" y2="783.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="466.6" y1="1430.9" x2="661.4" y2="1625.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="303.8" y1="1133" x2="466" y2="1295.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="660.4" y1="1623.5" x2="660.4" y2="2255.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="413" y1="1280.3" x2="413" y2="1643.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="421.1" y1="489" x2="421.1" y2="1284"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="357.5" y1="778.1" x2="357.5" y2="1647.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="420.7" y1="679.8" x2="552.6" y2="779.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="444" y1="658.6" x2="423.8" y2="678.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="443.1" y1="519.6" x2="443.1" y2="660.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="461.5" y1="502.1" x2="441.2" y2="522.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="460.5" y1="392.1" x2="460.5" y2="504.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="147.9" y1="98.3" x2="147.9" y2="350.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="350" y1="101.8" x2="350" y2="281.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="317.7" y1="385.6" x2="422" y2="489.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="329.1" y1="355" x2="440" y2="465.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="349.4" y1="280.1" x2="646.4" y2="577.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="272.7" y1="386.6" x2="319.7" y2="386.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="205.1" y1="243.9" x2="275.5" y2="386.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="147.9" y1="347.3" x2="234.4" y2="522.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="205.1" y1="100.3" x2="205.1" y2="245.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="310.6" y1="235.4" x2="310.6" y2="385.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="176" y1="100.3" x2="176" y2="221"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="187.7" y1="221" x2="187.7" y2="428.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="316.7" y1="1127.6" x2="316.7" y2="1646.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="329.3" y1="253" x2="329.3" y2="1127.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="261.7" y1="783.3" x2="261.7" y2="1600.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="275.6" y1="222" x2="275.6" y2="783.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="297.6" y1="100.3" x2="297.6" y2="222"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="1188.7" x2="234.5" y2="1521.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="520.6" x2="234.5" y2="635.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="692.2" y1="576.2" x2="692.2" y2="1639.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="732.1" y1="576.2" x2="732.1" y2="1639.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="764.1" y1="576.2" x2="764.1" y2="1714.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="800.7" y1="576.2" x2="800.7" y2="1740.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="836.1" y1="576.2" x2="836.1" y2="1897.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="872.7" y1="1635" x2="872.7" y2="1740.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="872.7" y1="577.1" x2="872.7" y2="1534.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="908.1" y1="989.7" x2="908.1" y2="1130.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="908.1" y1="577.1" x2="908.1" y2="703.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="1488.2" x2="872.7" y2="1488.2"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M1155.3,1127.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="618" y1="1127.6" x2="910" y2="1127.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="618" y1="1146.8" x2="692.2" y2="1146.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="598.1" y1="1156.2" x2="693.4" y2="1156.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="419.9" y1="1146.8" x2="618" y2="1146.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="419.9" y1="1077" x2="618" y2="1077"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="419.9" y1="1013.6" x2="507.1" y2="1013.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="520.9" y1="1027.3" x2="694.1" y2="1027.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="421.1" y1="909.3" x2="690.1" y2="909.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="525.6" y1="996.2" x2="690.1" y2="996.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="601.5" y1="1005.8" x2="694.1" y2="1005.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="419.9" y1="1156.2" x2="457.6" y2="1156.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.6" y1="1127.6" x2="424.2" y2="1127.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="617" y1="1077" x2="905.8" y2="1077"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.4" y1="1077" x2="424.2" y2="1077"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="618" y1="1038.4" x2="908.1" y2="1038.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.6" y1="1038.4" x2="419.9" y2="1038.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="689.1" y1="992.3" x2="908.1" y2="992.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="465.5" y1="991.9" x2="528" y2="996.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.5" y1="993.5" x2="465.4" y2="991.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="602.9" y1="918.4" x2="872.7" y2="918.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.6" y1="918.4" x2="421.1" y2="918.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="619.6" y1="846.4" x2="870" y2="846.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.6" y1="846.4" x2="419.9" y2="846.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="251.6" y1="780.7" x2="870" y2="780.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="368.7" y1="703.5" x2="911" y2="703.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="256" y1="703.5" x2="339.5" y2="703.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="633" x2="908.1" y2="633"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="381.1" y1="577.8" x2="911" y2="577.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="577.8" x2="361.4" y2="577.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="520.6" x2="587" y2="520.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="204.9" y1="465.9" x2="535.1" y2="465.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="189.7" y1="418.3" x2="390" y2="418.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="143.5" y1="222.9" x2="350" y2="222.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="172.8" y1="170.3" x2="298.1" y2="170.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="176" y1="204.3" x2="296.2" y2="204.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="275.6" y1="1646.8" x2="1012.5" y2="1646.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="250.5" y1="1567" x2="838.1" y2="1567"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="1381.9" x2="870" y2="1381.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="552.1" y1="1295.9" x2="872.7" y2="1295.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="1287.9" x2="552.1" y2="1287.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.5" y1="1217.7" x2="872.7" y2="1217.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="648" y1="577.1" x2="648" y2="1567.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="1012.5" y1="1742.2" x2="306.1" y2="1742.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="770.1" y1="1950.3" x2="371.8" y2="1950.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="660.4" y1="2002.4" x2="387.3" y2="2002.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="660.4" y1="1968.4" x2="377.1" y2="1968.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="771.1" y1="2175.3" x2="662" y2="2175.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="661" y1="2200.2" x2="511.2" y2="2200.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="805.8" y1="2290" x2="508.4" y2="2291.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="802.6" y1="2102.9" x2="661" y2="2102.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="803.3" y1="2152.1" x2="492.3" y2="2152.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="755.2" y1="2166" x2="663.2" y2="2258"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="803.3" y1="2122.8" x2="660.4" y2="2122.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="1054.7" y1="2009.6" x2="711" y2="2009.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="803.3" y1="2290.6" x2="712.1" y2="2199.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="1014.7" y1="1853.7" x2="499" y2="1853.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="896" y1="1875.3" x2="346.8" y2="1875.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="1012.5" y1="1837.5" x2="499" y2="1837.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="978.9" y1="1790.8" x2="765.1" y2="1790.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="728.1" y1="1815.4" x2="499" y2="1815.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="727.8" y1="1793.2" x2="499" y2="1793.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="978.9" y1="1767.6" x2="765.1" y2="1767.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="467.3" y1="1432.7" x2="467.3" y2="1295.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="304.7" y1="1135.1" x2="304.7" y2="885.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="943.5" y1="1739.3" x2="943.5" y2="1579.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="496.7" y1="2070.4" x2="496.7" y2="1924.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="494.7" y1="1928.5" x2="524.1" y2="1872"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="522.1" y1="2049.6" x2="522.1" y2="1876.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="693.7" y1="1990.3" x2="693.7" y2="1644.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="856.1" y1="1890.2" x2="856.1" y2="1740.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="817.3" y1="1902" x2="817.3" y2="1740.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="800.6" y1="1909.3" x2="800.6" y2="1740.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="730.1" y1="1950.3" x2="730.1" y2="1740.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="748.1" y1="1924.7" x2="748.1" y2="1740.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="712.9" y1="2201.4" x2="712.9" y2="1837.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="755.9" y1="2290.6" x2="755.9" y2="2008.1"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="780.6" y1="2289.3" x2="780.6" y2="2010.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="802.6" y1="2292" x2="802.6" y2="1964.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="770.2" y1="2009.6" x2="764.1" y2="1714.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="1014.7" y1="1904.7" x2="1014.7" y2="1644.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="978.9" y1="1833.2" x2="978.9" y2="1644.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="981.9" y1="1853.7" x2="771.1" y2="1918.2"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="1014.7" y1="1902" x2="801" y2="1967.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="761.1" y1="1906.4" x2="761.1" y2="1906.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="685.5" y1="1644.9" x2="763.3" y2="1712.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="357.5" y1="1647.2" x2="470.6" y2="2005.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="316.7" y1="1647.2" x2="428.1" y2="2001.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="531.8" y1="2105.3" x2="531.8" y2="2290.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="428.1" y1="2001.5" x2="533.1" y2="2106.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="234.4" y1="1516.3" x2="407.3" y2="2065.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="510.8" y1="2170.2" x2="510.8" y2="2290.6"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="407.1" y1="2066.5" x2="512.1" y2="2171.5"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="521.7" y1="2047.8" x2="581.9" y2="2108"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="581" y1="2106.1" x2="581" y2="2289.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="713.4" y1="1924.7" x2="771.1" y2="1924.7"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="729.1" y1="1938.3" x2="768.1" y2="1938.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="305.3" y1="887.6" x2="275.7" y2="778.9"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="411.7" y1="1282" x2="421.1" y2="1282"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="366.8" y1="779.3" x2="366.8" y2="633"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="352.7" y1="100.3" x2="145.9" y2="100.3"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="909.1" y1="1583.3" x2="909.1" y2="1534.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="909.1" y1="1742.2" x2="909.1" y2="1646.8"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M837.1,1621.9c10.5,0,19-6,19-13.5v1.2c0-7.4-8.5-13.5-19-13.5"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M941.5,1596.2c-10.5,0-19,6-19,13.5v-1.2c0,7.4,8.5,13.5,19,13.5"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M873,1579.3c0,10.5,8.5,19,19,19h-1.7c10.5,0,19-8.5,19-19"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M910.3,1639c0-10.5-8.5-19-19-19h1.7c-10.5,0-19,8.5-19,19"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="837.1" y1="1534.4" x2="912" y2="1534.4"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="834.1" y1="1579.8" x2="946" y2="1579.8"/>
+	<line fill="none" stroke="#C8DBD8" stroke-width="5" x1="297.6" y1="222" x2="330.2" y2="254.6"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M457.6,1156.2c4.3,0,7.7-3.5,7.7-7.7"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M598.1,1156.2c-4.3,0-7.8-3.5-7.8-7.8"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M507.1,1013.6c4.4,0,7.9,3.5,7.9,7.9"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M515.1,1021.5c0,3.2,2.6,5.8,5.8,5.8"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M601.5,1005.8c-4,0-7.2-3.2-7.2-7.2"/>
+	<path fill="none" stroke="#C8DBD8" stroke-width="5" d="M602.9,918.4c-4.7,0-8.6-3.8-8.6-8.6"/>
+</g>
+<g id="STREET_NAMES">
+	<text transform="matrix(0 1 -1 0 657.2407 1668.2208)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 463.9038 1336.3011)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 514.0084 1483.1771)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 602.8518 1571.475)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 657.2407 1815.4386)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 657.2407 2175.3101)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 833.1489 1767.2211)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">ALLEN  ST</text>
+	<text transform="matrix(0 1 -1 0 853.1489 1750.255)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">ESSEX  ST</text>
+	<text transform="matrix(0 1 -1 0 1011.5415 1757.3043)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(0 1 -1 0 869.6665 829.0516)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(0 1 -1 0 906.0005 637.9706)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(0 1 -1 0 906.1499 1061.2211)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(0 1 -1 0 869.6665 1236.1742)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(0 1 -1 0 906.1509 1534.4352)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(0 1 -1 0 869.6665 1060.7203)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">YORK  AVE</text>
+	<text transform="matrix(0 1 -1 0 814.3335 1757.3038)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">ELDRIDGE  ST</text>
+	<text transform="matrix(0 1 -1 0 798.6489 1757.3038)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CHRYSTIE ST</text>
+	<text transform="matrix(0 1 -1 0 727.481 1856.7374)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MULBERRY ST</text>
+	<text transform="matrix(0 1 -1 0 745.1489 1856.7362)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MOTT ST</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 344.364 1177.1584)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 419.1842 1251.207)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 302.522 999.818)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(0.2607 0.9654 -0.9654 0.2607 289.4981 838.2034)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(-1.040000e-03 1 -1 -1.040000e-03 272.6806 648.1133)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(-1.040000e-03 1 -1 -1.040000e-03 201.7646 144.4465)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	
+		<text transform="matrix(-1.040000e-03 1 -1 -1.040000e-03 307.9326 328.0862)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AUDUBON  AVE</text>
+	
+		<text transform="matrix(-1.040000e-03 1 -1 -1.040000e-03 172.709 103.4338)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SEAMAN  AVE</text>
+	
+		<text transform="matrix(-1.040000e-03 1 -1 -1.040000e-03 184.3755 242.8708)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FORT  WASHINGTON  AVE</text>
+	
+		<text transform="matrix(0.4478 0.8941 -0.8941 0.4478 225.1754 290.1565)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 418.5347 1105.1512)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CENTRAL  PARK  WEST</text>
+	<text transform="matrix(0 1 -1 0 418.5347 871.818)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CENTRAL  PARK  WEST</text>
+	<text transform="matrix(0 1 -1 0 354.4604 999.1886)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">COLMBUS  AVE</text>
+	<text transform="matrix(0 1 -1 0 258.6431 1092.3292)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WEST  END  AVE</text>
+	<text transform="matrix(0 1 -1 0 314.2437 1247.3944)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AMSTERDAM  AVE</text>
+	<text transform="matrix(0 1 -1 0 327.1489 999.1888)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AMSTERDAM  AVE</text>
+	<text transform="matrix(0 1 -1 0 327.1489 598.6534)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AMSTERDAM  AVE</text>
+	<text transform="matrix(0 1 -1 0 327.1489 281.7028)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AMSTERDAM  AVE</text>
+	<text transform="matrix(0 1 -1 0 363.8159 678.8612)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MANHATTAN  AVE</text>
+	<text transform="matrix(0 1 -1 0 418.1489 681.8929)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FREDERICK  DOUGLAS S  BLVD</text>
+	<text transform="matrix(0 1 -1 0 440.1489 523.2306)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FREDERICK  DOUGLAS S  BLVD</text>
+	<text transform="matrix(0 1 -1 0 457.562 391.236)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FREDERICK  DOUGLAS S  BLVD</text>
+	<text transform="matrix(0 1 -1 0 346.7319 128.9835)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">HARLEM  RIVER  DR</text>
+	<text transform="matrix(0 1 -1 0 145.9136 242.9835)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">HENRY  HUDSON  PKWY</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 364.8518 299.8543)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">HARLEM RIVER DR</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 528.0754 461.8085)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">HARLEM RIVER DR</text>
+	<text transform="matrix(1 0 0 1 767.1799 580.5836)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">HARLEM RIVER DR</text>
+	<text transform="matrix(0 1 -1 0 547.8247 645.8973)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MALCOLM  X  BLVD</text>
+	<text transform="matrix(0 1 -1 0 496.8892 525.2836)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">ADAM  CLAYTON  POWELL  JR  BLVD</text>
+	
+		<text transform="matrix(0.7984 0.6021 -0.6021 0.7984 445.0218 702.1088)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SAINT NICHOLAS AVE</text>
+	<text transform="matrix(0 1 -1 0 418.1489 560.2206)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SAINT NICHOLAS AVE</text>
+	<text transform="matrix(0 1 -1 0 272.731 281.7028)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SAINT NICHOLAS AVE</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 354.7798 427.0734)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SAINT NICHOLAS AVE</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 330.2543 359.4944)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">EDGECOMBE  AVE</text>
+	<text transform="matrix(0 1 -1 0 617.2495 1443.7179)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">5 AVE</text>
+	<text transform="matrix(0 1 -1 0 617.2495 1246.7653)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">5 AVE</text>
+	<text transform="matrix(0 1 -1 0 547.8247 1443.7177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">6 AVE</text>
+	<text transform="matrix(0 1 -1 0 495.8892 1443.2177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">7 AVE</text>
+	<text transform="matrix(1 0 0 1 704.2866 1745.2531)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">EAST HOUSTON ST</text>
+	<text transform="matrix(1 0 0 1 922.0898 1745.2531)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">EAST HOUSTON ST</text>
+	<text transform="matrix(1 0 0 1 348.9839 1745.254)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WEST HOUSTON ST</text>
+	
+		<text transform="matrix(0.9534 -0.3017 0.3017 0.9534 825.1238 1904.9712)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876"> E. BROADWAY</text>
+	
+		<text transform="matrix(0.9534 -0.3017 0.3017 0.9534 829.3423 1961.4712)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FDR  DRIVE</text>
+	<text transform="matrix(1 0 0 1 570.1487 1856.7365)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">GRAND ST</text>
+	<text transform="matrix(1 0 0 1 570.1487 1878.299)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CANAL ST</text>
+	<text transform="matrix(1 0 0 1 393.344 1878.299)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CANAL ST</text>
+	<text transform="matrix(1 0 0 1 795.1492 1878.299)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CANAL ST</text>
+	<text transform="matrix(1 0 0 1 891.8157 1856.7365)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">GRAND ST</text>
+	<text transform="matrix(1 0 0 1 569.9998 1953.3868)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WORTH ST</text>
+	<text transform="matrix(1 0 0 1 492.2659 2004.9865)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CHAMBERS ST</text>
+	<text transform="matrix(1 0 0 1 570.1489 1970.9962)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">DUANE ST</text>
+	<text transform="matrix(1 0 0 1 719.6492 1953.3868)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WORTH ST</text>
+	<text transform="matrix(1 0 0 1 717.1487 1927.0363)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BAYARD ST</text>
+	<text transform="matrix(1 0 0 1 729.1489 1941.4327)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PELL ST</text>
+	<text transform="matrix(1 0 0 1 786.0415 1840.3878)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROOME ST</text>
+	<text transform="matrix(1 0 0 1 720.9333 1649.132)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 14 ST</text>
+	<text transform="matrix(1 0 0 1 317.2434 1649.132)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 14 ST</text>
+	<text transform="matrix(1 0 0 1 767.1802 1570.1022)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 23 ST</text>
+	<text transform="matrix(1 0 0 1 877.844 1583.1022)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 20 ST</text>
+	<text transform="matrix(1 0 0 1 295.5308 1569.1022)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 23 ST</text>
+	<text transform="matrix(1 0 0 1 767.1802 1491.1373)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 34 ST</text>
+	<text transform="matrix(1 0 0 1 281.9932 1491.1373)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 34 ST</text>
+	<text transform="matrix(1 0 0 1 273.9932 1384.3849)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 42 ST</text>
+	<text transform="matrix(1 0 0 1 804.2976 1384.3849)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 42 ST</text>
+	<text transform="matrix(1 0 0 1 272.731 1290.3575)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 53 ST</text>
+	<text transform="matrix(1 0 0 1 275.1489 1220.2198)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 59 ST</text>
+	<text transform="matrix(1 0 0 1 429.8484 1220.2198)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CENTRAL PARK SOUTH      W 59 ST</text>
+	<text transform="matrix(1.1086 0 0 1 804.2978 1220.2194)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 59 ST</text>
+	<text transform="matrix(1.1086 0 0 1 651.4103 1220.2194)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 59 ST</text>
+	<text transform="matrix(1 0 0 1 332.0869 1080.0431)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 72 ST</text>
+	<text transform="matrix(1 0 0 1 428.1484 1016.3766)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 81 ST</text>
+	<text transform="matrix(1 0 0 1 332.0869 994.8175)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 86 ST</text>
+	<text transform="matrix(1 0 0 1 332.0869 920.6495)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 96 ST</text>
+	<text transform="matrix(1 0 0 1 332.0869 849.4357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 103 ST</text>
+	<text transform="matrix(1 0 0 1 332.0869 783.2833)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 110 ST</text>
+	<text transform="matrix(1 0 0 1 297.1489 705.5245)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 116 ST</text>
+	<text transform="matrix(1 0 0 1 314.2437 579.7687)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 135 ST</text>
+	<text transform="matrix(1 0 0 1 453.3333 579.7687)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 135 ST</text>
+	<text transform="matrix(1 0 0 1 314.2437 523.2306)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 145 ST</text>
+	<text transform="matrix(1 0 0 1 314.2437 468.4254)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 155 ST</text>
+	<text transform="matrix(1 0 0 1 231.0298 420.8688)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 168 ST</text>
+	<text transform="matrix(1 0 0 1 453.3333 523.2306)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 145 ST</text>
+	<text transform="matrix(1 0 0 1 218.0298 225.3107)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">DYKEMAN ST</text>
+	<text transform="matrix(1 0 0 1 219.4819 172.7116)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 207 ST</text>
+	<text transform="matrix(1 0 0 1 219.4819 206.7291)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">ACADEMY ST</text>
+	<text transform="matrix(1 0 0 1 806.4822 1298.3575)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 53 ST</text>
+	<text transform="matrix(1 0 0 1 651.4104 1298.3575)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 53 ST</text>
+	<text transform="matrix(1 0 0 1 814.3335 1129.9923)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 68 ST</text>
+	<text transform="matrix(1 0 0 1 659.4106 1129.9923)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 68 ST</text>
+	<text transform="matrix(1 0 0 1 625.4104 1149.2198)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 66 ST</text>
+	<text transform="matrix(1 0 0 1 625.4104 1158.6813)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 65 ST</text>
+	<text transform="matrix(1 0 0 1 429.8889 1149.2198)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 66 ST</text>
+	<text transform="matrix(1 0 0 1 429.8889 1158.6813)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 65 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 1040.0431)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 77 ST</text>
+	<text transform="matrix(1 0 0 1 625.1465 1041.0431)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 77 ST</text>
+	<text transform="matrix(1 0 0 1 625.1465 1029.7833)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 79 ST</text>
+	<text transform="matrix(1 0 0 1 625.1489 912.6505)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 97 ST</text>
+	<text transform="matrix(1 0 0 1 428.1484 912.6505)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">W 97 ST</text>
+	<text transform="matrix(1 0 0 1 625.1465 999.1886)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 85 ST</text>
+	<text transform="matrix(1 0 0 1 625.1465 1008.2833)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 84 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 995.1881)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 86 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 920.6505)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 96 ST</text>
+	<text transform="matrix(1 0 0 1 625.1489 920.6505)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 96 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 849.4357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 103 ST</text>
+	<text transform="matrix(1 0 0 1 659.4104 849.4357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 103 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 783.2833)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 110 ST</text>
+	<text transform="matrix(1 0 0 1 659.9104 783.2833)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 110 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 706.4357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 116 ST</text>
+	<text transform="matrix(1 0 0 1 787.4822 635.9357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 125 ST</text>
+	<text transform="matrix(1 0 0 1 618.6487 635.9357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">E 125 ST</text>
+	<text transform="matrix(1 0 0 1 591.1467 1818.2208)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SPRING ST</text>
+	<text transform="matrix(1 0 0 1 550.781 1795.4357)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PRINCE ST</text>
+	<text transform="matrix(1 0 0 1 921.8154 1793.6788)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">RIVINGTON ST</text>
+	<text transform="matrix(1 0 0 1 921.8154 1770.5333)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">STANTON ST</text>
+	<text transform="matrix(0 1 -1 0 493.9946 1928.2208)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WEST BROADWAY</text>
+	<text transform="matrix(0 1 -1 0 519.1489 1928.2201)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CHURCH  ST</text>
+	
+		<text transform="matrix(0.3122 0.95 -0.95 0.3122 404.5534 1804.2365)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">HUDSON  ST</text>
+	<text transform="matrix(0 1 -1 0 529.3237 2186.6294)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">GREENWICH  ST</text>
+	<text transform="matrix(0 1 -1 0 508.1489 2186.6292)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WEST  ST</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 445.0801 2108.74)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WEST  ST</text>
+	
+		<text transform="matrix(0.2935 0.9559 -0.9559 0.2935 329.3219 1826.4846)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WEST  ST</text>
+	<text transform="matrix(0 1 -1 0 578.3374 2128.3374)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876"> TRINITY  PL</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 485.1849 2063.0364)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">GREENWICH  ST</text>
+	
+		<text transform="matrix(0.2889 0.9573 -0.9573 0.2889 366.8053 1812.0881)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">GREENWICH  ST</text>
+	<text transform="matrix(0 1 -1 0 690.7007 1924.2208)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">LAFAYETTE  ST</text>
+	<text transform="matrix(0 1 -1 0 690.7007 1670.8876)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">LAFAYETTE  ST</text>
+	<text transform="matrix(0 1 -1 0 709.9839 1856.2208)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CENTRE  ST</text>
+	<text transform="matrix(0 1 -1 0 709.9839 2120.2202)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">NASSAU  ST</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 723.9699 2214.9646)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROAD  ST</text>
+	
+		<text transform="matrix(0.7071 -0.7071 0.7071 0.7071 681.6484 2243.3938)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BEAVER  ST</text>
+	<text transform="matrix(1 0 0 1 745.8643 2105.6409)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">FULTON  ST</text>
+	<text transform="matrix(1 0 0 1 529.324 2154.8342)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">LIBERTY ST</text>
+	<text transform="matrix(1 0 0 1 603.0281 2202.4182)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">RECTOR  ST</text>
+	<text transform="matrix(1 0 0 1 745.8643 2154.6116)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MAIDEN LN</text>
+	<text transform="matrix(1 0 0 1 745.2571 2126.0042)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">JOHN ST</text>
+	<text transform="matrix(1 0 0 1 835.4822 2012.3351)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BROOKLYN BRIDGE</text>
+	<text transform="matrix(0 1 -1 0 777.9438 2207.5044)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WATER  ST</text>
+	<text transform="matrix(0 1 -1 0 800.6489 2026.3195)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SOUTH  ST</text>
+	<text transform="matrix(0 1 -1 0 800.6489 2207.4182)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">SOUTH  ST</text>
+	<text transform="matrix(0 1 -1 0 777.9438 2026.3192)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">WATER  ST</text>
+	<text transform="matrix(0 1 -1 0 752.9438 2025.2208)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PEARL  ST</text>
+	<text transform="matrix(0 1 -1 0 496.8892 1331.9703)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">7 AVE</text>
+	<text transform="matrix(0 1 -1 0 409.9722 1442.7177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">8 AVE</text>
+	<text transform="matrix(0 1 -1 0 409.9722 1337.3094)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">8 AVE</text>
+	<text transform="matrix(0 1 -1 0 547.8247 1580.8097)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">6 AVE</text>
+	<text transform="matrix(0 1 -1 0 547.8247 1754.8881)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">6 AVE</text>
+	<text transform="matrix(0 1 -1 0 495.8892 1580.3097)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">7 AVE</text>
+	<text transform="matrix(0 1 -1 0 495.8892 1738.2775)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">7 AVE  S</text>
+	<text transform="matrix(0 1 -1 0 495.8892 1826.5123)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">VARICK  ST</text>
+	<text transform="matrix(0 1 -1 0 409.9722 1579.8097)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">8 AVE</text>
+	<text transform="matrix(0 1 -1 0 354.7437 1442.7177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">9 AVE</text>
+	<text transform="matrix(0 1 -1 0 314.2437 1442.7177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">10 AVE</text>
+	<text transform="matrix(0 1 -1 0 294.731 132.3092)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">10 AVE</text>
+	<text transform="matrix(0 1 -1 0 258.6431 1442.7177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">11 AVE</text>
+	<text transform="matrix(0 1 -1 0 231.0298 1443.1483)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">12 AVE</text>
+	<text transform="matrix(0 1 -1 0 798.1489 1443.2177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">2 AVE</text>
+	<text transform="matrix(0 1 -1 0 798.1489 1252.8019)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">2 AVE</text>
+	<text transform="matrix(0 1 -1 0 798.1489 1684.5509)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">2 AVE</text>
+	<text transform="matrix(0 1 -1 0 761.8882 1443.7184)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">3 AVE</text>
+	<text transform="matrix(0 1 -1 0 760.5552 1684.5514)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">3 AVE</text>
+	<text transform="matrix(0 1 -1 0 833.1489 1442.7179)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">1 AVE</text>
+	<text transform="matrix(0 1 -1 0 833.1489 1684.5509)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">1 AVE</text>
+	<text transform="matrix(0 1 -1 0 870.0005 1684.5509)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AVENUE  A</text>
+	<text transform="matrix(0 1 -1 0 906.0005 1684.5509)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AVENUE  B</text>
+	<text transform="matrix(0 1 -1 0 941.0005 1684.5509)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AVENUE  C</text>
+	<text transform="matrix(0 1 -1 0 976.5005 1684.5509)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">AVENUE  D</text>
+	<text transform="matrix(0 1 -1 0 644.9995 1426.5541)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MADISON AVE</text>
+	<text transform="matrix(0 1 -1 0 689.4995 1443.1478)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PARK AVE</text>
+	
+		<text transform="matrix(0.7566 0.6539 -0.6539 0.7566 691.386 1653.7841)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">4 AVE      COOPER SQ</text>
+	
+		<text transform="matrix(2.483000e-02 0.9997 -0.9997 2.483000e-02 766.1677 1928.2013)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">BOWERY</text>
+	<text transform="matrix(0 1 -1 0 729.1479 1443.1478)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">LEXINGTON AVE</text>
+	<text transform="matrix(0 1 -1 0 617.2495 707.4352)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">5 AVE</text>
+	<text transform="matrix(0 1 -1 0 798.1489 801.2177)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">2 AVE</text>
+	<text transform="matrix(0 1 -1 0 761.8882 801.3851)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">3 AVE</text>
+	<text transform="matrix(0 1 -1 0 833.1489 800.7179)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">1 AVE</text>
+	<text transform="matrix(0 1 -1 0 870.0005 637.9708)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PLEASANT  AVE</text>
+	<text transform="matrix(0 1 -1 0 644.9995 843.4354)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MADISON AVE</text>
+	<text transform="matrix(0 1 -1 0 689.4995 857.4811)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PARK AVE</text>
+	<text transform="matrix(0 1 -1 0 644.9995 705.5245)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MADISON AVE</text>
+	<text transform="matrix(0 1 -1 0 689.4995 705.9342)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PARK AVE</text>
+	<text transform="matrix(0 1 -1 0 729.1479 640.2941)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">LEXINGTON AVE</text>
+	<text transform="matrix(0 1 -1 0 617.2495 814.6505)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">CENTRAL  PARK  EAST</text>
+	<text transform="matrix(0 1 -1 0 798.1489 1060.7203)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">2 AVE</text>
+	<text transform="matrix(0 1 -1 0 761.8882 1061.2211)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">3 AVE</text>
+	<text transform="matrix(0 1 -1 0 833.1489 1060.2206)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">1 AVE</text>
+	<text transform="matrix(0 1 -1 0 833.1489 1251.1678)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">1 AVE</text>
+	<text transform="matrix(0 1 -1 0 644.9995 1050.7235)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">MADISON AVE</text>
+	<text transform="matrix(0 1 -1 0 689.4995 1050.6505)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PARK AVE</text>
+	<text transform="matrix(0 1 -1 0 689.4995 1244.1744)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">PARK AVE</text>
+	<text transform="matrix(0 1 -1 0 729.1479 949.9838)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">LEXINGTON AVE</text>
+	<text transform="matrix(0 1 -1 0 729.1479 1570.4352)" fill="#A0AEB5" font-family="'HelveticaNeue-Bold'" font-size="7.5876">IRVING  PL</text>
+</g>
+<g id="PARKS_TEXT">
+	
+		<text transform="matrix(1 0 0 1 434.4349 964.0722)" opacity="0.42" fill="#B8D9B4" font-family="'Helvetica-Bold'" font-size="21.4773">CENTRAL PARK</text>
+	
+		<text transform="matrix(0 1 -1 0 233.7056 858.6874)" opacity="0.42" fill="#B8D9B4" font-family="'Helvetica-Bold'" font-size="21.4773">RIVERSIDE PARK</text>
+</g>
+<g id="TRAIN_LINES">
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="1042.3" y1="1223.1" x2="543.3" y2="1223.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="603.3" y1="1762.1" x2="741.3" y2="1762.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="603.3" y1="1750.1" x2="759.3" y2="1750.1"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="513.3" y1="1253.1" x2="513.3" y2="1461"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M467,1262.2l9.5,9.5c13.9,13.9,14.7,38,14.7,38v11.7"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M455.8,1269.2l9.2,9.2c13.5,13.5,14.2,36.8,14.2,36.8v11.3"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="603.3" y1="1311.1" x2="1042.3" y2="1311.1"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="436.3" y1="1303.1" x2="1042.3" y2="1303.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="601.4" y1="1178.1" x2="1042.3" y2="1178.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="330.3" y1="863.1" x2="533.2" y2="863.1"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M455.8,1269.2l-156.5-156.5c-11.9-11.9-11.1-29.8-11.1-29.8"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M467,1262.2l-159.3-159.3c-8.7-8.7-7.5-19.7-7.5-19.7"/>
+	<line fill="none" stroke="#9D3D96" stroke-width="8" x1="495.1" y1="1388.9" x2="1047.2" y2="1388.9"/>
+	<line fill="none" stroke="#6D6E71" stroke-width="8" x1="509.1" y1="1380.8" x2="671.3" y2="1380.8"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="479.3" y1="2093.7" x2="479.3" y2="1319.6"/>
+	<line fill="none" stroke="#B0720D" stroke-width="8" x1="708.3" y1="1858.1" x2="708.3" y2="2192.3"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="657.8" y1="2025.2" x2="657.8" y2="2064.3"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M416.3,524.1c0,1.9,0,3,0,3v738"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="300.1" y1="1083.2" x2="300.1" y2="893.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="573.3" y1="1208.1" x2="573.3" y2="1720.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="491.3" y1="1320.7" x2="491.3" y2="2009.1"/>
+	<line fill="none" stroke="#009D57" stroke-width="8" x1="687.3" y1="1384.9" x2="687.3" y2="1985.2"/>
+	<line fill="none" stroke="#009D57" stroke-width="8" x1="725.3" y1="1339.2" x2="725.3" y2="619.5"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M711.3,2039.1c16.6,0,30,13.4,30,30"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="681.3" y1="1916.1" x2="1047.2" y2="1916.1"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M641.3,2061.9c0,13.1-10.6,23.8-23.8,23.8"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M665,1916.1c-13.1,0-23.8-10.6-23.8-23.8"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M677,1916.1c-13.1,0-23.8-10.6-23.8-23.8"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M594.3,2109.4c0-13.1,10.6-23.8,23.8-23.8"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M546.9,2212.8v-19.3c0,0,1.3-13.2-19.3-33.8l-33.8-33.8
+		c-15.3-15.3-14.5-33.8-14.5-33.8"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="711.3" y1="2039.1" x2="520.9" y2="2039.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="744.4" y1="2277.3" x2="576.4" y2="2277.3"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="546.3" y1="1719.1" x2="546.3" y2="2016.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="418.3" y1="1295.1" x2="531.3" y2="1295.1"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="534.3" y1="1718.1" x2="534.3" y2="1970.3"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="546.3" y1="2003.6" x2="546.3" y2="2042.1"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M399.2,1149.3"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M399.2,543.9"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="594.3" y1="2109.4" x2="594.3" y2="2224.1"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M573.3,1341.1c0-16.6,13.4-30,30-30"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="771.3" y1="1792.1" x2="771.3" y2="1877.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="852.3" y1="1780.1" x2="852.3" y2="1849.4"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="828.3" y1="1816.1" x2="1047.2" y2="1816.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="882.3" y1="1877.2" x2="1047.2" y2="1877.2"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="687.8" y1="2094.3" x2="1047.2" y2="2094.3"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="561.4" y1="1998.1" x2="627.8" y2="1998.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="741.3" y1="2069.1" x2="741.3" y2="2169.1"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="624.3" y1="2254.1" x2="1047.2" y2="2254.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="768.3" y1="2199.1" x2="1047.2" y2="2199.1"/>
+	<line fill="none" stroke="#009D57" stroke-width="8" x1="711.3" y1="2303.2" x2="1047.2" y2="2303.2"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="801.3" y1="1907.1" x2="1047.2" y2="1907.1"/>
+	<line fill="none" stroke="#B0720D" stroke-width="8" x1="1047.2" y1="1828.1" x2="738.3" y2="1828.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="562.3" y1="542.1" x2="562.3" y2="833.3"/>
+	<line fill="none" stroke="#009D57" stroke-width="8" x1="753" y1="593.1" x2="1042.3" y2="593.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="598.3" y1="517.4" x2="1042.3" y2="517.4"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M573.3,1208.1c0-16.6,13.4-30,30-30"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M725.3,623.1c0-16.6,13.4-30,30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M531.3,1295.1c16.6,0,30,13.4,30,30"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M408.3,1333.1c0-16.6,13.4-30,30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M741.3,1762.1c16.6,0,30,13.4,30,30"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="504.3" y1="1676.1" x2="436.3" y2="1676.1"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="436.3" y1="1688.1" x2="504.3" y2="1688.1"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M562.3,554c0-19.9,16.1-36,36-36"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M526.3,506.1c19.9,0,36,16.1,36,36"/>
+	<line fill="none" stroke="#006BB6" stroke-width="8" x1="198.3" y1="376" x2="198.3" y2="170.2"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="452.4" y1="481.9" x2="452.4" y2="107.1"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M513.3,1253.1c0-16.6,13.4-30,30-30"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="744.8" y1="1750.1" x2="822.3" y2="1750.1"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M711.3,2303.2c-19.9,0-36-16.1-36-36"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M446.3,1295.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M418.3,1295.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M603.3,1750.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M603.3,1762.1c-23.2,0-42-18.8-42-42"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M504.3,1688.1c16.6,0,30,13.4,30,30"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M504.3,1676.1c23.2,0,42,18.8,42,42"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M438.3,1676.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M438.3,1688.1c-23.2,0-42-18.8-42-42"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M584.3,1998.1c-21,0-38-17-38-38"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M576.3,2072.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M564.3,1998.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M521.3,2039.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M576.8,2277.2c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M771.3,2199.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M801.3,1907.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M828.3,1816.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#B0720D" stroke-width="8" d="M708.3,1858.1c0-16.6,13.4-30,30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M822.3,1750.1c16.6,0,30,13.4,30,30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M768.3,1750.1c16.6,0,30,13.4,30,30"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M300.3,893.1c0-16.6,13.4-30,30-30"/>
+	<path fill="none" stroke="#EF3E42" stroke-width="8" d="M562.3,833.1c0,16.6-13.4,30-30,30"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M624.3,2254.1c-16.6,0-30-13.4-30-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M416.3,524.1c0-16.6,11.6-30,26-30"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M388.2,524c0-16.6,13.4-30,30-30"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="798.3" y1="1780.1" x2="798.3" y2="1789.1"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M882.3,1877.1c-16.6,0-30-13.4-30-30"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="416.3" y1="494.1" x2="438.8" y2="494.1"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="546.9" y1="2203.7" x2="546.9" y2="2247.3"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="561.3" y1="1720.1" x2="561.3" y2="1325.1"/>
+	<line fill="none" stroke="#F58220" stroke-width="8" x1="388.3" y1="524.1" x2="388.3" y2="1265.1"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M228.3,406c-16.6,0-30-13.4-30-30"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="288.3" y1="1082.9" x2="288.3" y2="127.9"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M627.8,1998.1c16.6,0,30,13.4,30,30"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M687.8,2094.3c-16.6,0-30-13.4-30-30"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="641.3" y1="1622.7" x2="641.3" y2="2061.9"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M513.2,1457.2c0,0-1.2,6.2,7.2,14.6l108.6,108.6
+		c12.2,12.2,12.3,31.3,12.3,31.3v11"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="653.3" y1="1622.7" x2="653.3" y2="1892.3"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M575.2,1509.9l62.5,62.5c15.2,15.2,15.6,39.3,15.6,39.3v11"/>
+	<path fill="none" stroke="#FFD420" stroke-width="8" d="M575.7,1510.2c-4.2-4.2-10.9-4.2-15.1,0"/>
+	<line fill="none" stroke="#009D57" stroke-width="8" x1="675.3" y1="2267.2" x2="675.3" y2="1376.7"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M711.1,1330.9"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M675.3,1376.7"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M687.3,1384.9"/>
+	<line fill="none" stroke="#EF3E42" stroke-width="8" x1="510.3" y1="506.1" x2="529.6" y2="506.1"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M227.9,406h78.4c0,0,4.1-0.3,8.4,4c0.7,0.7,1.4,1.4,2.1,2.1l75.3,75.3
+		c4.4,4.4,4.1,13.6,4.1,13.6v1145.2"/>
+	<path fill="none" stroke="#006BB6" stroke-width="8" d="M284.2,394.2h26.6c0,0,4.3,0,8.4,4c3.6,3.6,7.8,7,12,11.2l73,73
+		c4.4,4.4,4,13.7,4,13.7v1150"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M725.3,1339.2c0,0,0.4,3.2-4,7.6l-29.9,29.9c-4.5,4.5-4.1,8.2-4.1,8.2"/>
+	<path fill="none" stroke="#009D57" stroke-width="8" d="M713.3,107.1v1223.8c0,0-0.3,5.6-4.1,9.3l-30,30c-4.7,4.7-4,6.6-4,6.6"/>
+	<path fill="none" stroke="#F58220" stroke-width="8" d="M440.3,494.1c6.7,0,12.2-5.4,12.2-12.2"/>
+	<line fill="none" stroke="#FFD420" stroke-width="8" x1="664.1" y1="1916.1" x2="1047.2" y2="1916.1"/>
+	<line id="L_x5F_downtown_4_" fill="none" stroke="#939598" stroke-width="2" x1="848.2" y1="1635.2" x2="1047.2" y2="1635.2"/>
+	<line id="L_x5F_downtown_3_" fill="none" stroke="#939598" stroke-width="2" x1="775.2" y1="1635.2" x2="840.2" y2="1635.2"/>
+	<line id="L_x5F_downtown_2_" fill="none" stroke="#939598" stroke-width="2" x1="657.5" y1="1635.2" x2="767.2" y2="1635.2"/>
+	<line id="L_x5F_downtown_1_" fill="none" stroke="#939598" stroke-width="2" x1="577.2" y1="1635.2" x2="637" y2="1635.2"/>
+	<line id="L_x5F_downtown" fill="none" stroke="#939598" stroke-width="2" x1="412.4" y1="1635.2" x2="569.4" y2="1635.2"/>
+	<line id="L_x5F_uptown_4_" fill="none" stroke="#939598" stroke-width="2" x1="848.2" y1="1641.2" x2="1047.2" y2="1641.2"/>
+	<line id="L_x5F_uptown_3_" fill="none" stroke="#939598" stroke-width="2" x1="775.2" y1="1641.2" x2="840.2" y2="1641.2"/>
+	<line id="L_x5F_uptown_2_" fill="none" stroke="#939598" stroke-width="2" x1="657.5" y1="1641.2" x2="767.2" y2="1641.2"/>
+	<line id="L_x5F_uptown_1_" fill="none" stroke="#939598" stroke-width="2" x1="577.3" y1="1641.2" x2="637" y2="1641.2"/>
+	<line id="L_x5F_uptown" fill="none" stroke="#939598" stroke-width="2" x1="412.4" y1="1641.2" x2="569.2" y2="1641.2"/>
+	<line id="L_x5F_background_4_" fill="none" stroke="#939598" stroke-width="4" x1="848.2" y1="1638.2" x2="1047.2" y2="1638.2"/>
+	<line id="L_x5F_background_3_" fill="none" stroke="#939598" stroke-width="4" x1="775.3" y1="1638.2" x2="840.2" y2="1638.2"/>
+	<line id="L_x5F_background_2_" fill="none" stroke="#939598" stroke-width="4" x1="657.5" y1="1638.2" x2="767.2" y2="1638.2"/>
+	<line id="L_x5F_background_1_" fill="none" stroke="#939598" stroke-width="4" x1="577.3" y1="1638.2" x2="637" y2="1638.2"/>
+	<line id="L_x5F_background" fill="none" stroke="#939598" stroke-width="4" x1="411.1" y1="1638.2" x2="569.2" y2="1638.2"/>
+</g>
+<g id="TRANSFERS">
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="713.7" y1="1324.1" x2="727.9" y2="1303.2"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="548.4" y1="1498" x2="559.8" y2="1486.5"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="681.6" y1="1743.5" x2="676.8" y2="1738.7"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="689.6" y1="1750.8" x2="673.7" y2="1734.8"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="479.9" y1="1650.5" x2="565.6" y2="1650.5"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="656.4" y1="1868.9" x2="672.3" y2="1868.9"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="656.2" y1="1638.7" x2="674.9" y2="1638.7"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="675.6" y1="1868.9" x2="704.8" y2="1868.9"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="853.1" y1="1813.3" x2="852.8" y2="1817.1"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="730.7" y1="2258" x2="746.4" y2="2273.6"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="581.1" y1="2072.6" x2="581.1" y2="1998.1"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="595.4" y1="2039.6" x2="582.3" y2="2039.6"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="689.8" y1="1987.3" x2="706.3" y2="1970.8"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="3" x1="678.5" y1="2125.3" x2="709" y2="2094.8"/>
+	<path fill="none" stroke="#FFFFFF" stroke-width="3" d="M565.6,1650.5c4.8,0,8.7-3.9,8.7-8.7"/>
+	<path fill="none" stroke="#FFFFFF" stroke-width="3" d="M742.4,2103.5c0-4.8-3.9-8.7-8.7-8.7"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="575.8" y1="1404.7" x2="614.4" y2="1404.7"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="411.6" y1="1381.5" x2="517.3" y2="1381.5"/>
+	<path fill="none" stroke="#FFFFFF" stroke-width="3" d="M614.4,1404.6c4.8,0,8.7-3.9,8.7-8.7"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="733.8" y1="2094.8" x2="707.9" y2="2094.8"/>
+	<line opacity="0.5" fill="#6F79B2" stroke="#232840" stroke-width="3" x1="729.1" y1="1218.5" x2="729.1" y2="1176"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="714.6" y1="1239.1" x2="727.2" y2="1226.5"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="747.8" y1="2275" x2="728.1" y2="2255.4"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="394" y1="1233.2" x2="425.3" y2="1239.8"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="623" y1="1396" x2="623" y2="1392.6"/>
+</g>
+<g id="STATION_BLOCKS">
+	<rect id="_x37_25_x5F_Times_Sq_-_42_St" x="486.9" y="1384.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x37_24_x5F_5_Av" x="617.9" y="1384.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x37_23_x5F_Grand_Central_-_42_St" x="671" y="1384.9" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x36_40_x5F_Brooklyn_Bridge_-_City_Hall" x="670.9" y="1985.1" fill="#FFFFFF" width="19.9" height="8"/>
+	<rect id="_x36_39_x5F_Canal_St" x="670.9" y="1864.3" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x36_38_x5F_Spring_St" x="670.9" y="1804.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_37_x5F_Bleecker_St_2_" x="670.9" y="1730.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_36_x5F_Astor_Pl" x="670.9" y="1688.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_35_x5F_14_St_-_Union_Sq" x="670.6" y="1634.1" fill="#FFFFFF" width="8.5" height="8"/>
+	<rect id="_x36_34_x5F_23_St" x="670.9" y="1562.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_33_x5F_28_St" x="670.9" y="1533.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_32_x5F_33_St" x="670.9" y="1492.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_31_x5F_Grand_Central_-_42_St" x="671" y="1384.9" fill="#FFFFFF" width="7.1" height="8"/>
+	<rect id="_x36_30_x5F_51_St_1_" x="708.9" y="1322.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_29_x5F_59_St" x="708.8" y="1234.9" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x36_28_x5F_68_St_-_Hunter_College" x="708.9" y="1109.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_27_x5F_77_St" x="708.9" y="1041.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_26_x5F_86_St" x="708.8" y="984.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_25_x5F_96_St" x="708.9" y="911.4" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_24_x5F_103_St" x="708.9" y="838.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_23_x5F_110_St" x="708.9" y="768.4" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_22_x5F_116_St" x="708.9" y="706.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x36_21_x5F_125_St" x="708.9" y="636.7" fill="#FFFFFF" width="7.8" height="8"/>
+	<rect id="_x34_20_x5F_Bowling_Green" x="670.9" y="2218.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x34_19_x5F_Wall_St" x="670.9" y="2166" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x34_18_x5F_Fulton_St" x="670.9" y="2122.8" fill="#FFFFFF" width="8" height="8"/>
+	
+		<rect id="_x33_02_x5F_145_St" x="549.5" y="514.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -204.3817 543.207)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x33_01_x5F_Harlem_-_148_St" x="508.9" y="502" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_30_x5F_Wall_St" x="736.9" y="2166" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_29_x5F_Fulton_St" x="736.9" y="2102.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_28_x5F_Park_Pl" x="589.9" y="2035" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_27_x5F_Central_Park_North__x28_110_St_x29_" x="557.9" y="768.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_26_x5F_116_St" x="557.9" y="708" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_25_x5F_125_St" x="557.9" y="636.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x32_24_x5F_135_St" x="557.9" y="581" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_40_x5F_South_Ferry_Loop" x="744" y="2273.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_39_x5F_Rector_St" x="542.5" y="2191" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_37_x5F_Chambers_St" x="475" y="1983.7" fill="#FFFFFF" width="7.9" height="8"/>
+	<rect id="_x31_36_x5F_Franklin_St" x="474.9" y="1919" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_35_x5F_Canal_St" x="474.9" y="1863.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_34_x5F_Houston_St" x="474.9" y="1786" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_33_x5F_Christopher_St_-_Sheridan_Sq" x="474.9" y="1709" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_32_x5F_14_St" x="474.8" y="1645.5" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x31_31_x5F_18_St" x="474.9" y="1606" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_30_x5F_23_St" x="474.9" y="1562.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_29_x5F_28_St" x="474.9" y="1528.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_28_x5F_34_St_-_Penn_Station" x="474.8" y="1481.9" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="_x31_27_x5F_Times_Sq_-_42_St" x="474.7" y="1376.8" fill="#FFFFFF" width="20" height="8.1"/>
+	<rect id="_x31_26_x5F_50_St" x="474.9" y="1328.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_25_x5F_59_St_-_Columbus_Circle" x="283.8" y="1069.8" fill="#FFFFFF" width="20.1" height="8"/>
+	
+		<rect id="_x31_24_x5F_66_St_-_Lincoln_Center" x="342.6" y="1156.1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -718.8074 584.8575)" fill="#FFFFFF" width="8" height="8"/>
+	
+		<rect id="_x31_23_x5F_72_St" x="422.9" y="1236.5" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -752.1158 665.2261)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_22_x5F_79_St" x="283.9" y="1030.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_21_x5F_86_St" x="283.9" y="987" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_20_x5F_96_St" x="283.8" y="913.2" fill="#FFFFFF" width="20" height="8"/>
+	<rect id="_x31_19_x5F_103_St" x="283.9" y="841.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_18_x5F_Cathedral_Pkwy" x="283.9" y="768.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_17_x5F_116_St_-_Columbia_University" x="283.9" y="706.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_16_x5F_125_St" x="283.9" y="636.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_15_x5F_137_St_-_City_College" x="283.9" y="572.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_14_x5F_145_St" x="283.9" y="524" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_13_x5F_157_St" x="283.9" y="448.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_12_x5F_168_St_-_Washington_Hts" x="283.8" y="401.2" fill="#FFFFFF" width="8" height="8.7"/>
+	<rect id="_x31_11_x5F_181_St" x="283.9" y="315.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_10_x5F_191_St" x="283.9" y="254.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_09_x5F_Dykeman_St" x="283.9" y="215.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_08_x5F_207_St" x="283.9" y="164.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x31_07_x5F_215_St" x="283.9" y="119.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A07_x5F_175_St" x="193.9" y="354.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A06_x5F_181_St" x="193.9" y="314.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A05_x5F_190_St" x="193.9" y="259.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A03_x5F_Dyckman_St" x="193.9" y="217.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A02_x5F_Inwood_-_207_St" x="193.9" y="165.4" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="E01_x5F_World_Trade_Center" x="575.9" y="2068" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A34_x5F_Canal_St" x="529.9" y="1864.3" fill="#FFFFFF" width="20" height="8"/>
+	<rect id="A33_x5F_Sprint_St" x="529.5" y="1806.2" fill="#FFFFFF" width="20.4" height="8"/>
+	<rect id="A32_x5F_W_4_St" x="529.9" y="1716.2" fill="#FFFFFF" width="47.4" height="8"/>
+	<rect id="A31_x5F_14_St" x="391.9" y="1634.1" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A30_x5F_23_St" x="391.9" y="1562.2" fill="#FFFFFF" width="20" height="8"/>
+	<rect id="A28_x5F_34_St_-_Penn_Station" x="391.8" y="1481.9" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A27_x5F_42_St_-_Port_Authority_Bus_Terminal" x="391.8" y="1377.1" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A25_x5F_50_St" x="403.9" y="1329" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D14_x5F_7_Av" x="525.9" y="1291" fill="#FFFFFF" width="8" height="15.9"/>
+	<rect id="F12_x5F_5_Av_x2F_53_St" x="612.1" y="1298.9" fill="#FFFFFF" width="8" height="8.1"/>
+	<rect id="F11_x5F_Lexington_Av_x2F_53_St_1_" x="723.9" y="1298.9" fill="#FFFFFF" width="8" height="8.5"/>
+	
+		<rect id="R17_x5F_34_St_-_Herald_Sq" x="542.9" y="1494.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -899.2869 825.5623)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D18_x5F_23_St" x="569" y="1562.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D12_x5F_155_St" x="448.1" y="456.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="_x39_02_x5F_Times_Sq_-_42_St" x="508.7" y="1376.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A22_x5F_72_St" x="391.8" y="1070" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A21_x5F_81_St_-_Museum_of_Natural_History" x="391.8" y="1026.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A20_x5F_86_St" x="391.8" y="987" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A19_x5F_96_St" x="391.8" y="912.8" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A18_x5F_103_St" x="391.9" y="840.8" fill="#FFFFFF" width="8.3" height="8"/>
+	<rect id="A17_x5F_Cathedral_Pkwy__x28_110_St_x29_" x="391.9" y="768.9" fill="#FFFFFF" width="8.3" height="8"/>
+	<rect id="A16_x5F_116_St" x="391.9" y="708" fill="#FFFFFF" width="8.2" height="8"/>
+	<rect id="A14_x5F_135_St" x="391.9" y="581" fill="#FFFFFF" width="7.9" height="8"/>
+	<rect id="A15_x5F_125_St" x="383.9" y="636.7" fill="#FFFFFF" width="16.3" height="8"/>
+	<rect id="A12_x5F_145_St" x="383.9" y="524" fill="#FFFFFF" width="16.3" height="8"/>
+	
+		<rect id="A11_x5F_155_St" x="370.9" y="466.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -222.7437 402.8363)" fill="#FFFFFF" width="8" height="8"/>
+	
+		<rect id="A10_x5F_163_St" x="335" y="430.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -207.9891 366.9871)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R15_x5F_49_St" x="508.8" y="1335.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R14_x5F_57_St_-_7_Av" x="509.1" y="1250.9" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R13_x5F_5_Av_x2F_59_St" x="613.9" y="1219" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R11_x5F_Lexington_Av_x2F_59_St_1_" x="725.9" y="1219" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="B08_x5F_Lexington_Av_x2F_63_St_1_" x="725.9" y="1174" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="B10_x5F_57_St" x="568.9" y="1251" fill="#FFFFFF" width="8" height="8"/>
+	
+		<rect id="R19_x5F_23_St" x="609" y="1560.5" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -926.7559 891.6894)" fill="#FFFFFF" width="8" height="8"/>
+	
+		<rect id="R18_x5F_28_St" x="581.7" y="1533.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -915.4047 864.4082)" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M20_x5F_Canal_St" x="703.9" y="1864.3" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M19_x5F_Bowery" x="750.8" y="1824" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D22_x5F_Grand_St" x="766.9" y="1854" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="F14_x5F_2_Av" x="798.9" y="1746" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="F15_x5F_Delancey_St" x="847.9" y="1823.9" fill="#FFFFFF" width="8" height="8.1"/>
+	<rect id="F16_x5F_East_Broadway" x="877.9" y="1873" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D21_x5F_Broadway-Lafayette_St_2_" x="683.9" y="1746.1" fill="#FFFFFF" width="8" height="20"/>
+	<rect id="R23_x5F_Canal_St" x="636.9" y="1864.3" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="Q01_x5F_Canal_St" x="648.8" y="1864.3" fill="#FFFFFF" width="8.1" height="8"/>
+	<rect id="R21_x5F_8_St_-_NYU" x="636.9" y="1688.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R22_x5F_Prince_St" x="636.9" y="1782" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R24_x5F_City_Hall" x="636.9" y="2015" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R25_x5F_Cortlandt_St" x="589.9" y="2108.5" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A38_x5F_Fulton_St" x="703.9" y="2090.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M21_x5F_Chambers_St" x="703.9" y="1963.6" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="M23_x5F_Broad_St_1_" x="703.9" y="2192.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R27_x5F_Whitehall_St" x="722.7" y="2250" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="R26_x5F_Rector_St" x="589.9" y="2191" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D19_x5F_14_St" x="568.9" y="1634.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L06_x5F_1_Av" x="839.9" y="1634.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L05_x5F_3_Av" x="766.9" y="1634.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L03_x5F_Union_Sq_-_14_St" x="670.6" y="1634.1" fill="#FFFFFF" width="8.5" height="8"/>
+	<rect id="R16_x5F_Times_Sq_-_42_St" x="508.7" y="1376.7" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D20_x5F_W_4_St" x="529.9" y="1716.2" fill="#FFFFFF" width="47.4" height="8"/>
+	<rect id="M18_x5F_Essex_St" x="847.9" y="1823.4" fill="#FFFFFF" width="8" height="8.5"/>
+	<rect id="M22_x5F_Fulton_St" x="703.9" y="2090.2" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="L02_x5F_6_Av" x="568.9" y="1634.1" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="D17_x5F_34_St_-_Herald_Sq" x="556.8" y="1483" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="R20_x5F_14_St_-_Union_Sq" x="636.6" y="1634.1" fill="#FFFFFF" width="20.5" height="8"/>
+	<rect id="D16_x5F_42_St_-_Bryant_Pk" x="556.8" y="1400.5" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="D15_x5F_47-50_Sts_-_Rockefeller_Ctr" x="556.8" y="1341.5" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="D13_x5F_145_St" x="383.9" y="524" fill="#FFFFFF" width="16.3" height="8"/>
+	<rect id="L01_x5F_8_Av" x="391.7" y="1634.1" fill="#FFFFFF" width="20.1" height="8"/>
+	<rect id="A36_x5F_Chambers_St" x="575.9" y="1994" fill="#FFFFFF" width="8" height="8"/>
+	<rect id="A24_x5F_59_St_-_Columbus_Circle" x="383.9" y="1229" fill="#FFFFFF" width="16" height="8"/>
+	<rect id="A09_x5F_168_St" x="283.8" y="401.8" fill="#FFFFFF" width="8" height="8"/>
+</g>
+<g id="TRAIN_NAMES">
+	<text transform="matrix(1 0 0 1 722.8755 1339.864)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 746.9269 1306.6365)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
+	<text transform="matrix(1 0 0 1 745.9269 1314.5625)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</text>
+	<text transform="matrix(1 0 0 1 622.8752 1306.6365)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
+	<text transform="matrix(1 0 0 1 517.5959 1307.6365)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
+	<text transform="matrix(1 0 0 1 507.8751 1298.8761)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B D</text>
+	<text transform="matrix(1 0 0 1 577.3765 2076.2205)" fill="#006BB6" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
+	<text transform="matrix(1 0 0 1 543.3757 2030.533)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
+	<text transform="matrix(1 0 0 1 544.3755 2207.9807)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.3755 2001.2828)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1936.2838)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1881.2838)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1803.7828)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1727.2838)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1661.7828)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1623.0231)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1579.8719)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1546.439)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1499.7828)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.4625 1375.7832)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 476.9243 1325.7831)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 430.1156 1250.7299)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 349.9982 1169.8176)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 1069.41)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 1029.41)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 984.0767)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 931.0767)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 859.0767)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 786.0767)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 723.5767)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 654.5494)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 589.7828)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 541.2158)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 466.5)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.2197 419.162)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 334.3116)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 272.8115)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 234.9658)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 183.4658)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 285.22 137.9658)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	<text transform="matrix(1 0 0 1 745.4841 2281.1533)" fill="#EF3E42" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">1</text>
+	
+		<text transform="matrix(0.7071 -0.7071 0.7071 0.7071 420.4874 1314.5626)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</text>
+	<text transform="matrix(1 0 0 1 404.3755 1306.6366)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</text>
+	<text transform="matrix(1 0 0 1 392.2662 1395.5776)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 392.8971 1246.3276)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 384.05 1246.3273)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</text>
+	<text transform="matrix(1 0 0 1 384.4195 882.411)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</text>
+	<text transform="matrix(1 0 0 1 384.4195 654.5496)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</text>
+	<text transform="matrix(1 0 0 1 384.4195 541.2155)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</text>
+	<text transform="matrix(1 0 0 1 404.3813 1246.3276)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</text>
+	<text transform="matrix(1 0 0 1 412.5058 1246.3276)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</text>
+	<text transform="matrix(1 0 0 1 449.0421 445.4511)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</tspan></text>
+	<text transform="matrix(1 0 0 1 393.2666 882.4106)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 393.2664 654.5494)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 393.2664 541.2156)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 292.7116 410.0906)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 195.3761 332.2156)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 195.3761 372.145)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 195.3759 276.7156)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 195.3759 234.9656)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 195.3759 182.2156)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 386.2304 471.7845)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</text>
+	<text transform="matrix(1 0 0 1 349.9589 436.038)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</text>
+	<text transform="matrix(1 0 0 1 284.3204 398.8343)" fill="#006BB6" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</text>
+	<text transform="matrix(1 0 0 1 392.2662 1499.5776)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 392.2662 1633.2443)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 405.3757 1641.9983)" fill="#939598" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">L</text>
+	<text transform="matrix(1 0 0 1 579.3756 1641.9983)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">L</text>
+	<text transform="matrix(1 0 0 1 693.3756 1641.9983)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">L</text>
+	<text transform="matrix(1 0 0 1 777.3756 1641.9983)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">L</text>
+	<text transform="matrix(1 0 0 1 849.7089 1641.9983)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">L</text>
+	<text transform="matrix(1 0 0 1 531.2662 1735.2443)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 809.0422 1754.2841)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</text>
+	<text transform="matrix(1 0 0 1 849.7089 1841.2841)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</text>
+	<text transform="matrix(1 0 0 1 887.7089 1881.2831)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</text>
+	<text transform="matrix(1 0 0 1 838.7089 1819.9504)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</text>
+	<text transform="matrix(1 0 0 1 708.9271 1754.2837)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F M</text>
+	<text transform="matrix(1 0 0 1 832.5938 1832.1158)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">J Z</text>
+	<text transform="matrix(1 0 0 1 735.9271 1832.1158)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">J Z</text>
+	<text transform="matrix(1 0 0 1 705.3753 1881.2834)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">J </tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Z</tspan></text>
+	<text transform="matrix(1 0 0 1 705.3753 1952.9502)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">J </tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Z</tspan></text>
+	<text transform="matrix(1 0 0 1 705.3753 2078.4502)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">J </tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Z</tspan></text>
+	<text transform="matrix(1 0 0 1 705.2084 2191.9495)"><tspan x="0" y="0" fill="#B0720D" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">J </tspan><tspan x="0" y="8.5" fill="#B0720D" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Z</tspan></text>
+	<text transform="matrix(1 0 0 1 708.9271 1766.2837)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B D</text>
+	<text transform="matrix(1 0 0 1 531.2662 1882.2443)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A</text>
+	<text transform="matrix(1 0 0 1 586.933 2002.5776)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A C</text>
+	<text transform="matrix(1 0 0 1 601.3757 2042.7823)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2 3</text>
+	<text transform="matrix(1 0 0 1 684.8757 2098.3462)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">A C</text>
+	<text transform="matrix(1 0 0 1 405.3755 1346.283)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 405.3755 1395.5778)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 405.3755 1498.9559)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 405.3755 1623.0232)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 405.3755 1551.6899)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 543.3757 1734.8699)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 543.3757 1823.5366)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 543.3757 1882.2032)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">C</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">E</tspan></text>
+	<text transform="matrix(1 0 0 1 621.8752 1314.5625)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</text>
+	<text transform="matrix(1 0 0 1 570.4963 1359.2832)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</tspan><tspan x="-1.5" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</tspan></text>
+	<text transform="matrix(1 0 0 1 570.4963 1269.7832)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</text>
+	<text transform="matrix(1 0 0 1 745.304 1182.2832)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</text>
+	<text transform="matrix(1 0 0 1 745.9274 1226.9927)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N Q R</text>
+	<text transform="matrix(1 0 0 1 623.8753 1226.9927)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N Q R</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 521.8044 1478.4099)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N Q R</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 567.5032 1524.4341)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N R</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 594.2518 1551.1187)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N R</text>
+	
+		<text transform="matrix(0.7071 0.7071 -0.7071 0.7071 575.7981 1515.3221)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Q</text>
+	<text transform="matrix(1 0 0 1 649.599 1650.9971)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Q</text>
+	<text transform="matrix(1 0 0 1 637.7787 1650.9974)"><tspan x="0" y="0" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N</tspan><tspan x="0.1" y="10" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</tspan></text>
+	<text transform="matrix(1 0 0 1 649.599 1881.2825)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Q</text>
+	<text transform="matrix(1 0 0 1 637.8708 2032.1438)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</text>
+	<text transform="matrix(1 0 0 1 590.8684 2125.5669)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</text>
+	<text transform="matrix(1 0 0 1 590.8684 2208.2825)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</text>
+	<text transform="matrix(1 0 0 1 732.4219 2258.2825)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</text>
+	<text transform="matrix(1 0 0 1 637.7787 1881.2828)"><tspan x="0" y="0" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N</tspan><tspan x="0.1" y="10" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</tspan></text>
+	<text transform="matrix(1 0 0 1 742.5646 1919.7828)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N Q</text>
+	<text transform="matrix(1 0 0 1 637.7787 1705.2474)"><tspan x="0" y="0" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N</tspan><tspan x="0.1" y="10" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</tspan></text>
+	<text transform="matrix(1 0 0 1 637.7787 1799.4974)"><tspan x="0" y="0" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N</tspan><tspan x="0.1" y="10" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</tspan></text>
+	<text transform="matrix(1 0 0 1 509.7787 1353.2827)"><tspan x="0" y="0" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">N</tspan><tspan x="-0.2" y="10" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">Q</tspan><tspan x="0.1" y="20" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">R</tspan></text>
+	<text transform="matrix(1 0 0 1 506.6376 1267.7404)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084"> N</text>
+	<text transform="matrix(1 0 0 1 506.5826 1276.4076)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084"> Q</text>
+	<text transform="matrix(1 0 0 1 506.8544 1285.0334)" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084"> R</text>
+	<text transform="matrix(1 0 0 1 557.9582 1359.2834)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</tspan><tspan x="-0.2" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</tspan></text>
+	<text transform="matrix(1 0 0 1 570.4963 1418.2832)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</tspan><tspan x="-1.5" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</tspan></text>
+	<text transform="matrix(1 0 0 1 557.9582 1418.2834)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</tspan><tspan x="-0.2" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</tspan></text>
+	<text transform="matrix(1 0 0 1 570.4963 1471.6998)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</tspan><tspan x="-1.5" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</tspan></text>
+	<text transform="matrix(1 0 0 1 570.4963 1579.9978)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</tspan><tspan x="-1.5" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</tspan></text>
+	<text transform="matrix(1 0 0 1 570.4963 1622.3312)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</tspan><tspan x="-1.5" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</tspan></text>
+	<text transform="matrix(1 0 0 1 570.4963 1703.8716)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">F</tspan><tspan x="-1.5" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">M</tspan></text>
+	<text transform="matrix(1 0 0 1 557.9582 1471.7001)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</tspan><tspan x="-0.2" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</tspan></text>
+	<text transform="matrix(1 0 0 1 557.9582 1703.8717)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</tspan><tspan x="-0.2" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</tspan></text>
+	<text transform="matrix(1 0 0 1 684.8755 1509.3564)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 684.8755 1550.0231)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 684.8756 1579.8717)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 1252.364)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 710.6255 1252.364)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 684.8755 1402.283)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 509.8677 1384.9473)" fill="#6D6E71" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">S</text>
+	<text transform="matrix(1 0 0 1 672.209 1384.9471)" fill="#6D6E71" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">S</text>
+	<text transform="matrix(1 0 0 1 601.3759 1384.9471)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">S</text>
+	<text transform="matrix(1 0 0 1 488.3756 1392.7548)" fill="#9D3D96" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">7</text>
+	<text transform="matrix(1 0 0 1 627.3755 1392.755)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">7</text>
+	<text transform="matrix(1 0 0 1 692.3756 1392.755)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">7</text>
+	<text transform="matrix(1 0 0 1 672.6255 1402.283)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 684.8755 1650.9496)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 684.8755 1716.9976)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 684.8755 1821.3308)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 672.6255 1650.9496)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 684.8755 1881.283)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 684.8755 1982.783)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 672.6255 1881.283)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 767.3755 1871.283)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">B</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">D</tspan></text>
+	<text transform="matrix(1 0 0 1 672.6255 1972.4497)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 672.6255 2111.2632)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 668.3755 1909.9299)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 488.8755 2001.283)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 488.3755 1661.783)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 488.3755 1499.5776)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 488.3755 1365.7832)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 297.6948 1059.1141)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 297.6948 931.0768)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 559.6264 786.0774)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 559.6265 726.3273)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 559.6265 654.549)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 559.6265 598.2158)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 738.3755 2154.1746)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</tspan></text>
+	<text transform="matrix(1 0 0 1 672.6255 2182.8411)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 672.6255 2236.1746)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 722.8755 1127.114)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 1059.114)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 1001.5492)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 929.5492)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 856.283)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 786.783)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 722.8755 724.283)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 710.6255 1001.5492)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+	<text transform="matrix(1 0 0 1 722.8755 654.5492)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">6</text>
+	<text transform="matrix(1 0 0 1 584.5503 522.7929)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">2</text>
+	<text transform="matrix(1 0 0 1 544.3755 516.8826)" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</text>
+	<text transform="matrix(1 0 0 1 510.3756 509.7159)" fill="#EF3E42" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">3</text>
+	<text transform="matrix(1 0 0 1 710.6255 654.5492)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">4</tspan><tspan x="0" y="10" fill="#FFFFFF" font-family="'AlteHaasGrotesk_Bold'" font-size="9.7084">5</tspan></text>
+</g>
+<g id="NEIGHBORHOOD_NAMES">
+	
+		<text transform="matrix(1 0 0 1 781.5442 1894.5853)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">CHINATOWN</text>
+	
+		<text transform="matrix(1 0 0 1 748.1757 1816.5582)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">LIL  ITALY</text>
+	
+		<text transform="matrix(1 0 0 1 705.6584 1718.6348)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">NOHO</text>
+	<text transform="matrix(1 0 0 1 871.7628 1759.634)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">LOWER</tspan><tspan x="6" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">EAST</tspan><tspan x="7.6" y="28.2" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">SIDE</tspan></text>
+	<text transform="matrix(1 0 0 1 872.1442 1666.6344)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">EAST</tspan><tspan x="-8.5" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">VILLAGE</tspan></text>
+	<text transform="matrix(1 0 0 1 855.6457 1611.6346)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">STUYVESANT</tspan><tspan x="19" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">TOWN</tspan></text>
+	
+		<text transform="matrix(1 0 0 1 578.9012 1611.6342)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">FLATIRON</text>
+	<text transform="matrix(1 0 0 1 620.8127 1501.8492)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">KOREA</tspan><tspan x="2" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">TOWN</tspan></text>
+	
+		<text transform="matrix(1 0 0 1 290.3759 1546.8494)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">CHELSEA</text>
+	<text transform="matrix(1 0 0 1 295.163 1337.7234)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">HELL’S </tspan><tspan x="-3.4" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">KITCHEN</tspan></text>
+	
+		<text transform="matrix(1 0 0 1 758.8213 1435.3446)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">MURRAY HILL</text>
+	
+		<text transform="matrix(1 0 0 1 752.9415 1355.1344)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">MIDTOWN EAST</text>
+	
+		<text transform="matrix(1 0 0 1 771.6837 1021.9869)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">UPPER EAST SIDE</text>
+	
+		<text transform="matrix(1 0 0 1 767.0073 751.9869)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">EAST HARLEM</text>
+	
+		<text transform="matrix(1 0 0 1 465.1639 683.2755)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">HARLEM</text>
+	<text transform="matrix(1 0 0 1 296.6622 753.448)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">MORNINGSIDE</tspan><tspan x="15.2" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">HEIGHTS</tspan></text>
+	<text transform="matrix(1 0 0 1 203.5531 367.8689)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">WASHINGTON</tspan><tspan x="14.1" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">HEIGHTS</tspan></text>
+	
+		<text transform="matrix(1 0 0 1 218.4662 142.8176)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">INWOOD</text>
+	<text transform="matrix(1 0 0 1 326.1125 949.6978)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">UPPER</tspan><tspan x="3" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">WEST</tspan><tspan x="6.3" y="28.2" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">SIDE</tspan></text>
+	
+		<text transform="matrix(1 0 0 1 255.1544 1208.6344)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">LINCOLN SQUARE</text>
+	<text transform="matrix(1 0 0 1 821.3341 1556.5417)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">PETER COOPER</tspan><tspan x="20.3" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">VILLAGE</tspan></text>
+	
+		<text transform="matrix(1 0 0 1 398.3488 1965.865)" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">TRIBECA</text>
+	<text transform="matrix(1 0 0 1 364.7806 1767.635)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">GREENWICH </tspan><tspan x="11.4" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">VILLAGE</tspan></text>
+	<text transform="matrix(1 0 0 1 329.1609 1675.3013)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">WEST </tspan><tspan x="-6.9" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">VILLAGE</tspan></text>
+	<text transform="matrix(1 0 0 1 611.1271 2149.3574)"><tspan x="0" y="0" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">FINANCIAL</tspan><tspan x="3.9" y="14.1" fill="#6D6E71" font-family="'HelveticaNeue-LightItalic'" font-size="11.7472">DISTRICT</tspan></text>
+</g>
+<g id="STATION_NAMES">
+	<text transform="matrix(1 0 0 1 754.5873 2282.1526)" font-family="'HelveticaNeue'" font-size="12">South Ferry</text>
+	<text transform="matrix(1 4.800000e-04 -4.800000e-04 1 724.0478 2247.9375)" font-family="'HelveticaNeue'" font-size="12">Whitehall St</text>
+	<text transform="matrix(1 4.800000e-04 -4.800000e-04 1 625.0651 2222.4077)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Bowling</tspan><tspan x="10.4" y="11" font-family="'HelveticaNeue'" font-size="12">Green</tspan></text>
+	<text transform="matrix(1 0 0 1 748.2635 2174.6768)" font-family="'HelveticaNeue'" font-size="12">Wall St</text>
+	<text transform="matrix(1 0 0 1 714.0983 2201.9631)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Broad </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">St</tspan></text>
+	<text transform="matrix(1 0 0 1 628.261 2174.8542)" font-family="'HelveticaNeue'" font-size="12">Wall St</text>
+	<text transform="matrix(1 0 0 1 619.8082 2131.7556)" font-family="'HelveticaNeue'" font-size="12">Fulton St</text>
+	<text transform="matrix(1 0 0 1 748.2637 2087.7654)" font-family="'HelveticaNeue'" font-size="12">Fulton St</text>
+	<text transform="matrix(1 0 0 1 518.1937 2115.1746)" font-family="'HelveticaNeue'" font-size="12">Cortlandt St</text>
+	<text transform="matrix(1 0 0 1 576.2635 1980.7653)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Chambers </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">St</tspan></text>
+	<text transform="matrix(1 0 0 1 590.0958 2023.7654)" font-family="'HelveticaNeue'" font-size="12">City Hall</text>
+	<text transform="matrix(1 0 0 1 713.2629 1972.4324)" font-family="'HelveticaNeue'" font-size="12">Chambers St</text>
+	<text transform="matrix(1 0 0 1 713.1747 1990.7651)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Brooklyn Bridge</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">City Hall</tspan></text>
+	<text transform="matrix(1 0 0 1 395.9009 1992.9803)" font-family="'HelveticaNeue'" font-size="12">Chambers St</text>
+	<text transform="matrix(1 0 0 1 568.2639 1873.1136)" font-family="'HelveticaNeue'" font-size="12">Canal St</text>
+	<text transform="matrix(1 0 0 1 722.0484 1851.933)" font-family="'HelveticaNeue'" font-size="12">Bowery</text>
+	<text transform="matrix(1 0 0 1 777.2633 1862.7657)" font-family="'HelveticaNeue'" font-size="12">Grand St</text>
+	<text transform="matrix(1 0 0 1 878.2631 1870.1136)" font-family="'HelveticaNeue'" font-size="12">East Broadway</text>
+	<text transform="matrix(1 0 0 1 858.1749 1844.7654)" font-family="'HelveticaNeue'" font-size="12">Essex St</text>
+	<text transform="matrix(1 0 0 1 800.2638 1742.7656)" font-family="'HelveticaNeue'" font-size="12">2 Ave</text>
+	<text transform="matrix(1 0 0 1 857.8331 1808.5729)" font-family="'HelveticaNeue'" font-size="12">Delancey St</text>
+	<text transform="matrix(0.9998 1.770000e-02 -1.770000e-02 0.9998 553.8831 1810.5862)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Spring </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">St</tspan></text>
+	<text transform="matrix(1 0 0 1 693.0327 1812.573)" font-family="'HelveticaNeue'" font-size="12">Spring St</text>
+	<text transform="matrix(1 0 0 1 695.0114 1733.4994)" font-family="'HelveticaNeue'" font-size="12">Bleecker St</text>
+	<text transform="matrix(1 0 0 1 612.6112 1691.765)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">8 St</tspan><tspan x="-3.5" y="11" font-family="'HelveticaNeue'" font-size="12">NYU</tspan></text>
+	<text transform="matrix(1 0 0 1 697.2637 1697.7653)" font-family="'HelveticaNeue'" font-size="12">Astor Pl</text>
+	<text transform="matrix(1 0 0 1 767.2632 1652.6783)" font-family="'HelveticaNeue'" font-size="12">3 Ave</text>
+	<text transform="matrix(1 0 0 1 579.1746 1651.6758)" font-family="'HelveticaNeue'" font-size="12">6 Ave</text>
+	<text transform="matrix(1 0 0 1 414.5983 1651.6782)" font-family="'HelveticaNeue'" font-size="12">8 Ave</text>
+	<text transform="matrix(1 0 0 1 841.2631 1652.678)" font-family="'HelveticaNeue'" font-size="12">1 Ave</text>
+	<text transform="matrix(1 0 0 1 505.1515 1724.9805)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">W 4</tspan><tspan x="9.6" y="11" font-family="'HelveticaNeue'" font-size="12">St</tspan></text>
+	<text transform="matrix(1 0 0 1 578.1469 1633.765)" font-family="'HelveticaNeue'" font-size="12">14 St</text>
+	<text transform="matrix(1 0 0 1 495.3808 1661.7654)" font-family="'HelveticaNeue'" font-size="12">14 St</text>
+	<text transform="matrix(1 0 0 1 445.9779 1613.9801)" font-family="'HelveticaNeue'" font-size="12">18 St</text>
+	<text transform="matrix(1 0 0 1 446.166 1570.98)" font-family="'HelveticaNeue'" font-size="12">23 St</text>
+	<text transform="matrix(1 0 0 1 362.8327 1569.6466)" font-family="'HelveticaNeue'" font-size="12">23 St</text>
+	<text transform="matrix(1 0 0 1 578.2632 1571.9796)" font-family="'HelveticaNeue'" font-size="12">23 St</text>
+	<text transform="matrix(1 0 0 1 604.5858 1523.2659)" font-family="'HelveticaNeue'" font-size="12">28 St</text>
+	<text transform="matrix(1 0 0 1 693.2633 1543.1954)" font-family="'HelveticaNeue'" font-size="12">28 St</text>
+	<text transform="matrix(1 0 0 1 693.2633 1501.7657)" font-family="'HelveticaNeue'" font-size="12">33 St</text>
+	<text transform="matrix(1 0 0 1 626.2634 1403.766)" font-family="'HelveticaNeue'" font-size="12">5 Ave</text>
+	<text transform="matrix(1 0 0 1 693.1747 1403.7657)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Grand </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Central</tspan><tspan x="0" y="22" font-family="'HelveticaNeue'" font-size="12">42 St</tspan></text>
+	<text transform="matrix(1 0 0 1 692.8906 1570.9801)" font-family="'HelveticaNeue'" font-size="12">23 St</text>
+	<text transform="matrix(1 0 0 1 445.9781 1537.4216)" font-family="'HelveticaNeue'" font-size="12">28 St</text>
+	<text transform="matrix(1 0 0 1 431.2634 1336.854)" font-family="'HelveticaNeue'" font-size="12">50 St</text>
+	<text transform="matrix(1 0 0 1 422.2637 1076.5879)" font-family="'HelveticaNeue'" font-size="12">72 St</text>
+	<text transform="matrix(1 0 0 1 253.4787 1037.9801)" font-family="'HelveticaNeue'" font-size="12">79 St</text>
+	<text transform="matrix(1 0 0 1 422.2634 1028.5503)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">81 St - Museum</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">of Natural History</tspan></text>
+	<text transform="matrix(1 0 0 1 254.4786 1078.5884)" font-family="'HelveticaNeue'" font-size="12">72 St</text>
+	<text transform="matrix(1 0 0 1 732.2632 1331.5155)" font-family="'HelveticaNeue'" font-size="12">51 St</text>
+	<text transform="matrix(1 0 0 1 518.1935 1343.6774)" font-family="'HelveticaNeue'" font-size="12">49 St</text>
+	<text transform="matrix(1 0 0 1 580.2633 1259.9802)" font-family="'HelveticaNeue'" font-size="12">57 St</text>
+	<text transform="matrix(1 0 0 1 733.5963 1050.2653)" font-family="'HelveticaNeue'" font-size="12">77 St</text>
+	<text transform="matrix(1 0 0 1 732.2631 920.1951)" font-family="'HelveticaNeue'" font-size="12">96 St</text>
+	<text transform="matrix(1 0 0 1 429.2632 921.1951)" font-family="'HelveticaNeue'" font-size="12">96 St</text>
+	<text transform="matrix(1 0 0 1 421.2632 849.9803)" font-family="'HelveticaNeue'" font-size="12">103 St</text>
+	<text transform="matrix(1 0 0 1 248.4792 849.9803)" font-family="'HelveticaNeue'" font-size="12">103 St</text>
+	<text transform="matrix(1 0 0 1 426.2636 716.9805)" font-family="'HelveticaNeue'" font-size="12">116 St</text>
+	<text transform="matrix(1 0 0 1 525.7637 715.9805)" font-family="'HelveticaNeue'" font-size="12">116 St</text>
+	<text transform="matrix(1 0 0 1 347.4789 644.7656)" font-family="'HelveticaNeue'" font-size="12">125 St</text>
+	<text transform="matrix(1 0 0 1 347.4789 533.1981)" font-family="'HelveticaNeue'" font-size="12">145 St</text>
+	<text transform="matrix(1 0 0 1 518.1935 531.0105)" font-family="'HelveticaNeue'" font-size="12">145 St</text>
+	<text transform="matrix(1 0 0 1 507.7558 489.5989)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Harlem</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">148 St</tspan></text>
+	<text transform="matrix(1 0 0 1 245.4792 532.8285)" font-family="'HelveticaNeue'" font-size="12">145 St</text>
+	<text transform="matrix(1 0 0 1 245.4792 456.9805)" font-family="'HelveticaNeue'" font-size="12">157 St</text>
+	<text transform="matrix(1 0 0 1 248.4789 643.7656)" font-family="'HelveticaNeue'" font-size="12">125 St</text>
+	<text transform="matrix(1 0 0 1 425.1048 589.6509)" font-family="'HelveticaNeue'" font-size="12">135 St</text>
+	<text transform="matrix(1 0 0 1 522.5963 588.6771)" font-family="'HelveticaNeue'" font-size="12">135 St</text>
+	<text transform="matrix(1 0 0 1 466.0039 465.4319)" font-family="'HelveticaNeue'" font-size="12">155 St</text>
+	<text transform="matrix(1 0 0 1 394.9008 458.2656)" font-family="'HelveticaNeue'" font-size="12">155 St</text>
+	<text transform="matrix(1 0 0 1 246.4788 398.8167)" font-family="'HelveticaNeue'" font-size="12">168 St</text>
+	<text transform="matrix(1 0 0 1 155.2635 362.5635)" font-family="'HelveticaNeue'" font-size="12">175 St</text>
+	<text transform="matrix(1 0 0 1 153.2634 323.0702)" font-family="'HelveticaNeue'" font-size="12">181 St</text>
+	<text transform="matrix(1 0 0 1 292.6694 323.0703)" font-family="'HelveticaNeue'" font-size="12">181 St</text>
+	<text transform="matrix(1 0 0 1 293.6453 263.8555)" font-family="'HelveticaNeue'" font-size="12">191 St</text>
+	<text transform="matrix(1 0 0 1 153.2634 267.0706)" font-family="'HelveticaNeue'" font-size="12">190 St</text>
+	<text transform="matrix(1 0 0 1 294.6453 172.8556)" font-family="'HelveticaNeue'" font-size="12">207 St</text>
+	<text transform="matrix(1 0 0 1 128.2634 226.0703)" font-family="'HelveticaNeue'" font-size="12">Dyckman St</text>
+	<text transform="matrix(1 0 0 1 294.6456 223.8555)" font-family="'HelveticaNeue'" font-size="12">Dyckman St</text>
+	<text transform="matrix(1 0 0 1 151.4958 168.9804)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Inwood</tspan><tspan x="4.9" y="11" font-family="'HelveticaNeue'" font-size="12">207 St</tspan></text>
+	<text transform="matrix(1 0 0 1 294.6455 128.1957)" font-family="'HelveticaNeue'" font-size="12">215 St</text>
+	<text transform="matrix(1 0 0 1 349.8464 410.0728)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">163 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Amsterdam Ave</tspan></text>
+	<text transform="matrix(1 0 0 1 429.2632 766.5885)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Cathedral </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Pkway</tspan><tspan x="0" y="22" font-family="'HelveticaNeue'" font-size="12">110 St</tspan></text>
+	<text transform="matrix(1 0 0 1 229.0407 764.5885)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Cathedral</tspan><tspan x="16.7" y="11" font-family="'HelveticaNeue'" font-size="12">Pkway</tspan><tspan x="17.3" y="22" font-family="'HelveticaNeue'" font-size="12">110 St</tspan></text>
+	<text transform="matrix(1 0 0 1 516.5557 766.5885)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Central</tspan><tspan x="-19.1" y="11" font-family="'HelveticaNeue'" font-size="12">Park North</tspan><tspan x="3.8" y="22" font-family="'HelveticaNeue'" font-size="12">110 St</tspan></text>
+	<text transform="matrix(1 0 0 1 246.3555 703.0695)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">116 St</tspan><tspan x="-16.4" y="11" font-family="'HelveticaNeue'" font-size="12">Columbia</tspan><tspan x="-18" y="22" font-family="'HelveticaNeue'" font-size="12">University</tspan></text>
+	<text transform="matrix(1 0 0 1 246.3555 575.765)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">137 St</tspan><tspan x="-30.2" y="11" font-family="'HelveticaNeue'" font-size="12">City College</tspan></text>
+	<text transform="matrix(1 0 0 1 253.4788 922.1951)" font-family="'HelveticaNeue'" font-size="12">96 St</text>
+	<text transform="matrix(1 0 0 1 732.2631 846.9803)" font-family="'HelveticaNeue'" font-size="12">103 St</text>
+	<text transform="matrix(1 0 0 1 732.2625 777.2305)" font-family="'HelveticaNeue'" font-size="12">110 St</text>
+	<text transform="matrix(1 0 0 1 732.2631 714.9803)" font-family="'HelveticaNeue'" font-size="12">116 St</text>
+	<text transform="matrix(1 0 0 1 668.1564 644.7654)" font-family="'HelveticaNeue'" font-size="12">125 St</text>
+	<text transform="matrix(1 0 0 1 522.5963 644.7651)" font-family="'HelveticaNeue'" font-size="12">125 St</text>
+	<text transform="matrix(1 0 0 1 677.7626 992.7335)" font-family="'HelveticaNeue'" font-size="12">86 St</text>
+	<text transform="matrix(1 0 0 1 422.2631 995.7335)" font-family="'HelveticaNeue'" font-size="12">86 St</text>
+	
+		<text transform="matrix(0.9997 2.325000e-02 -2.325000e-02 0.9997 251.4786 993.3625)" font-family="'HelveticaNeue'" font-size="12">86 St</text>
+	<text transform="matrix(1 0 0 1 519.1936 1317.4318)" font-family="'HelveticaNeue'" font-size="12">7 Ave</text>
+	<text transform="matrix(1 0 0 1 613.3522 1284.7651)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">5 Ave</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">53 St</tspan></text>
+	<text transform="matrix(1 0 0 1 736.3151 1285.4323)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Lexington Ave</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">53 St</tspan></text>
+	<text transform="matrix(1 0 0 1 733.5961 1113.5505)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">68 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Hunter College</tspan></text>
+	<text transform="matrix(1 0 0 1 309.9656 1167.2651)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">66 St</tspan><tspan x="-49.8" y="11" font-family="'HelveticaNeue'" font-size="12">Lincoln Center</tspan></text>
+	<text transform="matrix(1 0 0 1 736.3149 1241.2822)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Lexington Ave</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">59 St</tspan></text>
+	<text transform="matrix(1 0 0 1 735.8151 1160.7664)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Lexington Ave</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">63 St</tspan></text>
+	<text transform="matrix(1 0 0 1 613.3522 1203.7651)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">5 Ave</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">59 St</tspan></text>
+	<text transform="matrix(1 0 0 1 520.1859 1259.7169)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">57 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">7 Ave</tspan></text>
+	<text transform="matrix(1 0 0 1 352.0273 1226.7656)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">59 St</tspan><tspan x="-26.7" y="11" font-family="'HelveticaNeue'" font-size="12">Columbus</tspan><tspan x="-2.6" y="22" font-family="'HelveticaNeue'" font-size="12">Circle</tspan></text>
+	<text transform="matrix(1 0 0 1 445.5268 1478.7659)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">34 St</tspan><tspan x="0.7" y="11" font-family="'HelveticaNeue'" font-size="12">Penn</tspan><tspan x="-9.8" y="22" font-family="'HelveticaNeue'" font-size="12">Station</tspan></text>
+	<text transform="matrix(1 0 0 1 362.1935 1478.7659)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">34 St</tspan><tspan x="0.7" y="11" font-family="'HelveticaNeue'" font-size="12">Penn</tspan><tspan x="-9.8" y="22" font-family="'HelveticaNeue'" font-size="12">Station</tspan></text>
+	<text transform="matrix(1 0 0 1 362.0278 1374.7654)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">42 St</tspan><tspan x="5.8" y="11" font-family="'HelveticaNeue'" font-size="12">Port</tspan><tspan x="-20" y="22" font-family="'HelveticaNeue'" font-size="12">Authority</tspan></text>
+	<text transform="matrix(1 0 0 1 579.1743 1481.7659)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">34 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Herald</tspan><tspan x="0" y="22" font-family="'HelveticaNeue'" font-size="12">Square</tspan></text>
+	<text transform="matrix(1 0 0 1 578.6218 1418.4319)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">42 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Bryant</tspan><tspan x="0" y="22" font-family="'HelveticaNeue'" font-size="12">Park</tspan></text>
+	<text transform="matrix(1 0 0 1 581.5375 1339.8464)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">47-50 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Rockefeller</tspan><tspan x="0" y="22" font-family="'HelveticaNeue'" font-size="12">Center</tspan></text>
+	<text transform="matrix(1 0 0 1 441.4356 1394.1115)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Times</tspan><tspan x="-6.2" y="11" font-family="'HelveticaNeue'" font-size="12">Square</tspan><tspan x="4" y="22" font-family="'HelveticaNeue'" font-size="12">42 St</tspan></text>
+	<text transform="matrix(1 0 0 1 362.0277 1643.0225)" font-family="'HelveticaNeue'" font-size="12">14 St</text>
+	<text transform="matrix(1 0 0 1 599.2675 1786.9836)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Prince</tspan><tspan x="22.4" y="11" font-family="'HelveticaNeue'" font-size="12">St</tspan></text>
+	<text transform="matrix(1 0 0 1 414.6443 1927.1953)" font-family="'HelveticaNeue'" font-size="12">Franklin St</text>
+	<text transform="matrix(1 0 0 1 425.9839 1871.7656)" font-family="'HelveticaNeue'" font-size="12">Canal St</text>
+	<text transform="matrix(1 0 0 1 411.3079 1794.9806)" font-family="'HelveticaNeue'" font-size="12">Houston St</text>
+	<text transform="matrix(1 0 0 1 393.9801 1710.2657)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Christopher St </tspan><tspan x="11.8" y="11" font-family="'HelveticaNeue'" font-size="12">Sheridan Sq</tspan></text>
+	<text transform="matrix(1 0 0 1 693.2621 1778.7654)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Broadway</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Lafayette St</tspan></text>
+	<text transform="matrix(1 0 0 1 692.8904 1609.5508)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">14 St</tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Union </tspan><tspan x="0" y="22" font-family="'HelveticaNeue'" font-size="12">Square</tspan></text>
+	<text transform="matrix(1 0 0 1 590.2615 2054.7651)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Park </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">Place</tspan></text>
+	<text transform="matrix(1 0 0 1 518.1122 2087.7654)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">World Trade</tspan><tspan x="30" y="11" font-family="'HelveticaNeue'" font-size="12">Center</tspan></text>
+	<text transform="matrix(1 0 0 1 551.8829 2193.7651)"><tspan x="0" y="0" font-family="'HelveticaNeue'" font-size="12">Rector </tspan><tspan x="0" y="11" font-family="'HelveticaNeue'" font-size="12">St</tspan></text>
+	<line x1="460.9" y1="1334" x2="475.1" y2="1334"/>
+	<line x1="413.1" y1="1334" x2="428.1" y2="1334"/>
+	<line x1="588.1" y1="1535.1" x2="603.3" y2="1520"/>
+	<line x1="392.8" y1="1567" x2="400.1" y2="1567"/>
+	<line x1="744.2" y1="2084.2" x2="719" y2="2084.2"/>
+	<line x1="719" y1="2084.1" x2="714.1" y2="2088.9"/>
+	<line x1="741" y1="2084.3" x2="741" y2="2088.9"/>
+	<line x1="550.5" y1="1869.1" x2="566.4" y2="1869.1"/>
+	<line x1="637.3" y1="1869.1" x2="618.4" y2="1869.1"/>
+	<line x1="755.3" y1="1832.8" x2="755.3" y2="1841.3"/>
+	<line x1="710.7" y1="1990.8" x2="691.9" y2="1990.8"/>
+</g>
+</svg>
