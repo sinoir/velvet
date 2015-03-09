@@ -208,15 +208,8 @@ public class SubwayMapView extends View {
                 if( ev.getPointerCount() == 2 ){
                     int newIdx = ev.getActionIndex() == 0 ? 1 : 0; // The one not lifted
                     mActivePointerId = MotionEventCompat.getPointerId(ev, newIdx);
-
                     startX = MotionEventCompat.getX(ev, newIdx) - deltaX;
                     startY = MotionEventCompat.getY(ev, newIdx) - deltaY;
-
-                    deltaX += scalePointX;
-                    deltaY += scalePointY;
-                    scalePointX = 0;
-                    scalePointY = 0;
-
                 } else if(ev.getPointerCount() > 2) {
                     startX = scalePointX - deltaX;
                     startY = scalePointY - deltaY;
@@ -238,8 +231,10 @@ public class SubwayMapView extends View {
     private void calculateScalePoint(MotionEvent ev){
         float avgX = 0, avgY = 0;
         for( int i=0; i<ev.getPointerCount(); i++ ){
-            avgX += MotionEventCompat.getX(ev, i);
-            avgY += MotionEventCompat.getY(ev, i);
+            MotionEvent.PointerCoords theseCoords = new MotionEvent.PointerCoords();
+            ev.getPointerCoords(i, theseCoords);
+            avgX += theseCoords.x;
+            avgY += theseCoords.y;
         }
         scalePointX = (avgX / ev.getPointerCount()); // screen coordinates
         scalePointY = (avgY / ev.getPointerCount()); // screen coordinates
