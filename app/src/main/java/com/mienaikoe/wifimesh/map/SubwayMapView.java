@@ -99,7 +99,7 @@ public class SubwayMapView extends View {
 
         // Yay Matrix Math
         Matrix transformationMatrix = new Matrix();
-        transformationMatrix.setTranslate(deltaX, deltaY);
+        transformationMatrix.setTranslate(deltaX/mScaleFactor, deltaY/mScaleFactor);
         transformationMatrix.postScale(mScaleFactor, mScaleFactor, scalePointX, scalePointY);
 
         canvas.concat(transformationMatrix);
@@ -151,8 +151,8 @@ public class SubwayMapView extends View {
 
             Log.i("TESTER", mScaleFactor + "");
 
-            //scalePointX = detector.getFocusX();
-            //scalePointY = detector.getFocusY();
+            scalePointX = detector.getFocusX();
+            scalePointY = detector.getFocusY();
 
             return true;
         }
@@ -170,7 +170,7 @@ public class SubwayMapView extends View {
         mScaleDetector.onTouchEvent(ev);
 
         if( ev.getPointerCount() > 1 ){
-            calculateScalePoint(ev);
+            //calculateScalePoint(ev);
         }
 
         switch (MotionEventCompat.getActionMasked(ev)) {
