@@ -146,8 +146,8 @@ public class StartupActivity extends BaseActivity
 
     private static enum MapName {
         DAY("final_map.svg", R.drawable.ic_sun),
-        NIGHT("night.svg", R.drawable.ic_action_image_brightness_3),
-        WEEKEND("weekend_final.svg", R.drawable.ic_action_notification_mms);
+        NIGHT("nightmap.svg", R.drawable.ic_action_image_brightness_3),
+        WEEKEND("weekendmap.svg", R.drawable.ic_action_notification_mms);
 
         private String mFilename;
 
