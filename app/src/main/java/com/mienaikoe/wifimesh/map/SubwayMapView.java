@@ -298,21 +298,37 @@ public class SubwayMapView extends View {
 
     private void setCenter(float[] center) {
         scaleFactor = 2.5f;
-        this.scaleScreenX = (this.getWidth() / 2) / scaleFactor;
-        this.scaleScreenY = (this.getHeight() / 2) / scaleFactor;
-        this.translateX = -center[0];
-        this.translateY = -center[1];
+        this.scaleScreenX = 0;
+        this.scaleScreenY = 0;
+
+        Log.i("SCALEP", this.scaleScreenX + "," + this.scaleScreenY);
+
+        this.startX = 0;
+        this.startY = 0;
+        this.translateX = (-center[0] * scaleFactor ) + (this.getWidth() / 2);
+        this.translateY = (-center[1] * scaleFactor ) + (this.getHeight() / 2);
+        this.previousX = this.translateX;
+        this.previousY = this.translateY;
+
+        this.previousFocusX = 0;
+        this.previousFocusY = 0;
+
         invalidate();
     }
 
 
-    private void catchup(SubwayMapView other){
+    public void catchup(SubwayMapView other){
+        this.startX = other.startX;
+        this.startY = other.startY;
         this.translateX = other.translateX;
         this.translateY = other.translateY;
-        this.scaleFactor = other.scaleFactor;
-        this.previousFocusX = other.previousFocusX;
-        this.previousFocusY = other.previousFocusY;
         this.previousX = other.previousX;
         this.previousY = other.previousY;
+
+        this.scaleFactor = other.scaleFactor;
+        this.scaleScreenX = other.scaleScreenX;
+        this.scaleScreenY = other.scaleScreenY;
+        this.previousFocusX = other.previousFocusX;
+        this.previousFocusY = other.previousFocusY;
     }
 }

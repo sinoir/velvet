@@ -86,17 +86,19 @@ public class StartupActivity extends BaseActivity
     private void drawMap(MapName map) {
         mCurrentMap = map;
         // Fill Out Train System Information
-        this.trainSystem = new TrainSystem(
-                this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
-                this.getApplicationContext().getResources()
-                        .openRawResource(R.raw.transfers_normalized),
-                this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
-        );
+        if( this.trainSystem == null ) {
+            this.trainSystem = new TrainSystem(
+                    this.getApplicationContext().getResources().openRawResource(R.raw.stops_normalized),
+                    this.getApplicationContext().getResources().openRawResource(R.raw.lines_normalized),
+                    this.getApplicationContext().getResources()
+                            .openRawResource(R.raw.transfers_normalized),
+                    this.getApplicationContext().getResources().openRawResource(R.raw.subway_entrances)
+            );
+            TrainSystemModel.setTrainSystem(trainSystem);
+        }
 
         this.ingestor = new VectorMapIngestor(getApplicationContext(), map.toString());
         this.trainSystem.fillRectangles(ingestor);
-        TrainSystemModel.setTrainSystem(trainSystem);
     }
 
     @Override
@@ -192,8 +194,8 @@ public class StartupActivity extends BaseActivity
 
                 TrainMapFragment oldMap = trainMapFragment;
                 trainMapFragment = new TrainMapFragment();
-                trainMapFragment.setSystem(trainSystem);
                 trainMapFragment.setMapIngestor(ingestor);
+                trainMapFragment.catchupFrom(oldMap);
 
                 getFragmentManager().beginTransaction()
                         .remove(oldMap)

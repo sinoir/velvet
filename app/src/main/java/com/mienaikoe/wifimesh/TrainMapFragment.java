@@ -25,6 +25,7 @@ public class TrainMapFragment extends BaseFragment {
     private ViewGroup rootView;
     private TrainStation station;
     private SubwayMapView subwayMapView;
+    private SubwayMapView catchupMap;
 
     private TrainSystem system;
     private VectorMapIngestor mapIngestor;
@@ -40,6 +41,10 @@ public class TrainMapFragment extends BaseFragment {
         this.subwayMapView = new SubwayMapView(this.context);
         this.subwayMapView.setSystem( system );
         this.subwayMapView.setIngestor(mapIngestor);
+        if( catchupMap != null ){
+            this.subwayMapView.catchup(catchupMap);
+            this.catchupMap = null; // free memory
+        }
 
         this.rootView.addView(this.subwayMapView);
 
@@ -61,6 +66,11 @@ public class TrainMapFragment extends BaseFragment {
             this.subwayMapView.setStation(station);
         }
         this.station = station;
+    }
+
+    public void catchupFrom( TrainMapFragment other ){
+        this.setSystem(other.system);
+        this.catchupMap = other.subwayMapView;
     }
 
     public void toggleStreets(){
