@@ -40,7 +40,6 @@ public class SubwayMapView extends View {
     private float previousY = translateY;
 
     private float scaleFactor = 1.0f;
-    private float startScaleFactor = 1.0f;
     private float scaleScreenX = 0.f;
     private float scaleScreenY = 0.f;
     private float previousFocusX = 0.f;
@@ -118,16 +117,15 @@ public class SubwayMapView extends View {
         float displayWidth = this.getWidth() * scaleFactor;
         float displayHeight = this.getHeight() * scaleFactor;
 
+        float realTranslateX = translateX / scaleFactor;
+        float realTranslateY = translateY / scaleFactor;
+
         //We're going to scale the X and Y coordinates by the same amount
-        if (mScaleDetector.isInProgress()) {
-            canvas.scale(scaleFactor, scaleFactor, mScaleDetector.getFocusX(), mScaleDetector.getFocusY());
-        } else {
-            canvas.scale(scaleFactor, scaleFactor, previousFocusX, previousFocusY);
-        }
+        canvas.scale(scaleFactor, scaleFactor, scaleScreenX, scaleScreenY);
 
         //We need to divide by the scale factor here, otherwise we end up with excessive panning based on our zoom level
         //because the translation amount also gets scaled according to how much we've zoomed into the canvas.
-        canvas.translate(translateX / scaleFactor, translateY / scaleFactor);
+        canvas.translate( realTranslateX, realTranslateY);
 
         Log.i("SCALE:     ", scaleFactor + "");
         Log.i("TRANSLATE: ", translateX + "," + translateY);
@@ -170,8 +168,6 @@ public class SubwayMapView extends View {
         public boolean onScale(ScaleGestureDetector mScaleDetector) {
             // Don't let the object get too small or too large.
             scaleFactor = Math.max(0.5f, Math.min(scaleFactor * mScaleDetector.getScaleFactor(), 6.0f));
-            //scaleScreenX = mScaleDetector.getFocusX();
-            //scaleScreenY = mScaleDetector.getFocusY();
 
             return true;
         }
@@ -183,6 +179,15 @@ public class SubwayMapView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        mScaleDetector.onTouchEvent(event);
+        if (mScaleDetector.isInProgress()) {
+            previousFocusX = mScaleDetector.getFocusX();
+            previousFocusY = mScaleDetector.getFocusY();
+        }
+        scaleScreenX =  previousFocusX;
+        scaleScreenY =  previousFocusY;
+
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
 
@@ -196,11 +201,6 @@ public class SubwayMapView extends View {
             case MotionEvent.ACTION_MOVE:
                 translateX = event.getX() - startX;
                 translateY = event.getY() - startY;
-
-                if (mScaleDetector.isInProgress()) {
-                    previousFocusX = mScaleDetector.getFocusX();
-                    previousFocusY = mScaleDetector.getFocusY();
-                }
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -215,10 +215,23 @@ public class SubwayMapView extends View {
 
             case MotionEvent.ACTION_POINTER_UP:
                 if (event.getPointerCount() == 2) {
+                    // This prevents hysteresis jitter when using two fingers
                     int newIdx = event.getActionIndex() == 0 ? 1 : 0; // The one not lifted
                     mActivePointerId = MotionEventCompat.getPointerId(event, newIdx);
                     startX = (MotionEventCompat.getX(event, newIdx)) - translateX;
                     startY = (MotionEventCompat.getY(event, newIdx)) - translateY;
+
+                    // This makes it so there's no jitter when you do multiple zoom gestures
+                    /*
+                    float scaleVectorX = (scaleScreenX*scaleFactor) - scaleScreenX;
+                    float scaleVectorY = (scaleScreenY*scaleFactor) - scaleScreenY;
+                    startX = startX - scaleVectorX;
+                    startY = startY - scaleVectorY;
+                    translateX = translateX - scaleVectorX;
+                    translateY = translateY - scaleVectorY;
+                    scaleScreenX = 0;
+                    scaleScreenY = 0;
+                    /**/
                 }
 
                 //This is not strictly necessary; we save the value of translateX and translateY into previousX
@@ -227,9 +240,6 @@ public class SubwayMapView extends View {
                 previousY = translateY;
                 break;
         }
-
-        mScaleDetector.onTouchEvent(event);
-
 
         invalidate();
 
@@ -295,4 +305,14 @@ public class SubwayMapView extends View {
         invalidate();
     }
 
+
+    private void catchup(SubwayMapView other){
+        this.translateX = other.translateX;
+        this.translateY = other.translateY;
+        this.scaleFactor = other.scaleFactor;
+        this.previousFocusX = other.previousFocusX;
+        this.previousFocusY = other.previousFocusY;
+        this.previousX = other.previousX;
+        this.previousY = other.previousY;
+    }
 }
