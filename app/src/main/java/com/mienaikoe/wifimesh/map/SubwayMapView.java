@@ -36,14 +36,16 @@ public class SubwayMapView extends View {
     private float startY = 0;
     private float translateX = 0;
     private float translateY = -300;
+    private float previousX = translateX;
+    private float previousY = translateY;
 
     private float scaleFactor = 1.0f;
     private float startScaleFactor = 1.0f;
     private float scaleScreenX = 0.f;
     private float scaleScreenY = 0.f;
+    private float previousFocusX = 0.f;
+    private float previousFocusY = 0.f;
     private ScaleGestureDetector mScaleDetector;
-
-
 
 
     private VectorMapIngestor ingestor;
@@ -70,7 +72,7 @@ public class SubwayMapView extends View {
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
@@ -82,23 +84,27 @@ public class SubwayMapView extends View {
     };
 
     private String[] CROSS_STREET_GROUPS = new String[]{
-            "MANHATTAN_LAND","CROSS_STREETS","STREET_NAMES","NEIGHBORHOOD_NAMES", "PARKS", "PARKS_TEXT"
+            "MANHATTAN_LAND", "CROSS_STREETS", "STREET_NAMES", "NEIGHBORHOOD_NAMES", "PARKS", "PARKS_TEXT"
     };
 
     private static Paint LOCATION_PAINT = new Paint();
-    static{
+
+    static {
         LOCATION_PAINT.setStrokeWidth(8.0f);
         LOCATION_PAINT.setColor(Color.parseColor("#ffffff"));
         LOCATION_PAINT.setStyle(Paint.Style.STROKE);
     }
 
     private static Paint TEST_PAINT = new Paint();
-    static{
+
+    static {
         TEST_PAINT.setColor(Color.parseColor("#000000"));
         TEST_PAINT.setStyle(Paint.Style.FILL);
     }
+
     private static Paint TEST_PAINT2 = new Paint();
-    static{
+
+    static {
         TEST_PAINT2.setColor(Color.parseColor("#447700"));
         TEST_PAINT2.setStyle(Paint.Style.FILL);
     }
@@ -107,27 +113,35 @@ public class SubwayMapView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.save();
 
-        // Yay Matrix Math
-        Matrix transformationMatrix = new Matrix();
+        float displayWidth = this.getWidth() * scaleFactor;
+        float displayHeight = this.getHeight() * scaleFactor;
+
+        //We're going to scale the X and Y coordinates by the same amount
+        if (mScaleDetector.isInProgress()) {
+            canvas.scale(scaleFactor, scaleFactor, mScaleDetector.getFocusX(), mScaleDetector.getFocusY());
+        } else {
+            canvas.scale(scaleFactor, scaleFactor, previousFocusX, previousFocusY);
+        }
+
+        //We need to divide by the scale factor here, otherwise we end up with excessive panning based on our zoom level
+        //because the translation amount also gets scaled according to how much we've zoomed into the canvas.
+        canvas.translate(translateX / scaleFactor, translateY / scaleFactor);
 
         Log.i("SCALE:     ", scaleFactor + "");
         Log.i("TRANSLATE: ", translateX + "," + translateY);
 
-        transformationMatrix.setTranslate(translateX / scaleFactor, translateY / scaleFactor);
-        transformationMatrix.postScale(scaleFactor, scaleFactor, scaleScreenX, scaleScreenY);
-        canvas.concat(transformationMatrix);
-
-        if( this.showingStreets ) {
+        if (this.showingStreets) {
             for (VectorInstruction instruction : this.crossStreetInstructions) {
                 instruction.draw(canvas);
             }
             this.setBackgroundColor(WATER_COLOR);
         } else {
-            this.setBackgroundColor( LAND_COLOR );
+            this.setBackgroundColor(LAND_COLOR);
         }
 
-        if( this.currentStation != null ) {
+        if (this.currentStation != null) {
             float[] stationVectorCenter = this.currentStation.getVectorCenter();
             canvas.drawArc(new RectF(
                     stationVectorCenter[0] - 24, stationVectorCenter[1] - 24,
@@ -135,10 +149,11 @@ public class SubwayMapView extends View {
             ), 0, 360, false, LOCATION_PAINT);
         }
 
-        for( VectorInstruction instruction : this.mapInstructions ){
+        for (VectorInstruction instruction : this.mapInstructions) {
             instruction.draw(canvas);
         }
 
+        canvas.restore();
     }
 
 
@@ -152,87 +167,74 @@ public class SubwayMapView extends View {
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
-        public boolean onScale(ScaleGestureDetector detector) {
+        public boolean onScale(ScaleGestureDetector mScaleDetector) {
             // Don't let the object get too small or too large.
-            scaleFactor = Math.max(0.5f, Math.min(scaleFactor * detector.getScaleFactor(), 6.0f));
-            scaleScreenX = detector.getFocusX();
-            scaleScreenY = detector.getFocusY();
+            scaleFactor = Math.max(0.5f, Math.min(scaleFactor * mScaleDetector.getScaleFactor(), 6.0f));
+            //scaleScreenX = mScaleDetector.getFocusX();
+            //scaleScreenY = mScaleDetector.getFocusY();
 
             return true;
         }
     }
 
 
-
-
-
     private int mActivePointerId = -1;
 
+
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
 
-        mScaleDetector.onTouchEvent(ev);
-
-        if (ev.getPointerCount() > 1) {
-            //calculateScalePoint(ev);
-        }
-
-        switch (MotionEventCompat.getActionMasked(ev)) {
-            case MotionEvent.ACTION_DOWN: {
-                startX = (MotionEventCompat.getX(ev, 0) - translateX);
-                startY = (MotionEventCompat.getY(ev, 0) - translateY);
-                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                //We assign the current X and Y coordinate of the finger to startX and startY minus the previously translated
+                //amount for each coordinates This works even when we are translating the first time because the initial
+                //values for these two variables is zero.
+                startX = event.getX() - previousX;
+                startY = event.getY() - previousY;
                 break;
-            }
-            case MotionEvent.ACTION_POINTER_DOWN: {
-                mActivePointerId = -1;
-                startX = scaleScreenX - translateX;
-                startY = scaleScreenY - translateY;
-                startScaleFactor = scaleFactor;
-                break;
-            }
-            case MotionEvent.ACTION_MOVE: {
-                if (ev.getPointerCount() == 1) {
-                    final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
-                    if (pointerIndex == -1) {
-                        mActivePointerId = -1;
-                        break;
-                    }
-                    translateX = (MotionEventCompat.getX(ev, pointerIndex) - startX);
-                    translateY = (MotionEventCompat.getY(ev, pointerIndex) - startY);
-                } else {
-                    translateX = (scaleScreenX - startX);
-                    translateY = (scaleScreenY - startY);
+
+            case MotionEvent.ACTION_MOVE:
+                translateX = event.getX() - startX;
+                translateY = event.getY() - startY;
+
+                if (mScaleDetector.isInProgress()) {
+                    previousFocusX = mScaleDetector.getFocusX();
+                    previousFocusY = mScaleDetector.getFocusY();
                 }
                 break;
-            }
-            case MotionEvent.ACTION_POINTER_UP: {
-                if (ev.getPointerCount() == 2) {
-                    int newIdx = ev.getActionIndex() == 0 ? 1 : 0; // The one not lifted
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, newIdx);
 
-                    startX = (MotionEventCompat.getX(ev, newIdx)) - translateX;
-                    startY = (MotionEventCompat.getY(ev, newIdx)) - translateY;
-                    startScaleFactor = scaleFactor;
-                } else if (ev.getPointerCount() > 2) {
-                    startX = (scaleScreenX) - translateX;
-                    startY = (scaleScreenY) - translateY;
-                    startScaleFactor = scaleFactor;
-                }
+            case MotionEvent.ACTION_POINTER_DOWN:
                 break;
-            }
+
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = -1;
+                //All fingers went up, so let's save the value of translateX and translateY into previousX and
+                //previousTranslate
+                previousX = translateX;
+                previousY = translateY;
                 break;
-            }
+
+            case MotionEvent.ACTION_POINTER_UP:
+                if (event.getPointerCount() == 2) {
+                    int newIdx = event.getActionIndex() == 0 ? 1 : 0; // The one not lifted
+                    mActivePointerId = MotionEventCompat.getPointerId(event, newIdx);
+                    startX = (MotionEventCompat.getX(event, newIdx)) - translateX;
+                    startY = (MotionEventCompat.getY(event, newIdx)) - translateY;
+                }
+
+                //This is not strictly necessary; we save the value of translateX and translateY into previousX
+                //and previousY when the second finger goes up
+                previousX = translateX;
+                previousY = translateY;
+                break;
         }
 
-        this.invalidate();
+        mScaleDetector.onTouchEvent(event);
+
+
+        invalidate();
+
         return true;
     }
-
-
 
 
     private static final int CLICK_THRESHOLD_DISTANCE = 20;
@@ -240,17 +242,17 @@ public class SubwayMapView extends View {
     private float clickedX;
     private float clickedY;
 
-    private void onClick( float x, float y ){
-        Log.i(this.getClass().getSimpleName(), "On Clicking: ["+x+","+y+"]");
+    private void onClick(float x, float y) {
+        Log.i(this.getClass().getSimpleName(), "On Clicking: [" + x + "," + y + "]");
         clickedX = x;
         clickedY = y;
-        for( TrainStation station : this.system.getStations() ){
+        for (TrainStation station : this.system.getStations()) {
             float[] stationVectorCenter = station.getVectorCenter();
-            if( Math.abs(stationVectorCenter[0] - x) < CLICK_THRESHOLD_DISTANCE &&
-                Math.abs(stationVectorCenter[1] - y) < CLICK_THRESHOLD_DISTANCE ){
+            if (Math.abs(stationVectorCenter[0] - x) < CLICK_THRESHOLD_DISTANCE &&
+                    Math.abs(stationVectorCenter[1] - y) < CLICK_THRESHOLD_DISTANCE) {
 
-                Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+Math.abs(stationVectorCenter[0] - x)+":"+Math.abs(stationVectorCenter[1] - y));
-                Log.i(this.getClass().getSimpleName(), "MATCHED!!! "+station.getName());
+                Log.i(this.getClass().getSimpleName(), "MATCHED!!! " + Math.abs(stationVectorCenter[0] - x) + ":" + Math.abs(stationVectorCenter[1] - y));
+                Log.i(this.getClass().getSimpleName(), "MATCHED!!! " + station.getName());
 
                 mEventBus.postSticky(new StationSelectEvent(station));
                 return;
@@ -259,22 +261,20 @@ public class SubwayMapView extends View {
     }
 
 
-
-
     public void setSystem(TrainSystem system) {
         this.system = system;
     }
 
-    public void setIngestor(VectorMapIngestor ingestor){
+    public void setIngestor(VectorMapIngestor ingestor) {
         this.ingestor = ingestor;
-        for( String groupName : CROSS_STREET_GROUPS ) {
+        for (String groupName : CROSS_STREET_GROUPS) {
             if (this.ingestor.getInstructionGroup(groupName) == null) {
                 continue;
             }
             this.crossStreetInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
         }
-        for( String groupName : STANDARD_GROUPS ) {
-            if (this.ingestor.getInstructionGroup(groupName)==null) {
+        for (String groupName : STANDARD_GROUPS) {
+            if (this.ingestor.getInstructionGroup(groupName) == null) {
                 continue;
             }
             this.mapInstructions.addAll(this.ingestor.getInstructionGroup(groupName));
@@ -286,7 +286,7 @@ public class SubwayMapView extends View {
         this.setCenter(currentStation.getVectorCenter());
     }
 
-    private void setCenter( float[] center ){
+    private void setCenter(float[] center) {
         scaleFactor = 2.5f;
         this.scaleScreenX = (this.getWidth() / 2) / scaleFactor;
         this.scaleScreenY = (this.getHeight() / 2) / scaleFactor;
