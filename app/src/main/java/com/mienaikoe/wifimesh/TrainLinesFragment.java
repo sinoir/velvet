@@ -117,8 +117,7 @@ public class TrainLinesFragment extends BaseFragment implements TrainIconAdapter
         newRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEventBus.postSticky(new StationSelectEvent(station));
-                getActivity().setResult(Activity.RESULT_OK);
+                mEventBus.postSticky(new StationSelectEvent(station, true));
                 getActivity().finish();
             }
         });

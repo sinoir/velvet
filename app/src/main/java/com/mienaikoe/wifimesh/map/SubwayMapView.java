@@ -27,25 +27,19 @@ import de.greenrobot.event.EventBus;
  */
 public class SubwayMapView extends View {
 
-    private GestureOverlayView aps;
-
     private TrainSystem system;
     private TrainStation currentStation;
 
-    private float startX = 0;
-    private float startY = 0;
-    private float translateX = 0;
-    private float translateY = -300;
-    private float previousX = translateX;
-    private float previousY = translateY;
+    private float firstX = 0;
+    private float firstY = -300;
+    private float justX = firstX;
+    private float justY = firstY;
+
 
     private float scaleFactor = 1.0f;
-    private float scaleScreenX = 0.f;
-    private float scaleScreenY = 0.f;
-    private float previousFocusX = 0.f;
-    private float previousFocusY = 0.f;
     private ScaleGestureDetector mScaleDetector;
 
+    private Matrix transformer = new Matrix();
 
     private VectorMapIngestor ingestor;
 
@@ -94,41 +88,13 @@ public class SubwayMapView extends View {
         LOCATION_PAINT.setStyle(Paint.Style.STROKE);
     }
 
-    private static Paint TEST_PAINT = new Paint();
-
-    static {
-        TEST_PAINT.setColor(Color.parseColor("#000000"));
-        TEST_PAINT.setStyle(Paint.Style.FILL);
-    }
-
-    private static Paint TEST_PAINT2 = new Paint();
-
-    static {
-        TEST_PAINT2.setColor(Color.parseColor("#447700"));
-        TEST_PAINT2.setStyle(Paint.Style.FILL);
-    }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.save();
 
-        float displayWidth = this.getWidth() * scaleFactor;
-        float displayHeight = this.getHeight() * scaleFactor;
-
-        float realTranslateX = translateX / scaleFactor;
-        float realTranslateY = translateY / scaleFactor;
-
-        //We're going to scale the X and Y coordinates by the same amount
-        canvas.scale(scaleFactor, scaleFactor, scaleScreenX, scaleScreenY);
-
-        //We need to divide by the scale factor here, otherwise we end up with excessive panning based on our zoom level
-        //because the translation amount also gets scaled according to how much we've zoomed into the canvas.
-        canvas.translate( realTranslateX, realTranslateY);
-
-        Log.i("SCALE:     ", scaleFactor + "");
-        Log.i("TRANSLATE: ", translateX + "," + translateY);
+        canvas.concat(this.transformer);
 
         if (this.showingStreets) {
             for (VectorInstruction instruction : this.crossStreetInstructions) {
@@ -163,81 +129,70 @@ public class SubwayMapView extends View {
     }
 
 
+
+    private static float MIN_SCALE_FACTOR = 0.5f;
+    private static float MAX_SCALE_FACTOR = 6.0f;
+
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector mScaleDetector) {
             // Don't let the object get too small or too large.
-            scaleFactor = Math.max(0.5f, Math.min(scaleFactor * mScaleDetector.getScaleFactor(), 6.0f));
+            scaleFactor = scaleFactor * mScaleDetector.getScaleFactor();
+            float matrixScaleFactor = mScaleDetector.getScaleFactor();
+            if( scaleFactor < MIN_SCALE_FACTOR ){
+                scaleFactor = MIN_SCALE_FACTOR;
+                matrixScaleFactor = 1.f;
+            } else if( scaleFactor > MAX_SCALE_FACTOR ){
+                scaleFactor = MAX_SCALE_FACTOR;
+                matrixScaleFactor = 1.f;
+            }
 
+            transformer.postScale(matrixScaleFactor, matrixScaleFactor, mScaleDetector.getFocusX(), mScaleDetector.getFocusY());
             return true;
         }
     }
 
 
-    private int mActivePointerId = -1;
+    private boolean isScaling = false;
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         mScaleDetector.onTouchEvent(event);
-        if (mScaleDetector.isInProgress()) {
-            previousFocusX = mScaleDetector.getFocusX();
-            previousFocusY = mScaleDetector.getFocusY();
-        }
-        scaleScreenX =  previousFocusX;
-        scaleScreenY =  previousFocusY;
 
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-
-                //We assign the current X and Y coordinate of the finger to startX and startY minus the previously translated
-                //amount for each coordinates This works even when we are translating the first time because the initial
-                //values for these two variables is zero.
-                startX = event.getX() - previousX;
-                startY = event.getY() - previousY;
+                firstX = justX = event.getX();
+                firstY = justY = event.getY();
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                translateX = event.getX() - startX;
-                translateY = event.getY() - startY;
+                if( !isScaling ) {
+                    transformer.postTranslate(event.getX() - justX, event.getY() - justY);
+                    justX = event.getX();
+                    justY = event.getY();
+                }
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
+                isScaling = true;
                 break;
 
             case MotionEvent.ACTION_UP:
-                //All fingers went up, so let's save the value of translateX and translateY into previousX and
-                //previousTranslate
-                previousX = translateX;
-                previousY = translateY;
+                if( event.getX() == firstX && event.getY() == firstY ){
+                    onClick(event.getX(), event.getY());
+                }
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
                 if (event.getPointerCount() == 2) {
                     // This prevents hysteresis jitter when using two fingers
                     int newIdx = event.getActionIndex() == 0 ? 1 : 0; // The one not lifted
-                    mActivePointerId = MotionEventCompat.getPointerId(event, newIdx);
-                    startX = (MotionEventCompat.getX(event, newIdx)) - translateX;
-                    startY = (MotionEventCompat.getY(event, newIdx)) - translateY;
-
-                    // This makes it so there's no jitter when you do multiple zoom gestures
-                    /*
-                    float scaleVectorX = (scaleScreenX*scaleFactor) - scaleScreenX;
-                    float scaleVectorY = (scaleScreenY*scaleFactor) - scaleScreenY;
-                    startX = startX - scaleVectorX;
-                    startY = startY - scaleVectorY;
-                    translateX = translateX - scaleVectorX;
-                    translateY = translateY - scaleVectorY;
-                    scaleScreenX = 0;
-                    scaleScreenY = 0;
-                    /**/
+                    justX = MotionEventCompat.getX(event, newIdx);
+                    justY = MotionEventCompat.getY(event, newIdx);
+                    isScaling = false;
                 }
-
-                //This is not strictly necessary; we save the value of translateX and translateY into previousX
-                //and previousY when the second finger goes up
-                previousX = translateX;
-                previousY = translateY;
                 break;
         }
 
@@ -247,28 +202,26 @@ public class SubwayMapView extends View {
     }
 
 
-    private static final int CLICK_THRESHOLD_DISTANCE = 20;
-
-    private float clickedX;
-    private float clickedY;
+    private int CLICK_THRESHOLD_DISTANCE = 20;
 
     private void onClick(float x, float y) {
-        Log.i(this.getClass().getSimpleName(), "On Clicking: [" + x + "," + y + "]");
-        clickedX = x;
-        clickedY = y;
-        for (TrainStation station : this.system.getStations()) {
+        Matrix inverse = new Matrix();
+        transformer.invert(inverse);
+        float[] mapTouches = new float[]{ x, y};
+        inverse.mapPoints(mapTouches);
+        x = mapTouches[0];
+        y = mapTouches[1];
+
+        // much quicker would be to keep around two binary Trees sorted by coordinate and find intersections
+        for (TrainStation station : system.getStations()) {
             float[] stationVectorCenter = station.getVectorCenter();
-            if (Math.abs(stationVectorCenter[0] - x) < CLICK_THRESHOLD_DISTANCE &&
-                    Math.abs(stationVectorCenter[1] - y) < CLICK_THRESHOLD_DISTANCE) {
-
-                Log.i(this.getClass().getSimpleName(), "MATCHED!!! " + Math.abs(stationVectorCenter[0] - x) + ":" + Math.abs(stationVectorCenter[1] - y));
-                Log.i(this.getClass().getSimpleName(), "MATCHED!!! " + station.getName());
-
-                mEventBus.postSticky(new StationSelectEvent(station));
+            if (Math.abs(stationVectorCenter[0] - x) < CLICK_THRESHOLD_DISTANCE && Math.abs(stationVectorCenter[1] - y) < CLICK_THRESHOLD_DISTANCE) {
+                mEventBus.postSticky(new StationSelectEvent(station, false));
                 return;
             }
         }
     }
+
 
 
     public void setSystem(TrainSystem system) {
@@ -291,44 +244,38 @@ public class SubwayMapView extends View {
         }
     }
 
-    public void setStation(TrainStation currentStation) {
-        this.currentStation = currentStation;
-        this.setCenter(currentStation.getVectorCenter());
+    public void onEventMainThread( StationSelectEvent event ){
+        if (event == null) {
+            return;
+        }
+        if( event.getStation().hasRectangles() ) {
+            this.currentStation = event.getStation();
+            if (event.isMoveTo()) {
+                this.setCenter(currentStation.getVectorCenter());
+            }
+        } else {
+            this.currentStation = null;
+        }
     }
 
     private void setCenter(float[] center) {
         scaleFactor = 2.5f;
-        this.scaleScreenX = 0;
-        this.scaleScreenY = 0;
-
-        Log.i("SCALEP", this.scaleScreenX + "," + this.scaleScreenY);
-
-        this.startX = 0;
-        this.startY = 0;
-        this.translateX = (-center[0] * scaleFactor ) + (this.getWidth() / 2);
-        this.translateY = (-center[1] * scaleFactor ) + (this.getHeight() / 2);
-        this.previousX = this.translateX;
-        this.previousY = this.translateY;
-
-        this.previousFocusX = 0;
-        this.previousFocusY = 0;
-
+        transformer.reset();
+        transformer.postTranslate(  -center[0]  + this.getCenterX(), -center[1]  + this.getCenterY() );
+        transformer.postScale(scaleFactor, scaleFactor, this.getCenterX(), this.getCenterY() );
         invalidate();
+    }
+
+    private float getCenterX(){
+        return this.getWidth() / 2;
+    }
+
+    private float getCenterY(){
+        return this.getHeight() / 2;
     }
 
 
     public void catchup(SubwayMapView other){
-        this.startX = other.startX;
-        this.startY = other.startY;
-        this.translateX = other.translateX;
-        this.translateY = other.translateY;
-        this.previousX = other.previousX;
-        this.previousY = other.previousY;
-
-        this.scaleFactor = other.scaleFactor;
-        this.scaleScreenX = other.scaleScreenX;
-        this.scaleScreenY = other.scaleScreenY;
-        this.previousFocusX = other.previousFocusX;
-        this.previousFocusY = other.previousFocusY;
+        this.transformer = other.transformer;
     }
 }

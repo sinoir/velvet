@@ -119,6 +119,10 @@ public class StartupActivity extends BaseActivity
         super.onResume();
 
         mEventBus.register(trainSystem);
+        StationSelectEvent event = (StationSelectEvent)mEventBus.getStickyEvent(StationSelectEvent.class);
+        if( event != null ){
+            mEventBus.postSticky(event); // repost sticky for unresumed
+        }
     }
 
     @Override
@@ -215,8 +219,7 @@ public class StartupActivity extends BaseActivity
                 return true;
             case R.id.action_trainlines:
                 mEventBus.postSticky(new TrainLinesFragment.InitEvent(currentStation));
-                Intent intent = new Intent(getApplicationContext(), LineActivity.class);
-                startActivityForResult(intent, REQUEST_LINES);
+                startActivity( new Intent(getApplicationContext(), LineActivity.class) );
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -256,30 +259,16 @@ public class StartupActivity extends BaseActivity
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_LINES:
-                if (resultCode == Activity.RESULT_OK) {
-                    StationSelectEvent event = mEventBus.getStickyEvent(StationSelectEvent.class);
-                    if (event == null) {
-                        return;
-                    }
-                    setStation(event.getStation());
-                    //event is consumed, we can remove it now
-                    mEventBus.removeStickyEvent(event);
-                }
-                return;
-            default:
-                return;
-        }
-
-
-
-    }
     //endregion Lifecycle
 
+
+
+    public void onEventMainThread( StationSelectEvent event ){
+        if (event == null) {
+            return;
+        }
+        setStation(event.getStation());
+    }
 
 
 
@@ -345,8 +334,6 @@ public class StartupActivity extends BaseActivity
         }
 
         this.linesTiming.invalidate();
-
-        trainMapFragment.setStation(station);
 
         googleMapFragment.getMap().setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override

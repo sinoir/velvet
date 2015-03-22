@@ -61,11 +61,22 @@ public class TrainMapFragment extends BaseFragment {
         this.mapIngestor = mapIngestor;
     }
 
-    public void setStation( TrainStation station ){
-        if( station.hasRectangles() ) {
-            this.subwayMapView.setStation(station);
+
+    public void onStart(){
+        super.onStart();
+        this.mEventBus.register(this.subwayMapView);
+    }
+
+    public void onStop(){
+        super.onStop();
+        this.mEventBus.unregister(this.subwayMapView);
+    }
+
+    public void onEventMainThread( StationSelectEvent event ){
+        if (event == null) {
+            return;
         }
-        this.station = station;
+        this.station = event.getStation();
     }
 
     public void catchupFrom( TrainMapFragment other ){
